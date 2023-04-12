@@ -7,14 +7,14 @@ import '../../../domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_d
 part 'especie_animal_by_dpto_state.dart';
 
 class EspecieAnimalByDptoCubit extends Cubit<EspeciesAnimalesByDptoState> {
-  final EspecieAnimalByDptoUsecaseDB especieanimalByDptoUsecaseDB;
+  final EspecieAnimalByDptoUsecaseDB especieAnimalByDptoUsecaseDB;
 
-  EspecieAnimalByDptoCubit({required this.especieanimalByDptoUsecaseDB})
+  EspecieAnimalByDptoCubit({required this.especieAnimalByDptoUsecaseDB})
       : super(EspeciesAnimalesByDptoInitial());
 
   void getEspeciesAnimalesByDptoDB() async {
     final result =
-        await especieanimalByDptoUsecaseDB.getEspeciesAnimalesByDptoUsecaseDB();
+        await especieAnimalByDptoUsecaseDB.getEspeciesAnimalesByDptoUsecaseDB();
     result.fold(
         (failure) =>
             emit(EspeciesAnimalesByDptoError(failure.properties.first)),

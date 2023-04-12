@@ -5,13 +5,28 @@ import 'router.dart';
 import 'ui/blocs/afiliado/afiliado_bloc.dart';
 import 'ui/blocs/auth/auth_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
+import 'ui/cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
+import 'ui/cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
+import 'ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import 'ui/cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
+import 'ui/cubits/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_cubit.dart';
+import 'ui/cubits/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_cubit.dart';
+import 'ui/cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
 import 'ui/cubits/estado_via/estado_via_cubit.dart';
+import 'ui/cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
+import 'ui/cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
+import 'ui/cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
 import 'ui/cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import 'ui/cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
+import 'ui/cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
+import 'ui/cubits/opcion_si_no/opcion_si_no_cubit.dart';
+import 'ui/cubits/resguardo_by_dpto/resguardo_by_dpto_cubit.dart';
 import 'ui/cubits/sync_log/sync_log_cubit.dart';
 import 'ui/cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
+import 'ui/cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_cubit.dart';
+import 'ui/cubits/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_cubit.dart';
+import 'ui/cubits/verdura_by_dpto/verdura_by_dpto_cubit.dart';
 import 'ui/cubits/via_acceso/via_acceso_cubit.dart';
 import 'ui/utils/styles.dart';
 
@@ -59,6 +74,52 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<ViaAccesoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<AutoridadIndigenaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<CerealByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<CostoDesplazamientoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) =>
+                di.locator<DificultadAccesoMedTradicionalByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<EspecialidadMedTradicionalByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<EspecieAnimalByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<FrutoByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<HortalizaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<LeguminosaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<MedioUtilizaMedTradicionalByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<OpcionSiNoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<ResguardoByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TiempoTardaMedTradicionalCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TuberculoPlatanoByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<VerduraByDptoCubit>(),
           ),
         ],
         child: MaterialApp(

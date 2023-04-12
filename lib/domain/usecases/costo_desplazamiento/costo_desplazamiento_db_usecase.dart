@@ -9,7 +9,7 @@ class CostoDesplazamientoUsecaseDB {
 
   CostoDesplazamientoUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, int>> saveCostoDesplazamientoUsecase(
+  Future<Either<Failure, int>> saveCostoDesplazamientoUsecaseDB(
       CostoDesplazamientoEntity costoDesplazamiento) {
     return repositoryDB
         .saveCostoDesplazamientoRepositoryDB(costoDesplazamiento);

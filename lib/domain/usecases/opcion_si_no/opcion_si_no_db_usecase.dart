@@ -9,7 +9,7 @@ class OpcionSiNoUsecaseDB {
 
   OpcionSiNoUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, int>> saveOpcionSiNoUsecase(
+  Future<Either<Failure, int>> saveOpcionSiNoUsecaseDB(
       OpcionSiNoEntity opcionSiNo) {
     return repositoryDB.saveOpcionSiNoRepositoryDB(opcionSiNo);
   }

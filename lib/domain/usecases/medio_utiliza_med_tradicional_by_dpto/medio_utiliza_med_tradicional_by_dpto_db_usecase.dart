@@ -9,7 +9,7 @@ class MedioUtilizaMedTradicionalByDptoUsecaseDB {
 
   MedioUtilizaMedTradicionalByDptoUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, int>> saveMedioUtilizaMedTradicionalByDptoUsecase(
+  Future<Either<Failure, int>> saveMedioUtilizaMedTradicionalByDptoUsecaseDB(
       MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicional) {
     return repositoryDB.saveMedioUtilizaMedTradicionalByDptoRepositoryDB(
         medioUtilizaMedTradicional);

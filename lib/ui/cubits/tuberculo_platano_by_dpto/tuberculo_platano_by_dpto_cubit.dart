@@ -7,13 +7,13 @@ import '../../../domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_
 part 'tuberculo_platano_by_dpto_state.dart';
 
 class TuberculoPlatanoByDptoCubit extends Cubit<TuberculosPlatanosByDptoState> {
-  final TuberculoPlatanoByDptoUsecaseDB tuberculoplatanoByDptoUsecaseDB;
+  final TuberculoPlatanoByDptoUsecaseDB tuberculoPlatanoByDptoUsecaseDB;
 
-  TuberculoPlatanoByDptoCubit({required this.tuberculoplatanoByDptoUsecaseDB})
+  TuberculoPlatanoByDptoCubit({required this.tuberculoPlatanoByDptoUsecaseDB})
       : super(TuberculosPlatanosByDptoInitial());
 
   void getTuberculosPlatanosByDptoDB() async {
-    final result = await tuberculoplatanoByDptoUsecaseDB
+    final result = await tuberculoPlatanoByDptoUsecaseDB
         .getTuberculosPlatanosByDptoUsecaseDB();
     result.fold(
         (failure) =>

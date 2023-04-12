@@ -9,14 +9,14 @@ part 'especialidad_med_tradicional_by_dpto_state.dart';
 class EspecialidadMedTradicionalByDptoCubit
     extends Cubit<EspecialidadesMedTradicionalByDptoState> {
   final EspecialidadMedTradicionalByDptoUsecaseDB
-      especialidadmedtradicionalByDptoUsecaseDB;
+      especialidadMedTradicionalByDptoUsecaseDB;
 
   EspecialidadMedTradicionalByDptoCubit(
-      {required this.especialidadmedtradicionalByDptoUsecaseDB})
+      {required this.especialidadMedTradicionalByDptoUsecaseDB})
       : super(EspecialidadesMedTradicionalByDptoInitial());
 
   void getEspecialidadesMedTradicionalByDptoDB() async {
-    final result = await especialidadmedtradicionalByDptoUsecaseDB
+    final result = await especialidadMedTradicionalByDptoUsecaseDB
         .getEspecialidadesMedTradicionalByDptoUsecaseDB();
     result.fold(
         (failure) => emit(

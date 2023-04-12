@@ -9,11 +9,11 @@ class DificultadAccesoMedTradicionalByDptoUsecaseDB {
 
   DificultadAccesoMedTradicionalByDptoUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, int>> saveDificultadAccesoMedTradicionalByDptoUsecase(
-      DificultadAccesoMedTradicionalEntity
-          dificultadAccesoMedTradicionalByDpto) {
+  Future<Either<Failure, int>>
+      saveDificultadAccesoMedTradicionalByDptoUsecaseDB(
+          DificultadAccesoMedTradicionalEntity dificultadAccesoMedTradicional) {
     return repositoryDB.saveDificultadAccesoMedTradicionalByDptoRepositoryDB(
-        dificultadAccesoMedTradicionalByDpto);
+        dificultadAccesoMedTradicional);
   }
 
   Future<Either<Failure, List<DificultadAccesoMedTradicionalEntity>>>

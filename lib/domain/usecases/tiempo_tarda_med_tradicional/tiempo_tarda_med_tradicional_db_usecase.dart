@@ -9,7 +9,7 @@ class TiempoTardaMedTradicionalUsecaseDB {
 
   TiempoTardaMedTradicionalUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, int>> saveTiempoTardaMedTradicionalUsecase(
+  Future<Either<Failure, int>> saveTiempoTardaMedTradicionalUsecaseDB(
       TiempoTardaMedTradicionalEntity tiempoTardaMedTradicional) {
     return repositoryDB
         .saveTiempoTardaMedTradicionalRepositoryDB(tiempoTardaMedTradicional);
