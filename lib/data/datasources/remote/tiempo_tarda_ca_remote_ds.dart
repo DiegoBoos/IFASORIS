@@ -33,7 +33,7 @@ class TiempoTardaCARemoteDataSourceImpl
         final result = tiemposTardaCAModelFromJson(jsonEncode(decodedResp));
         return result;
       } else {
-        throw ServerFailure(decodedResp['errorMessages']);
+        throw const ServerFailure(['Excepción no controlada']);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

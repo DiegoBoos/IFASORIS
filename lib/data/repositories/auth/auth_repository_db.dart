@@ -15,9 +15,9 @@ class AuthRepositoryDBImpl implements AuthRepositoryDB {
   Future<Either<Failure, UsuarioEntity?>> logInRepositoryDB(
       UsuarioEntity usuario) async {
     try {
-      final usuarioEntity = await authLocalDataSource.logIn(usuario);
+      final result = await authLocalDataSource.logIn(usuario);
 
-      return Right(usuarioEntity);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {
@@ -28,9 +28,9 @@ class AuthRepositoryDBImpl implements AuthRepositoryDB {
   @override
   Future<Either<Failure, UsuarioEntity?>> checkTokenRepositoryDB() async {
     try {
-      final usuarioEntity = await authLocalDataSource.checkToken();
+      final result = await authLocalDataSource.checkToken();
 
-      return Right(usuarioEntity);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {

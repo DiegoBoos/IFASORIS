@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/especialidad_med_tradicional_by_dpto_entity.dart';
+import '../../../domain/entities/especialidad_med_tradicional_entity.dart';
 import '../../../domain/repositories/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_repository.dart';
 import '../../datasources/remote/especialidad_med_tradicional_by_dpto_remote_ds.dart';
 
@@ -17,7 +17,7 @@ class EspecialidadMedTradicionalByDptoRepositoryImpl
       {required this.especialidadMedTradicionalByDptoRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<EspecialidadMedTradicionalByDptoEntity>>>
+  Future<Either<Failure, List<EspecialidadMedTradicionalEntity>>>
       getEspecialidadesMedTradicionalByDptoRepository(int dtoId) async {
     try {
       final result = await especialidadMedTradicionalByDptoRemoteDataSource

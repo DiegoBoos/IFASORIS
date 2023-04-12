@@ -27,14 +27,12 @@ class MedioComunicacionRemoteDataSourceImpl
         'Authorization': 'Bearer ${await Constants.getToken()}',
       });
 
+      final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final decodedResp = jsonDecode(resp.body);
         final result = mediosComunicacionModelFromJson(jsonEncode(decodedResp));
         return result;
       } else {
-        final decodedResp = jsonDecode(resp.body);
-
-        throw ServerFailure(decodedResp['errorMessages']);
+        throw const ServerFailure(['Excepción no controlada']);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

@@ -1,7 +1,7 @@
 part of 'resguardo_by_dpto_cubit.dart';
 
 abstract class ResguardosByDptoState extends Equatable {
-  final List<ResguardoByDptoEntity>? resguardosByDpto;
+  final List<ResguardoEntity>? resguardosByDpto;
   const ResguardosByDptoState({this.resguardosByDpto});
 
   @override
@@ -13,7 +13,7 @@ class ResguardosByDptoInitial extends ResguardosByDptoState {}
 class ResguardosByDptoLoading extends ResguardosByDptoState {}
 
 class ResguardosByDptoLoaded extends ResguardosByDptoState {
-  final List<ResguardoByDptoEntity>? resguardosByDptoLoaded;
+  final List<ResguardoEntity>? resguardosByDptoLoaded;
 
   const ResguardosByDptoLoaded(this.resguardosByDptoLoaded)
       : super(resguardosByDpto: resguardosByDptoLoaded);

@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/especialidad_med_tradicional_by_dpto_entity.dart';
+import '../../../domain/entities/especialidad_med_tradicional_entity.dart';
 import '../../../domain/repositories/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_repository_db.dart';
 import '../../datasources/local/especialidad_med_tradicional_by_dpto_local_ds.dart';
 
@@ -15,11 +15,11 @@ class EspecialidadMedTradicionalByDptoRepositoryDBImpl
       {required this.especialidadMedTradicionalByDptoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<EspecialidadMedTradicionalByDptoEntity>>>
-      getEspecialidadesMedTradicionalByDptoRepositoryDB(int dtoId) async {
+  Future<Either<Failure, List<EspecialidadMedTradicionalEntity>>>
+      getEspecialidadesMedTradicionalByDptoRepositoryDB() async {
     try {
       final result = await especialidadMedTradicionalByDptoLocalDataSource
-          .getEspecialidadesMedTradicionalByDpto(dtoId);
+          .getEspecialidadesMedTradicionalByDpto();
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
@@ -30,8 +30,7 @@ class EspecialidadMedTradicionalByDptoRepositoryDBImpl
 
   @override
   Future<Either<Failure, int>> saveEspecialidadMedTradicionalByDptoRepositoryDB(
-      EspecialidadMedTradicionalByDptoEntity
-          especialidadMedTradicionalByDpto) async {
+      EspecialidadMedTradicionalEntity especialidadMedTradicionalByDpto) async {
     try {
       final result = await especialidadMedTradicionalByDptoLocalDataSource
           .saveEspecialidadMedTradicionalByDpto(

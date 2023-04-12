@@ -12,10 +12,10 @@ class TiempoTardaCALocalDataSourceImpl implements TiempoTardaCALocalDataSource {
   Future<List<TiempoTardaCAModel>> getTiemposTardaCA() async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('TiempoTardaCA');
-    final tiemposTardaCADB = List<TiempoTardaCAModel>.from(
+    final result = List<TiempoTardaCAModel>.from(
         res.map((m) => TiempoTardaCAModel.fromJson(m))).toList();
 
-    return tiemposTardaCADB;
+    return result;
   }
 
   @override

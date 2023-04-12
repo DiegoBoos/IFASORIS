@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/medio_utiliza_med_tradicional_by_dpto_entity.dart';
+import '../../../domain/entities/medio_utiliza_med_tradicional_entity.dart';
 import '../../../domain/repositories/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_repository_db.dart';
 import '../../datasources/local/medio_utiliza_med_tradicional_by_dpto_local_ds.dart';
 
@@ -15,11 +15,11 @@ class MedioUtilizaMedTradicionalByDptoRepositoryDBImpl
       {required this.medioUtilizaMedTradicionalByDptoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<MedioUtilizaMedTradicionalByDptoEntity>>>
-      getMediosUtilizaMedTradicionalByDptoRepositoryDB(int dtoId) async {
+  Future<Either<Failure, List<MedioUtilizaMedTradicionalEntity>>>
+      getMediosUtilizaMedTradicionalByDptoRepositoryDB() async {
     try {
       final result = await medioUtilizaMedTradicionalByDptoLocalDataSource
-          .getMediosUtilizaMedTradicionalByDpto(dtoId);
+          .getMediosUtilizaMedTradicionalByDpto();
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
@@ -30,8 +30,7 @@ class MedioUtilizaMedTradicionalByDptoRepositoryDBImpl
 
   @override
   Future<Either<Failure, int>> saveMedioUtilizaMedTradicionalByDptoRepositoryDB(
-      MedioUtilizaMedTradicionalByDptoEntity
-          medioUtilizaMedTradicionalByDpto) async {
+      MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicionalByDpto) async {
     try {
       final result = await medioUtilizaMedTradicionalByDptoLocalDataSource
           .saveMedioUtilizaMedTradicionalByDpto(

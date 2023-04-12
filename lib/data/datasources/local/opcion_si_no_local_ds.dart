@@ -12,11 +12,11 @@ class OpcionSiNoLocalDataSourceImpl implements OpcionSiNoLocalDataSource {
   Future<List<OpcionSiNoModel>> getOpcionesSiNo() async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('OpcionSiNo');
-    final opcionesSiNoDB =
+    final result =
         List<OpcionSiNoModel>.from(res.map((m) => OpcionSiNoModel.fromJson(m)))
             .toList();
 
-    return opcionesSiNoDB;
+    return result;
   }
 
   @override

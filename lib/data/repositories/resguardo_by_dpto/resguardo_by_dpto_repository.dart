@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/resguardo_by_dpto_entity.dart';
+import 'package:ifasoris/domain/entities/resguardo_entity.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -15,13 +15,13 @@ class ResguardoByDptoRepositoryImpl implements ResguardoByDptoRepository {
       {required this.resguardoByDptoRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<ResguardoByDptoEntity>>>
-      getResguardosByDptoRepository(int dtoId) async {
+  Future<Either<Failure, List<ResguardoEntity>>> getResguardosByDptoRepository(
+      int dtoId) async {
     try {
-      final resguardoByDptoResponse =
+      final result =
           await resguardoByDptoRemoteDataSource.getResguardosByDpto(dtoId);
 
-      return Right(resguardoByDptoResponse);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {

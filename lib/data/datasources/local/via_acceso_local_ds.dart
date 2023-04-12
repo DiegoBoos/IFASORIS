@@ -12,11 +12,11 @@ class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   Future<List<ViaAccesoModel>> getViasAcceso() async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('ViaAcceso');
-    final viasAccesoDB =
+    final result =
         List<ViaAccesoModel>.from(res.map((m) => ViaAccesoModel.fromJson(m)))
             .toList();
 
-    return viasAccesoDB;
+    return result;
   }
 
   @override

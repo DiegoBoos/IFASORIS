@@ -4,10 +4,10 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
-import '../../models/especialidad_med_tradicional_by_dpto_model.dart';
+import '../../models/especialidad_med_tradicional_model.dart';
 
 abstract class EspecialidadMedTradicionalByDptoRemoteDataSource {
-  Future<List<EspecialidadMedTradicionalByDptoModel>>
+  Future<List<EspecialidadMedTradicionalModel>>
       getEspecialidadesMedTradicionalByDpto(int dtoId);
 }
 
@@ -18,11 +18,11 @@ class EspecialidadMedTradicionalByDptoRemoteDataSourceImpl
   EspecialidadMedTradicionalByDptoRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<EspecialidadMedTradicionalByDptoModel>>
+  Future<List<EspecialidadMedTradicionalModel>>
       getEspecialidadesMedTradicionalByDpto(int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/especialidadesmedtradicionalbyDpto/$dtoId');
+          '${Constants.ifasorisBaseUrl}/especialidadesmedtradicionalbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -33,11 +33,11 @@ class EspecialidadMedTradicionalByDptoRemoteDataSourceImpl
       final Map<String, dynamic> decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
         final result =
-            especialidadesMedTradicionalByDptoFromJson(jsonEncode(decodedResp));
+            especialidadesMedTradicionalFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {
-        throw ServerFailure(decodedResp['errorMessages']);
+        throw const ServerFailure(['Excepción no controlada']);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

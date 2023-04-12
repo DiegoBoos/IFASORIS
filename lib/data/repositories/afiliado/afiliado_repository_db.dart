@@ -15,9 +15,9 @@ class AfiliadoRepositoryDBImpl implements AfiliadoRepositoryDB {
   Future<Either<Failure, List<AfiliadoEntity>>> getAfiliadosRepositoryDB(
       int dtoId, int pagina, int registrosPorPagina) async {
     try {
-      final afiliadoDB = await afiliadoLocalDataSource.getAfiliados(
+      final result = await afiliadoLocalDataSource.getAfiliados(
           dtoId, pagina, registrosPorPagina);
-      return Right(afiliadoDB);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {
@@ -29,8 +29,8 @@ class AfiliadoRepositoryDBImpl implements AfiliadoRepositoryDB {
   Future<Either<Failure, int>> saveAfiliadoRepositoryDB(
       AfiliadoEntity afiliado) async {
     try {
-      final afiliadoDB = await afiliadoLocalDataSource.saveAfiliado(afiliado);
-      return Right(afiliadoDB);
+      final result = await afiliadoLocalDataSource.saveAfiliado(afiliado);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {

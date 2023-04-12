@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:ifasoris/domain/entities/resguardo_by_dpto_entity.dart';
+import 'package:ifasoris/domain/entities/resguardo_entity.dart';
 
-List<ResguardoByDptoModel> resguardosByDptoModelFromJson(String str) =>
-    List<ResguardoByDptoModel>.from(
-        json.decode(str).map((x) => ResguardoByDptoModel.fromJson(x)));
+List<ResguardoModel> resguardosByDptoModelFromJson(String str) =>
+    List<ResguardoModel>.from(
+        json.decode(str).map((x) => ResguardoModel.fromJson(x)));
 
-class ResguardoByDptoModel extends ResguardoByDptoEntity {
-  ResguardoByDptoModel({
+class ResguardoModel extends ResguardoEntity {
+  ResguardoModel({
     required int resguardoId,
     required String nombreResguardo,
     required String codaneResguardo,
@@ -19,8 +19,7 @@ class ResguardoByDptoModel extends ResguardoByDptoEntity {
           departamentoIde: departamentoIde,
         );
 
-  factory ResguardoByDptoModel.fromJson(Map<String, dynamic> json) =>
-      ResguardoByDptoModel(
+  factory ResguardoModel.fromJson(Map<String, dynamic> json) => ResguardoModel(
         resguardoId: json["resguardo_id"],
         nombreResguardo: json["nombreResguardo"],
         codaneResguardo: json["codaneResguardo"],

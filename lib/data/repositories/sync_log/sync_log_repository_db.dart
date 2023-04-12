@@ -14,9 +14,9 @@ class SyncLogRepositoryDBImpl implements SyncLogRepositoryDB {
   @override
   Future<Either<Failure, List<SyncLogEntity>>> getSyncLogsRepositoryDB() async {
     try {
-      final syncLogsDB = await syncLogLocalDataSource.getSyncLogsDB();
+      final result = await syncLogLocalDataSource.getSyncLogsDB();
 
-      return Right(syncLogsDB);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {
@@ -28,8 +28,8 @@ class SyncLogRepositoryDBImpl implements SyncLogRepositoryDB {
   Future<Either<Failure, int>> forceSyncRepositoryDB(
       List<SyncLogEntity> syncLogEntity) async {
     try {
-      final syncLogDB = await syncLogLocalDataSource.forceSyncDB(syncLogEntity);
-      return Right(syncLogDB);
+      final result = await syncLogLocalDataSource.forceSyncDB(syncLogEntity);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {

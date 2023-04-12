@@ -17,10 +17,10 @@ class AfiliadoRepositoryImpl implements AfiliadoRepository {
   Future<Either<Failure, AfiliadoResponseModel>> getAfiliadosRepository(
       int dtoId, int pagina, int registrosPorPagina) async {
     try {
-      final afiliadoResponse = await afiliadoRemoteDataSource.getAfiliados(
+      final result = await afiliadoRemoteDataSource.getAfiliados(
           dtoId, pagina, registrosPorPagina);
 
-      return Right(afiliadoResponse);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {

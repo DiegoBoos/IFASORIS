@@ -7,7 +7,7 @@ import '../../../constants.dart';
 import '../../models/resguardo_by_dpto_model.dart';
 
 abstract class ResguardoByDptoRemoteDataSource {
-  Future<List<ResguardoByDptoModel>> getResguardosByDpto(int dtoId);
+  Future<List<ResguardoModel>> getResguardosByDpto(int dtoId);
 }
 
 class ResguardoByDptoRemoteDataSourceImpl
@@ -17,10 +17,10 @@ class ResguardoByDptoRemoteDataSourceImpl
   ResguardoByDptoRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<ResguardoByDptoModel>> getResguardosByDpto(int dtoId) async {
+  Future<List<ResguardoModel>> getResguardosByDpto(int dtoId) async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/resguardosByDpto/$dtoId');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/resguardosByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ class ResguardoByDptoRemoteDataSourceImpl
 
         return result;
       } else {
-        throw ServerFailure(decodedResp['errorMessages']);
+        throw const ServerFailure(['Excepción no controlada']);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

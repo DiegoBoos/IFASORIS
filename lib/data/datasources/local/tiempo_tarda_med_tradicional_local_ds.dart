@@ -15,12 +15,10 @@ class TiempoTardaMedTradicionalLocalDataSourceImpl
       getTiemposTardaMedTradicional() async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('TiempoTardaMedTradicional');
-    final tiemposTardaMedTradicionalDB =
-        List<TiempoTardaMedTradicionalModel>.from(
-                res.map((m) => TiempoTardaMedTradicionalModel.fromJson(m)))
-            .toList();
+    final result = List<TiempoTardaMedTradicionalModel>.from(
+        res.map((m) => TiempoTardaMedTradicionalModel.fromJson(m))).toList();
 
-    return tiemposTardaMedTradicionalDB;
+    return result;
   }
 
   @override

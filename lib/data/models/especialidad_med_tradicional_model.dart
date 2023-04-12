@@ -1,0 +1,35 @@
+import 'dart:convert';
+
+import 'package:ifasoris/domain/entities/especialidad_med_tradicional_entity.dart';
+
+List<EspecialidadMedTradicionalModel> especialidadesMedTradicionalFromJson(
+        String str) =>
+    List<EspecialidadMedTradicionalModel>.from(json
+        .decode(str)
+        .map((x) => EspecialidadMedTradicionalModel.fromJson(x)));
+
+class EspecialidadMedTradicionalModel extends EspecialidadMedTradicionalEntity {
+  EspecialidadMedTradicionalModel({
+    required int especialidadMedTradId,
+    required String descripcion,
+    required int departamentoIde,
+  }) : super(
+          especialidadMedTradId: especialidadMedTradId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
+
+  factory EspecialidadMedTradicionalModel.fromJson(Map<String, dynamic> json) =>
+      EspecialidadMedTradicionalModel(
+        especialidadMedTradId: json["especialidadMedTrad_id"],
+        descripcion: json["descripcion"],
+        departamentoIde: json["departamento_Ide"],
+      );
+
+  @override
+  Map<String, dynamic> toJson() => {
+        "especialidadMedTrad_id": especialidadMedTradId,
+        "descripcion": descripcion,
+        "departamento_Ide": departamentoIde,
+      };
+}

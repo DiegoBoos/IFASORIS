@@ -1,0 +1,10 @@
+export 'package:ifasoris/domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_usecase.dart';
+export 'package:ifasoris/domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_db_usecase.dart';
+export 'package:ifasoris/domain/repositories/especie_animal_by_dpto/especie_animal_by_dpto_repository.dart';
+export 'package:ifasoris/domain/repositories/especie_animal_by_dpto/especie_animal_by_dpto_repository_db.dart';
+export 'package:ifasoris/domain/entities/especie_animal_entity.dart';
+export 'package:ifasoris/ui/cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
+export 'package:ifasoris/data/repositories/especie_animal_by_dpto/especie_animal_by_dpto_repository.dart';
+export 'package:ifasoris/data/repositories/especie_animal_by_dpto/especie_animal_by_dpto_repository_db.dart';
+export 'package:ifasoris/data/datasources/remote/especie_animal_by_dpto_remote_ds.dart';
+export 'package:ifasoris/data/datasources/local/especie_animal_by_dpto_local_ds.dart';

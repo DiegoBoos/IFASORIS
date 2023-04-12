@@ -4,10 +4,10 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
-import '../../models/medio_utiliza_med_tradicional_by_dpto_model.dart';
+import '../../models/medio_utiliza_med_tradicional_model.dart';
 
 abstract class MedioUtilizaMedTradicionalByDptoRemoteDataSource {
-  Future<List<MedioUtilizaMedTradicionalByDptoModel>>
+  Future<List<MedioUtilizaMedTradicionalModel>>
       getMediosUtilizaMedTradicionalByDpto(int dtoId);
 }
 
@@ -18,11 +18,11 @@ class MedioUtilizaMedTradicionalByDptoRemoteDataSourceImpl
   MedioUtilizaMedTradicionalByDptoRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<MedioUtilizaMedTradicionalByDptoModel>>
+  Future<List<MedioUtilizaMedTradicionalModel>>
       getMediosUtilizaMedTradicionalByDpto(int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/mediosutilizamedtradicionalbyDpto/$dtoId');
+          '${Constants.ifasorisBaseUrl}/mediosutilizamedtradicionalbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -33,11 +33,11 @@ class MedioUtilizaMedTradicionalByDptoRemoteDataSourceImpl
       final Map<String, dynamic> decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
         final result =
-            mediosUtilizaMedTradicionalByDptoFromJson(jsonEncode(decodedResp));
+            mediosUtilizaMedTradicionalFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {
-        throw ServerFailure(decodedResp['errorMessages']);
+        throw const ServerFailure(['Excepción no controlada']);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

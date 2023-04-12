@@ -19,8 +19,7 @@ class AutoridadIndigenaRemoteDataSourceImpl
   @override
   Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas() async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/autoridadesindigenas');
+      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/AutoridadIndigena');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -34,7 +33,7 @@ class AutoridadIndigenaRemoteDataSourceImpl
             autoridadesIndigenasModelFromJson(jsonEncode(decodedResp));
         return result;
       } else {
-        throw ServerFailure(decodedResp['errorMessages']);
+        throw const ServerFailure(['Excepción no controlada']);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

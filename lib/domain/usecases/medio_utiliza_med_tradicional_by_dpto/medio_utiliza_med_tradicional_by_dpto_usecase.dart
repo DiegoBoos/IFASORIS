@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/medio_utiliza_med_tradicional_by_dpto_entity.dart';
+import '../../entities/medio_utiliza_med_tradicional_entity.dart';
 import '../../repositories/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_repository.dart';
 
 class MedioUtilizaMedTradicionalByDptoUsecase {
@@ -9,7 +9,7 @@ class MedioUtilizaMedTradicionalByDptoUsecase {
 
   MedioUtilizaMedTradicionalByDptoUsecase(this.repository);
 
-  Future<Either<Failure, List<MedioUtilizaMedTradicionalByDptoEntity>>>
+  Future<Either<Failure, List<MedioUtilizaMedTradicionalEntity>>>
       getMediosUtilizaMedTradicionalByDptoUsecase(int dtoId) {
     return repository.getMediosUtilizaMedTradicionalByDptoRepository(dtoId);
   }

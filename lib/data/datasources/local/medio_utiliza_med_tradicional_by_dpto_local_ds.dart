@@ -1,32 +1,30 @@
-import '../../../domain/entities/medio_utiliza_med_tradicional_by_dpto_entity.dart';
+import '../../../domain/entities/medio_utiliza_med_tradicional_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/medio_utiliza_med_tradicional_by_dpto_model.dart';
+import '../../models/medio_utiliza_med_tradicional_model.dart';
 
 abstract class MedioUtilizaMedTradicionalByDptoLocalDataSource {
-  Future<List<MedioUtilizaMedTradicionalByDptoModel>>
-      getMediosUtilizaMedTradicionalByDpto(int dtoId);
+  Future<List<MedioUtilizaMedTradicionalModel>>
+      getMediosUtilizaMedTradicionalByDpto();
   Future<int> saveMedioUtilizaMedTradicionalByDpto(
-      MedioUtilizaMedTradicionalByDptoEntity medioutilizaMedTradicionalByDpto);
+      MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicionalByDpto);
 }
 
 class MedioUtilizaMedTradicionalByDptoLocalDataSourceImpl
     implements MedioUtilizaMedTradicionalByDptoLocalDataSource {
   @override
-  Future<List<MedioUtilizaMedTradicionalByDptoModel>>
-      getMediosUtilizaMedTradicionalByDpto(int dtoId) async {
+  Future<List<MedioUtilizaMedTradicionalModel>>
+      getMediosUtilizaMedTradicionalByDpto() async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('MedioUtilizaMedTradicionalByDpto');
-    final result = List<MedioUtilizaMedTradicionalByDptoModel>.from(
-            res.map((m) => MedioUtilizaMedTradicionalByDptoModel.fromJson(m)))
-        .toList();
+    final result = List<MedioUtilizaMedTradicionalModel>.from(
+        res.map((m) => MedioUtilizaMedTradicionalModel.fromJson(m))).toList();
 
     return result;
   }
 
   @override
   Future<int> saveMedioUtilizaMedTradicionalByDpto(
-      MedioUtilizaMedTradicionalByDptoEntity
-          medioUtilizaMedTradicionalByDpto) async {
+      MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicionalByDpto) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('MedioUtilizaMedTradicionalByDpto',

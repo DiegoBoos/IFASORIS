@@ -1,7 +1,7 @@
 part of 'especialidad_med_tradicional_by_dpto_cubit.dart';
 
 abstract class EspecialidadesMedTradicionalByDptoState extends Equatable {
-  final List<EspecialidadMedTradicionalByDptoEntity>?
+  final List<EspecialidadMedTradicionalEntity>?
       especialidadesmedtradicionalByDpto;
   const EspecialidadesMedTradicionalByDptoState(
       {this.especialidadesmedtradicionalByDpto});
@@ -18,7 +18,7 @@ class EspecialidadesMedTradicionalByDptoLoading
 
 class EspecialidadesMedTradicionalByDptoLoaded
     extends EspecialidadesMedTradicionalByDptoState {
-  final List<EspecialidadMedTradicionalByDptoEntity>?
+  final List<EspecialidadMedTradicionalEntity>?
       especialidadesmedtradicionalByDptoLoaded;
 
   const EspecialidadesMedTradicionalByDptoLoaded(

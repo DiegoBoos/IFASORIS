@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/resguardo_by_dpto_entity.dart';
+import '../../entities/resguardo_entity.dart';
 
 abstract class ResguardoByDptoRepository {
-  Future<Either<Failure, List<ResguardoByDptoEntity>>>
-      getResguardosByDptoRepository(int dtoId);
+  Future<Either<Failure, List<ResguardoEntity>>> getResguardosByDptoRepository(
+      int dtoId);
 }

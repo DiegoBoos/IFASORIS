@@ -17,9 +17,9 @@ class OpcionSiNoRepositoryImpl implements OpcionSiNoRepository {
   Future<Either<Failure, List<OpcionSiNoEntity>>>
       getOpcionesSiNoRepository() async {
     try {
-      final opcionesSiNo = await opcionSiNoRemoteDataSource.getOpcionesSiNo();
+      final result = await opcionSiNoRemoteDataSource.getOpcionesSiNo();
 
-      return Right(opcionesSiNo);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {
