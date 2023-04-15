@@ -21,15 +21,8 @@ class EspecialidadMedTradicionalModel extends EspecialidadMedTradicionalEntity {
 
   factory EspecialidadMedTradicionalModel.fromJson(Map<String, dynamic> json) =>
       EspecialidadMedTradicionalModel(
-        especialidadMedTradId: json["especialidadMedTrad_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        especialidadMedTradId: json["EspecialidadMedTrad_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "especialidadMedTrad_id": especialidadMedTradId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

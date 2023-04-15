@@ -11,7 +11,7 @@ class VerduraByDptoLocalDataSourceImpl implements VerduraByDptoLocalDataSource {
   @override
   Future<List<VerduraModel>> getVerdurasByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('VerduraByDpto');
+    final res = await db.query('Verduras_AspectosSocioEconomicos');
     final result =
         List<VerduraModel>.from(res.map((m) => VerduraModel.fromJson(m)))
             .toList();
@@ -23,7 +23,8 @@ class VerduraByDptoLocalDataSourceImpl implements VerduraByDptoLocalDataSource {
   Future<int> saveVerduraByDpto(VerduraEntity verdura) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('VerduraByDpto', verdura.toJson());
+    final res =
+        await db.insert('Verduras_AspectosSocioEconomicos', verdura.toJson());
 
     return res;
   }

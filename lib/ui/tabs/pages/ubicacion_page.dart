@@ -10,14 +10,14 @@ import '../../cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import '../../cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
 import '../../cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
 
-class Screen1Page extends StatefulWidget {
-  const Screen1Page({super.key});
+class UbicacionPage extends StatefulWidget {
+  const UbicacionPage({super.key});
 
   @override
-  State<Screen1Page> createState() => _Screen1PageState();
+  State<UbicacionPage> createState() => _UbicacionPageState();
 }
 
-class _Screen1PageState extends State<Screen1Page> {
+class _UbicacionPageState extends State<UbicacionPage> {
   final formKey = GlobalKey<FormState>();
 
   @override

@@ -13,13 +13,7 @@ class ViaAccesoModel extends ViaAccesoEntity {
   }) : super(viaAccesoId: viaAccesoId, descripcion: descripcion);
 
   factory ViaAccesoModel.fromJson(Map<String, dynamic> json) => ViaAccesoModel(
-        viaAccesoId: json["viaAcceso_id"],
-        descripcion: json["descripcion"],
+        viaAccesoId: json["ViaAcceso_id"],
+        descripcion: json["Descripcion"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "viaAcceso_id": viaAccesoId,
-        "descripcion": descripcion,
-      };
 }

@@ -32,7 +32,7 @@ class _SignInPageState extends State<SignInPage> {
         listeners: [
           BlocListener<AuthBloc, AuthState>(listener: (context, state) {
             if (state is AuthLoaded) {
-              Navigator.pushReplacementNamed(context, 'tabs');
+              Navigator.pushReplacementNamed(context, 'home');
             }
             if (state is AuthError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -41,73 +41,75 @@ class _SignInPageState extends State<SignInPage> {
           }),
         ],
         child: Scaffold(
-          body: Container(
-            width: (size.width > 500) ? size.width / 2 : size.width,
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      Text('Ingresar',
-                          style: Theme.of(context).textTheme.headline4),
-                      const Expanded(child: NetworkIcon())
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  SignInForm(
-                      userNameCtrl: userNameCtrl, passwordCtrl: passwordCtrl),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: MaterialButton(
-                            disabledColor: Colors.grey,
-                            elevation: 0,
-                            color: Theme.of(context).colorScheme.primary,
-                            onPressed: authBloc.state is AuthLoading
-                                ? null
-                                : () {
-                                    if (!formKey.currentState!.validate()) {
-                                      return;
-                                    }
+          body: Center(
+            child: Container(
+              width: (size.width > 500) ? size.width / 2 : size.width,
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        Text('Ingresar',
+                            style: Theme.of(context).textTheme.headline4),
+                        const Expanded(child: NetworkIcon())
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    SignInForm(
+                        userNameCtrl: userNameCtrl, passwordCtrl: passwordCtrl),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: MaterialButton(
+                              disabledColor: Colors.grey,
+                              elevation: 0,
+                              color: Theme.of(context).colorScheme.primary,
+                              onPressed: authBloc.state is AuthLoading
+                                  ? null
+                                  : () {
+                                      if (!formKey.currentState!.validate()) {
+                                        return;
+                                      }
 
-                                    final usuario = UsuarioEntity(
-                                      userName: userNameCtrl.text,
-                                      password: passwordCtrl.text,
-                                    );
+                                      final usuario = UsuarioEntity(
+                                        userName: userNameCtrl.text,
+                                        password: passwordCtrl.text,
+                                      );
 
-                                    if (internetCubit.state
-                                        is InternetConnected) {
-                                      authBloc.add(LogIn(usuario: usuario));
-                                    } else if (internetCubit.state
-                                        is InternetDisconnected) {
-                                      authBloc.add(LogInDB(usuario: usuario));
-                                    }
-                                  },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: double.infinity,
-                              child: authBloc.state is AuthLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : const Text(
-                                      'Ingresar',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ],
+                                      if (internetCubit.state
+                                          is InternetConnected) {
+                                        authBloc.add(LogIn(usuario: usuario));
+                                      } else if (internetCubit.state
+                                          is InternetDisconnected) {
+                                        authBloc.add(LogInDB(usuario: usuario));
+                                      }
+                                    },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: double.infinity,
+                                child: authBloc.state is AuthLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : const Text(
+                                        'Ingresar',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

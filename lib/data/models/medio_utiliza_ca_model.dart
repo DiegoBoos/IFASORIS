@@ -19,15 +19,8 @@ class MedioUtilizaCAModel extends MedioUtilizaCAEntity {
 
   factory MedioUtilizaCAModel.fromJson(Map<String, dynamic> json) =>
       MedioUtilizaCAModel(
-        medioUtilizaId: json["medioUtiliza_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        medioUtilizaId: json["MedioUtiliza_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "medioUtiliza_id": medioUtilizaId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

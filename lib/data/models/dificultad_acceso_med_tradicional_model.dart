@@ -11,11 +11,11 @@ List<DificultadAccesoMedTradicionalModel>
 class DificultadAccesoMedTradicionalModel
     extends DificultadAccesoMedTradicionalEntity {
   DificultadAccesoMedTradicionalModel({
-    required int dificultaAccesoMedTradId,
+    required int dificultadAccesoMedTradId,
     required String descripcion,
     required int departamentoIde,
   }) : super(
-          dificultaAccesoMedTradId: dificultaAccesoMedTradId,
+          dificultadAccesoMedTradId: dificultadAccesoMedTradId,
           descripcion: descripcion,
           departamentoIde: departamentoIde,
         );
@@ -23,15 +23,8 @@ class DificultadAccesoMedTradicionalModel
   factory DificultadAccesoMedTradicionalModel.fromJson(
           Map<String, dynamic> json) =>
       DificultadAccesoMedTradicionalModel(
-        dificultaAccesoMedTradId: json["dificultaAccesoMedTrad_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        dificultadAccesoMedTradId: json["DificultadAccesoMedTrad_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "dificultaAccesoMedTrad_id": dificultaAccesoMedTradId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

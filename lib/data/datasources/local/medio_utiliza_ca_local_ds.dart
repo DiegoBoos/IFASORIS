@@ -12,7 +12,7 @@ class MedioUtilizaCALocalDataSourceImpl
   @override
   Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('MedioUtilizaCA');
+    final res = await db.query('MediosUtiliza_CentroAtencion');
     final mediosUtilizaCADB = List<MedioUtilizaCAModel>.from(
         res.map((m) => MedioUtilizaCAModel.fromJson(m))).toList();
 
@@ -23,7 +23,8 @@ class MedioUtilizaCALocalDataSourceImpl
   Future<int> saveMedioUtilizaCA(MedioUtilizaCAEntity medioUtilizaCA) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('MedioUtilizaCA', medioUtilizaCA.toJson());
+    final res = await db.insert(
+        'MediosUtiliza_CentroAtencion', medioUtilizaCA.toJson());
 
     return res;
   }

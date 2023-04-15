@@ -43,4 +43,13 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     final result = UsuarioModel.fromJson(resultMap);
     return result;
   }
+
+  static Future<int> saveUsuario(UsuarioEntity usuarioEntity) async {
+    final db = await ConnectionSQLiteService.db;
+
+    await db.delete('Usuario');
+
+    final res = await db.insert('Usuario', usuarioEntity.toJson());
+    return res;
+  }
 }

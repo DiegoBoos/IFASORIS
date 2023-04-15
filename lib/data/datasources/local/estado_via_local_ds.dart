@@ -11,7 +11,7 @@ class EstadoViaLocalDataSourceImpl implements EstadoViaLocalDataSource {
   @override
   Future<List<EstadoViaModel>> getEstadosVias() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('EstadoVia');
+    final res = await db.query('EstadoVias');
     final result =
         List<EstadoViaModel>.from(res.map((m) => EstadoViaModel.fromJson(m)))
             .toList();
@@ -23,7 +23,7 @@ class EstadoViaLocalDataSourceImpl implements EstadoViaLocalDataSource {
   Future<int> saveEstadoVia(EstadoViaEntity estadoVia) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('EstadoVia', estadoVia.toJson());
+    final res = await db.insert('EstadoVias', estadoVia.toJson());
 
     return res;
   }

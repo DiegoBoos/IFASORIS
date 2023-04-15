@@ -21,15 +21,8 @@ class MedioUtilizaMedTradicionalModel extends MedioUtilizaMedTradicionalEntity {
 
   factory MedioUtilizaMedTradicionalModel.fromJson(Map<String, dynamic> json) =>
       MedioUtilizaMedTradicionalModel(
-        medioUtilizaMedTradId: json["medioUtilizaMedTrad_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        medioUtilizaMedTradId: json["MedioUtilizaMedTrad_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "medioUtilizaMedTrad_id": medioUtilizaMedTradId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

@@ -15,7 +15,7 @@ class MedioUtilizaMedTradicionalByDptoLocalDataSourceImpl
   Future<List<MedioUtilizaMedTradicionalModel>>
       getMediosUtilizaMedTradicionalByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('MedioUtilizaMedTradicionalByDpto');
+    final res = await db.query('MediosUtiliza_AccesoMedTradicional');
     final result = List<MedioUtilizaMedTradicionalModel>.from(
         res.map((m) => MedioUtilizaMedTradicionalModel.fromJson(m))).toList();
 
@@ -27,7 +27,7 @@ class MedioUtilizaMedTradicionalByDptoLocalDataSourceImpl
       MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicionalByDpto) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('MedioUtilizaMedTradicionalByDpto',
+    final res = await db.insert('MediosUtiliza_AccesoMedTradicional',
         medioUtilizaMedTradicionalByDpto.toJson());
 
     return res;

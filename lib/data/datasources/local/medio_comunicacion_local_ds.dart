@@ -12,7 +12,7 @@ class MedioComunicacionLocalDataSourceImpl
   @override
   Future<List<MedioComunicacionModel>> getMediosComunicacion() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('MedioComunicacion');
+    final res = await db.query('MediosComunicacion');
     final mediosComunicacionDB = List<MedioComunicacionModel>.from(
         res.map((m) => MedioComunicacionModel.fromJson(m))).toList();
 
@@ -25,7 +25,7 @@ class MedioComunicacionLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     final res =
-        await db.insert('MedioComunicacion', medioComunicacion.toJson());
+        await db.insert('MediosComunicacion', medioComunicacion.toJson());
 
     return res;
   }

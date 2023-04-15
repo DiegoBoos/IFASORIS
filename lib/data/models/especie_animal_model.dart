@@ -19,15 +19,8 @@ class EspecieAnimalModel extends EspecieAnimalEntity {
 
   factory EspecieAnimalModel.fromJson(Map<String, dynamic> json) =>
       EspecieAnimalModel(
-        especieAnimalCriaId: json["especieAnimalCria_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        especieAnimalCriaId: json["EspecieAnimalCria_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "especieAnimalCria_id": especieAnimalCriaId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

@@ -19,15 +19,8 @@ class DificultadAccesoCAModel extends DificultadAccesoCAEntity {
 
   factory DificultadAccesoCAModel.fromJson(Map<String, dynamic> json) =>
       DificultadAccesoCAModel(
-        dificultaAccesoId: json["dificultaAcceso_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        dificultaAccesoId: json["DificultaAcceso_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "dificultaAcceso_id": dificultaAccesoId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

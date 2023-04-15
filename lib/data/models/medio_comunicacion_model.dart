@@ -15,13 +15,7 @@ class MedioComunicacionModel extends MedioComunicacionEntity {
 
   factory MedioComunicacionModel.fromJson(Map<String, dynamic> json) =>
       MedioComunicacionModel(
-        medioComunicacionId: json["medioComunicacion_id"],
-        descripcion: json["descripcion"],
+        medioComunicacionId: json["MedioComunicacion_id"],
+        descripcion: json["Descripcion"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "medioComunicacion_id": medioComunicacionId,
-        "descripcion": descripcion,
-      };
 }

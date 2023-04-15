@@ -12,7 +12,7 @@ class EspecieAnimalByDptoLocalDataSourceImpl
   @override
   Future<List<EspecieAnimalModel>> getEspeciesAnimalesByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('EspecieAnimalByDpto');
+    final res = await db.query('EspecieAnimalesCria_AspectosSocioEconomicos');
     final result = List<EspecieAnimalModel>.from(
         res.map((m) => EspecieAnimalModel.fromJson(m))).toList();
 
@@ -23,7 +23,8 @@ class EspecieAnimalByDptoLocalDataSourceImpl
   Future<int> saveEspecieAnimalByDpto(EspecieAnimalEntity especieAnimal) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('EspecieAnimalByDpto', especieAnimal.toJson());
+    final res = await db.insert(
+        'EspecieAnimalesCria_AspectosSocioEconomicos', especieAnimal.toJson());
 
     return res;
   }

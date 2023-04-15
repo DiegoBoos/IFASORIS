@@ -17,15 +17,8 @@ class FrutoModel extends FrutoEntity {
         );
 
   factory FrutoModel.fromJson(Map<String, dynamic> json) => FrutoModel(
-        frutoId: json["fruto_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        frutoId: json["Fruto_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "fruto_id": frutoId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

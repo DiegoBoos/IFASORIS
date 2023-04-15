@@ -13,7 +13,7 @@ class DificultadAccesoCALocalDataSourceImpl
   @override
   Future<List<DificultadAccesoCAModel>> getDificultadesAccesoCA() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('DificultadAccesoCA');
+    final res = await db.query('DificultadesAcceso_CentroAtencion');
     final result = List<DificultadAccesoCAModel>.from(
         res.map((m) => DificultadAccesoCAModel.fromJson(m))).toList();
 
@@ -25,8 +25,8 @@ class DificultadAccesoCALocalDataSourceImpl
       DificultadAccesoCAEntity dificultadAccesoCA) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res =
-        await db.insert('DificultadAccesoCA', dificultadAccesoCA.toJson());
+    final res = await db.insert(
+        'DificultadesAcceso_CentroAtencion', dificultadAccesoCA.toJson());
 
     return res;
   }

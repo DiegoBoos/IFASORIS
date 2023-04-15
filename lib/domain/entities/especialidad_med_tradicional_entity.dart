@@ -9,17 +9,9 @@ class EspecialidadMedTradicionalEntity {
   String descripcion;
   int departamentoIde;
 
-  factory EspecialidadMedTradicionalEntity.fromJson(
-          Map<String, dynamic> json) =>
-      EspecialidadMedTradicionalEntity(
-        especialidadMedTradId: json["especialidadMedTrad_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "especialidadMedTrad_id": especialidadMedTradId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
+        "EspecialidadMedTrad_id": especialidadMedTradId,
+        "Descripcion": descripcion,
+        "Departamento_Ide": departamentoIde,
       };
 }

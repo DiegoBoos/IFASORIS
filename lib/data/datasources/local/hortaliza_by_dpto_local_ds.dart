@@ -12,7 +12,7 @@ class HortalizaByDptoLocalDataSourceImpl
   @override
   Future<List<HortalizaModel>> getHortalizasByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('HortalizaByDpto');
+    final res = await db.query('Hortalizas_AspectosSocioEconomicos');
     final result =
         List<HortalizaModel>.from(res.map((m) => HortalizaModel.fromJson(m)))
             .toList();
@@ -24,7 +24,8 @@ class HortalizaByDptoLocalDataSourceImpl
   Future<int> saveHortalizaByDpto(HortalizaEntity hortaliza) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('HortalizaByDpto', hortaliza.toJson());
+    final res = await db.insert(
+        'Hortalizas_AspectosSocioEconomicos', hortaliza.toJson());
 
     return res;
   }

@@ -14,7 +14,7 @@ class TiempoTardaMedTradicionalLocalDataSourceImpl
   Future<List<TiempoTardaMedTradicionalModel>>
       getTiemposTardaMedTradicional() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('TiempoTardaMedTradicional');
+    final res = await db.query('TiemposTarda_AccesoMedTradicional');
     final result = List<TiempoTardaMedTradicionalModel>.from(
         res.map((m) => TiempoTardaMedTradicionalModel.fromJson(m))).toList();
 
@@ -26,8 +26,8 @@ class TiempoTardaMedTradicionalLocalDataSourceImpl
       TiempoTardaMedTradicionalEntity tiempoTardaMedTradicional) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res =
-        await db.insert('TiempoTardaCA', tiempoTardaMedTradicional.toJson());
+    final res = await db.insert('TiemposTarda_AccesoMedTradicional',
+        tiempoTardaMedTradicional.toJson());
 
     return res;
   }

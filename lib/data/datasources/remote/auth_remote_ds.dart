@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import '../../../core/error/failure.dart';
 import '../../../../domain/entities/usuario_entity.dart';
 import '../../../constants.dart';
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/usuario_model.dart';
+import '../local/auth_local_ds.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UsuarioModel> logIn(UsuarioEntity usuario);
@@ -21,8 +21,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UsuarioModel> logIn(UsuarioEntity usuario) async {
     try {
       final formData = {
-        "userName": usuario.userName,
-        "password": usuario.password
+        "UserName": usuario.userName,
+        "Password": usuario.password
       };
 
       final uri = Uri.parse('${Constants.ifasorisBaseUrl}/usuarios/login');
@@ -33,15 +33,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           },
           body: jsonEncode(formData));
 
-      final Map<String, dynamic> decodedResp = jsonDecode(resp.body);
+      final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final token = decodedResp['result']['token'];
-        final resultMap = decodedResp['result']['usuario'];
-        resultMap['password'] = usuario.password;
-        resultMap['token'] = token;
+        final token = decodedResp['Result']['Token'];
+        final resultMap = decodedResp['Result']['Usuario'];
+        resultMap['Password'] = usuario.password;
+        resultMap['Token'] = token;
 
         final result = UsuarioModel.fromJson(resultMap);
-        final res = await saveUsuario(result);
+        final res = await AuthLocalDataSourceImpl.saveUsuario(result);
 
         if (res == 1) {
           return result;
@@ -54,14 +54,5 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on SocketException catch (e) {
       throw SocketException(e.toString());
     }
-  }
-
-  Future<int> saveUsuario(UsuarioEntity usuarioEntity) async {
-    final db = await ConnectionSQLiteService.db;
-
-    await db.delete('Usuario', where: 'id = ?', whereArgs: [usuarioEntity.id]);
-
-    final res = await db.insert('Usuario', usuarioEntity.toJson());
-    return res;
   }
 }

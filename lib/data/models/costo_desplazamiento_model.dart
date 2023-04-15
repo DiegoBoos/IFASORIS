@@ -17,13 +17,7 @@ class CostoDesplazamientoModel extends CostoDesplazamientoEntity {
 
   factory CostoDesplazamientoModel.fromJson(Map<String, dynamic> json) =>
       CostoDesplazamientoModel(
-        costoDesplazamientoId: json["costoDesplazamiento_id"],
-        descripcion: json["descripcion"],
+        costoDesplazamientoId: json["CostoDesplazamiento_id"],
+        descripcion: json["Descripcion"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "costoDesplazamiento_id": costoDesplazamientoId,
-        "descripcion": descripcion,
-      };
 }

@@ -59,15 +59,30 @@ class ConnectionSQLiteService {
   }
 
   static FutureOr<void> _onCreate(Database db, int version) {
-    db.transaction((reference) async {
-      reference.execute(ConnectionSQL.CREATE_USUARIO);
-      reference.execute(ConnectionSQL.CREATE_AFILIADO);
-      reference.execute(ConnectionSQL.CREATE_DIFICULTAD_ACCESO_CA);
-      reference.execute(ConnectionSQL.CREATE_ESTADO_VIA);
-      reference.execute(ConnectionSQL.CREATE_MEDIO_COMUNICACION);
-      reference.execute(ConnectionSQL.CREATE_MEDIO_UTILIZA_CA);
-      reference.execute(ConnectionSQL.CREATE_TIEMPO_TARDA_CA);
-      reference.execute(ConnectionSQL.CREATE_VIA_ACCESO);
+    db.transaction((ref) async {
+      ref.execute(ConnectionSQL.CREATE_USUARIO);
+      ref.execute(ConnectionSQL.CREATE_AFILIADO);
+      ref.execute(ConnectionSQL.CREATE_DIFICULTADES_ACCESO_CENTRO_ATENCION);
+      ref.execute(ConnectionSQL.CREATE_ESTADOS_VIAS);
+      ref.execute(ConnectionSQL.CREATE_MEDIOS_COMUNICACION);
+      ref.execute(ConnectionSQL.CREATE_MEDIOS_UTILIZA_CENTRO_ATENCION);
+      ref.execute(ConnectionSQL.CREATE_TIEMPOS_TARDA_CENTRO_ATENCION);
+      ref.execute(ConnectionSQL.CREATE_VIAS_ACCESO);
+      ref.execute(ConnectionSQL.CREATE_AUTORIDADES_INDIGENAS);
+      ref.execute(ConnectionSQL.CREATE_CEREALES);
+      ref.execute(ConnectionSQL.CREATE_COSTOS_DESPLAZAMIENTO_CENTRO_ATENCION);
+      ref.execute(ConnectionSQL.CREATE_DIFICULTADES_ACCESO_MED_TRADICIONAL);
+      ref.execute(ConnectionSQL.CREATE_ESPECIALIDADES_MED_TRADICIONAL);
+      ref.execute(ConnectionSQL.CREATE_ESPECIES_ANIMALES);
+      ref.execute(ConnectionSQL.CREATE_FRUTOS);
+      ref.execute(ConnectionSQL.CREATE_HORTALIZAS);
+      ref.execute(ConnectionSQL.CREATE_LEGUMINOSAS);
+      ref.execute(ConnectionSQL.CREATE_MEDIOS_UTILIZA_MED_TRADICIONAL);
+      ref.execute(ConnectionSQL.CREATE_OPCIONES_SI_NO);
+      ref.execute(ConnectionSQL.CREATE_RESGUARDOS);
+      ref.execute(ConnectionSQL.CREATE_TIEMPOS_TARDA_MED_TRADICIONAL);
+      ref.execute(ConnectionSQL.CREATE_TUBERCULOS_PLATANOS);
+      ref.execute(ConnectionSQL.CREATE_VERDURAS);
     });
   }
 

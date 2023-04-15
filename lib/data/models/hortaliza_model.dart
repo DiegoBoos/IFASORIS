@@ -18,15 +18,8 @@ class HortalizaModel extends HortalizaEntity {
         );
 
   factory HortalizaModel.fromJson(Map<String, dynamic> json) => HortalizaModel(
-        hortalizaId: json["hortaliza_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        hortalizaId: json["Hortaliza_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "hortaliza_id": hortalizaId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

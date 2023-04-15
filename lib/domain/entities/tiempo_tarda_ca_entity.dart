@@ -7,14 +7,8 @@ class TiempoTardaCAEntity {
   int tiempoTardaId;
   String descripcion;
 
-  factory TiempoTardaCAEntity.fromJson(Map<String, dynamic> json) =>
-      TiempoTardaCAEntity(
-        tiempoTardaId: json["tiempoTarda_id"],
-        descripcion: json["descripcion"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "tiempoTarda_id": tiempoTardaId,
-        "descripcion": descripcion,
+        "TiempoTarda_id": tiempoTardaId,
+        "Descripcion": descripcion,
       };
 }

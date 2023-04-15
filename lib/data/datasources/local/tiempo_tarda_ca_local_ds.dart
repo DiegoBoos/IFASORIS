@@ -11,7 +11,7 @@ class TiempoTardaCALocalDataSourceImpl implements TiempoTardaCALocalDataSource {
   @override
   Future<List<TiempoTardaCAModel>> getTiemposTardaCA() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('TiempoTardaCA');
+    final res = await db.query('TiemposTarda_CentroAtencion');
     final result = List<TiempoTardaCAModel>.from(
         res.map((m) => TiempoTardaCAModel.fromJson(m))).toList();
 
@@ -22,7 +22,8 @@ class TiempoTardaCALocalDataSourceImpl implements TiempoTardaCALocalDataSource {
   Future<int> saveTiempoTardaCA(TiempoTardaCAEntity tiempoTardaCA) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('TiempoTardaCA', tiempoTardaCA.toJson());
+    final res =
+        await db.insert('TiemposTarda_CentroAtencion', tiempoTardaCA.toJson());
 
     return res;
   }

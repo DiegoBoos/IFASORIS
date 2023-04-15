@@ -7,14 +7,8 @@ class EstadoViaEntity {
   int estadoViaId;
   String descripcion;
 
-  factory EstadoViaEntity.fromJson(Map<String, dynamic> json) =>
-      EstadoViaEntity(
-        estadoViaId: json["estadoVia_id"],
-        descripcion: json["descripcion"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "estadoVia_id": estadoViaId,
-        "descripcion": descripcion,
+        "EstadoVia_id": estadoViaId,
+        "Descripcion": descripcion,
       };
 }

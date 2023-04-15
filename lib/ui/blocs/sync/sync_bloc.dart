@@ -166,7 +166,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
       } else if (event.tablesNames.contains('Accesorias')) {
         emit(InitializingSync());
-        await syncDificultadesAccesoCA(event);
+        ConnectionSQLiteService.truncateTable(
+                'DificultadesAcceso_CentroAtencion')
+            .then((value) async {
+          dificultadesAccesoCATemp = [];
+          await syncDificultadesAccesoCA(event);
+        });
       }
     });
     on<Downloading>((event, emit) => emit(SyncDownloading(event.syncProgress)));
@@ -243,10 +248,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       dificultadesAccesoCATemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando dificultades de acceso',
-          counter: dificultadesAccesoCATemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando dificultades acceso',
+      )));
 
       await saveDificultadAccesoCA(
         event,
@@ -264,12 +267,16 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando dificultades de acceso',
-          counter: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando dificultades acceso centro atención',
+          counter: data,
+          total: dificultadesAccesoCATemp.length,
           percent: calculatePercent())));
 
       if (data >= dificultadesAccesoCATemp.length) {
-        syncEstadosVias(event);
+        ConnectionSQLiteService.truncateTable('EstadoVias').then((value) async {
+          estadosViasTemp = [];
+          await syncEstadosVias(event);
+        });
         return;
       }
 
@@ -292,10 +299,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       estadosViasTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando estados vías',
-          counter: estadosViasTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando estados vías',
+      )));
 
       await saveEstadoVia(
         event,
@@ -313,11 +318,16 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando estados vias',
-          counter: state.syncProgressModel.counter + 1,
+          counter: data,
+          total: estadosViasTemp.length,
           percent: calculatePercent())));
 
       if (data >= estadosViasTemp.length) {
-        await syncMediosComunicacion(event);
+        ConnectionSQLiteService.truncateTable('MediosComunicacion')
+            .then((value) async {
+          mediosComunicacionTemp = [];
+          await syncMediosComunicacion(event);
+        });
         return;
       }
 
@@ -341,10 +351,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       mediosComunicacionTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando medios comunicación',
-          counter: mediosComunicacionTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando medios comunicación',
+      )));
 
       await saveMedioComunicacion(
         event,
@@ -363,11 +371,16 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando medios comunicación',
-          counter: state.syncProgressModel.counter + 1,
+          counter: data,
+          total: mediosComunicacionTemp.length,
           percent: calculatePercent())));
 
       if (data >= mediosComunicacionTemp.length) {
-        await syncMediosUtilizaCA(event);
+        ConnectionSQLiteService.truncateTable('MediosUtiliza_CentroAtencion')
+            .then((value) async {
+          mediosUtilizaCATemp = [];
+          await syncMediosUtilizaCA(event);
+        });
         return;
       }
 
@@ -390,10 +403,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       mediosUtilizaCATemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando medios utiliza centro de atención',
-          counter: mediosUtilizaCATemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando medios utiliza centro atención',
+      )));
 
       await saveMedioUtilizaCA(
         event,
@@ -411,13 +422,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando medios utiliza centro de atención',
-          counter: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando medios utiliza centro atención',
+          counter: data,
+          total: mediosUtilizaCATemp.length,
           percent: calculatePercent())));
 
       if (data >= mediosUtilizaCATemp.length) {
-        await syncTiemposTardaCA(event);
-
+        ConnectionSQLiteService.truncateTable('TiemposTarda_CentroAtencion')
+            .then((value) async {
+          tiemposTardaCATemp = [];
+          await syncTiemposTardaCA(event);
+        });
         return;
       }
 
@@ -440,10 +455,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       tiemposTardaCATemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando medios utiliza centro de atención',
-          counter: tiemposTardaCATemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando medios utiliza centro atención',
+      )));
 
       await saveTiemposTardaCA(
         event,
@@ -461,20 +474,24 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando tiempos tarda centro de atención',
-          counter: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando tiempos tarda centro atención',
+          counter: data,
+          total: tiemposTardaCATemp.length,
           percent: calculatePercent())));
 
       if (data >= tiemposTardaCATemp.length) {
-        await syncViasAcceso(event);
+        ConnectionSQLiteService.truncateTable('ViasAcceso').then((value) async {
+          viasAccesoTemp = [];
+          await syncViasAcceso(event);
+        });
         return;
       }
 
-      TiempoTardaCAEntity m = tiemposTardaCATemp[data];
+      TiempoTardaCAEntity t = tiemposTardaCATemp[data];
 
       await saveTiemposTardaCA(
         event,
-        m,
+        t,
       );
     });
   }
@@ -489,10 +506,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       viasAccesoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando vias acceso',
-          counter: viasAccesoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando vias acceso',
+      )));
 
       await saveViaAcceso(
         event,
@@ -510,20 +525,25 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando vias acceso',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          counter: data,
+          total: viasAccesoTemp.length,
           percent: calculatePercent())));
 
       if (data >= viasAccesoTemp.length) {
-        await syncAutoridadesIndigenas(event);
+        ConnectionSQLiteService.truncateTable(
+                'AutoridadesIndigenas_DatosVivienda')
+            .then((value) async {
+          autoridadesIndigenasTemp = [];
+          await syncAutoridadesIndigenas(event);
+        });
         return;
       }
 
-      ViaAccesoEntity m = viasAccesoTemp[data];
+      ViaAccesoEntity v = viasAccesoTemp[data];
 
       await saveViaAcceso(
         event,
-        m,
+        v,
       );
     });
   }
@@ -539,10 +559,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       autoridadesIndigenasTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando autoridades indígenas',
-          counter: autoridadesIndigenasTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando autoridades indígenas',
+      )));
 
       await saveAutoridadIndigena(
         event,
@@ -561,20 +579,25 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando autoridades indígenas',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          counter: data,
+          total: autoridadesIndigenasTemp.length,
           percent: calculatePercent())));
 
       if (data >= autoridadesIndigenasTemp.length) {
-        await syncCerealesByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'Cereales_AspectosSocioEconomicos')
+            .then((value) async {
+          cerealesByDptoTemp = [];
+          await syncCerealesByDpto(event);
+        });
         return;
       }
 
-      AutoridadIndigenaEntity m = autoridadesIndigenasTemp[data];
+      AutoridadIndigenaEntity a = autoridadesIndigenasTemp[data];
 
       await saveAutoridadIndigena(
         event,
-        m,
+        a,
       );
     });
   }
@@ -590,10 +613,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       cerealesByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando cereales por departamento',
-          counter: cerealesByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando cereales',
+      )));
 
       await saveCerealByDpto(
         event,
@@ -611,21 +632,26 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando cereales por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando cereales',
+          counter: data,
+          total: cerealesByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= cerealesByDptoTemp.length) {
-        await syncCostosDesplazamiento(event);
+        ConnectionSQLiteService.truncateTable(
+                'CostosDesplazamiento_CentroAtencion')
+            .then((value) async {
+          costosDesplazamientoTemp = [];
+          await syncCostosDesplazamiento(event);
+        });
         return;
       }
 
-      CerealEntity m = cerealesByDptoTemp[data];
+      CerealEntity c = cerealesByDptoTemp[data];
 
       await saveCerealByDpto(
         event,
-        m,
+        c,
       );
     });
   }
@@ -641,10 +667,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       costosDesplazamientoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando costos desplazamiento',
-          counter: costosDesplazamientoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando costos desplazamiento',
+      )));
 
       await saveCostoDesplazamiento(
         event,
@@ -663,20 +687,25 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando costos desplazamiento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          counter: data,
+          total: costosDesplazamientoTemp.length,
           percent: calculatePercent())));
 
       if (data >= costosDesplazamientoTemp.length) {
-        await syncDificultadesAccesoMedTradicionalByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'DificultadesAcceso_AccesoMedTradicional')
+            .then((value) async {
+          dificultadesAccesoMedTradicionalByDptoTemp = [];
+          await syncDificultadesAccesoMedTradicionalByDpto(event);
+        });
         return;
       }
 
-      CostoDesplazamientoEntity cd = costosDesplazamientoTemp[data];
+      CostoDesplazamientoEntity c = costosDesplazamientoTemp[data];
 
       await saveCostoDesplazamiento(
         event,
-        cd,
+        c,
       );
     });
   }
@@ -694,11 +723,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       dificultadesAccesoMedTradicionalByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title:
-              'Descargando dificultades acceso médico tradicional por departamento',
-          counter: dificultadesAccesoMedTradicionalByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando dificultades acceso médico tradicional',
+      )));
 
       await saveDificultadAccesoMedTradicionalByDpto(
         event,
@@ -717,14 +743,18 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title:
-              'Sincronizando dificultades acceso médico tradicional por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando dificultades acceso médico tradicional',
+          counter: data,
+          total: dificultadesAccesoMedTradicionalByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= dificultadesAccesoMedTradicionalByDptoTemp.length) {
-        await syncEspecialidadesMedTradicionalByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'EspecialidadesMedTrad_AccesoMedTradicional')
+            .then((value) async {
+          especialidadesMedTradicionalByDptoTemp = [];
+          await syncEspecialidadesMedTradicionalByDpto(event);
+        });
         return;
       }
 
@@ -750,11 +780,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       especialidadesMedTradicionalByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title:
-              'Descargando especialidades médico tradicional por departamento',
-          counter: especialidadesMedTradicionalByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando especialidades médico tradicional',
+      )));
 
       await saveEspecialidadMedTradicionalByDpto(
         event,
@@ -773,14 +800,18 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title:
-              'Sincronizando especialidades médico tradicional por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando especialidades médico tradicional',
+          counter: data,
+          total: especialidadesMedTradicionalByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= especialidadesMedTradicionalByDptoTemp.length) {
-        await syncEspeciesAnimalesByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'EspecieAnimalesCria_AspectosSocioEconomicos')
+            .then((value) async {
+          especiesAnimalesByDptoTemp = [];
+          await syncEspeciesAnimalesByDpto(event);
+        });
         return;
       }
 
@@ -805,10 +836,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       especiesAnimalesByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando especies animales por departamento',
-          counter: especiesAnimalesByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando especies animales',
+      )));
 
       await saveEspecieAnimalByDpto(
         event,
@@ -826,13 +855,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando especies animales por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando especies animales',
+          counter: data,
+          total: especiesAnimalesByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= especiesAnimalesByDptoTemp.length) {
-        await syncFrutosByDpto(event);
+        ConnectionSQLiteService.truncateTable('Frutos_AspectosSocioEconomicos')
+            .then((value) async {
+          frutosByDptoTemp = [];
+          await syncFrutosByDpto(event);
+        });
         return;
       }
 
@@ -856,10 +889,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       frutosByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando frutos por departamento',
-          counter: frutosByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando frutos',
+      )));
 
       await saveFrutoByDpto(
         event,
@@ -876,21 +907,26 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando frutos por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando frutos',
+          counter: data,
+          total: frutosByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= frutosByDptoTemp.length) {
-        await syncHortalizasByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'Hortalizas_AspectosSocioEconomicos')
+            .then((value) async {
+          hortalizasByDptoTemp = [];
+          await syncHortalizasByDpto(event);
+        });
         return;
       }
 
-      FrutoEntity e = frutosByDptoTemp[data];
+      FrutoEntity f = frutosByDptoTemp[data];
 
       await saveFrutoByDpto(
         event,
-        e,
+        f,
       );
     });
   }
@@ -906,10 +942,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       hortalizasByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando hortalizas por departamento',
-          counter: hortalizasByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando hortalizas',
+      )));
 
       await saveHortalizaByDpto(
         event,
@@ -927,21 +961,26 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando hortalizas por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando hortalizas',
+          counter: data,
+          total: hortalizasByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= hortalizasByDptoTemp.length) {
-        await syncLeguminosasByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'Leguminosas_AspectosSocioEconomicos')
+            .then((value) async {
+          leguminosasByDptoTemp = [];
+          await syncLeguminosasByDpto(event);
+        });
         return;
       }
 
-      HortalizaEntity e = hortalizasByDptoTemp[data];
+      HortalizaEntity h = hortalizasByDptoTemp[data];
 
       await saveHortalizaByDpto(
         event,
-        e,
+        h,
       );
     });
   }
@@ -957,10 +996,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       leguminosasByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando leguminosas por departamento',
-          counter: leguminosasByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando leguminosas',
+      )));
 
       await saveLeguminosaByDpto(
         event,
@@ -978,21 +1015,26 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando leguminosas por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando leguminosas',
+          counter: data,
+          total: leguminosasByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= leguminosasByDptoTemp.length) {
-        await syncMediosUtilizaMedTradicionalByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'MediosUtiliza_AccesoMedTradicional')
+            .then((value) async {
+          mediosUtilizaMedTradicionalByDptoTemp = [];
+          await syncMediosUtilizaMedTradicionalByDpto(event);
+        });
         return;
       }
 
-      LeguminosaEntity e = leguminosasByDptoTemp[data];
+      LeguminosaEntity l = leguminosasByDptoTemp[data];
 
       await saveLeguminosaByDpto(
         event,
-        e,
+        l,
       );
     });
   }
@@ -1009,11 +1051,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       mediosUtilizaMedTradicionalByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title:
-              'Descargando medios utiliza médico tradicional por departamento',
-          counter: mediosUtilizaMedTradicionalByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando medios utiliza médico tradicional',
+      )));
 
       await saveMedioUtilizaMedTradicionalByDpto(
         event,
@@ -1032,23 +1071,26 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title:
-              'Sincronizando medios utiliza médico tradicional por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando medios utiliza médico tradicional',
+          counter: data,
+          total: mediosUtilizaMedTradicionalByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= mediosUtilizaMedTradicionalByDptoTemp.length) {
-        await syncOpcionesSiNo(event);
+        ConnectionSQLiteService.truncateTable('OpcionesSi_No')
+            .then((value) async {
+          opcionesSiNoTemp = [];
+          await syncOpcionesSiNo(event);
+        });
         return;
       }
 
-      MedioUtilizaMedTradicionalEntity e =
+      MedioUtilizaMedTradicionalEntity m =
           mediosUtilizaMedTradicionalByDptoTemp[data];
 
       await saveMedioUtilizaMedTradicionalByDpto(
         event,
-        e,
+        m,
       );
     });
   }
@@ -1063,10 +1105,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       opcionesSiNoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando opciones',
-          counter: opcionesSiNoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando opciones',
+      )));
 
       await saveOpcionSiNo(
         event,
@@ -1085,20 +1125,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando opciones',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          counter: data,
+          total: opcionesSiNoTemp.length,
           percent: calculatePercent())));
 
       if (data >= opcionesSiNoTemp.length) {
-        await syncResguardosByDpto(event);
+        ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
+          resguardosByDptoTemp = [];
+          await syncResguardosByDpto(event);
+        });
         return;
       }
 
-      OpcionSiNoEntity e = opcionesSiNoTemp[data];
+      OpcionSiNoEntity o = opcionesSiNoTemp[data];
 
       await saveOpcionSiNo(
         event,
-        e,
+        o,
       );
     });
   }
@@ -1114,10 +1157,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       resguardosByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando resguardos por departamento',
-          counter: resguardosByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando resguardos',
+      )));
 
       await saveResguardoByDpto(
         event,
@@ -1135,21 +1176,26 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando resguardos por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando resguardos',
+          counter: data,
+          total: resguardosByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= resguardosByDptoTemp.length) {
-        await syncTiemposTardaMedTradicional(event);
+        ConnectionSQLiteService.truncateTable(
+                'TiemposTarda_AccesoMedTradicional')
+            .then((value) async {
+          tiemposTardaMedTradicionalTemp = [];
+          await syncTiemposTardaMedTradicional(event);
+        });
         return;
       }
 
-      ResguardoEntity e = resguardosByDptoTemp[data];
+      ResguardoEntity r = resguardosByDptoTemp[data];
 
       await saveResguardoByDpto(
         event,
-        e,
+        r,
       );
     });
   }
@@ -1165,10 +1211,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       tiemposTardaMedTradicionalTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando tiempos tarda médico tradicional',
-          counter: tiemposTardaMedTradicionalTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando tiempos tarda médico tradicional',
+      )));
 
       await saveTiempoTardaMedTradicional(
         event,
@@ -1187,20 +1231,25 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tiempos tarda médico tradicional',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          counter: data,
+          total: tiemposTardaMedTradicionalTemp.length,
           percent: calculatePercent())));
 
       if (data >= tiemposTardaMedTradicionalTemp.length) {
-        await syncTuberculosPlatanosByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'TuberculosPlatanos_AspectosSocioEconomicos')
+            .then((value) async {
+          tuberculosPlatanosByDptoTemp = [];
+          await syncTuberculosPlatanosByDpto(event);
+        });
         return;
       }
 
-      TiempoTardaMedTradicionalEntity e = tiemposTardaMedTradicionalTemp[data];
+      TiempoTardaMedTradicionalEntity t = tiemposTardaMedTradicionalTemp[data];
 
       await saveTiempoTardaMedTradicional(
         event,
-        e,
+        t,
       );
     });
   }
@@ -1216,10 +1265,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       tuberculosPlatanosByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando tubérculos plátanos por departamento',
-          counter: tuberculosPlatanosByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando tubérculos plátanos',
+      )));
 
       await saveTuberculoPlatanoByDpto(
         event,
@@ -1237,21 +1284,26 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando tubérculos plátanos por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando tubérculos plátanos',
+          counter: data,
+          total: tuberculosPlatanosByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= tuberculosPlatanosByDptoTemp.length) {
-        await syncVerdurasByDpto(event);
+        ConnectionSQLiteService.truncateTable(
+                'Verduras_AspectosSocioEconomicos')
+            .then((value) async {
+          tuberculosPlatanosByDptoTemp = [];
+          await syncVerdurasByDpto(event);
+        });
         return;
       }
 
-      TuberculoPlatanoEntity e = tuberculosPlatanosByDptoTemp[data];
+      TuberculoPlatanoEntity t = tuberculosPlatanosByDptoTemp[data];
 
       await saveTuberculoPlatanoByDpto(
         event,
-        e,
+        t,
       );
     });
   }
@@ -1267,10 +1319,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       verdurasByDptoTemp.addAll(data);
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando verduras por departamento',
-          counter: verdurasByDptoTemp.length,
-          total: data.length,
-          percent: calculatePercent())));
+        title: 'Descargando verduras',
+      )));
 
       await saveVerduraByDpto(
         event,
@@ -1288,9 +1338,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(SyncStatusChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando verduras por departamento',
-          counter: state.syncProgressModel.counter + 1,
-          total: state.syncProgressModel.counter + 1,
+          title: 'Sincronizando verduras',
+          counter: data,
+          total: verdurasByDptoTemp.length,
           percent: calculatePercent())));
 
       if (data >= verdurasByDptoTemp.length) {
@@ -1309,21 +1359,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** VerduraByDpto ****************************
-
-  Future<void> verifySync() async {
-    final result = await syncLogDB.getSyncLogsUsecaseDB();
-    return result.fold((failure) => add(SyncError(failure.properties.first)),
-        (data) {
-      if (data!.isNotEmpty) {
-        add(SyncLog(data));
-      } else {
-        add(SyncStatusChanged(state.syncProgressModel.copyWith(
-            title: 'Sincronización Completada',
-            counter: state.syncProgressModel.counter + 1,
-            percent: calculatePercent())));
-      }
-    });
-  }
 
   int calculatePercent() {
     final counter = state.syncProgressModel.counter <= 0

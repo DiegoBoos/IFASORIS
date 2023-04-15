@@ -14,13 +14,7 @@ class OpcionSiNoModel extends OpcionSiNoEntity {
 
   factory OpcionSiNoModel.fromJson(Map<String, dynamic> json) =>
       OpcionSiNoModel(
-        opcionId: json["opcion_id"],
-        descripcion: json["descripcion"],
+        opcionId: json["Opcion_id"],
+        descripcion: json["Descripcion"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "opcion_id": opcionId,
-        "descripcion": descripcion,
-      };
 }

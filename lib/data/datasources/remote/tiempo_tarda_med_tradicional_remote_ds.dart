@@ -21,7 +21,7 @@ class TiempoTardaMedTradicionalRemoteDataSourceImpl
       getTiemposTardaMedTradicional() async {
     try {
       final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/tiempotardaCentroAtencion');
+          Uri.parse('${Constants.ifasorisBaseUrl}/tiempotardamedtradicional');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -18,13 +18,7 @@ class TiempoTardaMedTradicionalModel extends TiempoTardaMedTradicionalEntity {
 
   factory TiempoTardaMedTradicionalModel.fromJson(Map<String, dynamic> json) =>
       TiempoTardaMedTradicionalModel(
-        tiempoTardaMedTradId: json["tiempoTardaMedTrad_id"],
-        descripcion: json["descripcion"],
+        tiempoTardaMedTradId: json["TiempoTardaMedTrad_id"],
+        descripcion: json["Descripcion"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "tiempoTardaMedTrad_id": tiempoTardaMedTradId,
-        "descripcion": descripcion,
-      };
 }

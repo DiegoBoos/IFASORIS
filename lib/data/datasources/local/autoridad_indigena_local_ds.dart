@@ -12,7 +12,7 @@ class AutoridadIndigenaLocalDataSourceImpl
   @override
   Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('AutoridadIndigena');
+    final res = await db.query('AutoridadesIndigenas_DatosVivienda');
     final result = List<AutoridadIndigenaModel>.from(
         res.map((m) => AutoridadIndigenaModel.fromJson(m))).toList();
 
@@ -24,8 +24,8 @@ class AutoridadIndigenaLocalDataSourceImpl
       AutoridadIndigenaEntity autoridadIndigena) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res =
-        await db.insert('AutoridadIndigena', autoridadIndigena.toJson());
+    final res = await db.insert(
+        'AutoridadesIndigenas_DatosVivienda', autoridadIndigena.toJson());
 
     return res;
   }

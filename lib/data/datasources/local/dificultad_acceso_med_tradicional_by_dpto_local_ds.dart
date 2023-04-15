@@ -16,7 +16,7 @@ class DificultadAccesoMedTradicionalByDptoLocalDataSourceImpl
   Future<List<DificultadAccesoMedTradicionalModel>>
       getDificultadesAccesoMedTradicionalByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('DificultadAccesoMedTradicionalByDpto');
+    final res = await db.query('DificultadesAcceso_AccesoMedTradicional');
     final result = List<DificultadAccesoMedTradicionalModel>.from(
             res.map((m) => DificultadAccesoMedTradicionalModel.fromJson(m)))
         .toList();
@@ -30,7 +30,7 @@ class DificultadAccesoMedTradicionalByDptoLocalDataSourceImpl
           dificultadAccesoMedTradicionalByDpto) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('DificultadAccesoMedTradicionalByDpto',
+    final res = await db.insert('DificultadesAcceso_AccesoMedTradicional',
         dificultadAccesoMedTradicionalByDpto.toJson());
 
     return res;

@@ -11,7 +11,7 @@ class CerealByDptoLocalDataSourceImpl implements CerealByDptoLocalDataSource {
   @override
   Future<List<CerealModel>> getCerealesByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('CerealByDpto');
+    final res = await db.query('Cereales_AspectosSocioEconomicos');
     final result =
         List<CerealModel>.from(res.map((m) => CerealModel.fromJson(m)))
             .toList();
@@ -23,7 +23,8 @@ class CerealByDptoLocalDataSourceImpl implements CerealByDptoLocalDataSource {
   Future<int> saveCerealByDpto(CerealEntity cereal) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('CerealByDpto', cereal.toJson());
+    final res =
+        await db.insert('Cereales_AspectosSocioEconomicos', cereal.toJson());
 
     return res;
   }

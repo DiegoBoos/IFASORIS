@@ -11,18 +11,10 @@ class ResguardoEntity {
   String codaneResguardo;
   int departamentoIde;
 
-  factory ResguardoEntity.fromJson(Map<String, dynamic> json) =>
-      ResguardoEntity(
-        resguardoId: json["resguardo_id"],
-        nombreResguardo: json["nombreResguardo"],
-        codaneResguardo: json["codaneResguardo"],
-        departamentoIde: json["departamento_Ide"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "resguardo_id": resguardoId,
-        "nombreResguardo": nombreResguardo,
-        "codaneResguardo": codaneResguardo,
-        "departamento_Ide": departamentoIde,
+        "Resguardo_id": resguardoId,
+        "NombreResguardo": nombreResguardo,
+        "CodaneResguardo": codaneResguardo,
+        "Departamento_Ide": departamentoIde,
       };
 }

@@ -7,14 +7,8 @@ class MedioComunicacionEntity {
   int medioComunicacionId;
   String descripcion;
 
-  factory MedioComunicacionEntity.fromJson(Map<String, dynamic> json) =>
-      MedioComunicacionEntity(
-        medioComunicacionId: json["medioComunicacion_id"],
-        descripcion: json["descripcion"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "medioComunicacion_id": medioComunicacionId,
-        "descripcion": descripcion,
+        "MedioComunicacion_id": medioComunicacionId,
+        "Descripcion": descripcion,
       };
 }

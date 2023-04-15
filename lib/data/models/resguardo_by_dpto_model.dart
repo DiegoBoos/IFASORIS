@@ -20,17 +20,9 @@ class ResguardoModel extends ResguardoEntity {
         );
 
   factory ResguardoModel.fromJson(Map<String, dynamic> json) => ResguardoModel(
-        resguardoId: json["resguardo_id"],
-        nombreResguardo: json["nombreResguardo"],
-        codaneResguardo: json["codaneResguardo"],
-        departamentoIde: json["departamento_Ide"],
+        resguardoId: json["Resguardo_id"],
+        nombreResguardo: json["NombreResguardo"],
+        codaneResguardo: json["CodaneResguardo"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "resguardo_id": resguardoId,
-        "nombreResguardo": nombreResguardo,
-        "codaneResguardo": codaneResguardo,
-        "departamento_Ide": departamentoIde,
-      };
 }

@@ -13,13 +13,7 @@ class EstadoViaModel extends EstadoViaEntity {
   }) : super(estadoViaId: estadoViaId, descripcion: descripcion);
 
   factory EstadoViaModel.fromJson(Map<String, dynamic> json) => EstadoViaModel(
-        estadoViaId: json["estadoVia_id"],
-        descripcion: json["descripcion"],
+        estadoViaId: json["EstadoVia_id"],
+        descripcion: json["Descripcion"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "estadoVia_id": estadoViaId,
-        "descripcion": descripcion,
-      };
 }

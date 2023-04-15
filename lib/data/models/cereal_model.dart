@@ -17,15 +17,8 @@ class CerealModel extends CerealEntity {
         );
 
   factory CerealModel.fromJson(Map<String, dynamic> json) => CerealModel(
-        cerealId: json["cereal_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        cerealId: json["Cereal_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "cereal_id": cerealId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

@@ -19,15 +19,8 @@ class TuberculoPlatanoModel extends TuberculoPlatanoEntity {
 
   factory TuberculoPlatanoModel.fromJson(Map<String, dynamic> json) =>
       TuberculoPlatanoModel(
-        tuberculoPlatanoId: json["tuberculoPlatano_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        tuberculoPlatanoId: json["TuberculoPlatano_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "tuberculoPlatano_id": tuberculoPlatanoId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

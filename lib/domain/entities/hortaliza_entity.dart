@@ -9,16 +9,9 @@ class HortalizaEntity {
   String descripcion;
   int departamentoIde;
 
-  factory HortalizaEntity.fromJson(Map<String, dynamic> json) =>
-      HortalizaEntity(
-        hortalizaId: json["hortaliza_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "hortaliza_id": hortalizaId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
+        "Hortaliza_id": hortalizaId,
+        "Descripcion": descripcion,
+        "Departamento_Ide": departamentoIde,
       };
 }

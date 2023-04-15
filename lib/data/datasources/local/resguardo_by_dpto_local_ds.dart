@@ -12,7 +12,7 @@ class ResguardoByDptoLocalDataSourceImpl
   @override
   Future<List<ResguardoModel>> getResguardosByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('ResguardoByDpto');
+    final res = await db.query('Resguardos');
     final result =
         List<ResguardoModel>.from(res.map((m) => ResguardoModel.fromJson(m)))
             .toList();
@@ -24,7 +24,7 @@ class ResguardoByDptoLocalDataSourceImpl
   Future<int> saveResguardoByDpto(ResguardoEntity resguardo) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('ResguardoByDpto', resguardo.toJson());
+    final res = await db.insert('Resguardos', resguardo.toJson());
 
     return res;
   }

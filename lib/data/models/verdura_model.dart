@@ -17,15 +17,8 @@ class VerduraModel extends VerduraEntity {
         );
 
   factory VerduraModel.fromJson(Map<String, dynamic> json) => VerduraModel(
-        verduraId: json["verdura_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        verduraId: json["Verdura_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "verdura_id": verduraId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

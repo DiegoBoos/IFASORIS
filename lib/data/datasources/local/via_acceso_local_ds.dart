@@ -11,7 +11,7 @@ class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   @override
   Future<List<ViaAccesoModel>> getViasAcceso() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('ViaAcceso');
+    final res = await db.query('ViasAcceso');
     final result =
         List<ViaAccesoModel>.from(res.map((m) => ViaAccesoModel.fromJson(m)))
             .toList();
@@ -23,7 +23,7 @@ class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   Future<int> saveViaAcceso(ViaAccesoEntity viaAcceso) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('ViaAcceso', viaAcceso.toJson());
+    final res = await db.insert('ViasAcceso', viaAcceso.toJson());
 
     return res;
   }

@@ -13,7 +13,7 @@ class TuberculoPlatanoByDptoLocalDataSourceImpl
   @override
   Future<List<TuberculoPlatanoModel>> getTuberculosPlatanosByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('TuberculoPlatanoByDpto');
+    final res = await db.query('TuberculosPlatanos_AspectosSocioEconomicos');
     final result = List<TuberculoPlatanoModel>.from(
         res.map((m) => TuberculoPlatanoModel.fromJson(m))).toList();
 
@@ -25,8 +25,8 @@ class TuberculoPlatanoByDptoLocalDataSourceImpl
       TuberculoPlatanoEntity tuberculoPlatano) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res =
-        await db.insert('TuberculoPlatanoByDpto', tuberculoPlatano.toJson());
+    final res = await db.insert('TuberculosPlatanos_AspectosSocioEconomicos',
+        tuberculoPlatano.toJson());
 
     return res;
   }

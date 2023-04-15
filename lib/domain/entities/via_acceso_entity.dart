@@ -7,14 +7,8 @@ class ViaAccesoEntity {
   int viaAccesoId;
   String descripcion;
 
-  factory ViaAccesoEntity.fromJson(Map<String, dynamic> json) =>
-      ViaAccesoEntity(
-        viaAccesoId: json["viaAcceso_id"],
-        descripcion: json["descripcion"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "viaAcceso_id": viaAccesoId,
-        "descripcion": descripcion,
+        "ViaAcceso_id": viaAccesoId,
+        "Descripcion": descripcion,
       };
 }

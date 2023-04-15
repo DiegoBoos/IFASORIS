@@ -17,13 +17,7 @@ class AutoridadIndigenaModel extends AutoridadIndigenaEntity {
 
   factory AutoridadIndigenaModel.fromJson(Map<String, dynamic> json) =>
       AutoridadIndigenaModel(
-        autoridadIndigenaId: json["autoridadIndigena_id"],
-        descripcion: json["descripcion"],
+        autoridadIndigenaId: json["AutoridadIndigena_id"],
+        descripcion: json["Descripcion"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "autoridadIndigena_id": autoridadIndigenaId,
-        "descripcion": descripcion,
-      };
 }

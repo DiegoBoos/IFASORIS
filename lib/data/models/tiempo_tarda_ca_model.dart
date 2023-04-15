@@ -14,13 +14,7 @@ class TiempoTardaCAModel extends TiempoTardaCAEntity {
 
   factory TiempoTardaCAModel.fromJson(Map<String, dynamic> json) =>
       TiempoTardaCAModel(
-        tiempoTardaId: json["tiempoTarda_id"],
-        descripcion: json["descripcion"],
+        tiempoTardaId: json["TiempoTarda_id"],
+        descripcion: json["Descripcion"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "tiempoTarda_id": tiempoTardaId,
-        "descripcion": descripcion,
-      };
 }

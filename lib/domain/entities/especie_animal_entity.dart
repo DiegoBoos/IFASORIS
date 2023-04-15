@@ -9,16 +9,9 @@ class EspecieAnimalEntity {
   String descripcion;
   int departamentoIde;
 
-  factory EspecieAnimalEntity.fromJson(Map<String, dynamic> json) =>
-      EspecieAnimalEntity(
-        especieAnimalCriaId: json["especieAnimalCria_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "especieAnimalCria_id": especieAnimalCriaId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
+        "EspecieAnimalCria_id": especieAnimalCriaId,
+        "Descripcion": descripcion,
+        "Departamento_Ide": departamentoIde,
       };
 }

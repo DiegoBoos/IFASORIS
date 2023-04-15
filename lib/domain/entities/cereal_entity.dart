@@ -9,15 +9,9 @@ class CerealEntity {
   String descripcion;
   int departamentoIde;
 
-  factory CerealEntity.fromJson(Map<String, dynamic> json) => CerealEntity(
-        cerealId: json["cereal_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "cereal_id": cerealId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
+        "Cereal_id": cerealId,
+        "Descripcion": descripcion,
+        "Departamento_Ide": departamentoIde,
       };
 }

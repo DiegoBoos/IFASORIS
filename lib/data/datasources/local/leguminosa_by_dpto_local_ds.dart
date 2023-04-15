@@ -12,7 +12,7 @@ class LeguminosaByDptoLocalDataSourceImpl
   @override
   Future<List<LeguminosaModel>> getLeguminosasByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('LeguminosaByDpto');
+    final res = await db.query('Leguminosas_AspectosSocioEconomicos');
     final result =
         List<LeguminosaModel>.from(res.map((m) => LeguminosaModel.fromJson(m)))
             .toList();
@@ -24,7 +24,8 @@ class LeguminosaByDptoLocalDataSourceImpl
   Future<int> saveLeguminosaByDpto(LeguminosaEntity leguminosa) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('LeguminosaByDpto', leguminosa.toJson());
+    final res = await db.insert(
+        'Leguminosas_AspectosSocioEconomicos', leguminosa.toJson());
 
     return res;
   }

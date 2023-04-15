@@ -7,14 +7,8 @@ class AutoridadIndigenaEntity {
   int autoridadIndigenaId;
   String descripcion;
 
-  factory AutoridadIndigenaEntity.fromJson(Map<String, dynamic> json) =>
-      AutoridadIndigenaEntity(
-        autoridadIndigenaId: json["autoridadIndigena_id"],
-        descripcion: json["descripcion"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "autoridadIndigena_id": autoridadIndigenaId,
-        "descripcion": descripcion,
+        "AutoridadIndigena_id": autoridadIndigenaId,
+        "Descripcion": descripcion,
       };
 }

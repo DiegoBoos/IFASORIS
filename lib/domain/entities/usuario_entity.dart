@@ -15,21 +15,12 @@ class UsuarioEntity {
   final String? password;
   final String? token;
 
-  factory UsuarioEntity.fromJson(Map<String, dynamic> json) => UsuarioEntity(
-        id: json["id"],
-        userName: json["userName"],
-        municipioId: json["municipio_id"],
-        departamentoId: json["departamento_id"],
-        password: json["password"],
-        token: json["token"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "userName": userName,
-        "password": password,
-        "municipio_id": municipioId,
-        "departamento_id": departamentoId,
-        "token": token,
+        "Id": id,
+        "Username": userName,
+        "Password": password,
+        "Municipio_Id": municipioId,
+        "Departamento_Id": departamentoId,
+        "Token": token,
       };
 }

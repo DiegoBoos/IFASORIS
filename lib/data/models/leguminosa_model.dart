@@ -19,15 +19,8 @@ class LeguminosaModel extends LeguminosaEntity {
 
   factory LeguminosaModel.fromJson(Map<String, dynamic> json) =>
       LeguminosaModel(
-        leguminosaId: json["leguminosa_id"],
-        descripcion: json["descripcion"],
-        departamentoIde: json["departamento_Ide"],
+        leguminosaId: json["Leguminosa_id"],
+        descripcion: json["Descripcion"],
+        departamentoIde: json["Departamento_Ide"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "leguminosa_id": leguminosaId,
-        "descripcion": descripcion,
-        "departamento_Ide": departamentoIde,
-      };
 }

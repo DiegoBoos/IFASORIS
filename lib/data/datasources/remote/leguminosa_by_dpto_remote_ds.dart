@@ -28,7 +28,7 @@ class LeguminosaByDptoRemoteDataSourceImpl
         'Authorization': 'Bearer ${await Constants.getToken()}',
       });
 
-      final Map<String, dynamic> decodedResp = jsonDecode(resp.body);
+      final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
         final result = leguminosasModelFromJson(jsonEncode(decodedResp));
 

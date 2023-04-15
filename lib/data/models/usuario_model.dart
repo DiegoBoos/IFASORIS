@@ -18,27 +18,11 @@ class UsuarioModel extends UsuarioEntity {
         );
 
   factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
-        id: json["id"],
-        userName: json["userName"],
-        municipioId: json["municipio_id"],
-        departamentoId: json["departamento_id"],
-        password: json["password"],
-        token: json["token"],
+        id: json["Id"],
+        userName: json["UserName"],
+        municipioId: json["Municipio_id"],
+        departamentoId: json["Departamento_id"],
+        password: json["Password"],
+        token: json["Token"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "userName": userName,
-        "municipio_id": municipioId,
-        "departamento_id": departamentoId,
-        "password": password,
-        "token": token,
-      };
-
-  @override
-  bool operator ==(Object other) => other is UsuarioModel && other.id == id;
-
-  @override
-  int get hashCode => id.hashCode;
 }

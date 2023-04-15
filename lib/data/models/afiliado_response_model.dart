@@ -21,20 +21,20 @@ class AfiliadoResponseModel {
 
   factory AfiliadoResponseModel.fromJson(Map<String, dynamic> json) =>
       AfiliadoResponseModel(
-        paginaActual: json["paginaActual"],
-        registrosPorPagina: json["registrosPorPagina"],
-        totalRegistros: json["totalRegistros"],
-        totalPaginas: json["totalPaginas"],
+        paginaActual: json["PaginaActual"],
+        registrosPorPagina: json["RegistrosPorPagina"],
+        totalRegistros: json["TotalRegistros"],
+        totalPaginas: json["TotalPaginas"],
         resultado: List<AfiliadoModel>.from(
-            json["resultado"].map((x) => AfiliadoModel.fromJson(x))),
+            json["Resultado"].map((x) => AfiliadoModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "paginaActual": paginaActual,
-        "registrosPorPagina": registrosPorPagina,
-        "totalRegistros": totalRegistros,
-        "totalPaginas": totalPaginas,
-        "resultado": List<dynamic>.from(resultado.map((x) => x.toJson())),
+        "PaginaActuals": paginaActual,
+        "RegistrosPorPaginas": registrosPorPagina,
+        "TotalRegistros": totalRegistros,
+        "TotalPaginass": totalPaginas,
+        "Resultado": List<dynamic>.from(resultado.map((x) => x.toJson())),
       };
 }
 
@@ -92,57 +92,29 @@ class AfiliadoModel extends AfiliadoEntity {
         );
 
   factory AfiliadoModel.fromJson(Map<String, dynamic> json) => AfiliadoModel(
-        afiliadoId: json["afiliado_id"],
-        tipoDocAfiliado: json["tipoDoc_Afiliado"],
+        afiliadoId: json["Afiliado_id"],
+        tipoDocAfiliado: json["TipoDoc_Afiliado"],
         documento: json["documento"],
-        tipoDocCabezaFamilia: json["tipoDoc_CabezaFamilia"],
+        tipoDocCabezaFamilia: json["TipoDoc_CabezaFamilia"],
         documentocabeza: json["documentocabeza"],
         apellido1: json["apellido1"],
         apellido2: json["apellido2"],
         nombre1: json["nombre1"],
         nombre2: json["nombre2"],
         fecnac: DateTime.parse(json["fecnac"]),
-        codGeneroAfiliado: json["codGenero_Afiliado"],
-        direccion: json["direccion"],
-        telefonofijo: json["telefonofijo"],
-        telefonocel1: json["telefonocel1"],
-        telefonocel2: json["telefonocel2"],
-        departamentoIde: json["departamento_Ide"],
-        codMpioAfiliado: json["codMpio_Afiliado"],
-        nomMpioAfiliado: json["nomMpio_Afiliado"],
-        codDptoAfiliado: json["codDpto_Afiliado"],
-        nomDptoAfiliado: json["nomDpto_Afiliado"],
+        codGeneroAfiliado: json["CodGenero_Afiliado"],
+        direccion: json["Direccion"],
+        telefonofijo: json["Telefonofijo"],
+        telefonocel1: json["Telefonocel1"],
+        telefonocel2: json["Telefonocel2"],
+        departamentoIde: json["Departamento_Ide"],
+        codMpioAfiliado: json["CodMpio_Afiliado"],
+        nomMpioAfiliado: json["NomMpio_Afiliado"],
+        codDptoAfiliado: json["CodDpto_Afiliado"],
+        nomDptoAfiliado: json["NomDpto_Afiliado"],
         fechafiliacion: DateTime.parse(json["fechafiliacion"]),
-        codZonaAfiliado: json["codZona_Afiliado"],
-        codTipoPobAfiliado: json["codTipoPob_afiliado"],
-        ipsPrimariaAfiliado: json["ipsPrimaria_Afiliado"],
+        codZonaAfiliado: json["CodZona_Afiliado"],
+        codTipoPobAfiliado: json["CodTipoPob_afiliado"],
+        ipsPrimariaAfiliado: json["IPSPrimaria_Afiliado"],
       );
-
-  @override
-  Map<String, dynamic> toJson() => {
-        "afiliado_id": afiliadoId,
-        "tipoDoc_Afiliado": tipoDocAfiliado,
-        "documento": documento,
-        "tipoDoc_CabezaFamilia": tipoDocCabezaFamilia,
-        "documentocabeza": documentocabeza,
-        "apellido1": apellido1,
-        "apellido2": apellido2,
-        "nombre1": nombre1,
-        "nombre2": nombre2,
-        "fecnac": fecnac?.toIso8601String(),
-        "codGenero_Afiliado": codGeneroAfiliado,
-        "direccion": direccion,
-        "telefonofijo": telefonofijo,
-        "telefonocel1": telefonocel1,
-        "telefonocel2": telefonocel2,
-        "departamento_Ide": departamentoIde,
-        "codMpio_Afiliado": codMpioAfiliado,
-        "nomMpio_Afiliado": nomMpioAfiliado,
-        "codDpto_Afiliado": codDptoAfiliado,
-        "nomDpto_Afiliado": nomDptoAfiliado,
-        "fechafiliacion": fechafiliacion?.toIso8601String(),
-        "codZona_Afiliado": codZonaAfiliado,
-        "codTipoPob_afiliado": codTipoPobAfiliado,
-        "ipsPrimaria_Afiliado": ipsPrimariaAfiliado,
-      };
 }

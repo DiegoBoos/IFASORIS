@@ -13,7 +13,7 @@ class CostoDesplazamientoLocalDataSourceImpl
   @override
   Future<List<CostoDesplazamientoModel>> getCostosDesplazamiento() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('CostoDesplazamiento');
+    final res = await db.query('CostosDesplazamiento_CentroAtencion');
     final result = List<CostoDesplazamientoModel>.from(
         res.map((m) => CostoDesplazamientoModel.fromJson(m))).toList();
 
@@ -25,8 +25,8 @@ class CostoDesplazamientoLocalDataSourceImpl
       CostoDesplazamientoEntity costoDesplazamiento) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res =
-        await db.insert('CostoDesplazamiento', costoDesplazamiento.toJson());
+    final res = await db.insert(
+        'CostosDesplazamiento_CentroAtencion', costoDesplazamiento.toJson());
 
     return res;
   }

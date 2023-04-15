@@ -7,14 +7,8 @@ class CostoDesplazamientoEntity {
   int costoDesplazamientoId;
   String descripcion;
 
-  factory CostoDesplazamientoEntity.fromJson(Map<String, dynamic> json) =>
-      CostoDesplazamientoEntity(
-        costoDesplazamientoId: json["costoDesplazamiento_id"],
-        descripcion: json["descripcion"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "costoDesplazamiento_id": costoDesplazamientoId,
-        "descripcion": descripcion,
+        "CostoDesplazamiento_id": costoDesplazamientoId,
+        "Descripcion": descripcion,
       };
 }
