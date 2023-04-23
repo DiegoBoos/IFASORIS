@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/tiempo_tarda_med_tradicional_model.dart';
 
 abstract class TiempoTardaMedTradicionalRemoteDataSource {
@@ -12,6 +13,7 @@ abstract class TiempoTardaMedTradicionalRemoteDataSource {
 
 class TiempoTardaMedTradicionalRemoteDataSourceImpl
     implements TiempoTardaMedTradicionalRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   TiempoTardaMedTradicionalRemoteDataSourceImpl({required this.client});
@@ -26,7 +28,7 @@ class TiempoTardaMedTradicionalRemoteDataSourceImpl
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

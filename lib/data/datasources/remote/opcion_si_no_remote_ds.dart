@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/opcion_si_no_model.dart';
 
 abstract class OpcionSiNoRemoteDataSource {
@@ -11,6 +12,7 @@ abstract class OpcionSiNoRemoteDataSource {
 }
 
 class OpcionSiNoRemoteDataSourceImpl implements OpcionSiNoRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   OpcionSiNoRemoteDataSourceImpl({required this.client});
@@ -23,7 +25,7 @@ class OpcionSiNoRemoteDataSourceImpl implements OpcionSiNoRemoteDataSource {
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

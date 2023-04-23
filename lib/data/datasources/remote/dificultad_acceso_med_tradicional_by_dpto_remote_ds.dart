@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/dificultad_acceso_med_tradicional_model.dart';
 
 abstract class DificultadAccesoMedTradicionalByDptoRemoteDataSource {
@@ -13,6 +14,7 @@ abstract class DificultadAccesoMedTradicionalByDptoRemoteDataSource {
 
 class DificultadAccesoMedTradicionalByDptoRemoteDataSourceImpl
     implements DificultadAccesoMedTradicionalByDptoRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   DificultadAccesoMedTradicionalByDptoRemoteDataSourceImpl(
@@ -28,7 +30,7 @@ class DificultadAccesoMedTradicionalByDptoRemoteDataSourceImpl
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

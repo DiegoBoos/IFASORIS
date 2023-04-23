@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/costo_desplazamiento_model.dart';
 
 abstract class CostoDesplazamientoRemoteDataSource {
@@ -12,6 +13,7 @@ abstract class CostoDesplazamientoRemoteDataSource {
 
 class CostoDesplazamientoRemoteDataSourceImpl
     implements CostoDesplazamientoRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   CostoDesplazamientoRemoteDataSourceImpl({required this.client});
@@ -25,7 +27,7 @@ class CostoDesplazamientoRemoteDataSourceImpl
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

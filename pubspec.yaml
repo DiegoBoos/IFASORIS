@@ -29,6 +29,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animate_do: ^3.0.2
   connectivity_plus: ^3.0.3
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
@@ -42,7 +43,9 @@ dependencies:
   get_it: ^7.2.0
   http: ^0.13.5
   intl: ^0.18.0
+  path: ^1.8.0
   path_provider: ^2.0.14
+  shared_preferences: ^2.1.0
   sqflite: ^2.2.6
   sqflite_common_ffi: ^2.2.2
 

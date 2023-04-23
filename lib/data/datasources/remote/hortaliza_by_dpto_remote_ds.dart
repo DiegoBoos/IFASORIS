@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/hortaliza_model.dart';
 
 abstract class HortalizaByDptoRemoteDataSource {
@@ -12,6 +13,7 @@ abstract class HortalizaByDptoRemoteDataSource {
 
 class HortalizaByDptoRemoteDataSourceImpl
     implements HortalizaByDptoRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   HortalizaByDptoRemoteDataSourceImpl({required this.client});
@@ -25,7 +27,7 @@ class HortalizaByDptoRemoteDataSourceImpl
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

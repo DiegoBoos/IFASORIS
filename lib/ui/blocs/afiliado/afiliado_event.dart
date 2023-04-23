@@ -7,11 +7,14 @@ abstract class AfiliadosEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetAfiliadosByDepartamento extends AfiliadosEvent {
-  final int dtoId;
-  final int pagina;
-  final int registrosPorPagina;
+class QueryChanged extends AfiliadosEvent {
+  final String query;
 
-  const GetAfiliadosByDepartamento(
-      this.dtoId, this.pagina, this.registrosPorPagina);
+  const QueryChanged(this.query);
+}
+
+class ErrorMessage extends AfiliadosEvent {
+  final String message;
+
+  const ErrorMessage(this.message);
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:ifasoris/services/shared_preferences_service.dart';
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
@@ -12,6 +13,7 @@ abstract class AfiliadoRemoteDataSource {
 }
 
 class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   AfiliadoRemoteDataSourceImpl({required this.client});
@@ -26,7 +28,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

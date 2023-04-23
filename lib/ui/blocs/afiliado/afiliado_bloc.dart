@@ -10,20 +10,17 @@ part 'afiliado_state.dart';
 class AfiliadoBloc extends Bloc<AfiliadosEvent, AfiliadosState> {
   final AfiliadoUsecaseDB afiliadoUsecaseDB;
   AfiliadoBloc({required this.afiliadoUsecaseDB}) : super(AfiliadosInitial()) {
-    on<GetAfiliadosByDepartamento>((event, emit) async {
+    on<QueryChanged>((event, emit) async {
       emit(AfiliadosLoading());
-      await _getAfiliadosByDepartamento(event, emit);
+      await _searchAfiliados(event, emit);
+    });
+    on<ErrorMessage>((event, emit) async {
+      emit(AfiliadosError(event.message));
     });
   }
 
-  _getAfiliadosByDepartamento(
-      GetAfiliadosByDepartamento event, Emitter<AfiliadosState> emit) async {
-    final dtoId = event.dtoId;
-    final pagina = event.pagina;
-    final registrosPorPagina = event.registrosPorPagina;
-
-    final result = await afiliadoUsecaseDB.getAfiliadosUsecaseDB(
-        dtoId, pagina, registrosPorPagina);
+  _searchAfiliados(QueryChanged event, Emitter<AfiliadosState> emit) async {
+    final result = await afiliadoUsecaseDB.getAfiliadosUsecaseDB(event.query);
 
     result.fold((failure) => emit(AfiliadosError(failure.properties.first)),
         (data) => emit(AfiliadosLoaded(afiliadosLoaded: data)));

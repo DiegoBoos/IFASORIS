@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/estado_via_model.dart';
 
 abstract class EstadoViaRemoteDataSource {
@@ -11,6 +12,7 @@ abstract class EstadoViaRemoteDataSource {
 }
 
 class EstadoViaRemoteDataSourceImpl implements EstadoViaRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   EstadoViaRemoteDataSourceImpl({required this.client});
@@ -23,7 +25,7 @@ class EstadoViaRemoteDataSourceImpl implements EstadoViaRemoteDataSource {
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

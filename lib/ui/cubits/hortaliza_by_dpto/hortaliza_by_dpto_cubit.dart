@@ -10,7 +10,9 @@ class HortalizaByDptoCubit extends Cubit<HortalizasByDptoState> {
   final HortalizaByDptoUsecaseDB hortalizaByDptoUsecaseDB;
 
   HortalizaByDptoCubit({required this.hortalizaByDptoUsecaseDB})
-      : super(HortalizasByDptoInitial());
+      : super(HortalizasByDptoInitial()) {
+    getHortalizasByDptoDB();
+  }
 
   void getHortalizasByDptoDB() async {
     final result =

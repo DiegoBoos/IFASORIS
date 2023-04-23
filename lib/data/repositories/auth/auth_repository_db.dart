@@ -26,19 +26,6 @@ class AuthRepositoryDBImpl implements AuthRepositoryDB {
   }
 
   @override
-  Future<Either<Failure, UsuarioEntity?>> checkTokenRepositoryDB() async {
-    try {
-      final result = await authLocalDataSource.checkToken();
-
-      return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
-    }
-  }
-
-  @override
   Future<Either<Failure, int>> logOutUsecaseDB() async {
     try {
       final loggedOut = await authLocalDataSource.logOut();

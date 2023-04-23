@@ -13,13 +13,14 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
           const DrawerHeader(
             child: Text(
-              'Drawer Header',
+              'Header',
               style: TextStyle(
                 fontSize: 24.0,
               ),
             ),
           ),
           ListTile(
+            leading: const Icon(Icons.location_on_outlined),
             title: const Text('Ubicación'),
             onTap: () => Navigator.pushNamed(context, 'ubicacion'),
           ),

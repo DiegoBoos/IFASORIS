@@ -14,10 +14,6 @@ class AuthUsecaseDB {
     return repositoryDB.logInRepositoryDB(usuario);
   }
 
-  Future<Either<Failure, UsuarioEntity?>> checkTokenUsecaseDB() {
-    return repositoryDB.checkTokenRepositoryDB();
-  }
-
   Future<Either<Failure, int>> logOutUsecaseDB() {
     return repositoryDB.logOutUsecaseDB();
   }

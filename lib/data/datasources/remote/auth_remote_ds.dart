@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:ifasoris/services/shared_preferences_service.dart';
 
 import '../../../core/error/failure.dart';
 import '../../../../domain/entities/usuario_entity.dart';
@@ -14,6 +15,7 @@ abstract class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final http.Client client;
+  final prefs = SharedPreferencesService();
 
   AuthRemoteDataSourceImpl({required this.client});
 
@@ -38,12 +40,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         final token = decodedResp['Result']['Token'];
         final resultMap = decodedResp['Result']['Usuario'];
         resultMap['Password'] = usuario.password;
-        resultMap['Token'] = token;
 
         final result = UsuarioModel.fromJson(resultMap);
         final res = await AuthLocalDataSourceImpl.saveUsuario(result);
 
         if (res == 1) {
+          prefs.set('token', token);
           return result;
         } else {
           throw const ServerFailure(['Error de autenticación']);

@@ -7,14 +7,12 @@ class UsuarioModel extends UsuarioEntity {
     required int municipioId,
     required int departamentoId,
     required String password,
-    required String token,
   }) : super(
           id: id,
           userName: userName,
           password: password,
           municipioId: municipioId,
           departamentoId: departamentoId,
-          token: token,
         );
 
   factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
@@ -23,6 +21,5 @@ class UsuarioModel extends UsuarioEntity {
         municipioId: json["Municipio_id"],
         departamentoId: json["Departamento_id"],
         password: json["Password"],
-        token: json["Token"],
       );
 }

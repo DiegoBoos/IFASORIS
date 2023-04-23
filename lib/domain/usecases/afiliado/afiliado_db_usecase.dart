@@ -14,8 +14,7 @@ class AfiliadoUsecaseDB {
   }
 
   Future<Either<Failure, List<AfiliadoEntity>>> getAfiliadosUsecaseDB(
-      int dtoId, int pagina, int registrosPorPagina) {
-    return repositoryDB.getAfiliadosRepositoryDB(
-        dtoId, pagina, registrosPorPagina);
+      String query) {
+    return repositoryDB.getAfiliadosRepositoryDB(query);
   }
 }

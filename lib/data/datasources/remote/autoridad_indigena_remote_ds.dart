@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/autoridad_indigena_model.dart';
 
 abstract class AutoridadIndigenaRemoteDataSource {
@@ -12,6 +13,7 @@ abstract class AutoridadIndigenaRemoteDataSource {
 
 class AutoridadIndigenaRemoteDataSourceImpl
     implements AutoridadIndigenaRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   AutoridadIndigenaRemoteDataSourceImpl({required this.client});
@@ -24,7 +26,7 @@ class AutoridadIndigenaRemoteDataSourceImpl
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

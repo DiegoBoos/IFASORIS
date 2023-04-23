@@ -7,16 +7,18 @@ class ConnectionSQL {
   userName TEXT,
   municipio_id INTEGER,
   departamento_id INTEGER,
-  password TEXT,
-  token TEXT
+  password TEXT
   )''';
 
   static const CREATE_AFILIADO = '''
   CREATE TABLE [Afiliado] (
 	[Afiliado_id]	integer NOT NULL,
+  [TipoDoc_Afiliado] varchar(2) COLLATE NOCASE,
 	[SerialBDUA]	varchar(18) COLLATE NOCASE,
 	[identificacion_id]	integer NOT NULL,
 	[documento]	varchar(18) NOT NULL COLLATE NOCASE,
+  [AfiliadoId_CabezaFamilia] integer NOT NULL,
+  [TipoDoc_CabezaFamilia] varchar(2) COLLATE NOCASE,
 	[identificacion_cab_id]	integer,
 	[documentocabeza]	varchar(18) COLLATE NOCASE,
 	[apellido1]	varchar(50) COLLATE NOCASE,
@@ -24,6 +26,7 @@ class ConnectionSQL {
 	[nombre1]	varchar(50) NOT NULL COLLATE NOCASE,
 	[nombre2]	varchar(50) COLLATE NOCASE,
 	[fecnac]	datetime COLLATE NOCASE,
+  [CodGenero_Afiliado] varchar(1) COLLATE NOCASE,
 	[Genero_id]	integer,
 	[Direccion]	varchar(200) COLLATE NOCASE,
 	[Telefonofijo]	varchar(30) COLLATE NOCASE,

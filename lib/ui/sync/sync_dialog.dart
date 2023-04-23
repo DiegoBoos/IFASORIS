@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/auth/auth_bloc.dart';
-import '../../blocs/sync/sync_bloc.dart';
+import '../blocs/auth/auth_bloc.dart';
+import '../blocs/sync/sync_bloc.dart';
 
 class SyncTable {
   String name;

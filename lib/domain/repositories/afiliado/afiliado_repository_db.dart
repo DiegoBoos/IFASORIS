@@ -8,5 +8,5 @@ abstract class AfiliadoRepositoryDB {
       AfiliadoEntity afiliado);
 
   Future<Either<Failure, List<AfiliadoEntity>>> getAfiliadosRepositoryDB(
-      int dtoId, int pagina, int registrosPorPagina);
+      String query);
 }

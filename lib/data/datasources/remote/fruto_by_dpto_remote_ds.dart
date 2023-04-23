@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/fruto_model.dart';
 
 abstract class FrutoByDptoRemoteDataSource {
@@ -11,6 +12,7 @@ abstract class FrutoByDptoRemoteDataSource {
 }
 
 class FrutoByDptoRemoteDataSourceImpl implements FrutoByDptoRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   FrutoByDptoRemoteDataSourceImpl({required this.client});
@@ -24,7 +26,7 @@ class FrutoByDptoRemoteDataSourceImpl implements FrutoByDptoRemoteDataSource {
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

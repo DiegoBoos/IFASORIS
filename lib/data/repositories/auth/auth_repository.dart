@@ -15,9 +15,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, UsuarioEntity>> logInRepository(
-      UsuarioEntity usuarioEntity) async {
+      UsuarioEntity usuario) async {
     try {
-      final result = await authRemoteDataSource.logIn(usuarioEntity);
+      final result = await authRemoteDataSource.logIn(usuario);
 
       return Right(result);
     } on ServerFailure catch (e) {

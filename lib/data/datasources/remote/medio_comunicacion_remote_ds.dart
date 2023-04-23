@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/medio_comunicacion_model.dart';
 
 abstract class MedioComunicacionRemoteDataSource {
@@ -12,6 +13,7 @@ abstract class MedioComunicacionRemoteDataSource {
 
 class MedioComunicacionRemoteDataSourceImpl
     implements MedioComunicacionRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   MedioComunicacionRemoteDataSourceImpl({required this.client});
@@ -24,7 +26,7 @@ class MedioComunicacionRemoteDataSourceImpl
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

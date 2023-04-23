@@ -90,4 +90,11 @@ class ConnectionSQLiteService {
     var dbClient = await db;
     return await dbClient.delete(table);
   }
+
+  static Future<bool> isTableEmpty(String tableName) async {
+    var dbClient = await db;
+    int? count = Sqflite.firstIntValue(
+        await dbClient.rawQuery('SELECT COUNT(*) FROM $tableName'));
+    return count == 0;
+  }
 }

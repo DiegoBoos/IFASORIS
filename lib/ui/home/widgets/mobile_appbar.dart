@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/usecases/auth/auth_exports.dart';
+import '../../../services/connection_sqlite_service.dart';
+import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
 import '../../cubits/internet/internet_cubit.dart';
-import 'custom_snack_bar.dart';
-import 'sync_dialog.dart';
+import '../../sync/sync_dialog.dart';
+import '../../search/search_afiliados.dart';
+import '../../utils/custom_snack_bar.dart';
 
 class MobileAppBar extends StatelessWidget {
   const MobileAppBar({super.key});
@@ -13,19 +16,32 @@ class MobileAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
+    final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
     final usuario = authBloc.state.usuario!;
     final internetCubit = BlocProvider.of<InternetCubit>(context);
 
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthInitial) {
-          Navigator.pushReplacementNamed(context, 'sign-in');
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthInitial) {
+              Navigator.pushReplacementNamed(context, 'sign-in');
+            }
+          },
+        ),
+        BlocListener<AfiliadoBloc, AfiliadosState>(
+          listener: (context, state) {
+            if (state is AfiliadosError) {
+              CustomSnackBar.showSnackBar(context, state.message, Colors.red);
+            }
+          },
+        ),
+      ],
       child: BlocBuilder<SyncBloc, SyncState>(
         builder: (context, state) {
           if (state is InitializingSync) {
             return AppBar(
+              elevation: 0,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -45,6 +61,7 @@ class MobileAppBar extends StatelessWidget {
           }
           if (state is SyncDownloading) {
             return AppBar(
+              elevation: 0,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -66,6 +83,7 @@ class MobileAppBar extends StatelessWidget {
           }
           if (state is SyncInProgress) {
             return AppBar(
+              elevation: 0,
               centerTitle: true,
               title: Text(
                   '${state.syncProgress.title} ${state.syncProgress.percent}%',
@@ -73,12 +91,24 @@ class MobileAppBar extends StatelessWidget {
             );
           } else {
             return AppBar(
+              elevation: 0,
               title: Text(usuario.userName,
                   style: const TextStyle(color: Colors.white)),
               actions: [
                 IconButton(
-                    onPressed: () => authBloc.add(LogOut()),
-                    icon: const Icon(Icons.logout)),
+                    onPressed: () async {
+                      bool isEmpty = await ConnectionSQLiteService.isTableEmpty(
+                          'Afiliado');
+                      if (isEmpty) {
+                        afiliadoBloc.add(const ErrorMessage(
+                            'No existen datos del afiliado'));
+                      } else {
+                        showSearch(
+                            context: context,
+                            delegate: SearchAfiliados(afiliadoBloc));
+                      }
+                    },
+                    icon: const Icon(Icons.search)),
                 IconButton(
                   icon: const Icon(Icons.cloud_upload),
                   onPressed: () {
@@ -96,6 +126,9 @@ class MobileAppBar extends StatelessWidget {
                     }
                   },
                 ),
+                IconButton(
+                    onPressed: () => authBloc.add(LogOut()),
+                    icon: const Icon(Icons.logout)),
               ],
             );
           }

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/via_acceso_model.dart';
 
 abstract class ViaAccesoRemoteDataSource {
@@ -11,6 +12,7 @@ abstract class ViaAccesoRemoteDataSource {
 }
 
 class ViaAccesoRemoteDataSourceImpl implements ViaAccesoRemoteDataSource {
+  final prefs = SharedPreferencesService();
   final http.Client client;
 
   ViaAccesoRemoteDataSourceImpl({required this.client});
@@ -23,7 +25,7 @@ class ViaAccesoRemoteDataSourceImpl implements ViaAccesoRemoteDataSource {
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await Constants.getToken()}',
+        'Authorization': 'Bearer ${await prefs.get('token')}',
       });
 
       final decodedResp = jsonDecode(resp.body);

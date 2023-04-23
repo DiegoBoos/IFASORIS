@@ -7,7 +7,5 @@ abstract class AuthRepositoryDB {
   Future<Either<Failure, UsuarioEntity?>> logInRepositoryDB(
       UsuarioEntity usuario);
 
-  Future<Either<Failure, UsuarioEntity?>> checkTokenRepositoryDB();
-
   Future<Either<Failure, int>> logOutUsecaseDB();
 }

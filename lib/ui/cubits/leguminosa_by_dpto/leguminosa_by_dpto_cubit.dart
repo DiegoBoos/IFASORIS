@@ -10,7 +10,9 @@ class LeguminosaByDptoCubit extends Cubit<LeguminosasByDptoState> {
   final LeguminosaByDptoUsecaseDB leguminosaByDptoUsecaseDB;
 
   LeguminosaByDptoCubit({required this.leguminosaByDptoUsecaseDB})
-      : super(LeguminosasByDptoInitial());
+      : super(LeguminosasByDptoInitial()) {
+    getLeguminosasByDptoDB();
+  }
 
   void getLeguminosasByDptoDB() async {
     final result =

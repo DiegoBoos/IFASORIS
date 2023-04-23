@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../domain/entities/sync_log_entity.dart';
-import 'blocs/auth/auth_bloc.dart';
-import 'blocs/sync/sync_bloc.dart';
-import 'cubits/internet/internet_cubit.dart';
-import 'cubits/sync_log/sync_log_cubit.dart';
-import 'utils/network_icon.dart';
-import 'utils/styles.dart';
+import '../blocs/auth/auth_bloc.dart';
+import '../blocs/sync/sync_bloc.dart';
+import '../cubits/internet/internet_cubit.dart';
+import '../cubits/sync_log/sync_log_cubit.dart';
+import '../utils/network_icon.dart';
+import '../utils/styles.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({

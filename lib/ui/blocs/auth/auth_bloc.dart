@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/services/shared_preferences_service.dart';
 
 import '../../../domain/entities/usuario_entity.dart';
 import '../../../domain/usecases/auth/auth_db_usecase.dart';
@@ -11,6 +12,8 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUsecase auth;
   final AuthUsecaseDB authDB;
+
+  final prefs = SharedPreferencesService();
 
   AuthBloc({
     required this.auth,
@@ -38,14 +41,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await auth.logInUsecase(usuario);
     result.fold((failure) {
       emit(AuthError(failure.properties.first));
-    }, (data) {
-      emit(AuthLoaded(data));
+    }, (data) async {
+      final token = prefs.get('token');
+      if (token != null) {
+        emit(AuthLoaded(data));
+      } else {
+        emit(const AuthError('Excepción no controlada'));
+      }
     });
   }
 
   _logInDB(event, emit) async {
-    final checkToken = await _checkToken();
-    if (checkToken != null) {
+    final token = await prefs.get('token');
+    if (token != null) {
       final usuario = event.usuario;
 
       final result = await authDB.logInUsecaseDB(usuario);
@@ -62,18 +70,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthError(
           'No existen datos, inicie sesión con una conexión a internet'));
     }
-  }
-
-  Future<UsuarioEntity?> _checkToken() async {
-    final result = await authDB.checkTokenUsecaseDB();
-    return result.fold((failure) {
-      return failure.properties.first;
-    }, (data) {
-      if (data == null) {
-        return null;
-      }
-      return data;
-    });
   }
 
   _logOut(Emitter<AuthState> emit) async {

@@ -5,7 +5,6 @@ class UsuarioEntity {
     this.password,
     this.municipioId,
     this.departamentoId,
-    this.token,
   });
 
   final String? id;
@@ -13,7 +12,6 @@ class UsuarioEntity {
   final int? municipioId;
   final int? departamentoId;
   final String? password;
-  final String? token;
 
   Map<String, dynamic> toJson() => {
         "Id": id,
@@ -21,6 +19,5 @@ class UsuarioEntity {
         "Password": password,
         "Municipio_Id": municipioId,
         "Departamento_Id": departamentoId,
-        "Token": token,
       };
 }

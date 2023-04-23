@@ -3,6 +3,7 @@ class AfiliadoEntity {
     required this.afiliadoId,
     required this.tipoDocAfiliado,
     required this.documento,
+    required this.afiliadoIdCabezaFamilia,
     required this.tipoDocCabezaFamilia,
     required this.documentocabeza,
     required this.apellido1,
@@ -29,6 +30,7 @@ class AfiliadoEntity {
   int afiliadoId;
   String tipoDocAfiliado;
   String documento;
+  int afiliadoIdCabezaFamilia;
   String tipoDocCabezaFamilia;
   String documentocabeza;
   String apellido1;
@@ -55,6 +57,7 @@ class AfiliadoEntity {
         "Afiliado_id": afiliadoId,
         "TipoDoc_Afiliado": tipoDocAfiliado,
         "documento": documento,
+        "AfiliadoId_CabezaFamilia": afiliadoIdCabezaFamilia,
         "TipoDoc_CabezaFamilia": tipoDocCabezaFamilia,
         "documentocabeza": documentocabeza,
         "apellido1": apellido1,

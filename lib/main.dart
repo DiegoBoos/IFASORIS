@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/services/shared_preferences_service.dart';
 import 'injection.dart' as di;
 import 'router.dart';
 import 'ui/blocs/afiliado/afiliado_bloc.dart';
@@ -30,8 +31,12 @@ import 'ui/cubits/verdura_by_dpto/verdura_by_dpto_cubit.dart';
 import 'ui/cubits/via_acceso/via_acceso_cubit.dart';
 import 'ui/utils/styles.dart';
 
-void main() {
+final prefs = SharedPreferencesService();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   di.init();
+  await prefs.initPrefs();
   runApp(const MyApp());
 }
 

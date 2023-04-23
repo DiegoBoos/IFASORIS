@@ -10,7 +10,9 @@ class CerealByDptoCubit extends Cubit<CerealesByDptoState> {
   final CerealByDptoUsecaseDB cerealByDptoUsecaseDB;
 
   CerealByDptoCubit({required this.cerealByDptoUsecaseDB})
-      : super(CerealesByDptoInitial());
+      : super(CerealesByDptoInitial()) {
+    getCerealesByDptoDB();
+  }
 
   void getCerealesByDptoDB() async {
     final result = await cerealByDptoUsecaseDB.getCerealesByDptoUsecaseDB();

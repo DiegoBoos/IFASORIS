@@ -4,17 +4,16 @@ import '../../../domain/entities/afiliado_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
 
 abstract class AfiliadoLocalDataSource {
-  Future<List<AfiliadoModel>> getAfiliados(
-      int dtoId, int pagina, int registrosPorPagina);
+  Future<List<AfiliadoModel>> getAfiliados(String query);
   Future<int> saveAfiliado(AfiliadoEntity afiliado);
 }
 
 class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
   @override
-  Future<List<AfiliadoModel>> getAfiliados(
-      int dtoId, int pagina, int registrosPorPagina) async {
+  Future<List<AfiliadoModel>> getAfiliados(String query) async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Afiliado');
+    final res =
+        await db.query('Afiliado', where: 'documento = ?', whereArgs: [query]);
     final result =
         List<AfiliadoModel>.from(res.map((m) => AfiliadoModel.fromJson(m)))
             .toList();
