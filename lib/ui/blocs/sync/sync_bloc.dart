@@ -162,7 +162,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         emit(InitializingSync());
         ConnectionSQLiteService.truncateTable('Afiliado').then((value) async {
           afiliadosTemp = [];
-          await syncAfiliados(event, 1, 10);
+          await syncAfiliados(event, 1, 10000);
         });
       } else if (event.tablesNames.contains('Accesorias')) {
         emit(InitializingSync());
@@ -201,11 +201,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           total: data.totalRegistros,
           percent: calculatePercent())));
 
-      /* if ((afiliadosTemp.length <= data.totalRegistros) &&
+      if ((afiliadosTemp.length <= data.totalRegistros) &&
           (pagina != data.totalPaginas)) {
         pagina++;
         await syncAfiliados(event, pagina, registrosPorPagina);
-      } */
+      }
       await saveAfiliado(event, afiliadosTemp[0]);
     });
   }
