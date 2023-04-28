@@ -10,9 +10,7 @@ class EspecieAnimalByDptoCubit extends Cubit<EspeciesAnimalesByDptoState> {
   final EspecieAnimalByDptoUsecaseDB especieAnimalByDptoUsecaseDB;
 
   EspecieAnimalByDptoCubit({required this.especieAnimalByDptoUsecaseDB})
-      : super(EspeciesAnimalesByDptoInitial()) {
-    getEspeciesAnimalesByDptoDB();
-  }
+      : super(EspeciesAnimalesByDptoInitial());
 
   void getEspeciesAnimalesByDptoDB() async {
     final result =

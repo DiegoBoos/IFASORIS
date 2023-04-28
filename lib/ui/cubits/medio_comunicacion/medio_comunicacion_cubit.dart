@@ -8,9 +8,7 @@ part 'medio_comunicacion_state.dart';
 class MedioComunicacionCubit extends Cubit<MediosComunicacionState> {
   final MedioComunicacionUsecaseDB medioComunicacionUsecaseDB;
   MedioComunicacionCubit({required this.medioComunicacionUsecaseDB})
-      : super(MediosComunicacionInitial()) {
-    getMediosComunicacionDB();
-  }
+      : super(MediosComunicacionInitial());
 
   void getMediosComunicacionDB() async {
     final result =

@@ -9,7 +9,11 @@ class FichaUsecaseDB {
 
   FichaUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, FichaEntity?>> logInUsecaseDB(FichaEntity ficha) {
+  Future<Either<Failure, FichaEntity>> createFichaUsecaseDB(FichaEntity ficha) {
     return repositoryDB.createFichaRepositoryDB(ficha);
+  }
+
+  Future<Either<Failure, List<FichaEntity>>> loadFichasUsecaseDB() {
+    return repositoryDB.loadFichasRepositoryDB();
   }
 }

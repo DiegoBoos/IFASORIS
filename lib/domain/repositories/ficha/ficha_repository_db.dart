@@ -4,6 +4,7 @@ import 'package:ifasoris/domain/entities/ficha_entity.dart';
 import '../../../core/error/failure.dart';
 
 abstract class FichaRepositoryDB {
-  Future<Either<Failure, FichaEntity?>> createFichaRepositoryDB(
+  Future<Either<Failure, FichaEntity>> createFichaRepositoryDB(
       FichaEntity ficha);
+  Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB();
 }

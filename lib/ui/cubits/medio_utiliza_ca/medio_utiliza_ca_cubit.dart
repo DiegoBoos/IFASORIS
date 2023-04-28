@@ -10,9 +10,7 @@ class MedioUtilizaCACubit extends Cubit<MediosUtilizaCAState> {
   final MedioUtilizaCAUsecaseDB medioUtilizaCAUsecaseDB;
 
   MedioUtilizaCACubit({required this.medioUtilizaCAUsecaseDB})
-      : super(MediosUtilizaCAInitial()) {
-    getMediosUtilizaCA();
-  }
+      : super(MediosUtilizaCAInitial());
 
   void getMediosUtilizaCA() async {
     final result = await medioUtilizaCAUsecaseDB.getMediosUtilizaCAUsecase();

@@ -8,9 +8,7 @@ class CostoDesplazamientoCubit extends Cubit<CostosDesplazamientoState> {
   final CostoDesplazamientoUsecaseDB costoDesplazamientoUsecaseDB;
 
   CostoDesplazamientoCubit({required this.costoDesplazamientoUsecaseDB})
-      : super(CostosDesplazamientoInitial()) {
-    getCostosDesplazamientoDB();
-  }
+      : super(CostosDesplazamientoInitial());
 
   void getCostosDesplazamientoDB() async {
     final result =

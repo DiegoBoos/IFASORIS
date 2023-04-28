@@ -10,9 +10,7 @@ class FrutoByDptoCubit extends Cubit<FrutosByDptoState> {
   final FrutoByDptoUsecaseDB frutoByDptoUsecaseDB;
 
   FrutoByDptoCubit({required this.frutoByDptoUsecaseDB})
-      : super(FrutosByDptoInitial()) {
-    getFrutosByDptoDB();
-  }
+      : super(FrutosByDptoInitial());
 
   void getFrutosByDptoDB() async {
     final result = await frutoByDptoUsecaseDB.getFrutosByDptoUsecaseDB();

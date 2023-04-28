@@ -12,9 +12,7 @@ class DificultadAccesoMedTradicionalByDptoCubit
       dificultadAccesoMedTradicionalByDptoUsecaseDB;
   DificultadAccesoMedTradicionalByDptoCubit(
       {required this.dificultadAccesoMedTradicionalByDptoUsecaseDB})
-      : super(DificultadesAccesoMedTradicionalByDptoInitial()) {
-    getDificultadesAccesoMedTradicionalByDpto();
-  }
+      : super(DificultadesAccesoMedTradicionalByDptoInitial());
 
   void getDificultadesAccesoMedTradicionalByDpto() async {
     final result = await dificultadAccesoMedTradicionalByDptoUsecaseDB

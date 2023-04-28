@@ -1,44 +1,34 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of 'familia_cubit.dart';
 
-import 'familia_cubit.dart';
+abstract class FamiliaState extends Equatable {
+  final FamiliaEntity? familia;
+  const FamiliaState({this.familia});
 
-class FamiliaCubit extends Cubit<FamiliaState> {
-  FamiliaCubit() : super(FamiliaInitial());
+  @override
+  List<Object?> get props => [];
+}
 
-  void initState() => emit(FamiliaInitial());
+class FamiliaInitial extends FamiliaState {}
 
-  /* void saveFamiliaDB(FamiliaEntity familiaEntity) async {
-    final result = await familiaUsecaseDB
-        .saveFamiliaUsecaseDB(familiaEntity);
-    result.fold((failure) => emit(FamiliaError(failure.properties.first)),
-        (data) => emit(FamiliaSaved(familia: familiaEntity)));
-  }
+class FamiliaLoading extends FamiliaState {}
 
-  Future<void> getFamilia(String familiaId) async {
-    final result =
-        await familiaUsecaseDB.getFamiliaUsecaseDB(familiaId);
-    result.fold((failure) => emit(FamiliaError(failure.properties.first)),
-        (data) {
-      if (data == null) {
-        emit(FamiliaError('No se encontró el familia'));
-      } else {
-        emit(FamiliaLoaded(data));
-      }
-    });
-  } */
+class FamiliaLoaded extends FamiliaState {
+  final FamiliaEntity familiaLoaded;
 
-  void changeFichaId(int value) {
-    final fichaIdChanged = state.familia.copyWith(fichaId: value);
-    emit(FamiliaChanged(fichaIdChanged));
-  }
+  const FamiliaLoaded(this.familiaLoaded) : super(familia: familiaLoaded);
+}
 
-  void changeApellidosFlia(String value) {
-    final apellidosFliaChanged = state.familia.copyWith(apellidosFlia: value);
-    emit(FamiliaChanged(apellidosFliaChanged));
-  }
+class FamiliaCreated extends FamiliaState {
+  final FamiliaEntity familiaCreated;
 
-  void changeAfiliadoId(int value) {
-    final afiliadoIdChanged = state.familia.copyWith(afiliadoId: value);
-    emit(FamiliaChanged(afiliadoIdChanged));
-  }
+  const FamiliaCreated(this.familiaCreated) : super(familia: familiaCreated);
+}
+
+class FamiliaError extends FamiliaState {
+  final String message;
+
+  const FamiliaError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

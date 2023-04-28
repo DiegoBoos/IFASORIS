@@ -1,52 +1,19 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/domain/usecases/familia/familia_db_usecase.dart';
 
 import '../../../domain/entities/familia_entity.dart';
+part 'familia_state.dart';
 
-abstract class FamiliaState extends Equatable {
-  final FamiliaEntity familia;
-  const FamiliaState({required this.familia});
+class FamiliaCubit extends Cubit<FamiliaState> {
+  final FamiliaUsecaseDB familiaUsecaseDB;
+  FamiliaCubit({required this.familiaUsecaseDB}) : super(FamiliaInitial());
 
-  @override
-  List<Object?> get props => [];
-}
+  void initState() => emit(FamiliaInitial());
 
-class FamiliaInitial extends FamiliaState {
-  FamiliaInitial() : super(familia: initObject());
-}
-
-class FamiliaLoading extends FamiliaState {
-  const FamiliaLoading({required super.familia});
-}
-
-class FamiliaLoaded extends FamiliaState {
-  final FamiliaEntity familiaLoaded;
-
-  const FamiliaLoaded(this.familiaLoaded) : super(familia: familiaLoaded);
-}
-
-class FamiliaChanged extends FamiliaState {
-  final FamiliaEntity familiaChanged;
-
-  const FamiliaChanged(this.familiaChanged) : super(familia: familiaChanged);
-}
-
-class FamiliaSaved extends FamiliaState {
-  const FamiliaSaved({required super.familia});
-}
-
-class FamiliaError extends FamiliaState {
-  final String message;
-
-  FamiliaError(this.message) : super(familia: initObject());
-
-  @override
-  List<Object?> get props => [message];
-}
-
-FamiliaEntity initObject() {
-  return FamiliaEntity(
-    fichaId: 0,
-    apellidosFlia: '',
-    afiliadoId: 0,
-  );
+  void createFamiliaDB(FamiliaEntity familia) async {
+    final result = await familiaUsecaseDB.createFamiliaUsecaseDB(familia);
+    result.fold((failure) => emit(FamiliaError(failure.properties.first)),
+        (data) => emit(FamiliaCreated(familia)));
+  }
 }

@@ -9,9 +9,7 @@ part 'dificultad_acceso_ca_state.dart';
 class DificultadAccesoCACubit extends Cubit<DificultadesAccesoCAState> {
   final DificultadAccesoCAUsecaseDB dificultadAccesoCAUsecaseDB;
   DificultadAccesoCACubit({required this.dificultadAccesoCAUsecaseDB})
-      : super(DificultadesAccesoCAInitial()) {
-    getDificultadesAccesoCA();
-  }
+      : super(DificultadesAccesoCAInitial());
 
   void getDificultadesAccesoCA() async {
     final result =

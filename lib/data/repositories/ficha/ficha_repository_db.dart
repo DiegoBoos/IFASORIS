@@ -12,10 +12,23 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
   FichaRepositoryDBImpl({required this.fichaLocalDataSource});
 
   @override
-  Future<Either<Failure, FichaEntity?>> createFichaRepositoryDB(
+  Future<Either<Failure, FichaEntity>> createFichaRepositoryDB(
       FichaEntity ficha) async {
     try {
       final result = await fichaLocalDataSource.createFicha(ficha);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB() async {
+    try {
+      final result = await fichaLocalDataSource.loadFichas();
 
       return Right(result);
     } on ServerFailure catch (e) {

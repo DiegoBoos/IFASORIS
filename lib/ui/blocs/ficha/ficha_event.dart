@@ -7,8 +7,4 @@ abstract class FichaEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class NewFicha extends FichaEvent {
-  final FichaEntity ficha;
-
-  const NewFicha({required this.ficha});
-}
+class LoadFichas extends FichaEvent {}

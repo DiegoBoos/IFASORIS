@@ -9,9 +9,7 @@ part 'estado_via_state.dart';
 class EstadoViaCubit extends Cubit<EstadosViasState> {
   final EstadoViaUsecaseDB estadoViaUsecaseDB;
   EstadoViaCubit({required this.estadoViaUsecaseDB})
-      : super(EstadosViasInitial()) {
-    getEstadosVias();
-  }
+      : super(EstadosViasInitial());
 
   void getEstadosVias() async {
     final result = await estadoViaUsecaseDB.getEstadosViasUsecase();

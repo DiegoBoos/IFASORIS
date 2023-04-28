@@ -25,4 +25,11 @@ class AfiliadoBloc extends Bloc<AfiliadosEvent, AfiliadosState> {
     result.fold((failure) => emit(AfiliadosError(failure.properties.first)),
         (data) => emit(AfiliadosLoaded(afiliadosLoaded: data)));
   }
+
+  Future<AfiliadoEntity?> afiliadoHasFicha(int afiliadoId) async {
+    final result =
+        await afiliadoUsecaseDB.afiliadoHasFichaRepositoryDB(afiliadoId);
+
+    return result.fold((failure) => null, (data) => data);
+  }
 }

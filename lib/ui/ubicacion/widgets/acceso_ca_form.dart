@@ -5,24 +5,53 @@ import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_expor
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
+import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../../cubits/dim_ubicacion/dim_ubicacion_state.dart';
 
 class AccesoCAForm extends StatefulWidget {
-  const AccesoCAForm({
-    Key? key,
-  }) : super(key: key);
+  const AccesoCAForm({super.key});
 
   @override
   State<AccesoCAForm> createState() => AccesoCAFormState();
 }
 
 class AccesoCAFormState extends State<AccesoCAForm> {
-  String? _tiempoTardaCASeleccionado;
-  String? _medioUtilizaCASeleccionado;
-  String? _dificultadAccesoSeleccionado;
-  String? _costoDesplazamientoSeleccionado;
+  String? _tiempoTardaId;
+  String? _medioUtilizaId;
+  String? _dificultaAccesoId;
+  String? _costoDesplazamientoId;
+
+  @override
+  void initState() {
+    super.initState();
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
+      context,
+    );
+    final afiliado = afiliadoPrefsBloc.state.afiliado!;
+    if (afiliado.familiaId != null) {
+      getDimUbicacion(afiliado.familiaId!);
+    }
+  }
+
+  getDimUbicacion(int familiaId) async {
+    final dimUbicacionCubit = BlocProvider.of<DimUbicacionCubit>(
+      context,
+    );
+
+    final dimUbicacion = await dimUbicacionCubit.getDimUbicacion(familiaId);
+
+    setState(() {
+      _tiempoTardaId = dimUbicacion?.tiempoTardaId.toString();
+      _medioUtilizaId = dimUbicacion?.medioUtilizaId.toString();
+      _dificultaAccesoId = dimUbicacion?.dificultaAccesoId.toString();
+      _costoDesplazamientoId = dimUbicacion?.costoDesplazamientoId.toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final dimUbicacionCubit = BlocProvider.of<DimUbicacionCubit>(context);
+
     return Column(
       children: [
         Container(
@@ -33,17 +62,12 @@ class AccesoCAFormState extends State<AccesoCAForm> {
               'ACCESO AL CENTRO DE ATENCION DE SALUD MAS CERCANO',
               style: TextStyle(fontWeight: FontWeight.bold),
             )),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         BlocBuilder<TiempoTardaCACubit, TiemposTardaCAState>(
           builder: (context, state) {
             if (state is TiemposTardaCALoaded) {
               return DropdownButtonFormField<String>(
-                value: _tiempoTardaCASeleccionado,
-                onChanged: (newValue) {
-                  setState(() {
-                    _tiempoTardaCASeleccionado = newValue;
-                  });
-                },
+                value: _tiempoTardaId,
                 items: state.tiemposTardaCALoaded!
                     .map(
                       (tiempoTardaCA) => DropdownMenuItem<String>(
@@ -56,22 +80,29 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                     labelText:
                         'Tiempo que tarda en llegar desde su casa al centro de atención en Salud',
                     border: OutlineInputBorder()),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _tiempoTardaId = newValue;
+                  });
+                  dimUbicacionCubit.changeTiempoTardaId(newValue);
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo Requerido';
+                  }
+                  return null;
+                },
               );
             }
             return Container();
           },
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         BlocBuilder<MedioUtilizaCACubit, MediosUtilizaCAState>(
           builder: (context, state) {
             if (state is MediosUtilizaCALoaded) {
               return DropdownButtonFormField<String>(
-                value: _medioUtilizaCASeleccionado,
-                onChanged: (newValue) {
-                  setState(() {
-                    _medioUtilizaCASeleccionado = newValue;
-                  });
-                },
+                value: _medioUtilizaId,
                 items: state.mediosUtilizaCALoaded!
                     .map(
                       (medioUtilizaCA) => DropdownMenuItem<String>(
@@ -84,22 +115,29 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                     labelText:
                         'Medios que utiliza para el desplazamiento al centro de atención',
                     border: OutlineInputBorder()),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _medioUtilizaId = newValue;
+                  });
+                  dimUbicacionCubit.changeMedioUtilizaId(newValue);
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo Requerido';
+                  }
+                  return null;
+                },
               );
             }
             return Container();
           },
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         BlocBuilder<DificultadAccesoCACubit, DificultadesAccesoCAState>(
           builder: (context, state) {
             if (state is DificultadesAccesoCALoaded) {
               return DropdownButtonFormField<String>(
-                value: _dificultadAccesoSeleccionado,
-                onChanged: (newValue) {
-                  setState(() {
-                    _dificultadAccesoSeleccionado = newValue;
-                  });
-                },
+                value: _dificultaAccesoId,
                 items: state.dificultadesAccesoCALoaded!
                     .map(
                       (dificultadAccesoCA) => DropdownMenuItem<String>(
@@ -111,22 +149,29 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                 decoration: const InputDecoration(
                     labelText: 'Dificultad de acceso',
                     border: OutlineInputBorder()),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _dificultaAccesoId = newValue;
+                  });
+                  dimUbicacionCubit.changeDificultaAccesoId(newValue);
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo Requerido';
+                  }
+                  return null;
+                },
               );
             }
             return Container();
           },
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         BlocBuilder<CostoDesplazamientoCubit, CostosDesplazamientoState>(
           builder: (context, state) {
             if (state is CostosDesplazamientoLoaded) {
               return DropdownButtonFormField<String>(
-                value: _costoDesplazamientoSeleccionado,
-                onChanged: (newValue) {
-                  setState(() {
-                    _costoDesplazamientoSeleccionado = newValue;
-                  });
-                },
+                value: _costoDesplazamientoId,
                 items: state.costosDesplazamientoLoaded!
                     .map(
                       (costoDesplazamiento) => DropdownMenuItem<String>(
@@ -139,12 +184,24 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                 decoration: const InputDecoration(
                     labelText: 'Costo desplazamiento',
                     border: OutlineInputBorder()),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _costoDesplazamientoId = newValue;
+                  });
+                  dimUbicacionCubit.changeCostoDesplazamientoId(newValue);
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo Requerido';
+                  }
+                  return null;
+                },
               );
             }
             return Container();
           },
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
       ],
     );
   }

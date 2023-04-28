@@ -11,9 +11,7 @@ class TiempoTardaMedTradicionalCubit
   final TiempoTardaMedTradicionalUsecaseDB tiempoTardaMedTradicionalUsecaseDB;
   TiempoTardaMedTradicionalCubit(
       {required this.tiempoTardaMedTradicionalUsecaseDB})
-      : super(TiemposTardaMedTradicionalInitial()) {
-    getTiemposTardaMedTradicionalDB();
-  }
+      : super(TiemposTardaMedTradicionalInitial());
 
   void getTiemposTardaMedTradicionalDB() async {
     final result = await tiempoTardaMedTradicionalUsecaseDB

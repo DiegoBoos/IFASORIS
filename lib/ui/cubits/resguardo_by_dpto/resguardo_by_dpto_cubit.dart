@@ -10,9 +10,7 @@ class ResguardoByDptoCubit extends Cubit<ResguardosByDptoState> {
   final ResguardoByDptoUsecaseDB resguardoByDptoUsecaseDB;
 
   ResguardoByDptoCubit({required this.resguardoByDptoUsecaseDB})
-      : super(ResguardosByDptoInitial()) {
-    getResguardosByDptoDB();
-  }
+      : super(ResguardosByDptoInitial());
 
   void getResguardosByDptoDB() async {
     final result =

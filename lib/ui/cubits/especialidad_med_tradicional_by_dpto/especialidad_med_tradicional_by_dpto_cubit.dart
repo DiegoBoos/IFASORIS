@@ -13,9 +13,7 @@ class EspecialidadMedTradicionalByDptoCubit
 
   EspecialidadMedTradicionalByDptoCubit(
       {required this.especialidadMedTradicionalByDptoUsecaseDB})
-      : super(EspecialidadesMedTradicionalByDptoInitial()) {
-    getEspecialidadesMedTradicionalByDptoDB();
-  }
+      : super(EspecialidadesMedTradicionalByDptoInitial());
 
   void getEspecialidadesMedTradicionalByDptoDB() async {
     final result = await especialidadMedTradicionalByDptoUsecaseDB

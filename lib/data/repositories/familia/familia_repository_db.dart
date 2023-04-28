@@ -12,10 +12,24 @@ class FamiliaRepositoryDBImpl implements FamiliaRepositoryDB {
   FamiliaRepositoryDBImpl({required this.familiaLocalDataSource});
 
   @override
-  Future<Either<Failure, FamiliaEntity?>> createFamiliaRepositoryDB(
+  Future<Either<Failure, FamiliaEntity>> createFamiliaRepositoryDB(
       FamiliaEntity familia) async {
     try {
       final result = await familiaLocalDataSource.createFamilia(familia);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<FamiliaEntity>>>
+      loadFamiliasRepositoryDB() async {
+    try {
+      final result = await familiaLocalDataSource.loadFamilias();
 
       return Right(result);
     } on ServerFailure catch (e) {

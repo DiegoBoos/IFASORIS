@@ -10,9 +10,7 @@ class TuberculoPlatanoByDptoCubit extends Cubit<TuberculosPlatanosByDptoState> {
   final TuberculoPlatanoByDptoUsecaseDB tuberculoPlatanoByDptoUsecaseDB;
 
   TuberculoPlatanoByDptoCubit({required this.tuberculoPlatanoByDptoUsecaseDB})
-      : super(TuberculosPlatanosByDptoInitial()) {
-    getTuberculosPlatanosByDptoDB();
-  }
+      : super(TuberculosPlatanosByDptoInitial());
 
   void getTuberculosPlatanosByDptoDB() async {
     final result = await tuberculoPlatanoByDptoUsecaseDB

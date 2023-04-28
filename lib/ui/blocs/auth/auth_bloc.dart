@@ -41,19 +41,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await auth.logInUsecase(usuario);
     result.fold((failure) {
       emit(AuthError(failure.properties.first));
-    }, (data) async {
-      final token = prefs.get('token');
-      if (token != null) {
-        emit(AuthLoaded(data));
-      } else {
-        emit(const AuthError('Excepción no controlada'));
-      }
+    }, (data) {
+      emit(AuthLoaded(data));
     });
   }
 
   _logInDB(event, emit) async {
-    final token = await prefs.get('token');
-    if (token != null) {
+    final token = prefs.token;
+    if (token.isNotEmpty) {
       final usuario = event.usuario;
 
       final result = await authDB.logInUsecaseDB(usuario);

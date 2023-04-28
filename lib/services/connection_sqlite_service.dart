@@ -83,6 +83,11 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_TIEMPOS_TARDA_MED_TRADICIONAL);
       ref.execute(ConnectionSQL.CREATE_TUBERCULOS_PLATANOS);
       ref.execute(ConnectionSQL.CREATE_VERDURAS);
+      ref.execute(ConnectionSQL.CREATE_FICHA);
+      ref.execute(ConnectionSQL.CREATE_FAMILIA);
+      ref.execute(ConnectionSQL.CREATE_UBICACION);
+      ref.execute(ConnectionSQL.CREATE_DATOS_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_GRUPO_FAMILIAR);
     });
   }
 

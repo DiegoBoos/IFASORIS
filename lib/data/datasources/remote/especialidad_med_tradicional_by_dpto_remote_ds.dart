@@ -29,7 +29,7 @@ class EspecialidadMedTradicionalByDptoRemoteDataSourceImpl
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${await prefs.get('token')}',
+        'Authorization': 'Bearer ${prefs.token}',
       });
 
       final decodedResp = jsonDecode(resp.body);

@@ -10,9 +10,7 @@ class ViaAccesoCubit extends Cubit<ViasAccesoState> {
   final ViaAccesoUsecaseDB viaAccesoUsecaseDB;
 
   ViaAccesoCubit({required this.viaAccesoUsecaseDB})
-      : super(ViasAccesoInitial()) {
-    getViasAccesoDB();
-  }
+      : super(ViasAccesoInitial());
 
   void getViasAccesoDB() async {
     final result = await viaAccesoUsecaseDB.getViasAccesoUsecaseDB();

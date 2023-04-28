@@ -65,6 +65,7 @@ class AfiliadoModel extends AfiliadoEntity {
     String? codZonaAfiliado,
     String? codTipoPobAfiliado,
     String? ipsPrimariaAfiliado,
+    int? familiaId,
   }) : super(
           afiliadoId: afiliadoId ?? 0,
           tipoDocAfiliado: tipoDocAfiliado ?? '',
@@ -91,6 +92,7 @@ class AfiliadoModel extends AfiliadoEntity {
           codZonaAfiliado: codZonaAfiliado ?? '',
           codTipoPobAfiliado: codTipoPobAfiliado ?? '',
           ipsPrimariaAfiliado: ipsPrimariaAfiliado ?? '',
+          familiaId: familiaId,
         );
 
   factory AfiliadoModel.fromJson(Map<String, dynamic> json) => AfiliadoModel(
@@ -104,7 +106,7 @@ class AfiliadoModel extends AfiliadoEntity {
         apellido2: json["apellido2"],
         nombre1: json["nombre1"],
         nombre2: json["nombre2"],
-        fecnac: DateTime.parse(json["fecnac"]),
+        fecnac: json["fecnac"] != null ? DateTime.parse(json["fecnac"]) : null,
         codGeneroAfiliado: json["CodGenero_Afiliado"],
         direccion: json["Direccion"],
         telefonofijo: json["Telefonofijo"],
@@ -115,9 +117,12 @@ class AfiliadoModel extends AfiliadoEntity {
         nomMpioAfiliado: json["NomMpio_Afiliado"],
         codDptoAfiliado: json["CodDpto_Afiliado"],
         nomDptoAfiliado: json["NomDpto_Afiliado"],
-        fechafiliacion: DateTime.parse(json["fechafiliacion"]),
+        fechafiliacion: json["fechafiliacion"] != null
+            ? DateTime.parse(json["fechafiliacion"])
+            : null,
         codZonaAfiliado: json["CodZona_Afiliado"],
         codTipoPobAfiliado: json["CodTipoPob_afiliado"],
         ipsPrimariaAfiliado: json["IPSPrimaria_Afiliado"],
+        familiaId: json["Familia_id"],
       );
 }

@@ -25,6 +25,19 @@ class AfiliadoRepositoryDBImpl implements AfiliadoRepositoryDB {
   }
 
   @override
+  Future<Either<Failure, AfiliadoEntity?>> afiliadoHasFichaRepositoryDB(
+      int afiliadoId) async {
+    try {
+      final result = await afiliadoLocalDataSource.afiliadoHasFicha(afiliadoId);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
   Future<Either<Failure, int>> saveAfiliadoRepositoryDB(
       AfiliadoEntity afiliado) async {
     try {

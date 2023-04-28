@@ -10,9 +10,7 @@ class OpcionSiNoCubit extends Cubit<OpcionesSiNoState> {
   final OpcionSiNoUsecaseDB opcionSiNoUsecaseDB;
 
   OpcionSiNoCubit({required this.opcionSiNoUsecaseDB})
-      : super(OpcionesSiNoInitial()) {
-    getOpcionesSiNoDB();
-  }
+      : super(OpcionesSiNoInitial());
 
   void getOpcionesSiNoDB() async {
     final result = await opcionSiNoUsecaseDB.getOpcionesSiNoUsecase();

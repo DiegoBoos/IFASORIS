@@ -8,9 +8,7 @@ part 'tiempo_tarda_ca_state.dart';
 class TiempoTardaCACubit extends Cubit<TiemposTardaCAState> {
   final TiempoTardaCAUsecaseDB tiempoTardaCAUsecaseDB;
   TiempoTardaCACubit({required this.tiempoTardaCAUsecaseDB})
-      : super(TiemposTardaCAInitial()) {
-    getTiemposTardaCADB();
-  }
+      : super(TiemposTardaCAInitial());
 
   void getTiemposTardaCADB() async {
     final result = await tiempoTardaCAUsecaseDB.getTiemposTardaCAUsecase();

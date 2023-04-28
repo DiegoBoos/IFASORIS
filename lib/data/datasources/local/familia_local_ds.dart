@@ -3,21 +3,30 @@ import '../../../services/connection_sqlite_service.dart';
 import '../../models/familia_model.dart';
 
 abstract class FamiliaLocalDataSource {
-  Future<FamiliaModel?> createFamilia(FamiliaEntity familia);
+  Future<FamiliaEntity> createFamilia(FamiliaEntity familia);
+  Future<List<FamiliaModel>> loadFamilias();
 }
 
 class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   @override
-  Future<FamiliaModel?> createFamilia(FamiliaEntity familia) async {
+  Future<FamiliaEntity> createFamilia(FamiliaEntity familia) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.query('Familia',
-        where: 'userName = ?', whereArgs: [familia.apellidosFlia]);
+    final res = await db.insert('Familia', familia.toJson());
 
-    if (res.isEmpty) return null;
+    familia.familiaId = res;
 
-    final resultMap = {for (var e in res[0].entries) e.key: e.value};
-    final result = FamiliaModel.fromJson(resultMap);
+    return familia;
+  }
+
+  @override
+  Future<List<FamiliaModel>> loadFamilias() async {
+    final db = await ConnectionSQLiteService.db;
+    final res = await db.query('Familia');
+    final result =
+        List<FamiliaModel>.from(res.map((m) => FamiliaModel.fromJson(m)))
+            .toList();
+
     return result;
   }
 }

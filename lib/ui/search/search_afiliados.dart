@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/afiliado/afiliado_exports.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
+import 'package:ifasoris/ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 
 class SearchAfiliados extends SearchDelegate {
   final AfiliadoBloc afiliadoBloc;
@@ -64,9 +65,18 @@ class SearchAfiliados extends SearchDelegate {
                   ListTile(
                     title: Text(afiliado.documento),
                     subtitle: Text('${afiliado.nombre1} | ${afiliado.nombre2}'),
-                    onTap: () {
-                      prefs.set('afiliado', afiliado);
-                      close(context, null);
+                    onTap: () async {
+                      final afiliadoPrefsBloc =
+                          BlocProvider.of<AfiliadoPrefsBloc>(context);
+
+                      final afiliadoHasFicha = await afiliadoBloc
+                          .afiliadoHasFicha(afiliado.afiliadoId)
+                          .whenComplete(() => close(context, null));
+                      if (afiliadoHasFicha != null) {
+                        afiliadoPrefsBloc.add(SaveAfiliado(afiliadoHasFicha));
+                      } else {
+                        afiliadoPrefsBloc.add(SaveAfiliado(afiliado));
+                      }
                     },
                   ),
                   const Divider()

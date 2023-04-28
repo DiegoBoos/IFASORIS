@@ -10,9 +10,7 @@ class VerduraByDptoCubit extends Cubit<VerdurasByDptoState> {
   final VerduraByDptoUsecaseDB verduraByDptoUsecaseDB;
 
   VerduraByDptoCubit({required this.verduraByDptoUsecaseDB})
-      : super(VerdurasByDptoInitial()) {
-    getVerdurasByDptoDB();
-  }
+      : super(VerdurasByDptoInitial());
 
   void getVerdurasByDptoDB() async {
     final result = await verduraByDptoUsecaseDB.getVerdurasByDptoUsecaseDB();

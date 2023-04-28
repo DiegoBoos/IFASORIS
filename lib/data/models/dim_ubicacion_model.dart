@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:ifasoris/domain/entities/dim_ubicacion_entity.dart';
+
+DimUbicacionModel dimUbicacionModelFromJson(String str) =>
+    DimUbicacionModel.fromJson(json.decode(str));
 
 class DimUbicacionModel extends DimUbicacionEntity {
   DimUbicacionModel({
@@ -22,7 +27,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
     int? medioUtilizaMedTradId,
     int? dificultadAccesoMedTradId,
     int? costoDesplazamientoMedTradicional,
-    int? nombreMedTradicional,
+    String? nombreMedTradicional,
     int? poseeChagra,
     int? tuberculoPlatanoId,
     int? leguminosaId,
@@ -55,7 +60,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
           dificultadAccesoMedTradId: dificultadAccesoMedTradId ?? 0,
           costoDesplazamientoMedTradicional:
               costoDesplazamientoMedTradicional ?? 0,
-          nombreMedTradicional: nombreMedTradicional ?? 0,
+          nombreMedTradicional: nombreMedTradicional ?? '',
           poseeChagra: poseeChagra ?? 0,
           tuberculoPlatanoId: tuberculoPlatanoId ?? 0,
           leguminosaId: leguminosaId ?? 0,

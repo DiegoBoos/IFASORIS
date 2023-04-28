@@ -17,15 +17,28 @@ class SharedPreferencesService {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  get(String key) async {
-    return json.decode(_prefs.getString(key)!);
+  // GET & SET  token
+  String get token {
+    return _prefs.getString('token') ?? '';
   }
 
-  set(String key, value) async {
-    _prefs.setString(key, json.encode(value));
+  set token(String value) {
+    _prefs.setString('token', value);
   }
 
-  delete(String key) async {
+  getJson(String key) {
+    String jsonString = _prefs.getString(key) ?? '{}';
+    Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+
+    return jsonMap;
+  }
+
+  setJson(String key, value) {
+    String jsonString = jsonEncode(value);
+    _prefs.setString(key, jsonString);
+  }
+
+  delete(String key) {
     _prefs.remove(key);
   }
 

@@ -10,9 +10,7 @@ class AutoridadIndigenaCubit extends Cubit<AutoridadesIndigenasState> {
   final AutoridadIndigenaUsecaseDB autoridadIndigenaUsecaseDB;
 
   AutoridadIndigenaCubit({required this.autoridadIndigenaUsecaseDB})
-      : super(AutoridadesIndigenasInitial()) {
-    getAutoridadesIndigenasDB();
-  }
+      : super(AutoridadesIndigenasInitial());
 
   void getAutoridadesIndigenasDB() async {
     final result =

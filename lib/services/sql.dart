@@ -36,7 +36,8 @@ class ConnectionSQL {
 	[fechafiliacion]	datetime COLLATE NOCASE,
 	[CodZona_Afiliado]	varchar(1) COLLATE NOCASE,
 	[CodTipoPob_afiliado]	varchar(2) COLLATE NOCASE,
-	[IPSPrimaria_Afiliado]	varchar COLLATE NOCASE
+	[IPSPrimaria_Afiliado]	varchar COLLATE NOCASE,
+	[Familia_id]	integer
   )''';
 
   static const CREATE_DIFICULTADES_ACCESO_CENTRO_ATENCION = '''
@@ -177,5 +178,189 @@ class ConnectionSQL {
 	[Verdura_id]	integer NOT NULL,
 	[Descripcion]	varchar(30) NOT NULL COLLATE NOCASE,
 	[Departamento_Ide]	integer
+  )''';
+
+  static const CREATE_FICHA = '''
+  CREATE TABLE [Ficha] (
+	[Ficha_id]	integer PRIMARY KEY AUTOINCREMENT,
+	[FechaCreacion]	datetime NOT NULL,
+	[NumFicha]	varchar(30) NOT NULL COLLATE NOCASE,
+	[UserName]	varchar(20) NOT NULL COLLATE NOCASE,
+	[UltimaActualizacion]	datetime NOT NULL
+  )''';
+  static const CREATE_FAMILIA = '''
+  CREATE TABLE [Familia] (
+	[Familia_id]	integer PRIMARY KEY AUTOINCREMENT,
+	[Ficha_id]	integer NOT NULL,
+	[ApellidosFlia]	varchar(150) NOT NULL COLLATE NOCASE,
+	[Afiliado_id]	integer NOT NULL
+  )''';
+  static const CREATE_UBICACION = '''
+  CREATE TABLE [Asp1_Ubicacion] (
+	[Ubicacion_id]	integer PRIMARY KEY AUTOINCREMENT,
+	[Familia_id]	integer NOT NULL,
+	[NombreRecibeVisita]	varchar(150) NOT NULL COLLATE NOCASE,
+	[TipoDoc_RecibeVisita]	varchar(2) NOT NULL COLLATE NOCASE,
+	[Documento_RecibeVisita]	varchar(15) NOT NULL COLLATE NOCASE,
+	[PerteneceResguardo]	integer NOT NULL,
+	[ViaAcceso_id]	integer NOT NULL,
+	[Resguardo_id]	integer NOT NULL,
+	[AutoridadIndigena_id]	integer NOT NULL,
+	[EstadoVia_id]	integer NOT NULL,
+	[MedioComunicacion_id]	integer NOT NULL,
+	[TiempoTarda_id]	integer NOT NULL,
+	[MedioUtiliza_id]	integer NOT NULL,
+	[DificultaAcceso_id]	integer NOT NULL,
+	[CostoDesplazamiento_id]	integer NOT NULL,
+	[ExisteMedTradicionalComunidad]	integer NOT NULL,
+	[EspecialidadMedTrad_id]	integer NOT NULL,
+	[TiempoTardaMedTrad_id]	integer NOT NULL,
+	[MedioUtilizaMedTrad_id]	integer NOT NULL,
+	[DificultadAccesoMedTrad_id]	integer NOT NULL,
+	[CostoDesplazamiento_MedTradicional]	numeric NOT NULL,
+	[NombreMedTradicional]	varchar(150) COLLATE NOCASE,
+	[PoseeChagra]	integer NOT NULL,
+	[TuberculoPlatano_id]	integer NOT NULL,
+	[Leguminosa_id]	integer NOT NULL,
+	[Hortaliza_id]	integer NOT NULL,
+	[Verdura_id]	integer NOT NULL,
+	[Fruto_id]	integer NOT NULL,
+	[Cereal_id]	integer NOT NULL,
+	[EspecieAnimalCria_id]	integer NOT NULL,
+	[ProduccionMinera]	integer NOT NULL,
+	[TipoCalendario_id]	integer NOT NULL,
+    FOREIGN KEY ([AutoridadIndigena_id])
+        REFERENCES [AutoridadesIndigenas_DatosVivienda]([AutoridadIndigena_id]),
+    FOREIGN KEY ([Cereal_id])
+        REFERENCES [Cereales_AspectosSocioEconomicos]([Cereal_id]),
+    FOREIGN KEY ([CostoDesplazamiento_id])
+        REFERENCES [CostosDesplazamiento_CentroAtencion]([CostoDesplazamiento_id]),
+    FOREIGN KEY ([DificultadAccesoMedTrad_id])
+        REFERENCES [DificultadesAcceso_AccesoMedTradicional]([DificultadAccesoMedTrad_id]),
+    FOREIGN KEY ([DificultaAcceso_id])
+        REFERENCES [DificultadesAcceso_CentroAtencion]([DificultaAcceso_id]),
+    FOREIGN KEY ([EspecialidadMedTrad_id])
+        REFERENCES [EspecialidadesMedTrad_AccesoMedTradicional]([EspecialidadMedTrad_id]),
+    FOREIGN KEY ([EspecieAnimalCria_id])
+        REFERENCES [EspecieAnimalesCria_AspectosSocioEconomicos]([EspecieAnimalCria_id]),
+    FOREIGN KEY ([EstadoVia_id])
+        REFERENCES [EstadoVias]([EstadoVia_id]),
+    FOREIGN KEY ([Familia_id])
+        REFERENCES [Familia]([Familia_id]),
+    FOREIGN KEY ([Fruto_id])
+        REFERENCES [Frutos_AspectosSocioEconomicos]([Fruto_id]),
+    FOREIGN KEY ([Hortaliza_id])
+        REFERENCES [Hortalizas_AspectosSocioEconomicos]([Hortaliza_id]),
+    FOREIGN KEY ([Leguminosa_id])
+        REFERENCES [Leguminosas_AspectosSocioEconomicos]([Leguminosa_id]),
+    FOREIGN KEY ([MedioComunicacion_id])
+        REFERENCES [MediosComunicacion]([MedioComunicacion_id]),
+    FOREIGN KEY ([MedioUtilizaMedTrad_id])
+        REFERENCES [MediosUtiliza_AccesoMedTradicional]([MedioUtilizaMedTrad_id]),
+    FOREIGN KEY ([MedioUtiliza_id])
+        REFERENCES [MediosUtiliza_CentroAtencion]([MedioUtiliza_id]),
+    FOREIGN KEY ([PerteneceResguardo])
+        REFERENCES [OpcionesSi_No]([Opcion_id]),
+    FOREIGN KEY ([ExisteMedTradicionalComunidad])
+        REFERENCES [OpcionesSi_No]([Opcion_id]),
+    FOREIGN KEY ([PoseeChagra])
+        REFERENCES [OpcionesSi_No]([Opcion_id]),
+    FOREIGN KEY ([ProduccionMinera])
+        REFERENCES [OpcionesSi_No]([Opcion_id]),
+    FOREIGN KEY ([TiempoTardaMedTrad_id])
+        REFERENCES [TiemposTarda_AccesoMedTradicional]([TiempoTardaMedTrad_id]),
+    FOREIGN KEY ([TiempoTarda_id])
+        REFERENCES [TiemposTarda_CentroAtencion]([TiempoTarda_id]),
+    FOREIGN KEY ([TipoCalendario_id])
+        REFERENCES [TiposCalendarios_AspectosSocioEconomicos]([TipoCalendario_id]),
+    FOREIGN KEY ([TuberculoPlatano_id])
+        REFERENCES [TuberculosPlatanos_AspectosSocioEconomicos]([TuberculoPlatano_id]),
+    FOREIGN KEY ([Ubicacion_id])
+        REFERENCES [Asp1_Ubicacion]([Ubicacion_id]),
+    FOREIGN KEY ([Verdura_id])
+        REFERENCES [Verduras_AspectosSocioEconomicos]([Verdura_id]),
+    FOREIGN KEY ([ViaAcceso_id])
+        REFERENCES [ViasAcceso]([ViaAcceso_id])
+  )''';
+
+  static const CREATE_DATOS_VIVIENDA = '''
+  CREATE TABLE [Asp2_DatosVivienda] (
+	[DatoVivienda_id]	integer NOT NULL,
+	[Familia_id]	integer NOT NULL,
+	[TipoVivienda_id]	integer NOT NULL,
+	[NumeroDormitorios]	integer NOT NULL,
+	[TenenciaVivienda_id]	integer NOT NULL,
+	[PisoVivienda_id]	integer NOT NULL,
+	[OtroTipoPiso]	varchar(50) COLLATE NOCASE,
+	[TechoVivienda_id]	integer NOT NULL,
+	[OtroTipoTecho]	varchar(50) COLLATE NOCASE,
+	[VentilacionVivienda_id]	integer NOT NULL,
+	[IluminacionVivienda_id]	integer NOT NULL,
+	[ServicioPublicoVivienda_id]	integer NOT NULL,
+	[TratamientoAguaVivienda_id]	integer NOT NULL,
+	[TipoSanitarioVivienda_id]	integer NOT NULL,
+	[OtroTipoSanitario]	varchar(50) COLLATE NOCASE,
+	[TipoCombustibleVivienda_id]	integer NOT NULL,
+	[OtroTipoCombustible]	varchar(50) COLLATE NOCASE,
+	[FactorRiesgoVivienda_id]	integer NOT NULL,
+	[PresenciaAnimalVivienda_id]	integer NOT NULL,
+	[OtroPresenciaAnimal]	varchar(50) COLLATE NOCASE,
+    FOREIGN KEY ([FactorRiesgoVivienda_id])
+        REFERENCES [FactoresRiesgoVivienda_DatosVivienda]([FactorRiesgoVivienda_id]),
+    FOREIGN KEY ([Familia_id])
+        REFERENCES [Familia]([Familia_id]),
+    FOREIGN KEY ([IluminacionVivienda_id])
+        REFERENCES [IluminacionVivienda_DatosVivienda]([IluminacionVivienda_id]),
+    FOREIGN KEY ([PisoVivienda_id])
+        REFERENCES [PisosVivienda_DatosVivienda]([PisoVivienda_id]),
+    FOREIGN KEY ([PresenciaAnimalVivienda_id])
+        REFERENCES [PresenciaAnimalesVivienda_DatosVivienda]([PresenciaAnimalVivienda_id]),
+    FOREIGN KEY ([ServicioPublicoVivienda_id])
+        REFERENCES [ServiciosPublicosVivienda_DatosVivienda]([ServicioPublicoVivienda_id]),
+    FOREIGN KEY ([TechoVivienda_id])
+        REFERENCES [TechosVivienda_DatosVivienda]([TechoVivienda_id]),
+    FOREIGN KEY ([TenenciaVivienda_id])
+        REFERENCES [TenenciasVivienda_DatosVivienda]([TenenciaVivienda_id]),
+    FOREIGN KEY ([TipoCombustibleVivienda_id])
+        REFERENCES [TiposCombustibleVivienda_DatosVivienda]([TipoCombustibleVivienda_id]),
+    FOREIGN KEY ([TipoSanitarioVivienda_id])
+        REFERENCES [TiposSanitarioVivienda_DatosVivienda]([TipoSanitarioVivienda_id]),
+    FOREIGN KEY ([TipoVivienda_id])
+        REFERENCES [TiposVivienda_DatosVivienda]([TipoVivienda_id]),
+    FOREIGN KEY ([TratamientoAguaVivienda_id])
+        REFERENCES [TratamientoAguaVivienda_DatosVivienda]([TratamientoAguaVivienda_id]),
+    FOREIGN KEY ([VentilacionVivienda_id])
+        REFERENCES [VentilacionVivienda_DatosVivienda]([VentilacionVivienda_id])
+  )''';
+
+  static const CREATE_GRUPO_FAMILIAR = '''
+  CREATE TABLE [Asp3_GrupoFamiliar] (
+	[GrupoFamiliar_id]	integer NOT NULL,
+	[Familia_id]	integer NOT NULL,
+	[Afiliado_id]	integer NOT NULL,
+	[CursoVida_id]	integer NOT NULL,
+	[NivelEducativo_id]	integer NOT NULL,
+	[Ocupacion_id]	integer NOT NULL,
+	[GrupoRiesgo_id]	integer NOT NULL,
+	[OrigenEtnico5602_id]	integer NOT NULL,
+	[PuebloIndigena_id]	integer NOT NULL,
+	[LenguaManeja_id]	integer NOT NULL,
+	[LenguaMaterna_id]	integer NOT NULL,
+    FOREIGN KEY ([CursoVida_id])
+        REFERENCES [CursoVida_GrupoFamiliar]([CursoVida_id]),
+    FOREIGN KEY ([Familia_id])
+        REFERENCES [Familia]([Familia_id]),
+    FOREIGN KEY ([GrupoRiesgo_id])
+        REFERENCES [GrupoRiesgo_GrupoFamiliar]([GrupoRiesgo_id]),
+    FOREIGN KEY ([LenguaManeja_id])
+        REFERENCES [LenguaManeja_GrupoFamiliar]([LenguaManeja_id]),
+    FOREIGN KEY ([NivelEducativo_id])
+        REFERENCES [NivelEductativo_GrupoFamiliar]([NivelEducativo_id]),
+    FOREIGN KEY ([LenguaMaterna_id])
+        REFERENCES [NombreLenguaMaterna_GrupoFamiliar]([LenguaMaterna_id]),
+    FOREIGN KEY ([Ocupacion_id])
+        REFERENCES [Ocupacion_GrupoFamiliar]([Ocupacion_id]),
+    FOREIGN KEY ([PuebloIndigena_id])
+        REFERENCES [PueblosIndigenas_GrupoFamiliar]([PuebloIndigena_id])
   )''';
 }

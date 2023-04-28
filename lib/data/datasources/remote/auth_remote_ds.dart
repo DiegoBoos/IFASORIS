@@ -45,7 +45,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         final res = await AuthLocalDataSourceImpl.saveUsuario(result);
 
         if (res == 1) {
-          prefs.set('token', token);
+          prefs.token = token;
           return result;
         } else {
           throw const ServerFailure(['Error de autenticación']);

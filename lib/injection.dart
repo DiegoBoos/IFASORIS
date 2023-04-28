@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
+import 'package:ifasoris/services/shared_preferences_service.dart';
 
 import 'domain/usecases/afiliado/afiliado_exports.dart';
 import 'domain/usecases/auth/auth_exports.dart';
@@ -8,9 +9,12 @@ import 'domain/usecases/cereal_by_dpto/cereal_by_dpto_exports.dart';
 import 'domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import 'domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import 'domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
+import 'domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
 import 'domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import 'domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_exports.dart';
 import 'domain/usecases/estado_via/estado_via_exports.dart';
+import 'domain/usecases/familia/familia_exports.dart';
+import 'domain/usecases/ficha/ficha_exports.dart';
 import 'domain/usecases/fruto_by_dpto/fruto_by_dpto_exports.dart';
 import 'domain/usecases/hortaliza_by_dpto/hortaliza_by_dpto_exports.dart';
 import 'domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
@@ -25,43 +29,49 @@ import 'domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradiciona
 import 'domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_exports.dart';
 import 'domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
 import 'domain/usecases/via_acceso/via_acceso_exports.dart';
+import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
 
 final locator = GetIt.instance;
 
 void init() {
-  authBlocInit();
-  internetCubitInit();
+  authInit();
+  internetInit();
   syncInit();
   syncLogInit();
-  afiliadoBlocInit();
-  dificultadAccesoCACubitInit();
-  estadoViaCubitInit();
-  medioComunicacionCubitInit();
-  medioUtilizaCACubitInit();
-  tiempoTardaCACubitInit();
-  viaAccesoCubitInit();
-  autoridadIndigenaCubitInit();
-  cerealByDptoCubitInit();
-  costoDesplazamientoCubitInit();
-  dificultadAccesoMedTradicionalByDptoCubitInit();
-  especialidadMedTradicionalByDptoCubitInit();
-  especieAnimalByDptoCubitInit();
-  frutoByDptoCubitInit();
-  hortalizaByDptoCubitInit();
-  leguminosaByDptoCubitInit();
-  medioUtilizaMedTradicionalByDptoCubitInit();
-  opcionSiNoCubitInit();
-  resguardoCubitInit();
-  tiempoTardaMedTradicionalCubitInit();
-  tuberculoPlatanoByDptoCubitInit();
-  verduraByDptoCubitInit();
+  afiliadoInit();
+  afiliadoPrefsInit();
+  dificultadAccesoCAInit();
+  estadoViaInit();
+  medioComunicacionInit();
+  medioUtilizaCAInit();
+  tiempoTardaCAInit();
+  viaAccesoInit();
+  autoridadIndigenaInit();
+  cerealByDptoInit();
+  costoDesplazamientoInit();
+  dificultadAccesoMedTradicionalByDptoInit();
+  especialidadMedTradicionalByDptoInit();
+  especieAnimalByDptoInit();
+  frutoByDptoInit();
+  hortalizaByDptoInit();
+  leguminosaByDptoInit();
+  medioUtilizaMedTradicionalByDptoInit();
+  opcionSiNoInit();
+  resguardoInit();
+  tiempoTardaMedTradicionalInit();
+  tuberculoPlatanoByDptoInit();
+  verduraByDptoInit();
+  fichaInit();
+  familiaInit();
+  dimUbicacionInit();
   // external
   locator.registerLazySingleton(() => http.Client());
+  locator.registerLazySingleton(() => SharedPreferencesService());
 }
 
-void authBlocInit() {
+void authInit() {
   // bloc
   locator.registerFactory(() => AuthBloc(
         auth: locator(),
@@ -101,7 +111,7 @@ void authBlocInit() {
   );
 }
 
-void internetCubitInit() {
+void internetInit() {
   // cubit
   locator.registerFactory(() => InternetCubit());
 }
@@ -177,7 +187,7 @@ void syncLogInit() {
   );
 }
 
-void afiliadoBlocInit() {
+void afiliadoInit() {
   // bloc
   locator.registerFactory(() => AfiliadoBloc(afiliadoUsecaseDB: locator()));
 
@@ -214,7 +224,13 @@ void afiliadoBlocInit() {
   );
 }
 
-void dificultadAccesoCACubitInit() {
+void afiliadoPrefsInit() {
+  // bloc
+  locator.registerFactory(
+      () => AfiliadoPrefsBloc(sharedPreferencesService: locator()));
+}
+
+void dificultadAccesoCAInit() {
   // bloc
   locator.registerFactory(
       () => DificultadAccesoCACubit(dificultadAccesoCAUsecaseDB: locator()));
@@ -252,7 +268,7 @@ void dificultadAccesoCACubitInit() {
   );
 }
 
-void estadoViaCubitInit() {
+void estadoViaInit() {
   // bloc
   locator.registerFactory(() => EstadoViaCubit(estadoViaUsecaseDB: locator()));
 
@@ -289,7 +305,7 @@ void estadoViaCubitInit() {
   );
 }
 
-void medioComunicacionCubitInit() {
+void medioComunicacionInit() {
   // bloc
   locator.registerFactory(
       () => MedioComunicacionCubit(medioComunicacionUsecaseDB: locator()));
@@ -327,7 +343,7 @@ void medioComunicacionCubitInit() {
   );
 }
 
-void medioUtilizaCACubitInit() {
+void medioUtilizaCAInit() {
   // bloc
   locator.registerFactory(
       () => MedioUtilizaCACubit(medioUtilizaCAUsecaseDB: locator()));
@@ -365,7 +381,7 @@ void medioUtilizaCACubitInit() {
   );
 }
 
-void tiempoTardaCACubitInit() {
+void tiempoTardaCAInit() {
   // bloc
   locator.registerFactory(
       () => TiempoTardaCACubit(tiempoTardaCAUsecaseDB: locator()));
@@ -403,7 +419,7 @@ void tiempoTardaCACubitInit() {
   );
 }
 
-void viaAccesoCubitInit() {
+void viaAccesoInit() {
   // bloc
   locator.registerFactory(() => ViaAccesoCubit(
         viaAccesoUsecaseDB: locator(),
@@ -442,7 +458,7 @@ void viaAccesoCubitInit() {
   );
 }
 
-void autoridadIndigenaCubitInit() {
+void autoridadIndigenaInit() {
   // bloc
   locator.registerFactory(() => AutoridadIndigenaCubit(
         autoridadIndigenaUsecaseDB: locator(),
@@ -481,7 +497,7 @@ void autoridadIndigenaCubitInit() {
   );
 }
 
-void cerealByDptoCubitInit() {
+void cerealByDptoInit() {
   // bloc
   locator.registerFactory(() => CerealByDptoCubit(
         cerealByDptoUsecaseDB: locator(),
@@ -520,7 +536,7 @@ void cerealByDptoCubitInit() {
   );
 }
 
-void costoDesplazamientoCubitInit() {
+void costoDesplazamientoInit() {
   // bloc
   locator.registerFactory(() => CostoDesplazamientoCubit(
         costoDesplazamientoUsecaseDB: locator(),
@@ -559,7 +575,7 @@ void costoDesplazamientoCubitInit() {
   );
 }
 
-void dificultadAccesoMedTradicionalByDptoCubitInit() {
+void dificultadAccesoMedTradicionalByDptoInit() {
   // bloc
   locator.registerFactory(() => DificultadAccesoMedTradicionalByDptoCubit(
         dificultadAccesoMedTradicionalByDptoUsecaseDB: locator(),
@@ -603,7 +619,7 @@ void dificultadAccesoMedTradicionalByDptoCubitInit() {
   );
 }
 
-void especialidadMedTradicionalByDptoCubitInit() {
+void especialidadMedTradicionalByDptoInit() {
   // bloc
   locator.registerFactory(() => EspecialidadMedTradicionalByDptoCubit(
         especialidadMedTradicionalByDptoUsecaseDB: locator(),
@@ -646,7 +662,7 @@ void especialidadMedTradicionalByDptoCubitInit() {
   );
 }
 
-void especieAnimalByDptoCubitInit() {
+void especieAnimalByDptoInit() {
   // bloc
   locator.registerFactory(() => EspecieAnimalByDptoCubit(
         especieAnimalByDptoUsecaseDB: locator(),
@@ -685,7 +701,7 @@ void especieAnimalByDptoCubitInit() {
   );
 }
 
-void frutoByDptoCubitInit() {
+void frutoByDptoInit() {
   // bloc
   locator.registerFactory(() => FrutoByDptoCubit(
         frutoByDptoUsecaseDB: locator(),
@@ -724,7 +740,7 @@ void frutoByDptoCubitInit() {
   );
 }
 
-void hortalizaByDptoCubitInit() {
+void hortalizaByDptoInit() {
   // bloc
   locator.registerFactory(() => HortalizaByDptoCubit(
         hortalizaByDptoUsecaseDB: locator(),
@@ -763,7 +779,7 @@ void hortalizaByDptoCubitInit() {
   );
 }
 
-void leguminosaByDptoCubitInit() {
+void leguminosaByDptoInit() {
   // bloc
   locator.registerFactory(() => LeguminosaByDptoCubit(
         leguminosaByDptoUsecaseDB: locator(),
@@ -802,7 +818,7 @@ void leguminosaByDptoCubitInit() {
   );
 }
 
-void medioUtilizaMedTradicionalByDptoCubitInit() {
+void medioUtilizaMedTradicionalByDptoInit() {
   // bloc
   locator.registerFactory(() => MedioUtilizaMedTradicionalByDptoCubit(
         medioUtilizaMedTradicionalByDptoUsecaseDB: locator(),
@@ -845,7 +861,7 @@ void medioUtilizaMedTradicionalByDptoCubitInit() {
   );
 }
 
-void opcionSiNoCubitInit() {
+void opcionSiNoInit() {
   // bloc
   locator.registerFactory(() => OpcionSiNoCubit(
         opcionSiNoUsecaseDB: locator(),
@@ -884,7 +900,7 @@ void opcionSiNoCubitInit() {
   );
 }
 
-void resguardoCubitInit() {
+void resguardoInit() {
   // bloc
   locator.registerFactory(() => ResguardoByDptoCubit(
         resguardoByDptoUsecaseDB: locator(),
@@ -923,7 +939,7 @@ void resguardoCubitInit() {
   );
 }
 
-void tiempoTardaMedTradicionalCubitInit() {
+void tiempoTardaMedTradicionalInit() {
   // bloc
   locator.registerFactory(() => TiempoTardaMedTradicionalCubit(
         tiempoTardaMedTradicionalUsecaseDB: locator(),
@@ -964,7 +980,7 @@ void tiempoTardaMedTradicionalCubitInit() {
   );
 }
 
-void tuberculoPlatanoByDptoCubitInit() {
+void tuberculoPlatanoByDptoInit() {
   // bloc
   locator.registerFactory(() => TuberculoPlatanoByDptoCubit(
         tuberculoPlatanoByDptoUsecaseDB: locator(),
@@ -1004,7 +1020,7 @@ void tuberculoPlatanoByDptoCubitInit() {
   );
 }
 
-void verduraByDptoCubitInit() {
+void verduraByDptoInit() {
   // bloc
   locator.registerFactory(() => VerduraByDptoCubit(
         verduraByDptoUsecaseDB: locator(),
@@ -1040,5 +1056,129 @@ void verduraByDptoCubitInit() {
   // local data source
   locator.registerLazySingleton<VerduraByDptoLocalDataSource>(
     () => VerduraByDptoLocalDataSourceImpl(),
+  );
+}
+
+void fichaInit() {
+  // bloc
+  locator.registerFactory(() => FichaBloc(
+        fichaUsecaseDB: locator(),
+      ));
+
+  // cubit
+  locator.registerFactory(() => FichaCubit(
+        fichaUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(() => FichaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => FichaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<FichaRepository>(
+    () => FichaRepositoryImpl(
+      fichaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<FichaRepositoryDB>(
+    () => FichaRepositoryDBImpl(
+      fichaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<FichaRemoteDataSource>(
+    () => FichaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<FichaLocalDataSource>(
+    () => FichaLocalDataSourceImpl(),
+  );
+}
+
+void familiaInit() {
+  // bloc
+  locator.registerFactory(() => FamiliaBloc(
+        familiaUsecaseDB: locator(),
+      ));
+
+  // cubit
+  locator.registerFactory(() => FamiliaCubit(familiaUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => FamiliaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => FamiliaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<FamiliaRepository>(
+    () => FamiliaRepositoryImpl(
+      familiaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<FamiliaRepositoryDB>(
+    () => FamiliaRepositoryDBImpl(
+      familiaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<FamiliaRemoteDataSource>(
+    () => FamiliaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<FamiliaLocalDataSource>(
+    () => FamiliaLocalDataSourceImpl(),
+  );
+}
+
+void dimUbicacionInit() {
+  // cubit
+  locator.registerFactory(
+      () => DimUbicacionCubit(dimUbicacionUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => DimUbicacionUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => DimUbicacionUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<DimUbicacionRepository>(
+    () => DimUbicacionRepositoryImpl(
+      dimubicacionRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<DimUbicacionRepositoryDB>(
+    () => DimUbicacionRepositoryDBImpl(
+      dimUbicacionLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<DimUbicacionRemoteDataSource>(
+    () => DimUbicacionRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<DimUbicacionLocalDataSource>(
+    () => DimUbicacionLocalDataSourceImpl(),
   );
 }

@@ -17,4 +17,9 @@ class AfiliadoUsecaseDB {
       String query) {
     return repositoryDB.getAfiliadosRepositoryDB(query);
   }
+
+  Future<Either<Failure, AfiliadoEntity?>> afiliadoHasFichaRepositoryDB(
+      int afiliadoId) {
+    return repositoryDB.afiliadoHasFichaRepositoryDB(afiliadoId);
+  }
 }

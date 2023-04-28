@@ -110,7 +110,7 @@ class MobileAppBar extends StatelessWidget {
                     },
                     icon: const Icon(Icons.search)),
                 IconButton(
-                  icon: const Icon(Icons.cloud_upload),
+                  icon: const Icon(Icons.cloud_download),
                   onPressed: () {
                     if (internetCubit.state is InternetConnected) {
                       showModalBottomSheet(

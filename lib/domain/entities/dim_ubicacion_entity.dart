@@ -53,7 +53,7 @@ class DimUbicacionEntity {
   int medioUtilizaMedTradId;
   int dificultadAccesoMedTradId;
   int costoDesplazamientoMedTradicional;
-  int nombreMedTradicional;
+  String nombreMedTradicional;
   int poseeChagra;
   int tuberculoPlatanoId;
   int leguminosaId;
@@ -86,7 +86,7 @@ class DimUbicacionEntity {
     int? medioUtilizaMedTradId,
     int? dificultadAccesoMedTradId,
     int? costoDesplazamientoMedTradicional,
-    int? nombreMedTradicional,
+    String? nombreMedTradicional,
     int? poseeChagra,
     int? tuberculoPlatanoId,
     int? leguminosaId,

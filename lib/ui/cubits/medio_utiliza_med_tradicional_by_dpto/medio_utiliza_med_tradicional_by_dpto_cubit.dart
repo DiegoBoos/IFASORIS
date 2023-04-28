@@ -13,9 +13,7 @@ class MedioUtilizaMedTradicionalByDptoCubit
 
   MedioUtilizaMedTradicionalByDptoCubit(
       {required this.medioUtilizaMedTradicionalByDptoUsecaseDB})
-      : super(MediosUtilizaMedTradicionalByDptoInitial()) {
-    getMediosUtilizaMedTradicionalByDpto();
-  }
+      : super(MediosUtilizaMedTradicionalByDptoInitial());
 
   void getMediosUtilizaMedTradicionalByDpto() async {
     final result = await medioUtilizaMedTradicionalByDptoUsecaseDB

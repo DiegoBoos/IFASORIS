@@ -1,34 +1,34 @@
 part of 'ficha_bloc.dart';
 
-abstract class FichaState extends Equatable {
-  final FichaEntity? ficha;
+abstract class FichasState extends Equatable {
+  final List<FichaEntity>? fichas;
 
-  const FichaState({this.ficha});
+  const FichasState({this.fichas});
 
   @override
-  List<Object?> get props => [ficha];
+  List<Object?> get props => [fichas];
 }
 
-class FichaInitial extends FichaState {}
+class FichasInitial extends FichasState {}
 
-class FichaLoading extends FichaState {}
+class FichasLoading extends FichasState {}
 
-class FichaCreated extends FichaState {
-  final FichaEntity? fichaCreated;
+class FichasLoaded extends FichasState {
+  final List<FichaEntity>? fichasLoaded;
 
-  const FichaCreated(this.fichaCreated)
+  const FichasLoaded(this.fichasLoaded)
       : super(
-          ficha: fichaCreated,
+          fichas: fichasLoaded,
         );
 
   @override
-  List<Object?> get props => [fichaCreated];
+  List<Object?> get props => [fichasLoaded];
 }
 
-class FichaError extends FichaState {
+class FichasError extends FichasState {
   final String message;
 
-  const FichaError(this.message);
+  const FichasError(this.message);
 
   @override
   List<Object?> get props => [message];

@@ -4,16 +4,22 @@ import 'package:ifasoris/services/shared_preferences_service.dart';
 import 'injection.dart' as di;
 import 'router.dart';
 import 'ui/blocs/afiliado/afiliado_bloc.dart';
+import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import 'ui/blocs/auth/auth_bloc.dart';
+import 'ui/blocs/familia/familia_bloc.dart';
+import 'ui/blocs/ficha/ficha_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import 'ui/cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
 import 'ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import 'ui/cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import 'ui/cubits/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_cubit.dart';
+import 'ui/cubits/dim_ubicacion/dim_ubicacion_state.dart';
 import 'ui/cubits/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_cubit.dart';
 import 'ui/cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
 import 'ui/cubits/estado_via/estado_via_cubit.dart';
+import 'ui/cubits/familia/familia_cubit.dart';
+import 'ui/cubits/ficha/ficha_cubit.dart';
 import 'ui/cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
 import 'ui/cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
@@ -125,6 +131,24 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<VerduraByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<FichaBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<FichaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<FamiliaBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<FamiliaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<AfiliadoPrefsBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<DimUbicacionCubit>(),
           ),
         ],
         child: MaterialApp(

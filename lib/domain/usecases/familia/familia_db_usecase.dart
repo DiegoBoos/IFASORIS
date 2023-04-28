@@ -9,8 +9,12 @@ class FamiliaUsecaseDB {
 
   FamiliaUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, FamiliaEntity?>> logInUsecaseDB(
+  Future<Either<Failure, FamiliaEntity>> createFamiliaUsecaseDB(
       FamiliaEntity familia) {
     return repositoryDB.createFamiliaRepositoryDB(familia);
+  }
+
+  Future<Either<Failure, List<FamiliaEntity>>> loadFamiliasUsecaseDB() {
+    return repositoryDB.loadFamiliasRepositoryDB();
   }
 }
