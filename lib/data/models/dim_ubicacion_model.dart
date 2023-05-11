@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:ifasoris/domain/entities/dim_ubicacion_entity.dart';
+import 'package:ifasoris/domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
 
 DimUbicacionModel dimUbicacionModelFromJson(String str) =>
     DimUbicacionModel.fromJson(json.decode(str));
 
 class DimUbicacionModel extends DimUbicacionEntity {
   DimUbicacionModel({
+    int? ubicacionId,
     int? familiaId,
     String? nombreRecibeVisita,
     String? tipoDocRecibeVisita,
@@ -39,6 +40,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
     int? produccionMinera,
     int? tipoCalendarioId,
   }) : super(
+          ubicacionId: ubicacionId ?? 0,
           familiaId: familiaId ?? 0,
           nombreRecibeVisita: nombreRecibeVisita ?? '',
           tipoDocRecibeVisita: tipoDocRecibeVisita ?? '',
@@ -75,6 +77,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
 
   factory DimUbicacionModel.fromJson(Map<String, dynamic> json) =>
       DimUbicacionModel(
+        ubicacionId: json["Ubicacion_id"],
         familiaId: json["Familia_id"],
         nombreRecibeVisita: json["NombreRecibeVisita"],
         tipoDocRecibeVisita: json["TipoDoc_RecibeVisita"],

@@ -13,12 +13,10 @@ import '../utils/styles.dart';
 class LoadingPage extends StatelessWidget {
   const LoadingPage({
     Key? key,
-    required this.percent,
     required this.title,
     required this.text,
   }) : super(key: key);
 
-  final double percent;
   final String title;
   final String text;
 
@@ -46,13 +44,9 @@ class LoadingPage extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            LinearProgressIndicator(
-              value: percent,
-              minHeight: 5,
-            ),
             Expanded(child: Container()),
-            SpinKitCircle(
-              color: Colors.blue[900],
+            const SpinKitCircle(
+              color: Colors.green,
               size: 100.0,
             ),
             const SizedBox(height: 10),

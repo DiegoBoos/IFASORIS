@@ -16,10 +16,10 @@ class AccesoCAForm extends StatefulWidget {
 }
 
 class AccesoCAFormState extends State<AccesoCAForm> {
-  String? _tiempoTardaId;
-  String? _medioUtilizaId;
-  String? _dificultaAccesoId;
-  String? _costoDesplazamientoId;
+  int? _tiempoTardaId;
+  int? _medioUtilizaId;
+  int? _dificultaAccesoId;
+  int? _costoDesplazamientoId;
 
   @override
   void initState() {
@@ -38,13 +38,13 @@ class AccesoCAFormState extends State<AccesoCAForm> {
       context,
     );
 
-    final dimUbicacion = await dimUbicacionCubit.getDimUbicacion(familiaId);
+    final dimUbicacion = dimUbicacionCubit.state.dimUbicacion;
 
     setState(() {
-      _tiempoTardaId = dimUbicacion?.tiempoTardaId.toString();
-      _medioUtilizaId = dimUbicacion?.medioUtilizaId.toString();
-      _dificultaAccesoId = dimUbicacion?.dificultaAccesoId.toString();
-      _costoDesplazamientoId = dimUbicacion?.costoDesplazamientoId.toString();
+      _tiempoTardaId = dimUbicacion.tiempoTardaId;
+      _medioUtilizaId = dimUbicacion.medioUtilizaId;
+      _dificultaAccesoId = dimUbicacion.dificultaAccesoId;
+      _costoDesplazamientoId = dimUbicacion.costoDesplazamientoId;
     });
   }
 
@@ -66,12 +66,12 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         BlocBuilder<TiempoTardaCACubit, TiemposTardaCAState>(
           builder: (context, state) {
             if (state is TiemposTardaCALoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 value: _tiempoTardaId,
                 items: state.tiemposTardaCALoaded!
                     .map(
-                      (tiempoTardaCA) => DropdownMenuItem<String>(
-                        value: tiempoTardaCA.tiempoTardaId.toString(),
+                      (tiempoTardaCA) => DropdownMenuItem<int>(
+                        value: tiempoTardaCA.tiempoTardaId,
                         child: Text(tiempoTardaCA.descripcion),
                       ),
                     )
@@ -80,7 +80,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                     labelText:
                         'Tiempo que tarda en llegar desde su casa al centro de atención en Salud',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _tiempoTardaId = newValue;
                   });
@@ -101,12 +101,12 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         BlocBuilder<MedioUtilizaCACubit, MediosUtilizaCAState>(
           builder: (context, state) {
             if (state is MediosUtilizaCALoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 value: _medioUtilizaId,
                 items: state.mediosUtilizaCALoaded!
                     .map(
-                      (medioUtilizaCA) => DropdownMenuItem<String>(
-                        value: medioUtilizaCA.medioUtilizaId.toString(),
+                      (medioUtilizaCA) => DropdownMenuItem<int>(
+                        value: medioUtilizaCA.medioUtilizaId,
                         child: Text(medioUtilizaCA.descripcion),
                       ),
                     )
@@ -115,7 +115,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                     labelText:
                         'Medios que utiliza para el desplazamiento al centro de atención',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _medioUtilizaId = newValue;
                   });
@@ -136,12 +136,12 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         BlocBuilder<DificultadAccesoCACubit, DificultadesAccesoCAState>(
           builder: (context, state) {
             if (state is DificultadesAccesoCALoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 value: _dificultaAccesoId,
                 items: state.dificultadesAccesoCALoaded!
                     .map(
-                      (dificultadAccesoCA) => DropdownMenuItem<String>(
-                        value: dificultadAccesoCA.dificultaAccesoId.toString(),
+                      (dificultadAccesoCA) => DropdownMenuItem<int>(
+                        value: dificultadAccesoCA.dificultaAccesoId,
                         child: Text(dificultadAccesoCA.descripcion),
                       ),
                     )
@@ -149,7 +149,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                 decoration: const InputDecoration(
                     labelText: 'Dificultad de acceso',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _dificultaAccesoId = newValue;
                   });
@@ -170,13 +170,12 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         BlocBuilder<CostoDesplazamientoCubit, CostosDesplazamientoState>(
           builder: (context, state) {
             if (state is CostosDesplazamientoLoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 value: _costoDesplazamientoId,
                 items: state.costosDesplazamientoLoaded!
                     .map(
-                      (costoDesplazamiento) => DropdownMenuItem<String>(
-                        value: costoDesplazamiento.costoDesplazamientoId
-                            .toString(),
+                      (costoDesplazamiento) => DropdownMenuItem<int>(
+                        value: costoDesplazamiento.costoDesplazamientoId,
                         child: Text(costoDesplazamiento.descripcion),
                       ),
                     )
@@ -184,7 +183,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                 decoration: const InputDecoration(
                     labelText: 'Costo desplazamiento',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _costoDesplazamientoId = newValue;
                   });

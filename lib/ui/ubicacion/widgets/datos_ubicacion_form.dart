@@ -30,12 +30,12 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   final _telefonoFijoCtrl = TextEditingController();
   final _telefonocel1Ctrl = TextEditingController();
   final _telefonocel2Ctrl = TextEditingController();
-  String? _perteneceResguardo;
+  int? _perteneceResguardo;
   final _nombreResguardoIndigenaCtrl = TextEditingController();
   final _nombreAutoridadIndigenaCtrl = TextEditingController();
-  String? _viaAccesoSeleccionada;
-  String? _estadoViaSeleccionada;
-  String? _medioComunicacion;
+  int? _viaAcceso;
+  int? _estadoVia;
+  int? _medioComunicacion;
 
   @override
   void initState() {
@@ -68,14 +68,14 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
       context,
     );
 
-    final dimUbicacion = await dimUbicacionCubit.getDimUbicacion(familiaId);
+    final dimUbicacion = dimUbicacionCubit.state.dimUbicacion;
 
     setState(() {
-      _nombreRecibeVisitaCtrl.text = dimUbicacion?.nombreRecibeVisita ?? '';
-      _perteneceResguardo = dimUbicacion?.perteneceResguardo.toString();
-      _viaAccesoSeleccionada = dimUbicacion?.viaAccesoId.toString();
-      _estadoViaSeleccionada = dimUbicacion?.estadoViaId.toString();
-      _medioComunicacion = dimUbicacion?.medioComunicacionId.toString();
+      _nombreRecibeVisitaCtrl.text = dimUbicacion.nombreRecibeVisita ?? '';
+      _perteneceResguardo = dimUbicacion.perteneceResguardo;
+      _viaAcceso = dimUbicacion.viaAccesoId;
+      _estadoVia = dimUbicacion.estadoViaId;
+      _medioComunicacion = dimUbicacion.medioComunicacionId;
     });
   }
 
@@ -233,18 +233,18 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                           .map<Widget>(
                             (e) => SizedBox(
                               height: 50,
-                              child: RadioListTile<String>(
+                              child: RadioListTile<int>(
                                 title: Text(
                                   e.descripcion,
                                 ),
-                                value: e.opcionId.toString(),
+                                value: e.opcionId,
                                 groupValue: _perteneceResguardo,
-                                onChanged: (String? value) {
+                                onChanged: (int? value) {
                                   setState(() {
                                     _perteneceResguardo = value;
                                   });
                                   dimUbicacionCubit
-                                      .changePerteneceResguardo(value!);
+                                      .changePerteneceResguardo(value);
                                 },
                               ),
                             ),
@@ -278,22 +278,22 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<ViaAccesoCubit, ViasAccesoState>(
           builder: (context, state) {
             if (state is ViasAccesoLoaded) {
-              return DropdownButtonFormField<String>(
-                value: _viaAccesoSeleccionada,
+              return DropdownButtonFormField<int>(
+                value: _viaAcceso,
                 items: state.viasAccesoLoaded!
-                    .map((viaAcceso) => DropdownMenuItem<String>(
-                          value: viaAcceso.viaAccesoId.toString(),
+                    .map((viaAcceso) => DropdownMenuItem<int>(
+                          value: viaAcceso.viaAccesoId,
                           child: Text(viaAcceso.descripcion),
                         ))
                     .toList(),
                 decoration: const InputDecoration(
                     labelText: 'Vías de acceso que utiliza',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
-                    _viaAccesoSeleccionada = newValue;
+                    _viaAcceso = newValue;
                   });
-                  dimUbicacionCubit.changeViaAccesoId(newValue!);
+                  dimUbicacionCubit.changeViaAccesoId(newValue);
                 },
                 validator: (value) {
                   if (value == null) {
@@ -310,12 +310,12 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<EstadoViaCubit, EstadosViasState>(
           builder: (context, state) {
             if (state is EstadosViasLoaded) {
-              return DropdownButtonFormField<String>(
-                value: _estadoViaSeleccionada,
+              return DropdownButtonFormField<int>(
+                value: _estadoVia,
                 items: state.estadosViasLoaded!
                     .map(
-                      (estadoVia) => DropdownMenuItem<String>(
-                        value: estadoVia.estadoViaId.toString(),
+                      (estadoVia) => DropdownMenuItem<int>(
+                        value: estadoVia.estadoViaId,
                         child: Text(estadoVia.descripcion),
                       ),
                     )
@@ -323,11 +323,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                 decoration: const InputDecoration(
                     labelText: 'Estado de las vías de acceso',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
-                    _estadoViaSeleccionada = newValue;
+                    _estadoVia = newValue;
                   });
-                  dimUbicacionCubit.changeEstadoViaId(newValue!);
+                  dimUbicacionCubit.changeEstadoViaId(newValue);
                 },
                 validator: (value) {
                   if (value == null) {
@@ -344,13 +344,13 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<MedioComunicacionCubit, MediosComunicacionState>(
           builder: (context, state) {
             if (state is MediosComunicacionLoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 isExpanded: true,
                 value: _medioComunicacion,
                 items: state.mediosComunicacionLoaded!
                     .map(
-                      (medioComunicacion) => DropdownMenuItem<String>(
-                        value: medioComunicacion.medioComunicacionId.toString(),
+                      (medioComunicacion) => DropdownMenuItem<int>(
+                        value: medioComunicacion.medioComunicacionId,
                         child: Text(medioComunicacion.descripcion),
                       ),
                     )
@@ -359,11 +359,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     labelText:
                         'Medios de comunicación que utiliza con mayor frecuencia',
                     border: OutlineInputBorder()),
-                onChanged: (newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _medioComunicacion = newValue;
                   });
-                  dimUbicacionCubit.changeMedioComunicacionId(newValue!);
+                  dimUbicacionCubit.changeMedioComunicacionId(newValue);
                 },
                 validator: (value) {
                   if (value == null) {

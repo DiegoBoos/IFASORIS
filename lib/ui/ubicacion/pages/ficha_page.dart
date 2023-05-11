@@ -18,17 +18,20 @@ import '../../cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_c
 import '../widgets/acceso_ca_form.dart';
 import '../widgets/acceso_medico_form.dart';
 import '../widgets/datos_ubicacion_form.dart';
+import '../widgets/datos_vivienda_form.dart';
 import '../widgets/grupo_familiar_form.dart';
 
-class UbicacionPage extends StatefulWidget {
-  const UbicacionPage({super.key});
+class FichaPage extends StatefulWidget {
+  const FichaPage({super.key});
 
   @override
-  State<UbicacionPage> createState() => _UbicacionPageState();
+  State<FichaPage> createState() => _FichaPageState();
 }
 
-class _UbicacionPageState extends State<UbicacionPage> {
-  final formKey = GlobalKey<FormState>();
+class _FichaPageState extends State<FichaPage> {
+  final _formKeyUbicacion = GlobalKey<FormState>();
+  final _formKeyVivienda = GlobalKey<FormState>();
+  final _formKeyGrupoFamiliar = GlobalKey<FormState>();
   int currentStep = 0;
   bool isCompleted = false;
   DimUbicacionEntity? dimUbicacion;
@@ -36,6 +39,14 @@ class _UbicacionPageState extends State<UbicacionPage> {
   @override
   void initState() {
     super.initState();
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
+      context,
+    );
+
+    final afiliado = afiliadoPrefsBloc.state.afiliado!;
+    BlocProvider.of<DimUbicacionCubit>(context)
+        .getDimUbicacion(afiliado.familiaId!);
+
     getAccesorias();
   }
 
@@ -87,23 +98,24 @@ class _UbicacionPageState extends State<UbicacionPage> {
                 onStepContinue: () async {
                   final isLastStep = currentStep == getSteps().length - 1;
 
-                  if (isLastStep) {
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
+                  if (currentStep == 0) {
+                    if (_formKeyUbicacion.currentState!.validate()) {
+                      _formKeyUbicacion.currentState!.save();
 
                       dimUbicacionCubit.changeFamiliaId(afiliado.familiaId!);
 
                       dimUbicacionCubit.saveDimUbicacionDB(
                           dimUbicacionCubit.state.dimUbicacion,
                           afiliado.familiaId!);
-
-                      Navigator.pop(context);
+                    } else if (currentStep == 1) {
+                      print('middle step');
+                    } else if (isLastStep) {
+                      print('last step');
                     }
                   } else {
                     setState(() => currentStep += 1);
                   }
                 },
-                onStepTapped: (step) => setState(() => currentStep = step),
                 onStepCancel: currentStep == 0
                     ? null
                     : () => setState(() => currentStep -= 1),
@@ -115,7 +127,7 @@ class _UbicacionPageState extends State<UbicacionPage> {
                       Expanded(
                           child: ElevatedButton(
                         onPressed: details.onStepContinue,
-                        child: Text(isLastStep ? 'Guardar' : 'Siguiente'),
+                        child: Text(isLastStep ? 'Finalizar' : 'Siguiente'),
                       )),
                       const SizedBox(
                         width: 12,
@@ -139,25 +151,25 @@ class _UbicacionPageState extends State<UbicacionPage> {
           isActive: currentStep >= 0,
           title: const Text('Ubicación'),
           content: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                DatosUbicacionForm(),
-                AccesoCAForm(),
-                AccesoMedicoForm()
-              ],
-            ),
-          ),
+              key: _formKeyUbicacion,
+              child: Column(
+                children: const [
+                  DatosUbicacionForm(),
+                  AccesoCAForm(),
+                  AccesoMedicoForm()
+                ],
+              )),
         ),
-        /*  Step(
+        Step(
             state: currentStep > 1 ? StepState.complete : StepState.indexed,
             isActive: currentStep >= 1,
             title: const Text('Vivienda'),
-            content: Container()),
+            content:
+                Form(key: _formKeyVivienda, child: const DatosViviendaForm())),
         Step(
             isActive: currentStep >= 2,
             title: const Text('Grupo Familiar'),
-            content: const GrupoFamiliar()) */
+            content: const GrupoFamiliar())
       ];
 
   Widget buildCompleted() {

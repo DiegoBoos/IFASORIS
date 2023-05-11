@@ -18,8 +18,8 @@ class _SignInPageState extends State<SignInPage> {
   final formKey = GlobalKey<FormState>();
   final configFormKey = GlobalKey<FormState>();
 
-  final userNameCtrl = TextEditingController();
-  final passwordCtrl = TextEditingController();
+  final userNameCtrl = TextEditingController(text: 'jpalomino');
+  final passwordCtrl = TextEditingController(text: 'Jpalomino*2022');
 
   @override
   Widget build(BuildContext context) {

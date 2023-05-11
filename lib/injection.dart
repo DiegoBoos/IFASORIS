@@ -30,6 +30,7 @@ import 'domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_expo
 import 'domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
 import 'domain/usecases/via_acceso/via_acceso_exports.dart';
 import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import 'ui/blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
 
@@ -66,6 +67,7 @@ void init() {
   fichaInit();
   familiaInit();
   dimUbicacionInit();
+  grupoFamiliarInit();
   // external
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => SharedPreferencesService());
@@ -1181,4 +1183,9 @@ void dimUbicacionInit() {
   locator.registerLazySingleton<DimUbicacionLocalDataSource>(
     () => DimUbicacionLocalDataSourceImpl(),
   );
+}
+
+void grupoFamiliarInit() {
+  // cubit
+  locator.registerFactory(() => GrupoFamiliarBloc());
 }

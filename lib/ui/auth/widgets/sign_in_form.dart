@@ -33,6 +33,12 @@ class _SignInFormState extends State<SignInForm> {
               hintText: 'Nombre de usuario',
               labelText: 'Nombre de usuario',
               prefixIcon: Icons.alternate_email_sharp),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Ingrese el nombre de usuario';
+            }
+            return null;
+          },
         ),
         const SizedBox(height: 30.0),
         TextFormField(
@@ -55,6 +61,12 @@ class _SignInFormState extends State<SignInForm> {
                         size: 18,
                       )),
           ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Ingrese la contraseña';
+            }
+            return null;
+          },
         ),
         const SizedBox(height: 20),
       ],

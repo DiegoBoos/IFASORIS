@@ -34,6 +34,9 @@ class DimUbicacionChanged extends DimUbicacionState {
 
   const DimUbicacionChanged(this.dimUbicacionChanged)
       : super(dimUbicacion: dimUbicacionChanged);
+
+  @override
+  List<Object?> get props => [dimUbicacionChanged];
 }
 
 class DimUbicacionSaved extends DimUbicacionState {
@@ -51,29 +54,16 @@ class DimUbicacionError extends DimUbicacionState {
 
 DimUbicacionEntity initObject() {
   return DimUbicacionEntity(
+      ubicacionId: 0,
       familiaId: 0,
       nombreRecibeVisita: '',
       tipoDocRecibeVisita: '',
       documentoRecibeVisita: '',
-      perteneceResguardo: 0,
-      viaAccesoId: 0,
+      nombreMedTradicional: '',
       resguardoId: 0,
       autoridadIndigenaId: 0,
-      estadoViaId: 0,
-      medioComunicacionId: 0,
-      tiempoTardaId: 0,
-      medioUtilizaId: 0,
-      dificultaAccesoId: 0,
-      costoDesplazamientoId: 0,
-      existeMedTradicionalComunidad: 0,
-      especialidadMedTradId: 0,
-      tiempoTardaMedTradId: 0,
-      medioUtilizaMedTradId: 0,
-      dificultadAccesoMedTradId: 0,
-      costoDesplazamientoMedTradicional: 0,
-      nombreMedTradicional: '',
-      poseeChagra: 0,
       tuberculoPlatanoId: 0,
+      poseeChagra: 0,
       leguminosaId: 0,
       hortalizaId: 0,
       verduraId: 0,

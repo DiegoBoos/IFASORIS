@@ -15,10 +15,20 @@ class DimUbicacionCubit extends Cubit<DimUbicacionState> {
         (data) => emit(DimUbicacionSaved(dimUbicacion: dimUbicacion)));
   }
 
-  Future<DimUbicacionEntity?> getDimUbicacion(int familiaId) async {
+  void getDimUbicacion(int familiaId) async {
     final result =
         await dimUbicacionUsecaseDB.getDimUbicacionUsecaseDB(familiaId);
-    return result.fold((failure) => null, (data) => data);
+    result.fold((failure) => emit(DimUbicacionError(failure.properties.first)),
+        (data) {
+      if (data != null) {
+        emit(DimUbicacionLoaded(data));
+      }
+    });
+  }
+
+  void changeUbicacionId(int? value) {
+    final ubicacionIdChanged = state.dimUbicacion.copyWith(ubicacionId: value);
+    emit(DimUbicacionChanged(ubicacionIdChanged));
   }
 
   void changeFamiliaId(int? value) {
@@ -44,93 +54,90 @@ class DimUbicacionCubit extends Cubit<DimUbicacionState> {
     emit(DimUbicacionChanged(documentoRecibeVisitaChanged));
   }
 
-  void changePerteneceResguardo(String? value) {
+  void changePerteneceResguardo(int? value) {
     final perteneceResguardoChanged =
-        state.dimUbicacion.copyWith(perteneceResguardo: int.parse(value!));
+        state.dimUbicacion.copyWith(perteneceResguardo: value);
     emit(DimUbicacionChanged(perteneceResguardoChanged));
   }
 
-  void changeViaAccesoId(String? value) {
-    final viaAccesoIdChanged =
-        state.dimUbicacion.copyWith(viaAccesoId: int.parse(value!));
+  void changeViaAccesoId(int? value) {
+    final viaAccesoIdChanged = state.dimUbicacion.copyWith(viaAccesoId: value);
     emit(DimUbicacionChanged(viaAccesoIdChanged));
   }
 
-  void changeResguardoId(String? value) {
-    final resguardoIdChanged =
-        state.dimUbicacion.copyWith(resguardoId: int.parse(value!));
+  void changeResguardoId(int? value) {
+    final resguardoIdChanged = state.dimUbicacion.copyWith(resguardoId: value);
     emit(DimUbicacionChanged(resguardoIdChanged));
   }
 
-  void changeAutoridadIndigenaId(String? value) {
+  void changeAutoridadIndigenaId(int? value) {
     final autoridadIndigenaIdChanged =
-        state.dimUbicacion.copyWith(autoridadIndigenaId: int.parse(value!));
+        state.dimUbicacion.copyWith(autoridadIndigenaId: value);
     emit(DimUbicacionChanged(autoridadIndigenaIdChanged));
   }
 
-  void changeEstadoViaId(String? value) {
-    final estadoViaIdChanged =
-        state.dimUbicacion.copyWith(estadoViaId: int.parse(value!));
+  void changeEstadoViaId(int? value) {
+    final estadoViaIdChanged = state.dimUbicacion.copyWith(estadoViaId: value);
     emit(DimUbicacionChanged(estadoViaIdChanged));
   }
 
-  void changeMedioComunicacionId(String? value) {
+  void changeMedioComunicacionId(int? value) {
     final medioComunicacionIdChanged =
-        state.dimUbicacion.copyWith(medioComunicacionId: int.parse(value!));
+        state.dimUbicacion.copyWith(medioComunicacionId: value);
     emit(DimUbicacionChanged(medioComunicacionIdChanged));
   }
 
-  void changeTiempoTardaId(String? value) {
+  void changeTiempoTardaId(int? value) {
     final tiempoTardaIdChanged =
-        state.dimUbicacion.copyWith(tiempoTardaId: int.parse(value!));
+        state.dimUbicacion.copyWith(tiempoTardaId: value);
     emit(DimUbicacionChanged(tiempoTardaIdChanged));
   }
 
-  void changeMedioUtilizaId(String? value) {
+  void changeMedioUtilizaId(int? value) {
     final medioUtilizaIdChanged =
-        state.dimUbicacion.copyWith(medioUtilizaId: int.parse(value!));
+        state.dimUbicacion.copyWith(medioUtilizaId: value);
     emit(DimUbicacionChanged(medioUtilizaIdChanged));
   }
 
-  void changeDificultaAccesoId(String? value) {
+  void changeDificultaAccesoId(int? value) {
     final dificultaAccesoIdChanged =
-        state.dimUbicacion.copyWith(dificultaAccesoId: int.parse(value!));
+        state.dimUbicacion.copyWith(dificultaAccesoId: value);
     emit(DimUbicacionChanged(dificultaAccesoIdChanged));
   }
 
-  void changeCostoDesplazamientoId(String? value) {
+  void changeCostoDesplazamientoId(int? value) {
     final costoDesplazamientoIdChanged =
-        state.dimUbicacion.copyWith(costoDesplazamientoId: int.parse(value!));
+        state.dimUbicacion.copyWith(costoDesplazamientoId: value);
     emit(DimUbicacionChanged(costoDesplazamientoIdChanged));
   }
 
-  void changeExisteMedTradicionalComunidad(String? value) {
-    final existeMedTradicionalComunidadChanged = state.dimUbicacion
-        .copyWith(existeMedTradicionalComunidad: int.parse(value!));
+  void changeExisteMedTradicionalComunidad(int? value) {
+    final existeMedTradicionalComunidadChanged =
+        state.dimUbicacion.copyWith(existeMedTradicionalComunidad: value);
     emit(DimUbicacionChanged(existeMedTradicionalComunidadChanged));
   }
 
-  void changeEspecialidadMedTradId(String? value) {
+  void changeEspecialidadMedTradId(int? value) {
     final especialidadMedTradIdChanged =
-        state.dimUbicacion.copyWith(especialidadMedTradId: int.parse(value!));
+        state.dimUbicacion.copyWith(especialidadMedTradId: value);
     emit(DimUbicacionChanged(especialidadMedTradIdChanged));
   }
 
-  void changeTiempoTardaMedTradId(String? value) {
+  void changeTiempoTardaMedTradId(int? value) {
     final tiempoTardaMedTradIdChanged =
-        state.dimUbicacion.copyWith(tiempoTardaMedTradId: int.parse(value!));
+        state.dimUbicacion.copyWith(tiempoTardaMedTradId: value);
     emit(DimUbicacionChanged(tiempoTardaMedTradIdChanged));
   }
 
-  void changeMedioUtilizaMedTradId(String? value) {
+  void changeMedioUtilizaMedTradId(int? value) {
     final medioUtilizaMedTradIdChanged =
-        state.dimUbicacion.copyWith(medioUtilizaMedTradId: int.parse(value!));
+        state.dimUbicacion.copyWith(medioUtilizaMedTradId: value);
     emit(DimUbicacionChanged(medioUtilizaMedTradIdChanged));
   }
 
-  void changeDificultadAccesoMedTradId(String? value) {
-    final dificultadAccesoMedTradIdChanged = state.dimUbicacion
-        .copyWith(dificultadAccesoMedTradId: int.parse(value!));
+  void changeDificultadAccesoMedTradicional(int? value) {
+    final dificultadAccesoMedTradIdChanged =
+        state.dimUbicacion.copyWith(dificultadAccesoMedTradId: value);
     emit(DimUbicacionChanged(dificultadAccesoMedTradIdChanged));
   }
 
@@ -146,63 +153,58 @@ class DimUbicacionCubit extends Cubit<DimUbicacionState> {
     emit(DimUbicacionChanged(nombreMedTradicionalChanged));
   }
 
-  void changePoseeChagra(String? value) {
-    final poseeChagraChanged =
-        state.dimUbicacion.copyWith(poseeChagra: int.parse(value!));
+  void changePoseeChagra(int? value) {
+    final poseeChagraChanged = state.dimUbicacion.copyWith(poseeChagra: value);
     emit(DimUbicacionChanged(poseeChagraChanged));
   }
 
-  void changeTuberculoPlatanoId(String? value) {
+  void changeTuberculoPlatanoId(int? value) {
     final tuberculoPlatanoIdChanged =
-        state.dimUbicacion.copyWith(tuberculoPlatanoId: int.parse(value!));
+        state.dimUbicacion.copyWith(tuberculoPlatanoId: value);
     emit(DimUbicacionChanged(tuberculoPlatanoIdChanged));
   }
 
-  void changeLeguminosaId(String? value) {
+  void changeLeguminosaId(int? value) {
     final leguminosaIdChanged =
-        state.dimUbicacion.copyWith(leguminosaId: int.parse(value!));
+        state.dimUbicacion.copyWith(leguminosaId: value);
     emit(DimUbicacionChanged(leguminosaIdChanged));
   }
 
-  void changeHortalizaId(String? value) {
-    final hortalizaIdChanged =
-        state.dimUbicacion.copyWith(hortalizaId: int.parse(value!));
+  void changeHortalizaId(int? value) {
+    final hortalizaIdChanged = state.dimUbicacion.copyWith(hortalizaId: value);
     emit(DimUbicacionChanged(hortalizaIdChanged));
   }
 
-  void changeVerduraId(String? value) {
-    final verduraIdChanged =
-        state.dimUbicacion.copyWith(verduraId: int.parse(value!));
+  void changeVerduraId(int? value) {
+    final verduraIdChanged = state.dimUbicacion.copyWith(verduraId: value);
     emit(DimUbicacionChanged(verduraIdChanged));
   }
 
-  void changeFrutoId(String? value) {
-    final frutoIdChanged =
-        state.dimUbicacion.copyWith(frutoId: int.parse(value!));
+  void changeFrutoId(int? value) {
+    final frutoIdChanged = state.dimUbicacion.copyWith(frutoId: value);
     emit(DimUbicacionChanged(frutoIdChanged));
   }
 
-  void changeCerealId(String? value) {
-    final cerealIdChanged =
-        state.dimUbicacion.copyWith(cerealId: int.parse(value!));
+  void changeCerealId(int? value) {
+    final cerealIdChanged = state.dimUbicacion.copyWith(cerealId: value);
     emit(DimUbicacionChanged(cerealIdChanged));
   }
 
-  void changeEspecieAnimalCriaId(String? value) {
+  void changeEspecieAnimalCriaId(int? value) {
     final especieAnimalCriaIdChanged =
-        state.dimUbicacion.copyWith(especieAnimalCriaId: int.parse(value!));
+        state.dimUbicacion.copyWith(especieAnimalCriaId: value);
     emit(DimUbicacionChanged(especieAnimalCriaIdChanged));
   }
 
-  void changeProduccionMinera(String? value) {
+  void changeProduccionMinera(int? value) {
     final produccionMineraChanged =
-        state.dimUbicacion.copyWith(produccionMinera: int.parse(value!));
+        state.dimUbicacion.copyWith(produccionMinera: value);
     emit(DimUbicacionChanged(produccionMineraChanged));
   }
 
-  void changeTipoCalendarioId(String? value) {
+  void changeTipoCalendarioId(int? value) {
     final tipoCalendarioIdChanged =
-        state.dimUbicacion.copyWith(tipoCalendarioId: int.parse(value!));
+        state.dimUbicacion.copyWith(tipoCalendarioId: value);
     emit(DimUbicacionChanged(tipoCalendarioIdChanged));
   }
 }

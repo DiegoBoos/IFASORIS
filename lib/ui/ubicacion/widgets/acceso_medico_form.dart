@@ -20,11 +20,11 @@ class AccesoMedicoForm extends StatefulWidget {
 }
 
 class AccesoMedicoFormState extends State<AccesoMedicoForm> {
-  String? _existeMedTradicionalComunidad;
-  String? _especialidadMedTradId;
-  String? _tiempoTardaId;
-  String? _medioUtilizaId;
-  String? _dificultaAccesoId;
+  int? _existeMedTradicionalComunidad;
+  int? _especialidadMedTradId;
+  int? _tiempoTardaId;
+  int? _medioUtilizaId;
+  int? _dificultaAccesoId;
   final _costoDesplazamientoCtrl = TextEditingController();
   final _nombreMedTradicionalCtrl = TextEditingController();
 
@@ -47,18 +47,18 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
       context,
     );
 
-    final dimUbicacion = await dimUbicacionCubit.getDimUbicacion(familiaId);
+    final dimUbicacion = dimUbicacionCubit.state.dimUbicacion;
 
     setState(() {
       _existeMedTradicionalComunidad =
-          dimUbicacion?.existeMedTradicionalComunidad.toString();
-      _especialidadMedTradId = dimUbicacion?.especialidadMedTradId.toString();
-      _tiempoTardaId = dimUbicacion?.tiempoTardaId.toString();
-      _medioUtilizaId = dimUbicacion?.medioUtilizaId.toString();
-      _dificultaAccesoId = dimUbicacion?.dificultaAccesoId.toString();
+          dimUbicacion.existeMedTradicionalComunidad;
+      _especialidadMedTradId = dimUbicacion.especialidadMedTradId;
+      _tiempoTardaId = dimUbicacion.tiempoTardaId;
+      _medioUtilizaId = dimUbicacion.medioUtilizaId;
+      _dificultaAccesoId = dimUbicacion.dificultaAccesoId;
       _costoDesplazamientoCtrl.text =
-          dimUbicacion?.costoDesplazamientoMedTradicional.toString() ?? '';
-      _nombreMedTradicionalCtrl.text = dimUbicacion?.nombreMedTradicional ?? '';
+          dimUbicacion.costoDesplazamientoMedTradicional.toString();
+      _nombreMedTradicionalCtrl.text = dimUbicacion.nombreMedTradicional ?? '';
     });
   }
 
@@ -88,13 +88,13 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                           .map<Widget>(
                             (e) => SizedBox(
                               height: 50,
-                              child: RadioListTile<String>(
+                              child: RadioListTile<int>(
                                 title: Text(
                                   e.descripcion,
                                 ),
-                                value: e.opcionId.toString(),
+                                value: e.opcionId,
                                 groupValue: _existeMedTradicionalComunidad,
-                                onChanged: (String? value) {
+                                onChanged: (int? value) {
                                   setState(() {
                                     _existeMedTradicionalComunidad = value;
                                   });
@@ -117,13 +117,12 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
             EspecialidadesMedTradicionalByDptoState>(
           builder: (context, state) {
             if (state is EspecialidadesMedTradicionalByDptoLoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 value: _especialidadMedTradId,
                 items: state.especialidadesmedtradicionalByDptoLoaded!
                     .map(
-                      (especialidadMedTradicional) => DropdownMenuItem<String>(
-                        value: especialidadMedTradicional.especialidadMedTradId
-                            .toString(),
+                      (especialidadMedTradicional) => DropdownMenuItem<int>(
+                        value: especialidadMedTradicional.especialidadMedTradId,
                         child: Text(especialidadMedTradicional.descripcion),
                       ),
                     )
@@ -131,7 +130,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                 decoration: const InputDecoration(
                     labelText: 'Especialidad del médico tradicional',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _especialidadMedTradId = newValue;
                   });
@@ -153,13 +152,12 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
             TiemposTardaMedTradicionalState>(
           builder: (context, state) {
             if (state is TiemposTardaMedTradicionalLoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 value: _tiempoTardaId,
                 items: state.tiemposTardaMedTradicionalLoaded!
                     .map(
-                      (tiempoTardaMedTradicional) => DropdownMenuItem<String>(
-                        value: tiempoTardaMedTradicional.tiempoTardaMedTradId
-                            .toString(),
+                      (tiempoTardaMedTradicional) => DropdownMenuItem<int>(
+                        value: tiempoTardaMedTradicional.tiempoTardaMedTradId,
                         child: Text(tiempoTardaMedTradicional.descripcion),
                       ),
                     )
@@ -168,11 +166,11 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     labelText:
                         'Tiempo que tarda en llegar desde su casa al medico tradicional',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _tiempoTardaId = newValue;
                   });
-                  dimUbicacionCubit.changeEspecialidadMedTradId(newValue);
+                  dimUbicacionCubit.changeTiempoTardaMedTradId(newValue);
                 },
                 validator: (value) {
                   if (value == null) {
@@ -189,12 +187,12 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
         BlocBuilder<MedioUtilizaCACubit, MediosUtilizaCAState>(
           builder: (context, state) {
             if (state is MediosUtilizaCALoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 value: _medioUtilizaId,
                 items: state.mediosUtilizaCALoaded!
                     .map(
-                      (medioUtilizaCA) => DropdownMenuItem<String>(
-                        value: medioUtilizaCA.medioUtilizaId.toString(),
+                      (medioUtilizaCA) => DropdownMenuItem<int>(
+                        value: medioUtilizaCA.medioUtilizaId,
                         child: Text(medioUtilizaCA.descripcion),
                       ),
                     )
@@ -203,11 +201,11 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     labelText:
                         'Medios que utiliza para el desplazamiento al médico tradicional',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _medioUtilizaId = newValue;
                   });
-                  dimUbicacionCubit.changeEspecialidadMedTradId(newValue);
+                  dimUbicacionCubit.changeMedioUtilizaMedTradId(newValue);
                 },
                 validator: (value) {
                   if (value == null) {
@@ -225,15 +223,14 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
             DificultadesAccesoMedTradicionalByDptoState>(
           builder: (context, state) {
             if (state is DificultadesAccesoMedTradicionalByDptoLoaded) {
-              return DropdownButtonFormField<String>(
+              return DropdownButtonFormField<int>(
                 value: _dificultaAccesoId,
                 items: state.dificultadesAccesoMedTradicionalByDptoLoaded!
                     .map(
                       (dificultadAccesoMedTradicionalByDpto) =>
-                          DropdownMenuItem<String>(
+                          DropdownMenuItem<int>(
                         value: dificultadAccesoMedTradicionalByDpto
-                            .dificultadAccesoMedTradId
-                            .toString(),
+                            .dificultadAccesoMedTradId,
                         child: Text(
                             dificultadAccesoMedTradicionalByDpto.descripcion),
                       ),
@@ -243,11 +240,12 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     labelText:
                         'Que dificultad de acceso tiene, para llegar donde el médico tradicional',
                     border: OutlineInputBorder()),
-                onChanged: (String? newValue) {
+                onChanged: (int? newValue) {
                   setState(() {
                     _dificultaAccesoId = newValue;
                   });
-                  dimUbicacionCubit.changeDificultaAccesoId(newValue);
+                  dimUbicacionCubit
+                      .changeDificultadAccesoMedTradicional(newValue);
                 },
                 validator: (value) {
                   if (value == null) {

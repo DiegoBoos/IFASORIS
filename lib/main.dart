@@ -8,6 +8,7 @@ import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import 'ui/blocs/auth/auth_bloc.dart';
 import 'ui/blocs/familia/familia_bloc.dart';
 import 'ui/blocs/ficha/ficha_bloc.dart';
+import 'ui/blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import 'ui/cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
@@ -149,6 +150,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<DimUbicacionCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<GrupoFamiliarBloc>(),
           ),
         ],
         child: MaterialApp(

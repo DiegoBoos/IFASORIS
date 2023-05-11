@@ -1,71 +1,74 @@
 class DimUbicacionEntity {
+  int? ubicacionId;
+  int? familiaId;
+  String? nombreRecibeVisita;
+  String? tipoDocRecibeVisita;
+  String? documentoRecibeVisita;
+  int? perteneceResguardo;
+  int? viaAccesoId;
+  int? resguardoId;
+  int? autoridadIndigenaId;
+  int? estadoViaId;
+  int? medioComunicacionId;
+  int? tiempoTardaId;
+  int? medioUtilizaId;
+  int? dificultaAccesoId;
+  int? costoDesplazamientoId;
+  int? existeMedTradicionalComunidad;
+  int? especialidadMedTradId;
+  int? tiempoTardaMedTradId;
+  int? medioUtilizaMedTradId;
+  int? dificultadAccesoMedTradId;
+  int? costoDesplazamientoMedTradicional;
+  String? nombreMedTradicional;
+  int? poseeChagra;
+  int? tuberculoPlatanoId;
+  int? leguminosaId;
+  int? hortalizaId;
+  int? verduraId;
+  int? frutoId;
+  int? cerealId;
+  int? especieAnimalCriaId;
+  int? produccionMinera;
+  int? tipoCalendarioId;
+
   DimUbicacionEntity({
-    required this.familiaId,
-    required this.nombreRecibeVisita,
-    required this.tipoDocRecibeVisita,
-    required this.documentoRecibeVisita,
-    required this.perteneceResguardo,
-    required this.viaAccesoId,
-    required this.resguardoId,
-    required this.autoridadIndigenaId,
-    required this.estadoViaId,
-    required this.medioComunicacionId,
-    required this.tiempoTardaId,
-    required this.medioUtilizaId,
-    required this.dificultaAccesoId,
-    required this.costoDesplazamientoId,
-    required this.existeMedTradicionalComunidad,
-    required this.especialidadMedTradId,
-    required this.tiempoTardaMedTradId,
-    required this.medioUtilizaMedTradId,
-    required this.dificultadAccesoMedTradId,
-    required this.costoDesplazamientoMedTradicional,
-    required this.nombreMedTradicional,
-    required this.poseeChagra,
-    required this.tuberculoPlatanoId,
-    required this.leguminosaId,
-    required this.hortalizaId,
-    required this.verduraId,
-    required this.frutoId,
-    required this.cerealId,
-    required this.especieAnimalCriaId,
-    required this.produccionMinera,
-    required this.tipoCalendarioId,
+    this.ubicacionId,
+    this.familiaId,
+    this.nombreRecibeVisita,
+    this.tipoDocRecibeVisita,
+    this.documentoRecibeVisita,
+    this.perteneceResguardo,
+    this.viaAccesoId,
+    this.resguardoId,
+    this.autoridadIndigenaId,
+    this.estadoViaId,
+    this.medioComunicacionId,
+    this.tiempoTardaId,
+    this.medioUtilizaId,
+    this.dificultaAccesoId,
+    this.costoDesplazamientoId,
+    this.existeMedTradicionalComunidad,
+    this.especialidadMedTradId,
+    this.tiempoTardaMedTradId,
+    this.medioUtilizaMedTradId,
+    this.dificultadAccesoMedTradId,
+    this.costoDesplazamientoMedTradicional,
+    this.nombreMedTradicional,
+    this.poseeChagra,
+    this.tuberculoPlatanoId,
+    this.leguminosaId,
+    this.hortalizaId,
+    this.verduraId,
+    this.frutoId,
+    this.cerealId,
+    this.especieAnimalCriaId,
+    this.produccionMinera,
+    this.tipoCalendarioId,
   });
 
-  int familiaId;
-  String nombreRecibeVisita;
-  String tipoDocRecibeVisita;
-  String documentoRecibeVisita;
-  int perteneceResguardo;
-  int viaAccesoId;
-  int resguardoId;
-  int autoridadIndigenaId;
-  int estadoViaId;
-  int medioComunicacionId;
-  int tiempoTardaId;
-  int medioUtilizaId;
-  int dificultaAccesoId;
-  int costoDesplazamientoId;
-  int existeMedTradicionalComunidad;
-  int especialidadMedTradId;
-  int tiempoTardaMedTradId;
-  int medioUtilizaMedTradId;
-  int dificultadAccesoMedTradId;
-  int costoDesplazamientoMedTradicional;
-  String nombreMedTradicional;
-  int poseeChagra;
-  int tuberculoPlatanoId;
-  int leguminosaId;
-  int hortalizaId;
-  int verduraId;
-  int frutoId;
-  int cerealId;
-  int especieAnimalCriaId;
-  int produccionMinera;
-  int tipoCalendarioId;
-
   DimUbicacionEntity copyWith({
+    int? ubicacionId,
     int? familiaId,
     String? nombreRecibeVisita,
     String? tipoDocRecibeVisita,
@@ -99,6 +102,7 @@ class DimUbicacionEntity {
     int? tipoCalendarioId,
   }) =>
       DimUbicacionEntity(
+        ubicacionId: ubicacionId ?? this.ubicacionId,
         familiaId: familiaId ?? this.familiaId,
         nombreRecibeVisita: nombreRecibeVisita ?? this.nombreRecibeVisita,
         tipoDocRecibeVisita: tipoDocRecibeVisita ?? this.tipoDocRecibeVisita,
@@ -140,6 +144,7 @@ class DimUbicacionEntity {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "Familia_id": familiaId,
         "NombreRecibeVisita": nombreRecibeVisita,
         "TipoDoc_RecibeVisita": tipoDocRecibeVisita,

@@ -9,10 +9,11 @@ import 'package:ifasoris/ui/blocs/auth/auth_bloc.dart';
 import 'package:ifasoris/ui/utils/custom_snack_bar.dart';
 
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../../blocs/sync/sync_bloc.dart';
 import '../../cubits/dim_ubicacion/dim_ubicacion_state.dart';
 import '../../cubits/familia/familia_cubit.dart';
 import '../../cubits/ficha/ficha_cubit.dart';
-import '../widgets/app_drawer.dart';
+import '../../sync/sync_pages.dart';
 import '../widgets/buttons.dart';
 import '../widgets/headers.dart';
 import '../widgets/mobile_appbar.dart';
@@ -92,67 +93,97 @@ class _HomePageState extends State<HomePage> {
             },
           )
         ],
-        child: Scaffold(
-            appBar: size.width > 500
-                ? PreferredSize(
-                    preferredSize: size,
-                    child: const NavBar(),
-                  )
-                : PreferredSize(
-                    preferredSize: Size.fromHeight(size.height * 0.08),
-                    child: const MobileAppBar()),
-            //drawer: const AppDrawer(),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BlocBuilder<AfiliadoPrefsBloc, AfiliadoPrefsState>(
-                    builder: (context, state) {
-                  if (state is AfiliadoLoaded) {
-                    return Column(
-                      children: [
-                        _Header(
-                          afiliado: state.afiliado,
+        child: BlocConsumer<SyncBloc, SyncState>(
+          listener: (context, state) {
+            if (state is SyncFailure) {
+              CustomSnackBar.showSnackBar(context, state.message, Colors.red);
+            }
+            if (state is SyncSuccess) {
+              CustomSnackBar.showSnackBar(
+                  context, 'Sincronización completada', Colors.green);
+            }
+          },
+          builder: (context, state) {
+            if (state is InitializingSync) {
+              return LoadingPage(
+                  title: state.syncProgressModel.title,
+                  text: 'Iniciando sincronización...');
+            }
+            if (state is SyncDownloading || state is SyncInProgress) {
+              return LoadingPage(
+                  title: state.syncProgressModel.title,
+                  text:
+                      '${state.syncProgressModel.title} ${state.syncProgressModel.percent}%');
+            } else {
+              return Scaffold(
+                  appBar: size.width > 500
+                      ? PreferredSize(
+                          preferredSize: size,
+                          child: const NavBar(),
+                        )
+                      : PreferredSize(
+                          preferredSize: Size.fromHeight(size.height * 0.08),
+                          child: const MobileAppBar()),
+                  //drawer: const AppDrawer(),
+                  body: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BlocBuilder<AfiliadoPrefsBloc, AfiliadoPrefsState>(
+                          builder: (context, state) {
+                        if (state is AfiliadoLoaded) {
+                          return Column(
+                            children: [
+                              _Header(
+                                afiliado: state.afiliado,
+                              ),
+                              FadeInLeft(
+                                  child: CustomButton(
+                                      icon: FontAwesomeIcons.dochub,
+                                      texto: state.afiliado!.familiaId == null
+                                          ? 'Crear ficha'
+                                          : 'Diligenciar ficha',
+                                      color1:
+                                          Theme.of(context).colorScheme.primary,
+                                      color2: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      onPress: () {
+                                        if (state.afiliado!.familiaId == null) {
+                                          final fichaCubit =
+                                              BlocProvider.of<FichaCubit>(
+                                                  context);
+                                          final newFicha = FichaEntity(
+                                              fechaCreacion: DateTime.now(),
+                                              numFicha: '1',
+                                              userName: authBloc
+                                                  .state.usuario!.userName,
+                                              ultimaActualizacion:
+                                                  DateTime.now());
+                                          fichaCubit.createFichaDB(newFicha);
+                                        } else {
+                                          Navigator.pushNamed(context, 'ficha');
+                                        }
+                                      })),
+                            ],
+                          );
+                        }
+                        return _EmptyHeader();
+                      }),
+                      Expanded(child: Container()),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Column(
+                          children: const [
+                            Text('SIRIS S.A.S'),
+                            Text('Última versión 19/04/2021')
+                          ],
                         ),
-                        FadeInLeft(
-                            child: CustomButton(
-                                icon: FontAwesomeIcons.dochub,
-                                texto: state.afiliado!.familiaId == null
-                                    ? 'Crear ficha'
-                                    : 'Diligenciar ficha',
-                                color1: Theme.of(context).colorScheme.primary,
-                                color2: Theme.of(context).colorScheme.secondary,
-                                onPress: () {
-                                  if (state.afiliado!.familiaId == null) {
-                                    final fichaCubit =
-                                        BlocProvider.of<FichaCubit>(context);
-                                    final newFicha = FichaEntity(
-                                        fechaCreacion: DateTime.now(),
-                                        numFicha: '1',
-                                        userName:
-                                            authBloc.state.usuario!.userName,
-                                        ultimaActualizacion: DateTime.now());
-                                    fichaCubit.createFichaDB(newFicha);
-                                  } else {
-                                    Navigator.pushNamed(context, 'ubicacion');
-                                  }
-                                })),
-                      ],
-                    );
-                  }
-                  return _EmptyHeader();
-                }),
-                Expanded(child: Container()),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Column(
-                    children: const [
-                      Text('SIRIS S.A.S'),
-                      Text('Última versión 19/04/2021')
+                      )
                     ],
-                  ),
-                )
-              ],
-            )));
+                  ));
+            }
+          },
+        ));
   }
 }
 
