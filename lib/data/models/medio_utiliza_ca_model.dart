@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/medio_utiliza_ca_entity.dart';
 
-List<MedioUtilizaCAModel> mediosUtilizaCAModelFromJson(String str) =>
+List<MedioUtilizaCAModel> mediosUtilizaCAFromJson(String str) =>
     List<MedioUtilizaCAModel>.from(
         json.decode(str).map((x) => MedioUtilizaCAModel.fromJson(x)));
 

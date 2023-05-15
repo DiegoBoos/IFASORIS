@@ -30,7 +30,7 @@ class EstadoViaRemoteDataSourceImpl implements EstadoViaRemoteDataSource {
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = estadosViasModelFromJson(jsonEncode(decodedResp));
+        final result = estadosViasFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

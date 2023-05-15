@@ -32,7 +32,7 @@ class LeguminosaByDptoRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = leguminosasModelFromJson(jsonEncode(decodedResp));
+        final result = leguminosasFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

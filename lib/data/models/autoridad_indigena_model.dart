@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/autoridad_indigena_entity.dart';
 
-List<AutoridadIndigenaModel> autoridadesIndigenasModelFromJson(String str) =>
+List<AutoridadIndigenaModel> autoridadesIndigenasFromJson(String str) =>
     List<AutoridadIndigenaModel>.from(
         json.decode(str).map((x) => AutoridadIndigenaModel.fromJson(x)));
 

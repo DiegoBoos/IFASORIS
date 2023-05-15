@@ -44,12 +44,17 @@ class _SignInPageState extends State<SignInPage> {
           body: Center(
             child: Container(
               width: (size.width > 500) ? size.width / 2 : size.width,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Form(
                 key: formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Image.asset(
+                      'assets/icon_foreground.png',
+                      width: 200,
+                      height: 200,
+                    ),
                     const SizedBox(height: 10),
                     Row(
                       children: [

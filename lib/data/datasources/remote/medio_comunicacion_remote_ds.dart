@@ -31,7 +31,7 @@ class MedioComunicacionRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = mediosComunicacionModelFromJson(jsonEncode(decodedResp));
+        final result = mediosComunicacionFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

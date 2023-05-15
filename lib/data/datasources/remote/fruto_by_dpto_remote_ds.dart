@@ -31,7 +31,7 @@ class FrutoByDptoRemoteDataSourceImpl implements FrutoByDptoRemoteDataSource {
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = frutosModelFromJson(jsonEncode(decodedResp));
+        final result = frutosFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

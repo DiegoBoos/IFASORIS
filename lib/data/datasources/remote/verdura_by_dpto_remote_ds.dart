@@ -32,7 +32,7 @@ class VerduraByDptoRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = verdurasModelFromJson(jsonEncode(decodedResp));
+        final result = verdurasFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

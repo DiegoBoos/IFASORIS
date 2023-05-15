@@ -64,6 +64,16 @@ class SyncInProgress extends SyncState {
   List<Object?> get props => [syncProgress];
 }
 
+class SyncInProgressAccesories extends SyncState {
+  final SyncProgressModel syncProgress;
+
+  const SyncInProgressAccesories(this.syncProgress)
+      : super(syncProgressModel: syncProgress);
+
+  @override
+  List<Object?> get props => [syncProgress];
+}
+
 class SyncSuccess extends SyncState {
   SyncSuccess()
       : super(

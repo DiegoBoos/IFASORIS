@@ -88,6 +88,17 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_UBICACION);
       ref.execute(ConnectionSQL.CREATE_DATOS_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_GRUPO_FAMILIAR);
+      ref.execute(ConnectionSQL.CREATE_FACTORES_RIESGO_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_ILUMINACION_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_PISOS_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_PRESENCIA_ANIMALES_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_SERVICIOS_PUBLICOS_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_TECHOS_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_TENENCIAS_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_TIPO_COMBUSTIBLE_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_TIPO_SANITARIO_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_TRATAMIENTO_AGUA_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_VENTILACION_VIVIENDA);
     });
   }
 

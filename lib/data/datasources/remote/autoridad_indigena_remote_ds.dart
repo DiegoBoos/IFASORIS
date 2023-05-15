@@ -31,8 +31,7 @@ class AutoridadIndigenaRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result =
-            autoridadesIndigenasModelFromJson(jsonEncode(decodedResp));
+        final result = autoridadesIndigenasFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

@@ -29,6 +29,15 @@ class SyncStatusChanged extends SyncEvent {
   List<Object> get props => [syncProgress];
 }
 
+class SyncAccesoriesChanged extends SyncEvent {
+  final SyncProgressModel syncProgress;
+
+  const SyncAccesoriesChanged(this.syncProgress);
+
+  @override
+  List<Object> get props => [syncProgress];
+}
+
 class SyncError extends SyncEvent {
   final String message;
 

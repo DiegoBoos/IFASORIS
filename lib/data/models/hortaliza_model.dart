@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:ifasoris/domain/entities/hortaliza_entity.dart';
 
-List<HortalizaModel> hortalizasModelFromJson(String str) =>
+List<HortalizaModel> hortalizasFromJson(String str) =>
     List<HortalizaModel>.from(
         json.decode(str).map((x) => HortalizaModel.fromJson(x)));
 

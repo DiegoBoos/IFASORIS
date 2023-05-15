@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:ifasoris/domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
+import '../../domain/entities/dim_ubicacion_entity.dart';
 
-DimUbicacionModel dimUbicacionModelFromJson(String str) =>
+DimUbicacionModel dimUbicacionFromJson(String str) =>
     DimUbicacionModel.fromJson(json.decode(str));
 
 class DimUbicacionModel extends DimUbicacionEntity {

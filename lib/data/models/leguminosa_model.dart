@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/leguminosa_entity.dart';
 
-List<LeguminosaModel> leguminosasModelFromJson(String str) =>
+List<LeguminosaModel> leguminosasFromJson(String str) =>
     List<LeguminosaModel>.from(
         json.decode(str).map((x) => LeguminosaModel.fromJson(x)));
 

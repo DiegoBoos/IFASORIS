@@ -30,7 +30,7 @@ class OpcionSiNoRemoteDataSourceImpl implements OpcionSiNoRemoteDataSource {
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = opcionesSiNoModelFromJson(jsonEncode(decodedResp));
+        final result = opcionesSiNoFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

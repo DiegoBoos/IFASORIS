@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../constants.dart';
 import '../../models/dim_ubicacion_model.dart';
 
 abstract class DimUbicacionRemoteDataSource {
-  Future<DimUbicacionModel> createDimUbicacion(DimUbicacionEntity dimUbicacion);
+  Future<DimUbicacionModel> uploadDimUbicacion();
 }
 
 class DimUbicacionRemoteDataSourceImpl implements DimUbicacionRemoteDataSource {
@@ -17,24 +16,24 @@ class DimUbicacionRemoteDataSourceImpl implements DimUbicacionRemoteDataSource {
   DimUbicacionRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<DimUbicacionModel> createDimUbicacion(
-      DimUbicacionEntity dimUbicacion) async {
+  Future<DimUbicacionModel> uploadDimUbicacion() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/creatDimUbicacion');
+      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/crearDimUbicacion');
 
-      final resp = await client.post(uri,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: dimUbicacion.toJson());
+      final resp = await client.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+        }, /*  body: dimUbicacion.toJson() */
+      );
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = dimUbicacionModelFromJson(decodedResp);
+        final result = dimUbicacionFromJson(decodedResp);
 
         return result;
       } else {
-        throw const ServerFailure(['DimUbicacion/contraseña no son correctos']);
+        throw const ServerFailure(['Excepción no controlada']);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

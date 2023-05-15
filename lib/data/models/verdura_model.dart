@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:ifasoris/domain/entities/verdura_entity.dart';
 
-List<VerduraModel> verdurasModelFromJson(String str) => List<VerduraModel>.from(
+List<VerduraModel> verdurasFromJson(String str) => List<VerduraModel>.from(
     json.decode(str).map((x) => VerduraModel.fromJson(x)));
 
 class VerduraModel extends VerduraEntity {

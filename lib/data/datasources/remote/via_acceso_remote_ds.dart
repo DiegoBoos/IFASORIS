@@ -30,7 +30,7 @@ class ViaAccesoRemoteDataSourceImpl implements ViaAccesoRemoteDataSource {
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = viasAccesoModelFromJson(jsonEncode(decodedResp));
+        final result = viasAccesoFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

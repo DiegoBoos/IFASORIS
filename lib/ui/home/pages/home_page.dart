@@ -9,8 +9,8 @@ import 'package:ifasoris/ui/blocs/auth/auth_bloc.dart';
 import 'package:ifasoris/ui/utils/custom_snack_bar.dart';
 
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
-import '../../cubits/dim_ubicacion/dim_ubicacion_state.dart';
 import '../../cubits/familia/familia_cubit.dart';
 import '../../cubits/ficha/ficha_cubit.dart';
 import '../../sync/sync_pages.dart';
@@ -36,6 +36,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
+
     final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
 
     final authBloc = BlocProvider.of<AuthBloc>(context);
@@ -81,17 +83,12 @@ class _HomePageState extends State<HomePage> {
                     .copyWith(familiaId: state.familiaCreated.familiaId);
 
                 afiliadoPrefsBloc.add(SaveAfiliado(updateAfiliado));
+
+                BlocProvider.of<DimUbicacionBloc>(context)
+                    .add(DimUbicacionInit());
               }
             },
           ),
-          BlocListener<DimUbicacionCubit, DimUbicacionState>(
-            listener: (context, state) {
-              if (state is DimUbicacionSaved) {
-                CustomSnackBar.showSnackBar(
-                    context, 'Datos guardados correctamente', Colors.green);
-              }
-            },
-          )
         ],
         child: BlocConsumer<SyncBloc, SyncState>(
           listener: (context, state) {
@@ -114,6 +111,12 @@ class _HomePageState extends State<HomePage> {
                   title: state.syncProgressModel.title,
                   text:
                       '${state.syncProgressModel.title} ${state.syncProgressModel.percent}%');
+            }
+            if (state is SyncInProgressAccesories) {
+              return LoadingPage(
+                  title: state.syncProgressModel.title,
+                  text:
+                      '${state.syncProgressModel.title} ${state.syncProgressModel.counter} / ${state.syncProgressModel.total}');
             } else {
               return Scaffold(
                   appBar: size.width > 500
@@ -123,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                         )
                       : PreferredSize(
                           preferredSize: Size.fromHeight(size.height * 0.08),
-                          child: const MobileAppBar()),
+                          child: MobileAppBar()),
                   //drawer: const AppDrawer(),
                   body: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,8 +177,8 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Column(
                           children: const [
-                            Text('SIRIS S.A.S'),
-                            Text('Última versión 19/04/2021')
+                            Text('IFASORIS'),
+                            Text('MALLAMAS EPS INDIGENA')
                           ],
                         ),
                       )

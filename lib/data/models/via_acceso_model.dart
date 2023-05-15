@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:ifasoris/domain/entities/via_acceso_entity.dart';
 
-List<ViaAccesoModel> viasAccesoModelFromJson(String str) =>
+List<ViaAccesoModel> viasAccesoFromJson(String str) =>
     List<ViaAccesoModel>.from(
         json.decode(str).map((x) => ViaAccesoModel.fromJson(x)));
 

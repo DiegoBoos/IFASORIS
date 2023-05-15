@@ -9,8 +9,7 @@ class DimUbicacionUsecase {
 
   DimUbicacionUsecase(this.repository);
 
-  Future<Either<Failure, DimUbicacionEntity>> createDimUbicacionUsecase(
-      DimUbicacionEntity dimUbicacion) {
-    return repository.createDimUbicacionRepository(dimUbicacion);
+  Future<Either<Failure, DimUbicacionEntity>> uploadDimUbicacionUsecase() {
+    return repository.uploadDimUbicacionRepository();
   }
 }

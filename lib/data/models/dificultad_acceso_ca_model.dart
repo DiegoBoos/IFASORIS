@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:ifasoris/domain/entities/dificultad_acceso_ca_entity.dart';
 
-List<DificultadAccesoCAModel> dificultadesAccesoCAModelFromJson(String str) =>
+List<DificultadAccesoCAModel> dificultadesAccesoCAFromJson(String str) =>
     List<DificultadAccesoCAModel>.from(
         json.decode(str).map((x) => DificultadAccesoCAModel.fromJson(x)));
 

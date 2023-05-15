@@ -10,23 +10,36 @@ import 'domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import 'domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import 'domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
 import 'domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
+import 'domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
 import 'domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import 'domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_exports.dart';
 import 'domain/usecases/estado_via/estado_via_exports.dart';
+import 'domain/usecases/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/familia/familia_exports.dart';
 import 'domain/usecases/ficha/ficha_exports.dart';
 import 'domain/usecases/fruto_by_dpto/fruto_by_dpto_exports.dart';
 import 'domain/usecases/hortaliza_by_dpto/hortaliza_by_dpto_exports.dart';
+import 'domain/usecases/iluminacion_vivienda/iluminacion_vivienda_exports.dart';
 import 'domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
 import 'domain/usecases/medio_comunicacion/medio_comunicacion_exports.dart';
 import 'domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import 'domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_exports.dart';
 import 'domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
+import 'domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
+import 'domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/resguardo_by_dpto/resguardo_by_dpto_exports.dart';
+import 'domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/sync_log/sync_log_exports.dart';
+import 'domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_exports.dart';
+import 'domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import 'domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
+import 'domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_exports.dart';
+import 'domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_exports.dart';
+import 'domain/usecases/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_exports.dart';
+import 'domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_exports.dart';
+import 'domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import 'domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
 import 'domain/usecases/via_acceso/via_acceso_exports.dart';
 import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
@@ -64,9 +77,21 @@ void init() {
   tiempoTardaMedTradicionalInit();
   tuberculoPlatanoByDptoInit();
   verduraByDptoInit();
+  factorRiesgoViviendaByDptoInit();
+  iluminacionViviendaInit();
+  pisoViviendaByDptoInit();
+  presenciaAnimalViviendaByDptoInit();
+  servicioPublicoViviendaByDptoInit();
+  techoViviendaByDptoInit();
+  tenenciaViviendaByDptoInit();
+  tipoCombustibleViviendaByDptoInit();
+  tipoSanitarioViviendaByDptoInit();
+  tipoViviendaByDptoInit();
+  tratamientoAguaViviendaByDptoInit();
   fichaInit();
   familiaInit();
   dimUbicacionInit();
+  dimViviendaInit();
   grupoFamiliarInit();
   // external
   locator.registerLazySingleton(() => http.Client());
@@ -166,6 +191,7 @@ void syncInit() {
         tuberculoPlatanoByDptoUsecaseDB: locator(),
         verduraByDptoUsecase: locator(),
         verduraByDptoUsecaseDB: locator(),
+        dimUbicacionUsecase: locator(),
       ));
 }
 
@@ -233,7 +259,7 @@ void afiliadoPrefsInit() {
 }
 
 void dificultadAccesoCAInit() {
-  // bloc
+  // cubit
   locator.registerFactory(
       () => DificultadAccesoCACubit(dificultadAccesoCAUsecaseDB: locator()));
 
@@ -271,7 +297,7 @@ void dificultadAccesoCAInit() {
 }
 
 void estadoViaInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => EstadoViaCubit(estadoViaUsecaseDB: locator()));
 
   // remote usecase
@@ -308,7 +334,7 @@ void estadoViaInit() {
 }
 
 void medioComunicacionInit() {
-  // bloc
+  // cubit
   locator.registerFactory(
       () => MedioComunicacionCubit(medioComunicacionUsecaseDB: locator()));
 
@@ -346,7 +372,7 @@ void medioComunicacionInit() {
 }
 
 void medioUtilizaCAInit() {
-  // bloc
+  // cubit
   locator.registerFactory(
       () => MedioUtilizaCACubit(medioUtilizaCAUsecaseDB: locator()));
 
@@ -384,7 +410,7 @@ void medioUtilizaCAInit() {
 }
 
 void tiempoTardaCAInit() {
-  // bloc
+  // cubit
   locator.registerFactory(
       () => TiempoTardaCACubit(tiempoTardaCAUsecaseDB: locator()));
 
@@ -422,7 +448,7 @@ void tiempoTardaCAInit() {
 }
 
 void viaAccesoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => ViaAccesoCubit(
         viaAccesoUsecaseDB: locator(),
       ));
@@ -461,7 +487,7 @@ void viaAccesoInit() {
 }
 
 void autoridadIndigenaInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => AutoridadIndigenaCubit(
         autoridadIndigenaUsecaseDB: locator(),
       ));
@@ -500,7 +526,7 @@ void autoridadIndigenaInit() {
 }
 
 void cerealByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => CerealByDptoCubit(
         cerealByDptoUsecaseDB: locator(),
       ));
@@ -539,7 +565,7 @@ void cerealByDptoInit() {
 }
 
 void costoDesplazamientoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => CostoDesplazamientoCubit(
         costoDesplazamientoUsecaseDB: locator(),
       ));
@@ -578,7 +604,7 @@ void costoDesplazamientoInit() {
 }
 
 void dificultadAccesoMedTradicionalByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => DificultadAccesoMedTradicionalByDptoCubit(
         dificultadAccesoMedTradicionalByDptoUsecaseDB: locator(),
       ));
@@ -622,7 +648,7 @@ void dificultadAccesoMedTradicionalByDptoInit() {
 }
 
 void especialidadMedTradicionalByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => EspecialidadMedTradicionalByDptoCubit(
         especialidadMedTradicionalByDptoUsecaseDB: locator(),
       ));
@@ -665,7 +691,7 @@ void especialidadMedTradicionalByDptoInit() {
 }
 
 void especieAnimalByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => EspecieAnimalByDptoCubit(
         especieAnimalByDptoUsecaseDB: locator(),
       ));
@@ -704,7 +730,7 @@ void especieAnimalByDptoInit() {
 }
 
 void frutoByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => FrutoByDptoCubit(
         frutoByDptoUsecaseDB: locator(),
       ));
@@ -743,7 +769,7 @@ void frutoByDptoInit() {
 }
 
 void hortalizaByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => HortalizaByDptoCubit(
         hortalizaByDptoUsecaseDB: locator(),
       ));
@@ -782,7 +808,7 @@ void hortalizaByDptoInit() {
 }
 
 void leguminosaByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => LeguminosaByDptoCubit(
         leguminosaByDptoUsecaseDB: locator(),
       ));
@@ -821,7 +847,7 @@ void leguminosaByDptoInit() {
 }
 
 void medioUtilizaMedTradicionalByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => MedioUtilizaMedTradicionalByDptoCubit(
         medioUtilizaMedTradicionalByDptoUsecaseDB: locator(),
       ));
@@ -864,7 +890,7 @@ void medioUtilizaMedTradicionalByDptoInit() {
 }
 
 void opcionSiNoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => OpcionSiNoCubit(
         opcionSiNoUsecaseDB: locator(),
       ));
@@ -903,7 +929,7 @@ void opcionSiNoInit() {
 }
 
 void resguardoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => ResguardoByDptoCubit(
         resguardoByDptoUsecaseDB: locator(),
       ));
@@ -942,7 +968,7 @@ void resguardoInit() {
 }
 
 void tiempoTardaMedTradicionalInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => TiempoTardaMedTradicionalCubit(
         tiempoTardaMedTradicionalUsecaseDB: locator(),
       ));
@@ -983,7 +1009,7 @@ void tiempoTardaMedTradicionalInit() {
 }
 
 void tuberculoPlatanoByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => TuberculoPlatanoByDptoCubit(
         tuberculoPlatanoByDptoUsecaseDB: locator(),
       ));
@@ -1023,7 +1049,7 @@ void tuberculoPlatanoByDptoInit() {
 }
 
 void verduraByDptoInit() {
-  // bloc
+  // cubit
   locator.registerFactory(() => VerduraByDptoCubit(
         verduraByDptoUsecaseDB: locator(),
       ));
@@ -1058,6 +1084,487 @@ void verduraByDptoInit() {
   // local data source
   locator.registerLazySingleton<VerduraByDptoLocalDataSource>(
     () => VerduraByDptoLocalDataSourceImpl(),
+  );
+}
+
+void factorRiesgoViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => FactorRiesgoViviendaByDptoCubit(
+        factorRiesgoViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(
+      () => FactorRiesgoViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(
+      () => FactorRiesgoViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<FactorRiesgoViviendaByDptoRepository>(
+    () => FactorRiesgoViviendaByDptoRepositoryImpl(
+      factorRiesgoViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<FactorRiesgoViviendaByDptoRepositoryDB>(
+    () => FactorRiesgoViviendaByDptoRepositoryDBImpl(
+      factorRiesgoViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<FactorRiesgoViviendaByDptoRemoteDataSource>(
+    () => FactorRiesgoViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<FactorRiesgoViviendaByDptoLocalDataSource>(
+    () => FactorRiesgoViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void iluminacionViviendaInit() {
+  // cubit
+  locator.registerFactory(() => IluminacionViviendaCubit(
+        iluminacionViviendaUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(() => IluminacionViviendaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => IluminacionViviendaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<IluminacionViviendaRepository>(
+    () => IluminacionViviendaRepositoryImpl(
+      iluminacionViviendaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<IluminacionViviendaRepositoryDB>(
+    () => IluminacionViviendaRepositoryDBImpl(
+      iluminacionViviendaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<IluminacionViviendaRemoteDataSource>(
+    () => IluminacionViviendaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<IluminacionViviendaLocalDataSource>(
+    () => IluminacionViviendaLocalDataSourceImpl(),
+  );
+}
+
+void pisoViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => PisoViviendaByDptoCubit(
+        pisoViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(() => PisoViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => PisoViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<PisoViviendaByDptoRepository>(
+    () => PisoViviendaByDptoRepositoryImpl(
+      pisoViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<PisoViviendaByDptoRepositoryDB>(
+    () => PisoViviendaByDptoRepositoryDBImpl(
+      pisoViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<PisoViviendaByDptoRemoteDataSource>(
+    () => PisoViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<PisoViviendaByDptoLocalDataSource>(
+    () => PisoViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void presenciaAnimalViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => PresenciaAnimalViviendaByDptoCubit(
+        presenciaAnimalViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(
+      () => PresenciaAnimalViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(
+      () => PresenciaAnimalViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<PresenciaAnimalViviendaByDptoRepository>(
+    () => PresenciaAnimalViviendaByDptoRepositoryImpl(
+      presenciaAnimalViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<PresenciaAnimalViviendaByDptoRepositoryDB>(
+    () => PresenciaAnimalViviendaByDptoRepositoryDBImpl(
+      presenciaAnimalViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<PresenciaAnimalViviendaByDptoRemoteDataSource>(
+    () => PresenciaAnimalViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<PresenciaAnimalViviendaByDptoLocalDataSource>(
+    () => PresenciaAnimalViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void servicioPublicoViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => ServicioPublicoViviendaByDptoCubit(
+        servicioPublicoViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(
+      () => ServicioPublicoViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(
+      () => ServicioPublicoViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<ServicioPublicoViviendaByDptoRepository>(
+    () => ServicioPublicoViviendaByDptoRepositoryImpl(
+      servicioPublicoViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<ServicioPublicoViviendaByDptoRepositoryDB>(
+    () => ServicioPublicoViviendaByDptoRepositoryDBImpl(
+      servicioPublicoViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<ServicioPublicoViviendaByDptoRemoteDataSource>(
+    () => ServicioPublicoViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<ServicioPublicoViviendaByDptoLocalDataSource>(
+    () => ServicioPublicoViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void techoViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => TechoViviendaByDptoCubit(
+        techoViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(() => TechoViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => TechoViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<TechoViviendaByDptoRepository>(
+    () => TechoViviendaByDptoRepositoryImpl(
+      techoViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<TechoViviendaByDptoRepositoryDB>(
+    () => TechoViviendaByDptoRepositoryDBImpl(
+      techoViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<TechoViviendaByDptoRemoteDataSource>(
+    () => TechoViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<TechoViviendaByDptoLocalDataSource>(
+    () => TechoViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void tenenciaViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => TenenciaViviendaByDptoCubit(
+        tenenciaViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(() => TenenciaViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator
+      .registerLazySingleton(() => TenenciaViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<TenenciaViviendaByDptoRepository>(
+    () => TenenciaViviendaByDptoRepositoryImpl(
+      tenenciaViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<TenenciaViviendaByDptoRepositoryDB>(
+    () => TenenciaViviendaByDptoRepositoryDBImpl(
+      tenenciaViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<TenenciaViviendaByDptoRemoteDataSource>(
+    () => TenenciaViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<TenenciaViviendaByDptoLocalDataSource>(
+    () => TenenciaViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void tipoCombustibleViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => TipoCombustibleViviendaByDptoCubit(
+        tipoCombustibleViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(
+      () => TipoCombustibleViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(
+      () => TipoCombustibleViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<TipoCombustibleViviendaByDptoRepository>(
+    () => TipoCombustibleViviendaByDptoRepositoryImpl(
+      tipoCombustibleViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<TipoCombustibleViviendaByDptoRepositoryDB>(
+    () => TipoCombustibleViviendaByDptoRepositoryDBImpl(
+      tipoCombustibleViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<TipoCombustibleViviendaByDptoRemoteDataSource>(
+    () => TipoCombustibleViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<TipoCombustibleViviendaByDptoLocalDataSource>(
+    () => TipoCombustibleViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void tipoSanitarioViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => TipoSanitarioViviendaByDptoCubit(
+        tipoSanitarioViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(
+      () => TipoSanitarioViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(
+      () => TipoSanitarioViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<TipoSanitarioViviendaByDptoRepository>(
+    () => TipoSanitarioViviendaByDptoRepositoryImpl(
+      tipoSanitarioViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<TipoSanitarioViviendaByDptoRepositoryDB>(
+    () => TipoSanitarioViviendaByDptoRepositoryDBImpl(
+      tipoSanitarioViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<TipoSanitarioViviendaByDptoRemoteDataSource>(
+    () => TipoSanitarioViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<TipoSanitarioViviendaByDptoLocalDataSource>(
+    () => TipoSanitarioViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void tipoViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => TipoViviendaByDptoCubit(
+        tipoViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(() => TipoViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => TipoViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<TipoViviendaByDptoRepository>(
+    () => TipoViviendaByDptoRepositoryImpl(
+      tipoViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<TipoViviendaByDptoRepositoryDB>(
+    () => TipoViviendaByDptoRepositoryDBImpl(
+      tipoViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<TipoViviendaByDptoRemoteDataSource>(
+    () => TipoViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<TipoViviendaByDptoLocalDataSource>(
+    () => TipoViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void tratamientoAguaViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => TratamientoAguaViviendaByDptoCubit(
+        tratamientoAguaViviendaByDptoUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(
+      () => TratamientoAguaViviendaByDptoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(
+      () => TratamientoAguaViviendaByDptoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<TratamientoAguaViviendaByDptoRepository>(
+    () => TratamientoAguaViviendaByDptoRepositoryImpl(
+      tratamientoAguaViviendaByDptoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<TratamientoAguaViviendaByDptoRepositoryDB>(
+    () => TratamientoAguaViviendaByDptoRepositoryDBImpl(
+      tratamientoAguaViviendaByDptoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<TratamientoAguaViviendaByDptoRemoteDataSource>(
+    () => TratamientoAguaViviendaByDptoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<TratamientoAguaViviendaByDptoLocalDataSource>(
+    () => TratamientoAguaViviendaByDptoLocalDataSourceImpl(),
+  );
+}
+
+void ventilacionViviendaByDptoInit() {
+  // cubit
+  locator.registerFactory(() => VentilacionViviendaCubit(
+        ventilacionViviendaUsecaseDB: locator(),
+      ));
+
+  // remote usecase
+  locator.registerLazySingleton(() => VentilacionViviendaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => VentilacionViviendaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<VentilacionViviendaRepository>(
+    () => VentilacionViviendaRepositoryImpl(
+      ventilacionViviendaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<VentilacionViviendaRepositoryDB>(
+    () => VentilacionViviendaRepositoryDBImpl(
+      ventilacionViviendaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<VentilacionViviendaRemoteDataSource>(
+    () => VentilacionViviendaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<VentilacionViviendaLocalDataSource>(
+    () => VentilacionViviendaLocalDataSourceImpl(),
   );
 }
 
@@ -1148,9 +1655,9 @@ void familiaInit() {
 }
 
 void dimUbicacionInit() {
-  // cubit
+  // bloc
   locator.registerFactory(
-      () => DimUbicacionCubit(dimUbicacionUsecaseDB: locator()));
+      () => DimUbicacionBloc(dimUbicacionUsecaseDB: locator()));
 
   // remote usecase
   locator.registerLazySingleton(() => DimUbicacionUsecase(locator()));
@@ -1161,7 +1668,7 @@ void dimUbicacionInit() {
   // repository
   locator.registerLazySingleton<DimUbicacionRepository>(
     () => DimUbicacionRepositoryImpl(
-      dimubicacionRemoteDataSource: locator(),
+      dimUbicacionRemoteDataSource: locator(),
     ),
   );
 
@@ -1182,6 +1689,44 @@ void dimUbicacionInit() {
   // local data source
   locator.registerLazySingleton<DimUbicacionLocalDataSource>(
     () => DimUbicacionLocalDataSourceImpl(),
+  );
+}
+
+void dimViviendaInit() {
+  // bloc
+  locator
+      .registerFactory(() => DimViviendaBloc(dimViviendaUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => DimViviendaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => DimViviendaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<DimViviendaRepository>(
+    () => DimViviendaRepositoryImpl(
+      dimViviendaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<DimViviendaRepositoryDB>(
+    () => DimViviendaRepositoryDBImpl(
+      dimViviendaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<DimViviendaRemoteDataSource>(
+    () => DimViviendaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<DimViviendaLocalDataSource>(
+    () => DimViviendaLocalDataSourceImpl(),
   );
 }
 

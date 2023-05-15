@@ -31,7 +31,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = fichaModelFromJson(decodedResp);
+        final result = fichaFromJson(decodedResp);
 
         return result;
       } else {

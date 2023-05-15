@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/opcion_si_no_entity.dart';
 
-List<OpcionSiNoModel> opcionesSiNoModelFromJson(String str) =>
+List<OpcionSiNoModel> opcionesSiNoFromJson(String str) =>
     List<OpcionSiNoModel>.from(
         json.decode(str).map((x) => OpcionSiNoModel.fromJson(x)));
 

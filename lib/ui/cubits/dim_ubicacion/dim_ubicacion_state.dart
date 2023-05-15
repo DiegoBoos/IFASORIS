@@ -27,6 +27,9 @@ class DimUbicacionLoaded extends DimUbicacionState {
 
   const DimUbicacionLoaded(this.dimUbicacionLoaded)
       : super(dimUbicacion: dimUbicacionLoaded);
+
+  @override
+  List<Object?> get props => [dimUbicacionLoaded];
 }
 
 class DimUbicacionChanged extends DimUbicacionState {
@@ -60,6 +63,7 @@ DimUbicacionEntity initObject() {
       tipoDocRecibeVisita: '',
       documentoRecibeVisita: '',
       nombreMedTradicional: '',
+      costoDesplazamientoMedTradicional: 0,
       resguardoId: 0,
       autoridadIndigenaId: 0,
       tuberculoPlatanoId: 0,

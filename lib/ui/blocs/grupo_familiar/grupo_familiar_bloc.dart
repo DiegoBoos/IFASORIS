@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:ifasoris/ui/ubicacion/pages/grupo_familiar_page.dart';
+import 'package:ifasoris/ui/ficha/pages/grupo_familiar_page.dart';
 
 part 'grupo_familiar_event.dart';
 part 'grupo_familiar_state.dart';

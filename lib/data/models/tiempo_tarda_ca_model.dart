@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/tiempo_tarda_ca_entity.dart';
 
-List<TiempoTardaCAModel> tiemposTardaCAModelFromJson(String str) =>
+List<TiempoTardaCAModel> tiemposTardaCAFromJson(String str) =>
     List<TiempoTardaCAModel>.from(
         json.decode(str).map((x) => TiempoTardaCAModel.fromJson(x)));
 

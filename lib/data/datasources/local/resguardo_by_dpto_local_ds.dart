@@ -1,6 +1,6 @@
 import '../../../domain/entities/resguardo_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/resguardo_by_dpto_model.dart';
+import '../../models/resguardo_model.dart';
 
 abstract class ResguardoByDptoLocalDataSource {
   Future<List<ResguardoModel>> getResguardosByDpto();

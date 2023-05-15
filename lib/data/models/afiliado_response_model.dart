@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:ifasoris/domain/entities/afiliado_entity.dart';
 
-AfiliadoResponseModel afiliadoResponseModelFromJson(String str) =>
+AfiliadoResponseModel afiliadoResponseFromJson(String str) =>
     AfiliadoResponseModel.fromJson(json.decode(str));
 
 class AfiliadoResponseModel {

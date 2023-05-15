@@ -31,7 +31,7 @@ class FamiliaRemoteDataSourceImpl implements FamiliaRemoteDataSource {
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = familiaModelFromJson(decodedResp);
+        final result = familiaFromJson(decodedResp);
 
         return result;
       } else {

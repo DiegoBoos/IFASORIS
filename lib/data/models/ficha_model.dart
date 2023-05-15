@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:ifasoris/domain/entities/ficha_entity.dart';
 
-FichaModel fichaModelFromJson(String str) =>
-    FichaModel.fromJson(json.decode(str));
+FichaModel fichaFromJson(String str) => FichaModel.fromJson(json.decode(str));
 
 class FichaModel extends FichaEntity {
   FichaModel({

@@ -10,7 +10,16 @@ import '../../search/search_afiliados.dart';
 import '../../utils/custom_snack_bar.dart';
 
 class MobileAppBar extends StatelessWidget {
-  const MobileAppBar({super.key});
+  final List<SyncTable> _downloadSyncTables = [
+    SyncTable(name: 'Afiliado', type: 'A'),
+    SyncTable(name: 'Accesorias', type: 'A'),
+  ];
+
+  final List<SyncTable> _uploadSyncTables = [
+    SyncTable(name: 'Asp1_Ubicacion', type: 'P'),
+  ];
+
+  MobileAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +71,24 @@ class MobileAppBar extends StatelessWidget {
                 showModalBottomSheet(
                     context: context,
                     builder: (_) {
-                      return const SyncDialog();
+                      return SyncDialog(syncTables: _downloadSyncTables);
+                    });
+              } else if (internetCubit.state is InternetDisconnected) {
+                CustomSnackBar.showSnackBar(
+                    context,
+                    'No es posible sincronizar, revise su conexión a internet',
+                    Colors.red);
+              }
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.cloud_upload),
+            onPressed: () {
+              if (internetCubit.state is InternetConnected) {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (_) {
+                      return SyncDialog(syncTables: _uploadSyncTables);
                     });
               } else if (internetCubit.state is InternetDisconnected) {
                 CustomSnackBar.showSnackBar(

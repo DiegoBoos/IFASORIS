@@ -1,0 +1,10 @@
+export 'package:ifasoris/domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_usecase.dart';
+export 'package:ifasoris/domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_db_usecase.dart';
+export 'package:ifasoris/domain/repositories/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_repository.dart';
+export 'package:ifasoris/domain/repositories/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_repository_db.dart';
+export 'package:ifasoris/domain/entities/tenencia_vivienda_entity.dart';
+export 'package:ifasoris/ui/cubits/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_cubit.dart';
+export 'package:ifasoris/data/repositories/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_repository.dart';
+export 'package:ifasoris/data/repositories/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_repository_db.dart';
+export 'package:ifasoris/data/datasources/remote/tenencia_vivienda_by_dpto_remote_ds.dart';
+export 'package:ifasoris/data/datasources/local/tenencia_vivienda_by_dpto_local_ds.dart';

@@ -32,7 +32,7 @@ class TiempoTardaCARemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = tiemposTardaCAModelFromJson(jsonEncode(decodedResp));
+        final result = tiemposTardaCAFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

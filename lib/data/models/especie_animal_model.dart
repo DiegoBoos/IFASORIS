@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/especie_animal_entity.dart';
 
-List<EspecieAnimalModel> especiesAnimalesModelFromJson(String str) =>
+List<EspecieAnimalModel> especiesAnimalesFromJson(String str) =>
     List<EspecieAnimalModel>.from(
         json.decode(str).map((x) => EspecieAnimalModel.fromJson(x)));
 

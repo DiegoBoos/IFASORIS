@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/tiempo_tarda_med_tradicional_entity.dart';
 
-List<TiempoTardaMedTradicionalModel> tiemposTardaMedTradicionalModelFromJson(
+List<TiempoTardaMedTradicionalModel> tiemposTardaMedTradicionalFromJson(
         String str) =>
     List<TiempoTardaMedTradicionalModel>.from(json
         .decode(str)

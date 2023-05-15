@@ -9,16 +9,15 @@ import '../../../domain/repositories/dim_ubicacion/dim_ubicacion_repository.dart
 import '../../datasources/remote/dim_ubicacion_remote_ds.dart';
 
 class DimUbicacionRepositoryImpl implements DimUbicacionRepository {
-  final DimUbicacionRemoteDataSource dimubicacionRemoteDataSource;
+  final DimUbicacionRemoteDataSource dimUbicacionRemoteDataSource;
 
-  DimUbicacionRepositoryImpl({required this.dimubicacionRemoteDataSource});
+  DimUbicacionRepositoryImpl({required this.dimUbicacionRemoteDataSource});
 
   @override
-  Future<Either<Failure, DimUbicacionEntity>> createDimUbicacionRepository(
-      DimUbicacionEntity dimUbicacion) async {
+  Future<Either<Failure, DimUbicacionEntity>>
+      uploadDimUbicacionRepository() async {
     try {
-      final result =
-          await dimubicacionRemoteDataSource.createDimUbicacion(dimUbicacion);
+      final result = await dimUbicacionRemoteDataSource.uploadDimUbicacion();
 
       return Right(result);
     } on ServerFailure catch (e) {

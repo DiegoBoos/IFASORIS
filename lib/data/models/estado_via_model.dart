@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:ifasoris/domain/entities/estado_via_entity.dart';
 
-List<EstadoViaModel> estadosViasModelFromJson(String str) =>
+List<EstadoViaModel> estadosViasFromJson(String str) =>
     List<EstadoViaModel>.from(
         json.decode(str).map((x) => EstadoViaModel.fromJson(x)));
 

@@ -32,7 +32,7 @@ class MedioUtilizaCARemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = mediosUtilizaCAModelFromJson(jsonEncode(decodedResp));
+        final result = mediosUtilizaCAFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

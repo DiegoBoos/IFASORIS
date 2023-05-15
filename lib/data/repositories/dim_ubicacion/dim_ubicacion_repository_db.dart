@@ -12,7 +12,7 @@ class DimUbicacionRepositoryDBImpl implements DimUbicacionRepositoryDB {
   DimUbicacionRepositoryDBImpl({required this.dimUbicacionLocalDataSource});
 
   @override
-  Future<Either<Failure, DimUbicacionEntity?>> saveDimUbicacionRepositoryDB(
+  Future<Either<Failure, int>> saveDimUbicacionRepositoryDB(
       DimUbicacionEntity dimUbicacion) async {
     try {
       final result =

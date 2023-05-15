@@ -33,7 +33,7 @@ class TuberculoPlatanoByDptoRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = tuberculosPlatanosModelFromJson(jsonEncode(decodedResp));
+        final result = tuberculosPlatanosFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

@@ -3,7 +3,7 @@ export 'package:ifasoris/domain/usecases/dim_ubicacion/dim_ubicacion_db_usecase.
 export 'package:ifasoris/domain/repositories/dim_ubicacion/dim_ubicacion_repository.dart';
 export 'package:ifasoris/domain/repositories/dim_ubicacion/dim_ubicacion_repository_db.dart';
 export 'package:ifasoris/domain/entities/dim_ubicacion_entity.dart';
-export 'package:ifasoris/ui/cubits/dim_ubicacion/dim_ubicacion_state.dart';
+export 'package:ifasoris/ui/blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 export 'package:ifasoris/data/repositories/dim_ubicacion/dim_ubicacion_repository.dart';
 export 'package:ifasoris/data/repositories/dim_ubicacion/dim_ubicacion_repository_db.dart';
 export 'package:ifasoris/data/datasources/remote/dim_ubicacion_remote_ds.dart';

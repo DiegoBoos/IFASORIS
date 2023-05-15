@@ -188,6 +188,7 @@ class ConnectionSQL {
 	[UserName]	varchar(20) NOT NULL COLLATE NOCASE,
 	[UltimaActualizacion]	datetime NOT NULL
   )''';
+
   static const CREATE_FAMILIA = '''
   CREATE TABLE [Familia] (
 	[Familia_id]	integer PRIMARY KEY AUTOINCREMENT,
@@ -195,6 +196,7 @@ class ConnectionSQL {
 	[ApellidosFlia]	varchar(150) NOT NULL COLLATE NOCASE,
 	[Afiliado_id]	integer NOT NULL
   )''';
+
   static const CREATE_UBICACION = '''
   CREATE TABLE [Asp1_Ubicacion] (
 	[Ubicacion_id]	integer PRIMARY KEY AUTOINCREMENT,
@@ -362,5 +364,80 @@ class ConnectionSQL {
         REFERENCES [Ocupacion_GrupoFamiliar]([Ocupacion_id]),
     FOREIGN KEY ([PuebloIndigena_id])
         REFERENCES [PueblosIndigenas_GrupoFamiliar]([PuebloIndigena_id])
+  )''';
+
+  static const CREATE_FACTORES_RIESGO_VIVIENDA = '''
+  CREATE TABLE [FactoresRiesgoVivienda_DatosVivienda] (
+  [FactorRiesgoVivienda_id]	integer NOT NULL,
+  [Descripcion]	varchar(60) NOT NULL COLLATE NOCASE,
+  [Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_ILUMINACION_VIVIENDA = '''
+  CREATE TABLE [IluminacionVivienda_DatosVivienda] (
+  [IluminacionVivienda_id]	integer NOT NULL,
+  [Descripcion]	varchar(10) NOT NULL COLLATE NOCASE
+  )''';
+
+  static const CREATE_PISOS_VIVIENDA = '''
+  CREATE TABLE [PisosVivienda_DatosVivienda] (
+  [PisoVivienda_id]	integer NOT NULL,
+  [Descripcion]	varchar(40) NOT NULL COLLATE NOCASE,
+  [Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_PRESENCIA_ANIMALES_VIVIENDA = '''
+  CREATE TABLE [PresenciaAnimalesVivienda_DatosVivienda] (
+	[PresenciaAnimalVivienda_id]	integer NOT NULL,
+	[Descripcion]	varchar(10) NOT NULL COLLATE NOCASE,
+	[Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_SERVICIOS_PUBLICOS_VIVIENDA = '''
+  CREATE TABLE [ServiciosPublicosVivienda_DatosVivienda] (
+  [ServicioPublicoVivienda_id]	integer NOT NULL,
+  [Descripcion]	varchar(20) NOT NULL COLLATE NOCASE,
+  [Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_TECHOS_VIVIENDA = '''
+  CREATE TABLE [TechosVivienda_DatosVivienda] (
+  [TechoVivienda_id]	integer NOT NULL,
+  [Descripcion]	varchar(30) NOT NULL COLLATE NOCASE,
+  [Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_TENENCIAS_VIVIENDA = '''
+  CREATE TABLE [TenenciasVivienda_DatosVivienda] (
+	[TenenciaVivienda_id]	integer NOT NULL,
+	[Descripcion]	varchar(30) NOT NULL COLLATE NOCASE,
+	[Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_TIPO_COMBUSTIBLE_VIVIENDA = '''
+  CREATE TABLE [TiposCombustibleVivienda_DatosVivienda] (
+	[TipoCombustibleVivienda_id]	integer NOT NULL,
+	[Descripcion]	varchar(20) NOT NULL COLLATE NOCASE,
+	[Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_TIPO_SANITARIO_VIVIENDA = '''
+  CREATE TABLE [TiposSanitarioVivienda_DatosVivienda] (
+	[TipoSanitarioVivienda_id]	integer NOT NULL,
+	[Descripcion]	varchar(20) NOT NULL COLLATE NOCASE,
+	[Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_TRATAMIENTO_AGUA_VIVIENDA = '''
+  CREATE TABLE [TratamientoAguaVivienda_DatosVivienda] (
+	[TratamientoAguaVivienda_id]	integer NOT NULL,
+	[Descripcion]	varchar(20) NOT NULL COLLATE NOCASE,
+	[Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_VENTILACION_VIVIENDA = '''
+  CREATE TABLE [VentilacionVivienda_DatosVivienda] (
+	[VentilacionVivienda_id]	integer NOT NULL,
+	[Descripcion]	varchar(10) NOT NULL COLLATE NOCASE
   )''';
 }

@@ -35,8 +35,8 @@ class DificultadAccesoMedTradicionalByDptoRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = dificultadesAccesoMedTradicionalModelFromJson(
-            jsonEncode(decodedResp));
+        final result =
+            dificultadesAccesoMedTradicionalFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

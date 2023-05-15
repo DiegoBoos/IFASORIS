@@ -32,8 +32,7 @@ class CostoDesplazamientoRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result =
-            costosDesplazamientoModelFromJson(jsonEncode(decodedResp));
+        final result = costosDesplazamientoFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/costo_desplazamiento_entity.dart';
 
-List<CostoDesplazamientoModel> costosDesplazamientoModelFromJson(String str) =>
+List<CostoDesplazamientoModel> costosDesplazamientoFromJson(String str) =>
     List<CostoDesplazamientoModel>.from(
         json.decode(str).map((x) => CostoDesplazamientoModel.fromJson(x)));
 

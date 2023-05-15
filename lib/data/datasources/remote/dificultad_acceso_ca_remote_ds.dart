@@ -32,8 +32,7 @@ class DificultadAccesoCARemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result =
-            dificultadesAccesoCAModelFromJson(jsonEncode(decodedResp));
+        final result = dificultadesAccesoCAFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

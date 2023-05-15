@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:ifasoris/domain/entities/familia_entity.dart';
 
-FamiliaModel familiaModelFromJson(String str) =>
+FamiliaModel familiaFromJson(String str) =>
     FamiliaModel.fromJson(json.decode(str));
 
 class FamiliaModel extends FamiliaEntity {

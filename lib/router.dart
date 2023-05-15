@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'ui/auth/pages/sign_in_page.dart';
 import 'ui/home/pages/home_page.dart';
-import 'ui/ubicacion/pages/grupo_familiar_page.dart';
-import 'ui/ubicacion/pages/search_afiliado_page.dart';
-import 'ui/ubicacion/pages/ficha_page.dart';
+import 'ui/ficha/pages/grupo_familiar_page.dart';
+import 'ui/ficha/pages/search_afiliado_page.dart';
+import 'ui/ficha/pages/ficha_page.dart';
 
 class AppRouter {
   static const initialRoute = 'sign-in';

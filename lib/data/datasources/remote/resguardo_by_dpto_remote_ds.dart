@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/resguardo_by_dpto_model.dart';
+import '../../models/resguardo_model.dart';
 
 abstract class ResguardoByDptoRemoteDataSource {
   Future<List<ResguardoModel>> getResguardosByDpto(int dtoId);
@@ -32,7 +32,7 @@ class ResguardoByDptoRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = resguardosByDptoModelFromJson(jsonEncode(decodedResp));
+        final result = resguardosFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

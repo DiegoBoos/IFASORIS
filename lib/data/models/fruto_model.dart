@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:ifasoris/domain/entities/fruto_entity.dart';
 
-List<FrutoModel> frutosModelFromJson(String str) =>
+List<FrutoModel> frutosFromJson(String str) =>
     List<FrutoModel>.from(json.decode(str).map((x) => FrutoModel.fromJson(x)));
 
 class FrutoModel extends FrutoEntity {

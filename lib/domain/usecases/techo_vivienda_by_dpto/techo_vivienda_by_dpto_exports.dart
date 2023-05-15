@@ -1,0 +1,10 @@
+export 'package:ifasoris/domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_usecase.dart';
+export 'package:ifasoris/domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_db_usecase.dart';
+export 'package:ifasoris/domain/repositories/techo_vivienda_by_dpto/techo_vivienda_by_dpto_repository.dart';
+export 'package:ifasoris/domain/repositories/techo_vivienda_by_dpto/techo_vivienda_by_dpto_repository_db.dart';
+export 'package:ifasoris/domain/entities/techo_vivienda_entity.dart';
+export 'package:ifasoris/ui/cubits/techo_vivienda_by_dpto/techo_vivienda_by_dpto_cubit.dart';
+export 'package:ifasoris/data/repositories/techo_vivienda_by_dpto/techo_vivienda_by_dpto_repository.dart';
+export 'package:ifasoris/data/repositories/techo_vivienda_by_dpto/techo_vivienda_by_dpto_repository_db.dart';
+export 'package:ifasoris/data/datasources/remote/techo_vivienda_by_dpto_remote_ds.dart';
+export 'package:ifasoris/data/datasources/local/techo_vivienda_by_dpto_local_ds.dart';

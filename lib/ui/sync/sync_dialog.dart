@@ -6,24 +6,22 @@ import '../blocs/sync/sync_bloc.dart';
 
 class SyncTable {
   String name;
+  String type;
   bool isChecked;
 
-  SyncTable({required this.name, this.isChecked = false});
+  SyncTable({required this.name, required this.type, this.isChecked = false});
 }
 
 class SyncDialog extends StatefulWidget {
-  const SyncDialog({super.key});
+  const SyncDialog({super.key, required this.syncTables});
+
+  final List<SyncTable> syncTables;
 
   @override
   State<SyncDialog> createState() => _SyncDialogState();
 }
 
 class _SyncDialogState extends State<SyncDialog> {
-  final List<SyncTable> _syncTables = [
-    SyncTable(name: 'Afiliado'),
-    SyncTable(name: 'Accesorias'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
@@ -43,7 +41,7 @@ class _SyncDialogState extends State<SyncDialog> {
           ),
           const SizedBox(height: 8),
           Column(
-              children: _syncTables
+              children: widget.syncTables
                   .map<Widget>((syncTable) => CheckboxListTile(
                         title: Text(syncTable.name),
                         value: syncTable.isChecked,
@@ -56,27 +54,41 @@ class _SyncDialogState extends State<SyncDialog> {
                   .toList()),
           const Divider(),
           GestureDetector(
-            onTap: _syncTables
+            onTap: widget.syncTables
                     .where((element) => element.isChecked == true)
                     .isEmpty
                 ? null
                 : () {
-                    final checkedTables = _syncTables
-                        .where((element) => element.isChecked == true);
+                    final accesoryTables = widget.syncTables.where((element) =>
+                        element.isChecked == true && element.type == 'A');
 
-                    final names = checkedTables.map((e) => e.name).toList();
+                    final productionTables = widget.syncTables.where(
+                        (element) =>
+                            element.isChecked == true && element.type == 'P');
 
-                    BlocProvider.of<SyncBloc>(context)
-                        .add(SyncStarted(usuario, names));
+                    if (accesoryTables.isNotEmpty) {
+                      final names = accesoryTables.map((e) => e.name).toList();
 
-                    Navigator.pop(context);
+                      BlocProvider.of<SyncBloc>(context)
+                          .add(SyncStarted(usuario, names));
+
+                      Navigator.pop(context);
+                    } else if (productionTables.isNotEmpty) {
+                      final names =
+                          productionTables.map((e) => e.name).toList();
+
+                      BlocProvider.of<SyncBloc>(context)
+                          .add(SyncStarted(usuario, names));
+
+                      Navigator.pop(context);
+                    }
                   },
             child: Container(
               margin: const EdgeInsets.only(top: 10, bottom: 10),
               child: Text(
                 'Sincronizar',
                 style: TextStyle(
-                    color: _syncTables
+                    color: widget.syncTables
                             .where((element) => element.isChecked == true)
                             .isEmpty
                         ? Colors.grey

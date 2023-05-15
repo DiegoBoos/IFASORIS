@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../domain/entities/dificultad_acceso_med_tradicional_entity.dart';
 
 List<DificultadAccesoMedTradicionalModel>
-    dificultadesAccesoMedTradicionalModelFromJson(String str) =>
+    dificultadesAccesoMedTradicionalFromJson(String str) =>
         List<DificultadAccesoMedTradicionalModel>.from(json
             .decode(str)
             .map((x) => DificultadAccesoMedTradicionalModel.fromJson(x)));

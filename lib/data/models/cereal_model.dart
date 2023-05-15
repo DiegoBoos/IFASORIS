@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/cereal_entity.dart';
 
-List<CerealModel> cerealesModelFromJson(String str) => List<CerealModel>.from(
+List<CerealModel> cerealesFromJson(String str) => List<CerealModel>.from(
     json.decode(str).map((x) => CerealModel.fromJson(x)));
 
 class CerealModel extends CerealEntity {

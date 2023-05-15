@@ -33,7 +33,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = afiliadoResponseModelFromJson(jsonEncode(decodedResp));
+        final result = afiliadoResponseFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

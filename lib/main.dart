@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
+import 'domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
 import 'injection.dart' as di;
 import 'router.dart';
 import 'ui/blocs/afiliado/afiliado_bloc.dart';
 import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import 'ui/blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import 'ui/blocs/auth/auth_bloc.dart';
+import 'ui/blocs/dim_vivienda/dim_vivienda_bloc.dart';
 import 'ui/blocs/familia/familia_bloc.dart';
 import 'ui/blocs/ficha/ficha_bloc.dart';
 import 'ui/blocs/grupo_familiar/grupo_familiar_bloc.dart';
@@ -15,25 +18,35 @@ import 'ui/cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
 import 'ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import 'ui/cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import 'ui/cubits/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_cubit.dart';
-import 'ui/cubits/dim_ubicacion/dim_ubicacion_state.dart';
 import 'ui/cubits/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_cubit.dart';
 import 'ui/cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
 import 'ui/cubits/estado_via/estado_via_cubit.dart';
+import 'ui/cubits/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/familia/familia_cubit.dart';
 import 'ui/cubits/ficha/ficha_cubit.dart';
 import 'ui/cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
 import 'ui/cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
+import 'ui/cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
 import 'ui/cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
 import 'ui/cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import 'ui/cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
 import 'ui/cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
 import 'ui/cubits/opcion_si_no/opcion_si_no_cubit.dart';
+import 'ui/cubits/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/resguardo_by_dpto/resguardo_by_dpto_cubit.dart';
+import 'ui/cubits/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/sync_log/sync_log_cubit.dart';
+import 'ui/cubits/techo_vivienda_by_dpto/techo_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
 import 'ui/cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_cubit.dart';
+import 'ui/cubits/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_cubit.dart';
+import 'ui/cubits/ventilacion_vivienda/ventilacion_vivienda_cubit.dart';
 import 'ui/cubits/verdura_by_dpto/verdura_by_dpto_cubit.dart';
 import 'ui/cubits/via_acceso/via_acceso_cubit.dart';
 import 'ui/utils/styles.dart';
@@ -134,6 +147,42 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<VerduraByDptoCubit>(),
           ),
           BlocProvider(
+            create: (_) => di.locator<FactorRiesgoViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<IluminacionViviendaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<PisoViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<PresenciaAnimalViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<ServicioPublicoViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TechoViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TenenciaViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TipoCombustibleViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TipoSanitarioViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TipoViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TratamientoAguaViviendaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<VentilacionViviendaCubit>(),
+          ),
+          BlocProvider(
             create: (_) => di.locator<FichaBloc>(),
           ),
           BlocProvider(
@@ -149,7 +198,10 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<AfiliadoPrefsBloc>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<DimUbicacionCubit>(),
+            create: (_) => di.locator<DimUbicacionBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<DimViviendaBloc>(),
           ),
           BlocProvider(
             create: (_) => di.locator<GrupoFamiliarBloc>(),
@@ -161,6 +213,7 @@ class MyApp extends StatelessWidget {
             initialRoute: AppRouter.initialRoute,
             routes: AppRouter.routes,
             theme: ThemeData(
+                scaffoldBackgroundColor: Colors.white,
                 colorScheme: ColorScheme.fromSwatch().copyWith(
                     primary: Styles.lightGreen,
                     secondary: Styles.obscureGreen))));

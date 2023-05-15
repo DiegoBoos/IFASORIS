@@ -31,7 +31,7 @@ class CerealByDptoRemoteDataSourceImpl implements CerealByDptoRemoteDataSource {
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = cerealesModelFromJson(jsonEncode(decodedResp));
+        final result = cerealesFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

@@ -32,7 +32,7 @@ class EspecieAnimalByDptoRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = especiesAnimalesModelFromJson(jsonEncode(decodedResp));
+        final result = especiesAnimalesFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

@@ -64,7 +64,8 @@ class SearchAfiliados extends SearchDelegate {
                 children: [
                   ListTile(
                     title: Text(afiliado.documento),
-                    subtitle: Text('${afiliado.nombre1} | ${afiliado.nombre2}'),
+                    subtitle: Text(
+                        '${afiliado.nombre1} ${afiliado.nombre2} ${afiliado.apellido1} ${afiliado.apellido2}'),
                     onTap: () async {
                       final afiliadoPrefsBloc =
                           BlocProvider.of<AfiliadoPrefsBloc>(context);

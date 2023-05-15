@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../domain/entities/tuberculo_platano_entity.dart';
 
-List<TuberculoPlatanoModel> tuberculosPlatanosModelFromJson(String str) =>
+List<TuberculoPlatanoModel> tuberculosPlatanosFromJson(String str) =>
     List<TuberculoPlatanoModel>.from(
         json.decode(str).map((x) => TuberculoPlatanoModel.fromJson(x)));
 
