@@ -262,10 +262,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           dificultadesAccesoCATemp = [];
           await syncDificultadesAccesoCA(event);
         });
-      } else if (event.tablesNames.contains('Produccion')) {
-        add(Downloading(state.syncProgressModel.copyWith(
-            title: 'Sincronizanco DimUbicacion', percent: calculatePercent())));
-        await syncDimUbicacion(event);
       }
     });
     on<Downloading>((event, emit) => emit(SyncDownloading(event.syncProgress)));
@@ -290,9 +286,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await dimUbicacionUsecase.uploadDimUbicacionUsecase();
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Sincronizanco DimVivienda', percent: calculatePercent())));
-      await syncDimVivienda(event);
+      print(data);
+      /*  await syncDimVivienda(event); */
     });
   }
 // ************************** DimUbicacion ****************************
@@ -304,7 +299,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await dimViviendaUsecase.uploadDimViviendaUsecase();
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) {
-      event.tablesNames.remove('Accesorias');
+      event.tablesNames.remove('Asp1_Ubicacion');
       add(SyncStarted(event.usuario, event.tablesNames));
       return;
     });

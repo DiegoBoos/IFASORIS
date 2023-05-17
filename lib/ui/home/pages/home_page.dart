@@ -36,8 +36,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
-
     final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
 
     final authBloc = BlocProvider.of<AuthBloc>(context);
