@@ -68,7 +68,7 @@ class DimUbicacionEntity {
       this.especieAnimalCriaId,
       this.produccionMinera,
       this.tipoCalendarioId,
-      this.formStatus = const FormInitial()});
+      this.formStatus = const DimUbicacionFormInitial()});
 
   DimUbicacionEntity copyWith(
           {int? ubicacionId,

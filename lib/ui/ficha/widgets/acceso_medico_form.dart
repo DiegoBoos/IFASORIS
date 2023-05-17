@@ -6,7 +6,6 @@ import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dific
 import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
-import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
@@ -32,26 +31,19 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
   void initState() {
     super.initState();
 
-    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
-      context,
-    );
-    final afiliado = afiliadoPrefsBloc.state.afiliado!;
-
-    if (afiliado.familiaId != null) {
-      setState(() {
-        _existeMedTradicionalComunidad =
-            widget.dimUbicacion?.existeMedTradicionalComunidad;
-        _especialidadMedTradId = widget.dimUbicacion?.especialidadMedTradId;
-        _tiempoTardaId = widget.dimUbicacion?.tiempoTardaId;
-        _medioUtilizaId = widget.dimUbicacion?.medioUtilizaId;
-        _dificultaAccesoId = widget.dimUbicacion?.dificultaAccesoId;
-        _costoDesplazamientoCtrl.text =
-            widget.dimUbicacion?.costoDesplazamientoMedTradicional.toString() ??
-                '0';
-        _nombreMedTradicionalCtrl.text =
-            widget.dimUbicacion?.nombreMedTradicional ?? '';
-      });
-    }
+    setState(() {
+      _existeMedTradicionalComunidad =
+          widget.dimUbicacion?.existeMedTradicionalComunidad;
+      _especialidadMedTradId = widget.dimUbicacion?.especialidadMedTradId;
+      _tiempoTardaId = widget.dimUbicacion?.tiempoTardaId;
+      _medioUtilizaId = widget.dimUbicacion?.medioUtilizaId;
+      _dificultaAccesoId = widget.dimUbicacion?.dificultaAccesoId;
+      _costoDesplazamientoCtrl.text =
+          widget.dimUbicacion?.costoDesplazamientoMedTradicional.toString() ??
+              '0';
+      _nombreMedTradicionalCtrl.text =
+          widget.dimUbicacion?.nombreMedTradicional ?? '';
+    });
   }
 
   @override

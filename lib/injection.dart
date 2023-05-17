@@ -88,6 +88,7 @@ void init() {
   tipoSanitarioViviendaByDptoInit();
   tipoViviendaByDptoInit();
   tratamientoAguaViviendaByDptoInit();
+  ventilacionViviendaByDptoInit();
   fichaInit();
   familiaInit();
   dimUbicacionInit();
@@ -191,7 +192,30 @@ void syncInit() {
         tuberculoPlatanoByDptoUsecaseDB: locator(),
         verduraByDptoUsecase: locator(),
         verduraByDptoUsecaseDB: locator(),
+        factorRiesgoViviendaByDptoUsecase: locator(),
+        factorRiesgoViviendaByDptoUsecaseDB: locator(),
+        iluminacionViviendaUsecase: locator(),
+        iluminacionViviendaUsecaseDB: locator(),
+        pisoViviendaByDptoUsecase: locator(),
+        pisoViviendaByDptoUsecaseDB: locator(),
+        presenciaAnimalViviendaByDptoUsecase: locator(),
+        presenciaAnimalViviendaByDptoUsecaseDB: locator(),
+        servicioPublicoViviendaByDptoUsecase: locator(),
+        servicioPublicoViviendaByDptoUsecaseDB: locator(),
+        techoViviendaByDptoUsecase: locator(),
+        techoViviendaByDptoUsecaseDB: locator(),
+        tenenciaViviendaByDptoUsecase: locator(),
+        tenenciaViviendaByDptoUsecaseDB: locator(),
+        tipoCombustibleViviendaByDptoUsecase: locator(),
+        tipoCombustibleViviendaByDptoUsecaseDB: locator(),
+        tipoSanitarioViviendaByDptoUsecase: locator(),
+        tipoSanitarioViviendaByDptoUsecaseDB: locator(),
+        tratamientoAguaViviendaByDptoUsecase: locator(),
+        tratamientoAguaViviendaByDptoUsecaseDB: locator(),
+        ventilacionViviendaUsecase: locator(),
+        ventilacionViviendaUsecaseDB: locator(),
         dimUbicacionUsecase: locator(),
+        dimViviendaUsecase: locator(),
       ));
 }
 

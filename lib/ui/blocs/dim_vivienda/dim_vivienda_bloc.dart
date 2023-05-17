@@ -19,8 +19,10 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
       final result = await dimViviendaUsecaseDB.saveDimViviendaUsecaseDB(state);
       result.fold((failure) {
         emit(state.copyWith(
-            formStatus: SubmissionFailed(failure.properties.first)));
-      }, (data) => emit(state.copyWith(formStatus: SubmissionSuccess())));
+            formStatus: DimViviendaSubmissionFailed(failure.properties.first)));
+      },
+          (data) =>
+              emit(state.copyWith(formStatus: DimViviendaSubmissionSuccess())));
     });
 
     on<GetDimVivienda>((event, emit) async {
@@ -28,11 +30,13 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
           await dimViviendaUsecaseDB.getDimViviendaUsecaseDB(event.familiaId);
       result.fold(
           (failure) => emit(state.copyWith(
-              formStatus: SubmissionFailed(failure.properties.first))), (data) {
+              formStatus:
+                  DimViviendaSubmissionFailed(failure.properties.first))),
+          (data) {
         if (data != null) {
-          emit(data.copyWith(formStatus: FormLoaded()));
+          emit(data.copyWith(formStatus: DimViviendaFormLoaded()));
         } else {
-          emit(state.copyWith(formStatus: FormEmpty()));
+          emit(state.copyWith(formStatus: DimViviendaFormEmpty()));
         }
       });
     });
@@ -40,23 +44,23 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     on<DatoViviendaChanged>((event, emit) {
       emit(state.copyWith(datoViviendaId: event.datoViviendaId));
     });
-    on<FamiliaChanged>((event, emit) {
+    on<DimViviendaFamiliaChanged>((event, emit) {
       emit(state.copyWith(familiaId: event.familiaId));
     });
-    on<TipoVivienda>((event, emit) {
+    on<TipoViviendaChanged>((event, emit) {
       emit(state.copyWith(tipoViviendaId: event.tipoViviendaId));
     });
     on<TenenciaViviendaChanged>((event, emit) {
       emit(state.copyWith(tenenciaViviendaId: event.tenenciaViviendaId));
     });
-    on<PisoViviendaChanged>((event, emit) {
-      emit(state.copyWith(pisoViviendaId: event.pisoViviendaId));
+    on<PisosViviendaChanged>((event, emit) {
+      emit(state.copyWith(pisosViviendaIds: event.pisosViviendaIds));
     });
     on<OtroTipoPisoChanged>((event, emit) {
       emit(state.copyWith(otroTipoPiso: event.otroTipoPiso));
     });
-    on<TechoViviendaChanged>((event, emit) {
-      emit(state.copyWith(techoViviendaId: event.techoViviendaId));
+    on<TechosViviendaChanged>((event, emit) {
+      emit(state.copyWith(techosViviendaIds: event.techosViviendaIds));
     });
     on<OtroTipoTechoChanged>((event, emit) {
       emit(state.copyWith(otroTipoTecho: event.otroTipoTecho));
@@ -67,35 +71,35 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     on<IluminacionViviendaChanged>((event, emit) {
       emit(state.copyWith(iluminacionViviendaId: event.iluminacionViviendaId));
     });
-    on<ServicioPublicoViviendaChanged>((event, emit) {
+    on<ServiciosPublicosViviendaChanged>((event, emit) {
       emit(state.copyWith(
-          servicioPublicoViviendaId: event.servicioPublicoViviendaId));
+          serviciosPublicosViviendaIds: event.serviciosPublicosViviendaIds));
     });
     on<TratamientoAguaViviendaChanged>((event, emit) {
       emit(state.copyWith(
-          tratamientoAguaViviendaId: event.tratamientoAguaViviendaId));
+          tratamientosAguaViviendaIds: event.tratamientosAguaViviendaIds));
     });
-    on<TipoSanitarioViviendaChanged>((event, emit) {
+    on<TiposSanitarioViviendaChanged>((event, emit) {
       emit(state.copyWith(
-          tipoSanitarioViviendaId: event.tipoSanitarioViviendaId));
+          tiposSanitarioViviendaIds: event.tiposSanitarioViviendaIds));
     });
     on<OtroTipoSanitarioChanged>((event, emit) {
       emit(state.copyWith(otroTipoSanitario: event.otroTipoSanitario));
     });
-    on<TipoCombustibleViviendaChanged>((event, emit) {
+    on<TiposCombustibleViviendaChanged>((event, emit) {
       emit(state.copyWith(
-          tipoCombustibleViviendaId: event.tipoCombustibleViviendaId));
+          tiposCombustibleViviendaIds: event.tiposCombustibleViviendaIds));
     });
     on<OtroTipoCombustibleChanged>((event, emit) {
       emit(state.copyWith(otroTipoCombustible: event.otroTipoCombustible));
     });
-    on<FactorRiesgoViviendaChanged>((event, emit) {
-      emit(
-          state.copyWith(factorRiesgoViviendaId: event.factorRiesgoViviendaId));
-    });
-    on<PresenciaAnimalViviendaChanged>((event, emit) {
+    on<FactoresRiesgoViviendaChanged>((event, emit) {
       emit(state.copyWith(
-          presenciaAnimalViviendaId: event.presenciaAnimalViviendaId));
+          factoresRiesgoViviendaIds: event.factoresRiesgoViviendaIds));
+    });
+    on<PresenciaAnimalesViviendaChanged>((event, emit) {
+      emit(state.copyWith(
+          presenciaAnimalesViviendaIds: event.presenciaAnimalesViviendaIds));
     });
     on<OtroPresenciaAnimalChanged>((event, emit) {
       emit(state.copyWith(otroPresenciaAnimal: event.otroPresenciaAnimal));

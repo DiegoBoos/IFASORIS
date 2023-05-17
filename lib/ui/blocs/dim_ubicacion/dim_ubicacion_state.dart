@@ -4,20 +4,20 @@ abstract class DimUbicacionState {
   const DimUbicacionState();
 }
 
-class FormInitial extends DimUbicacionState {
-  const FormInitial();
+class DimUbicacionFormInitial extends DimUbicacionState {
+  const DimUbicacionFormInitial();
 }
 
-class FormLoaded extends DimUbicacionState {}
+class DimUbicacionFormLoaded extends DimUbicacionState {}
 
-class FormEmpty extends DimUbicacionState {}
+class DimUbicacionFormEmpty extends DimUbicacionState {}
 
-class SubmissionSuccess extends DimUbicacionState {}
+class DimUbicacionSubmissionSuccess extends DimUbicacionState {}
 
-class SubmissionFailed extends DimUbicacionState {
+class DimUbicacionSubmissionFailed extends DimUbicacionState {
   final String message;
 
-  SubmissionFailed(this.message);
+  DimUbicacionSubmissionFailed(this.message);
 }
 
 DimUbicacionEntity initObject() {

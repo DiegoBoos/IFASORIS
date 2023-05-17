@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import 'package:ifasoris/domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import 'package:ifasoris/domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
+import 'package:ifasoris/domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_exports.dart';
 import 'package:ifasoris/services/connection_sqlite_service.dart';
 
 import '../../../domain/entities/usuario_entity.dart';
@@ -10,21 +11,32 @@ import '../../../domain/usecases/afiliado/afiliado_exports.dart';
 import '../../../domain/usecases/autoridad_indigena/autoridad_indigena_exports.dart';
 import '../../../domain/usecases/cereal_by_dpto/cereal_by_dpto_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
+import '../../../domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
 import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_exports.dart';
 import '../../../domain/usecases/estado_via/estado_via_exports.dart';
+import '../../../domain/usecases/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/fruto_by_dpto/fruto_by_dpto_exports.dart';
 import '../../../domain/usecases/hortaliza_by_dpto/hortaliza_by_dpto_exports.dart';
+import '../../../domain/usecases/iluminacion_vivienda/iluminacion_vivienda_exports.dart';
 import '../../../domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
 import '../../../domain/usecases/medio_comunicacion/medio_comunicacion_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import '../../../domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
+import '../../../domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/resguardo_by_dpto/resguardo_by_dpto_exports.dart';
+import '../../../domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/sync_log/sync_log_exports.dart';
+import '../../../domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
+import '../../../domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_exports.dart';
+import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import '../../../domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
 
@@ -82,12 +94,44 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final TuberculoPlatanoByDptoUsecaseDB tuberculoPlatanoByDptoUsecaseDB;
   final VerduraByDptoUsecase verduraByDptoUsecase;
   final VerduraByDptoUsecaseDB verduraByDptoUsecaseDB;
+  final FactorRiesgoViviendaByDptoUsecase factorRiesgoViviendaByDptoUsecase;
+  final FactorRiesgoViviendaByDptoUsecaseDB factorRiesgoViviendaByDptoUsecaseDB;
+  final IluminacionViviendaUsecase iluminacionViviendaUsecase;
+  final IluminacionViviendaUsecaseDB iluminacionViviendaUsecaseDB;
+  final PisoViviendaByDptoUsecase pisoViviendaByDptoUsecase;
+  final PisoViviendaByDptoUsecaseDB pisoViviendaByDptoUsecaseDB;
+  final PresenciaAnimalViviendaByDptoUsecase
+      presenciaAnimalViviendaByDptoUsecase;
+  final PresenciaAnimalViviendaByDptoUsecaseDB
+      presenciaAnimalViviendaByDptoUsecaseDB;
+  final ServicioPublicoViviendaByDptoUsecase
+      servicioPublicoViviendaByDptoUsecase;
+  final ServicioPublicoViviendaByDptoUsecaseDB
+      servicioPublicoViviendaByDptoUsecaseDB;
+  final TechoViviendaByDptoUsecase techoViviendaByDptoUsecase;
+  final TechoViviendaByDptoUsecaseDB techoViviendaByDptoUsecaseDB;
+  final TenenciaViviendaByDptoUsecase tenenciaViviendaByDptoUsecase;
+  final TenenciaViviendaByDptoUsecaseDB tenenciaViviendaByDptoUsecaseDB;
+  final TipoCombustibleViviendaByDptoUsecase
+      tipoCombustibleViviendaByDptoUsecase;
+  final TipoCombustibleViviendaByDptoUsecaseDB
+      tipoCombustibleViviendaByDptoUsecaseDB;
+  final TipoSanitarioViviendaByDptoUsecase tipoSanitarioViviendaByDptoUsecase;
+  final TipoSanitarioViviendaByDptoUsecaseDB
+      tipoSanitarioViviendaByDptoUsecaseDB;
+  final TratamientoAguaViviendaByDptoUsecase
+      tratamientoAguaViviendaByDptoUsecase;
+  final TratamientoAguaViviendaByDptoUsecaseDB
+      tratamientoAguaViviendaByDptoUsecaseDB;
+  final VentilacionViviendaUsecase ventilacionViviendaUsecase;
+  final VentilacionViviendaUsecaseDB ventilacionViviendaUsecaseDB;
 
   final DimUbicacionUsecase dimUbicacionUsecase;
+  final DimViviendaUsecase dimViviendaUsecase;
 
   final SyncLogUsecaseDB syncLogDB;
 
-  int totalAccesories = 21;
+  int totalAccesories = 32;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -114,6 +158,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<TiempoTardaMedTradicionalEntity> tiemposTardaMedTradicionalTemp = [];
   List<TuberculoPlatanoEntity> tuberculosPlatanosByDptoTemp = [];
   List<VerduraEntity> verdurasByDptoTemp = [];
+  List<FactorRiesgoViviendaEntity> factoresRiesgoViviendaByDptoTemp = [];
+  List<IluminacionViviendaEntity> iluminacionesViviendaTemp = [];
+  List<PisoViviendaEntity> pisosViviendaByDptoTemp = [];
+  List<PresenciaAnimalViviendaEntity> presenciaAnimalesViviendaByDptoTemp = [];
+  List<ServicioPublicoViviendaEntity> serviciosPublicosViviendaByDptoTemp = [];
+  List<TechoViviendaEntity> techosViviendaByDptoTemp = [];
+  List<TenenciaViviendaEntity> tenenciasViviendaByDptoTemp = [];
+  List<TipoCombustibleViviendaEntity> tiposCombustibleViviendaByDptoTemp = [];
+  List<TipoSanitarioViviendaEntity> tiposSanitarioViviendaByDptoTemp = [];
+  List<TratamientoAguaViviendaEntity> tratamientosAguaViviendaByDptoTemp = [];
+  List<VentilacionViviendaEntity> ventilacionesViviendaTemp = [];
 
   SyncBloc({
     required this.afiliadoUsecase,
@@ -160,7 +215,30 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.tuberculoPlatanoByDptoUsecaseDB,
     required this.verduraByDptoUsecase,
     required this.verduraByDptoUsecaseDB,
+    required this.factorRiesgoViviendaByDptoUsecase,
+    required this.factorRiesgoViviendaByDptoUsecaseDB,
+    required this.iluminacionViviendaUsecase,
+    required this.iluminacionViviendaUsecaseDB,
+    required this.pisoViviendaByDptoUsecase,
+    required this.pisoViviendaByDptoUsecaseDB,
+    required this.presenciaAnimalViviendaByDptoUsecase,
+    required this.presenciaAnimalViviendaByDptoUsecaseDB,
+    required this.servicioPublicoViviendaByDptoUsecase,
+    required this.servicioPublicoViviendaByDptoUsecaseDB,
+    required this.techoViviendaByDptoUsecase,
+    required this.techoViviendaByDptoUsecaseDB,
+    required this.tenenciaViviendaByDptoUsecase,
+    required this.tenenciaViviendaByDptoUsecaseDB,
+    required this.tipoCombustibleViviendaByDptoUsecase,
+    required this.tipoCombustibleViviendaByDptoUsecaseDB,
+    required this.tipoSanitarioViviendaByDptoUsecase,
+    required this.tipoSanitarioViviendaByDptoUsecaseDB,
+    required this.tratamientoAguaViviendaByDptoUsecase,
+    required this.tratamientoAguaViviendaByDptoUsecaseDB,
+    required this.ventilacionViviendaUsecase,
+    required this.ventilacionViviendaUsecaseDB,
     required this.dimUbicacionUsecase,
+    required this.dimViviendaUsecase,
     required this.syncLogDB,
   }) : super(SyncInitial()) {
     on<SyncStarted>((event, emit) async {
@@ -184,6 +262,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           dificultadesAccesoCATemp = [];
           await syncDificultadesAccesoCA(event);
         });
+      } else if (event.tablesNames.contains('Produccion')) {
+        add(Downloading(state.syncProgressModel.copyWith(
+            title: 'Sincronizanco DimUbicacion', percent: calculatePercent())));
+        await syncDimUbicacion(event);
       }
     });
     on<Downloading>((event, emit) => emit(SyncDownloading(event.syncProgress)));
@@ -209,9 +291,25 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Subiendo DimUbicacion', percent: calculatePercent())));
+          title: 'Sincronizanco DimVivienda', percent: calculatePercent())));
+      await syncDimVivienda(event);
     });
   }
+// ************************** DimUbicacion ****************************
+
+// ************************** DimVivienda ****************************
+  Future<void> syncDimVivienda(
+    SyncStarted event,
+  ) async {
+    final result = await dimViviendaUsecase.uploadDimViviendaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) {
+      event.tablesNames.remove('Accesorias');
+      add(SyncStarted(event.usuario, event.tablesNames));
+      return;
+    });
+  }
+// ************************** DimVivienda ****************************
 
 // ************************** Afiliados ****************************
   Future<void> syncAfiliados(
@@ -1222,7 +1320,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         ConnectionSQLiteService.truncateTable(
                 'Verduras_AspectosSocioEconomicos')
             .then((value) async {
-          tuberculosPlatanosByDptoTemp = [];
+          verdurasByDptoTemp = [];
           await syncVerdurasByDpto(event);
         });
         return;
@@ -1268,8 +1366,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= verdurasByDptoTemp.length) {
-        event.tablesNames.remove('Accesorias');
-        add(SyncStarted(event.usuario, event.tablesNames));
+        ConnectionSQLiteService.truncateTable(
+                'FactoresRiesgoVivienda_DatosVivienda')
+            .then((value) async {
+          factoresRiesgoViviendaByDptoTemp = [];
+          await syncFactoresRiesgoViviendaByDpto(event);
+        });
         return;
       }
 
@@ -1283,6 +1385,546 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** VerduraByDpto ****************************
+
+// ************************** FactorRiesgoViviendaByDpto ****************************
+
+  Future<void> syncFactoresRiesgoViviendaByDpto(SyncStarted event) async {
+    final result = await factorRiesgoViviendaByDptoUsecase
+        .getFactoresRiesgoViviendaByDptoUsecase(event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      factoresRiesgoViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando factores riesgo vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveFactorRiesgoViviendaByDpto(
+        event,
+        factoresRiesgoViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveFactorRiesgoViviendaByDpto(
+    SyncStarted event,
+    FactorRiesgoViviendaEntity factorRiesgoVivienda,
+  ) async {
+    final result = await factorRiesgoViviendaByDptoUsecaseDB
+        .saveFactorRiesgoViviendaByDptoUsecaseDB(factorRiesgoVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= factoresRiesgoViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'IluminacionVivienda_DatosVivienda')
+            .then((value) async {
+          iluminacionesViviendaTemp = [];
+          await syncIluminacionesVivienda(event);
+        });
+        return;
+      }
+
+      FactorRiesgoViviendaEntity f = factoresRiesgoViviendaByDptoTemp[data];
+
+      await saveFactorRiesgoViviendaByDpto(
+        event,
+        f,
+      );
+    });
+  }
+
+// ************************** FactorRiesgoViviendaByDpto ****************************
+
+// ************************** IluminacionVivienda ****************************
+
+  Future<void> syncIluminacionesVivienda(SyncStarted event) async {
+    final result =
+        await iluminacionViviendaUsecase.getIluminacionesViviendaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      iluminacionesViviendaTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando iluminaciones vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveIluminacionVivienda(
+        event,
+        iluminacionesViviendaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveIluminacionVivienda(
+    SyncStarted event,
+    IluminacionViviendaEntity iluminacionVivienda,
+  ) async {
+    final result = await iluminacionViviendaUsecaseDB
+        .saveIluminacionViviendaUsecaseDB(iluminacionVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= iluminacionesViviendaTemp.length) {
+        ConnectionSQLiteService.truncateTable('PisosVivienda_DatosVivienda')
+            .then((value) async {
+          pisosViviendaByDptoTemp = [];
+          await syncPisosViviendaByDpto(event);
+        });
+        return;
+      }
+
+      IluminacionViviendaEntity i = iluminacionesViviendaTemp[data];
+
+      await saveIluminacionVivienda(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** IluminacionVivienda ****************************
+
+// ************************** PisoViviendaByDpto ****************************
+
+  Future<void> syncPisosViviendaByDpto(SyncStarted event) async {
+    final result = await pisoViviendaByDptoUsecase
+        .getPisosViviendaByDptoUsecase(event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      pisosViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando pisos vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await savePisoViviendaByDpto(
+        event,
+        pisosViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> savePisoViviendaByDpto(
+    SyncStarted event,
+    PisoViviendaEntity pisoVivienda,
+  ) async {
+    final result = await pisoViviendaByDptoUsecaseDB
+        .savePisoViviendaByDptoUsecaseDB(pisoVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= pisosViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'PresenciaAnimalesVivienda_DatosVivienda')
+            .then((value) async {
+          presenciaAnimalesViviendaByDptoTemp = [];
+          await syncPresenciaAnimalesViviendaByDpto(event);
+        });
+        return;
+      }
+
+      PisoViviendaEntity i = pisosViviendaByDptoTemp[data];
+
+      await savePisoViviendaByDpto(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** PisoViviendaByDpto ****************************
+
+// ************************** PresenciaAnimalViviendaByDpto ****************************
+
+  Future<void> syncPresenciaAnimalesViviendaByDpto(SyncStarted event) async {
+    final result = await presenciaAnimalViviendaByDptoUsecase
+        .getPresenciaAnimalesViviendaByDptoUsecase(
+            event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      presenciaAnimalesViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando presencia animales',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await savePresenciaAnimalViviendaByDpto(
+        event,
+        presenciaAnimalesViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> savePresenciaAnimalViviendaByDpto(
+    SyncStarted event,
+    PresenciaAnimalViviendaEntity presenciaAnimalVivienda,
+  ) async {
+    final result = await presenciaAnimalViviendaByDptoUsecaseDB
+        .savePresenciaAnimalViviendaByDptoUsecaseDB(presenciaAnimalVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= presenciaAnimalesViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'ServiciosPublicosVivienda_DatosVivienda')
+            .then((value) async {
+          serviciosPublicosViviendaByDptoTemp = [];
+          await syncServiciosPublicosViviendaByDpto(event);
+        });
+        return;
+      }
+
+      PresenciaAnimalViviendaEntity i =
+          presenciaAnimalesViviendaByDptoTemp[data];
+
+      await savePresenciaAnimalViviendaByDpto(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** PresenciaAnimalViviendaByDpto ****************************
+
+// ************************** ServicioPublicoViviendaByDpto ****************************
+
+  Future<void> syncServiciosPublicosViviendaByDpto(SyncStarted event) async {
+    final result = await servicioPublicoViviendaByDptoUsecase
+        .getServiciosPublicosViviendaByDptoUsecase(
+            event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      serviciosPublicosViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando servicios públicos',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveServicioPublicoViviendaByDpto(
+        event,
+        serviciosPublicosViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveServicioPublicoViviendaByDpto(
+    SyncStarted event,
+    ServicioPublicoViviendaEntity servicioPublicoVivienda,
+  ) async {
+    final result = await servicioPublicoViviendaByDptoUsecaseDB
+        .saveServicioPublicoViviendaByDptoUsecaseDB(servicioPublicoVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= serviciosPublicosViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable('TechosVivienda_DatosVivienda')
+            .then((value) async {
+          techosViviendaByDptoTemp = [];
+          await syncTechosViviendaByDpto(event);
+        });
+        return;
+      }
+
+      ServicioPublicoViviendaEntity i =
+          serviciosPublicosViviendaByDptoTemp[data];
+
+      await saveServicioPublicoViviendaByDpto(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** ServicioPublicoViviendaByDpto ****************************
+
+// ************************** TechoViviendaByDpto ****************************
+
+  Future<void> syncTechosViviendaByDpto(SyncStarted event) async {
+    final result = await techoViviendaByDptoUsecase
+        .getTechosViviendaByDptoUsecase(event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      techosViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando techos vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveTechoViviendaByDpto(
+        event,
+        techosViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveTechoViviendaByDpto(
+    SyncStarted event,
+    TechoViviendaEntity techoVivienda,
+  ) async {
+    final result = await techoViviendaByDptoUsecaseDB
+        .saveTechoViviendaByDptoUsecaseDB(techoVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= techosViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable('TenenciasVivienda_DatosVivienda')
+            .then((value) async {
+          tenenciasViviendaByDptoTemp = [];
+          await syncTenenciasViviendaByDpto(event);
+        });
+        return;
+      }
+
+      TechoViviendaEntity i = techosViviendaByDptoTemp[data];
+
+      await saveTechoViviendaByDpto(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** TechoViviendaByDpto ****************************
+
+// ************************** TenenciaViviendaByDpto ****************************
+
+  Future<void> syncTenenciasViviendaByDpto(SyncStarted event) async {
+    final result = await tenenciaViviendaByDptoUsecase
+        .getTenenciasViviendaByDptoUsecase(event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      tenenciasViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando tenencias vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveTenenciaViviendaByDpto(
+        event,
+        tenenciasViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveTenenciaViviendaByDpto(
+    SyncStarted event,
+    TenenciaViviendaEntity tenenciaVivienda,
+  ) async {
+    final result = await tenenciaViviendaByDptoUsecaseDB
+        .saveTenenciaViviendaByDptoUsecaseDB(tenenciaVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= tenenciasViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'TiposCombustibleVivienda_DatosVivienda')
+            .then((value) async {
+          tiposCombustibleViviendaByDptoTemp = [];
+          await syncTiposCombustibleViviendaByDpto(event);
+        });
+        return;
+      }
+
+      TenenciaViviendaEntity i = tenenciasViviendaByDptoTemp[data];
+
+      await saveTenenciaViviendaByDpto(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** TenenciaViviendaByDpto ****************************
+
+// ************************** TipoCombustibleViviendaByDpto ****************************
+
+  Future<void> syncTiposCombustibleViviendaByDpto(SyncStarted event) async {
+    final result = await tipoCombustibleViviendaByDptoUsecase
+        .getTiposCombustibleViviendaByDptoUsecase(
+            event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      tiposCombustibleViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando tipos combustible vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveTipoCombustibleViviendaByDpto(
+        event,
+        tiposCombustibleViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveTipoCombustibleViviendaByDpto(
+    SyncStarted event,
+    TipoCombustibleViviendaEntity tipoCombustibleVivienda,
+  ) async {
+    final result = await tipoCombustibleViviendaByDptoUsecaseDB
+        .saveTipoCombustibleViviendaByDptoUsecaseDB(tipoCombustibleVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= tiposCombustibleViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'TiposSanitarioVivienda_DatosVivienda')
+            .then((value) async {
+          tiposSanitarioViviendaByDptoTemp = [];
+          await syncTiposSanitarioViviendaByDpto(event);
+        });
+        return;
+      }
+
+      TipoCombustibleViviendaEntity i =
+          tiposCombustibleViviendaByDptoTemp[data];
+
+      await saveTipoCombustibleViviendaByDpto(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** TipoCombustibleViviendaByDpto ****************************
+
+// ************************** TipoSanitarioViviendaByDpto ****************************
+
+  Future<void> syncTiposSanitarioViviendaByDpto(SyncStarted event) async {
+    final result = await tipoSanitarioViviendaByDptoUsecase
+        .getTiposSanitarioViviendaByDptoUsecase(event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      tiposSanitarioViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando tipos sanitario vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveTipoSanitarioViviendaByDpto(
+        event,
+        tiposSanitarioViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveTipoSanitarioViviendaByDpto(
+    SyncStarted event,
+    TipoSanitarioViviendaEntity tipoSanitarioVivienda,
+  ) async {
+    final result = await tipoSanitarioViviendaByDptoUsecaseDB
+        .saveTipoSanitarioViviendaByDptoUsecaseDB(tipoSanitarioVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= tiposSanitarioViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'TratamientoAguaVivienda_DatosVivienda')
+            .then((value) async {
+          tratamientosAguaViviendaByDptoTemp = [];
+          await syncTratamientosAguaViviendaByDpto(event);
+        });
+        return;
+      }
+
+      TipoSanitarioViviendaEntity i = tiposSanitarioViviendaByDptoTemp[data];
+
+      await saveTipoSanitarioViviendaByDpto(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** TipoSanitarioViviendaByDpto ****************************
+
+// ************************** TratamientoAguaViviendaByDpto ****************************
+
+  Future<void> syncTratamientosAguaViviendaByDpto(SyncStarted event) async {
+    final result = await tratamientoAguaViviendaByDptoUsecase
+        .getTratamientosAguaViviendaByDptoUsecase(
+            event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      tratamientosAguaViviendaByDptoTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando tratamientos agua vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveTratamientoAguaViviendaByDpto(
+        event,
+        tratamientosAguaViviendaByDptoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveTratamientoAguaViviendaByDpto(
+    SyncStarted event,
+    TratamientoAguaViviendaEntity tratamientoAguaVivienda,
+  ) async {
+    final result = await tratamientoAguaViviendaByDptoUsecaseDB
+        .saveTratamientoAguaViviendaByDptoUsecaseDB(tratamientoAguaVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= tratamientosAguaViviendaByDptoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'VentilacionVivienda_DatosVivienda')
+            .then((value) async {
+          ventilacionesViviendaTemp = [];
+          await syncVentilacionesVivienda(event);
+        });
+        return;
+      }
+
+      TratamientoAguaViviendaEntity i =
+          tratamientosAguaViviendaByDptoTemp[data];
+
+      await saveTratamientoAguaViviendaByDpto(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** TratamientoAguaViviendaByDpto ****************************
+
+// ************************** VentilacionesVivienda ****************************
+
+  Future<void> syncVentilacionesVivienda(SyncStarted event) async {
+    final result =
+        await ventilacionViviendaUsecase.getVentilacionesViviendaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      ventilacionesViviendaTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando ventilaciones vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveVentilacionVivienda(
+        event,
+        ventilacionesViviendaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveVentilacionVivienda(
+    SyncStarted event,
+    VentilacionViviendaEntity ventilacionVivienda,
+  ) async {
+    final result = await ventilacionViviendaUsecaseDB
+        .saveVentilacionViviendaUsecaseDB(ventilacionVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= ventilacionesViviendaTemp.length) {
+        event.tablesNames.remove('Accesorias');
+        add(SyncStarted(event.usuario, event.tablesNames));
+        return;
+      }
+
+      VentilacionViviendaEntity i = ventilacionesViviendaTemp[data];
+
+      await saveVentilacionVivienda(
+        event,
+        i,
+      );
+    });
+  }
+
+// ************************** VentilacionesVivienda ****************************
 
   int calculatePercent() {
     final counter = state.syncProgressModel.counter <= 0

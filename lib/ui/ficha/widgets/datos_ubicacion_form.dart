@@ -61,16 +61,14 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
     _telefonocel1Ctrl.text = afiliado.telefonocel1;
     _telefonocel2Ctrl.text = afiliado.telefonocel2;
 
-    if (afiliado.familiaId != null) {
-      setState(() {
-        _nombreRecibeVisitaCtrl.text =
-            widget.dimUbicacion?.nombreRecibeVisita ?? '';
-        _perteneceResguardo = widget.dimUbicacion?.perteneceResguardo;
-        _viaAcceso = widget.dimUbicacion?.viaAccesoId;
-        _estadoVia = widget.dimUbicacion?.estadoViaId;
-        _medioComunicacion = widget.dimUbicacion?.medioComunicacionId;
-      });
-    }
+    setState(() {
+      _nombreRecibeVisitaCtrl.text =
+          widget.dimUbicacion?.nombreRecibeVisita ?? '';
+      _perteneceResguardo = widget.dimUbicacion?.perteneceResguardo;
+      _viaAcceso = widget.dimUbicacion?.viaAccesoId;
+      _estadoVia = widget.dimUbicacion?.estadoViaId;
+      _medioComunicacion = widget.dimUbicacion?.medioComunicacionId;
+    });
   }
 
   @override

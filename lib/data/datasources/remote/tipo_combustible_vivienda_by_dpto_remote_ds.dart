@@ -24,7 +24,7 @@ class TipoCombustibleViviendaByDptoRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/tipocombustibleviviendabyDpto?IdeDpto=$dtoId');
+          '${Constants.ifasorisBaseUrl}/tiposcombustibleviviendabyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

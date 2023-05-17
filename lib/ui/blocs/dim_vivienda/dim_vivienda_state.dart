@@ -4,20 +4,20 @@ abstract class DimViviendaState {
   const DimViviendaState();
 }
 
-class FormInitial extends DimViviendaState {
-  const FormInitial();
+class DimViviendaFormInitial extends DimViviendaState {
+  const DimViviendaFormInitial();
 }
 
-class FormLoaded extends DimViviendaState {}
+class DimViviendaFormLoaded extends DimViviendaState {}
 
-class FormEmpty extends DimViviendaState {}
+class DimViviendaFormEmpty extends DimViviendaState {}
 
-class SubmissionSuccess extends DimViviendaState {}
+class DimViviendaSubmissionSuccess extends DimViviendaState {}
 
-class SubmissionFailed extends DimViviendaState {
+class DimViviendaSubmissionFailed extends DimViviendaState {
   final String message;
 
-  SubmissionFailed(this.message);
+  DimViviendaSubmissionFailed(this.message);
 }
 
 DimViviendaEntity initObject() {
@@ -26,19 +26,19 @@ DimViviendaEntity initObject() {
       familiaId: 0,
       tipoViviendaId: 0,
       tenenciaViviendaId: 0,
-      pisoViviendaId: 0,
+      pisosViviendaIds: [],
       otroTipoPiso: '',
-      techoViviendaId: 0,
+      techosViviendaIds: [],
       otroTipoTecho: '',
       ventilacionViviendaId: 0,
       iluminacionViviendaId: 0,
-      servicioPublicoViviendaId: 0,
-      tratamientoAguaViviendaId: 0,
-      tipoSanitarioViviendaId: 0,
+      serviciosPublicosViviendaIds: [],
+      tratamientosAguaViviendaIds: [],
+      tiposSanitarioViviendaIds: [],
       otroTipoSanitario: '',
-      tipoCombustibleViviendaId: 0,
+      tiposCombustibleViviendaIds: [],
       otroTipoCombustible: '',
-      factorRiesgoViviendaId: 0,
-      presenciaAnimalViviendaId: 0,
+      factoresRiesgoViviendaIds: [],
+      presenciaAnimalesViviendaIds: [],
       otroPresenciaAnimal: 0);
 }

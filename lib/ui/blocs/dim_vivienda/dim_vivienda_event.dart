@@ -25,16 +25,16 @@ class DatoViviendaChanged extends DimViviendaEvent {
   const DatoViviendaChanged(this.datoViviendaId);
 }
 
-class FamiliaChanged extends DimViviendaEvent {
+class DimViviendaFamiliaChanged extends DimViviendaEvent {
   final int familiaId;
 
-  const FamiliaChanged(this.familiaId);
+  const DimViviendaFamiliaChanged(this.familiaId);
 }
 
-class TipoVivienda extends DimViviendaEvent {
+class TipoViviendaChanged extends DimViviendaEvent {
   final int tipoViviendaId;
 
-  const TipoVivienda(this.tipoViviendaId);
+  const TipoViviendaChanged(this.tipoViviendaId);
 }
 
 class TenenciaViviendaChanged extends DimViviendaEvent {
@@ -43,10 +43,10 @@ class TenenciaViviendaChanged extends DimViviendaEvent {
   const TenenciaViviendaChanged(this.tenenciaViviendaId);
 }
 
-class PisoViviendaChanged extends DimViviendaEvent {
-  final int pisoViviendaId;
+class PisosViviendaChanged extends DimViviendaEvent {
+  final List<int> pisosViviendaIds;
 
-  const PisoViviendaChanged(this.pisoViviendaId);
+  const PisosViviendaChanged(this.pisosViviendaIds);
 }
 
 class OtroTipoPisoChanged extends DimViviendaEvent {
@@ -55,10 +55,10 @@ class OtroTipoPisoChanged extends DimViviendaEvent {
   const OtroTipoPisoChanged(this.otroTipoPiso);
 }
 
-class TechoViviendaChanged extends DimViviendaEvent {
-  final int techoViviendaId;
+class TechosViviendaChanged extends DimViviendaEvent {
+  final List<int> techosViviendaIds;
 
-  const TechoViviendaChanged(this.techoViviendaId);
+  const TechosViviendaChanged(this.techosViviendaIds);
 }
 
 class OtroTipoTechoChanged extends DimViviendaEvent {
@@ -79,22 +79,22 @@ class IluminacionViviendaChanged extends DimViviendaEvent {
   const IluminacionViviendaChanged(this.iluminacionViviendaId);
 }
 
-class ServicioPublicoViviendaChanged extends DimViviendaEvent {
-  final int servicioPublicoViviendaId;
+class ServiciosPublicosViviendaChanged extends DimViviendaEvent {
+  final List<int> serviciosPublicosViviendaIds;
 
-  const ServicioPublicoViviendaChanged(this.servicioPublicoViviendaId);
+  const ServiciosPublicosViviendaChanged(this.serviciosPublicosViviendaIds);
 }
 
 class TratamientoAguaViviendaChanged extends DimViviendaEvent {
-  final int tratamientoAguaViviendaId;
+  final List<int> tratamientosAguaViviendaIds;
 
-  const TratamientoAguaViviendaChanged(this.tratamientoAguaViviendaId);
+  const TratamientoAguaViviendaChanged(this.tratamientosAguaViviendaIds);
 }
 
-class TipoSanitarioViviendaChanged extends DimViviendaEvent {
-  final int tipoSanitarioViviendaId;
+class TiposSanitarioViviendaChanged extends DimViviendaEvent {
+  final List<int> tiposSanitarioViviendaIds;
 
-  const TipoSanitarioViviendaChanged(this.tipoSanitarioViviendaId);
+  const TiposSanitarioViviendaChanged(this.tiposSanitarioViviendaIds);
 }
 
 class OtroTipoSanitarioChanged extends DimViviendaEvent {
@@ -103,10 +103,10 @@ class OtroTipoSanitarioChanged extends DimViviendaEvent {
   const OtroTipoSanitarioChanged(this.otroTipoSanitario);
 }
 
-class TipoCombustibleViviendaChanged extends DimViviendaEvent {
-  final int tipoCombustibleViviendaId;
+class TiposCombustibleViviendaChanged extends DimViviendaEvent {
+  final List<int> tiposCombustibleViviendaIds;
 
-  const TipoCombustibleViviendaChanged(this.tipoCombustibleViviendaId);
+  const TiposCombustibleViviendaChanged(this.tiposCombustibleViviendaIds);
 }
 
 class OtroTipoCombustibleChanged extends DimViviendaEvent {
@@ -115,16 +115,16 @@ class OtroTipoCombustibleChanged extends DimViviendaEvent {
   const OtroTipoCombustibleChanged(this.otroTipoCombustible);
 }
 
-class FactorRiesgoViviendaChanged extends DimViviendaEvent {
-  final int factorRiesgoViviendaId;
+class FactoresRiesgoViviendaChanged extends DimViviendaEvent {
+  final List<int> factoresRiesgoViviendaIds;
 
-  const FactorRiesgoViviendaChanged(this.factorRiesgoViviendaId);
+  const FactoresRiesgoViviendaChanged(this.factoresRiesgoViviendaIds);
 }
 
-class PresenciaAnimalViviendaChanged extends DimViviendaEvent {
-  final int presenciaAnimalViviendaId;
+class PresenciaAnimalesViviendaChanged extends DimViviendaEvent {
+  final List<int> presenciaAnimalesViviendaIds;
 
-  const PresenciaAnimalViviendaChanged(this.presenciaAnimalViviendaId);
+  const PresenciaAnimalesViviendaChanged(this.presenciaAnimalesViviendaIds);
 }
 
 class OtroPresenciaAnimalChanged extends DimViviendaEvent {

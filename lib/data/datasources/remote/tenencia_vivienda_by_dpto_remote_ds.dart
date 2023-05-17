@@ -23,7 +23,7 @@ class TenenciaViviendaByDptoRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/tenenciasviviendaByDpto?IdeDpto=$dtoId');
+          '${Constants.ifasorisBaseUrl}/tenenciaviviendaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

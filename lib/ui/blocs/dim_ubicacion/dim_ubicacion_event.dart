@@ -25,10 +25,10 @@ class UbicacionChanged extends DimUbicacionEvent {
   const UbicacionChanged(this.ubicacionId);
 }
 
-class FamiliaChanged extends DimUbicacionEvent {
+class DimUbicacionFamiliaChanged extends DimUbicacionEvent {
   final int familiaId;
 
-  const FamiliaChanged(this.familiaId);
+  const DimUbicacionFamiliaChanged(this.familiaId);
 }
 
 class NombreRecibeVisitaChanged extends DimUbicacionEvent {

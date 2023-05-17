@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../ui/blocs/dim_vivienda/dim_vivienda_bloc.dart';
 
 class DimViviendaEntity {
@@ -5,20 +7,20 @@ class DimViviendaEntity {
   int? familiaId;
   int? tipoViviendaId;
   int? tenenciaViviendaId;
-  int? pisoViviendaId;
+  List<int>? pisosViviendaIds;
   String? otroTipoPiso;
-  int? techoViviendaId;
+  List<int>? techosViviendaIds;
   String? otroTipoTecho;
   int? ventilacionViviendaId;
   int? iluminacionViviendaId;
-  int? servicioPublicoViviendaId;
-  int? tratamientoAguaViviendaId;
-  int? tipoSanitarioViviendaId;
+  List<int>? serviciosPublicosViviendaIds;
+  List<int>? tratamientosAguaViviendaIds;
+  List<int>? tiposSanitarioViviendaIds;
   String? otroTipoSanitario;
-  int? tipoCombustibleViviendaId;
+  List<int>? tiposCombustibleViviendaIds;
   String? otroTipoCombustible;
-  int? factorRiesgoViviendaId;
-  int? presenciaAnimalViviendaId;
+  List<int>? factoresRiesgoViviendaIds;
+  List<int>? presenciaAnimalesViviendaIds;
   int? otroPresenciaAnimal;
   DimViviendaState formStatus;
 
@@ -27,42 +29,42 @@ class DimViviendaEntity {
       this.familiaId,
       this.tipoViviendaId,
       this.tenenciaViviendaId,
-      this.pisoViviendaId,
+      this.pisosViviendaIds,
       this.otroTipoPiso,
-      this.techoViviendaId,
+      this.techosViviendaIds,
       this.otroTipoTecho,
       this.ventilacionViviendaId,
       this.iluminacionViviendaId,
-      this.servicioPublicoViviendaId,
-      this.tratamientoAguaViviendaId,
-      this.tipoSanitarioViviendaId,
+      this.serviciosPublicosViviendaIds,
+      this.tratamientosAguaViviendaIds,
+      this.tiposSanitarioViviendaIds,
       this.otroTipoSanitario,
-      this.tipoCombustibleViviendaId,
+      this.tiposCombustibleViviendaIds,
       this.otroTipoCombustible,
-      this.factorRiesgoViviendaId,
-      this.presenciaAnimalViviendaId,
+      this.factoresRiesgoViviendaIds,
+      this.presenciaAnimalesViviendaIds,
       this.otroPresenciaAnimal,
-      this.formStatus = const FormInitial()});
+      this.formStatus = const DimViviendaFormInitial()});
 
   DimViviendaEntity copyWith(
           {int? datoViviendaId,
           int? familiaId,
           int? tipoViviendaId,
           int? tenenciaViviendaId,
-          int? pisoViviendaId,
+          List<int>? pisosViviendaIds,
           String? otroTipoPiso,
-          int? techoViviendaId,
+          List<int>? techosViviendaIds,
           String? otroTipoTecho,
           int? ventilacionViviendaId,
           int? iluminacionViviendaId,
-          int? servicioPublicoViviendaId,
-          int? tratamientoAguaViviendaId,
-          int? tipoSanitarioViviendaId,
+          List<int>? serviciosPublicosViviendaIds,
+          List<int>? tratamientosAguaViviendaIds,
+          List<int>? tiposSanitarioViviendaIds,
           String? otroTipoSanitario,
-          int? tipoCombustibleViviendaId,
+          List<int>? tiposCombustibleViviendaIds,
           String? otroTipoCombustible,
-          int? factorRiesgoViviendaId,
-          int? presenciaAnimalViviendaId,
+          List<int>? factoresRiesgoViviendaIds,
+          List<int>? presenciaAnimalesViviendaIds,
           int? otroPresenciaAnimal,
           DimViviendaState? formStatus}) =>
       DimViviendaEntity(
@@ -70,28 +72,28 @@ class DimViviendaEntity {
         familiaId: familiaId ?? this.familiaId,
         tipoViviendaId: tipoViviendaId ?? this.tipoViviendaId,
         tenenciaViviendaId: tenenciaViviendaId ?? this.tenenciaViviendaId,
-        pisoViviendaId: pisoViviendaId ?? this.pisoViviendaId,
+        pisosViviendaIds: pisosViviendaIds ?? this.pisosViviendaIds,
         otroTipoPiso: otroTipoPiso ?? this.otroTipoPiso,
-        techoViviendaId: techoViviendaId ?? this.techoViviendaId,
+        techosViviendaIds: techosViviendaIds ?? this.techosViviendaIds,
         otroTipoTecho: otroTipoTecho ?? this.otroTipoTecho,
         ventilacionViviendaId:
             ventilacionViviendaId ?? this.ventilacionViviendaId,
         iluminacionViviendaId:
             iluminacionViviendaId ?? this.iluminacionViviendaId,
-        servicioPublicoViviendaId:
-            servicioPublicoViviendaId ?? this.servicioPublicoViviendaId,
-        tratamientoAguaViviendaId:
-            tratamientoAguaViviendaId ?? this.tratamientoAguaViviendaId,
-        tipoSanitarioViviendaId:
-            tipoSanitarioViviendaId ?? this.tipoSanitarioViviendaId,
+        serviciosPublicosViviendaIds:
+            serviciosPublicosViviendaIds ?? this.serviciosPublicosViviendaIds,
+        tratamientosAguaViviendaIds:
+            tratamientosAguaViviendaIds ?? this.tratamientosAguaViviendaIds,
+        tiposSanitarioViviendaIds:
+            tiposSanitarioViviendaIds ?? this.tiposSanitarioViviendaIds,
         otroTipoSanitario: otroTipoSanitario ?? this.otroTipoSanitario,
-        tipoCombustibleViviendaId:
-            tipoCombustibleViviendaId ?? this.tipoCombustibleViviendaId,
+        tiposCombustibleViviendaIds:
+            tiposCombustibleViviendaIds ?? this.tiposCombustibleViviendaIds,
         otroTipoCombustible: otroTipoCombustible ?? this.otroTipoCombustible,
-        factorRiesgoViviendaId:
-            factorRiesgoViviendaId ?? this.factorRiesgoViviendaId,
-        presenciaAnimalViviendaId:
-            presenciaAnimalViviendaId ?? this.presenciaAnimalViviendaId,
+        factoresRiesgoViviendaIds:
+            factoresRiesgoViviendaIds ?? this.factoresRiesgoViviendaIds,
+        presenciaAnimalesViviendaIds:
+            presenciaAnimalesViviendaIds ?? this.presenciaAnimalesViviendaIds,
         otroPresenciaAnimal: otroPresenciaAnimal ?? this.otroPresenciaAnimal,
         formStatus: formStatus ?? this.formStatus,
       );
@@ -101,20 +103,20 @@ class DimViviendaEntity {
         "Familia_id": familiaId,
         "TipoVivienda_id": tipoViviendaId,
         "TenenciaVivienda_id": tenenciaViviendaId,
-        "PisoVivienda_id": pisoViviendaId,
+        "PisoVivienda_id": jsonEncode(pisosViviendaIds),
         "OtroTipoPiso": otroTipoPiso,
-        "TechoVivienda_id": techoViviendaId,
+        "TechoVivienda_id": jsonEncode(techosViviendaIds),
         "OtroTipoTecho": otroTipoTecho,
         "VentilacionVivienda_id": ventilacionViviendaId,
         "IluminacionVivienda_id": iluminacionViviendaId,
-        "ServicioPublicoVivienda_id": servicioPublicoViviendaId,
-        "TratamientoAguaVivienda_id": tratamientoAguaViviendaId,
-        "TipoSanitarioVivienda_id": tipoSanitarioViviendaId,
+        "ServicioPublicoVivienda_id": jsonEncode(serviciosPublicosViviendaIds),
+        "TratamientoAguaVivienda_id": jsonEncode(tratamientosAguaViviendaIds),
+        "TipoSanitarioVivienda_id": jsonEncode(tiposSanitarioViviendaIds),
         "OtroTipoSanitario": otroTipoSanitario,
-        "TipoCombustibleVivienda_id": tipoCombustibleViviendaId,
+        "TipoCombustibleVivienda_id": jsonEncode(tiposCombustibleViviendaIds),
         "OtroTipoCombustible": otroTipoCombustible,
-        "FactorRiesgoVivienda_id": factorRiesgoViviendaId,
-        "PresenciaAnimalVivienda_id": presenciaAnimalViviendaId,
+        "FactorRiesgoVivienda_id": jsonEncode(factoresRiesgoViviendaIds),
+        "PresenciaAnimalVivienda_id": jsonEncode(presenciaAnimalesViviendaIds),
         "OtroPresenciaAnimal": otroPresenciaAnimal,
       };
 }

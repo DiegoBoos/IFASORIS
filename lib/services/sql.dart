@@ -285,6 +285,7 @@ class ConnectionSQL {
         REFERENCES [ViasAcceso]([ViaAcceso_id])
   )''';
 
+  //TODO: modificar tabla
   static const CREATE_DATOS_VIVIENDA = '''
   CREATE TABLE [Asp2_DatosVivienda] (
 	[DatoVivienda_id]	integer NOT NULL,
@@ -405,6 +406,13 @@ class ConnectionSQL {
   [TechoVivienda_id]	integer NOT NULL,
   [Descripcion]	varchar(30) NOT NULL COLLATE NOCASE,
   [Departamento_Ide]	integer NOT NULL
+  )''';
+
+  static const CREATE_TIPOS_VIVIENDA = '''
+  CREATE TABLE [TiposVivienda_DatosVivienda] (
+	[TipoVivienda_id]	integer NOT NULL,
+	[Descripcion]	varchar(30) NOT NULL COLLATE NOCASE,
+	[Departamento_Ide]	integer NOT NULL
   )''';
 
   static const CREATE_TENENCIAS_VIVIENDA = '''

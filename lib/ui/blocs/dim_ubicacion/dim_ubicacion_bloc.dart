@@ -21,8 +21,11 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
           await dimUbicacionUsecaseDB.saveDimUbicacionUsecaseDB(state);
       result.fold((failure) {
         emit(state.copyWith(
-            formStatus: SubmissionFailed(failure.properties.first)));
-      }, (data) => emit(state.copyWith(formStatus: SubmissionSuccess())));
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      },
+          (data) => emit(
+              state.copyWith(formStatus: DimUbicacionSubmissionSuccess())));
     });
 
     on<GetDimUbicacion>((event, emit) async {
@@ -30,11 +33,13 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
           await dimUbicacionUsecaseDB.getDimUbicacionUsecaseDB(event.familiaId);
       result.fold(
           (failure) => emit(state.copyWith(
-              formStatus: SubmissionFailed(failure.properties.first))), (data) {
+              formStatus:
+                  DimUbicacionSubmissionFailed(failure.properties.first))),
+          (data) {
         if (data != null) {
-          emit(data.copyWith(formStatus: FormLoaded()));
+          emit(data.copyWith(formStatus: DimUbicacionFormLoaded()));
         } else {
-          emit(state.copyWith(formStatus: FormEmpty()));
+          emit(state.copyWith(formStatus: DimUbicacionFormEmpty()));
         }
       });
     });
@@ -42,7 +47,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     on<UbicacionChanged>((event, emit) {
       emit(state.copyWith(ubicacionId: event.ubicacionId));
     });
-    on<FamiliaChanged>((event, emit) {
+    on<DimUbicacionFamiliaChanged>((event, emit) {
       emit(state.copyWith(familiaId: event.familiaId));
     });
     on<NombreRecibeVisitaChanged>((event, emit) {

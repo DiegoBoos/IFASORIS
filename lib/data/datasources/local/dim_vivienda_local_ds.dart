@@ -18,7 +18,7 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
 
     try {
       final res = await db.insert(
-        'Asp1_Vivienda',
+        'Asp2_DatosVivienda',
         dimVivienda.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
@@ -31,7 +31,7 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   @override
   Future<DimViviendaEntity?> getDimVivienda(int familiaId) async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_Vivienda',
+    final res = await db.query('Asp2_DatosVivienda',
         where: 'Familia_Id = ?', whereArgs: [familiaId]);
 
     if (res.isEmpty) return null;

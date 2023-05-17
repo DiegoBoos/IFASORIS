@@ -6,7 +6,6 @@ import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_expor
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
-import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 
 class AccesoCAForm extends StatefulWidget {
@@ -26,19 +25,13 @@ class AccesoCAFormState extends State<AccesoCAForm> {
   @override
   void initState() {
     super.initState();
-    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
-      context,
-    );
-    final afiliado = afiliadoPrefsBloc.state.afiliado!;
 
-    if (afiliado.familiaId != null) {
-      setState(() {
-        _tiempoTardaId = widget.dimUbicacion?.tiempoTardaId;
-        _medioUtilizaId = widget.dimUbicacion?.medioUtilizaId;
-        _dificultaAccesoId = widget.dimUbicacion?.dificultaAccesoId;
-        _costoDesplazamientoId = widget.dimUbicacion?.costoDesplazamientoId;
-      });
-    }
+    setState(() {
+      _tiempoTardaId = widget.dimUbicacion?.tiempoTardaId;
+      _medioUtilizaId = widget.dimUbicacion?.medioUtilizaId;
+      _dificultaAccesoId = widget.dimUbicacion?.dificultaAccesoId;
+      _costoDesplazamientoId = widget.dimUbicacion?.costoDesplazamientoId;
+    });
   }
 
   @override
