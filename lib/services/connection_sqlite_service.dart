@@ -94,6 +94,7 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_PRESENCIA_ANIMALES_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_SERVICIOS_PUBLICOS_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_TECHOS_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_TIPOS_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_TENENCIAS_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_TIPO_COMBUSTIBLE_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_TIPO_SANITARIO_VIVIENDA);
