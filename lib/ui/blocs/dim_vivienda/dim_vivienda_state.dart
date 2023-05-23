@@ -21,6 +21,7 @@ class DimViviendaSubmissionFailed extends DimViviendaState {
 }
 
 DimViviendaEntity initObject() {
+  //TODO: Revisar init object
   return DimViviendaEntity(
       datoViviendaId: 0,
       familiaId: 0,
@@ -40,5 +41,5 @@ DimViviendaEntity initObject() {
       otroTipoCombustible: '',
       factoresRiesgoViviendaIds: [],
       presenciaAnimalesViviendaIds: [],
-      otroPresenciaAnimal: 0);
+      otroPresenciaAnimal: '');
 }

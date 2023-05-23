@@ -128,7 +128,7 @@ class PresenciaAnimalesViviendaChanged extends DimViviendaEvent {
 }
 
 class OtroPresenciaAnimalChanged extends DimViviendaEvent {
-  final int otroPresenciaAnimal;
+  final String otroPresenciaAnimal;
 
   const OtroPresenciaAnimalChanged(this.otroPresenciaAnimal);
 }

@@ -21,7 +21,7 @@ class DimViviendaEntity {
   String? otroTipoCombustible;
   List<int>? factoresRiesgoViviendaIds;
   List<int>? presenciaAnimalesViviendaIds;
-  int? otroPresenciaAnimal;
+  String? otroPresenciaAnimal;
   DimViviendaState formStatus;
 
   DimViviendaEntity(
@@ -65,7 +65,7 @@ class DimViviendaEntity {
           String? otroTipoCombustible,
           List<int>? factoresRiesgoViviendaIds,
           List<int>? presenciaAnimalesViviendaIds,
-          int? otroPresenciaAnimal,
+          String? otroPresenciaAnimal,
           DimViviendaState? formStatus}) =>
       DimViviendaEntity(
         datoViviendaId: datoViviendaId ?? this.datoViviendaId,
@@ -103,20 +103,22 @@ class DimViviendaEntity {
         "Familia_id": familiaId,
         "TipoVivienda_id": tipoViviendaId,
         "TenenciaVivienda_id": tenenciaViviendaId,
-        "PisoVivienda_id": jsonEncode(pisosViviendaIds),
+        "PisosVivienda_ids": jsonEncode(pisosViviendaIds),
         "OtroTipoPiso": otroTipoPiso,
-        "TechoVivienda_id": jsonEncode(techosViviendaIds),
+        "TechosVivienda_ids": jsonEncode(techosViviendaIds),
         "OtroTipoTecho": otroTipoTecho,
         "VentilacionVivienda_id": ventilacionViviendaId,
         "IluminacionVivienda_id": iluminacionViviendaId,
-        "ServicioPublicoVivienda_id": jsonEncode(serviciosPublicosViviendaIds),
-        "TratamientoAguaVivienda_id": jsonEncode(tratamientosAguaViviendaIds),
-        "TipoSanitarioVivienda_id": jsonEncode(tiposSanitarioViviendaIds),
+        "ServiciosPublicosVivienda_ids":
+            jsonEncode(serviciosPublicosViviendaIds),
+        "TratamientosAguaVivienda_ids": jsonEncode(tratamientosAguaViviendaIds),
+        "TiposSanitarioVivienda_ids": jsonEncode(tiposSanitarioViviendaIds),
         "OtroTipoSanitario": otroTipoSanitario,
-        "TipoCombustibleVivienda_id": jsonEncode(tiposCombustibleViviendaIds),
+        "TiposCombustibleVivienda_ids": jsonEncode(tiposCombustibleViviendaIds),
         "OtroTipoCombustible": otroTipoCombustible,
-        "FactorRiesgoVivienda_id": jsonEncode(factoresRiesgoViviendaIds),
-        "PresenciaAnimalVivienda_id": jsonEncode(presenciaAnimalesViviendaIds),
+        "FactoresRiesgoVivienda_ids": jsonEncode(factoresRiesgoViviendaIds),
+        "PresenciaAnimalesVivienda_ids":
+            jsonEncode(presenciaAnimalesViviendaIds),
         "OtroPresenciaAnimal": otroPresenciaAnimal,
       };
 }

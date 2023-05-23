@@ -18,9 +18,27 @@ class AccesoCAForm extends StatefulWidget {
 
 class AccesoCAFormState extends State<AccesoCAForm> {
   int? _tiempoTardaId;
-  int? _medioUtilizaId;
-  int? _dificultaAccesoId;
+  List<int> _selectedMediosUtilizaCA = [];
+  List<int> _selectedDificultadesAccesoCA = [];
   int? _costoDesplazamientoId;
+
+  String? _validateMediosUtilizaCA() {
+    if (_selectedMediosUtilizaCA.isEmpty) {
+      return 'Seleccione al menos una opción.';
+    } else if (_selectedMediosUtilizaCA.length > 3) {
+      return 'Máximo tres opciones.';
+    }
+    return null;
+  }
+
+  String? _validateDificultadesAccesoCA() {
+    if (_selectedDificultadesAccesoCA.isEmpty) {
+      return 'Seleccione al menos una opción.';
+    } else if (_selectedDificultadesAccesoCA.length > 3) {
+      return 'Máximo tres opciones.';
+    }
+    return null;
+  }
 
   @override
   void initState() {
@@ -28,8 +46,9 @@ class AccesoCAFormState extends State<AccesoCAForm> {
 
     setState(() {
       _tiempoTardaId = widget.dimUbicacion?.tiempoTardaId;
-      _medioUtilizaId = widget.dimUbicacion?.medioUtilizaId;
-      _dificultaAccesoId = widget.dimUbicacion?.dificultaAccesoId;
+      _selectedMediosUtilizaCA = widget.dimUbicacion?.mediosUtilizaIds ?? [];
+      _selectedDificultadesAccesoCA =
+          widget.dimUbicacion?.dificultadesAccesoIds ?? [];
       _costoDesplazamientoId = widget.dimUbicacion?.costoDesplazamientoId;
     });
   }
@@ -52,6 +71,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
           builder: (context, state) {
             if (state is TiemposTardaCALoaded) {
               return DropdownButtonFormField<int>(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _tiempoTardaId,
                 items: state.tiemposTardaCALoaded!
                     .map(
@@ -86,31 +106,54 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         BlocBuilder<MedioUtilizaCACubit, MediosUtilizaCAState>(
           builder: (context, state) {
             if (state is MediosUtilizaCALoaded) {
-              return DropdownButtonFormField<int>(
-                value: _medioUtilizaId,
-                items: state.mediosUtilizaCALoaded!
-                    .map(
-                      (medioUtilizaCA) => DropdownMenuItem<int>(
-                        value: medioUtilizaCA.medioUtilizaId,
-                        child: Text(medioUtilizaCA.descripcion),
+              return FormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                initialValue: _selectedMediosUtilizaCA,
+                builder: (FormFieldState<List<int>> formstate) {
+                  return Column(
+                    children: [
+                      Wrap(
+                          children: List<Widget>.generate(
+                              state.mediosUtilizaCALoaded!.length, (index) {
+                        final e = state.mediosUtilizaCALoaded![index];
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Checkbox(
+                                value: _selectedMediosUtilizaCA
+                                    .contains(e.medioUtilizaId),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    if (value!) {
+                                      _selectedMediosUtilizaCA
+                                          .add(e.medioUtilizaId);
+                                    } else {
+                                      _selectedMediosUtilizaCA
+                                          .remove(e.medioUtilizaId);
+                                    }
+                                  });
+                                }),
+                            Flexible(
+                              child: Text(
+                                e.descripcion,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (index < state.mediosUtilizaCALoaded!.length - 1)
+                              const VerticalDivider(),
+                          ],
+                        );
+                      })),
+                      Text(
+                        _validateMediosUtilizaCA() ?? '',
+                        style: const TextStyle(color: Colors.red),
                       ),
-                    )
-                    .toList(),
-                decoration: const InputDecoration(
-                    labelText:
-                        'Medios que utiliza para el desplazamiento al centro de atención',
-                    border: OutlineInputBorder()),
-                onChanged: (int? newValue) {
-                  setState(() {
-                    _medioUtilizaId = newValue;
-                  });
-                  dimUbicacionBloc.add(MedioUtilizaChanged(newValue!));
+                    ],
+                  );
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Campo Requerido';
-                  }
-                  return null;
+                validator: (_) => _validateMediosUtilizaCA(),
+                onSaved: (List<int>? value) {
+                  dimUbicacionBloc.add(MediosUtilizaCAChanged(value!));
                 },
               );
             }
@@ -121,30 +164,61 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         BlocBuilder<DificultadAccesoCACubit, DificultadesAccesoCAState>(
           builder: (context, state) {
             if (state is DificultadesAccesoCALoaded) {
-              return DropdownButtonFormField<int>(
-                value: _dificultaAccesoId,
-                items: state.dificultadesAccesoCALoaded!
-                    .map(
-                      (dificultadAccesoCA) => DropdownMenuItem<int>(
-                        value: dificultadAccesoCA.dificultaAccesoId,
-                        child: Text(dificultadAccesoCA.descripcion),
+              return FormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                initialValue: _selectedDificultadesAccesoCA,
+                builder: (FormFieldState<List<int>> formstate) {
+                  return Column(
+                    children: [
+                      Wrap(
+                          children: List<Widget>.generate(
+                              state.dificultadesAccesoCALoaded!.length,
+                              (index) {
+                        final e = state.dificultadesAccesoCALoaded![index];
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Checkbox(
+                                value: _selectedDificultadesAccesoCA
+                                    .contains(e.dificultaAccesoId),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    if (e.dificultaAccesoId == 5) {
+                                      _selectedDificultadesAccesoCA = [
+                                        e.dificultaAccesoId
+                                      ];
+                                    } else if (value!) {
+                                      _selectedDificultadesAccesoCA.remove(5);
+                                      _selectedDificultadesAccesoCA
+                                          .add(e.dificultaAccesoId);
+                                    } else {
+                                      _selectedDificultadesAccesoCA
+                                          .remove(e.dificultaAccesoId);
+                                    }
+                                  });
+                                }),
+                            Flexible(
+                              child: Text(
+                                e.descripcion,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (index <
+                                state.dificultadesAccesoCALoaded!.length - 1)
+                              const VerticalDivider(),
+                          ],
+                        );
+                      })),
+                      Text(
+                        _validateDificultadesAccesoCA() ?? '',
+                        style: const TextStyle(color: Colors.red),
                       ),
-                    )
-                    .toList(),
-                decoration: const InputDecoration(
-                    labelText: 'Dificultad de acceso',
-                    border: OutlineInputBorder()),
-                onChanged: (int? newValue) {
-                  setState(() {
-                    _dificultaAccesoId = newValue;
-                  });
-                  dimUbicacionBloc.add(DificultaAccesoChanged(newValue!));
+                    ],
+                  );
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Campo Requerido';
-                  }
-                  return null;
+                validator: (_) => _validateDificultadesAccesoCA(),
+                onSaved: (List<int>? value) {
+                  dimUbicacionBloc.add(DificultadesAccesoCAChanged(value!));
                 },
               );
             }
@@ -156,6 +230,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
           builder: (context, state) {
             if (state is CostosDesplazamientoLoaded) {
               return DropdownButtonFormField<int>(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _costoDesplazamientoId,
                 items: state.costosDesplazamientoLoaded!
                     .map(

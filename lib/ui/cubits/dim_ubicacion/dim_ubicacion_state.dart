@@ -57,23 +57,12 @@ class DimUbicacionError extends DimUbicacionState {
 
 DimUbicacionEntity initObject() {
   return DimUbicacionEntity(
-      ubicacionId: 0,
-      familiaId: 0,
-      nombreRecibeVisita: '',
-      tipoDocRecibeVisita: '',
-      documentoRecibeVisita: '',
-      nombreMedTradicional: '',
-      costoDesplazamientoMedTradicional: 0,
-      resguardoId: 0,
-      autoridadIndigenaId: 0,
-      tuberculoPlatanoId: 0,
-      poseeChagra: 0,
-      leguminosaId: 0,
-      hortalizaId: 0,
-      verduraId: 0,
-      frutoId: 0,
-      cerealId: 0,
-      especieAnimalCriaId: 0,
-      produccionMinera: 0,
-      tipoCalendarioId: 0);
+    ubicacionId: 0,
+    familiaId: 0,
+    nombreRecibeVisita: '',
+    tipoDocRecibeVisita: '',
+    documentoRecibeVisita: '',
+    resguardoId: 0,
+    produccionMinera: 0,
+  );
 }

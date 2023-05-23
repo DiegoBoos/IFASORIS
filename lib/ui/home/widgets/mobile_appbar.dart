@@ -81,7 +81,7 @@ class MobileAppBar extends StatelessWidget {
               }
             },
           ),
-          IconButton(
+          /*  IconButton(
             icon: const Icon(Icons.cloud_upload),
             onPressed: () {
               if (internetCubit.state is InternetConnected) {
@@ -97,7 +97,7 @@ class MobileAppBar extends StatelessWidget {
                     Colors.red);
               }
             },
-          ),
+          ), */
           IconButton(
               onPressed: () => authBloc.add(LogOut()),
               icon: const Icon(Icons.logout)),

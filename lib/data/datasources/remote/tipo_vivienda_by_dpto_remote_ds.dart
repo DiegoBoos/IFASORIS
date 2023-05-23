@@ -22,7 +22,7 @@ class TipoViviendaByDptoRemoteDataSourceImpl
   Future<List<TipoViviendaModel>> getTiposViviendaByDpto(int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/tiposviviendaByDpto?IdeDpto=$dtoId');
+          '${Constants.ifasorisBaseUrl}/tioposviviendaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

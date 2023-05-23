@@ -25,7 +25,7 @@ class DimViviendaModel extends DimViviendaEntity {
     String? otroTipoCombustible,
     List<int>? factoresRiesgoViviendaIds,
     List<int>? presenciaAnimalesViviendaIds,
-    int? otroPresenciaAnimal,
+    String? otroPresenciaAnimal,
   }) : super(
           datoViviendaId: datoViviendaId ?? 0,
           familiaId: familiaId ?? 0,
@@ -45,7 +45,7 @@ class DimViviendaModel extends DimViviendaEntity {
           otroTipoCombustible: otroTipoCombustible ?? '',
           factoresRiesgoViviendaIds: factoresRiesgoViviendaIds,
           presenciaAnimalesViviendaIds: presenciaAnimalesViviendaIds,
-          otroPresenciaAnimal: otroPresenciaAnimal ?? 0,
+          otroPresenciaAnimal: otroPresenciaAnimal ?? '',
         );
 
   factory DimViviendaModel.fromJson(Map<String, dynamic> json) =>
@@ -54,20 +54,38 @@ class DimViviendaModel extends DimViviendaEntity {
         familiaId: json["Familia_id"],
         tipoViviendaId: json["TipoVivienda_id"],
         tenenciaViviendaId: json["TenenciaVivienda_id"],
-        pisosViviendaIds: json["PisoVivienda_id"],
+        pisosViviendaIds: json["PisosVivienda_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["PisosVivienda_ids"]))
+            : [],
         otroTipoPiso: json["OtroTipoPiso"],
         techosViviendaIds: json["TechoVivienda_id"],
         otroTipoTecho: json["OtroTipoTecho"],
         ventilacionViviendaId: json["VentilacionVivienda_id"],
         iluminacionViviendaId: json["IluminacionVivienda_id"],
-        serviciosPublicosViviendaIds: json["ServicioPublicoVivienda_id"],
-        tratamientosAguaViviendaIds: json["TratamientoAguaVivienda_id"],
-        tiposSanitarioViviendaIds: json["TipoSanitarioVivienda_id"],
+        serviciosPublicosViviendaIds: json["ServiciosPublicosVivienda_ids"] !=
+                "null"
+            ? List<int>.from(jsonDecode(json["ServiciosPublicosVivienda_ids"]))
+            : [],
+        tratamientosAguaViviendaIds: json["TratamientosAguaVivienda_ids"] !=
+                "null"
+            ? List<int>.from(jsonDecode(json["TratamientosAguaVivienda_ids"]))
+            : [],
+        tiposSanitarioViviendaIds: json["TiposSanitarioVivienda_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["TiposSanitarioVivienda_ids"]))
+            : [],
         otroTipoSanitario: json["OtroTipoSanitario"],
-        tiposCombustibleViviendaIds: json["TipoCombustibleVivienda_id"],
+        tiposCombustibleViviendaIds: json["TiposCombustibleVivienda_ids"] !=
+                "null"
+            ? List<int>.from(jsonDecode(json["TiposCombustibleVivienda_ids"]))
+            : [],
         otroTipoCombustible: json["OtroTipoCombustible"],
-        factoresRiesgoViviendaIds: json["FactorRiesgoVivienda_id"],
-        presenciaAnimalesViviendaIds: json["PresenciaAnimalVivienda_id"],
+        factoresRiesgoViviendaIds: json["FactoresRiesgoVivienda_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["FactoresRiesgoVivienda_ids"]))
+            : [],
+        presenciaAnimalesViviendaIds: json["PresenciaAnimalesVivienda_ids"] !=
+                "null"
+            ? List<int>.from(jsonDecode(json["PresenciaAnimalesVivienda_ids"]))
+            : [],
         otroPresenciaAnimal: json["OtroPresenciaAnimal"],
       );
 }

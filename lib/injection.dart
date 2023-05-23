@@ -214,6 +214,8 @@ void syncInit() {
         tratamientoAguaViviendaByDptoUsecaseDB: locator(),
         ventilacionViviendaUsecase: locator(),
         ventilacionViviendaUsecaseDB: locator(),
+        tipoViviendaByDptoUsecase: locator(),
+        tipoViviendaByDptoUsecaseDB: locator(),
         dimUbicacionUsecase: locator(),
         dimViviendaUsecase: locator(),
       ));

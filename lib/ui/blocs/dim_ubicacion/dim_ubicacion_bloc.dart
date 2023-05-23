@@ -74,17 +74,17 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     on<EstadoViaChanged>((event, emit) {
       emit(state.copyWith(estadoViaId: event.estadoViaId));
     });
-    on<MedioComunicacionChanged>((event, emit) {
-      emit(state.copyWith(medioComunicacionId: event.medioComunicacionId));
+    on<MediosComunicacionChanged>((event, emit) {
+      emit(state.copyWith(mediosComunicacionIds: event.mediosComunicacionIds));
     });
     on<TiempoTardaChanged>((event, emit) {
       emit(state.copyWith(tiempoTardaId: event.tiempoTardaId));
     });
-    on<MedioUtilizaChanged>((event, emit) {
-      emit(state.copyWith(medioUtilizaId: event.medioUtilizaId));
+    on<MediosUtilizaCAChanged>((event, emit) {
+      emit(state.copyWith(mediosUtilizaIds: event.mediosUtilizaIds));
     });
-    on<DificultaAccesoChanged>((event, emit) {
-      emit(state.copyWith(dificultaAccesoId: event.dificultaAccesoId));
+    on<DificultadesAccesoCAChanged>((event, emit) {
+      emit(state.copyWith(dificultadesAccesoIds: event.dificultadesAccesoIds));
     });
     on<CostoDesplazamientoChanged>((event, emit) {
       emit(state.copyWith(costoDesplazamientoId: event.costoDesplazamientoId));
@@ -93,56 +93,59 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
       emit(state.copyWith(
           existeMedTradicionalComunidad: event.existeMedTradicionalComunidad));
     });
-    on<EspecialidadMedTradChanged>((event, emit) {
-      emit(state.copyWith(especialidadMedTradId: event.especialidadMedTradId));
+    on<EspecialidadesMedTradChanged>((event, emit) {
+      emit(state.copyWith(
+          especialidadesMedTradIds: event.especialidadesMedTradIds));
     });
     on<TiempoTardaMedTradChanged>((event, emit) {
       emit(state.copyWith(tiempoTardaMedTradId: event.tiempoTardaMedTradId));
     });
-    on<MedioUtilizaMedTradChanged>((event, emit) {
-      emit(state.copyWith(medioUtilizaMedTradId: event.medioUtilizaMedTradId));
-    });
-    on<DificultadAccesoMedTradicionalChanged>((event, emit) {
+    on<MediosUtilizaMedTradChanged>((event, emit) {
       emit(state.copyWith(
-          dificultadAccesoMedTradId: event.dificultadAccesoMedTradicionalId));
+          mediosUtilizaMedTradIds: event.mediosUtilizaMedTradIds));
+    });
+    on<DificultadesAccesoMedTradicionalChanged>((event, emit) {
+      emit(state.copyWith(
+          dificultadesAccesoMedTradIds: event.dificultadesAccesoMedTradIds));
     });
     on<CostoDesplazamientoMedTradicionalChanged>((event, emit) {
       emit(state.copyWith(
           costoDesplazamientoMedTradicional:
               event.costoDesplazamientoMedTradicional));
     });
-    on<NombreMedTradicionalChanged>((event, emit) {
-      emit(state.copyWith(nombreMedTradicional: event.nombreMedTradicional));
+    on<NombresMedTradicionalChanged>((event, emit) {
+      emit(state.copyWith(nombresMedTradicional: event.nombresMedTradicional));
     });
     on<PoseeChagraChanged>((event, emit) {
       emit(state.copyWith(poseeChagra: event.poseeChagra));
     });
-    on<TuberculoPlatanoChanged>((event, emit) {
-      emit(state.copyWith(tuberculoPlatanoId: event.tuberculoPlatanoId));
+    on<TuberculosPlatanosChanged>((event, emit) {
+      emit(state.copyWith(tuberculosPlatanosIds: event.tuberculosPlatanosIds));
     });
-    on<LeguminosaChanged>((event, emit) {
-      emit(state.copyWith(leguminosaId: event.leguminosaId));
+    on<LeguminosasChanged>((event, emit) {
+      emit(state.copyWith(leguminosasIds: event.leguminosasIds));
     });
-    on<HortalizaChanged>((event, emit) {
-      emit(state.copyWith(hortalizaId: event.hortalizaId));
+    on<HortalizasChanged>((event, emit) {
+      emit(state.copyWith(hortalizasIds: event.hortalizasIds));
     });
-    on<VerduraChanged>((event, emit) {
-      emit(state.copyWith(verduraId: event.verduraId));
+    on<VerdurasChanged>((event, emit) {
+      emit(state.copyWith(verdurasIds: event.verdurasIds));
     });
-    on<FrutoChanged>((event, emit) {
-      emit(state.copyWith(frutoId: event.frutoId));
+    on<FrutosChanged>((event, emit) {
+      emit(state.copyWith(frutosIds: event.frutosIds));
     });
-    on<CerealChanged>((event, emit) {
-      emit(state.copyWith(cerealId: event.cerealId));
+    on<CerealesChanged>((event, emit) {
+      emit(state.copyWith(cerealesIds: event.cerealesIds));
     });
-    on<EspecieAnimalCriaChanged>((event, emit) {
-      emit(state.copyWith(especieAnimalCriaId: event.especieAnimalCriaId));
+    on<EspeciesAnimalesCriaChanged>((event, emit) {
+      emit(state.copyWith(
+          especiesAnimalesCriaIds: event.especiesAnimalesCriaIds));
     });
     on<ProduccionMineraChanged>((event, emit) {
       emit(state.copyWith(produccionMinera: event.produccionMineraId));
     });
-    on<TipoCalendarioChanged>((event, emit) {
-      emit(state.copyWith(tipoCalendarioId: event.tipoCalendarioId));
+    on<TiposCalendariosChanged>((event, emit) {
+      emit(state.copyWith(tiposCalendariosIds: event.tiposCalendariosIds));
     });
   }
 }

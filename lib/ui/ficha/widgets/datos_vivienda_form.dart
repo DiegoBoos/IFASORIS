@@ -1166,7 +1166,6 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
             return Container();
           },
         ),
-        const SizedBox(height: 20),
       ],
     );
   }

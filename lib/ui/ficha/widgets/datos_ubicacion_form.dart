@@ -8,6 +8,7 @@ import '../../../domain/usecases/estado_via/estado_via_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
+import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
@@ -35,10 +36,19 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   final _telefonocel2Ctrl = TextEditingController();
   int? _perteneceResguardo;
   final _nombreResguardoIndigenaCtrl = TextEditingController();
-  final _nombreAutoridadIndigenaCtrl = TextEditingController();
+  int? _autoridadIndigena;
   int? _viaAcceso;
   int? _estadoVia;
-  int? _medioComunicacion;
+  List<int> _selectedMediosComunicacion = [];
+
+  String? _validateMediosComunicacion() {
+    if (_selectedMediosComunicacion.isEmpty) {
+      return 'Seleccione al menos una opción.';
+    } else if (_selectedMediosComunicacion.length > 3) {
+      return 'Máximo tres opciones.';
+    }
+    return null;
+  }
 
   @override
   void initState() {
@@ -65,9 +75,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
       _nombreRecibeVisitaCtrl.text =
           widget.dimUbicacion?.nombreRecibeVisita ?? '';
       _perteneceResguardo = widget.dimUbicacion?.perteneceResguardo;
+      _autoridadIndigena = widget.dimUbicacion?.autoridadIndigenaId;
       _viaAcceso = widget.dimUbicacion?.viaAccesoId;
       _estadoVia = widget.dimUbicacion?.estadoViaId;
-      _medioComunicacion = widget.dimUbicacion?.medioComunicacionId;
+      _selectedMediosComunicacion =
+          widget.dimUbicacion?.mediosComunicacionIds ?? [];
     });
   }
 
@@ -87,7 +99,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         ),
         const SizedBox(height: 20),
         DateTimeField(
-          format: DateFormat("yyyy-MM-dd"),
+          format: DateFormat("dd-MM-yyyy"),
           initialValue: _fechafiliacion,
           decoration: const InputDecoration(
             labelText: 'Fecha de Diligenciamiento',
@@ -176,6 +188,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         ),
         const SizedBox(height: 20),
         TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: _nombreRecibeVisitaCtrl,
             decoration: const InputDecoration(
                 labelText: 'Nombre de quien recibe la visita',
@@ -220,6 +233,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               return Column(
                 children: [
                   FormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     initialValue: _perteneceResguardo,
                     builder: (FormFieldState<int> formstate) {
                       return Column(
@@ -272,6 +286,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         ),
         const SizedBox(height: 20),
         TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: _nombreResguardoIndigenaCtrl,
             decoration: const InputDecoration(
                 labelText: 'Nombre del resguardo indígena',
@@ -280,19 +295,47 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               //TODO: dimUbicacionBloc.nombreResguardoIndigena(newValue);
             }),
         const SizedBox(height: 20),
-        TextFormField(
-            controller: _nombreAutoridadIndigenaCtrl,
-            decoration: const InputDecoration(
-                labelText: 'Nombre con el que conoce a la autoridad indígena',
-                border: OutlineInputBorder()),
-            onSaved: (String? newValue) {
-              //TODO: dimUbicacionBloc.changeNombreAutoridadIndigena(newValue);
-            }),
+        BlocBuilder<AutoridadIndigenaCubit, AutoridadesIndigenasState>(
+          builder: (context, state) {
+            if (state is AutoridadesIndigenasLoaded) {
+              return DropdownButtonFormField<int>(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                value: _autoridadIndigena,
+                items: state.autoridadesIndigenas!
+                    .map(
+                      (autoridadIndigena) => DropdownMenuItem<int>(
+                        value: autoridadIndigena.autoridadIndigenaId,
+                        child: Text(autoridadIndigena.descripcion),
+                      ),
+                    )
+                    .toList(),
+                decoration: const InputDecoration(
+                    labelText:
+                        'Nombre con el que se connoce a la autoridad indígena',
+                    border: OutlineInputBorder()),
+                onChanged: (int? newValue) {
+                  setState(() {
+                    _autoridadIndigena = newValue;
+                  });
+                  dimUbicacionBloc.add(AutoridadIndigenaChanged(newValue!));
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo Requerido';
+                  }
+                  return null;
+                },
+              );
+            }
+            return Container();
+          },
+        ),
         const SizedBox(height: 20),
         BlocBuilder<ViaAccesoCubit, ViasAccesoState>(
           builder: (context, state) {
             if (state is ViasAccesoLoaded) {
               return DropdownButtonFormField<int>(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _viaAcceso,
                 items: state.viasAccesoLoaded!
                     .map((viaAcceso) => DropdownMenuItem<int>(
@@ -325,6 +368,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           builder: (context, state) {
             if (state is EstadosViasLoaded) {
               return DropdownButtonFormField<int>(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _estadoVia,
                 items: state.estadosViasLoaded!
                     .map(
@@ -358,37 +402,64 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<MedioComunicacionCubit, MediosComunicacionState>(
           builder: (context, state) {
             if (state is MediosComunicacionLoaded) {
-              return DropdownButtonFormField<int>(
-                isExpanded: true,
-                value: _medioComunicacion,
-                items: state.mediosComunicacionLoaded!
-                    .map(
-                      (medioComunicacion) => DropdownMenuItem<int>(
-                        value: medioComunicacion.medioComunicacionId,
-                        child: Text(medioComunicacion.descripcion),
+              return FormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                initialValue: _selectedMediosComunicacion,
+                builder: (FormFieldState<List<int>> formstate) {
+                  return Column(
+                    children: [
+                      Wrap(
+                          children: List<Widget>.generate(
+                              state.mediosComunicacionLoaded!.length, (index) {
+                        final e = state.mediosComunicacionLoaded![index];
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Checkbox(
+                                value: _selectedMediosComunicacion
+                                    .contains(e.medioComunicacionId),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    if (e.medioComunicacionId == 7) {
+                                      _selectedMediosComunicacion = [
+                                        e.medioComunicacionId
+                                      ];
+                                    } else if (value!) {
+                                      _selectedMediosComunicacion.remove(7);
+                                      _selectedMediosComunicacion
+                                          .add(e.medioComunicacionId);
+                                    } else {
+                                      _selectedMediosComunicacion
+                                          .remove(e.medioComunicacionId);
+                                    }
+                                  });
+                                }),
+                            Flexible(
+                              child: Text(
+                                e.descripcion,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (index <
+                                state.mediosComunicacionLoaded!.length - 1)
+                              const VerticalDivider(),
+                          ],
+                        );
+                      })),
+                      Text(
+                        _validateMediosComunicacion() ?? '',
+                        style: const TextStyle(color: Colors.red),
                       ),
-                    )
-                    .toList(),
-                decoration: const InputDecoration(
-                    labelText:
-                        'Medios de comunicación que utiliza con mayor frecuencia',
-                    border: OutlineInputBorder()),
-                onChanged: (int? newValue) {
-                  setState(() {
-                    _medioComunicacion = newValue;
-                  });
-                  dimUbicacionBloc.add(MedioComunicacionChanged(newValue!));
+                    ],
+                  );
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Campo Requerido';
-                  }
-                  return null;
+                validator: (_) => _validateMediosComunicacion(),
+                onSaved: (List<int>? value) {
+                  dimUbicacionBloc.add(MediosComunicacionChanged(value!));
                 },
               );
-            } else {
-              return Container();
             }
+            return Container();
           },
         ),
         const SizedBox(height: 20),

@@ -17,28 +17,28 @@ class DimUbicacionModel extends DimUbicacionEntity {
     int? resguardoId,
     int? autoridadIndigenaId,
     int? estadoViaId,
-    int? medioComunicacionId,
+    List<int>? mediosComunicacionIds,
     int? tiempoTardaId,
-    int? medioUtilizaId,
-    int? dificultaAccesoId,
+    List<int>? mediosUtilizaIds,
+    List<int>? dificultadesAccesoIds,
     int? costoDesplazamientoId,
     int? existeMedTradicionalComunidad,
-    int? especialidadMedTradId,
+    List<int>? especialidadesMedTradIds,
     int? tiempoTardaMedTradId,
-    int? medioUtilizaMedTradId,
-    int? dificultadAccesoMedTradId,
+    List<int>? mediosUtilizaMedTradIds,
+    List<int>? dificultadesAccesoMedTradIds,
     int? costoDesplazamientoMedTradicional,
-    String? nombreMedTradicional,
+    List<String>? nombresMedTradicional,
     int? poseeChagra,
-    int? tuberculoPlatanoId,
-    int? leguminosaId,
-    int? hortalizaId,
-    int? verduraId,
-    int? frutoId,
-    int? cerealId,
-    int? especieAnimalCriaId,
+    List<int>? tuberculosPlatanosIds,
+    List<int>? leguminosasIds,
+    List<int>? hortalizasIds,
+    List<int>? verdurasIds,
+    List<int>? frutosIds,
+    List<int>? cerealesIds,
+    List<int>? especiesAnimalesCriaIds,
     int? produccionMinera,
-    int? tipoCalendarioId,
+    List<int>? tiposCalendariosIds,
   }) : super(
           ubicacionId: ubicacionId ?? 0,
           familiaId: familiaId ?? 0,
@@ -50,29 +50,29 @@ class DimUbicacionModel extends DimUbicacionEntity {
           resguardoId: resguardoId ?? 0,
           autoridadIndigenaId: autoridadIndigenaId ?? 0,
           estadoViaId: estadoViaId ?? 0,
-          medioComunicacionId: medioComunicacionId ?? 0,
+          mediosComunicacionIds: mediosComunicacionIds,
           tiempoTardaId: tiempoTardaId ?? 0,
-          medioUtilizaId: medioUtilizaId ?? 0,
-          dificultaAccesoId: dificultaAccesoId ?? 0,
+          mediosUtilizaIds: mediosUtilizaIds,
+          dificultadesAccesoIds: dificultadesAccesoIds,
           costoDesplazamientoId: costoDesplazamientoId ?? 0,
           existeMedTradicionalComunidad: existeMedTradicionalComunidad ?? 0,
-          especialidadMedTradId: especialidadMedTradId ?? 0,
+          especialidadesMedTradIds: especialidadesMedTradIds,
           tiempoTardaMedTradId: tiempoTardaMedTradId ?? 0,
-          medioUtilizaMedTradId: medioUtilizaMedTradId ?? 0,
-          dificultadAccesoMedTradId: dificultadAccesoMedTradId ?? 0,
+          mediosUtilizaMedTradIds: mediosUtilizaMedTradIds,
+          dificultadesAccesoMedTradIds: dificultadesAccesoMedTradIds,
           costoDesplazamientoMedTradicional:
               costoDesplazamientoMedTradicional ?? 0,
-          nombreMedTradicional: nombreMedTradicional ?? '',
+          nombresMedTradicional: nombresMedTradicional,
           poseeChagra: poseeChagra ?? 0,
-          tuberculoPlatanoId: tuberculoPlatanoId ?? 0,
-          leguminosaId: leguminosaId ?? 0,
-          hortalizaId: hortalizaId ?? 0,
-          verduraId: verduraId ?? 0,
-          frutoId: frutoId ?? 0,
-          cerealId: cerealId ?? 0,
-          especieAnimalCriaId: especieAnimalCriaId ?? 0,
+          tuberculosPlatanosIds: tuberculosPlatanosIds,
+          leguminosasIds: leguminosasIds,
+          hortalizasIds: hortalizasIds,
+          verdurasIds: verdurasIds,
+          frutosIds: frutosIds,
+          cerealesIds: cerealesIds,
+          especiesAnimalesCriaIds: especiesAnimalesCriaIds,
           produccionMinera: produccionMinera ?? 0,
-          tipoCalendarioId: tipoCalendarioId ?? 0,
+          tiposCalendariosIds: tiposCalendariosIds,
         );
 
   factory DimUbicacionModel.fromJson(Map<String, dynamic> json) =>
@@ -87,28 +87,52 @@ class DimUbicacionModel extends DimUbicacionEntity {
         resguardoId: json["Resguardo_id"],
         autoridadIndigenaId: json["AutoridadIndigena_id"],
         estadoViaId: json["EstadoVia_id"],
-        medioComunicacionId: json["MedioComunicacion_id"],
+        mediosComunicacionIds:
+            List<int>.from(jsonDecode(json["MediosComunicacion_ids"])),
         tiempoTardaId: json["TiempoTarda_id"],
-        medioUtilizaId: json["MedioUtiliza_id"],
-        dificultaAccesoId: json["DificultaAcceso_id"],
+        mediosUtilizaIds: List<int>.from(jsonDecode(json["MediosUtiliza_ids"])),
+        dificultadesAccesoIds:
+            List<int>.from(jsonDecode(json["DificultadesAcceso_ids"])),
         costoDesplazamientoId: json["CostoDesplazamiento_id"],
         existeMedTradicionalComunidad: json["ExisteMedTradicionalComunidad"],
-        especialidadMedTradId: json["EspecialidadMedTrad_id"],
+        especialidadesMedTradIds:
+            List<int>.from(jsonDecode(json["EspecialidadesMedTrad_ids"])),
         tiempoTardaMedTradId: json["TiempoTardaMedTrad_id"],
-        medioUtilizaMedTradId: json["MedioUtilizaMedTrad_id"],
-        dificultadAccesoMedTradId: json["DificultadAccesoMedTrad_id"],
+        mediosUtilizaMedTradIds: json["MediosUtilizaMedTrad_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["MediosUtilizaMedTrad_ids"]))
+            : [],
+        dificultadesAccesoMedTradIds: json["DificultadesAccesoMedTrad_ids"] !=
+                "null"
+            ? List<int>.from(jsonDecode(json["DificultadesAccesoMedTrad_ids"]))
+            : [],
         costoDesplazamientoMedTradicional:
             json["CostoDesplazamiento_MedTradicional"],
-        nombreMedTradicional: json["NombreMedTradicional"],
+        nombresMedTradicional:
+            List<String>.from(jsonDecode(json["nombresMedTradicional"])),
         poseeChagra: json["PoseeChagra"],
-        tuberculoPlatanoId: json["TuberculoPlatano_id"],
-        leguminosaId: json["Leguminosa_id"],
-        hortalizaId: json["Hortaliza_id"],
-        verduraId: json["Verdura_id"],
-        frutoId: json["Fruto_id"],
-        cerealId: json["Cereal_id"],
-        especieAnimalCriaId: json["EspecieAnimalCria_id"],
+        tuberculosPlatanosIds: json["TuberculosPlatanos_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["TuberculosPlatanos_ids"]))
+            : [],
+        leguminosasIds: json["Leguminosas_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["Leguminosas_ids"]))
+            : [],
+        hortalizasIds: json["Hortalizas_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["Hortalizas_ids"]))
+            : [],
+        verdurasIds: json["Verduras_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["Verduras_ids"]))
+            : [],
+        frutosIds: json["Frutos_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["Frutos_ids"]))
+            : [],
+        cerealesIds: json["Cereales_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["Cereales_ids"]))
+            : [],
+        especiesAnimalesCriaIds:
+            List<int>.from(jsonDecode(json["EspeciesAnimalesCria_ids"])),
         produccionMinera: json["ProduccionMinera"],
-        tipoCalendarioId: json["TipoCalendario_id"],
+        tiposCalendariosIds: json["TiposCalendarios_ids"] != "null"
+            ? List<int>.from(jsonDecode(json["TiposCalendarios_ids"]))
+            : [],
       );
 }

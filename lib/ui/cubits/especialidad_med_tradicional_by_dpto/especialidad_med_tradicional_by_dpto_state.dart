@@ -2,9 +2,9 @@ part of 'especialidad_med_tradicional_by_dpto_cubit.dart';
 
 abstract class EspecialidadesMedTradicionalByDptoState extends Equatable {
   final List<EspecialidadMedTradicionalEntity>?
-      especialidadesmedtradicionalByDpto;
+      especialidadesMedtradicionalByDpto;
   const EspecialidadesMedTradicionalByDptoState(
-      {this.especialidadesmedtradicionalByDpto});
+      {this.especialidadesMedtradicionalByDpto});
 
   @override
   List<Object> get props => [];
@@ -19,13 +19,13 @@ class EspecialidadesMedTradicionalByDptoLoading
 class EspecialidadesMedTradicionalByDptoLoaded
     extends EspecialidadesMedTradicionalByDptoState {
   final List<EspecialidadMedTradicionalEntity>?
-      especialidadesmedtradicionalByDptoLoaded;
+      especialidadesMedtradicionalByDptoLoaded;
 
   const EspecialidadesMedTradicionalByDptoLoaded(
-      this.especialidadesmedtradicionalByDptoLoaded)
+      this.especialidadesMedtradicionalByDptoLoaded)
       : super(
-            especialidadesmedtradicionalByDpto:
-                especialidadesmedtradicionalByDptoLoaded);
+            especialidadesMedtradicionalByDpto:
+                especialidadesMedtradicionalByDptoLoaded);
 }
 
 class EspecialidadesMedTradicionalByDptoError

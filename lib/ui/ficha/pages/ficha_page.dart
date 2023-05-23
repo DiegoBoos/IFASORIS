@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
+import 'package:ifasoris/ui/ficha/widgets/aspectos_tierra.dart';
 
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
+import '../../cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
 import '../../cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import '../../cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import '../../cubits/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_cubit.dart';
 import '../../cubits/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_cubit.dart';
+import '../../cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
 import '../../cubits/estado_via/estado_via_cubit.dart';
 import '../../cubits/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_cubit.dart';
+import '../../cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
+import '../../cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
 import '../../cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
+import '../../cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import '../../cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
 import '../../cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
@@ -28,7 +35,9 @@ import '../../cubits/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda
 import '../../cubits/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_cubit.dart';
+import '../../cubits/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_cubit.dart';
 import '../../cubits/ventilacion_vivienda/ventilacion_vivienda_cubit.dart';
+import '../../cubits/verdura_by_dpto/verdura_by_dpto_cubit.dart';
 import '../../cubits/via_acceso/via_acceso_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/acceso_ca_form.dart';
@@ -71,6 +80,8 @@ class _FichaPageState extends State<FichaPage> {
   }
 
   getAccesorias() {
+    BlocProvider.of<AutoridadIndigenaCubit>(context)
+        .getAutoridadesIndigenasDB();
     BlocProvider.of<ViaAccesoCubit>(context).getViasAccesoDB();
     BlocProvider.of<EstadoViaCubit>(context).getEstadosVias();
     BlocProvider.of<MedioComunicacionCubit>(context).getMediosComunicacionDB();
@@ -112,6 +123,15 @@ class _FichaPageState extends State<FichaPage> {
         .getFactoresRiesgoViviendaByDptoDB();
     BlocProvider.of<PresenciaAnimalViviendaByDptoCubit>(context)
         .getPresenciaAnimalesViviendaDB();
+    BlocProvider.of<TuberculoPlatanoByDptoCubit>(context)
+        .getTuberculosPlatanosByDptoDB();
+    BlocProvider.of<EspecieAnimalByDptoCubit>(context)
+        .getEspeciesAnimalesByDptoDB();
+    BlocProvider.of<LeguminosaByDptoCubit>(context).getLeguminosasByDptoDB();
+    BlocProvider.of<HortalizaByDptoCubit>(context).getHortalizasByDptoDB();
+    BlocProvider.of<VerduraByDptoCubit>(context).getVerdurasByDptoDB();
+    BlocProvider.of<FrutoByDptoCubit>(context).getFrutosByDptoDB();
+    BlocProvider.of<CerealByDptoCubit>(context).getCerealesByDptoDB();
   }
 
   @override
@@ -136,7 +156,7 @@ class _FichaPageState extends State<FichaPage> {
                 CustomSnackBar.showSnackBar(context,
                     'Datos de ubicación guardados correctamente', Colors.green);
                 setState(() {
-                  currentStep = 1;
+                  currentStep += 1;
                 });
               }
               if (formStatus is DimUbicacionSubmissionFailed) {
@@ -152,7 +172,7 @@ class _FichaPageState extends State<FichaPage> {
                 CustomSnackBar.showSnackBar(context,
                     'Datos de vivienda guardados correctamente', Colors.green);
                 setState(() {
-                  currentStep = 2;
+                  isCompleted = true;
                 });
               }
               if (formStatus is DimViviendaSubmissionFailed) {
@@ -187,15 +207,13 @@ class _FichaPageState extends State<FichaPage> {
                               DimUbicacionFamiliaChanged(afiliado.familiaId!));
                           dimUbicacionBloc.add(DimUbicacionSubmitted());
                         }
-                      } else if (currentStep == 1) {
+                      } else if (isLastStep) {
                         if (_formKeyVivienda.currentState!.validate()) {
                           _formKeyVivienda.currentState!.save();
                           dimViviendaBloc.add(
                               DimViviendaFamiliaChanged(afiliado.familiaId!));
                           dimViviendaBloc.add(DimViviendaSubmitted());
                         }
-                      } else if (isLastStep) {
-                        print('last step');
                       }
                     },
                     onStepCancel: currentStep == 0
@@ -214,11 +232,6 @@ class _FichaPageState extends State<FichaPage> {
                           const SizedBox(
                             width: 12,
                           ),
-                          if (currentStep != 0)
-                            Expanded(
-                                child: ElevatedButton(
-                                    onPressed: details.onStepCancel,
-                                    child: const Text('Anterior')))
                         ]),
                       );
                     },
@@ -241,7 +254,8 @@ class _FichaPageState extends State<FichaPage> {
                       children: const [
                         DatosUbicacionForm(),
                         AccesoCAForm(),
-                        AccesoMedicoForm()
+                        AccesoMedicoForm(),
+                        AspectosTierraForm(),
                       ],
                     ));
               } else if (state.formStatus is DimUbicacionFormLoaded ||
@@ -252,7 +266,8 @@ class _FichaPageState extends State<FichaPage> {
                       children: [
                         DatosUbicacionForm(dimUbicacion: state),
                         AccesoCAForm(dimUbicacion: state),
-                        AccesoMedicoForm(dimUbicacion: state)
+                        AccesoMedicoForm(dimUbicacion: state),
+                        AspectosTierraForm(dimUbicacion: state),
                       ],
                     ));
               }
@@ -281,13 +296,24 @@ class _FichaPageState extends State<FichaPage> {
             },
           ),
         ),
-        Step(
+        /*  Step(
             isActive: currentStep >= 2,
             title: const Text('Grupo Familiar'),
-            content: const GrupoFamiliar())
+            content: const GrupoFamiliar()) */
       ];
 
   Widget buildCompleted() {
-    return Container();
+    return AlertDialog(
+      title: const Text('Ficha guardada'),
+      content: const Text('Registro completado.'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Aceptar'),
+        ),
+      ],
+    );
   }
 }

@@ -20,9 +20,9 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
       result.fold((failure) {
         emit(state.copyWith(
             formStatus: DimViviendaSubmissionFailed(failure.properties.first)));
-      },
-          (data) =>
-              emit(state.copyWith(formStatus: DimViviendaSubmissionSuccess())));
+      }, (data) {
+        emit(state.copyWith(formStatus: DimViviendaSubmissionSuccess()));
+      });
     });
 
     on<GetDimVivienda>((event, emit) async {

@@ -35,6 +35,7 @@ import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
 import '../../../domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_exports.dart';
 import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import '../../../domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
@@ -125,13 +126,15 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       tratamientoAguaViviendaByDptoUsecaseDB;
   final VentilacionViviendaUsecase ventilacionViviendaUsecase;
   final VentilacionViviendaUsecaseDB ventilacionViviendaUsecaseDB;
+  final TipoViviendaByDptoUsecase tipoViviendaByDptoUsecase;
+  final TipoViviendaByDptoUsecaseDB tipoViviendaByDptoUsecaseDB;
 
   final DimUbicacionUsecase dimUbicacionUsecase;
   final DimViviendaUsecase dimViviendaUsecase;
 
   final SyncLogUsecaseDB syncLogDB;
 
-  int totalAccesories = 32;
+  int totalAccesories = 33;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -169,6 +172,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<TipoSanitarioViviendaEntity> tiposSanitarioViviendaByDptoTemp = [];
   List<TratamientoAguaViviendaEntity> tratamientosAguaViviendaByDptoTemp = [];
   List<VentilacionViviendaEntity> ventilacionesViviendaTemp = [];
+  List<TipoViviendaEntity> tiposViviendaTemp = [];
 
   SyncBloc({
     required this.afiliadoUsecase,
@@ -237,6 +241,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.tratamientoAguaViviendaByDptoUsecaseDB,
     required this.ventilacionViviendaUsecase,
     required this.ventilacionViviendaUsecaseDB,
+    required this.tipoViviendaByDptoUsecase,
+    required this.tipoViviendaByDptoUsecaseDB,
     required this.dimUbicacionUsecase,
     required this.dimViviendaUsecase,
     required this.syncLogDB,
@@ -1905,8 +1911,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= ventilacionesViviendaTemp.length) {
-        event.tablesNames.remove('Accesorias');
-        add(SyncStarted(event.usuario, event.tablesNames));
+        ConnectionSQLiteService.truncateTable('TiposVivienda_DatosVivienda')
+            .then((value) async {
+          tiposViviendaTemp = [];
+          await syncTiposVivienda(event);
+        });
         return;
       }
 
@@ -1920,6 +1929,51 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** VentilacionesVivienda ****************************
+
+// ************************** TiposVivienda ****************************
+
+  Future<void> syncTiposVivienda(SyncStarted event) async {
+    final result = await tipoViviendaByDptoUsecase
+        .getTiposViviendaByDptoUsecase(event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      tiposViviendaTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando tipos vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveTipoVivienda(
+        event,
+        tiposViviendaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveTipoVivienda(
+    SyncStarted event,
+    TipoViviendaEntity tipoVivienda,
+  ) async {
+    final result = await tipoViviendaByDptoUsecaseDB
+        .saveTipoViviendaByDptoUsecaseDB(tipoVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= tiposViviendaTemp.length) {
+        event.tablesNames.remove('Accesorias');
+        add(SyncStarted(event.usuario, event.tablesNames));
+        return;
+      }
+
+      TipoViviendaEntity t = tiposViviendaTemp[data];
+
+      await saveTipoVivienda(
+        event,
+        t,
+      );
+    });
+  }
+
+// ************************** TiposVivienda ****************************
 
   int calculatePercent() {
     final counter = state.syncProgressModel.counter <= 0
