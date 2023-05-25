@@ -1,21 +1,21 @@
 part of 'grupo_familiar_bloc.dart';
 
-abstract class GrupoFamiliarState extends Equatable {
-  final List<GrupoFamiliarEntity>? grupoFamiliar;
-
-  const GrupoFamiliarState({this.grupoFamiliar});
-
-  @override
-  List<Object> get props => [];
+abstract class GrupoFamiliarState {
+  const GrupoFamiliarState();
 }
 
-class GrupoFamiliarInitial extends GrupoFamiliarState {}
+class GrupoFamiliarFormInitial extends GrupoFamiliarState {
+  const GrupoFamiliarFormInitial();
+}
 
-class GrupoFamiliarLoading extends GrupoFamiliarState {}
+class GrupoFamiliarFormLoaded extends GrupoFamiliarState {}
 
-class GrupoFamiliarLoaded extends GrupoFamiliarState {
-  final List<GrupoFamiliarEntity>? grupoFamiliarLoaded;
+class GrupoFamiliarFormEmpty extends GrupoFamiliarState {}
 
-  const GrupoFamiliarLoaded({this.grupoFamiliarLoaded})
-      : super(grupoFamiliar: grupoFamiliarLoaded);
+class GrupoFamiliarSubmissionSuccess extends GrupoFamiliarState {}
+
+class GrupoFamiliarSubmissionFailed extends GrupoFamiliarState {
+  final String message;
+
+  GrupoFamiliarSubmissionFailed(this.message);
 }

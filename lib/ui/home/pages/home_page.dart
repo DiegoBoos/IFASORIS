@@ -64,8 +64,9 @@ class _HomePageState extends State<HomePage> {
 
                 final newFamilia = FamiliaEntity(
                     fichaId: state.fichaCreated!.fichaId!,
-                    apellidosFlia: afiliado.apellido1 + afiliado.apellido2,
-                    afiliadoId: afiliado.afiliadoId);
+                    apellidosFlia:
+                        '${afiliado.apellido1}  ${afiliado.apellido2}',
+                    afiliadoId: afiliado.afiliadoId!);
 
                 familiaCubit.createFamiliaDB(newFamilia);
               }

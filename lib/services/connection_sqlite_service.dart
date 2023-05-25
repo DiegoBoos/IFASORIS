@@ -100,6 +100,7 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_TIPO_SANITARIO_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_TRATAMIENTO_AGUA_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_VENTILACION_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE_TIPOS_CALENDARIOS);
     });
   }
 

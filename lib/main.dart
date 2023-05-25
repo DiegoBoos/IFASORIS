@@ -6,6 +6,7 @@ import 'injection.dart' as di;
 import 'router.dart';
 import 'ui/blocs/afiliado/afiliado_bloc.dart';
 import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import 'ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import 'ui/blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import 'ui/blocs/auth/auth_bloc.dart';
 import 'ui/blocs/dim_vivienda/dim_vivienda_bloc.dart';
@@ -41,6 +42,7 @@ import 'ui/cubits/techo_vivienda_by_dpto/techo_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
 import 'ui/cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_cubit.dart';
+import 'ui/cubits/tipo_calendario/tipo_calendario_cubit.dart';
 import 'ui/cubits/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_cubit.dart';
@@ -183,6 +185,9 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<VentilacionViviendaCubit>(),
           ),
           BlocProvider(
+            create: (_) => di.locator<TipoCalendarioCubit>(),
+          ),
+          BlocProvider(
             create: (_) => di.locator<FichaBloc>(),
           ),
           BlocProvider(
@@ -202,6 +207,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<DimViviendaBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<AfiliadosGrupoFamiliarBloc>(),
           ),
           BlocProvider(
             create: (_) => di.locator<GrupoFamiliarBloc>(),

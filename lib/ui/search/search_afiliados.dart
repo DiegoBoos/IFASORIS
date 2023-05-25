@@ -63,7 +63,7 @@ class SearchAfiliados extends SearchDelegate {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(afiliado.documento),
+                    title: Text('${afiliado.documento}'),
                     subtitle: Text(
                         '${afiliado.nombre1} ${afiliado.nombre2} ${afiliado.apellido1} ${afiliado.apellido2}'),
                     onTap: () async {
@@ -71,7 +71,7 @@ class SearchAfiliados extends SearchDelegate {
                           BlocProvider.of<AfiliadoPrefsBloc>(context);
 
                       final afiliadoHasFicha = await afiliadoBloc
-                          .afiliadoHasFicha(afiliado.afiliadoId)
+                          .afiliadoHasFicha(afiliado.afiliadoId!)
                           .whenComplete(() => close(context, null));
                       if (afiliadoHasFicha != null) {
                         afiliadoPrefsBloc.add(SaveAfiliado(afiliadoHasFicha));

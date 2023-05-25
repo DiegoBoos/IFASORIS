@@ -144,8 +144,8 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     on<ProduccionMineraChanged>((event, emit) {
       emit(state.copyWith(produccionMinera: event.produccionMineraId));
     });
-    on<TiposCalendariosChanged>((event, emit) {
-      emit(state.copyWith(tiposCalendariosIds: event.tiposCalendariosIds));
+    on<TipoCalendarioChanged>((event, emit) {
+      emit(state.copyWith(tipoCalendarioId: event.tipoCalendarioId));
     });
   }
 }

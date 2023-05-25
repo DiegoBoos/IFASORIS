@@ -37,7 +37,7 @@ class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
     if (res.isEmpty) return null;
 
     final resultMap = {for (var e in res[0].entries) e.key: e.value};
-    final result = DimUbicacionModel.fromJson(resultMap);
+    final result = DimUbicacionModel.fromDB(resultMap);
     return result;
   }
 }

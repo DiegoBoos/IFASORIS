@@ -10,9 +10,10 @@ part 'dim_vivienda_state.dart';
 class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
   final DimViviendaUsecaseDB dimViviendaUsecaseDB;
 
-  DimViviendaBloc({required this.dimViviendaUsecaseDB}) : super(initObject()) {
+  DimViviendaBloc({required this.dimViviendaUsecaseDB})
+      : super(DimViviendaEntity()) {
     on<DimViviendaInit>((event, emit) {
-      emit(initObject());
+      emit(DimViviendaEntity());
     });
 
     on<DimViviendaSubmitted>((event, emit) async {

@@ -13,7 +13,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.query('Usuario',
-        where: 'userName = ? AND password = ?',
+        where: 'UserName = ? AND Password = ?',
         whereArgs: [usuario.userName, usuario.password]);
 
     if (res.isEmpty) return null;

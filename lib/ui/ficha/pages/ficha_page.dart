@@ -31,6 +31,7 @@ import '../../cubits/techo_vivienda_by_dpto/techo_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
 import '../../cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_cubit.dart';
+import '../../cubits/tipo_calendario/tipo_calendario_cubit.dart';
 import '../../cubits/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_cubit.dart';
@@ -132,6 +133,7 @@ class _FichaPageState extends State<FichaPage> {
     BlocProvider.of<VerduraByDptoCubit>(context).getVerdurasByDptoDB();
     BlocProvider.of<FrutoByDptoCubit>(context).getFrutosByDptoDB();
     BlocProvider.of<CerealByDptoCubit>(context).getCerealesByDptoDB();
+    BlocProvider.of<TipoCalendarioCubit>(context).getTiposCalendarioDB();
   }
 
   @override
@@ -184,7 +186,7 @@ class _FichaPageState extends State<FichaPage> {
         ],
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Ubicación'),
+            title: const Text('Ficha'),
           ),
           body: isCompleted
               ? buildCompleted()
@@ -214,7 +216,11 @@ class _FichaPageState extends State<FichaPage> {
                               DimViviendaFamiliaChanged(afiliado.familiaId!));
                           dimViviendaBloc.add(DimViviendaSubmitted());
                         }
-                      }
+                      } /* else if (isLastStep) {
+                        if (_formKeyGrupoFamiliar.currentState!.validate()) {
+                          _formKeyGrupoFamiliar.currentState!.save();
+                        }
+                      } */
                     },
                     onStepCancel: currentStep == 0
                         ? null

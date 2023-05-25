@@ -21,14 +21,9 @@ class DimUbicacionSubmissionFailed extends DimUbicacionState {
 }
 
 DimUbicacionEntity initObject() {
-  //TODO: Revisar init object
   return DimUbicacionEntity(
-    ubicacionId: 0,
-    familiaId: 0,
-    nombreRecibeVisita: '',
-    tipoDocRecibeVisita: '',
-    documentoRecibeVisita: '',
-    resguardoId: 0,
-    produccionMinera: 0,
-  );
+      tipoDocRecibeVisita: '',
+      documentoRecibeVisita: '',
+      resguardoId: 0,
+      produccionMinera: 0);
 }

@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
-import 'package:ifasoris/domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
-import 'package:ifasoris/domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
-import 'package:ifasoris/domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_exports.dart';
 import 'package:ifasoris/services/connection_sqlite_service.dart';
 
+import '../../../domain/entities/tipo_calendario_entity.dart';
 import '../../../domain/entities/usuario_entity.dart';
 import '../../../domain/usecases/afiliado/afiliado_exports.dart';
 import '../../../domain/usecases/autoridad_indigena/autoridad_indigena_exports.dart';
 import '../../../domain/usecases/cereal_by_dpto/cereal_by_dpto_exports.dart';
+import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
+import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
+import '../../../domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
 import '../../../domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
 import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_exports.dart';
@@ -33,9 +33,11 @@ import '../../../domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_e
 import '../../../domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
+import '../../../domain/usecases/tipo_calendario/tipo_calendario_exports.dart';
 import '../../../domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_exports.dart';
 import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import '../../../domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
@@ -128,13 +130,15 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final VentilacionViviendaUsecaseDB ventilacionViviendaUsecaseDB;
   final TipoViviendaByDptoUsecase tipoViviendaByDptoUsecase;
   final TipoViviendaByDptoUsecaseDB tipoViviendaByDptoUsecaseDB;
+  final TipoCalendarioUsecase tipoCalendarioUsecase;
+  final TipoCalendarioUsecaseDB tipoCalendarioUsecaseDB;
 
   final DimUbicacionUsecase dimUbicacionUsecase;
   final DimViviendaUsecase dimViviendaUsecase;
 
   final SyncLogUsecaseDB syncLogDB;
 
-  int totalAccesories = 33;
+  int totalAccesories = 34;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -173,6 +177,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<TratamientoAguaViviendaEntity> tratamientosAguaViviendaByDptoTemp = [];
   List<VentilacionViviendaEntity> ventilacionesViviendaTemp = [];
   List<TipoViviendaEntity> tiposViviendaTemp = [];
+  List<TipoCalendarioEntity> tiposCalendarioTemp = [];
 
   SyncBloc({
     required this.afiliadoUsecase,
@@ -243,6 +248,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.ventilacionViviendaUsecaseDB,
     required this.tipoViviendaByDptoUsecase,
     required this.tipoViviendaByDptoUsecaseDB,
+    required this.tipoCalendarioUsecase,
+    required this.tipoCalendarioUsecaseDB,
     required this.dimUbicacionUsecase,
     required this.dimViviendaUsecase,
     required this.syncLogDB,
@@ -1959,8 +1966,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= tiposViviendaTemp.length) {
-        event.tablesNames.remove('Accesorias');
-        add(SyncStarted(event.usuario, event.tablesNames));
+        ConnectionSQLiteService.truncateTable(
+                'TiposCalendarios_AspectosSocioEconomicos')
+            .then((value) async {
+          tiposCalendarioTemp = [];
+          await syncTiposCalendario(event);
+        });
         return;
       }
 
@@ -1974,6 +1985,50 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** TiposVivienda ****************************
+
+// ************************** TiposCalendario ****************************
+
+  Future<void> syncTiposCalendario(SyncStarted event) async {
+    final result = await tipoCalendarioUsecase.getTiposCalendarioUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      tiposCalendarioTemp.addAll(data);
+      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
+          title: 'Descargando tipos calendario',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveTipoCalendario(
+        event,
+        tiposCalendarioTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveTipoCalendario(
+    SyncStarted event,
+    TipoCalendarioEntity tipoCalendario,
+  ) async {
+    final result = await tipoCalendarioUsecaseDB
+        .saveTipoCalendarioUsecaseDB(tipoCalendario);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= tiposCalendarioTemp.length) {
+        event.tablesNames.remove('Accesorias');
+        add(SyncStarted(event.usuario, event.tablesNames));
+        return;
+      }
+
+      TipoCalendarioEntity t = tiposCalendarioTemp[data];
+
+      await saveTipoCalendario(
+        event,
+        t,
+      );
+    });
+  }
+
+// ************************** TiposCalendario ****************************
 
   int calculatePercent() {
     final counter = state.syncProgressModel.counter <= 0

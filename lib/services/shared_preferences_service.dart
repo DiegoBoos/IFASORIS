@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ifasoris/domain/usecases/afiliado/afiliado_exports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {
@@ -36,6 +37,11 @@ class SharedPreferencesService {
   setJson(String key, value) {
     String jsonString = jsonEncode(value);
     _prefs.setString(key, jsonString);
+  }
+
+  void saveAfiliadoToSharedPreferences(AfiliadoEntity afiliado) {
+    final jsonData = afiliado.toJsonForSharedPreferences();
+    _prefs.setString('afiliado', jsonEncode(jsonData));
   }
 
   delete(String key) {

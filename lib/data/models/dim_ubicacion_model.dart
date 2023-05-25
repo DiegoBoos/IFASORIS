@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../domain/entities/dim_ubicacion_entity.dart';
 
 DimUbicacionModel dimUbicacionFromJson(String str) =>
-    DimUbicacionModel.fromJson(json.decode(str));
+    DimUbicacionModel.fromDB(json.decode(str));
 
 class DimUbicacionModel extends DimUbicacionEntity {
   DimUbicacionModel({
@@ -38,7 +38,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
     List<int>? cerealesIds,
     List<int>? especiesAnimalesCriaIds,
     int? produccionMinera,
-    List<int>? tiposCalendariosIds,
+    int? tipoCalendarioId,
   }) : super(
           ubicacionId: ubicacionId ?? 0,
           familiaId: familiaId ?? 0,
@@ -72,10 +72,10 @@ class DimUbicacionModel extends DimUbicacionEntity {
           cerealesIds: cerealesIds,
           especiesAnimalesCriaIds: especiesAnimalesCriaIds,
           produccionMinera: produccionMinera ?? 0,
-          tiposCalendariosIds: tiposCalendariosIds,
+          tipoCalendarioId: tipoCalendarioId,
         );
 
-  factory DimUbicacionModel.fromJson(Map<String, dynamic> json) =>
+  factory DimUbicacionModel.fromDB(Map<String, dynamic> json) =>
       DimUbicacionModel(
         ubicacionId: json["Ubicacion_id"],
         familiaId: json["Familia_id"],
@@ -131,8 +131,6 @@ class DimUbicacionModel extends DimUbicacionEntity {
         especiesAnimalesCriaIds:
             List<int>.from(jsonDecode(json["EspeciesAnimalesCria_ids"])),
         produccionMinera: json["ProduccionMinera"],
-        tiposCalendariosIds: json["TiposCalendarios_ids"] != "null"
-            ? List<int>.from(jsonDecode(json["TiposCalendarios_ids"]))
-            : [],
+        tipoCalendarioId: json["TipoCalendario_id"],
       );
 }

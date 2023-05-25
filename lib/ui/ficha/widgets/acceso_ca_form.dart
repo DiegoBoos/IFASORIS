@@ -102,7 +102,13 @@ class AccesoCAFormState extends State<AccesoCAForm> {
             return Container();
           },
         ),
-        const SizedBox(height: 20),
+        const Divider(),
+        const Text(
+          'Medios que utiliza para el desplazamiento al centro de atención',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const Divider(),
         BlocBuilder<MedioUtilizaCACubit, MediosUtilizaCAState>(
           builder: (context, state) {
             if (state is MediosUtilizaCALoaded) {
@@ -160,7 +166,13 @@ class AccesoCAFormState extends State<AccesoCAForm> {
             return Container();
           },
         ),
-        const SizedBox(height: 20),
+        const Divider(),
+        const Text(
+          'Dificultad de acceso',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const Divider(),
         BlocBuilder<DificultadAccesoCACubit, DificultadesAccesoCAState>(
           builder: (context, state) {
             if (state is DificultadesAccesoCALoaded) {

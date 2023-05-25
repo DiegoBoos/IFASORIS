@@ -19,27 +19,3 @@ class DimViviendaSubmissionFailed extends DimViviendaState {
 
   DimViviendaSubmissionFailed(this.message);
 }
-
-DimViviendaEntity initObject() {
-  //TODO: Revisar init object
-  return DimViviendaEntity(
-      datoViviendaId: 0,
-      familiaId: 0,
-      tipoViviendaId: 0,
-      tenenciaViviendaId: 0,
-      pisosViviendaIds: [],
-      otroTipoPiso: '',
-      techosViviendaIds: [],
-      otroTipoTecho: '',
-      ventilacionViviendaId: 0,
-      iluminacionViviendaId: 0,
-      serviciosPublicosViviendaIds: [],
-      tratamientosAguaViviendaIds: [],
-      tiposSanitarioViviendaIds: [],
-      otroTipoSanitario: '',
-      tiposCombustibleViviendaIds: [],
-      otroTipoCombustible: '',
-      factoresRiesgoViviendaIds: [],
-      presenciaAnimalesViviendaIds: [],
-      otroPresenciaAnimal: '');
-}

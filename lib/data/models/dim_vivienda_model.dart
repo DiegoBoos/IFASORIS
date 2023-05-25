@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../domain/entities/dim_vivienda_entity.dart';
 
 DimViviendaModel dimViviendaFromJson(String str) =>
-    DimViviendaModel.fromJson(json.decode(str));
+    DimViviendaModel.fromDB(json.decode(str));
 
 class DimViviendaModel extends DimViviendaEntity {
   DimViviendaModel({
@@ -48,7 +48,7 @@ class DimViviendaModel extends DimViviendaEntity {
           otroPresenciaAnimal: otroPresenciaAnimal ?? '',
         );
 
-  factory DimViviendaModel.fromJson(Map<String, dynamic> json) =>
+  factory DimViviendaModel.fromDB(Map<String, dynamic> json) =>
       DimViviendaModel(
         datoViviendaId: json["DatoVivienda_id"],
         familiaId: json["Familia_id"],

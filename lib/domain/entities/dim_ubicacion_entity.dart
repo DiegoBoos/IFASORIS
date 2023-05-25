@@ -34,7 +34,7 @@ class DimUbicacionEntity {
   List<int>? cerealesIds;
   List<int>? especiesAnimalesCriaIds;
   int? produccionMinera;
-  List<int>? tiposCalendariosIds;
+  int? tipoCalendarioId;
   DimUbicacionState formStatus;
 
   DimUbicacionEntity(
@@ -69,7 +69,7 @@ class DimUbicacionEntity {
       this.cerealesIds,
       this.especiesAnimalesCriaIds,
       this.produccionMinera,
-      this.tiposCalendariosIds,
+      this.tipoCalendarioId,
       this.formStatus = const DimUbicacionFormInitial()});
 
   DimUbicacionEntity copyWith(
@@ -104,7 +104,7 @@ class DimUbicacionEntity {
           List<int>? cerealesIds,
           List<int>? especiesAnimalesCriaIds,
           int? produccionMinera,
-          List<int>? tiposCalendariosIds,
+          int? tipoCalendarioId,
           DimUbicacionState? formStatus}) =>
       DimUbicacionEntity(
         ubicacionId: ubicacionId ?? this.ubicacionId,
@@ -150,7 +150,7 @@ class DimUbicacionEntity {
         especiesAnimalesCriaIds:
             especiesAnimalesCriaIds ?? this.especiesAnimalesCriaIds,
         produccionMinera: produccionMinera ?? this.produccionMinera,
-        tiposCalendariosIds: tiposCalendariosIds ?? this.tiposCalendariosIds,
+        tipoCalendarioId: tipoCalendarioId ?? this.tipoCalendarioId,
         formStatus: formStatus ?? this.formStatus,
       );
 
@@ -187,6 +187,6 @@ class DimUbicacionEntity {
         "Cereales_ids": jsonEncode(cerealesIds),
         "EspeciesAnimalesCria_ids": jsonEncode(especiesAnimalesCriaIds),
         "ProduccionMinera": produccionMinera,
-        "TiposCalendarios_ids": jsonEncode(tiposCalendariosIds),
+        "TipoCalendario_id": tipoCalendarioId,
       };
 }

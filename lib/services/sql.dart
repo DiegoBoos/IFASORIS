@@ -3,11 +3,11 @@
 class ConnectionSQL {
   static const CREATE_USUARIO = '''
   CREATE TABLE Usuario (
-  id TEXT NOT NULL,
-  userName TEXT,
-  municipio_id INTEGER,
-  departamento_id INTEGER,
-  password TEXT
+  Id TEXT NOT NULL,
+  UserName TEXT,
+  Municipio_id INTEGER,
+  Departamento_id INTEGER,
+  Password TEXT
   )''';
 
   static const CREATE_AFILIADO = '''
@@ -36,8 +36,7 @@ class ConnectionSQL {
 	[fechafiliacion]	datetime COLLATE NOCASE,
 	[CodZona_Afiliado]	varchar(1) COLLATE NOCASE,
 	[CodTipoPob_afiliado]	varchar(2) COLLATE NOCASE,
-	[IPSPrimaria_Afiliado]	varchar COLLATE NOCASE,
-	[Familia_id]	integer
+	[IPSPrimaria_Afiliado]	varchar COLLATE NOCASE
   )''';
 
   static const CREATE_DIFICULTADES_ACCESO_CENTRO_ATENCION = '''
@@ -230,7 +229,7 @@ class ConnectionSQL {
 	[Cereales_ids]	TEXT,
 	[EspeciesAnimalesCria_ids]	TEXT,
 	[ProduccionMinera]	integer NOT NULL,
-	[TiposCalendarios_ids]	TEXT,
+	[TipoCalendario_id]	integer NOT NULL,
     FOREIGN KEY ([AutoridadIndigena_id])
         REFERENCES [AutoridadesIndigenas_DatosVivienda]([AutoridadIndigena_id]),
     FOREIGN KEY ([CostoDesplazamiento_id])
@@ -400,5 +399,11 @@ class ConnectionSQL {
   CREATE TABLE [VentilacionVivienda_DatosVivienda] (
 	[VentilacionVivienda_id]	integer NOT NULL,
 	[Descripcion]	varchar(10) NOT NULL COLLATE NOCASE
+  )''';
+
+  static const CREATE_TIPOS_CALENDARIOS = '''
+  CREATE TABLE [TiposCalendarios_AspectosSocioEconomicos] (
+	[TipoCalendario_id]	integer NOT NULL,
+	[Descripcion]	varchar(50) NOT NULL COLLATE NOCASE
   )''';
 }

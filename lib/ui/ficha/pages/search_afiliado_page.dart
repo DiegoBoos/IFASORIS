@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import 'package:ifasoris/ui/utils/input_decoration.dart';
 
+import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
-import 'grupo_familiar_page.dart';
+import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 
 class SearchAfiliadoPage extends StatefulWidget {
   const SearchAfiliadoPage({super.key});
@@ -19,14 +19,15 @@ class _SearchAfiliadoPageState extends State<SearchAfiliadoPage> {
   @override
   Widget build(BuildContext context) {
     final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
-    final grupoFamiliarBloc = BlocProvider.of<GrupoFamiliarBloc>(context);
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
 
     return Scaffold(
         appBar: AppBar(
           title: const Text('Seleccionar afiliado'),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
               Row(
@@ -61,24 +62,28 @@ class _SearchAfiliadoPageState extends State<SearchAfiliadoPage> {
                       return const Center(child: Text('No hay resultados'));
                     } else {
                       return ListView(
+                          shrinkWrap: true,
                           children: state.afiliadosLoaded!.map((afiliado) {
-                        return Column(
-                          children: [
-                            ListTile(
-                                title: Text(afiliado.documento),
-                                subtitle: Text(
-                                    '${afiliado.nombre1} | ${afiliado.nombre2}'),
-                                onTap: () {
-                                  final newGrupoFamiliar =
-                                      GrupoFamiliarEntity(afiliado.afiliadoId);
+                            return Column(
+                              children: [
+                                ListTile(
+                                    title: Text('${afiliado.documento}'),
+                                    subtitle: Text(
+                                        '${afiliado.nombre1} | ${afiliado.nombre2}'),
+                                    onTap: () {
+                                      final newGrupoFamiliar =
+                                          GrupoFamiliarEntity(
+                                              afiliadoId: afiliado.afiliadoId);
 
-                                  grupoFamiliarBloc
-                                      .add(SaveGrupoFamiliar(newGrupoFamiliar));
-                                }),
-                            const Divider()
-                          ],
-                        );
-                      }).toList());
+                                      afiliadosGrupoFamiliarBloc.add(
+                                          SaveAfiliadoGrupoFamiliar(
+                                              newGrupoFamiliar));
+                                      Navigator.pop(context);
+                                    }),
+                                const Divider()
+                              ],
+                            );
+                          }).toList());
                     }
                   }
                   return Container();

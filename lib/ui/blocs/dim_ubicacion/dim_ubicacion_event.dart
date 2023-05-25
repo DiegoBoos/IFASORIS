@@ -208,8 +208,8 @@ class ProduccionMineraChanged extends DimUbicacionEvent {
   const ProduccionMineraChanged(this.produccionMineraId);
 }
 
-class TiposCalendariosChanged extends DimUbicacionEvent {
-  final List<int> tiposCalendariosIds;
+class TipoCalendarioChanged extends DimUbicacionEvent {
+  final int tipoCalendarioId;
 
-  const TiposCalendariosChanged(this.tiposCalendariosIds);
+  const TipoCalendarioChanged(this.tipoCalendarioId);
 }

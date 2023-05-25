@@ -14,12 +14,12 @@ class AfiliadoPrefsBloc extends Bloc<AfiliadoPrefsEvent, AfiliadoPrefsState> {
       : super(AfiliadoInitial()) {
     on<SaveAfiliado>((event, emit) {
       // Persist data to shared preferences
-      sharedPreferencesService.setJson('afiliado', event.afiliado);
+      sharedPreferencesService.saveAfiliadoToSharedPreferences(event.afiliado);
 
       final afiliadoJson = sharedPreferencesService.getJson('afiliado');
 
       if (afiliadoJson != null) {
-        AfiliadoModel afiliado = AfiliadoModel.fromJson(afiliadoJson);
+        AfiliadoModel afiliado = AfiliadoModel.fromDB(afiliadoJson);
 
         // Emit new state with loaded data
         emit(AfiliadoLoaded(afiliado));
@@ -35,7 +35,7 @@ class AfiliadoPrefsBloc extends Bloc<AfiliadoPrefsEvent, AfiliadoPrefsState> {
           sharedPreferencesService.getJson('afiliado');
 
       if (afiliadoStr.isNotEmpty) {
-        AfiliadoModel afiliado = AfiliadoModel.fromJson(afiliadoStr);
+        AfiliadoModel afiliado = AfiliadoModel.fromDB(afiliadoStr);
 
         // Emit new state with loaded data
         emit(AfiliadoLoaded(afiliado));

@@ -6,7 +6,6 @@ import 'package:ifasoris/domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_
 import 'package:ifasoris/domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_exports.dart';
 import 'package:ifasoris/domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_exports.dart';
 import 'package:ifasoris/domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_exports.dart';
-import 'package:ifasoris/ui/utils/input_decoration.dart';
 
 import '../../../domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
 import '../../../domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
@@ -39,11 +38,11 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   List<int> _selectedFactoresRiesgoVivienda = [];
   List<int> _selectedPresenciaAnimalesVivienda = [];
 
-  bool _showOtherPisoVivienda = false;
+  /* bool _showOtherPisoVivienda = false;
   bool _showOtherTechoVivienda = false;
   bool _showOtherTratamientoAgua = false;
   bool _showOtherTipoSanitario = false;
-  bool _showOtherTipoCombustible = false;
+  bool _showOtherTipoCombustible = false; */
 
   String? _validatePisosVivienda() {
     if (_selectedPisosVivienda.isEmpty) {
@@ -328,12 +327,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _selectedPisosVivienda = [
                                         e.pisoViviendaId
                                       ];
-                                      _showOtherPisoVivienda = true;
+                                      /*  _showOtherPisoVivienda = true; */
                                     } else if (value!) {
                                       _selectedPisosVivienda.remove(6);
                                       _selectedPisosVivienda
                                           .add(e.pisoViviendaId);
-                                      _showOtherPisoVivienda = false;
+                                      /* _showOtherPisoVivienda = false; */
                                     } else {
                                       _selectedPisosVivienda
                                           .remove(e.pisoViviendaId);
@@ -352,7 +351,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                           ],
                         );
                       })
-                            ..add(
+                          /* ..add(
                               _showOtherPisoVivienda
                                   ? Padding(
                                       padding: const EdgeInsets.all(15.0),
@@ -369,12 +368,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                           return null;
                                         },
                                         onSaved: (String? value) {
-                                          //TODO: guardar nuevo valor???
+                                          
                                         },
                                       ),
                                     )
                                   : Container(),
-                            )),
+                            ) */
+                          ),
                       Text(
                         _validatePisosVivienda() ?? '',
                         style: const TextStyle(color: Colors.red),
@@ -424,12 +424,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _selectedTechosVivienda = [
                                         e.techoViviendaId
                                       ];
-                                      _showOtherTechoVivienda = true;
+                                      /*  _showOtherTechoVivienda = true; */
                                     } else if (value!) {
                                       _selectedTechosVivienda.remove(6);
                                       _selectedTechosVivienda
                                           .add(e.techoViviendaId);
-                                      _showOtherTechoVivienda = false;
+                                      /*  _showOtherTechoVivienda = false; */
                                     } else {
                                       _selectedTechosVivienda
                                           .remove(e.techoViviendaId);
@@ -448,7 +448,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                           ],
                         );
                       })
-                            ..add(
+                          /* ..add(
                               _showOtherTechoVivienda
                                   ? Padding(
                                       padding: const EdgeInsets.all(15.0),
@@ -465,12 +465,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                           return null;
                                         },
                                         onSaved: (String? value) {
-                                          //TODO: guardar nuevo valor???
+                                          
                                         },
                                       ),
                                     )
                                   : Container(),
-                            )),
+                            ) */
+                          ),
                       Text(
                         _validateTechosVivienda() ?? '',
                         style: const TextStyle(color: Colors.red),
@@ -745,13 +746,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _selectedTratamientosAguaVivienda = [
                                         e.tratamientoAguaViviendaId
                                       ];
-                                      _showOtherTratamientoAgua = true;
+                                      /*  _showOtherTratamientoAgua = true; */
                                     } else if (value!) {
                                       _selectedTratamientosAguaVivienda
                                           .remove(5);
                                       _selectedTratamientosAguaVivienda
                                           .add(e.tratamientoAguaViviendaId);
-                                      _showOtherTratamientoAgua = false;
+                                      /* _showOtherTratamientoAgua = false; */
                                     } else {
                                       _selectedTratamientosAguaVivienda
                                           .remove(e.tratamientoAguaViviendaId);
@@ -772,7 +773,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                           ],
                         );
                       })
-                            ..add(
+                          /* ..add(
                               _showOtherTratamientoAgua
                                   ? Padding(
                                       padding: const EdgeInsets.all(15.0),
@@ -789,12 +790,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                           return null;
                                         },
                                         onSaved: (String? value) {
-                                          //TODO: guardar nuevo valor???
+                                          
                                         },
                                       ),
                                     )
                                   : Container(),
-                            )),
+                            ) */
+                          ),
                       Text(
                         _validateTratamientosAguaVivienda() ?? '',
                         style: const TextStyle(color: Colors.red),
@@ -846,12 +848,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _selectedTiposSanitarioVivienda = [
                                         e.tipoSanitarioViviendaId
                                       ];
-                                      _showOtherTipoSanitario = true;
+                                      /* _showOtherTipoSanitario = true; */
                                     } else if (value!) {
                                       _selectedTiposSanitarioVivienda.remove(6);
                                       _selectedTiposSanitarioVivienda
                                           .add(e.tipoSanitarioViviendaId);
-                                      _showOtherTipoSanitario = false;
+                                      /* _showOtherTipoSanitario = false; */
                                     } else {
                                       _selectedTiposSanitarioVivienda
                                           .remove(e.tipoSanitarioViviendaId);
@@ -872,7 +874,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                           ],
                         );
                       })
-                            ..add(
+                          /* ..add(
                               _showOtherTipoSanitario
                                   ? Padding(
                                       padding: const EdgeInsets.all(15.0),
@@ -889,12 +891,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                           return null;
                                         },
                                         onSaved: (String? value) {
-                                          //TODO: guardar nuevo valor???
+                                          
                                         },
                                       ),
                                     )
                                   : Container(),
-                            )),
+                            ) */
+                          ),
                       Text(
                         _validateTiposSanitariosVivienda() ?? '',
                         style: const TextStyle(color: Colors.red),
@@ -946,13 +949,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _selectedTiposCombustibleVivienda = [
                                         e.tipoCombustibleViviendaId
                                       ];
-                                      _showOtherTipoCombustible = true;
+                                      /* _showOtherTipoCombustible = true; */
                                     } else if (value!) {
                                       _selectedTiposCombustibleVivienda
                                           .remove(8);
                                       _selectedTiposCombustibleVivienda
                                           .add(e.tipoCombustibleViviendaId);
-                                      _showOtherTipoCombustible = false;
+                                      /* _showOtherTipoCombustible = false; */
                                     } else {
                                       _selectedTiposCombustibleVivienda
                                           .remove(e.tipoCombustibleViviendaId);
@@ -973,7 +976,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                           ],
                         );
                       })
-                            ..add(
+                          /* ..add(
                               _showOtherTipoCombustible
                                   ? Padding(
                                       padding: const EdgeInsets.all(15.0),
@@ -990,12 +993,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                           return null;
                                         },
                                         onSaved: (String? value) {
-                                          //TODO: guardar nuevo valor???
+                                          
                                         },
                                       ),
                                     )
                                   : Container(),
-                            )),
+                            ) */
+                          ),
                       Text(
                         _validateTiposCombustibleVivienda() ?? '',
                         style: const TextStyle(color: Colors.red),

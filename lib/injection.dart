@@ -34,6 +34,7 @@ import 'domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_exports.da
 import 'domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import 'domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
+import 'domain/usecases/tipo_calendario/tipo_calendario_exports.dart';
 import 'domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_exports.dart';
@@ -43,6 +44,7 @@ import 'domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import 'domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
 import 'domain/usecases/via_acceso/via_acceso_exports.dart';
 import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import 'ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import 'ui/blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
@@ -89,6 +91,7 @@ void init() {
   tipoViviendaByDptoInit();
   tratamientoAguaViviendaByDptoInit();
   ventilacionViviendaByDptoInit();
+  tipoCalendarioInit();
   fichaInit();
   familiaInit();
   dimUbicacionInit();
@@ -218,6 +221,8 @@ void syncInit() {
         tipoViviendaByDptoUsecaseDB: locator(),
         dimUbicacionUsecase: locator(),
         dimViviendaUsecase: locator(),
+        tipoCalendarioUsecase: locator(),
+        tipoCalendarioUsecaseDB: locator(),
       ));
 }
 
@@ -1756,7 +1761,48 @@ void dimViviendaInit() {
   );
 }
 
+void tipoCalendarioInit() {
+  // bloc
+  locator.registerFactory(
+      () => TipoCalendarioCubit(tipoCalendarioUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => TipoCalendarioUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => TipoCalendarioUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<TipoCalendarioRepository>(
+    () => TipoCalendarioRepositoryImpl(
+      tipoCalendarioRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<TipoCalendarioRepositoryDB>(
+    () => TipoCalendarioRepositoryDBImpl(
+      tipoCalendarioLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<TipoCalendarioRemoteDataSource>(
+    () => TipoCalendarioRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<TipoCalendarioLocalDataSource>(
+    () => TipoCalendarioLocalDataSourceImpl(),
+  );
+}
+
 void grupoFamiliarInit() {
-  // cubit
+  // bloc
+  locator.registerFactory(() => AfiliadosGrupoFamiliarBloc());
+
+  // bloc
   locator.registerFactory(() => GrupoFamiliarBloc());
 }
