@@ -1,5 +1,16 @@
-import 'dart:convert';
-
+import '../../data/models/cereal_model.dart';
+import '../../data/models/dificultad_acceso_ca_model.dart';
+import '../../data/models/dificultad_acceso_med_tradicional_model.dart';
+import '../../data/models/especialidad_med_tradicional_model.dart';
+import '../../data/models/especie_animal_model.dart';
+import '../../data/models/fruto_model.dart';
+import '../../data/models/hortaliza_model.dart';
+import '../../data/models/leguminosa_model.dart';
+import '../../data/models/medio_comunicacion_model.dart';
+import '../../data/models/medio_utiliza_med_tradicional_model.dart';
+import '../../data/models/nombre_med_tradicional_model.dart';
+import '../../data/models/tuberculo_platano_model.dart';
+import '../../data/models/verdura_model.dart';
 import '../../ui/blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 
 class DimUbicacionEntity {
@@ -13,64 +24,67 @@ class DimUbicacionEntity {
   int? resguardoId;
   int? autoridadIndigenaId;
   int? estadoViaId;
-  List<int>? mediosComunicacionIds;
   int? tiempoTardaId;
-  List<int>? mediosUtilizaIds;
-  List<int>? dificultadesAccesoIds;
+  int? medioUtilizaId;
   int? costoDesplazamientoId;
   int? existeMedTradicionalComunidad;
-  List<int>? especialidadesMedTradIds;
   int? tiempoTardaMedTradId;
-  List<int>? mediosUtilizaMedTradIds;
-  List<int>? dificultadesAccesoMedTradIds;
   int? costoDesplazamientoMedTradicional;
-  List<String>? nombresMedTradicional;
   int? poseeChagra;
-  List<int>? tuberculosPlatanosIds;
-  List<int>? leguminosasIds;
-  List<int>? hortalizasIds;
-  List<int>? verdurasIds;
-  List<int>? frutosIds;
-  List<int>? cerealesIds;
-  List<int>? especiesAnimalesCriaIds;
   int? produccionMinera;
   int? tipoCalendarioId;
+  List<LstDificultadAccesoMedTradicional>? lstDificultadAccesoMedTradicional;
+  List<LstCereal>? lstCereales;
+  List<LstDificultadAccesoAtencion>? lstDificultadAccesoAtencion;
+  List<LstEspMedTradicional>? lstEspMedTradicional;
+  List<LstAnimalCria>? lstAnimalCria;
+  List<LstFruto>? lstFrutos;
+  List<LstHortaliza>? lstHortalizas;
+  List<LstLeguminosa>? lstLeguminosas;
+  List<LstMediosComunica>? lstMediosComunica;
+  List<LstMediosMedTradicional>? lstMediosMedTradicional;
+  List<LstNombreMedTradicional>? lstNombreMedTradicional;
+  List<LstTuberculo>? lstTuberculos;
+  List<LstVerdura>? lstVerduras;
   DimUbicacionState formStatus;
+  int? remoteUbicacionId;
 
-  DimUbicacionEntity(
-      {this.ubicacionId,
-      this.familiaId,
-      this.nombreRecibeVisita,
-      this.tipoDocRecibeVisita,
-      this.documentoRecibeVisita,
-      this.perteneceResguardo,
-      this.viaAccesoId,
-      this.resguardoId,
-      this.autoridadIndigenaId,
-      this.estadoViaId,
-      this.mediosComunicacionIds,
-      this.tiempoTardaId,
-      this.mediosUtilizaIds,
-      this.dificultadesAccesoIds,
-      this.costoDesplazamientoId,
-      this.existeMedTradicionalComunidad,
-      this.especialidadesMedTradIds,
-      this.tiempoTardaMedTradId,
-      this.mediosUtilizaMedTradIds,
-      this.dificultadesAccesoMedTradIds,
-      this.costoDesplazamientoMedTradicional,
-      this.nombresMedTradicional,
-      this.poseeChagra,
-      this.tuberculosPlatanosIds,
-      this.leguminosasIds,
-      this.hortalizasIds,
-      this.verdurasIds,
-      this.frutosIds,
-      this.cerealesIds,
-      this.especiesAnimalesCriaIds,
-      this.produccionMinera,
-      this.tipoCalendarioId,
-      this.formStatus = const DimUbicacionFormInitial()});
+  DimUbicacionEntity({
+    this.ubicacionId,
+    this.familiaId,
+    this.nombreRecibeVisita,
+    this.tipoDocRecibeVisita,
+    this.documentoRecibeVisita,
+    this.perteneceResguardo,
+    this.viaAccesoId,
+    this.resguardoId,
+    this.autoridadIndigenaId,
+    this.estadoViaId,
+    this.tiempoTardaId,
+    this.medioUtilizaId,
+    this.costoDesplazamientoId,
+    this.existeMedTradicionalComunidad,
+    this.tiempoTardaMedTradId,
+    this.costoDesplazamientoMedTradicional,
+    this.poseeChagra,
+    this.produccionMinera,
+    this.tipoCalendarioId,
+    this.lstDificultadAccesoMedTradicional,
+    this.lstCereales,
+    this.lstDificultadAccesoAtencion,
+    this.lstEspMedTradicional,
+    this.lstAnimalCria,
+    this.lstFrutos,
+    this.lstHortalizas,
+    this.lstLeguminosas,
+    this.lstMediosComunica,
+    this.lstMediosMedTradicional,
+    this.lstNombreMedTradicional,
+    this.lstTuberculos,
+    this.lstVerduras,
+    this.formStatus = const DimUbicacionFormInitial(),
+    this.remoteUbicacionId,
+  });
 
   DimUbicacionEntity copyWith(
           {int? ubicacionId,
@@ -83,28 +97,29 @@ class DimUbicacionEntity {
           int? resguardoId,
           int? autoridadIndigenaId,
           int? estadoViaId,
-          List<int>? mediosComunicacionIds,
           int? tiempoTardaId,
-          List<int>? mediosUtilizaIds,
-          List<int>? dificultadesAccesoIds,
+          int? medioUtilizaId,
           int? costoDesplazamientoId,
           int? existeMedTradicionalComunidad,
-          List<int>? especialidadesMedTradIds,
           int? tiempoTardaMedTradId,
-          List<int>? mediosUtilizaMedTradIds,
-          List<int>? dificultadesAccesoMedTradIds,
           int? costoDesplazamientoMedTradicional,
-          List<String>? nombresMedTradicional,
           int? poseeChagra,
-          List<int>? tuberculosPlatanosIds,
-          List<int>? leguminosasIds,
-          List<int>? hortalizasIds,
-          List<int>? verdurasIds,
-          List<int>? frutosIds,
-          List<int>? cerealesIds,
-          List<int>? especiesAnimalesCriaIds,
           int? produccionMinera,
           int? tipoCalendarioId,
+          List<LstDificultadAccesoMedTradicional>?
+              lstDificultadAccesoMedTradicional,
+          List<LstCereal>? lstCereales,
+          List<LstDificultadAccesoAtencion>? lstDificultadAccesoAtencion,
+          List<LstEspMedTradicional>? lstEspMedTradicional,
+          List<LstAnimalCria>? lstAnimalCria,
+          List<LstFruto>? lstFrutos,
+          List<LstHortaliza>? lstHortalizas,
+          List<LstLeguminosa>? lstLeguminosas,
+          List<LstMediosComunica>? lstMediosComunica,
+          List<LstMediosMedTradicional>? lstMediosMedTradicional,
+          List<LstNombreMedTradicional>? lstNombreMedTradicional,
+          List<LstTuberculo>? lstTuberculos,
+          List<LstVerdura>? lstVerduras,
           DimUbicacionState? formStatus}) =>
       DimUbicacionEntity(
         ubicacionId: ubicacionId ?? this.ubicacionId,
@@ -118,39 +133,35 @@ class DimUbicacionEntity {
         resguardoId: resguardoId ?? this.resguardoId,
         autoridadIndigenaId: autoridadIndigenaId ?? this.autoridadIndigenaId,
         estadoViaId: estadoViaId ?? this.estadoViaId,
-        mediosComunicacionIds:
-            mediosComunicacionIds ?? this.mediosComunicacionIds,
         tiempoTardaId: tiempoTardaId ?? this.tiempoTardaId,
-        mediosUtilizaIds: mediosUtilizaIds ?? this.mediosUtilizaIds,
-        dificultadesAccesoIds:
-            dificultadesAccesoIds ?? this.dificultadesAccesoIds,
+        medioUtilizaId: medioUtilizaId ?? this.medioUtilizaId,
         costoDesplazamientoId:
             costoDesplazamientoId ?? this.costoDesplazamientoId,
         existeMedTradicionalComunidad:
             existeMedTradicionalComunidad ?? this.existeMedTradicionalComunidad,
-        especialidadesMedTradIds:
-            especialidadesMedTradIds ?? this.especialidadesMedTradIds,
         tiempoTardaMedTradId: tiempoTardaMedTradId ?? this.tiempoTardaMedTradId,
-        mediosUtilizaMedTradIds:
-            mediosUtilizaMedTradIds ?? this.mediosUtilizaMedTradIds,
-        dificultadesAccesoMedTradIds:
-            dificultadesAccesoMedTradIds ?? this.dificultadesAccesoMedTradIds,
         costoDesplazamientoMedTradicional: costoDesplazamientoMedTradicional ??
             this.costoDesplazamientoMedTradicional,
-        nombresMedTradicional:
-            nombresMedTradicional ?? this.nombresMedTradicional,
         poseeChagra: poseeChagra ?? this.poseeChagra,
-        tuberculosPlatanosIds:
-            tuberculosPlatanosIds ?? this.tuberculosPlatanosIds,
-        leguminosasIds: leguminosasIds ?? this.leguminosasIds,
-        hortalizasIds: hortalizasIds ?? this.hortalizasIds,
-        verdurasIds: verdurasIds ?? this.verdurasIds,
-        frutosIds: frutosIds ?? this.frutosIds,
-        cerealesIds: cerealesIds ?? this.cerealesIds,
-        especiesAnimalesCriaIds:
-            especiesAnimalesCriaIds ?? this.especiesAnimalesCriaIds,
         produccionMinera: produccionMinera ?? this.produccionMinera,
         tipoCalendarioId: tipoCalendarioId ?? this.tipoCalendarioId,
+        lstDificultadAccesoMedTradicional: lstDificultadAccesoMedTradicional ??
+            this.lstDificultadAccesoMedTradicional,
+        lstCereales: lstCereales ?? this.lstCereales,
+        lstDificultadAccesoAtencion:
+            lstDificultadAccesoAtencion ?? this.lstDificultadAccesoAtencion,
+        lstEspMedTradicional: lstEspMedTradicional ?? this.lstEspMedTradicional,
+        lstAnimalCria: lstAnimalCria ?? this.lstAnimalCria,
+        lstFrutos: lstFrutos ?? this.lstFrutos,
+        lstHortalizas: lstHortalizas ?? this.lstHortalizas,
+        lstLeguminosas: lstLeguminosas ?? this.lstLeguminosas,
+        lstMediosComunica: lstMediosComunica ?? this.lstMediosComunica,
+        lstMediosMedTradicional:
+            lstMediosMedTradicional ?? this.lstMediosMedTradicional,
+        lstNombreMedTradicional:
+            lstNombreMedTradicional ?? this.lstNombreMedTradicional,
+        lstTuberculos: lstTuberculos ?? this.lstTuberculos,
+        lstVerduras: lstVerduras ?? this.lstVerduras,
         formStatus: formStatus ?? this.formStatus,
       );
 
@@ -165,28 +176,99 @@ class DimUbicacionEntity {
         "Resguardo_id": resguardoId,
         "AutoridadIndigena_id": autoridadIndigenaId,
         "EstadoVia_id": estadoViaId,
-        "MediosComunicacion_ids": jsonEncode(mediosComunicacionIds),
         "TiempoTarda_id": tiempoTardaId,
-        "MediosUtiliza_ids": jsonEncode(mediosUtilizaIds),
-        "DificultadesAcceso_ids": jsonEncode(dificultadesAccesoIds),
+        "MedioUtiliza_id": medioUtilizaId,
         "CostoDesplazamiento_id": costoDesplazamientoId,
         "ExisteMedTradicionalComunidad": existeMedTradicionalComunidad,
-        "EspecialidadesMedTrad_ids": jsonEncode(especialidadesMedTradIds),
         "TiempoTardaMedTrad_id": tiempoTardaMedTradId,
-        "MediosUtilizaMedTrad_ids": jsonEncode(mediosUtilizaMedTradIds),
-        "DificultadesAccesoMedTrad_ids":
-            jsonEncode(dificultadesAccesoMedTradIds),
         "CostoDesplazamiento_MedTradicional": costoDesplazamientoMedTradicional,
-        "nombresMedTradicional": jsonEncode(nombresMedTradicional),
         "PoseeChagra": poseeChagra,
-        "TuberculosPlatanos_ids": jsonEncode(tuberculosPlatanosIds),
-        "Leguminosas_ids": jsonEncode(leguminosasIds),
-        "Hortalizas_ids": jsonEncode(hortalizasIds),
-        "Verduras_ids": jsonEncode(verdurasIds),
-        "Frutos_ids": jsonEncode(frutosIds),
-        "Cereales_ids": jsonEncode(cerealesIds),
-        "EspeciesAnimalesCria_ids": jsonEncode(especiesAnimalesCriaIds),
         "ProduccionMinera": produccionMinera,
         "TipoCalendario_id": tipoCalendarioId,
+        "remoteUbicacionId": remoteUbicacionId,
       };
+
+  Map<String, dynamic> toJsonUpload() {
+    final Map<String, dynamic> data = {
+      "Familia_id": familiaId,
+      "NombreRecibeVisita": nombreRecibeVisita,
+      "TipoDoc_RecibeVisita": tipoDocRecibeVisita,
+      "Documento_RecibeVisita": documentoRecibeVisita,
+      "PerteneceResguardo": perteneceResguardo,
+      "ViaAcceso_id": viaAccesoId,
+      "Resguardo_id": resguardoId,
+      "AutoridadIndigena_id": autoridadIndigenaId,
+      "EstadoVia_id": estadoViaId,
+      "TiempoTarda_id": tiempoTardaId,
+      "MedioUtiliza_id": medioUtilizaId,
+      "CostoDesplazamiento_id": costoDesplazamientoId,
+      "ExisteMedTradicionalComunidad": existeMedTradicionalComunidad,
+      "TiempoTardaMedTrad_id": tiempoTardaMedTradId,
+      "CostoDesplazamiento_MedTradicional": costoDesplazamientoMedTradicional,
+      "PoseeChagra": poseeChagra,
+      "ProduccionMinera": produccionMinera,
+      "TipoCalendario_id": tipoCalendarioId,
+      "remoteUbicacionId": remoteUbicacionId,
+    };
+
+    if (lstDificultadAccesoMedTradicional != null) {
+      data["lstDificultadAccesoMedTradicional"] =
+          lstDificultadAccesoMedTradicional!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstCereales != null) {
+      data["lstCereales"] = lstCereales!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstDificultadAccesoAtencion != null) {
+      data["lstDificultadAccesoAtencion"] =
+          lstDificultadAccesoAtencion!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstEspMedTradicional != null) {
+      data["lstEspMedTradicional"] =
+          lstEspMedTradicional!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstAnimalCria != null) {
+      data["lstAnimalCria"] = lstAnimalCria!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstFrutos != null) {
+      data["lstFrutos"] = lstFrutos!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstHortalizas != null) {
+      data["lstHortalizas"] = lstHortalizas!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstLeguminosas != null) {
+      data["lstLeguminosas"] = lstLeguminosas!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstMediosComunica != null) {
+      data["lstMediosComunica"] =
+          lstMediosComunica!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstMediosMedTradicional != null) {
+      data["lstMediosMedTradicional"] =
+          lstMediosMedTradicional!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstNombreMedTradicional != null) {
+      data["lstNombreMedTradicional"] =
+          lstNombreMedTradicional!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstTuberculos != null) {
+      data["lstTuberculos"] = lstTuberculos!.map((x) => x.toJson()).toList();
+    }
+
+    if (lstVerduras != null) {
+      data["lstVerduras"] = lstVerduras!.map((x) => x.toJson()).toList();
+    }
+
+    return data;
+  }
 }

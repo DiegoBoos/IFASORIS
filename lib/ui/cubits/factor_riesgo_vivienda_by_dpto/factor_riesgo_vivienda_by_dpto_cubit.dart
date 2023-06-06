@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:ifasoris/data/models/factor_riesgo_vivienda_model.dart';
 
 import '../../../domain/entities/factor_riesgo_vivienda_entity.dart';
 import '../../../domain/usecases/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_db_usecase.dart';
@@ -21,5 +22,12 @@ class FactorRiesgoViviendaByDptoCubit
         (failure) =>
             emit(FactoresRiesgoViviendaByDptoError(failure.properties.first)),
         (data) => emit(FactoresRiesgoViviendaByDptoLoaded(data)));
+  }
+
+  Future<List<LstFactoresRiesgo>> getFactoresRiesgoViviendaDB(
+      int? datoViviendaId) async {
+    final result = await factorRiesgoViviendaByDptoUsecaseDB
+        .getFactoresRiesgoViviendaUsecaseDB(datoViviendaId);
+    return result.fold((failure) => [], (data) => data);
   }
 }

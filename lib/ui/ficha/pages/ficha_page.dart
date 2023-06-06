@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
-import 'package:ifasoris/ui/ficha/widgets/aspectos_tierra.dart';
+import 'package:ifasoris/ui/cubits/dim_ubicacion/dim_ubicacion_state.dart';
 
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
+import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
 import '../../cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import '../../cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
@@ -43,6 +43,7 @@ import '../../cubits/via_acceso/via_acceso_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/acceso_ca_form.dart';
 import '../widgets/acceso_medico_form.dart';
+import '../widgets/aspectos_tierra.dart';
 import '../widgets/datos_ubicacion_form.dart';
 import '../widgets/datos_vivienda_form.dart';
 import '../widgets/grupo_familiar_form.dart';
@@ -157,13 +158,15 @@ class _FichaPageState extends State<FichaPage> {
               if (formStatus is DimUbicacionSubmissionSuccess) {
                 CustomSnackBar.showSnackBar(context,
                     'Datos de ubicación guardados correctamente', Colors.green);
+
                 setState(() {
-                  currentStep += 1;
+                  currentStep = 1;
                 });
               }
               if (formStatus is DimUbicacionSubmissionFailed) {
                 CustomSnackBar.showSnackBar(
                     context, formStatus.message.toString(), Colors.red);
+                dimUbicacionBloc.add(DimUbicacionInit());
               }
             },
           ),
@@ -173,6 +176,8 @@ class _FichaPageState extends State<FichaPage> {
               if (formStatus is DimViviendaSubmissionSuccess) {
                 CustomSnackBar.showSnackBar(context,
                     'Datos de vivienda guardados correctamente', Colors.green);
+                dimViviendaBloc.add(DimViviendaSubmitted());
+
                 setState(() {
                   isCompleted = true;
                 });
@@ -180,6 +185,8 @@ class _FichaPageState extends State<FichaPage> {
               if (formStatus is DimViviendaSubmissionFailed) {
                 CustomSnackBar.showSnackBar(
                     context, formStatus.message.toString(), Colors.red);
+
+                dimViviendaBloc.add(DimViviendaInit());
               }
             },
           )

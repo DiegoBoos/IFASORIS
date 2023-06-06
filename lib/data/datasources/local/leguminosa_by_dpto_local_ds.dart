@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../../../domain/entities/leguminosa_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
 import '../../models/leguminosa_model.dart';
@@ -5,6 +7,11 @@ import '../../models/leguminosa_model.dart';
 abstract class LeguminosaByDptoLocalDataSource {
   Future<List<LeguminosaModel>> getLeguminosasByDpto();
   Future<int> saveLeguminosaByDpto(LeguminosaEntity leguminosa);
+
+  Future<int> saveUbicacionLeguminosas(
+      int ubicacionId, List<LstLeguminosa> lstLeguminosas);
+
+  Future<List<LstLeguminosa>> getUbicacionLeguminosas(int? ubicacionId);
 }
 
 class LeguminosaByDptoLocalDataSourceImpl
@@ -28,5 +35,39 @@ class LeguminosaByDptoLocalDataSourceImpl
         'Leguminosas_AspectosSocioEconomicos', leguminosa.toJson());
 
     return res;
+  }
+
+  @override
+  Future<int> saveUbicacionLeguminosas(
+      int ubicacionId, List<LstLeguminosa> lstLeguminosas) async {
+    final db = await ConnectionSQLiteService.db;
+
+    Batch batch = db.batch();
+    batch.delete('Asp1_UbicacionLeguminosas');
+
+    final ubicacionLeguminosas = lstLeguminosas
+        .map((item) => UbicacionLeguminosas(
+            leguminosaId: item.leguminosaId, ubicacionId: ubicacionId))
+        .toList();
+
+    for (final ubicacionLeguminosa in ubicacionLeguminosas) {
+      batch.insert('Asp1_UbicacionLeguminosas', ubicacionLeguminosa.toJson());
+    }
+
+    final res = await batch.commit();
+
+    return res.length;
+  }
+
+  @override
+  Future<List<LstLeguminosa>> getUbicacionLeguminosas(int? ubicacionId) async {
+    final db = await ConnectionSQLiteService.db;
+    final res = await db.query('Asp1_UbicacionLeguminosas',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final result =
+        List<LstLeguminosa>.from(res.map((m) => LstLeguminosa.fromJson(m)))
+            .toList();
+
+    return result;
   }
 }

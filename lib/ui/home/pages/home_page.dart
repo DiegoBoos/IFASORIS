@@ -100,18 +100,13 @@ class _HomePageState extends State<HomePage> {
             }
           },
           builder: (context, state) {
-            if (state is InitializingSync) {
-              return LoadingPage(
-                  title: state.syncProgressModel.title,
-                  text: 'Iniciando sincronización...');
-            }
-            if (state is SyncDownloading || state is SyncInProgress) {
+            if (state is SyncDownloading || state is SyncPercentageInProgress) {
               return LoadingPage(
                   title: state.syncProgressModel.title,
                   text:
                       '${state.syncProgressModel.title} ${state.syncProgressModel.percent}%');
             }
-            if (state is SyncInProgressAccesories) {
+            if (state is SyncIncrementInProgress) {
               return LoadingPage(
                   title: state.syncProgressModel.title,
                   text:
@@ -156,6 +151,7 @@ class _HomePageState extends State<HomePage> {
                                                   context);
                                           final newFicha = FichaEntity(
                                               fechaCreacion: DateTime.now(),
+                                              //TODO: ???
                                               numFicha: '1',
                                               userName: authBloc
                                                   .state.usuario!.userName,

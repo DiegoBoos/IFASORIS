@@ -25,3 +25,47 @@ class ServicioPublicoViviendaModel extends ServicioPublicoViviendaEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstServPublico {
+  int? servicioPublicoViviendaId;
+
+  LstServPublico({
+    this.servicioPublicoViviendaId,
+  });
+
+  factory LstServPublico.fromJson(Map<String, dynamic> json) => LstServPublico(
+        servicioPublicoViviendaId: json["ServicioPublicoVivienda_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "ServicioPublicoVivienda_id": servicioPublicoViviendaId,
+      };
+}
+
+List<ViviendaServiciosPublicos> viviendaServiciosPublicosFromJson(String str) =>
+    List<ViviendaServiciosPublicos>.from(
+        json.decode(str).map((x) => ViviendaServiciosPublicos.fromJson(x)));
+
+class ViviendaServiciosPublicos {
+  int? viviendaServicioPublicoId;
+  int? datoViviendaId;
+  int? servicioPublicoViviendaId;
+
+  ViviendaServiciosPublicos({
+    this.viviendaServicioPublicoId,
+    this.datoViviendaId,
+    this.servicioPublicoViviendaId,
+  });
+
+  factory ViviendaServiciosPublicos.fromJson(Map<String, dynamic> json) =>
+      ViviendaServiciosPublicos(
+        viviendaServicioPublicoId: json["ViviendaServicioPublico_id"],
+        datoViviendaId: json["DatoVivienda_id"],
+        servicioPublicoViviendaId: json["ServicioPublicoVivienda_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": datoViviendaId,
+        "ServicioPublicoVivienda_id": servicioPublicoViviendaId,
+      };
+}

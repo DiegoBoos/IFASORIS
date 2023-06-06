@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/servicio_publico_vivienda_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/servicio_publico_vivienda_entity.dart';
@@ -18,5 +19,17 @@ class ServicioPublicoViviendaByDptoUsecaseDB {
   Future<Either<Failure, List<ServicioPublicoViviendaEntity>>>
       getServiciosPublicosViviendaByDptoUsecaseDB() {
     return repositoryDB.getServiciosPublicosViviendaByDptoRepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveServiciosPublicosViviendaUsecaseDB(
+      int datoViviendaId, List<LstServPublico> lstServPublicos) {
+    return repositoryDB.saveServiciosPublicosViviendaRepositoryDB(
+        datoViviendaId, lstServPublicos);
+  }
+
+  Future<Either<Failure, List<LstServPublico>>> getServiciosPublicosViviendaDB(
+      int? datoViviendaId) {
+    return repositoryDB
+        .getServiciosPublicosViviendaRepositoryDB(datoViviendaId);
   }
 }

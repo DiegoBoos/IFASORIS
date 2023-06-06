@@ -12,6 +12,8 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   Future<FamiliaEntity> createFamilia(FamiliaEntity familia) async {
     final db = await ConnectionSQLiteService.db;
 
+    familia.copyWith(remoteFamiliaId: 0);
+
     final res = await db.insert('Familia', familia.toJson());
 
     familia.familiaId = res;

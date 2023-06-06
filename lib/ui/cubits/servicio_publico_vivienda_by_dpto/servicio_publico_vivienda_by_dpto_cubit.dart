@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:ifasoris/data/models/servicio_publico_vivienda_model.dart';
 
 import '../../../domain/entities/servicio_publico_vivienda_entity.dart';
 import '../../../domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_db_usecase.dart';
@@ -22,5 +23,12 @@ class ServicioPublicoViviendaByDptoCubit
         (failure) => emit(
             ServiciosPublicosViviendaByDptoError(failure.properties.first)),
         (data) => emit(ServiciosPublicosViviendaByDptoLoaded(data)));
+  }
+
+  Future<List<LstServPublico>> getServiciosPublicosViviendaDB(
+      int? datoViviendaId) async {
+    final result = await servicioPublicoViviendaByDptoUsecaseDB
+        .getServiciosPublicosViviendaDB(datoViviendaId);
+    return result.fold((failure) => [], (data) => data);
   }
 }

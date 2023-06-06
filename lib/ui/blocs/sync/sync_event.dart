@@ -20,19 +20,19 @@ class Downloading extends SyncEvent {
   const Downloading(this.syncProgress);
 }
 
-class SyncStatusChanged extends SyncEvent {
+class SyncPercentageChanged extends SyncEvent {
   final SyncProgressModel syncProgress;
 
-  const SyncStatusChanged(this.syncProgress);
+  const SyncPercentageChanged(this.syncProgress);
 
   @override
   List<Object> get props => [syncProgress];
 }
 
-class SyncAccesoriesChanged extends SyncEvent {
+class SyncIncrementChanged extends SyncEvent {
   final SyncProgressModel syncProgress;
 
-  const SyncAccesoriesChanged(this.syncProgress);
+  const SyncIncrementChanged(this.syncProgress);
 
   @override
   List<Object> get props => [syncProgress];

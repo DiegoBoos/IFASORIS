@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/techo_vivienda_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -33,6 +34,34 @@ class TechoViviendaByDptoRepositoryDBImpl
     try {
       final result = await techoViviendaByDptoLocalDataSource
           .saveTechoViviendaByDpto(techoVivienda);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveTechosViviendaRepositoryDB(
+      int datoViviendaId, List<LstTecho> lstTechos) async {
+    try {
+      final result = await techoViviendaByDptoLocalDataSource
+          .saveTechosVivienda(datoViviendaId, lstTechos);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstTecho>>> getTechosViviendaRepositoryDB(
+      int? datoViviendaId) async {
+    try {
+      final result = await techoViviendaByDptoLocalDataSource
+          .getTechosVivienda(datoViviendaId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

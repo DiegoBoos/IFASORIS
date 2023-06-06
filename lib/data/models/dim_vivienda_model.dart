@@ -1,91 +1,86 @@
 import 'dart:convert';
 
 import '../../domain/entities/dim_vivienda_entity.dart';
+import 'factor_riesgo_vivienda_model.dart';
+import 'presencia_animal_vivienda_model.dart';
+import 'servicio_publico_vivienda_model.dart';
+import 'techo_vivienda_model.dart';
+import 'tipo_combustible_vivienda_model.dart';
+import 'tipo_sanitario_vivienda_model.dart';
+import 'tratamiento_agua_vivienda_model.dart';
 
 DimViviendaModel dimViviendaFromJson(String str) =>
-    DimViviendaModel.fromDB(json.decode(str));
+    DimViviendaModel.fromJson(json.decode(str));
 
 class DimViviendaModel extends DimViviendaEntity {
   DimViviendaModel({
-    int? datoViviendaId,
     int? familiaId,
     int? tipoViviendaId,
     int? tenenciaViviendaId,
-    List<int>? pisosViviendaIds,
-    String? otroTipoPiso,
-    List<int>? techosViviendaIds,
-    String? otroTipoTecho,
     int? ventilacionViviendaId,
     int? iluminacionViviendaId,
-    List<int>? serviciosPublicosViviendaIds,
-    List<int>? tratamientosAguaViviendaIds,
-    List<int>? tiposSanitarioViviendaIds,
-    String? otroTipoSanitario,
-    List<int>? tiposCombustibleViviendaIds,
-    String? otroTipoCombustible,
-    List<int>? factoresRiesgoViviendaIds,
-    List<int>? presenciaAnimalesViviendaIds,
-    String? otroPresenciaAnimal,
+    int? pisoViviendaId,
+    String? otroTipoPiso,
+    List<LstTecho>? lstTechos,
+    List<LstServPublico>? lstServPublicos,
+    List<LstTmtoAgua>? lstTmtoAguas,
+    List<LstFactoresRiesgo>? lstFactoresRiesgo,
+    List<LstTiposSanitario>? lstTiposSanitario,
+    List<LstTiposCombustible>? lstTiposCombustible,
+    List<LstPresenciaAnimal>? lstPresenciaAnimales,
   }) : super(
-          datoViviendaId: datoViviendaId ?? 0,
-          familiaId: familiaId ?? 0,
-          tipoViviendaId: tipoViviendaId ?? 0,
-          tenenciaViviendaId: tenenciaViviendaId ?? 0,
-          pisosViviendaIds: pisosViviendaIds,
-          otroTipoPiso: otroTipoPiso ?? '',
-          techosViviendaIds: techosViviendaIds,
-          otroTipoTecho: otroTipoTecho ?? '',
-          ventilacionViviendaId: ventilacionViviendaId ?? 0,
-          iluminacionViviendaId: iluminacionViviendaId ?? 0,
-          serviciosPublicosViviendaIds: serviciosPublicosViviendaIds,
-          tratamientosAguaViviendaIds: tratamientosAguaViviendaIds,
-          tiposSanitarioViviendaIds: tiposSanitarioViviendaIds,
-          otroTipoSanitario: otroTipoSanitario ?? '',
-          tiposCombustibleViviendaIds: tiposCombustibleViviendaIds,
-          otroTipoCombustible: otroTipoCombustible ?? '',
-          factoresRiesgoViviendaIds: factoresRiesgoViviendaIds,
-          presenciaAnimalesViviendaIds: presenciaAnimalesViviendaIds,
-          otroPresenciaAnimal: otroPresenciaAnimal ?? '',
+          familiaId: familiaId,
+          tipoViviendaId: tipoViviendaId,
+          tenenciaViviendaId: tenenciaViviendaId,
+          ventilacionViviendaId: ventilacionViviendaId,
+          iluminacionViviendaId: iluminacionViviendaId,
+          pisoViviendaId: pisoViviendaId,
+          otroTipoPiso: otroTipoPiso,
+          lstTechos: lstTechos,
+          lstServPublicos: lstServPublicos,
+          lstTmtoAguas: lstTmtoAguas,
+          lstFactoresRiesgo: lstFactoresRiesgo,
+          lstTiposSanitario: lstTiposSanitario,
+          lstTiposCombustible: lstTiposCombustible,
+          lstPresenciaAnimales: lstPresenciaAnimales,
         );
 
-  factory DimViviendaModel.fromDB(Map<String, dynamic> json) =>
+  factory DimViviendaModel.fromJson(Map<String, dynamic> json) =>
       DimViviendaModel(
-        datoViviendaId: json["DatoVivienda_id"],
         familiaId: json["Familia_id"],
         tipoViviendaId: json["TipoVivienda_id"],
         tenenciaViviendaId: json["TenenciaVivienda_id"],
-        pisosViviendaIds: json["PisosVivienda_ids"] != "null"
-            ? List<int>.from(jsonDecode(json["PisosVivienda_ids"]))
-            : [],
-        otroTipoPiso: json["OtroTipoPiso"],
-        techosViviendaIds: json["TechoVivienda_id"],
-        otroTipoTecho: json["OtroTipoTecho"],
         ventilacionViviendaId: json["VentilacionVivienda_id"],
         iluminacionViviendaId: json["IluminacionVivienda_id"],
-        serviciosPublicosViviendaIds: json["ServiciosPublicosVivienda_ids"] !=
-                "null"
-            ? List<int>.from(jsonDecode(json["ServiciosPublicosVivienda_ids"]))
-            : [],
-        tratamientosAguaViviendaIds: json["TratamientosAguaVivienda_ids"] !=
-                "null"
-            ? List<int>.from(jsonDecode(json["TratamientosAguaVivienda_ids"]))
-            : [],
-        tiposSanitarioViviendaIds: json["TiposSanitarioVivienda_ids"] != "null"
-            ? List<int>.from(jsonDecode(json["TiposSanitarioVivienda_ids"]))
-            : [],
-        otroTipoSanitario: json["OtroTipoSanitario"],
-        tiposCombustibleViviendaIds: json["TiposCombustibleVivienda_ids"] !=
-                "null"
-            ? List<int>.from(jsonDecode(json["TiposCombustibleVivienda_ids"]))
-            : [],
-        otroTipoCombustible: json["OtroTipoCombustible"],
-        factoresRiesgoViviendaIds: json["FactoresRiesgoVivienda_ids"] != "null"
-            ? List<int>.from(jsonDecode(json["FactoresRiesgoVivienda_ids"]))
-            : [],
-        presenciaAnimalesViviendaIds: json["PresenciaAnimalesVivienda_ids"] !=
-                "null"
-            ? List<int>.from(jsonDecode(json["PresenciaAnimalesVivienda_ids"]))
-            : [],
-        otroPresenciaAnimal: json["OtroPresenciaAnimal"],
+        pisoViviendaId: json["PisoVivienda_id"],
+        otroTipoPiso: json["OtroTipoPiso"],
+        lstTechos: json["lstTechos"] == null
+            ? []
+            : List<LstTecho>.from(
+                json["lstTechos"]!.map((x) => LstTecho.fromJson(x))),
+        lstServPublicos: json["lstServPublicos"] == null
+            ? []
+            : List<LstServPublico>.from(json["lstServPublicos"]!
+                .map((x) => LstServPublico.fromJson(x))),
+        lstTmtoAguas: json["lstTmtoAguas"] == null
+            ? []
+            : List<LstTmtoAgua>.from(
+                json["lstTmtoAguas"]!.map((x) => LstTmtoAgua.fromJson(x))),
+        lstFactoresRiesgo: json["lstFactoresRiesgo"] == null
+            ? []
+            : List<LstFactoresRiesgo>.from(json["lstFactoresRiesgo"]!
+                .map((x) => LstFactoresRiesgo.fromJson(x))),
+        lstTiposSanitario: json["lstTiposSanitario"] == null
+            ? []
+            : List<LstTiposSanitario>.from(json["lstTiposSanitario"]!
+                .map((x) => LstTiposSanitario.fromJson(x))),
+        lstTiposCombustible: json["lstTiposCombustible"] == null
+            ? []
+            : List<LstTiposCombustible>.from(json["lstTiposCombustible"]!
+                .map((x) => LstTiposCombustible.fromJson(x))),
+        lstPresenciaAnimales: json["lstPresenciaAnimales"] == null
+            ? []
+            : List<LstPresenciaAnimal>.from(json["lstPresenciaAnimales"]!
+                .map((x) => LstPresenciaAnimal.fromJson(x))),
       );
 }

@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/models/cereal_model.dart';
+import '../../../data/models/especie_animal_model.dart';
+import '../../../data/models/fruto_model.dart';
+import '../../../data/models/hortaliza_model.dart';
+import '../../../data/models/leguminosa_model.dart';
+import '../../../data/models/tuberculo_platano_model.dart';
+import '../../../data/models/verdura_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
@@ -24,13 +31,13 @@ class AspectosTierraForm extends StatefulWidget {
 class AspectosTierraFormState extends State<AspectosTierraForm> {
   int? _poseeChagra;
   int? _tipoCalendarioId;
-  List<int> _selectedTuberculosPlatanos = [];
-  List<int> _selectedEspeciesAnimales = [];
-  List<int> _selectedLeguminosasByDpto = [];
-  List<int> _selectedHortalizasByDpto = [];
-  List<int> _selectedVerdurasByDpto = [];
-  List<int> _selectedFrutosByDpto = [];
-  List<int> _selectedCerealesByDpto = [];
+  List<LstTuberculo> _selectedTuberculosPlatanos = [];
+  List<LstAnimalCria> _selectedEspeciesAnimales = [];
+  List<LstLeguminosa> _selectedLeguminosasByDpto = [];
+  List<LstHortaliza> _selectedHortalizasByDpto = [];
+  List<LstVerdura> _selectedVerdurasByDpto = [];
+  List<LstFruto> _selectedFrutosByDpto = [];
+  List<LstCereal> _selectedCerealesByDpto = [];
 
   String? _validateTuberculosPlatanos() {
     if (_selectedTuberculosPlatanos.isEmpty) {
@@ -102,66 +109,57 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
     setState(() {
       _poseeChagra = widget.dimUbicacion?.poseeChagra;
       _tipoCalendarioId = widget.dimUbicacion?.tipoCalendarioId;
-
-      if (widget.dimUbicacion?.tuberculosPlatanosIds != null) {
-        _selectedTuberculosPlatanos =
-            widget.dimUbicacion!.tuberculosPlatanosIds!.isEmpty
-                ? []
-                : widget.dimUbicacion!.tuberculosPlatanosIds!;
-      } else {
-        _selectedTuberculosPlatanos = [];
-      }
-
-      if (widget.dimUbicacion?.leguminosasIds != null) {
-        _selectedLeguminosasByDpto =
-            widget.dimUbicacion!.leguminosasIds!.isEmpty
-                ? []
-                : widget.dimUbicacion!.leguminosasIds!;
-      } else {
-        _selectedLeguminosasByDpto = [];
-      }
-
-      if (widget.dimUbicacion?.hortalizasIds != null) {
-        _selectedHortalizasByDpto = widget.dimUbicacion!.hortalizasIds!.isEmpty
-            ? []
-            : widget.dimUbicacion!.hortalizasIds!;
-      } else {
-        _selectedHortalizasByDpto = [];
-      }
-
-      if (widget.dimUbicacion?.verdurasIds != null) {
-        _selectedVerdurasByDpto = widget.dimUbicacion!.verdurasIds!.isEmpty
-            ? []
-            : widget.dimUbicacion!.verdurasIds!;
-      } else {
-        _selectedVerdurasByDpto = [];
-      }
-
-      if (widget.dimUbicacion?.frutosIds != null) {
-        _selectedFrutosByDpto = widget.dimUbicacion!.frutosIds!.isEmpty
-            ? []
-            : widget.dimUbicacion!.frutosIds!;
-      } else {
-        _selectedFrutosByDpto = [];
-      }
-
-      if (widget.dimUbicacion?.cerealesIds != null) {
-        _selectedCerealesByDpto = widget.dimUbicacion!.cerealesIds!.isEmpty
-            ? []
-            : widget.dimUbicacion!.cerealesIds!;
-      } else {
-        _selectedCerealesByDpto = [];
-      }
-
-      if (widget.dimUbicacion?.cerealesIds != null) {
-        _selectedEspeciesAnimales =
-            widget.dimUbicacion!.especiesAnimalesCriaIds!.isEmpty
-                ? []
-                : widget.dimUbicacion!.especiesAnimalesCriaIds!;
-      } else {
-        _selectedEspeciesAnimales = [];
-      }
     });
+    getOptions();
+  }
+
+  Future<void> getOptions() async {
+    final tuberculoPlatanoByDptoCubit =
+        BlocProvider.of<TuberculoPlatanoByDptoCubit>(
+      context,
+    );
+
+    final leguminosaByDptoCubit = BlocProvider.of<LeguminosaByDptoCubit>(
+      context,
+    );
+
+    final hortalizaByDptoCubit = BlocProvider.of<HortalizaByDptoCubit>(
+      context,
+    );
+    final verduraByDptoCubit = BlocProvider.of<VerduraByDptoCubit>(
+      context,
+    );
+    final frutoByDptoCubit = BlocProvider.of<FrutoByDptoCubit>(
+      context,
+    );
+    final cerealByDptoCubit = BlocProvider.of<CerealByDptoCubit>(
+      context,
+    );
+    final especieAnimalByDptoCubit = BlocProvider.of<EspecieAnimalByDptoCubit>(
+      context,
+    );
+
+    _selectedTuberculosPlatanos = await tuberculoPlatanoByDptoCubit
+        .getUbicacionTuberculosPlatanosDB(widget.dimUbicacion?.ubicacionId);
+
+    _selectedLeguminosasByDpto = await leguminosaByDptoCubit
+        .getUbicacionLeguminosasDB(widget.dimUbicacion?.ubicacionId);
+
+    _selectedHortalizasByDpto = await hortalizaByDptoCubit
+        .getUbicacionHortalizasDB(widget.dimUbicacion?.ubicacionId);
+
+    _selectedVerdurasByDpto = await verduraByDptoCubit
+        .getUbicacionVerdurasDB(widget.dimUbicacion?.ubicacionId);
+
+    _selectedFrutosByDpto = await frutoByDptoCubit
+        .getUbicacionFrutosDB(widget.dimUbicacion?.ubicacionId);
+
+    _selectedCerealesByDpto = await cerealByDptoCubit
+        .getUbicacionCerealesDB(widget.dimUbicacion?.ubicacionId);
+
+    _selectedEspeciesAnimales = await especieAnimalByDptoCubit
+        .getUbicacionEspeciesAnimalesDB(widget.dimUbicacion?.ubicacionId);
+    setState(() {});
   }
 
   @override
@@ -273,7 +271,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                     return FormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       initialValue: _selectedTuberculosPlatanos,
-                      builder: (FormFieldState<List<int>> formstate) {
+                      builder: (FormFieldState<List<LstTuberculo>> formstate) {
                         return Column(
                           children: [
                             Wrap(
@@ -286,16 +284,24 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Checkbox(
-                                      value: _selectedTuberculosPlatanos
-                                          .contains(e.tuberculoPlatanoId),
+                                      value: _selectedTuberculosPlatanos.any(
+                                          (element) =>
+                                              element.tuberculoPlatanoId ==
+                                              e.tuberculoPlatanoId),
                                       onChanged: (bool? value) {
                                         setState(() {
                                           if (value!) {
-                                            _selectedTuberculosPlatanos
-                                                .add(e.tuberculoPlatanoId);
+                                            _selectedTuberculosPlatanos.add(
+                                                LstTuberculo(
+                                                    tuberculoPlatanoId:
+                                                        e.tuberculoPlatanoId));
                                           } else {
                                             _selectedTuberculosPlatanos
-                                                .remove(e.tuberculoPlatanoId);
+                                                .removeWhere(
+                                              (element) =>
+                                                  element.tuberculoPlatanoId ==
+                                                  e.tuberculoPlatanoId,
+                                            );
                                           }
                                         });
                                       }),
@@ -321,7 +327,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                         );
                       },
                       validator: (_) => _validateTuberculosPlatanos(),
-                      onSaved: (List<int>? value) {
+                      onSaved: (List<LstTuberculo>? value) {
                         dimUbicacionBloc.add(TuberculosPlatanosChanged(value!));
                       },
                     );
@@ -342,7 +348,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                     return FormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       initialValue: _selectedLeguminosasByDpto,
-                      builder: (FormFieldState<List<int>> formstate) {
+                      builder: (FormFieldState<List<LstLeguminosa>> formstate) {
                         return Column(
                           children: [
                             Wrap(
@@ -354,16 +360,24 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Checkbox(
-                                      value: _selectedLeguminosasByDpto
-                                          .contains(e.leguminosaId),
+                                      value: _selectedLeguminosasByDpto.any(
+                                          (element) =>
+                                              element.leguminosaId ==
+                                              e.leguminosaId),
                                       onChanged: (bool? value) {
                                         setState(() {
                                           if (value!) {
-                                            _selectedLeguminosasByDpto
-                                                .add(e.leguminosaId);
+                                            _selectedLeguminosasByDpto.add(
+                                                LstLeguminosa(
+                                                    leguminosaId:
+                                                        e.leguminosaId));
                                           } else {
                                             _selectedLeguminosasByDpto
-                                                .remove(e.leguminosaId);
+                                                .removeWhere(
+                                              (element) =>
+                                                  element.leguminosaId ==
+                                                  e.leguminosaId,
+                                            );
                                           }
                                         });
                                       }),
@@ -387,7 +401,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                         );
                       },
                       validator: (_) => _validateLeguminosas(),
-                      onSaved: (List<int>? value) {
+                      onSaved: (List<LstLeguminosa>? value) {
                         dimUbicacionBloc.add(LeguminosasChanged(value!));
                       },
                     );
@@ -408,7 +422,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                     return FormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       initialValue: _selectedHortalizasByDpto,
-                      builder: (FormFieldState<List<int>> formstate) {
+                      builder: (FormFieldState<List<LstHortaliza>> formstate) {
                         return Column(
                           children: [
                             Wrap(
@@ -420,16 +434,24 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Checkbox(
-                                      value: _selectedHortalizasByDpto
-                                          .contains(e.hortalizaId),
+                                      value: _selectedHortalizasByDpto.any(
+                                          (element) =>
+                                              element.hortalizaId ==
+                                              e.hortalizaId),
                                       onChanged: (bool? value) {
                                         setState(() {
                                           if (value!) {
-                                            _selectedHortalizasByDpto
-                                                .add(e.hortalizaId);
+                                            _selectedHortalizasByDpto.add(
+                                                LstHortaliza(
+                                                    hortalizaId:
+                                                        e.hortalizaId));
                                           } else {
                                             _selectedHortalizasByDpto
-                                                .remove(e.hortalizaId);
+                                                .removeWhere(
+                                              (element) =>
+                                                  element.hortalizaId ==
+                                                  e.hortalizaId,
+                                            );
                                           }
                                         });
                                       }),
@@ -453,7 +475,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                         );
                       },
                       validator: (_) => _validateHortalizas(),
-                      onSaved: (List<int>? value) {
+                      onSaved: (List<LstHortaliza>? value) {
                         dimUbicacionBloc.add(HortalizasChanged(value!));
                       },
                     );
@@ -474,7 +496,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                     return FormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       initialValue: _selectedVerdurasByDpto,
-                      builder: (FormFieldState<List<int>> formstate) {
+                      builder: (FormFieldState<List<LstVerdura>> formstate) {
                         return Column(
                           children: [
                             Wrap(
@@ -486,16 +508,21 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Checkbox(
-                                      value: _selectedVerdurasByDpto
-                                          .contains(e.verduraId),
+                                      value: _selectedVerdurasByDpto.any(
+                                          (element) =>
+                                              element.verduraId == e.verduraId),
                                       onChanged: (bool? value) {
                                         setState(() {
                                           if (value!) {
-                                            _selectedVerdurasByDpto
-                                                .add(e.verduraId);
+                                            _selectedVerdurasByDpto.add(
+                                                LstVerdura(
+                                                    verduraId: e.verduraId));
                                           } else {
-                                            _selectedVerdurasByDpto
-                                                .remove(e.verduraId);
+                                            _selectedVerdurasByDpto.removeWhere(
+                                              (element) =>
+                                                  element.verduraId ==
+                                                  e.verduraId,
+                                            );
                                           }
                                         });
                                       }),
@@ -519,7 +546,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                         );
                       },
                       validator: (_) => _validateVerduras(),
-                      onSaved: (List<int>? value) {
+                      onSaved: (List<LstVerdura>? value) {
                         dimUbicacionBloc.add(VerdurasChanged(value!));
                       },
                     );
@@ -540,7 +567,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                     return FormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       initialValue: _selectedFrutosByDpto,
-                      builder: (FormFieldState<List<int>> formstate) {
+                      builder: (FormFieldState<List<LstFruto>> formstate) {
                         return Column(
                           children: [
                             Wrap(
@@ -551,16 +578,19 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Checkbox(
-                                      value: _selectedFrutosByDpto
-                                          .contains(e.frutoId),
+                                      value: _selectedFrutosByDpto.any(
+                                          (element) =>
+                                              element.frutoId == e.frutoId),
                                       onChanged: (bool? value) {
                                         setState(() {
                                           if (value!) {
-                                            _selectedFrutosByDpto
-                                                .add(e.frutoId);
+                                            _selectedFrutosByDpto.add(
+                                                LstFruto(frutoId: e.frutoId));
                                           } else {
-                                            _selectedFrutosByDpto
-                                                .remove(e.frutoId);
+                                            _selectedFrutosByDpto.removeWhere(
+                                              (element) =>
+                                                  element.frutoId == e.frutoId,
+                                            );
                                           }
                                         });
                                       }),
@@ -584,7 +614,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                         );
                       },
                       validator: (_) => _validateFrutos(),
-                      onSaved: (List<int>? value) {
+                      onSaved: (List<LstFruto>? value) {
                         dimUbicacionBloc.add(FrutosChanged(value!));
                       },
                     );
@@ -605,7 +635,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                     return FormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       initialValue: _selectedCerealesByDpto,
-                      builder: (FormFieldState<List<int>> formstate) {
+                      builder: (FormFieldState<List<LstCereal>> formstate) {
                         return Column(
                           children: [
                             Wrap(
@@ -617,16 +647,21 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Checkbox(
-                                      value: _selectedCerealesByDpto
-                                          .contains(e.cerealId),
+                                      value: _selectedCerealesByDpto.any(
+                                          (element) =>
+                                              element.cerealId == e.cerealId),
                                       onChanged: (bool? value) {
                                         setState(() {
                                           if (value!) {
-                                            _selectedCerealesByDpto
-                                                .add(e.cerealId);
+                                            _selectedCerealesByDpto.add(
+                                                LstCereal(
+                                                    cerealId: e.cerealId));
                                           } else {
-                                            _selectedCerealesByDpto
-                                                .remove(e.cerealId);
+                                            _selectedCerealesByDpto.removeWhere(
+                                              (element) =>
+                                                  element.cerealId ==
+                                                  e.cerealId,
+                                            );
                                           }
                                         });
                                       }),
@@ -650,7 +685,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                         );
                       },
                       validator: (_) => _validateCereales(),
-                      onSaved: (List<int>? value) {
+                      onSaved: (List<LstCereal>? value) {
                         dimUbicacionBloc.add(CerealesChanged(value!));
                       },
                     );
@@ -673,7 +708,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
               return FormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedEspeciesAnimales,
-                builder: (FormFieldState<List<int>> formstate) {
+                builder: (FormFieldState<List<LstAnimalCria>> formstate) {
                   return Column(
                     children: [
                       Wrap(
@@ -685,21 +720,32 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Checkbox(
-                                value: _selectedEspeciesAnimales
-                                    .contains(e.especieAnimalCriaId),
+                                value: _selectedEspeciesAnimales.any(
+                                    (element) =>
+                                        element.especieAnimalCriaId ==
+                                        e.especieAnimalCriaId),
                                 onChanged: (bool? value) {
                                   setState(() {
                                     if (e.especieAnimalCriaId == 9) {
                                       _selectedEspeciesAnimales = [
-                                        e.especieAnimalCriaId
+                                        LstAnimalCria(
+                                            especieAnimalCriaId:
+                                                e.especieAnimalCriaId)
                                       ];
                                     } else if (value!) {
-                                      _selectedEspeciesAnimales.remove(9);
-                                      _selectedEspeciesAnimales
-                                          .add(e.especieAnimalCriaId);
+                                      _selectedEspeciesAnimales.removeWhere(
+                                          (element) =>
+                                              element.especieAnimalCriaId == 9);
+                                      _selectedEspeciesAnimales.add(
+                                          LstAnimalCria(
+                                              especieAnimalCriaId:
+                                                  e.especieAnimalCriaId));
                                     } else {
-                                      _selectedEspeciesAnimales
-                                          .remove(e.especieAnimalCriaId);
+                                      _selectedEspeciesAnimales.removeWhere(
+                                        (element) =>
+                                            element.especieAnimalCriaId ==
+                                            e.especieAnimalCriaId,
+                                      );
                                     }
                                   });
                                 }),
@@ -723,7 +769,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                   );
                 },
                 validator: (_) => _validateEspeciesAnimales(),
-                onSaved: (List<int>? value) {
+                onSaved: (List<LstAnimalCria>? value) {
                   dimUbicacionBloc.add(EspeciesAnimalesCriaChanged(value!));
                 },
               );

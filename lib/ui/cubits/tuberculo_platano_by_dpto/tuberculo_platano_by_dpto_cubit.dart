@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:ifasoris/data/models/tuberculo_platano_model.dart';
 
 import '../../../domain/entities/tuberculo_platano_entity.dart';
 import '../../../domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_db_usecase.dart';
@@ -19,5 +20,12 @@ class TuberculoPlatanoByDptoCubit extends Cubit<TuberculosPlatanosByDptoState> {
         (failure) =>
             emit(TuberculosPlatanosByDptoError(failure.properties.first)),
         (data) => emit(TuberculosPlatanosByDptoLoaded(data)));
+  }
+
+  Future<List<LstTuberculo>> getUbicacionTuberculosPlatanosDB(
+      int? ubicacionId) async {
+    final result = await tuberculoPlatanoByDptoUsecaseDB
+        .getUbicacionTuberculosPlatanosUsecaseDB(ubicacionId);
+    return result.fold((failure) => [], (data) => data);
   }
 }

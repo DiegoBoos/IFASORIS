@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/dificultad_acceso_med_tradicional_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -37,6 +38,38 @@ class DificultadAccesoMedTradicionalByDptoRepositoryDBImpl
       final result = await dificultadAccesoMedTradicionalByDptoLocalDataSource
           .saveDificultadAccesoMedTradicionalByDpto(
               dificultadAccesoMedTradicionalByDpto);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveUbicacionAccesoMedTradicionalRepositoryDB(
+      int ubicacionId,
+      List<LstDificultadAccesoMedTradicional>
+          lstDificultadAccesoMedTradicional) async {
+    try {
+      final result = await dificultadAccesoMedTradicionalByDptoLocalDataSource
+          .saveUbicacionAccesoMedTradicional(
+              ubicacionId, lstDificultadAccesoMedTradicional);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstDificultadAccesoMedTradicional>>>
+      getUbicacionDificultadesAccesoMedTradicionalRepositoryDB(
+          int? ubicacionId) async {
+    try {
+      final result = await dificultadAccesoMedTradicionalByDptoLocalDataSource
+          .getUbicacionDificultadesAccesoMedTradicional(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

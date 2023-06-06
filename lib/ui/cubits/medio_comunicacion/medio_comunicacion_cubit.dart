@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:ifasoris/domain/entities/medio_comunicacion_entity.dart';
 import 'package:ifasoris/domain/usecases/medio_comunicacion/medio_comunicacion_db_usecase.dart';
 
+import '../../../data/models/medio_comunicacion_model.dart';
+
 part 'medio_comunicacion_state.dart';
 
 class MedioComunicacionCubit extends Cubit<MediosComunicacionState> {
@@ -16,5 +18,12 @@ class MedioComunicacionCubit extends Cubit<MediosComunicacionState> {
     result.fold(
         (failure) => emit(MediosComunicacionError(failure.properties.first)),
         (data) => emit(MediosComunicacionLoaded(data)));
+  }
+
+  Future<List<LstMediosComunica>> getUbicacionMediosComunicacionDB(
+      int? ubicacionId) async {
+    final result = await medioComunicacionUsecaseDB
+        .getUbicacionMediosComunicacionUsecaseDB(ubicacionId);
+    return result.fold((failure) => [], (data) => data);
   }
 }

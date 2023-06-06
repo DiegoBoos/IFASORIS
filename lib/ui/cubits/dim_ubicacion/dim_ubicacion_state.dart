@@ -57,7 +57,6 @@ class DimUbicacionError extends DimUbicacionState {
 
 DimUbicacionEntity initObject() {
   return DimUbicacionEntity(
-    ubicacionId: 0,
     familiaId: 0,
     nombreRecibeVisita: '',
     tipoDocRecibeVisita: '',

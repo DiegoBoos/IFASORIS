@@ -25,3 +25,56 @@ class TipoCombustibleViviendaModel extends TipoCombustibleViviendaEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstTiposCombustible {
+  int? tipoCombustibleViviendaId;
+  String? otroTipoCombustible;
+
+  LstTiposCombustible({
+    this.tipoCombustibleViviendaId,
+    this.otroTipoCombustible,
+  });
+
+  factory LstTiposCombustible.fromJson(Map<String, dynamic> json) =>
+      LstTiposCombustible(
+        tipoCombustibleViviendaId: json["TipoCombustibleVivienda_id"],
+        otroTipoCombustible: json["OtroTipoCombustible"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "TipoCombustibleVivienda_id": tipoCombustibleViviendaId,
+        "OtroTipoCombustible": otroTipoCombustible,
+      };
+}
+
+List<ViviendaTiposCombustible> viviendaTiposCombustibleFromJson(String str) =>
+    List<ViviendaTiposCombustible>.from(
+        json.decode(str).map((x) => ViviendaTiposCombustible.fromJson(x)));
+
+class ViviendaTiposCombustible {
+  int? viviendaTipoCombustibleId;
+  int? datoViviendaId;
+  int? tipoCombustibleViviendaId;
+  String? otroTipoCombustible;
+
+  ViviendaTiposCombustible({
+    this.viviendaTipoCombustibleId,
+    this.datoViviendaId,
+    this.tipoCombustibleViviendaId,
+    this.otroTipoCombustible,
+  });
+
+  factory ViviendaTiposCombustible.fromJson(Map<String, dynamic> json) =>
+      ViviendaTiposCombustible(
+        viviendaTipoCombustibleId: json["ViviendaTipoCombustible_id"],
+        datoViviendaId: json["DatoVivienda_id"],
+        tipoCombustibleViviendaId: json["TipoCombustibleVivienda_id"],
+        otroTipoCombustible: json["OtroTipoCombustible"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": datoViviendaId,
+        "TipoCombustibleVivienda_id": tipoCombustibleViviendaId,
+        "OtroTipoCombustible": otroTipoCombustible,
+      };
+}

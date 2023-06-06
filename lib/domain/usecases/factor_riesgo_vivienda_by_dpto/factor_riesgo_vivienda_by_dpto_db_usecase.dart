@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/factor_riesgo_vivienda_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/factor_riesgo_vivienda_entity.dart';
@@ -18,5 +19,16 @@ class FactorRiesgoViviendaByDptoUsecaseDB {
   Future<Either<Failure, List<FactorRiesgoViviendaEntity>>>
       getFactoresRiesgoViviendaByDptoUsecaseDB() {
     return repositoryDB.getFactoresRiesgoViviendaByDptoRepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveFactoresRiesgoViviendaUsecaseDB(
+      int datoViviendaId, List<LstFactoresRiesgo> lstFactoresRiesgo) {
+    return repositoryDB.saveFactoresRiesgoViviendaRepositoryDB(
+        datoViviendaId, lstFactoresRiesgo);
+  }
+
+  Future<Either<Failure, List<LstFactoresRiesgo>>>
+      getFactoresRiesgoViviendaUsecaseDB(int? datoViviendaId) {
+    return repositoryDB.getFactoresRiesgoViviendaRepositoryDB(datoViviendaId);
   }
 }

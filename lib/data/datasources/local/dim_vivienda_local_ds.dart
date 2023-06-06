@@ -37,7 +37,7 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
     if (res.isEmpty) return null;
 
     final resultMap = {for (var e in res[0].entries) e.key: e.value};
-    final result = DimViviendaModel.fromDB(resultMap);
+    final result = DimViviendaModel.fromJson(resultMap);
     return result;
   }
 }

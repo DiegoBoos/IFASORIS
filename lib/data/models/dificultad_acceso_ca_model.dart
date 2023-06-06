@@ -24,3 +24,49 @@ class DificultadAccesoCAModel extends DificultadAccesoCAEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstDificultadAccesoAtencion {
+  int? dificultaAccesoId;
+
+  LstDificultadAccesoAtencion({
+    this.dificultaAccesoId,
+  });
+
+  factory LstDificultadAccesoAtencion.fromJson(Map<String, dynamic> json) =>
+      LstDificultadAccesoAtencion(
+        dificultaAccesoId: json["DificultaAcceso_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "DificultaAcceso_id": dificultaAccesoId,
+      };
+}
+
+List<UbicacionDificultadAcceso> ubicacionesDificultadAccesoFromJson(
+        String str) =>
+    List<UbicacionDificultadAcceso>.from(
+        json.decode(str).map((x) => UbicacionDificultadAcceso.fromJson(x)));
+
+class UbicacionDificultadAcceso {
+  int? ubicacionDificultadAccesoId;
+  int? ubicacionId;
+  int? dificultadAccesoId;
+
+  UbicacionDificultadAcceso({
+    this.ubicacionDificultadAccesoId,
+    this.ubicacionId,
+    this.dificultadAccesoId,
+  });
+
+  factory UbicacionDificultadAcceso.fromJson(Map<String, dynamic> json) =>
+      UbicacionDificultadAcceso(
+        ubicacionDificultadAccesoId: json["UbicacionDificultadAcceso_id"],
+        ubicacionId: json["Ubicacion_id"],
+        dificultadAccesoId: json["DificultaAcceso_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
+        "DificultaAcceso_id": dificultadAccesoId,
+      };
+}

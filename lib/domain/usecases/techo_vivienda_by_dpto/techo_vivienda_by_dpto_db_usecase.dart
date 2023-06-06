@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/techo_vivienda_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/techo_vivienda_entity.dart';
@@ -17,5 +18,16 @@ class TechoViviendaByDptoUsecaseDB {
   Future<Either<Failure, List<TechoViviendaEntity>>>
       getTechosViviendaByDptoUsecaseDB() {
     return repositoryDB.getTechosViviendaByDptoRepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveTechosViviendaUsecaseDB(
+      int datoViviendaId, List<LstTecho> lstTechos) {
+    return repositoryDB.saveTechosViviendaRepositoryDB(
+        datoViviendaId, lstTechos);
+  }
+
+  Future<Either<Failure, List<LstTecho>>> getTechosViviendaUsecaseDB(
+      int? datoViviendaId) {
+    return repositoryDB.getTechosViviendaRepositoryDB(datoViviendaId);
   }
 }

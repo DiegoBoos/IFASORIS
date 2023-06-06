@@ -1,8 +1,10 @@
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
 import 'package:intl/intl.dart';
 
+import '../../../data/models/medio_comunicacion_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/usecases/estado_via/estado_via_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
@@ -39,7 +41,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   int? _autoridadIndigena;
   int? _viaAcceso;
   int? _estadoVia;
-  List<int> _selectedMediosComunicacion = [];
+  List<LstMediosComunica> _selectedMediosComunicacion = [];
 
   String? _validateMediosComunicacion() {
     if (_selectedMediosComunicacion.isEmpty) {
@@ -57,6 +59,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
     final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
       context,
     );
+
     final afiliado = afiliadoPrefsBloc.state.afiliado!;
 
     _fechafiliacion = afiliado.fechafiliacion;
@@ -78,9 +81,18 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
       _autoridadIndigena = widget.dimUbicacion?.autoridadIndigenaId;
       _viaAcceso = widget.dimUbicacion?.viaAccesoId;
       _estadoVia = widget.dimUbicacion?.estadoViaId;
-      _selectedMediosComunicacion =
-          widget.dimUbicacion?.mediosComunicacionIds ?? [];
     });
+
+    getOptions();
+  }
+
+  Future<void> getOptions() async {
+    final medioComunicacionCubit = BlocProvider.of<MedioComunicacionCubit>(
+      context,
+    );
+    _selectedMediosComunicacion = await medioComunicacionCubit
+        .getUbicacionMediosComunicacionDB(widget.dimUbicacion?.ubicacionId);
+    setState(() {});
   }
 
   @override
@@ -398,14 +410,20 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             return Container();
           },
         ),
-        const SizedBox(height: 20),
+        const Divider(),
+        const Text(
+          'MEDIOS COMUNICACIÓN',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const Divider(),
         BlocBuilder<MedioComunicacionCubit, MediosComunicacionState>(
           builder: (context, state) {
             if (state is MediosComunicacionLoaded) {
               return FormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedMediosComunicacion,
-                builder: (FormFieldState<List<int>> formstate) {
+                builder: (FormFieldState<List<LstMediosComunica>> formstate) {
                   return Column(
                     children: [
                       Wrap(
@@ -416,21 +434,31 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Checkbox(
-                                value: _selectedMediosComunicacion
-                                    .contains(e.medioComunicacionId),
+                                value: _selectedMediosComunicacion.any(
+                                    (element) =>
+                                        element.medioComunicacionId ==
+                                        e.medioComunicacionId),
                                 onChanged: (bool? value) {
                                   setState(() {
                                     if (e.medioComunicacionId == 7) {
                                       _selectedMediosComunicacion = [
-                                        e.medioComunicacionId
+                                        LstMediosComunica(
+                                            medioComunicacionId:
+                                                e.medioComunicacionId)
                                       ];
                                     } else if (value!) {
-                                      _selectedMediosComunicacion.remove(7);
-                                      _selectedMediosComunicacion
-                                          .add(e.medioComunicacionId);
+                                      _selectedMediosComunicacion.removeWhere(
+                                          (element) =>
+                                              element.medioComunicacionId == 7);
+                                      _selectedMediosComunicacion.add(
+                                          LstMediosComunica(
+                                              medioComunicacionId:
+                                                  e.medioComunicacionId));
                                     } else {
-                                      _selectedMediosComunicacion
-                                          .remove(e.medioComunicacionId);
+                                      _selectedMediosComunicacion.removeWhere(
+                                          (element) =>
+                                              element.medioComunicacionId ==
+                                              e.medioComunicacionId);
                                     }
                                   });
                                 }),
@@ -454,7 +482,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                   );
                 },
                 validator: (_) => _validateMediosComunicacion(),
-                onSaved: (List<int>? value) {
+                onSaved: (List<LstMediosComunica>? value) {
                   dimUbicacionBloc.add(MediosComunicacionChanged(value!));
                 },
               );

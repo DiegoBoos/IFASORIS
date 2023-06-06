@@ -25,5 +25,6 @@ DimUbicacionEntity initObject() {
       tipoDocRecibeVisita: '',
       documentoRecibeVisita: '',
       resguardoId: 0,
-      produccionMinera: 0);
+      produccionMinera: 0,
+      formStatus: const DimUbicacionFormInitial());
 }

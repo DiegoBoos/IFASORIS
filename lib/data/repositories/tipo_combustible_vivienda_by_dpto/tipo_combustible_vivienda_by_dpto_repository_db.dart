@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/tipo_combustible_vivienda_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -34,6 +35,34 @@ class TipoCombustibleViviendaByDptoRepositoryDBImpl
     try {
       final result = await tipoCombustibleViviendaByDptoLocalDataSource
           .saveTipoCombustibleViviendaByDpto(tipoCombustibleViviendaByDpto);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveTiposCombustibleViviendaRepositoryDB(
+      int datoViviendaId, List<LstTiposCombustible> lstTiposCombustible) async {
+    try {
+      final result = await tipoCombustibleViviendaByDptoLocalDataSource
+          .saveTiposCombustibleVivienda(datoViviendaId, lstTiposCombustible);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstTiposCombustible>>>
+      getTiposCombustibleViviendaRepositoryDB(int? datoViviendaId) async {
+    try {
+      final result = await tipoCombustibleViviendaByDptoLocalDataSource
+          .getTiposCombustibleVivienda(datoViviendaId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

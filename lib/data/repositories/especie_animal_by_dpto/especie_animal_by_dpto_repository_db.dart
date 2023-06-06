@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/especie_animal_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -33,6 +34,34 @@ class EspecieAnimalByDptoRepositoryDBImpl
     try {
       final result = await especieAnimalByDptoLocalDataSource
           .saveEspecieAnimalByDpto(especieAnimal);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveUbicacionEspecieAnimalesCriaRepositoryDB(
+      int ubicacionId, List<LstAnimalCria> lstAnimalCria) async {
+    try {
+      final result = await especieAnimalByDptoLocalDataSource
+          .saveUbicacionEspecieAnimalesCria(ubicacionId, lstAnimalCria);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstAnimalCria>>>
+      getUbicacionEspeciesAnimalesRepositoryDB(int? ubicacionId) async {
+    try {
+      final result = await especieAnimalByDptoLocalDataSource
+          .getUbicacionEspeciesAnimales(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

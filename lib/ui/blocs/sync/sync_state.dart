@@ -40,13 +40,6 @@ class SyncInitial extends SyncState {
                 SyncProgressModel(title: '', counter: 0, percent: 0));
 }
 
-class InitializingSync extends SyncState {
-  InitializingSync()
-      : super(
-            syncProgressModel:
-                SyncProgressModel(title: '', counter: 0, percent: 0));
-}
-
 class SyncDownloading extends SyncState {
   final SyncProgressModel syncProgress;
 
@@ -54,20 +47,20 @@ class SyncDownloading extends SyncState {
       : super(syncProgressModel: syncProgress);
 }
 
-class SyncInProgress extends SyncState {
+class SyncPercentageInProgress extends SyncState {
   final SyncProgressModel syncProgress;
 
-  const SyncInProgress(this.syncProgress)
+  const SyncPercentageInProgress(this.syncProgress)
       : super(syncProgressModel: syncProgress);
 
   @override
   List<Object?> get props => [syncProgress];
 }
 
-class SyncInProgressAccesories extends SyncState {
+class SyncIncrementInProgress extends SyncState {
   final SyncProgressModel syncProgress;
 
-  const SyncInProgressAccesories(this.syncProgress)
+  const SyncIncrementInProgress(this.syncProgress)
       : super(syncProgressModel: syncProgress);
 
   @override

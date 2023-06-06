@@ -24,3 +24,48 @@ class TuberculoPlatanoModel extends TuberculoPlatanoEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstTuberculo {
+  int? tuberculoPlatanoId;
+
+  LstTuberculo({
+    this.tuberculoPlatanoId,
+  });
+
+  factory LstTuberculo.fromJson(Map<String, dynamic> json) => LstTuberculo(
+        tuberculoPlatanoId: json["TuberculoPlatano_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "TuberculoPlatano_id": tuberculoPlatanoId,
+      };
+}
+
+List<UbicacionTuberculosPlatanos> ubicacionTuberculosPlatanosFromJson(
+        String str) =>
+    List<UbicacionTuberculosPlatanos>.from(
+        json.decode(str).map((x) => UbicacionTuberculosPlatanos.fromJson(x)));
+
+class UbicacionTuberculosPlatanos {
+  int? ubicacionTuberculoPlatanoId;
+  int? ubicacionId;
+  int? tuberculoPlatanoId;
+
+  UbicacionTuberculosPlatanos({
+    this.ubicacionTuberculoPlatanoId,
+    this.ubicacionId,
+    this.tuberculoPlatanoId,
+  });
+
+  factory UbicacionTuberculosPlatanos.fromJson(Map<String, dynamic> json) =>
+      UbicacionTuberculosPlatanos(
+        ubicacionTuberculoPlatanoId: json["UbicacionTuberculoPlatano_id"],
+        ubicacionId: json["Ubicacion_id"],
+        tuberculoPlatanoId: json["TuberculoPlatano_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
+        "TuberculoPlatano_id": tuberculoPlatanoId,
+      };
+}

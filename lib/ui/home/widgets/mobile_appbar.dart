@@ -16,7 +16,8 @@ class MobileAppBar extends StatelessWidget {
   ];
 
   final List<SyncTable> _uploadSyncTables = [
-    SyncTable(name: 'Asp1_Ubicacion', type: 'P'),
+    SyncTable(name: 'DimUbicacion', type: 'P'),
+    SyncTable(name: 'DimVivienda', type: 'P'),
   ];
 
   MobileAppBar({super.key});
@@ -81,7 +82,7 @@ class MobileAppBar extends StatelessWidget {
               }
             },
           ),
-          /*  IconButton(
+          IconButton(
             icon: const Icon(Icons.cloud_upload),
             onPressed: () {
               if (internetCubit.state is InternetConnected) {
@@ -97,7 +98,7 @@ class MobileAppBar extends StatelessWidget {
                     Colors.red);
               }
             },
-          ), */
+          ),
           IconButton(
               onPressed: () => authBloc.add(LogOut()),
               icon: const Icon(Icons.logout)),

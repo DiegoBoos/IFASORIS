@@ -1687,8 +1687,20 @@ void familiaInit() {
 
 void dimUbicacionInit() {
   // bloc
-  locator.registerFactory(
-      () => DimUbicacionBloc(dimUbicacionUsecaseDB: locator()));
+  locator.registerFactory(() => DimUbicacionBloc(
+      dimUbicacionUsecaseDB: locator(),
+      cerealByDptoUsecaseDB: locator(),
+      dificultadAccesoCAUsecaseDB: locator(),
+      dificultadAccesoMedTradicionalByDptoUsecaseDB: locator(),
+      especialidadMedTradicionalByDptoUsecaseDB: locator(),
+      especieAnimalByDptoUsecaseDB: locator(),
+      frutoByDptoUsecaseDB: locator(),
+      hortalizaByDptoUsecaseDB: locator(),
+      leguminosaByDptoUsecaseDB: locator(),
+      medioComunicacionUsecaseDB: locator(),
+      medioUtilizaMedTradicionalByDptoUsecaseDB: locator(),
+      tuberculoPlatanoByDptoUsecaseDB: locator(),
+      verduraByDptoUsecaseDB: locator()));
 
   // remote usecase
   locator.registerLazySingleton(() => DimUbicacionUsecase(locator()));
@@ -1725,8 +1737,15 @@ void dimUbicacionInit() {
 
 void dimViviendaInit() {
   // bloc
-  locator
-      .registerFactory(() => DimViviendaBloc(dimViviendaUsecaseDB: locator()));
+  locator.registerFactory(() => DimViviendaBloc(
+      dimViviendaUsecaseDB: locator(),
+      factorRiesgoViviendaByDptoUsecaseDB: locator(),
+      servicioPublicoViviendaByDptoUsecaseDB: locator(),
+      techoViviendaByDptoUsecaseDB: locator(),
+      tipoCombustibleViviendaByDptoUsecaseDB: locator(),
+      tipoSanitarioViviendaByDptoUsecaseDB: locator(),
+      tratamientoAguaViviendaByDptoUsecaseDB: locator(),
+      presenciaAnimalViviendaByDptoUsecaseDB: locator()));
 
   // remote usecase
   locator.registerLazySingleton(() => DimViviendaUsecase(locator()));

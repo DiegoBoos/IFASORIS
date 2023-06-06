@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/hortaliza_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/hortaliza_entity.dart';
@@ -17,5 +18,16 @@ class HortalizaByDptoUsecaseDB {
   Future<Either<Failure, List<HortalizaEntity>>>
       getHortalizasByDptoUsecaseDB() {
     return repositoryDB.getHortalizasByDptoRepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveUbicacionHortalizasUsecaseDB(
+      int ubicacionId, List<LstHortaliza> lstHortalizas) {
+    return repositoryDB.saveUbicacionHortalizasRepositoryDB(
+        ubicacionId, lstHortalizas);
+  }
+
+  Future<Either<Failure, List<LstHortaliza>>> getUbicacionHortalizasUsecaseDB(
+      int? ubicacionId) {
+    return repositoryDB.getUbicacionHortalizasRepositoryDB(ubicacionId);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/tipo_sanitario_vivienda_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/tipo_sanitario_vivienda_entity.dart';
@@ -18,5 +19,16 @@ class TipoSanitarioViviendaByDptoUsecaseDB {
   Future<Either<Failure, List<TipoSanitarioViviendaEntity>>>
       getTiposSanitarioViviendaByDptoUsecaseDB() {
     return repositoryDB.getTiposSanitarioViviendaByDptoRepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveTiposSanitarioViviendaUsecaseDB(
+      int datoViviendaId, List<LstTiposSanitario> lstTiposSanitario) {
+    return repositoryDB.saveTiposSanitarioViviendaRepositoryDB(
+        datoViviendaId, lstTiposSanitario);
+  }
+
+  Future<Either<Failure, List<LstTiposSanitario>>>
+      getTiposSanitarioViviendaUsecaseDB(int? datoViviendaId) {
+    return repositoryDB.getTiposSanitarioViviendaRepositoryDB(datoViviendaId);
   }
 }

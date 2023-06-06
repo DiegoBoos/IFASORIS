@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/medio_utiliza_med_tradicional_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -35,6 +36,36 @@ class MedioUtilizaMedTradicionalByDptoRepositoryDBImpl
       final result = await medioUtilizaMedTradicionalByDptoLocalDataSource
           .saveMedioUtilizaMedTradicionalByDpto(
               medioUtilizaMedTradicionalByDpto);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveUbicacionMediosMedTradicionalRepositoryDB(
+      int ubicacionId,
+      List<LstMediosMedTradicional> lstMediosMedTradicional) async {
+    try {
+      final result = await medioUtilizaMedTradicionalByDptoLocalDataSource
+          .saveUbicacionMediosMedTradicional(
+              ubicacionId, lstMediosMedTradicional);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstMediosMedTradicional>>>
+      getMediosUtilizaMedTradicionalRepositoryDB(int? ubicacionId) async {
+    try {
+      final result = await medioUtilizaMedTradicionalByDptoLocalDataSource
+          .getMediosUtilizaMedTradicional(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

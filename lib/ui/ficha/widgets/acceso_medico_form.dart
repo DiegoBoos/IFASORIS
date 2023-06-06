@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/data/models/dificultad_acceso_med_tradicional_model.dart';
 import 'package:ifasoris/ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 
+import '../../../data/models/especialidad_med_tradicional_model.dart';
+import '../../../data/models/medio_utiliza_med_tradicional_model.dart';
+import '../../../data/models/nombre_med_tradicional_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
@@ -21,13 +25,13 @@ class AccesoMedicoForm extends StatefulWidget {
 
 class AccesoMedicoFormState extends State<AccesoMedicoForm> {
   int? _existeMedTradicionalComunidad;
-  List<int> _selectedEspecialidadesMedTradicional = [];
+  List<LstEspMedTradicional> _selectedEspecialidadesMedTradicional = [];
   int? _tiempoTardaMedTradId;
   int? _costoDesplazamientoMedTradicional;
-  List<int> _selectedMediosUtilizaMedTradicional = [];
-  List<int> _selectedDificultadesAccesoMedTradicional = [];
-
-  List<String> _nombresMedTrad = [];
+  List<LstMediosMedTradicional> _selectedMediosUtilizaMedTradicional = [];
+  List<LstDificultadAccesoMedTradicional>
+      _selectedDificultadesAccesoMedTradicional = [];
+  List<LstNombreMedTradicional> _nombresMedTrad = [];
 
   String? _validateEspecialidadesMedTradicionalByDpto() {
     if (_selectedEspecialidadesMedTradicional.isEmpty) {
@@ -59,7 +63,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
   void _addFormField() {
     if (_nombresMedTrad.length < 5) {
       setState(() {
-        _nombresMedTrad.add('');
+        _nombresMedTrad.add(LstNombreMedTradicional(nombreMedTradicional: ''));
       });
     } else {
       showDialog(
@@ -98,50 +102,51 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
       _existeMedTradicionalComunidad =
           widget.dimUbicacion?.existeMedTradicionalComunidad;
 
-      if (widget.dimUbicacion?.especialidadesMedTradIds != null) {
-        _selectedEspecialidadesMedTradicional =
-            widget.dimUbicacion!.especialidadesMedTradIds!.isEmpty
-                ? []
-                : widget.dimUbicacion!.especialidadesMedTradIds!;
-      } else {
-        _selectedEspecialidadesMedTradicional = [];
-      }
-
       _tiempoTardaMedTradId = widget.dimUbicacion?.tiempoTardaMedTradId == 0
           ? null
           : widget.dimUbicacion?.tiempoTardaMedTradId;
-
-      if (widget.dimUbicacion?.mediosUtilizaMedTradIds != null) {
-        _selectedMediosUtilizaMedTradicional =
-            widget.dimUbicacion!.mediosUtilizaMedTradIds!.isEmpty
-                ? []
-                : widget.dimUbicacion!.mediosUtilizaMedTradIds!;
-      } else {
-        _selectedMediosUtilizaMedTradicional = [];
-      }
-
-      if (widget.dimUbicacion?.dificultadesAccesoMedTradIds != null) {
-        _selectedDificultadesAccesoMedTradicional =
-            widget.dimUbicacion!.dificultadesAccesoMedTradIds!.isEmpty
-                ? []
-                : widget.dimUbicacion!.dificultadesAccesoMedTradIds!;
-      } else {
-        _selectedDificultadesAccesoMedTradicional = [];
-      }
 
       _costoDesplazamientoMedTradicional =
           widget.dimUbicacion?.costoDesplazamientoMedTradicional == 0
               ? null
               : widget.dimUbicacion?.costoDesplazamientoMedTradicional;
-
-      if (widget.dimUbicacion?.nombresMedTradicional != null) {
-        _nombresMedTrad = widget.dimUbicacion!.nombresMedTradicional!.isEmpty
-            ? []
-            : widget.dimUbicacion!.nombresMedTradicional!;
-      } else {
-        _nombresMedTrad = [];
-      }
     });
+    getOptions();
+  }
+
+  Future<void> getOptions() async {
+    final especialidadMedTradicionalByDptoCubit =
+        BlocProvider.of<EspecialidadMedTradicionalByDptoCubit>(
+      context,
+    );
+
+    final medioUtilizaMedTradicionalByDptoCubit =
+        BlocProvider.of<MedioUtilizaMedTradicionalByDptoCubit>(
+      context,
+    );
+
+    final dificultadAccesoMedTradicionalByDptoCubit =
+        BlocProvider.of<DificultadAccesoMedTradicionalByDptoCubit>(
+      context,
+    );
+
+    _selectedEspecialidadesMedTradicional =
+        await especialidadMedTradicionalByDptoCubit
+            .getUbicacionEspecialidadesMedTradicionalDB(
+                widget.dimUbicacion?.ubicacionId);
+
+    _nombresMedTrad = await especialidadMedTradicionalByDptoCubit
+        .getUbicacionNombresMedTradicionalDB(widget.dimUbicacion?.ubicacionId);
+
+    _selectedMediosUtilizaMedTradicional =
+        await medioUtilizaMedTradicionalByDptoCubit
+            .getMedioUtilizaMedTradicionalDB(widget.dimUbicacion?.ubicacionId);
+
+    _selectedDificultadesAccesoMedTradicional =
+        await dificultadAccesoMedTradicionalByDptoCubit
+            .getUbicacionDificultadAccesoMedTradicionalDB(
+                widget.dimUbicacion?.ubicacionId);
+    setState(() {});
   }
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
@@ -164,7 +169,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
   Widget build(BuildContext context) {
     final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
     if (_nombresMedTrad.isEmpty) {
-      _nombresMedTrad.add('');
+      _nombresMedTrad.add(LstNombreMedTradicional(nombreMedTradicional: ''));
     }
 
     return Column(children: [
@@ -276,7 +281,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                   return FormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     initialValue: _selectedEspecialidadesMedTradicional,
-                    builder: (FormFieldState<List<int>> formstate) {
+                    builder:
+                        (FormFieldState<List<LstEspMedTradicional>> formstate) {
                       return Column(
                         children: [
                           Wrap(
@@ -292,15 +298,22 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                               children: [
                                 Checkbox(
                                     value: _selectedEspecialidadesMedTradicional
-                                        .contains(e.especialidadMedTradId),
+                                        .any((element) =>
+                                            element.especialidadMedTradId ==
+                                            e.especialidadMedTradId),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
                                           _selectedEspecialidadesMedTradicional
-                                              .add(e.especialidadMedTradId);
+                                              .add(LstEspMedTradicional(
+                                                  especialidadMedTradId:
+                                                      e.especialidadMedTradId));
                                         } else {
                                           _selectedEspecialidadesMedTradicional
-                                              .remove(e.especialidadMedTradId);
+                                              .removeWhere((element) =>
+                                                  element
+                                                      .especialidadMedTradId ==
+                                                  e.especialidadMedTradId);
                                         }
                                       });
                                     }),
@@ -327,7 +340,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     },
                     validator: (_) =>
                         _validateEspecialidadesMedTradicionalByDpto(),
-                    onSaved: (List<int>? value) {
+                    onSaved: (List<LstEspMedTradicional>? value) {
                       dimUbicacionBloc
                           .add(EspecialidadesMedTradChanged(value!));
                     },
@@ -389,7 +402,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                   return FormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     initialValue: _selectedMediosUtilizaMedTradicional,
-                    builder: (FormFieldState<List<int>> formstate) {
+                    builder: (FormFieldState<List<LstMediosMedTradicional>>
+                        formstate) {
                       return Column(
                         children: [
                           Wrap(
@@ -404,15 +418,22 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                               children: [
                                 Checkbox(
                                     value: _selectedMediosUtilizaMedTradicional
-                                        .contains(e.medioUtilizaMedTradId),
+                                        .any((element) =>
+                                            element.medioUtilizaMedTradId ==
+                                            e.medioUtilizaMedTradId),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
                                           _selectedMediosUtilizaMedTradicional
-                                              .add(e.medioUtilizaMedTradId);
+                                              .add(LstMediosMedTradicional(
+                                                  medioUtilizaMedTradId:
+                                                      e.medioUtilizaMedTradId));
                                         } else {
                                           _selectedMediosUtilizaMedTradicional
-                                              .remove(e.medioUtilizaMedTradId);
+                                              .removeWhere((element) =>
+                                                  element
+                                                      .medioUtilizaMedTradId ==
+                                                  e.medioUtilizaMedTradId);
                                         }
                                       });
                                     }),
@@ -439,7 +460,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     },
                     validator: (_) =>
                         _validateMediosUtilizaMedTradicionalByDpto(),
-                    onSaved: (List<int>? value) {
+                    onSaved: (List<LstMediosMedTradicional>? value) {
                       dimUbicacionBloc.add(MediosUtilizaMedTradChanged(value!));
                     },
                   );
@@ -461,7 +482,9 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                   return FormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     initialValue: _selectedDificultadesAccesoMedTradicional,
-                    builder: (FormFieldState<List<int>> formstate) {
+                    builder:
+                        (FormFieldState<List<LstDificultadAccesoMedTradicional>>
+                            formstate) {
                       return Column(
                         children: [
                           Wrap(
@@ -478,22 +501,37 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                 Checkbox(
                                     value:
                                         _selectedDificultadesAccesoMedTradicional
-                                            .contains(
+                                            .any((element) =>
+                                                element
+                                                    .dificultadAccesoMedTradId ==
                                                 e.dificultadAccesoMedTradId),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (e.dificultadAccesoMedTradId == 5) {
                                           _selectedDificultadesAccesoMedTradicional =
-                                              [e.dificultadAccesoMedTradId];
+                                              [
+                                            LstDificultadAccesoMedTradicional(
+                                                dificultadAccesoMedTradId:
+                                                    e.dificultadAccesoMedTradId)
+                                          ];
                                         } else if (value!) {
                                           _selectedDificultadesAccesoMedTradicional
-                                              .remove(5);
-                                          _selectedDificultadesAccesoMedTradicional
-                                              .add(e.dificultadAccesoMedTradId);
+                                              .removeWhere((element) =>
+                                                  element
+                                                      .dificultadAccesoMedTradId ==
+                                                  5);
+                                          _selectedDificultadesAccesoMedTradicional.add(
+                                              LstDificultadAccesoMedTradicional(
+                                                  dificultadAccesoMedTradId: e
+                                                      .dificultadAccesoMedTradId));
                                         } else {
                                           _selectedDificultadesAccesoMedTradicional
-                                              .remove(
-                                                  e.dificultadAccesoMedTradId);
+                                              .removeWhere(
+                                            (element) =>
+                                                element
+                                                    .dificultadAccesoMedTradId ==
+                                                e.dificultadAccesoMedTradId,
+                                          );
                                         }
                                       });
                                     }),
@@ -521,7 +559,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     },
                     validator: (_) =>
                         _validateDificultadesAccesoMedTradicionalByDpto(),
-                    onSaved: (List<int>? value) {
+                    onSaved: (List<LstDificultadAccesoMedTradicional>? value) {
                       dimUbicacionBloc
                           .add(DificultadesAccesoMedTradicionalChanged(value!));
                     },
@@ -576,7 +614,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        initialValue: _nombresMedTrad[index],
+                        initialValue:
+                            _nombresMedTrad[index].nombreMedTradicional,
                         decoration: InputDecoration(
                             labelText:
                                 'Nombre del médico tradicional ${index + 1}'),
@@ -587,7 +626,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                           return null;
                         },
                         onSaved: (String? value) {
-                          _nombresMedTrad[index] = value!;
+                          _nombresMedTrad[index].nombreMedTradicional = value!;
                           dimUbicacionBloc.add(
                               NombresMedTradicionalChanged(_nombresMedTrad));
                         },

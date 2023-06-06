@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/data/models/medio_utiliza_med_tradicional_model.dart';
 
 import '../../../domain/entities/medio_utiliza_med_tradicional_entity.dart';
 import '../../../domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_db_usecase.dart';
@@ -22,5 +23,12 @@ class MedioUtilizaMedTradicionalByDptoCubit
         (failure) => emit(
             MediosUtilizaMedTradicionalByDptoError(failure.properties.first)),
         (data) => emit(MediosUtilizaMedTradicionalByDptoLoaded(data)));
+  }
+
+  Future<List<LstMediosMedTradicional>> getMedioUtilizaMedTradicionalDB(
+      int? ubicacionId) async {
+    final result = await medioUtilizaMedTradicionalByDptoUsecaseDB
+        .getMediosUtilizaMedTradicionalUsecaseDB(ubicacionId);
+    return result.fold((failure) => [], (data) => data);
   }
 }

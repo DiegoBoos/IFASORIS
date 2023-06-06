@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/medio_comunicacion_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -33,6 +34,34 @@ class MedioComunicacionRepositoryDBImpl
     try {
       final result = await medioComunicacionLocalDataSource
           .saveMedioComunicacion(medioComunicacion);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveUbicacionMediosComunicacionRepositoryDB(
+      int ubicacionId, List<LstMediosComunica> lstMediosComunica) async {
+    try {
+      final result = await medioComunicacionLocalDataSource
+          .saveUbicacionMediosComunicacion(ubicacionId, lstMediosComunica);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstMediosComunica>>>
+      getUbicacionMediosComunicacionRepositoryDB(int? ubicacionId) async {
+    try {
+      final result = await medioComunicacionLocalDataSource
+          .getUbicacionMediosComunicacion(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

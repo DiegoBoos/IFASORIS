@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/tuberculo_platano_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -34,6 +35,34 @@ class TuberculoPlatanoByDptoRepositoryDBImpl
     try {
       final result = await tuberculoPlatanoByDptoLocalDataSource
           .saveTuberculoPlatanoByDpto(tuberculoPlatano);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveUbicacionTuberculosPlatanosRepositoryDB(
+      int ubicacionId, List<LstTuberculo> lstTuberculos) async {
+    try {
+      final result = await tuberculoPlatanoByDptoLocalDataSource
+          .saveUbicacionTuberculosPlatanos(ubicacionId, lstTuberculos);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstTuberculo>>>
+      getUbicacionTuberculosPlatanosRepositoryDB(int? ubicacionId) async {
+    try {
+      final result = await tuberculoPlatanoByDptoLocalDataSource
+          .getUbicacionTuberculosPlatanos(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

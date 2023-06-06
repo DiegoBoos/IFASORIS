@@ -24,3 +24,56 @@ class TipoSanitarioViviendaModel extends TipoSanitarioViviendaEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstTiposSanitario {
+  int? tipoSanitarioViviendaId;
+  String? otroTipoSanitario;
+
+  LstTiposSanitario({
+    this.tipoSanitarioViviendaId,
+    this.otroTipoSanitario,
+  });
+
+  factory LstTiposSanitario.fromJson(Map<String, dynamic> json) =>
+      LstTiposSanitario(
+        tipoSanitarioViviendaId: json["TipoSanitarioVivienda_id"],
+        otroTipoSanitario: json["OtroTipoSanitario"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "TipoSanitarioVivienda_id": tipoSanitarioViviendaId,
+        "OtroTipoSanitario": otroTipoSanitario,
+      };
+}
+
+List<ViviendaTiposSanitario> viviendaTiposSanitarioFromJson(String str) =>
+    List<ViviendaTiposSanitario>.from(
+        json.decode(str).map((x) => ViviendaTiposSanitario.fromJson(x)));
+
+class ViviendaTiposSanitario {
+  int? viviendaTipoSanitarioId;
+  int? datoViviendaId;
+  int? tipoSanitarioViviendaId;
+  String? otroTipoSanitario;
+
+  ViviendaTiposSanitario({
+    this.viviendaTipoSanitarioId,
+    this.datoViviendaId,
+    this.tipoSanitarioViviendaId,
+    this.otroTipoSanitario,
+  });
+
+  factory ViviendaTiposSanitario.fromJson(Map<String, dynamic> json) =>
+      ViviendaTiposSanitario(
+        viviendaTipoSanitarioId: json["ViviendaTipoSanitario_id"],
+        datoViviendaId: json["DatoVivienda_id"],
+        tipoSanitarioViviendaId: json["TipoSanitarioVivienda_id"],
+        otroTipoSanitario: json["OtroTipoSanitario"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": datoViviendaId,
+        "TipoSanitarioVivienda_id": tipoSanitarioViviendaId,
+        "OtroTipoSanitario": otroTipoSanitario,
+      };
+}

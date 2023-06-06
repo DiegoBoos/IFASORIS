@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/dificultad_acceso_ca_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/dificultad_acceso_ca_entity.dart';
@@ -17,5 +18,17 @@ class DificultadAccesoCAUsecaseDB {
   Future<Either<Failure, List<DificultadAccesoCAEntity>>>
       getDificultadesAccesoCAUsecase() {
     return repositoryDB.getDificultadesAccesoCARepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveUbicacionDificultadesAccesoUsecaseDB(
+      int ubicacionId,
+      List<LstDificultadAccesoAtencion> lstDificultadAccesoAtencion) {
+    return repositoryDB.saveUbicacionDificultadesAccesoRepositoryDB(
+        ubicacionId, lstDificultadAccesoAtencion);
+  }
+
+  Future<Either<Failure, List<LstDificultadAccesoAtencion>>>
+      getUbicacionDificultadesAccesoUsecaseDB(int? ubicacionId) {
+    return repositoryDB.getUbicacionDificultadesAccesoRepositoryDB(ubicacionId);
   }
 }

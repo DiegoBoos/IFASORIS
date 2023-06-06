@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/dificultad_acceso_med_tradicional_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/dificultad_acceso_med_tradicional_entity.dart';
@@ -19,5 +20,19 @@ class DificultadAccesoMedTradicionalByDptoUsecaseDB {
   Future<Either<Failure, List<DificultadAccesoMedTradicionalEntity>>>
       getDificultadesAccesoMedTradicionalByDptoUsecase() {
     return repositoryDB.getDificultadesAccesoMedTradicionalByDptoRepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveUbicacionAccesoMedTradicionalUsecaseDB(
+      int ubicacionId,
+      List<LstDificultadAccesoMedTradicional>
+          lstDificultadAccesoMedTradicional) {
+    return repositoryDB.saveUbicacionAccesoMedTradicionalRepositoryDB(
+        ubicacionId, lstDificultadAccesoMedTradicional);
+  }
+
+  Future<Either<Failure, List<LstDificultadAccesoMedTradicional>>>
+      getUbicacionDificultadesAccesoMedTradicionalUsecaseDB(int? ubicacionId) {
+    return repositoryDB
+        .getUbicacionDificultadesAccesoMedTradicionalRepositoryDB(ubicacionId);
   }
 }

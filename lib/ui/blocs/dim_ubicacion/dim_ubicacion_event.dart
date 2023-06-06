@@ -19,6 +19,12 @@ class GetDimUbicacion extends DimUbicacionEvent {
   const GetDimUbicacion(this.familiaId);
 }
 
+class DimUbicacionFormSubmissionSuccess extends DimUbicacionEvent {
+  final int ubicacionId;
+
+  const DimUbicacionFormSubmissionSuccess(this.ubicacionId);
+}
+
 class UbicacionChanged extends DimUbicacionEvent {
   final int ubicacionId;
 
@@ -80,9 +86,9 @@ class EstadoViaChanged extends DimUbicacionEvent {
 }
 
 class MediosComunicacionChanged extends DimUbicacionEvent {
-  final List<int> mediosComunicacionIds;
+  final List<LstMediosComunica> lstMediosComunica;
 
-  const MediosComunicacionChanged(this.mediosComunicacionIds);
+  const MediosComunicacionChanged(this.lstMediosComunica);
 }
 
 class TiempoTardaChanged extends DimUbicacionEvent {
@@ -91,16 +97,16 @@ class TiempoTardaChanged extends DimUbicacionEvent {
   const TiempoTardaChanged(this.tiempoTardaId);
 }
 
-class MediosUtilizaCAChanged extends DimUbicacionEvent {
-  final List<int> mediosUtilizaIds;
+class MedioUtilizaCAChanged extends DimUbicacionEvent {
+  final int medioUtilizaId;
 
-  const MediosUtilizaCAChanged(this.mediosUtilizaIds);
+  const MedioUtilizaCAChanged(this.medioUtilizaId);
 }
 
 class DificultadesAccesoCAChanged extends DimUbicacionEvent {
-  final List<int> dificultadesAccesoIds;
+  final List<LstDificultadAccesoAtencion> lstDificultadAccesoAtencion;
 
-  const DificultadesAccesoCAChanged(this.dificultadesAccesoIds);
+  const DificultadesAccesoCAChanged(this.lstDificultadAccesoAtencion);
 }
 
 class CostoDesplazamientoChanged extends DimUbicacionEvent {
@@ -117,9 +123,9 @@ class ExisteMedTradicionalComunidadChanged extends DimUbicacionEvent {
 }
 
 class EspecialidadesMedTradChanged extends DimUbicacionEvent {
-  final List<int> especialidadesMedTradIds;
+  final List<LstEspMedTradicional> lstEspMedTradicional;
 
-  const EspecialidadesMedTradChanged(this.especialidadesMedTradIds);
+  const EspecialidadesMedTradChanged(this.lstEspMedTradicional);
 }
 
 class TiempoTardaMedTradChanged extends DimUbicacionEvent {
@@ -129,16 +135,17 @@ class TiempoTardaMedTradChanged extends DimUbicacionEvent {
 }
 
 class MediosUtilizaMedTradChanged extends DimUbicacionEvent {
-  final List<int> mediosUtilizaMedTradIds;
+  final List<LstMediosMedTradicional> lstMediosMedTradicional;
 
-  const MediosUtilizaMedTradChanged(this.mediosUtilizaMedTradIds);
+  const MediosUtilizaMedTradChanged(this.lstMediosMedTradicional);
 }
 
 class DificultadesAccesoMedTradicionalChanged extends DimUbicacionEvent {
-  final List<int> dificultadesAccesoMedTradIds;
+  final List<LstDificultadAccesoMedTradicional>
+      lstDificultadAccesoMedTradicional;
 
   const DificultadesAccesoMedTradicionalChanged(
-      this.dificultadesAccesoMedTradIds);
+      this.lstDificultadAccesoMedTradicional);
 }
 
 class CostoDesplazamientoMedTradicionalChanged extends DimUbicacionEvent {
@@ -149,9 +156,9 @@ class CostoDesplazamientoMedTradicionalChanged extends DimUbicacionEvent {
 }
 
 class NombresMedTradicionalChanged extends DimUbicacionEvent {
-  final List<String> nombresMedTradicional;
+  final List<LstNombreMedTradicional> lstNombreMedTradicional;
 
-  const NombresMedTradicionalChanged(this.nombresMedTradicional);
+  const NombresMedTradicionalChanged(this.lstNombreMedTradicional);
 }
 
 class PoseeChagraChanged extends DimUbicacionEvent {
@@ -161,45 +168,45 @@ class PoseeChagraChanged extends DimUbicacionEvent {
 }
 
 class TuberculosPlatanosChanged extends DimUbicacionEvent {
-  final List<int> tuberculosPlatanosIds;
+  final List<LstTuberculo> lstTuberculos;
 
-  const TuberculosPlatanosChanged(this.tuberculosPlatanosIds);
+  const TuberculosPlatanosChanged(this.lstTuberculos);
 }
 
 class LeguminosasChanged extends DimUbicacionEvent {
-  final List<int> leguminosasIds;
+  final List<LstLeguminosa> lstLeguminosas;
 
-  const LeguminosasChanged(this.leguminosasIds);
+  const LeguminosasChanged(this.lstLeguminosas);
 }
 
 class HortalizasChanged extends DimUbicacionEvent {
-  final List<int> hortalizasIds;
+  final List<LstHortaliza> lstHortalizas;
 
-  const HortalizasChanged(this.hortalizasIds);
+  const HortalizasChanged(this.lstHortalizas);
 }
 
 class VerdurasChanged extends DimUbicacionEvent {
-  final List<int> verdurasIds;
+  final List<LstVerdura> lstVerduras;
 
-  const VerdurasChanged(this.verdurasIds);
+  const VerdurasChanged(this.lstVerduras);
 }
 
 class FrutosChanged extends DimUbicacionEvent {
-  final List<int> frutosIds;
+  final List<LstFruto> lstFrutos;
 
-  const FrutosChanged(this.frutosIds);
+  const FrutosChanged(this.lstFrutos);
 }
 
 class CerealesChanged extends DimUbicacionEvent {
-  final List<int> cerealesIds;
+  final List<LstCereal> lstCereales;
 
-  const CerealesChanged(this.cerealesIds);
+  const CerealesChanged(this.lstCereales);
 }
 
 class EspeciesAnimalesCriaChanged extends DimUbicacionEvent {
-  final List<int> especiesAnimalesCriaIds;
+  final List<LstAnimalCria> lstAnimalCria;
 
-  const EspeciesAnimalesCriaChanged(this.especiesAnimalesCriaIds);
+  const EspeciesAnimalesCriaChanged(this.lstAnimalCria);
 }
 
 class ProduccionMineraChanged extends DimUbicacionEvent {

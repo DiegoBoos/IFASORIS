@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/tratamiento_agua_vivienda_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -34,6 +35,34 @@ class TratamientoAguaViviendaByDptoRepositoryDBImpl
     try {
       final result = await tratamientoAguaViviendaByDptoLocalDataSource
           .saveTratamientoAguaViviendaByDpto(tratamientoAguaViviendaByDpto);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveTmtoAguasViviendaRepositoryDB(
+      int datoViviendaId, List<LstTmtoAgua> lstTmtoAguas) async {
+    try {
+      final result = await tratamientoAguaViviendaByDptoLocalDataSource
+          .saveTmtoAguasVivienda(datoViviendaId, lstTmtoAguas);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstTmtoAgua>>>
+      getTratamientosAguaViviendaRepositoryDB(int? datoViviendaId) async {
+    try {
+      final result = await tratamientoAguaViviendaByDptoLocalDataSource
+          .getTratamientosAguaVivienda(datoViviendaId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

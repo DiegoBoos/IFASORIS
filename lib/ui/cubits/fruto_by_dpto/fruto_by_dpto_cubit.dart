@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:ifasoris/data/models/fruto_model.dart';
 
 import '../../../domain/entities/fruto_entity.dart';
 import '../../../domain/usecases/fruto_by_dpto/fruto_by_dpto_db_usecase.dart';
@@ -16,5 +17,11 @@ class FrutoByDptoCubit extends Cubit<FrutosByDptoState> {
     final result = await frutoByDptoUsecaseDB.getFrutosByDptoUsecaseDB();
     result.fold((failure) => emit(FrutosByDptoError(failure.properties.first)),
         (data) => emit(FrutosByDptoLoaded(data)));
+  }
+
+  Future<List<LstFruto>> getUbicacionFrutosDB(int? ubicacionId) async {
+    final result =
+        await frutoByDptoUsecaseDB.getUbicacionFrutosUsecaseDB(ubicacionId);
+    return result.fold((failure) => [], (data) => data);
   }
 }

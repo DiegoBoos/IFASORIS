@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/leguminosa_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -32,6 +33,34 @@ class LeguminosaByDptoRepositoryDBImpl implements LeguminosaByDptoRepositoryDB {
     try {
       final result = await leguminosaByDptoLocalDataSource
           .saveLeguminosaByDpto(leguminosa);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveUbicacionLeguminosasRepositoryDB(
+      int ubicacionId, List<LstLeguminosa> lstLeguminosas) async {
+    try {
+      final result = await leguminosaByDptoLocalDataSource
+          .saveUbicacionLeguminosas(ubicacionId, lstLeguminosas);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstLeguminosa>>>
+      getUbicacionLeguminosasRepositoryDB(int? ubicacionId) async {
+    try {
+      final result = await leguminosaByDptoLocalDataSource
+          .getUbicacionLeguminosas(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

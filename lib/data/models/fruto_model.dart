@@ -22,3 +22,47 @@ class FrutoModel extends FrutoEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstFruto {
+  int? frutoId;
+
+  LstFruto({
+    this.frutoId,
+  });
+
+  factory LstFruto.fromJson(Map<String, dynamic> json) => LstFruto(
+        frutoId: json["Fruto_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Fruto_id": frutoId,
+      };
+}
+
+List<UbicacionFrutos> ubicacionFrutosFromJson(String str) =>
+    List<UbicacionFrutos>.from(
+        json.decode(str).map((x) => UbicacionFrutos.fromJson(x)));
+
+class UbicacionFrutos {
+  int? ubicacionFrutoId;
+  int? ubicacionId;
+  int? frutoId;
+
+  UbicacionFrutos({
+    this.ubicacionFrutoId,
+    this.ubicacionId,
+    this.frutoId,
+  });
+
+  factory UbicacionFrutos.fromJson(Map<String, dynamic> json) =>
+      UbicacionFrutos(
+        ubicacionFrutoId: json["UbicacionFruto_id"],
+        ubicacionId: json["Ubicacion_id"],
+        frutoId: json["Fruto_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
+        "Fruto_id": frutoId,
+      };
+}

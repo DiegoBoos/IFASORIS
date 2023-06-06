@@ -23,7 +23,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
       int dtoId, int pagina, int registrosPorPagina) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/afiliados/$dtoId?pagina=$pagina&_RegistrosPorPagina=$registrosPorPagina');
+          '${Constants.ifasorisBaseUrl}/afiliadosbydpto?DtoId=$dtoId&pagina=$pagina&_RegistrosPorPagina=$registrosPorPagina');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

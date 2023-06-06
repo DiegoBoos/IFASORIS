@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/cereal_model.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -29,6 +30,34 @@ class CerealByDptoRepositoryDBImpl implements CerealByDptoRepositoryDB {
       CerealEntity cereal) async {
     try {
       final result = await cerealByDptoLocalDataSource.saveCerealByDpto(cereal);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveUbicacionCerealesRepositoryDB(
+      int ubicacionId, List<LstCereal> lstCereales) async {
+    try {
+      final result = await cerealByDptoLocalDataSource.saveUbicacionCereales(
+          ubicacionId, lstCereales);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstCereal>>> getUbicacionCerealesRepositoryDB(
+      int? ubicacionId) async {
+    try {
+      final result =
+          await cerealByDptoLocalDataSource.getUbicacionCereales(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

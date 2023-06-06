@@ -5,12 +5,14 @@ class FichaEntity {
     required this.numFicha,
     required this.userName,
     this.ultimaActualizacion,
+    this.remoteFichaId,
   });
   int? fichaId;
   DateTime? fechaCreacion;
   String numFicha;
   String userName;
   DateTime? ultimaActualizacion;
+  int? remoteFichaId;
 
   FichaEntity copyWith({
     int? fichaId,
@@ -32,5 +34,6 @@ class FichaEntity {
         "NumFicha": numFicha,
         "UserName": userName,
         "UltimaActualizacion": ultimaActualizacion?.toIso8601String(),
+        "remoteFichaId": remoteFichaId,
       };
 }

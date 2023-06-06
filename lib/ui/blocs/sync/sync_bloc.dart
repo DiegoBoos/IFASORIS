@@ -138,7 +138,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   final SyncLogUsecaseDB syncLogDB;
 
-  int totalAccesories = 34;
+  /* int totalAccesories = 34; */
+  int totalAccesories = 33;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -255,38 +256,43 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.syncLogDB,
   }) : super(SyncInitial()) {
     on<SyncStarted>((event, emit) async {
-      if (event.tablesNames.contains('Asp1_Ubicacion')) {
-        emit(InitializingSync());
-        ConnectionSQLiteService.truncateTable('Asp1_Ubicacion')
-            .then((value) async {
-          await syncDimUbicacion(event);
-        });
-      } else if (event.tablesNames.contains('Afiliado')) {
-        emit(InitializingSync());
+      if (event.tablesNames.contains('Afiliado')) {
+        add(Downloading(state.syncProgressModel.copyWith(
+          title: 'Descargando afiliados',
+        )));
         ConnectionSQLiteService.truncateTable('Afiliado').then((value) async {
           afiliadosTemp = [];
           await syncAfiliados(event, 1, 10000);
         });
       } else if (event.tablesNames.contains('Accesorias')) {
-        emit(InitializingSync());
         ConnectionSQLiteService.truncateTable(
                 'DificultadesAcceso_CentroAtencion')
             .then((value) async {
           dificultadesAccesoCATemp = [];
           await syncDificultadesAccesoCA(event);
         });
+      } else if (event.tablesNames.contains('DimUbicacion')) {
+        ConnectionSQLiteService.truncateTable('Asp1_Ubicacion')
+            .then((value) async {
+          await syncDimUbicacion(event);
+        });
+      } else if (event.tablesNames.contains('DimVivienda')) {
+        ConnectionSQLiteService.truncateTable('Asp2_DatosVivienda')
+            .then((value) async {
+          await syncDimUbicacion(event);
+        });
       }
     });
     on<Downloading>((event, emit) => emit(SyncDownloading(event.syncProgress)));
-    on<SyncStatusChanged>((event, emit) {
+    on<SyncPercentageChanged>((event, emit) {
       event.syncProgress.counter == event.syncProgress.total
           ? emit(SyncSuccess())
-          : emit(SyncInProgress(event.syncProgress));
+          : emit(SyncPercentageInProgress(event.syncProgress));
     });
-    on<SyncAccesoriesChanged>((event, emit) {
+    on<SyncIncrementChanged>((event, emit) {
       event.syncProgress.counter == event.syncProgress.total
           ? emit(SyncSuccess())
-          : emit(SyncInProgressAccesories(event.syncProgress));
+          : emit(SyncIncrementInProgress(event.syncProgress));
     });
     on<SyncError>((event, emit) => emit(SyncFailure(event.message)));
     on<SyncLog>((event, emit) => emit(IncompleteSync(event.syncLog)));
@@ -300,7 +306,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       print(data);
-      /*  await syncDimVivienda(event); */
     });
   }
 // ************************** DimUbicacion ****************************
@@ -312,9 +317,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await dimViviendaUsecase.uploadDimViviendaUsecase();
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) {
-      event.tablesNames.remove('Asp1_Ubicacion');
-      add(SyncStarted(event.usuario, event.tablesNames));
-      return;
+      print(data);
     });
   }
 // ************************** DimVivienda ****************************
@@ -336,12 +339,15 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           total: data.totalRegistros,
           percent: calculatePercent())));
 
-      if ((afiliadosTemp.length <= data.totalRegistros) &&
-          (pagina != data.totalPaginas)) {
+      /*  if (afiliadosTemp.length < data.totalRegistros &&
+          pagina < data.totalPaginas) {
         pagina++;
         await syncAfiliados(event, pagina, registrosPorPagina);
+      } */
+
+      for (int i = 0; i < afiliadosTemp.length; i++) {
+        await saveAfiliado(event, afiliadosTemp[i]);
       }
-      await saveAfiliado(event, afiliadosTemp[0]);
     });
   }
 
@@ -352,7 +358,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await afiliadoUsecaseDB.saveAfiliadoUsecaseDB(afiliado);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      add(SyncStatusChanged(state.syncProgressModel.copyWith(
+      add(SyncPercentageChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando afiliados',
           counter: data,
           total: afiliadosTemp.length,
@@ -382,8 +388,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       dificultadesAccesoCATemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando dificultades acceso',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando dificultades acceso',
           counter: 1,
           total: totalAccesories)));
 
@@ -428,8 +434,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       estadosViasTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando estados vías',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando estados vías',
           counter: 2,
           total: totalAccesories)));
 
@@ -475,8 +481,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       mediosComunicacionTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando medios comunicación',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando medios comunicación',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -522,8 +528,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       mediosUtilizaCATemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando medios utiliza centro atención',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando medios utiliza centro atención',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -569,8 +575,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tiemposTardaCATemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando medios utiliza centro atención',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando medios utiliza centro atención',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -615,8 +621,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       viasAccesoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando vias acceso',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando vias acceso',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -663,8 +669,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       autoridadesIndigenasTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando autoridades indígenas',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando autoridades indígenas',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -712,8 +718,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       cerealesByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando cereales',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando cereales',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -761,8 +767,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       costosDesplazamientoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando costos desplazamiento',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando costos desplazamiento',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -812,8 +818,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       dificultadesAccesoMedTradicionalByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando dificultades acceso médico tradicional',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando dificultades acceso médico tradicional',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -864,8 +870,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       especialidadesMedTradicionalByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando especialidades médico tradicional',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando especialidades médico tradicional',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -915,8 +921,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       especiesAnimalesByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando especies animales',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando especies animales',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -963,8 +969,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       frutosByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando frutos',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando frutos',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1011,8 +1017,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       hortalizasByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando hortalizas',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando hortalizas',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1060,8 +1066,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       leguminosasByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando leguminosas',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando leguminosas',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1110,8 +1116,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       mediosUtilizaMedTradicionalByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando medios utiliza médico tradicional',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando medios utiliza médico tradicional',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1159,8 +1165,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       opcionesSiNoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando opciones',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando opciones',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1180,11 +1186,20 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= opcionesSiNoTemp.length) {
-        ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
-          resguardosByDptoTemp = [];
-          await syncResguardosByDpto(event);
+        //TODO: TEMP UNTIL FIXING
+        ConnectionSQLiteService.truncateTable(
+                'TiemposTarda_AccesoMedTradicional')
+            .then((value) async {
+          tiemposTardaMedTradicionalTemp = [];
+          await syncTiemposTardaMedTradicional(event);
         });
         return;
+        /* ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
+          resguardosByDptoTemp = [];
+          await syncResguardosByDpto(event);
+        }); 
+        return;
+        */
       }
 
       OpcionSiNoEntity o = opcionesSiNoTemp[data];
@@ -1206,8 +1221,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       resguardosByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando resguardos',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando resguardos',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1255,8 +1270,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tiemposTardaMedTradicionalTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando tiempos tarda médico tradicional',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando tiempos tarda médico tradicional',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1304,8 +1319,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tuberculosPlatanosByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando tubérculos plátanos',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando tubérculos plátanos',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1353,8 +1368,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       verdurasByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando verduras',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando verduras',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1402,8 +1417,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       factoresRiesgoViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando factores riesgo vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando factores riesgo vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1451,8 +1466,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       iluminacionesViviendaTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando iluminaciones vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando iluminaciones vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1499,8 +1514,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       pisosViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando pisos vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando pisos vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1549,8 +1564,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       presenciaAnimalesViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando presencia animales',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando presencia animales',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1600,8 +1615,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       serviciosPublicosViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando servicios públicos',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando servicios públicos',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1649,8 +1664,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       techosViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando techos vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando techos vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1697,8 +1712,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tenenciasViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando tenencias vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando tenencias vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1747,8 +1762,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tiposCombustibleViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando tipos combustible vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando tipos combustible vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1797,8 +1812,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tiposSanitarioViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando tipos sanitario vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando tipos sanitario vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1847,8 +1862,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tratamientosAguaViviendaByDptoTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando tratamientos agua vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando tratamientos agua vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1897,8 +1912,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       ventilacionesViviendaTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando ventilaciones vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando ventilaciones vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1945,8 +1960,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tiposViviendaTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando tipos vivienda',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando tipos vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -1993,8 +2008,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tiposCalendarioTemp.addAll(data);
-      add(SyncAccesoriesChanged(state.syncProgressModel.copyWith(
-          title: 'Descargando tipos calendario',
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando tipos calendario',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 

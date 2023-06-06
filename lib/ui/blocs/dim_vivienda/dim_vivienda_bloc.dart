@@ -1,19 +1,53 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/models/factor_riesgo_vivienda_model.dart';
+import '../../../data/models/presencia_animal_vivienda_model.dart';
+import '../../../data/models/servicio_publico_vivienda_model.dart';
+import '../../../data/models/techo_vivienda_model.dart';
+import '../../../data/models/tipo_combustible_vivienda_model.dart';
+import '../../../data/models/tipo_sanitario_vivienda_model.dart';
+import '../../../data/models/tratamiento_agua_vivienda_model.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
 import '../../../domain/usecases/dim_vivienda/dim_vivienda_db_usecase.dart';
+import '../../../domain/usecases/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_db_usecase.dart';
 
 part 'dim_vivienda_event.dart';
 part 'dim_vivienda_state.dart';
 
 class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
   final DimViviendaUsecaseDB dimViviendaUsecaseDB;
+  final FactorRiesgoViviendaByDptoUsecaseDB factorRiesgoViviendaByDptoUsecaseDB;
+  final ServicioPublicoViviendaByDptoUsecaseDB
+      servicioPublicoViviendaByDptoUsecaseDB;
+  final TechoViviendaByDptoUsecaseDB techoViviendaByDptoUsecaseDB;
+  final TipoCombustibleViviendaByDptoUsecaseDB
+      tipoCombustibleViviendaByDptoUsecaseDB;
+  final TipoSanitarioViviendaByDptoUsecaseDB
+      tipoSanitarioViviendaByDptoUsecaseDB;
+  final TratamientoAguaViviendaByDptoUsecaseDB
+      tratamientoAguaViviendaByDptoUsecaseDB;
+  final PresenciaAnimalViviendaByDptoUsecaseDB
+      presenciaAnimalViviendaByDptoUsecaseDB;
 
-  DimViviendaBloc({required this.dimViviendaUsecaseDB})
-      : super(DimViviendaEntity()) {
+  DimViviendaBloc({
+    required this.dimViviendaUsecaseDB,
+    required this.factorRiesgoViviendaByDptoUsecaseDB,
+    required this.servicioPublicoViviendaByDptoUsecaseDB,
+    required this.techoViviendaByDptoUsecaseDB,
+    required this.tipoCombustibleViviendaByDptoUsecaseDB,
+    required this.tipoSanitarioViviendaByDptoUsecaseDB,
+    required this.tratamientoAguaViviendaByDptoUsecaseDB,
+    required this.presenciaAnimalViviendaByDptoUsecaseDB,
+  }) : super(initObject()) {
     on<DimViviendaInit>((event, emit) {
-      emit(DimViviendaEntity());
+      emit(initObject());
     });
 
     on<DimViviendaSubmitted>((event, emit) async {
@@ -21,9 +55,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
       result.fold((failure) {
         emit(state.copyWith(
             formStatus: DimViviendaSubmissionFailed(failure.properties.first)));
-      }, (data) {
-        emit(state.copyWith(formStatus: DimViviendaSubmissionSuccess()));
-      });
+      }, (data) => saveFactoresRiesgoVivienda(data));
     });
 
     on<GetDimVivienda>((event, emit) async {
@@ -42,9 +74,12 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
       });
     });
 
-    on<DatoViviendaChanged>((event, emit) {
-      emit(state.copyWith(datoViviendaId: event.datoViviendaId));
+    on<DimViviendaFormSubmissionSuccess>((event, emit) {
+      emit(state.copyWith(
+          datoViviendaId: event.datoViviendaId,
+          formStatus: DimViviendaSubmissionSuccess()));
     });
+
     on<DimViviendaFamiliaChanged>((event, emit) {
       emit(state.copyWith(familiaId: event.familiaId));
     });
@@ -54,17 +89,14 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     on<TenenciaViviendaChanged>((event, emit) {
       emit(state.copyWith(tenenciaViviendaId: event.tenenciaViviendaId));
     });
-    on<PisosViviendaChanged>((event, emit) {
-      emit(state.copyWith(pisosViviendaIds: event.pisosViviendaIds));
+    on<PisoViviendaChanged>((event, emit) {
+      emit(state.copyWith(pisoViviendaId: event.pisoViviendaId));
     });
     on<OtroTipoPisoChanged>((event, emit) {
       emit(state.copyWith(otroTipoPiso: event.otroTipoPiso));
     });
     on<TechosViviendaChanged>((event, emit) {
-      emit(state.copyWith(techosViviendaIds: event.techosViviendaIds));
-    });
-    on<OtroTipoTechoChanged>((event, emit) {
-      emit(state.copyWith(otroTipoTecho: event.otroTipoTecho));
+      emit(state.copyWith(lstTechos: event.lstTechos));
     });
     on<VentilacionViviendaChanged>((event, emit) {
       emit(state.copyWith(ventilacionViviendaId: event.ventilacionViviendaId));
@@ -73,37 +105,83 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
       emit(state.copyWith(iluminacionViviendaId: event.iluminacionViviendaId));
     });
     on<ServiciosPublicosViviendaChanged>((event, emit) {
-      emit(state.copyWith(
-          serviciosPublicosViviendaIds: event.serviciosPublicosViviendaIds));
+      emit(state.copyWith(lstServPublicos: event.lstServPublicos));
     });
     on<TratamientoAguaViviendaChanged>((event, emit) {
-      emit(state.copyWith(
-          tratamientosAguaViviendaIds: event.tratamientosAguaViviendaIds));
+      emit(state.copyWith(lstTmtoAguas: event.lstTmtoAguas));
     });
     on<TiposSanitarioViviendaChanged>((event, emit) {
-      emit(state.copyWith(
-          tiposSanitarioViviendaIds: event.tiposSanitarioViviendaIds));
-    });
-    on<OtroTipoSanitarioChanged>((event, emit) {
-      emit(state.copyWith(otroTipoSanitario: event.otroTipoSanitario));
+      emit(state.copyWith(lstTiposSanitario: event.lstTiposSanitario));
     });
     on<TiposCombustibleViviendaChanged>((event, emit) {
-      emit(state.copyWith(
-          tiposCombustibleViviendaIds: event.tiposCombustibleViviendaIds));
-    });
-    on<OtroTipoCombustibleChanged>((event, emit) {
-      emit(state.copyWith(otroTipoCombustible: event.otroTipoCombustible));
+      emit(state.copyWith(lstTiposCombustible: event.lstTiposCombustible));
     });
     on<FactoresRiesgoViviendaChanged>((event, emit) {
-      emit(state.copyWith(
-          factoresRiesgoViviendaIds: event.factoresRiesgoViviendaIds));
+      emit(state.copyWith(lstFactoresRiesgo: event.lstFactoresRiesgo));
     });
     on<PresenciaAnimalesViviendaChanged>((event, emit) {
-      emit(state.copyWith(
-          presenciaAnimalesViviendaIds: event.presenciaAnimalesViviendaIds));
+      emit(state.copyWith(lstPresenciaAnimales: event.lstPresenciaAnimales));
     });
-    on<OtroPresenciaAnimalChanged>((event, emit) {
-      emit(state.copyWith(otroPresenciaAnimal: event.otroPresenciaAnimal));
-    });
+  }
+
+  void saveFactoresRiesgoVivienda(int datoViviendaId) async {
+    final result = await factorRiesgoViviendaByDptoUsecaseDB
+        .saveFactoresRiesgoViviendaUsecaseDB(
+            datoViviendaId, state.lstFactoresRiesgo!);
+    result.fold((failure) {
+      print(failure);
+    }, (data) => saveServiciosPublicosVivienda(datoViviendaId));
+  }
+
+  void saveServiciosPublicosVivienda(int datoViviendaId) async {
+    final result = await servicioPublicoViviendaByDptoUsecaseDB
+        .saveServiciosPublicosViviendaUsecaseDB(
+            datoViviendaId, state.lstServPublicos!);
+    result.fold((failure) {
+      print(failure);
+    }, (data) => saveTechosVivienda(datoViviendaId));
+  }
+
+  void saveTechosVivienda(int datoViviendaId) async {
+    final result = await techoViviendaByDptoUsecaseDB
+        .saveTechosViviendaUsecaseDB(datoViviendaId, state.lstTechos!);
+    result.fold((failure) {
+      print(failure);
+    }, (data) => saveTiposCombustibleVivienda(datoViviendaId));
+  }
+
+  void saveTiposCombustibleVivienda(int datoViviendaId) async {
+    final result = await tipoCombustibleViviendaByDptoUsecaseDB
+        .saveTiposCombustibleViviendaUsecaseDB(
+            datoViviendaId, state.lstTiposCombustible!);
+    result.fold((failure) {
+      print(failure);
+    }, (data) => saveTiposSanitarioVivienda(datoViviendaId));
+  }
+
+  void saveTiposSanitarioVivienda(int datoViviendaId) async {
+    final result = await tipoSanitarioViviendaByDptoUsecaseDB
+        .saveTiposSanitarioViviendaUsecaseDB(
+            datoViviendaId, state.lstTiposSanitario!);
+    result.fold((failure) {
+      print(failure);
+    }, (data) => saveTmtoAguasVivienda(datoViviendaId));
+  }
+
+  void saveTmtoAguasVivienda(int datoViviendaId) async {
+    final result = await tratamientoAguaViviendaByDptoUsecaseDB
+        .saveTmtoAguasViviendaUsecaseDB(datoViviendaId, state.lstTmtoAguas!);
+    result.fold((failure) {
+      print(failure);
+    }, (data) => savePresenciaAnimalesVivienda(datoViviendaId));
+  }
+
+  void savePresenciaAnimalesVivienda(int datoViviendaId) async {
+    final result = await presenciaAnimalViviendaByDptoUsecaseDB
+        .savePresenciaAnimalesViviendaUsecaseDB(
+            datoViviendaId, state.lstPresenciaAnimales!);
+    result.fold((failure) {
+      print(failure);
+    }, (data) => add(DimViviendaFormSubmissionSuccess(datoViviendaId)));
   }
 }

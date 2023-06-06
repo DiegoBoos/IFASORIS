@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/leguminosa_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/leguminosa_entity.dart';
@@ -17,5 +18,16 @@ class LeguminosaByDptoUsecaseDB {
   Future<Either<Failure, List<LeguminosaEntity>>>
       getLeguminosasByDptoUsecaseDB() {
     return repositoryDB.getLeguminosasByDptoRepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveUbicacionLeguminosasUsecaseDB(
+      int ubicacionId, List<LstLeguminosa> lstLeguminosas) {
+    return repositoryDB.saveUbicacionLeguminosasRepositoryDB(
+        ubicacionId, lstLeguminosas);
+  }
+
+  Future<Either<Failure, List<LstLeguminosa>>> getUbicacionLeguminosasUsecaseDB(
+      int? ubicacionId) {
+    return repositoryDB.getUbicacionLeguminosasRepositoryDB(ubicacionId);
   }
 }

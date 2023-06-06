@@ -24,3 +24,47 @@ class LeguminosaModel extends LeguminosaEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstLeguminosa {
+  int? leguminosaId;
+
+  LstLeguminosa({
+    this.leguminosaId,
+  });
+
+  factory LstLeguminosa.fromJson(Map<String, dynamic> json) => LstLeguminosa(
+        leguminosaId: json["Leguminosa_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Leguminosa_id": leguminosaId,
+      };
+}
+
+List<UbicacionLeguminosas> ubicacionLeguminosasFromJson(String str) =>
+    List<UbicacionLeguminosas>.from(
+        json.decode(str).map((x) => UbicacionLeguminosas.fromJson(x)));
+
+class UbicacionLeguminosas {
+  int? ubicacionLeguminosaId;
+  int? ubicacionId;
+  int? leguminosaId;
+
+  UbicacionLeguminosas({
+    this.ubicacionLeguminosaId,
+    this.ubicacionId,
+    this.leguminosaId,
+  });
+
+  factory UbicacionLeguminosas.fromJson(Map<String, dynamic> json) =>
+      UbicacionLeguminosas(
+        ubicacionLeguminosaId: json["UbicacionLeguminosa_id"],
+        ubicacionId: json["Ubicacion_id"],
+        leguminosaId: json["Leguminosa_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
+        "Leguminosa_id": leguminosaId,
+      };
+}

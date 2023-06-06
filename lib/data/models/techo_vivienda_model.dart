@@ -24,3 +24,54 @@ class TechoViviendaModel extends TechoViviendaEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstTecho {
+  int? techoViviendaId;
+  String? otroTipoTecho;
+
+  LstTecho({
+    this.techoViviendaId,
+    this.otroTipoTecho,
+  });
+
+  factory LstTecho.fromJson(Map<String, dynamic> json) => LstTecho(
+        techoViviendaId: json["TechoVivienda_id"],
+        otroTipoTecho: json["OtroTipoTecho"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "TechoVivienda_id": techoViviendaId,
+        "OtroTipoTecho": otroTipoTecho,
+      };
+}
+
+List<ViviendaTechos> viviendaTechosFromJson(String str) =>
+    List<ViviendaTechos>.from(
+        json.decode(str).map((x) => ViviendaTechos.fromJson(x)));
+
+class ViviendaTechos {
+  int? viviendaTechoId;
+  int? datoViviendaId;
+  int? techoViviendaId;
+  String? otroTipoTecho;
+
+  ViviendaTechos({
+    this.viviendaTechoId,
+    this.datoViviendaId,
+    this.techoViviendaId,
+    this.otroTipoTecho,
+  });
+
+  factory ViviendaTechos.fromJson(Map<String, dynamic> json) => ViviendaTechos(
+        viviendaTechoId: json["ViviendaTecho_id"],
+        datoViviendaId: json["DatoVivienda_id"],
+        techoViviendaId: json["TechoVivienda_id"],
+        otroTipoTecho: json["OtroTipoTecho"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": datoViviendaId,
+        "TechoVivienda_id": techoViviendaId,
+        "OtroTipoTecho": otroTipoTecho,
+      };
+}

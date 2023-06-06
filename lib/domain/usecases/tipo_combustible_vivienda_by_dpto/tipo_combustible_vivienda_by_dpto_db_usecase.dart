@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/tipo_combustible_vivienda_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/tipo_combustible_vivienda_entity.dart';
@@ -18,5 +19,16 @@ class TipoCombustibleViviendaByDptoUsecaseDB {
   Future<Either<Failure, List<TipoCombustibleViviendaEntity>>>
       getTiposCombustibleViviendaByDptoUsecaseDB() {
     return repositoryDB.getTiposCombustibleViviendaByDptoRepositoryDB();
+  }
+
+  Future<Either<Failure, int>> saveTiposCombustibleViviendaUsecaseDB(
+      int datoViviendaId, List<LstTiposCombustible> lstTiposCombustible) {
+    return repositoryDB.saveTiposCombustibleViviendaRepositoryDB(
+        datoViviendaId, lstTiposCombustible);
+  }
+
+  Future<Either<Failure, List<LstTiposCombustible>>>
+      getTiposCombustibleViviendaUsecaseDB(int? datoViviendaId) {
+    return repositoryDB.getTiposCombustibleViviendaRepositoryDB(datoViviendaId);
   }
 }
