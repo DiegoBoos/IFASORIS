@@ -9,7 +9,6 @@ import '../../../data/models/tipo_combustible_vivienda_model.dart';
 import '../../../data/models/tipo_sanitario_vivienda_model.dart';
 import '../../../data/models/tratamiento_agua_vivienda_model.dart';
 import '../../../domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
-import '../../../domain/usecases/iluminacion_vivienda/iluminacion_vivienda_exports.dart';
 import '../../../domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
@@ -37,7 +36,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   int? _pisoViviendaId;
   List<LstTecho> _selectedTechosVivienda = [];
   int? _ventilacionViviendaId;
-  int? _iluminacionViviendaId;
+  /* int? _iluminacionViviendaId; */
   List<LstServPublico> _selectedServiciosPublicosVivienda = [];
   List<LstTmtoAgua> _selectedTratamientosAguaVivienda = [];
   List<LstTiposSanitario> _selectedTiposSanitarioVivienda = [];
@@ -46,8 +45,11 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   List<LstPresenciaAnimal> _selectedPresenciaAnimalesVivienda = [];
 
   bool _showOtherTechoVivienda = false;
+  String? _otroTipoTecho;
   bool _showOtherTipoSanitario = false;
+  String? _otroTipoSanitario;
   bool _showOtherTipoCombustible = false;
+  String? _otroTipoCombustible;
   bool _showOtherPresenciaAnimal = false;
 
   String? _validateTechosVivienda() {
@@ -95,7 +97,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
       _tenenciaVivienda = widget.dimVivienda?.tenenciaViviendaId;
       _pisoViviendaId = widget.dimVivienda?.pisoViviendaId;
       _ventilacionViviendaId = widget.dimVivienda?.ventilacionViviendaId;
-      _iluminacionViviendaId = widget.dimVivienda?.iluminacionViviendaId;
+      /* _iluminacionViviendaId = widget.dimVivienda?.iluminacionViviendaId; */
     });
     getOptions();
   }
@@ -134,6 +136,10 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
     _selectedTechosVivienda = await techoViviendaByDptoCubit
         .getTechosViviendaDB(widget.dimVivienda?.datoViviendaId);
 
+    if (_selectedTechosVivienda[0].otroTipoTecho != null) {
+      _showOtherTechoVivienda = true;
+    }
+
     _selectedServiciosPublicosVivienda =
         await servicioPublicoViviendaByDptoCubit
             .getServiciosPublicosViviendaDB(widget.dimVivienda?.datoViviendaId);
@@ -144,8 +150,16 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
     _selectedTiposSanitarioVivienda = await tipoSanitarioViviendaByDptoCubit
         .getTiposSanitarioViviendaDB(widget.dimVivienda?.datoViviendaId);
 
+    if (_selectedTiposSanitarioVivienda[0].otroTipoSanitario != null) {
+      _showOtherTipoSanitario = true;
+    }
+
     _selectedTiposCombustibleVivienda = await tipoCombustibleViviendaByDptoCubit
         .getTiposCombustibleViviendaDB(widget.dimVivienda?.datoViviendaId);
+
+    if (_selectedTiposCombustibleVivienda[0].otroTipoCombustible != null) {
+      _showOtherTipoCombustible = true;
+    }
 
     _selectedFactoresRiesgoVivienda = await factorRiesgoViviendaByDptoCubit
         .getFactoresRiesgoViviendaDB(widget.dimVivienda?.datoViviendaId);
@@ -182,7 +196,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is TiposViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _tipoVivienda,
                 builder: (FormFieldState<int> formstate) {
                   return Column(
@@ -279,7 +293,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is TenenciasViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _tenenciaVivienda,
                 builder: (FormFieldState<int> formstate) {
                   return Column(
@@ -349,7 +363,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is PisosViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _pisoViviendaId,
                 builder: (FormFieldState<int> formstate) {
                   return Column(
@@ -415,7 +429,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is TechosViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedTechosVivienda,
                 builder: (FormFieldState<List<LstTecho>> formstate) {
                   return Column(
@@ -467,33 +481,28 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               const VerticalDivider(),
                           ],
                         );
-                      })
-                            ..add(
-                              _showOtherTechoVivienda
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: TextFormField(
-                                        initialValue: '',
-                                        decoration: CustomInputDecoration
-                                            .inputDecoration(
-                                                hintText: 'Otro',
-                                                labelText: 'Cuál'),
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Campo requerido';
-                                          }
-                                          return null;
-                                        },
-                                        onSaved: (String? value) {
-                                          dimViviendaBloc.add(
-                                              TechosViviendaChanged([
-                                            LstTecho(otroTipoTecho: value!)
-                                          ]));
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                            )),
+                      })),
+                      if (_showOtherTechoVivienda)
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            initialValue:
+                                _selectedTechosVivienda[0].otroTipoTecho,
+                            decoration: CustomInputDecoration.inputDecoration(
+                                hintText: 'Otro', labelText: 'Cuál'),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Campo requerido';
+                              }
+                              return null;
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _otroTipoTecho = value;
+                              });
+                            },
+                          ),
+                        ),
                       Text(
                         _validateTechosVivienda() ?? '',
                         style: const TextStyle(color: Colors.red),
@@ -503,7 +512,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                 },
                 validator: (_) => _validateTechosVivienda(),
                 onSaved: (List<LstTecho>? value) {
-                  dimViviendaBloc.add(TechosViviendaChanged(value!));
+                  if (_otroTipoTecho != null) {
+                    final List<LstTecho> lstTecho = value!;
+                    lstTecho[0].otroTipoTecho = _otroTipoTecho;
+                    dimViviendaBloc.add(TechosViviendaChanged(lstTecho));
+                  } else {
+                    dimViviendaBloc.add(TechosViviendaChanged(value!));
+                  }
                 },
               );
             }
@@ -521,7 +536,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is VentilacionesViviendaLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _ventilacionViviendaId,
                 builder: (FormFieldState<int> formstate) {
                   return Column(
@@ -580,7 +595,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
             return Container();
           },
         ),
-        const Divider(),
+        /*  const Divider(),
         const Text(
           'Iluminación',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -591,7 +606,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is IluminacionesViviendaLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _iluminacionViviendaId,
                 builder: (FormFieldState<int> formstate) {
                   return Column(
@@ -649,7 +664,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
             }
             return Container();
           },
-        ),
+        ), */
         const Divider(),
         const Text(
           'Servicios públicos',
@@ -662,7 +677,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is ServiciosPublicosViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedServiciosPublicosVivienda,
                 builder: (FormFieldState<List<LstServPublico>> formstate) {
                   return Column(
@@ -734,7 +749,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Seleccione una opción';
+                    return 'Seleccione al menos una opción';
                   }
                   return null;
                 },
@@ -758,7 +773,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is TratamientosAguaViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedTratamientosAguaVivienda,
                 builder: (FormFieldState<List<LstTmtoAgua>> formstate) {
                   return Column(
@@ -847,7 +862,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is TiposSanitarioViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedTiposSanitarioVivienda,
                 builder: (FormFieldState<List<LstTiposSanitario>> formstate) {
                   return Column(
@@ -868,6 +883,14 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                         e.tipoSanitarioViviendaId),
                                 onChanged: (bool? value) {
                                   setState(() {
+                                    if (e.tipoSanitarioViviendaId == 3) {
+                                      _selectedTiposSanitarioVivienda = [
+                                        LstTiposSanitario(
+                                            tipoSanitarioViviendaId:
+                                                e.tipoSanitarioViviendaId)
+                                      ];
+                                      _showOtherTipoSanitario = false;
+                                    }
                                     if (e.tipoSanitarioViviendaId == 6) {
                                       _selectedTiposSanitarioVivienda = [
                                         LstTiposSanitario(
@@ -879,7 +902,9 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _selectedTiposSanitarioVivienda
                                           .removeWhere((element) =>
                                               element.tipoSanitarioViviendaId ==
-                                              6);
+                                                  6 ||
+                                              element.tipoSanitarioViviendaId ==
+                                                  3);
                                       _selectedTiposSanitarioVivienda.add(
                                           LstTiposSanitario(
                                               tipoSanitarioViviendaId:
@@ -914,23 +939,23 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                   ? Padding(
                                       padding: const EdgeInsets.all(15.0),
                                       child: TextFormField(
-                                        initialValue: '',
+                                        initialValue:
+                                            _selectedTiposSanitarioVivienda[0]
+                                                .otroTipoSanitario,
                                         decoration: CustomInputDecoration
                                             .inputDecoration(
                                                 hintText: 'Otro',
                                                 labelText: 'Cuál'),
                                         validator: (value) {
-                                          if (value!.isEmpty) {
+                                          if (value == null) {
                                             return 'Campo requerido';
                                           }
                                           return null;
                                         },
-                                        onSaved: (String? value) {
-                                          dimViviendaBloc.add(
-                                              TiposSanitarioViviendaChanged([
-                                            LstTiposSanitario(
-                                                otroTipoSanitario: value!)
-                                          ]));
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            _otroTipoSanitario = value;
+                                          });
                                         },
                                       ),
                                     )
@@ -945,7 +970,14 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                 },
                 validator: (_) => _validateTiposSanitariosVivienda(),
                 onSaved: (List<LstTiposSanitario>? value) {
-                  dimViviendaBloc.add(TiposSanitarioViviendaChanged(value!));
+                  if (_otroTipoSanitario != null) {
+                    final List<LstTiposSanitario> lstTiposSanitario = value!;
+                    lstTiposSanitario[0].otroTipoSanitario = _otroTipoSanitario;
+                    dimViviendaBloc
+                        .add(TiposSanitarioViviendaChanged(lstTiposSanitario));
+                  } else {
+                    dimViviendaBloc.add(TiposSanitarioViviendaChanged(value!));
+                  }
                 },
               );
             }
@@ -964,7 +996,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is TiposCombustibleViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedTiposCombustibleVivienda,
                 builder: (FormFieldState<List<LstTiposCombustible>> formstate) {
                   return Column(
@@ -1032,23 +1064,23 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                   ? Padding(
                                       padding: const EdgeInsets.all(15.0),
                                       child: TextFormField(
-                                        initialValue: '',
+                                        initialValue:
+                                            _selectedTiposCombustibleVivienda[0]
+                                                .otroTipoCombustible,
                                         decoration: CustomInputDecoration
                                             .inputDecoration(
                                                 hintText: 'Otro',
                                                 labelText: 'Cuál'),
                                         validator: (value) {
-                                          if (value!.isEmpty) {
+                                          if (value == null) {
                                             return 'Campo requerido';
                                           }
                                           return null;
                                         },
-                                        onSaved: (String? value) {
-                                          dimViviendaBloc.add(
-                                              TiposCombustibleViviendaChanged([
-                                            LstTiposCombustible(
-                                                otroTipoCombustible: value!)
-                                          ]));
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            _otroTipoCombustible = value;
+                                          });
                                         },
                                       ),
                                     )
@@ -1063,7 +1095,17 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                 },
                 validator: (_) => _validateTiposCombustibleVivienda(),
                 onSaved: (List<LstTiposCombustible>? value) {
-                  dimViviendaBloc.add(TiposCombustibleViviendaChanged(value!));
+                  if (_otroTipoCombustible != null) {
+                    final List<LstTiposCombustible> lstTiposCombustible =
+                        value!;
+                    lstTiposCombustible[0].otroTipoCombustible =
+                        _otroTipoCombustible;
+                    dimViviendaBloc.add(
+                        TiposCombustibleViviendaChanged(lstTiposCombustible));
+                  } else {
+                    dimViviendaBloc
+                        .add(TiposCombustibleViviendaChanged(value!));
+                  }
                 },
               );
             }
@@ -1082,7 +1124,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is FactoresRiesgoViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedFactoresRiesgoVivienda,
                 builder: (FormFieldState<List<LstFactoresRiesgo>> formstate) {
                   return Column(
@@ -1167,7 +1209,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is PresenciaAnimalesViviendaByDptoLoaded) {
               return FormField(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 initialValue: _selectedPresenciaAnimalesVivienda,
                 builder: (FormFieldState<List<LstPresenciaAnimal>> formstate) {
                   return Column(
@@ -1188,6 +1230,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                         e.presenciaAnimalViviendaId),
                                 onChanged: (bool? value) {
                                   setState(() {
+                                    formstate.didChange(
+                                        _selectedPresenciaAnimalesVivienda);
                                     if (e.presenciaAnimalViviendaId == 5) {
                                       _selectedPresenciaAnimalesVivienda = [
                                         LstPresenciaAnimal(
@@ -1242,16 +1286,16 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 hintText: 'Otro',
                                                 labelText: 'Cuál'),
                                         validator: (value) {
-                                          if (value!.isEmpty) {
+                                          if (value == null) {
                                             return 'Campo requerido';
                                           }
                                           return null;
                                         },
                                         onSaved: (String? value) {
                                           dimViviendaBloc.add(
-                                              TiposCombustibleViviendaChanged([
-                                            LstTiposCombustible(
-                                                otroTipoCombustible: value!)
+                                              PresenciaAnimalesViviendaChanged([
+                                            LstPresenciaAnimal(
+                                                otroPresenciaAnimal: value!)
                                           ]));
                                         },
                                       ),

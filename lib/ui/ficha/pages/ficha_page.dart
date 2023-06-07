@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/cubits/dim_ubicacion/dim_ubicacion_state.dart';
 
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
@@ -166,7 +165,6 @@ class _FichaPageState extends State<FichaPage> {
               if (formStatus is DimUbicacionSubmissionFailed) {
                 CustomSnackBar.showSnackBar(
                     context, formStatus.message.toString(), Colors.red);
-                dimUbicacionBloc.add(DimUbicacionInit());
               }
             },
           ),
@@ -176,7 +174,6 @@ class _FichaPageState extends State<FichaPage> {
               if (formStatus is DimViviendaSubmissionSuccess) {
                 CustomSnackBar.showSnackBar(context,
                     'Datos de vivienda guardados correctamente', Colors.green);
-                dimViviendaBloc.add(DimViviendaSubmitted());
 
                 setState(() {
                   isCompleted = true;
@@ -185,8 +182,6 @@ class _FichaPageState extends State<FichaPage> {
               if (formStatus is DimViviendaSubmissionFailed) {
                 CustomSnackBar.showSnackBar(
                     context, formStatus.message.toString(), Colors.red);
-
-                dimViviendaBloc.add(DimViviendaInit());
               }
             },
           )

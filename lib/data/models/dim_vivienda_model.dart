@@ -14,11 +14,12 @@ DimViviendaModel dimViviendaFromJson(String str) =>
 
 class DimViviendaModel extends DimViviendaEntity {
   DimViviendaModel({
+    int? datoViviendaId,
     int? familiaId,
     int? tipoViviendaId,
     int? tenenciaViviendaId,
     int? ventilacionViviendaId,
-    int? iluminacionViviendaId,
+    /*  int? iluminacionViviendaId, */
     int? pisoViviendaId,
     String? otroTipoPiso,
     List<LstTecho>? lstTechos,
@@ -29,11 +30,12 @@ class DimViviendaModel extends DimViviendaEntity {
     List<LstTiposCombustible>? lstTiposCombustible,
     List<LstPresenciaAnimal>? lstPresenciaAnimales,
   }) : super(
+          datoViviendaId: datoViviendaId,
           familiaId: familiaId,
           tipoViviendaId: tipoViviendaId,
           tenenciaViviendaId: tenenciaViviendaId,
           ventilacionViviendaId: ventilacionViviendaId,
-          iluminacionViviendaId: iluminacionViviendaId,
+          /*  iluminacionViviendaId: iluminacionViviendaId, */
           pisoViviendaId: pisoViviendaId,
           otroTipoPiso: otroTipoPiso,
           lstTechos: lstTechos,
@@ -47,11 +49,12 @@ class DimViviendaModel extends DimViviendaEntity {
 
   factory DimViviendaModel.fromJson(Map<String, dynamic> json) =>
       DimViviendaModel(
+        datoViviendaId: json["DatoVivienda_id"],
         familiaId: json["Familia_id"],
         tipoViviendaId: json["TipoVivienda_id"],
         tenenciaViviendaId: json["TenenciaVivienda_id"],
         ventilacionViviendaId: json["VentilacionVivienda_id"],
-        iluminacionViviendaId: json["IluminacionVivienda_id"],
+        /*  iluminacionViviendaId: json["IluminacionVivienda_id"], */
         pisoViviendaId: json["PisoVivienda_id"],
         otroTipoPiso: json["OtroTipoPiso"],
         lstTechos: json["lstTechos"] == null

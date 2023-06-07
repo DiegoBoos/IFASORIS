@@ -708,7 +708,7 @@ class ConnectionSQL {
 
   static const CREATE_DATOS_VIVIENDA_PRESENCIA_ANIMALES = '''
   CREATE TABLE [Asp2_DatosViviendaPresenciaAnimales] (
-	[ViviendaPresenciaAnimal_id]	integer NOT NULL,
+	[ViviendaPresenciaAnimal_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[PresenciaAnimalVivienda_id]	integer,
 	[OtroPresenciaAnimal]	varchar(150) COLLATE NOCASE

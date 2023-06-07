@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/ficha/pages/grupo_familiar_page.dart';
 
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
+import '../pages/grupo_familiar_page.dart';
 
 class GrupoFamiliar extends StatefulWidget {
   const GrupoFamiliar({super.key});

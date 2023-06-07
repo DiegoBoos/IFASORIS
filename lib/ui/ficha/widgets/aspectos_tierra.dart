@@ -51,8 +51,8 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
   String? _validateEspeciesAnimales() {
     if (_selectedEspeciesAnimales.isEmpty) {
       return 'Seleccione al menos una opción.';
-    } else if (_selectedEspeciesAnimales.length > 4) {
-      return 'Máximo cuatro opciones.';
+    } else if (_selectedEspeciesAnimales.length > 5) {
+      return 'Máximo cinco opciones.';
     }
     return null;
   }
@@ -78,8 +78,8 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
   String? _validateVerduras() {
     if (_selectedVerdurasByDpto.isEmpty) {
       return 'Seleccione al menos una opción.';
-    } else if (_selectedVerdurasByDpto.length > 5) {
-      return 'Máximo cinco opciones.';
+    } else if (_selectedVerdurasByDpto.length > 3) {
+      return 'Máximo tres opciones.';
     }
     return null;
   }
@@ -96,8 +96,8 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
   String? _validateCereales() {
     if (_selectedCerealesByDpto.isEmpty) {
       return 'Seleccione al menos una opción.';
-    } else if (_selectedCerealesByDpto.length > 5) {
-      return 'Máximo cinco opciones.';
+    } else if (_selectedCerealesByDpto.length > 3) {
+      return 'Máximo tres opciones.';
     }
     return null;
   }

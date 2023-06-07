@@ -1,7 +1,5 @@
-import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/medio_comunicacion_model.dart';
@@ -25,6 +23,7 @@ class DatosUbicacionForm extends StatefulWidget {
 
 class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   DateTime? _fechafiliacion;
+  String formattedFecha = '';
   String? _nomDptoAfiliado;
   String? _nomMpioAfiliado;
   String? _direccion;
@@ -63,6 +62,10 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
     final afiliado = afiliadoPrefsBloc.state.afiliado!;
 
     _fechafiliacion = afiliado.fechafiliacion;
+    if (_fechafiliacion != null) {
+      formattedFecha = DateFormat('yyyy-MM-dd').format(_fechafiliacion!);
+    }
+
     _nomDptoAfiliado = afiliado.nomDptoAfiliado;
     _nomMpioAfiliado = afiliado.nomMpioAfiliado;
     _direccion = afiliado.direccion;
@@ -110,27 +113,15 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           ),
         ),
         const SizedBox(height: 20),
-        DateTimeField(
-          format: DateFormat("dd-MM-yyyy"),
-          initialValue: _fechafiliacion,
+        TextFormField(
+          enabled: false,
+          initialValue: formattedFecha,
           decoration: const InputDecoration(
             labelText: 'Fecha de Diligenciamiento',
             border: OutlineInputBorder(),
           ),
-          onShowPicker: (context, currentValue) async {
-            final date = await showDatePicker(
-              context: context,
-              initialDate: currentValue ?? DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-            );
-            if (date != null) {
-              setState(() {
-                _fechafiliacion = date;
-              });
-              //TODO: dimUbicacionBloc.changeFecha(newValue);
-            }
-            return date;
+          onSaved: (String? value) {
+            //TODO: dimUbicacionBloc.changeFecha(newValue);
           },
         ),
         const SizedBox(height: 20),

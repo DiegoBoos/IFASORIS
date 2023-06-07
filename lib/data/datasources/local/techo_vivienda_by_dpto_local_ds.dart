@@ -46,7 +46,8 @@ class TechoViviendaByDptoLocalDataSourceImpl
     final viviendaTechos = lstTechos
         .map((item) => ViviendaTechos(
             techoViviendaId: item.techoViviendaId,
-            datoViviendaId: datoViviendaId))
+            datoViviendaId: datoViviendaId,
+            otroTipoTecho: item.otroTipoTecho))
         .toList();
 
     for (final viviendaTecho in viviendaTechos) {

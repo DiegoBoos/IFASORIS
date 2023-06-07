@@ -32,7 +32,7 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   Future<DimViviendaEntity?> getDimVivienda(int familiaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosVivienda',
-        where: 'Familia_Id = ?', whereArgs: [familiaId]);
+        where: 'Familia_id = ?', whereArgs: [familiaId]);
 
     if (res.isEmpty) return null;
 

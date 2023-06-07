@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/data/models/dificultad_acceso_med_tradicional_model.dart';
-import 'package:ifasoris/ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 
+import '../../../data/models/dificultad_acceso_med_tradicional_model.dart';
 import '../../../data/models/especialidad_med_tradicional_model.dart';
 import '../../../data/models/medio_utiliza_med_tradicional_model.dart';
 import '../../../data/models/nombre_med_tradicional_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
+import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';

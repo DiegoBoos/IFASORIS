@@ -52,7 +52,8 @@ class TipoCombustibleViviendaByDptoLocalDataSourceImpl
     final viviendaTiposCombustible = lstTiposCombustible
         .map((item) => ViviendaTiposCombustible(
             tipoCombustibleViviendaId: item.tipoCombustibleViviendaId,
-            datoViviendaId: datoViviendaId))
+            datoViviendaId: datoViviendaId,
+            otroTipoCombustible: item.otroTipoCombustible))
         .toList();
 
     for (final viviendaTipoCombustible in viviendaTiposCombustible) {

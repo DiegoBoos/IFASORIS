@@ -51,7 +51,8 @@ class TipoSanitarioViviendaByDptoLocalDataSourceImpl
     final viviendaTiposSanitario = lstTiposSanitario
         .map((item) => ViviendaTiposSanitario(
             tipoSanitarioViviendaId: item.tipoSanitarioViviendaId,
-            datoViviendaId: datoViviendaId))
+            datoViviendaId: datoViviendaId,
+            otroTipoSanitario: item.otroTipoSanitario))
         .toList();
 
     for (final viviendaTipoSanitario in viviendaTiposSanitario) {
