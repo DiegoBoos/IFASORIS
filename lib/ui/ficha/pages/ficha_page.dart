@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/domain/usecases/grupo_familiar/grupo_familiar_exports.dart';
 
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
@@ -176,7 +177,7 @@ class _FichaPageState extends State<FichaPage> {
                     'Datos de vivienda guardados correctamente', Colors.green);
 
                 setState(() {
-                  isCompleted = true;
+                  currentStep = 2;
                 });
               }
               if (formStatus is DimViviendaSubmissionFailed) {
@@ -211,18 +212,18 @@ class _FichaPageState extends State<FichaPage> {
                               DimUbicacionFamiliaChanged(afiliado.familiaId!));
                           dimUbicacionBloc.add(DimUbicacionSubmitted());
                         }
-                      } else if (isLastStep) {
+                      } else if (currentStep == 1) {
                         if (_formKeyVivienda.currentState!.validate()) {
                           _formKeyVivienda.currentState!.save();
                           dimViviendaBloc.add(
                               DimViviendaFamiliaChanged(afiliado.familiaId!));
                           dimViviendaBloc.add(DimViviendaSubmitted());
                         }
-                      } /* else if (isLastStep) {
+                      } else if (isLastStep) {
                         if (_formKeyGrupoFamiliar.currentState!.validate()) {
                           _formKeyGrupoFamiliar.currentState!.save();
                         }
-                      } */
+                      }
                     },
                     onStepCancel: currentStep == 0
                         ? null
@@ -304,10 +305,29 @@ class _FichaPageState extends State<FichaPage> {
             },
           ),
         ),
-        /*  Step(
+        Step(
             isActive: currentStep >= 2,
             title: const Text('Grupo Familiar'),
-            content: const GrupoFamiliar()) */
+            content: BlocBuilder<GrupoFamiliarBloc, GrupoFamiliarEntity>(
+              builder: (context, state) {
+                if (state.formStatus is GrupoFamiliarFormEmpty) {
+                  return Form(
+                      key: _formKeyGrupoFamiliar,
+                      child: const GrupoFamiliarForm());
+                } else if (state.formStatus is GrupoFamiliarFormLoaded ||
+                    state.formStatus is GrupoFamiliarSubmissionSuccess) {
+                  return Form(
+                      key: _formKeyGrupoFamiliar,
+                      child: GrupoFamiliarForm(
+                        grupoFamiliar: state,
+                      ));
+                }
+                return Form(
+                    key: _formKeyGrupoFamiliar,
+                    child: const GrupoFamiliarForm());
+                /* return const Center(child: CircularProgressIndicator()); */
+              },
+            ))
       ];
 
   Widget buildCompleted() {

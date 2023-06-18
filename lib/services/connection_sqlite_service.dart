@@ -155,7 +155,18 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_VENTILACION_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_VERDURAS);
       ref.execute(ConnectionSQL.CREATE_VIAS_ACCESO);
+      ref.execute(ConnectionSQL.CREATE_CURSO_VIDA);
+      ref.execute(ConnectionSQL.CREATE_ETNIA);
+      ref.execute(ConnectionSQL.CREATE_GENERO);
+      ref.execute(ConnectionSQL.CREATE_GRUPO_RIESGO);
+      ref.execute(ConnectionSQL.CREATE_LENGUA_MANEJA);
+      ref.execute(ConnectionSQL.CREATE_NIVEL_EDUCATIVO);
+      ref.execute(ConnectionSQL.CREATE_LENGUA_MATERNA);
+      ref.execute(ConnectionSQL.CREATE_OCUPACIONES);
       ref.execute(ConnectionSQL.CREATE_PARENTESCO);
+      ref.execute(ConnectionSQL.CREATE_PUEBLO_INDIGENA);
+      ref.execute(ConnectionSQL.CREATE_REGIMEN);
+      ref.execute(ConnectionSQL.CREATE_TIPOS_DOCUMENTO);
     });
   }
 

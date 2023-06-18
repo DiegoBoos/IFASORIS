@@ -855,11 +855,80 @@ class ConnectionSQL {
 	[Descripcion]	varchar(10) NOT NULL COLLATE NOCASE
   )''';
 
+  static const CREATE_CURSO_VIDA = '''
+  CREATE TABLE [CursoVida_GrupoFamiliar] (
+	[CursoVida_id]	integer NOT NULL,
+	[Descripcion]	varchar(25) NOT NULL COLLATE NOCASE,
+	[Rango]	varchar(15) NOT NULL COLLATE NOCASE
+  )''';
+
+  static const CREATE_ETNIA = '''
+  CREATE TABLE [Etnias_GrupoFamiliar] (
+	[Etnia_id]	integer NOT NULL,
+	[Descripcion]	varchar(25) NOT NULL COLLATE NOCASE,
+  )''';
+
+  static const CREATE_GENERO = '''
+  CREATE TABLE [Generos_GrupoFamiliar] (
+	[Genero_id]	integer NOT NULL,
+  [Tipo]	varchar(15) NOT NULL COLLATE NOCASE,
+	[Descripcion]	varchar(25) NOT NULL COLLATE NOCASE,
+  )''';
+
+  static const CREATE_GRUPO_RIESGO = '''
+  CREATE TABLE [GrupoRiesgo_GrupoFamiliar] (
+	[GrupoRiesgo_id]	integer NOT NULL,
+	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE
+  )''';
+
+  static const CREATE_LENGUA_MANEJA = '''
+  CREATE TABLE [LenguaManeja_GrupoFamiliar] (
+	[LenguaManeja_id]	integer NOT NULL,
+	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE
+  )''';
+
+  static const CREATE_NIVEL_EDUCATIVO = '''
+  CREATE TABLE [NivelEductativo_GrupoFamiliar] (
+	[NivelEducativo_id]	integer NOT NULL,
+	[Descripcion]	varchar(50) NOT NULL COLLATE NOCASE
+  )''';
+
+  static const CREATE_LENGUA_MATERNA = '''
+  CREATE TABLE [NombreLenguaMaterna_GrupoFamiliar] (
+	[LenguaMaterna_id]	integer NOT NULL,
+	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE
+  )''';
+
+  static const CREATE_OCUPACIONES = '''
+  CREATE TABLE [Ocupacion_GrupoFamiliar] (
+	[Ocupacion_id]	integer NOT NULL,
+	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE
+  )''';
+
   static const CREATE_PARENTESCO = '''
   CREATE TABLE [parentesco] (
 	[parentesco_id]	integer NOT NULL,
 	[codigo]	varchar(2) NOT NULL COLLATE NOCASE,
 	[descripcion]	varchar NOT NULL COLLATE NOCASE,
 	[definicion_parentesco]	varchar COLLATE NOCASE
+  )''';
+
+  static const CREATE_PUEBLO_INDIGENA = '''
+  CREATE TABLE [PueblosIndigenas_GrupoFamiliar] (
+	[PuebloIndigena_id]	integer NOT NULL,
+	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE,
+	[Departamento_ide]	integer
+  )''';
+
+  static const CREATE_REGIMEN = '''
+  CREATE TABLE [Regimenes_GrupoFamiliar] (
+	[Regimen_id]	integer NOT NULL,
+	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE,
+  )''';
+
+  static const CREATE_TIPOS_DOCUMENTO = '''
+  CREATE TABLE [TiposDocumento_GrupoFamiliar] (
+	[TipoDocumento_id]	integer NOT NULL,
+	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE,
   )''';
 }

@@ -17,24 +17,35 @@ import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import 'ui/cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
 import 'ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
+import 'ui/cubits/curso_vida/curso_vida_cubit.dart';
 import 'ui/cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import 'ui/cubits/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_cubit.dart';
 import 'ui/cubits/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_cubit.dart';
 import 'ui/cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
 import 'ui/cubits/estado_via/estado_via_cubit.dart';
+import 'ui/cubits/etnia/etnia_cubit.dart';
 import 'ui/cubits/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/familia/familia_cubit.dart';
 import 'ui/cubits/ficha/ficha_cubit.dart';
 import 'ui/cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
+import 'ui/cubits/genero/genero_cubit.dart';
+import 'ui/cubits/grupo_riesgo/grupo_riesgo_cubit.dart';
 import 'ui/cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
 import 'ui/cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
 import 'ui/cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
+import 'ui/cubits/lengua_maneja/lengua_maneja_cubit.dart';
 import 'ui/cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import 'ui/cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
 import 'ui/cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
+import 'ui/cubits/nivel_educativo/nivel_educativo_cubit.dart';
+import 'ui/cubits/nombre_lengua_maneja/nombre_lengua_maneja_cubit.dart';
+import 'ui/cubits/ocupacion/ocupacion_cubit.dart';
 import 'ui/cubits/opcion_si_no/opcion_si_no_cubit.dart';
+import 'ui/cubits/parentesco/parentesco_cubit.dart';
 import 'ui/cubits/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_cubit.dart';
+import 'ui/cubits/regimen/regimen_cubit.dart';
 import 'ui/cubits/resguardo_by_dpto/resguardo_by_dpto_cubit.dart';
 import 'ui/cubits/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/sync_log/sync_log_cubit.dart';
@@ -44,6 +55,7 @@ import 'ui/cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
 import 'ui/cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_cubit.dart';
 import 'ui/cubits/tipo_calendario/tipo_calendario_cubit.dart';
 import 'ui/cubits/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/tipo_documento/tipo_documento_cubit.dart';
 import 'ui/cubits/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_cubit.dart';
 import 'ui/cubits/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_cubit.dart';
@@ -213,6 +225,42 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<GrupoFamiliarBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<CursoVidaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<EtniaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<GeneroCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<GrupoRiesgoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<LenguaManejaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<NivelEducativoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<NombreLenguaManejaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<OcupacionCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<ParentescoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<PuebloIndigenaByDptoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<RegimenCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<TipoDocumentoCubit>(),
           ),
         ],
         child: MaterialApp(

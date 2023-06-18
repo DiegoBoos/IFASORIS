@@ -2,12 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/services/connection_sqlite_service.dart';
 
-import '../../../domain/entities/tipo_calendario_entity.dart';
 import '../../../domain/entities/usuario_entity.dart';
 import '../../../domain/usecases/afiliado/afiliado_exports.dart';
 import '../../../domain/usecases/autoridad_indigena/autoridad_indigena_exports.dart';
 import '../../../domain/usecases/cereal_by_dpto/cereal_by_dpto_exports.dart';
 import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
+import '../../../domain/usecases/curso_vida/curso_vida_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
@@ -15,17 +15,27 @@ import '../../../domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
 import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_exports.dart';
 import '../../../domain/usecases/estado_via/estado_via_exports.dart';
+import '../../../domain/usecases/etnia/etnia_exports.dart';
 import '../../../domain/usecases/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/fruto_by_dpto/fruto_by_dpto_exports.dart';
+import '../../../domain/usecases/genero/genero_exports.dart';
+import '../../../domain/usecases/grupo_riesgo/grupo_riesgo_exports.dart';
 import '../../../domain/usecases/hortaliza_by_dpto/hortaliza_by_dpto_exports.dart';
 import '../../../domain/usecases/iluminacion_vivienda/iluminacion_vivienda_exports.dart';
 import '../../../domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
+import '../../../domain/usecases/lengua_maneja/lengua_maneja_exports.dart';
 import '../../../domain/usecases/medio_comunicacion/medio_comunicacion_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import '../../../domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_exports.dart';
+import '../../../domain/usecases/nivel_educativo/nivel_educativo_exports.dart';
+import '../../../domain/usecases/nombre_lengua_maneja/nombre_lengua_maneja_exports.dart';
+import '../../../domain/usecases/ocupacion/ocupacion_exports.dart';
 import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
+import '../../../domain/usecases/parentesco/parentesco_exports.dart';
 import '../../../domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_exports.dart';
+import '../../../domain/usecases/regimen/regimen_exports.dart';
 import '../../../domain/usecases/resguardo_by_dpto/resguardo_by_dpto_exports.dart';
 import '../../../domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/sync_log/sync_log_exports.dart';
@@ -35,6 +45,7 @@ import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
 import '../../../domain/usecases/tipo_calendario/tipo_calendario_exports.dart';
 import '../../../domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/tipo_documento/tipo_documento_exports.dart';
 import '../../../domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_exports.dart';
@@ -132,14 +143,38 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final TipoViviendaByDptoUsecaseDB tipoViviendaByDptoUsecaseDB;
   final TipoCalendarioUsecase tipoCalendarioUsecase;
   final TipoCalendarioUsecaseDB tipoCalendarioUsecaseDB;
+  final CursoVidaUsecase cursoVidaUsecase;
+  final CursoVidaUsecaseDB cursoVidaUsecaseDB;
+  final EtniaUsecase etniaUsecase;
+  final EtniaUsecaseDB etniaUsecaseDB;
+  final GeneroUsecase generoUsecase;
+  final GeneroUsecaseDB generoUsecaseDB;
+  final GrupoRiesgoUsecase grupoRiesgoUsecase;
+  final GrupoRiesgoUsecaseDB grupoRiesgoUsecaseDB;
+  final LenguaManejaUsecase lenguaManejaUsecase;
+  final LenguaManejaUsecaseDB lenguaManejaUsecaseDB;
+  final NivelEducativoUsecase nivelEducativoUsecase;
+  final NivelEducativoUsecaseDB nivelEducativoUsecaseDB;
+  final NombreLenguaManejaUsecase nombreLenguaManejaUsecase;
+  final NombreLenguaManejaUsecaseDB nombreLenguaManejaUsecaseDB;
+  final OcupacionUsecase ocupacionUsecase;
+  final OcupacionUsecaseDB ocupacionUsecaseDB;
+  final ParentescoUsecase parentescoUsecase;
+  final ParentescoUsecaseDB parentescoUsecaseDB;
+  final PuebloIndigenaByDptoUsecase puebloIndigenaByDptoUsecase;
+  final PuebloIndigenaByDptoUsecaseDB puebloIndigenaByDptoUsecaseDB;
+  final RegimenUsecase regimenUsecase;
+  final RegimenUsecaseDB regimenUsecaseDB;
+  final TipoDocumentoUsecase tipoDocumentoUsecase;
+  final TipoDocumentoUsecaseDB tipoDocumentoUsecaseDB;
 
   final DimUbicacionUsecase dimUbicacionUsecase;
   final DimViviendaUsecase dimViviendaUsecase;
 
   final SyncLogUsecaseDB syncLogDB;
 
-  /* int totalAccesories = 34; */
-  int totalAccesories = 33;
+  /* int totalAccesories = 46; */
+  int totalAccesories = 45;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -179,6 +214,18 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<VentilacionViviendaEntity> ventilacionesViviendaTemp = [];
   List<TipoViviendaEntity> tiposViviendaTemp = [];
   List<TipoCalendarioEntity> tiposCalendarioTemp = [];
+  List<CursoVidaEntity> cursosVidaTemp = [];
+  List<EtniaEntity> etniasTemp = [];
+  List<GeneroEntity> generosTemp = [];
+  List<GrupoRiesgoEntity> gruposRiesgoTemp = [];
+  List<LenguaManejaEntity> lenguasManejaTemp = [];
+  List<NivelEducativoEntity> nivelesEducativosTemp = [];
+  List<NombreLenguaManejaEntity> nombresLenguasManejaTemp = [];
+  List<OcupacionEntity> ocupacionesTemp = [];
+  List<ParentescoEntity> parentescosTemp = [];
+  List<PuebloIndigenaEntity> pueblosIndigenasTemp = [];
+  List<RegimenEntity> regimenesTemp = [];
+  List<TipoDocumentoEntity> tiposDocumentoTemp = [];
 
   SyncBloc({
     required this.afiliadoUsecase,
@@ -251,6 +298,30 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.tipoViviendaByDptoUsecaseDB,
     required this.tipoCalendarioUsecase,
     required this.tipoCalendarioUsecaseDB,
+    required this.cursoVidaUsecase,
+    required this.cursoVidaUsecaseDB,
+    required this.etniaUsecase,
+    required this.etniaUsecaseDB,
+    required this.generoUsecase,
+    required this.generoUsecaseDB,
+    required this.grupoRiesgoUsecase,
+    required this.grupoRiesgoUsecaseDB,
+    required this.lenguaManejaUsecase,
+    required this.lenguaManejaUsecaseDB,
+    required this.nivelEducativoUsecase,
+    required this.nivelEducativoUsecaseDB,
+    required this.nombreLenguaManejaUsecase,
+    required this.nombreLenguaManejaUsecaseDB,
+    required this.ocupacionUsecase,
+    required this.ocupacionUsecaseDB,
+    required this.parentescoUsecase,
+    required this.parentescoUsecaseDB,
+    required this.puebloIndigenaByDptoUsecase,
+    required this.puebloIndigenaByDptoUsecaseDB,
+    required this.regimenUsecase,
+    required this.regimenUsecaseDB,
+    required this.tipoDocumentoUsecase,
+    required this.tipoDocumentoUsecaseDB,
     required this.dimUbicacionUsecase,
     required this.dimViviendaUsecase,
     required this.syncLogDB,
@@ -2029,8 +2100,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= tiposCalendarioTemp.length) {
-        event.tablesNames.remove('Accesorias');
-        add(SyncStarted(event.usuario, event.tablesNames));
+        ConnectionSQLiteService.truncateTable('CursoVida_GrupoFamiliar')
+            .then((value) async {
+          cursosVidaTemp = [];
+          await syncCursosVida(event);
+        });
         return;
       }
 
@@ -2044,6 +2118,562 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** TiposCalendario ****************************
+
+// ************************** CursosVida ****************************
+
+  Future<void> syncCursosVida(SyncStarted event) async {
+    final result = await cursoVidaUsecase.getCursosVidaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      cursosVidaTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando cursos vida',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveCursoVida(
+        event,
+        cursosVidaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveCursoVida(
+    SyncStarted event,
+    CursoVidaEntity cursoVida,
+  ) async {
+    final result = await cursoVidaUsecaseDB.saveCursoVidaUsecaseDB(cursoVida);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= cursosVidaTemp.length) {
+        //TODO: table doesn't exist
+        ConnectionSQLiteService.truncateTable('Etnia_GrupoFamiliar')
+            .then((value) async {
+          etniasTemp = [];
+          await syncEtnias(event);
+        });
+        return;
+      }
+
+      CursoVidaEntity t = cursosVidaTemp[data];
+
+      await saveCursoVida(
+        event,
+        t,
+      );
+    });
+  }
+
+// ************************** CursosVida ****************************
+
+// ************************** Etnias ****************************
+
+  Future<void> syncEtnias(SyncStarted event) async {
+    final result = await etniaUsecase.getEtniasUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      etniasTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando etnias',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveEtnia(
+        event,
+        etniasTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveEtnia(
+    SyncStarted event,
+    EtniaEntity etnia,
+  ) async {
+    final result = await etniaUsecaseDB.saveEtniaUsecaseDB(etnia);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= etniasTemp.length) {
+        //TODO: table doesn't exist
+        ConnectionSQLiteService.truncateTable('Genero_GrupoFamiliar')
+            .then((value) async {
+          generosTemp = [];
+          await syncGeneros(event);
+        });
+        return;
+      }
+
+      EtniaEntity t = etniasTemp[data];
+
+      await saveEtnia(
+        event,
+        t,
+      );
+    });
+  }
+
+// ************************** Etnias ****************************
+
+// ************************** Generos ****************************
+
+  Future<void> syncGeneros(SyncStarted event) async {
+    final result = await generoUsecase.getGenerosUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      generosTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando generos',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveGenero(
+        event,
+        generosTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveGenero(
+    SyncStarted event,
+    GeneroEntity genero,
+  ) async {
+    final result = await generoUsecaseDB.saveGeneroUsecaseDB(genero);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= generosTemp.length) {
+        ConnectionSQLiteService.truncateTable('GruposRiesgo_GrupoFamiliar')
+            .then((value) async {
+          gruposRiesgoTemp = [];
+          await syncGruposRiesgo(event);
+        });
+        return;
+      }
+
+      GeneroEntity t = generosTemp[data];
+
+      await saveGenero(
+        event,
+        t,
+      );
+    });
+  }
+
+// ************************** Generos ****************************
+
+// ************************** GruposRiesgo ****************************
+
+  Future<void> syncGruposRiesgo(SyncStarted event) async {
+    final result = await grupoRiesgoUsecase.getGruposRiesgoUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      gruposRiesgoTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando grupos riesgo',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveGrupoRiesgo(
+        event,
+        gruposRiesgoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveGrupoRiesgo(
+    SyncStarted event,
+    GrupoRiesgoEntity grupoRiesgo,
+  ) async {
+    final result =
+        await grupoRiesgoUsecaseDB.saveGrupoRiesgoUsecaseDB(grupoRiesgo);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= gruposRiesgoTemp.length) {
+        ConnectionSQLiteService.truncateTable('LenguaManeja_GrupoFamiliar')
+            .then((value) async {
+          lenguasManejaTemp = [];
+          await syncLenguasManeja(event);
+        });
+        return;
+      }
+
+      GrupoRiesgoEntity grupoRiesgoTemp = gruposRiesgoTemp[data];
+
+      await saveGrupoRiesgo(
+        event,
+        grupoRiesgoTemp,
+      );
+    });
+  }
+
+// ************************** GruposRiesgo ****************************
+
+// ************************** LenguasManeja ****************************
+
+  Future<void> syncLenguasManeja(SyncStarted event) async {
+    final result = await lenguaManejaUsecase.getLenguasManejaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      lenguasManejaTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando lenguas maneja',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveLenguaManeja(
+        event,
+        lenguasManejaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveLenguaManeja(
+    SyncStarted event,
+    LenguaManejaEntity lenguaManeja,
+  ) async {
+    final result =
+        await lenguaManejaUsecaseDB.saveLenguaManejaUsecaseDB(lenguaManeja);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= lenguasManejaTemp.length) {
+        ConnectionSQLiteService.truncateTable('NivelEducativo_GrupoFamiliar')
+            .then((value) async {
+          nivelesEducativosTemp = [];
+          await syncNivelesEducativos(event);
+        });
+        return;
+      }
+      LenguaManejaEntity lenguaManejaTemp = lenguasManejaTemp[data];
+
+      await saveLenguaManeja(
+        event,
+        lenguaManejaTemp,
+      );
+    });
+  }
+
+// ************************** LenguasManeja ****************************
+
+// ************************** NivelesEducativos ****************************
+
+  Future<void> syncNivelesEducativos(SyncStarted event) async {
+    final result = await nivelEducativoUsecase.getNivelesEducativosUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      nivelesEducativosTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando niveles educativos',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveNivelEducativo(
+        event,
+        nivelesEducativosTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveNivelEducativo(
+    SyncStarted event,
+    NivelEducativoEntity nivelEducativo,
+  ) async {
+    final result = await nivelEducativoUsecaseDB
+        .saveNivelEducativoUsecaseDB(nivelEducativo);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= nivelesEducativosTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'NombreLenguaMaterna_GrupoFamiliar')
+            .then((value) async {
+          nombresLenguasManejaTemp = [];
+          await syncNombresLenguasManeja(event);
+        });
+        return;
+      }
+      NivelEducativoEntity nivelEducativoTemp = nivelesEducativosTemp[data];
+
+      await saveNivelEducativo(
+        event,
+        nivelEducativoTemp,
+      );
+    });
+  }
+
+// ************************** NivelesEducativos ****************************
+
+// ************************** NombresLenguasManeja ****************************
+
+  Future<void> syncNombresLenguasManeja(SyncStarted event) async {
+    final result =
+        await nombreLenguaManejaUsecase.getNombresLenguasManejaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      nombresLenguasManejaTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando niveles educativos',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveNombreLenguaManeja(
+        event,
+        nombresLenguasManejaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveNombreLenguaManeja(
+    SyncStarted event,
+    NombreLenguaManejaEntity nombreLenguaManeja,
+  ) async {
+    final result = await nombreLenguaManejaUsecaseDB
+        .saveNombreLenguaManejaUsecaseDB(nombreLenguaManeja);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= nombresLenguasManejaTemp.length) {
+        ConnectionSQLiteService.truncateTable('Ocupacion_GrupoFamiliar')
+            .then((value) async {
+          ocupacionesTemp = [];
+          await syncOcupaciones(event);
+        });
+        return;
+      }
+      NombreLenguaManejaEntity nombreLenguaManejaTemp =
+          nombresLenguasManejaTemp[data];
+
+      await saveNombreLenguaManeja(
+        event,
+        nombreLenguaManejaTemp,
+      );
+    });
+  }
+
+// ************************** NombresLenguasManeja ****************************
+
+// ************************** Ocupaciones ****************************
+
+  Future<void> syncOcupaciones(SyncStarted event) async {
+    final result = await ocupacionUsecase.getOcupacionesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      ocupacionesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando ocupaciones',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveOcupacion(
+        event,
+        ocupacionesTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveOcupacion(
+    SyncStarted event,
+    OcupacionEntity ocupacion,
+  ) async {
+    final result = await ocupacionUsecaseDB.saveOcupacionUsecaseDB(ocupacion);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= ocupacionesTemp.length) {
+        ConnectionSQLiteService.truncateTable('Parentesco_GrupoFamiliar')
+            .then((value) async {
+          parentescosTemp = [];
+          await syncParentescos(event);
+        });
+        return;
+      }
+      OcupacionEntity ocupacionTemp = ocupacionesTemp[data];
+
+      await saveOcupacion(
+        event,
+        ocupacionTemp,
+      );
+    });
+  }
+
+// ************************** Ocupaciones ****************************
+
+// ************************** Parentescos ****************************
+
+  Future<void> syncParentescos(SyncStarted event) async {
+    final result = await parentescoUsecase.getParentescosUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      parentescosTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando parentescos',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveParentesco(
+        event,
+        parentescosTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveParentesco(
+    SyncStarted event,
+    ParentescoEntity parentesco,
+  ) async {
+    final result =
+        await parentescoUsecaseDB.saveParentescoUsecaseDB(parentesco);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= parentescosTemp.length) {
+        ConnectionSQLiteService.truncateTable('PueblosIndigenas_GrupoFamiliar')
+            .then((value) async {
+          pueblosIndigenasTemp = [];
+          await syncPueblosIndigenasByDpto(event);
+        });
+        return;
+      }
+      ParentescoEntity parentescoTemp = parentescosTemp[data];
+
+      await saveParentesco(
+        event,
+        parentescoTemp,
+      );
+    });
+  }
+
+// ************************** Parentescos ****************************
+
+// ************************** PueblosIndigenasByDpto ****************************
+
+  Future<void> syncPueblosIndigenasByDpto(SyncStarted event) async {
+    final result = await puebloIndigenaByDptoUsecase
+        .getPueblosIndigenasByDptoUsecase(event.usuario.departamentoId!);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      pueblosIndigenasTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando pueblos indigenas',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await savePuebloIndigena(
+        event,
+        pueblosIndigenasTemp[0],
+      );
+    });
+  }
+
+  Future<void> savePuebloIndigena(
+    SyncStarted event,
+    PuebloIndigenaEntity puebloIndigena,
+  ) async {
+    final result = await puebloIndigenaByDptoUsecaseDB
+        .savePuebloIndigenaByDptoUsecaseDB(puebloIndigena);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= pueblosIndigenasTemp.length) {
+        //TODO: Table doesn't exist
+        ConnectionSQLiteService.truncateTable('Regimenes_GrupoFamiliar')
+            .then((value) async {
+          regimenesTemp = [];
+          await syncRegimenes(event);
+        });
+        return;
+      }
+      PuebloIndigenaEntity puebloIndigenaTemp = pueblosIndigenasTemp[data];
+
+      await savePuebloIndigena(
+        event,
+        puebloIndigenaTemp,
+      );
+    });
+  }
+
+// ************************** PueblosIndigenasByDpto ****************************
+
+// ************************** Regimenes ****************************
+
+  Future<void> syncRegimenes(SyncStarted event) async {
+    final result = await regimenUsecase.getRegimenesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      regimenesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando pueblos indigenas',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveRegimen(
+        event,
+        regimenesTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveRegimen(
+    SyncStarted event,
+    RegimenEntity regimen,
+  ) async {
+    final result = await regimenUsecaseDB.saveRegimenUsecaseDB(regimen);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= regimenesTemp.length) {
+        //TODO: Table doesn't exist
+        ConnectionSQLiteService.truncateTable('TiposDocumento_GrupoFamiliar')
+            .then((value) async {
+          tiposDocumentoTemp = [];
+          await syncTiposDocumento(event);
+        });
+        return;
+      }
+      RegimenEntity regimenTemp = regimenesTemp[data];
+
+      await saveRegimen(
+        event,
+        regimenTemp,
+      );
+    });
+  }
+
+// ************************** Regimenes ****************************
+
+// ************************** TiposDocumento ****************************
+
+  Future<void> syncTiposDocumento(SyncStarted event) async {
+    final result = await tipoDocumentoUsecase.getTiposDocumentoUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      tiposDocumentoTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando pueblos indigenas',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveTipoDocumento(
+        event,
+        tiposDocumentoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveTipoDocumento(
+    SyncStarted event,
+    TipoDocumentoEntity tipoDocumento,
+  ) async {
+    final result =
+        await tipoDocumentoUsecaseDB.saveTipoDocumentoUsecaseDB(tipoDocumento);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= tiposDocumentoTemp.length) {
+        event.tablesNames.remove('Accesorias');
+        add(SyncStarted(event.usuario, event.tablesNames));
+        return;
+      }
+      TipoDocumentoEntity tipoDocumentoTemp = tiposDocumentoTemp[data];
+
+      await saveTipoDocumento(
+        event,
+        tipoDocumentoTemp,
+      );
+    });
+  }
+
+// ************************** TiposDocumento ****************************
 
   int calculatePercent() {
     final counter = state.syncProgressModel.counter <= 0

@@ -19,3 +19,7 @@ class GrupoFamiliarSubmissionFailed extends GrupoFamiliarState {
 
   GrupoFamiliarSubmissionFailed(this.message);
 }
+
+GrupoFamiliarEntity initObject() {
+  return GrupoFamiliarEntity(formStatus: const GrupoFamiliarFormInitial());
+}
