@@ -20,7 +20,7 @@ class EtniaRemoteDataSourceImpl implements EtniaRemoteDataSource {
   @override
   Future<List<EtniaModel>> getEtnias() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/etnia');
+      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/etnias');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

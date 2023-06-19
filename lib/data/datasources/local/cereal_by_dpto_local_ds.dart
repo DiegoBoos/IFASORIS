@@ -40,7 +40,8 @@ class CerealByDptoLocalDataSourceImpl implements CerealByDptoLocalDataSource {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionCereales');
+    batch.delete('Asp1_UbicacionCereales',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionCereales = lstCereales
         .map((item) => UbicacionCereales(

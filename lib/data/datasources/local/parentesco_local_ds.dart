@@ -11,7 +11,7 @@ class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
   @override
   Future<List<ParentescoModel>> getParentescos() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Parentescoss_AspectosSocioEconomicos');
+    final res = await db.query('Parentesco_GrupoFamiliar');
     final result =
         List<ParentescoModel>.from(res.map((m) => ParentescoModel.fromJson(m)))
             .toList();
@@ -23,8 +23,8 @@ class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
   Future<int> saveParentesco(ParentescoEntity parentesco) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert(
-        'Parentescoss_AspectosSocioEconomicos', parentesco.toJson());
+    final res =
+        await db.insert('Parentesco_GrupoFamiliar', parentesco.toJson());
 
     return res;
   }

@@ -10,22 +10,33 @@ import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
 import '../../cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
+import '../../cubits/curso_vida/curso_vida_cubit.dart';
 import '../../cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import '../../cubits/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_cubit.dart';
 import '../../cubits/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_cubit.dart';
 import '../../cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
 import '../../cubits/estado_via/estado_via_cubit.dart';
+import '../../cubits/etnia/etnia_cubit.dart';
 import '../../cubits/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_cubit.dart';
 import '../../cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
+import '../../cubits/genero/genero_cubit.dart';
+import '../../cubits/grupo_riesgo/grupo_riesgo_cubit.dart';
 import '../../cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
 import '../../cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
 import '../../cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
+import '../../cubits/lengua_maneja/lengua_maneja_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import '../../cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
 import '../../cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
+import '../../cubits/nivel_educativo/nivel_educativo_cubit.dart';
+import '../../cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
+import '../../cubits/ocupacion/ocupacion_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
+import '../../cubits/parentesco/parentesco_cubit.dart';
 import '../../cubits/piso_vivienda_by_dpto/piso_vivienda_by_dpto_cubit.dart';
 import '../../cubits/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_cubit.dart';
+import '../../cubits/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_cubit.dart';
+import '../../cubits/regimen/regimen_cubit.dart';
 import '../../cubits/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_cubit.dart';
 import '../../cubits/techo_vivienda_by_dpto/techo_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_cubit.dart';
@@ -33,6 +44,7 @@ import '../../cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
 import '../../cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_cubit.dart';
 import '../../cubits/tipo_calendario/tipo_calendario_cubit.dart';
 import '../../cubits/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_cubit.dart';
+import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 import '../../cubits/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_cubit.dart';
@@ -135,6 +147,20 @@ class _FichaPageState extends State<FichaPage> {
     BlocProvider.of<FrutoByDptoCubit>(context).getFrutosByDptoDB();
     BlocProvider.of<CerealByDptoCubit>(context).getCerealesByDptoDB();
     BlocProvider.of<TipoCalendarioCubit>(context).getTiposCalendarioDB();
+    BlocProvider.of<TipoDocumentoCubit>(context).getTiposDocumentoDB();
+    BlocProvider.of<GeneroCubit>(context).getGenerosDB();
+    BlocProvider.of<CursoVidaCubit>(context).getCursosVidaDB();
+    BlocProvider.of<ParentescoCubit>(context).getParentescosDB();
+    BlocProvider.of<RegimenCubit>(context).getRegimenesDB();
+    BlocProvider.of<NivelEducativoCubit>(context).getNivelesEducativosDB();
+    BlocProvider.of<OcupacionCubit>(context).getOcupacionesDB();
+    BlocProvider.of<EtniaCubit>(context).getEtniasDB();
+    BlocProvider.of<PuebloIndigenaByDptoCubit>(context)
+        .getPueblosIndigenasByDptoDB();
+    BlocProvider.of<GrupoRiesgoCubit>(context).getGruposRiesgoDB();
+    BlocProvider.of<LenguaManejaCubit>(context).getLenguasManejaDB();
+    BlocProvider.of<NombreLenguaMaternaCubit>(context)
+        .getNombresLenguasMaternaDB();
   }
 
   @override
@@ -319,7 +345,7 @@ class _FichaPageState extends State<FichaPage> {
                   return Form(
                       key: _formKeyGrupoFamiliar,
                       child: GrupoFamiliarForm(
-                        grupoFamiliar: state,
+                        afiliadoGrupoFamiliar: state,
                       ));
                 }
                 return Form(

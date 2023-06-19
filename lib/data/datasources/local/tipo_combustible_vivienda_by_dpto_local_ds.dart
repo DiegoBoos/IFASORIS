@@ -47,7 +47,8 @@ class TipoCombustibleViviendaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaTiposCombustible');
+    batch.delete('Asp2_DatosViviendaTiposCombustible',
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
     final viviendaTiposCombustible = lstTiposCombustible
         .map((item) => ViviendaTiposCombustible(

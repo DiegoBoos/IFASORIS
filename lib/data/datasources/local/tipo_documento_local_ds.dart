@@ -11,7 +11,7 @@ class TipoDocumentoLocalDataSourceImpl implements TipoDocumentoLocalDataSource {
   @override
   Future<List<TipoDocumentoModel>> getTiposDocumento() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('TiposDocumentos_AspectosSocioEconomicos');
+    final res = await db.query('TiposDocumento_GrupoFamiliar');
     final result = List<TipoDocumentoModel>.from(
         res.map((m) => TipoDocumentoModel.fromJson(m))).toList();
 
@@ -22,8 +22,8 @@ class TipoDocumentoLocalDataSourceImpl implements TipoDocumentoLocalDataSource {
   Future<int> saveTipoDocumento(TipoDocumentoEntity tipoDocumento) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert(
-        'TiposDocumentos_AspectosSocioEconomicos', tipoDocumento.toJson());
+    final res =
+        await db.insert('TiposDocumento_GrupoFamiliar', tipoDocumento.toJson());
 
     return res;
   }

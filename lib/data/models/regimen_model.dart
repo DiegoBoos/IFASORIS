@@ -7,15 +7,18 @@ List<RegimenModel> regimenesFromJson(String str) => List<RegimenModel>.from(
 
 class RegimenModel extends RegimenEntity {
   RegimenModel({
-    required int regimenId,
+    required int tipoRegimenId,
+    required String tipo,
     required String descripcion,
   }) : super(
-          regimenId: regimenId,
+          tipoRegimenId: tipoRegimenId,
+          tipo: tipo,
           descripcion: descripcion,
         );
 
   factory RegimenModel.fromJson(Map<String, dynamic> json) => RegimenModel(
-        regimenId: json["Regimen_id"],
+        tipoRegimenId: json["TipoRegimen_id"],
+        tipo: json["Tipo"],
         descripcion: json["Descripcion"],
       );
 }

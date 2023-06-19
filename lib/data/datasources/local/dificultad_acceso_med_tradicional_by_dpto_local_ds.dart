@@ -54,7 +54,8 @@ class DificultadAccesoMedTradicionalByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionAccesoMedTradicional');
+    batch.delete('Asp1_UbicacionAccesoMedTradicional',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionDificultadesAccesoMedTradicional =
         lstDificultadAccesoMedTradicional

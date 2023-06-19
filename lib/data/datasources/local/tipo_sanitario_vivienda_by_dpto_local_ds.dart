@@ -46,7 +46,8 @@ class TipoSanitarioViviendaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaTiposSanitario');
+    batch.delete('Asp2_DatosViviendaTiposSanitario',
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
     final viviendaTiposSanitario = lstTiposSanitario
         .map((item) => ViviendaTiposSanitario(

@@ -25,6 +25,12 @@ class DimViviendaFormSubmissionSuccess extends DimViviendaEvent {
   const DimViviendaFormSubmissionSuccess(this.datoViviendaId);
 }
 
+class DimViviendaFormSubmissionFailed extends DimViviendaEvent {
+  final String message;
+
+  const DimViviendaFormSubmissionFailed(this.message);
+}
+
 class DimViviendaFamiliaChanged extends DimViviendaEvent {
   final int familiaId;
 

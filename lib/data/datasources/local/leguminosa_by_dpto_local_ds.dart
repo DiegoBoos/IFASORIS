@@ -43,7 +43,8 @@ class LeguminosaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionLeguminosas');
+    batch.delete('Asp1_UbicacionLeguminosas',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionLeguminosas = lstLeguminosas
         .map((item) => UbicacionLeguminosas(

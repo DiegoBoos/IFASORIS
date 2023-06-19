@@ -45,7 +45,8 @@ class DificultadAccesoCALocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionDificultadAcceso');
+    batch.delete('Asp1_UbicacionDificultadAcceso',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionDificultadesAcceso = lstDificultadAccesoAtencion
         .map((item) => UbicacionDificultadAcceso(

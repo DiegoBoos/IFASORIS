@@ -46,7 +46,8 @@ class FactorRiesgoViviendaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaFactoresRiesgo');
+    batch.delete('Asp2_DatosViviendaFactoresRiesgo',
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
     final factoresRiesgoVivienda = lstFactoresRiesgo
         .map((item) => ViviendaFactoresRiesgo(

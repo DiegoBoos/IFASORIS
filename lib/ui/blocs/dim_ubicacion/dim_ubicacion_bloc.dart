@@ -210,7 +210,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         .saveUbicacionAccesoMedTradicionalUsecaseDB(
             ubicacionId, state.lstDificultadAccesoMedTradicional!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionCereales(ubicacionId));
   }
 
@@ -218,7 +218,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     final result = await cerealByDptoUsecaseDB.saveUbicacionCerealesUsecaseDB(
         ubicacionId, state.lstCereales!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionDificultadAcceso(ubicacionId));
   }
 
@@ -227,7 +227,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         .saveUbicacionDificultadesAccesoUsecaseDB(
             ubicacionId, state.lstDificultadAccesoAtencion!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionEspecialidadMedTradicional(ubicacionId));
   }
 
@@ -236,7 +236,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         .saveUbicacionEspecialidadMedTradicionalUsecaseDB(
             ubicacionId, state.lstEspMedTradicional!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionEspecieAnimalesCria(ubicacionId));
   }
 
@@ -245,7 +245,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         .saveUbicacionEspecieAnimalesCriaUsecaseDB(
             ubicacionId, state.lstAnimalCria!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionFrutos(ubicacionId));
   }
 
@@ -253,7 +253,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     final result = await frutoByDptoUsecaseDB.saveUbicacionFrutosUsecaseDB(
         ubicacionId, state.lstFrutos!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionHortalizas(ubicacionId));
   }
 
@@ -261,7 +261,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     final result = await hortalizaByDptoUsecaseDB
         .saveUbicacionHortalizasUsecaseDB(ubicacionId, state.lstHortalizas!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionLeguminosas(ubicacionId));
   }
 
@@ -269,7 +269,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     final result = await leguminosaByDptoUsecaseDB
         .saveUbicacionLeguminosasUsecaseDB(ubicacionId, state.lstLeguminosas!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionMediosComunicacion(ubicacionId));
   }
 
@@ -278,7 +278,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         .saveUbicacionMediosComunicacionUsecaseDB(
             ubicacionId, state.lstMediosComunica!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionMediosMedTradicional(ubicacionId));
   }
 
@@ -287,7 +287,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         .saveUbicacionMediosMedTradicionalUsecaseDB(
             ubicacionId, state.lstMediosMedTradicional!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionNombresMedTradicional(ubicacionId));
   }
 
@@ -296,7 +296,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         .saveUbicacionNombresMedTradicionalUsecaseDB(
             ubicacionId, state.lstNombreMedTradicional!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionTuberculosPlatanos(ubicacionId));
   }
 
@@ -305,7 +305,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         .saveUbicacionTuberculosPlatanosUsecaseDB(
             ubicacionId, state.lstTuberculos!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => saveUbicacionVerduras(ubicacionId));
   }
 
@@ -313,7 +313,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     final result = await verduraByDptoUsecaseDB.saveUbicacionVerdurasUsecaseDB(
         ubicacionId, state.lstVerduras!);
     result.fold((failure) {
-      print(failure);
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) => add(DimUbicacionFormSubmissionSuccess(ubicacionId)));
   }
 }

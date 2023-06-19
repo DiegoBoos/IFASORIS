@@ -11,7 +11,7 @@ class LenguaManejaLocalDataSourceImpl implements LenguaManejaLocalDataSource {
   @override
   Future<List<LenguaManejaModel>> getLenguasManeja() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('LenguasManeja_CentroAtencion');
+    final res = await db.query('LenguaManeja_GrupoFamiliar');
     final result = List<LenguaManejaModel>.from(
         res.map((m) => LenguaManejaModel.fromJson(m))).toList();
 
@@ -23,7 +23,7 @@ class LenguaManejaLocalDataSourceImpl implements LenguaManejaLocalDataSource {
     final db = await ConnectionSQLiteService.db;
 
     final res =
-        await db.insert('LenguasManeja_CentroAtencion', lenguaManeja.toJson());
+        await db.insert('LenguaManeja_GrupoFamiliar', lenguaManeja.toJson());
 
     return res;
   }

@@ -129,7 +129,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
         .saveFactoresRiesgoViviendaUsecaseDB(
             datoViviendaId, state.lstFactoresRiesgo!);
     result.fold((failure) {
-      print(failure);
+      add(DimViviendaFormSubmissionFailed(failure.properties.first));
     }, (data) => saveServiciosPublicosVivienda(datoViviendaId));
   }
 
@@ -138,7 +138,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
         .saveServiciosPublicosViviendaUsecaseDB(
             datoViviendaId, state.lstServPublicos!);
     result.fold((failure) {
-      print(failure);
+      add(DimViviendaFormSubmissionFailed(failure.properties.first));
     }, (data) => saveTechosVivienda(datoViviendaId));
   }
 
@@ -146,7 +146,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     final result = await techoViviendaByDptoUsecaseDB
         .saveTechosViviendaUsecaseDB(datoViviendaId, state.lstTechos!);
     result.fold((failure) {
-      print(failure);
+      add(DimViviendaFormSubmissionFailed(failure.properties.first));
     }, (data) => saveTiposCombustibleVivienda(datoViviendaId));
   }
 
@@ -155,7 +155,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
         .saveTiposCombustibleViviendaUsecaseDB(
             datoViviendaId, state.lstTiposCombustible!);
     result.fold((failure) {
-      print(failure);
+      add(DimViviendaFormSubmissionFailed(failure.properties.first));
     }, (data) => saveTiposSanitarioVivienda(datoViviendaId));
   }
 
@@ -164,7 +164,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
         .saveTiposSanitarioViviendaUsecaseDB(
             datoViviendaId, state.lstTiposSanitario!);
     result.fold((failure) {
-      print(failure);
+      add(DimViviendaFormSubmissionFailed(failure.properties.first));
     }, (data) => saveTmtoAguasVivienda(datoViviendaId));
   }
 
@@ -172,7 +172,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     final result = await tratamientoAguaViviendaByDptoUsecaseDB
         .saveTmtoAguasViviendaUsecaseDB(datoViviendaId, state.lstTmtoAguas!);
     result.fold((failure) {
-      print(failure);
+      add(DimViviendaFormSubmissionFailed(failure.properties.first));
     }, (data) => savePresenciaAnimalesVivienda(datoViviendaId));
   }
 
@@ -181,7 +181,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
         .savePresenciaAnimalesViviendaUsecaseDB(
             datoViviendaId, state.lstPresenciaAnimales!);
     result.fold((failure) {
-      print(failure);
+      add(DimViviendaFormSubmissionFailed(failure.properties.first));
     }, (data) => add(DimViviendaFormSubmissionSuccess(datoViviendaId)));
   }
 }

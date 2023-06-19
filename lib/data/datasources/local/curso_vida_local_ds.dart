@@ -11,7 +11,7 @@ class CursoVidaLocalDataSourceImpl implements CursoVidaLocalDataSource {
   @override
   Future<List<CursoVidaModel>> getCursosVida() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('CursosVida_CentroAtencion');
+    final res = await db.query('CursoVida_GrupoFamiliar');
     final result =
         List<CursoVidaModel>.from(res.map((m) => CursoVidaModel.fromJson(m)))
             .toList();
@@ -23,8 +23,7 @@ class CursoVidaLocalDataSourceImpl implements CursoVidaLocalDataSource {
   Future<int> saveCursoVida(CursoVidaEntity cursoVida) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res =
-        await db.insert('CursosVida_CentroAtencion', cursoVida.toJson());
+    final res = await db.insert('CursoVida_GrupoFamiliar', cursoVida.toJson());
 
     return res;
   }

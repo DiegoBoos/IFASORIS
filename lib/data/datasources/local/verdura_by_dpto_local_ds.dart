@@ -42,7 +42,8 @@ class VerduraByDptoLocalDataSourceImpl implements VerduraByDptoLocalDataSource {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionVerduras');
+    batch.delete('Asp1_UbicacionVerduras',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionVerduras = lstVerduras
         .map((item) => UbicacionVerduras(

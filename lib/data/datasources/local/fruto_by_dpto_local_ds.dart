@@ -38,7 +38,8 @@ class FrutoByDptoLocalDataSourceImpl implements FrutoByDptoLocalDataSource {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionFrutos');
+    batch.delete('Asp1_UbicacionFrutos',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionFrutos = lstFrutos
         .map((item) =>

@@ -121,8 +121,8 @@ class LenguaManejaChanged extends GrupoFamiliarEvent {
   const LenguaManejaChanged(this.lenguaManejaId);
 }
 
-class NombreLenguaManejaChanged extends GrupoFamiliarEvent {
-  final int nombreLenguaManejaId;
+class NombreLenguaMaternaChanged extends GrupoFamiliarEvent {
+  final int nombreLenguaMaternaId;
 
-  const NombreLenguaManejaChanged(this.nombreLenguaManejaId);
+  const NombreLenguaMaternaChanged(this.nombreLenguaMaternaId);
 }

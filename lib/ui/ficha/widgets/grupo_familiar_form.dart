@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/domain/entities/grupo_familiar_entity.dart';
 
-import '../../../domain/entities/grupo_familiar_entity.dart';
-import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
-import '../../../domain/usecases/tipo_documento/tipo_documento_exports.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../cubits/curso_vida/curso_vida_cubit.dart';
@@ -12,24 +10,27 @@ import '../../cubits/genero/genero_cubit.dart';
 import '../../cubits/grupo_riesgo/grupo_riesgo_cubit.dart';
 import '../../cubits/lengua_maneja/lengua_maneja_cubit.dart';
 import '../../cubits/nivel_educativo/nivel_educativo_cubit.dart';
-import '../../cubits/nombre_lengua_maneja/nombre_lengua_maneja_cubit.dart';
+import '../../cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
 import '../../cubits/ocupacion/ocupacion_cubit.dart';
+import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../cubits/parentesco/parentesco_cubit.dart';
 import '../../cubits/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_cubit.dart';
 import '../../cubits/regimen/regimen_cubit.dart';
-import '../pages/grupo_familiar_page.dart';
+import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 
 class GrupoFamiliarForm extends StatefulWidget {
-  const GrupoFamiliarForm({super.key, this.grupoFamiliar});
+  const GrupoFamiliarForm({
+    super.key,
+    this.afiliadoGrupoFamiliar,
+  });
 
-  final GrupoFamiliarEntity? grupoFamiliar;
+  final GrupoFamiliarEntity? afiliadoGrupoFamiliar;
 
   @override
-  State<GrupoFamiliarForm> createState() => _GrupoFamiliarState();
+  State<GrupoFamiliarForm> createState() => _GrupoFamiliarFormState();
 }
 
-class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
-  double percentage = 0.0;
+class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
   int? _familiaRegistro;
   int? _tipoDocumento;
   String? _documento;
@@ -39,18 +40,45 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
   String? formattedFechaNac;
   String? _edad;
   int? _parentescoId;
-  int? _regimenId;
+  int? _tipoRegimenId;
   int? _nivelEducativoId;
   int? _ocupacionId;
   int? _grupoRiesgoId;
   int? _etniaId;
   int? _puebloIndigenaId;
   int? _lenguaManejaId;
-  int? _nombreLenguaManejaId;
+  int? _nombreLenguaMaternaId;
 
   @override
   Widget build(BuildContext context) {
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
+
+    /* Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+              child: Text(widget.afiliadoGrupoFamiliar!.afiliadoId.toString())),
+          Center(
+              child: TextButton(
+                  onPressed: () {
+                    afiliadosGrupoFamiliarBloc.add(UpdateAfiliadoGrupoFamiliar(
+                        widget.afiliadoGrupoFamiliar!
+                            .copyWith(isCompleted: true)));
+                  },
+                  child: const Text('Completar'))),
+          Center(
+              child: TextButton(
+                  onPressed: () {
+                    widget.afiliadoGrupoFamiliar!.isCompleted = false;
+                    afiliadosGrupoFamiliarBloc.add(UpdateAfiliadoGrupoFamiliar(
+                        widget.afiliadoGrupoFamiliar!
+                            .copyWith(isCompleted: false)));
+                  },
+                  child: const Text('Desactivar')))), */
+
     final grupoFamiliarBloc = BlocProvider.of<GrupoFamiliarBloc>(context);
+
     return Column(
       children: [
         Container(
@@ -65,7 +93,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
         const SizedBox(height: 20),
         BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
           builder: (context, state) {
-            if (state is GenerosLoaded) {
+            if (state is OpcionesSiNoLoaded) {
               return Column(
                 children: [
                   FormField(
@@ -122,54 +150,47 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
           },
         ),
         const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            BlocBuilder<TipoDocumentoCubit, TiposDocumentoState>(
-              builder: (context, state) {
-                if (state is TiposDocumentoLoaded) {
-                  return DropdownButtonFormField<int>(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    value: _tipoDocumento,
-                    items: state.tiposDocumento!
-                        .map(
-                          (tipoDocumento) => DropdownMenuItem<int>(
-                            value: tipoDocumento.tipoDocumentoId,
-                            child: Text(tipoDocumento.descripcion),
-                          ),
-                        )
-                        .toList(),
-                    decoration: const InputDecoration(
-                        labelText: 'Tipo documento',
-                        border: OutlineInputBorder()),
-                    onChanged: (int? newValue) {
-                      setState(() {
-                        _tipoDocumento = newValue;
-                      });
-                      grupoFamiliarBloc.add(TipoDocumentoChanged(newValue!));
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Campo Requerido';
-                      }
-                      return null;
-                    },
-                  );
-                }
-                return Container();
-              },
-            ),
-            TextFormField(
-              enabled: false,
-              initialValue: _documento,
-              decoration: const InputDecoration(
-                  labelText: 'Numero de Documento',
-                  border: OutlineInputBorder()),
-              onSaved: (String? newValue) {
-                grupoFamiliarBloc.add(DocumentoChanged(newValue!));
-              },
-            ),
-          ],
+        BlocBuilder<TipoDocumentoCubit, TiposDocumentoState>(
+          builder: (context, state) {
+            if (state is TiposDocumentoLoaded) {
+              return DropdownButtonFormField<int>(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                value: _tipoDocumento,
+                items: state.tiposDocumento!
+                    .map(
+                      (tipoDocumento) => DropdownMenuItem<int>(
+                        value: tipoDocumento.tipoDocumentoId,
+                        child: Text(tipoDocumento.descripcion),
+                      ),
+                    )
+                    .toList(),
+                decoration: const InputDecoration(
+                    labelText: 'Tipo documento', border: OutlineInputBorder()),
+                onChanged: (int? newValue) {
+                  setState(() {
+                    _tipoDocumento = newValue;
+                  });
+                  grupoFamiliarBloc.add(TipoDocumentoChanged(newValue!));
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo Requerido';
+                  }
+                  return null;
+                },
+              );
+            }
+            return Container();
+          },
+        ),
+        const SizedBox(height: 20),
+        TextFormField(
+          initialValue: _documento,
+          decoration: const InputDecoration(
+              labelText: 'Numero de Documento', border: OutlineInputBorder()),
+          onSaved: (String? newValue) {
+            grupoFamiliarBloc.add(DocumentoChanged(newValue!));
+          },
         ),
         const SizedBox(height: 20),
         const Divider(),
@@ -181,7 +202,6 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
         const Divider(),
         const SizedBox(height: 20),
         TextFormField(
-          enabled: false,
           initialValue: _nombresApellidos,
           decoration: const InputDecoration(
             labelText: 'Apellidos y Nombres',
@@ -191,7 +211,6 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
             grupoFamiliarBloc.add(NombresApellidosChanged(newValue!));
           },
         ),
-        const SizedBox(height: 20),
         const SizedBox(height: 20),
         BlocBuilder<GeneroCubit, GenerosState>(
           builder: (context, state) {
@@ -251,9 +270,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
           },
         ),
         const SizedBox(height: 20),
-        const SizedBox(height: 20),
         TextFormField(
-          enabled: false,
           initialValue: formattedFechaNac,
           decoration: const InputDecoration(
             labelText: 'Fecha de nacimiento',
@@ -264,9 +281,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
           },
         ),
         const SizedBox(height: 20),
-        const SizedBox(height: 20),
         TextFormField(
-          enabled: false,
           initialValue: _edad,
           decoration: const InputDecoration(
             labelText: 'Edad',
@@ -419,7 +434,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
             if (state is RegimenesLoaded) {
               return FormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                initialValue: _regimenId,
+                initialValue: _tipoRegimenId,
                 builder: (FormFieldState<int> formstate) {
                   return Column(
                     children: [
@@ -432,11 +447,12 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Checkbox(
-                                  value: _regimenId == e.regimenId,
+                                  value: _tipoRegimenId == e.tipoRegimenId,
                                   onChanged: (bool? value) {
                                     setState(() {
-                                      _regimenId = value! ? e.regimenId : null;
-                                      formstate.didChange(_regimenId);
+                                      _tipoRegimenId =
+                                          value! ? e.tipoRegimenId : null;
+                                      formstate.didChange(_tipoRegimenId);
                                     });
                                   },
                                 ),
@@ -702,7 +718,9 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
                                     });
                                   },
                                 ),
-                                Text(e.descripcion),
+                                Text(
+                                  e.descripcion,
+                                ),
                                 if (index < state.etniasLoaded!.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
                               ],
@@ -870,43 +888,43 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
         ),
         const Divider(),
         const Text(
-          'GRUPO DE RIESGO',
+          'NOMBRE LENGUA MATERNA',
           style: TextStyle(fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         const Divider(),
-        BlocBuilder<NombreLenguaManejaCubit, NombresLenguasManejaState>(
+        BlocBuilder<NombreLenguaMaternaCubit, NombresLenguasMaternaState>(
           builder: (context, state) {
-            if (state is NombresLenguasManejaLoaded) {
+            if (state is NombresLenguasMaternaLoaded) {
               return FormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                initialValue: _nombreLenguaManejaId,
+                initialValue: _nombreLenguaMaternaId,
                 builder: (FormFieldState<int> formstate) {
                   return Column(
                     children: [
                       Wrap(
                         children: List<Widget>.generate(
-                          state.nombresLenguasManejaLoaded!.length,
+                          state.nombresLenguasMaternaLoaded!.length,
                           (index) {
-                            final e = state.nombresLenguasManejaLoaded![index];
+                            final e = state.nombresLenguasMaternaLoaded![index];
                             return Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Checkbox(
-                                  value: _nombreLenguaManejaId ==
+                                  value: _nombreLenguaMaternaId ==
                                       e.lenguaMaternaId,
                                   onChanged: (bool? value) {
                                     setState(() {
-                                      _nombreLenguaManejaId =
+                                      _nombreLenguaMaternaId =
                                           value! ? e.lenguaMaternaId : null;
                                       formstate
-                                          .didChange(_nombreLenguaManejaId);
+                                          .didChange(_nombreLenguaMaternaId);
                                     });
                                   },
                                 ),
                                 Text(e.descripcion),
                                 if (index <
-                                    state.nombresLenguasManejaLoaded!.length -
+                                    state.nombresLenguasMaternaLoaded!.length -
                                         1)
                                   const VerticalDivider(), // Adds a vertical separator between items
                               ],
@@ -930,7 +948,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
                   return null;
                 },
                 onSaved: (int? value) {
-                  grupoFamiliarBloc.add(NombreLenguaManejaChanged(value!));
+                  grupoFamiliarBloc.add(NombreLenguaMaternaChanged(value!));
                 },
               );
             }
@@ -939,127 +957,5 @@ class _GrupoFamiliarState extends State<GrupoFamiliarForm> {
         ),
       ],
     );
-    /* return BlocListener<AfiliadosGrupoFamiliarBloc,
-        AfiliadosGrupoFamiliarState>(
-      listener: (context, state) {
-        if (state is AfiliadosGrupoFamiliarLoaded ||
-            state is AfiliadosGrupoFamiliarError) {
-          final grupoFamiliarCompleted = state.afiliadosGrupoFamiliar!
-              .where((element) => element.isCompleted == true)
-              .length;
-          setState(() {
-            percentage = (grupoFamiliarCompleted /
-                    state.afiliadosGrupoFamiliar!.length) *
-                100;
-          });
-        }
-      },
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 35,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.green, width: 3),
-                borderRadius: BorderRadius.circular(50)),
-            child: Stack(
-              children: [
-                LayoutBuilder(
-                    builder: (context, constraints) => Container(
-                        width: constraints.maxWidth * (percentage / 100),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [
-                                Colors.greenAccent,
-                                Colors.green,
-                              ],
-                            )))),
-                Positioned.fill(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        'Progreso',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Icon(Icons.percent)
-                    ],
-                  ),
-                ))
-              ],
-            ),
-          ),
-          MaterialButton(
-              elevation: 0,
-              color: Theme.of(context).colorScheme.primary,
-              onPressed: () {
-                Navigator.pushNamed(context, 'search-afiliado');
-              },
-              child: Container(
-                alignment: Alignment.center,
-                width: double.infinity,
-                child: const Text(
-                  'Agregar afiliado',
-                  style: TextStyle(color: Colors.white),
-                ),
-              )),
-          BlocBuilder<AfiliadosGrupoFamiliarBloc, AfiliadosGrupoFamiliarState>(
-            builder: (context, state) {
-              if (state is AfiliadosGrupoFamiliarLoaded ||
-                  state is AfiliadosGrupoFamiliarError) {
-                final afiliadosGrupoFamiliar = state.afiliadosGrupoFamiliar!;
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: afiliadosGrupoFamiliar.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final afiliadoGrupoFamiliar = afiliadosGrupoFamiliar[index];
-                    return ListTile(
-                      title: Text(afiliadoGrupoFamiliar.afiliadoId.toString()),
-                      onTap: () {
-                        Navigator.push<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                GrupoFamiliarPage(
-                                    afiliadoGrupoFamiliar:
-                                        afiliadoGrupoFamiliar),
-                          ),
-                        );
-                      },
-                      trailing: !afiliadoGrupoFamiliar.isCompleted!
-                          ? const SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: Icon(
-                                Icons.arrow_right,
-                              ),
-                            )
-                          : Container(
-                              width: 30,
-                              height: 30,
-                              decoration: const BoxDecoration(
-                                  color: Colors.green, shape: BoxShape.circle),
-                              child: const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                            ),
-                    );
-                  },
-                );
-              } else {
-                return const Center(
-                    child: Text('No hay afiliados en el grupo familiar'));
-              }
-            },
-          ),
-        ],
-      ),
-    ); */
   }
 }

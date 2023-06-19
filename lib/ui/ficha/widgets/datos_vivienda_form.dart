@@ -136,7 +136,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
     _selectedTechosVivienda = await techoViviendaByDptoCubit
         .getTechosViviendaDB(widget.dimVivienda?.datoViviendaId);
 
-    if (_selectedTechosVivienda[0].otroTipoTecho != null) {
+    if (_selectedTechosVivienda.isNotEmpty) {
       _showOtherTechoVivienda = true;
     }
 
@@ -150,14 +150,14 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
     _selectedTiposSanitarioVivienda = await tipoSanitarioViviendaByDptoCubit
         .getTiposSanitarioViviendaDB(widget.dimVivienda?.datoViviendaId);
 
-    if (_selectedTiposSanitarioVivienda[0].otroTipoSanitario != null) {
+    if (_selectedTiposSanitarioVivienda.isNotEmpty) {
       _showOtherTipoSanitario = true;
     }
 
     _selectedTiposCombustibleVivienda = await tipoCombustibleViviendaByDptoCubit
         .getTiposCombustibleViviendaDB(widget.dimVivienda?.datoViviendaId);
 
-    if (_selectedTiposCombustibleVivienda[0].otroTipoCombustible != null) {
+    if (_selectedTiposCombustibleVivienda.isNotEmpty) {
       _showOtherTipoCombustible = true;
     }
 
@@ -1240,7 +1240,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       ];
                                       _showOtherPresenciaAnimal = true;
                                     } else if (value!) {
-                                      //TODO: falta otro
+                                      //TODO: falta opcion otro
                                       _selectedPresenciaAnimalesVivienda
                                           .removeWhere((element) =>
                                               element

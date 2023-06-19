@@ -40,7 +40,8 @@ class EspecieAnimalByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionEspecieAnimalesCria');
+    batch.delete('Asp1_UbicacionEspecieAnimalesCria',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionEspeciesAnimalesCria = lstAnimalCria
         .map((item) => UbicacionEspecieAnimalesCria(

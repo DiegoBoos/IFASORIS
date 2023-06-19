@@ -12,7 +12,7 @@ class PuebloIndigenaByDptoLocalDataSourceImpl
   @override
   Future<List<PuebloIndigenaModel>> getPueblosIndigenasByDpto() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('PueblosIndigenas_DatosVivienda');
+    final res = await db.query('PueblosIndigenas_GrupoFamiliar');
     final result = List<PuebloIndigenaModel>.from(
         res.map((m) => PuebloIndigenaModel.fromJson(m))).toList();
 
@@ -25,7 +25,7 @@ class PuebloIndigenaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(
-        'PueblosIndigenas_DatosVivienda', puebloIndigena.toJson());
+        'PueblosIndigenas_GrupoFamiliar', puebloIndigena.toJson());
 
     return res;
   }

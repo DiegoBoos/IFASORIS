@@ -5,21 +5,21 @@ import 'package:http/http.dart' as http;
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/nombre_lengua_maneja_model.dart';
+import '../../models/nombre_lengua_materna_model.dart';
 
-abstract class NombreLenguaManejaRemoteDataSource {
-  Future<List<NombreLenguaManejaModel>> getNombresLenguasManeja();
+abstract class NombreLenguaMaternaRemoteDataSource {
+  Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna();
 }
 
-class NombreLenguaManejaRemoteDataSourceImpl
-    implements NombreLenguaManejaRemoteDataSource {
+class NombreLenguaMaternaRemoteDataSourceImpl
+    implements NombreLenguaMaternaRemoteDataSource {
   final prefs = SharedPreferencesService();
   final http.Client client;
 
-  NombreLenguaManejaRemoteDataSourceImpl({required this.client});
+  NombreLenguaMaternaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<NombreLenguaManejaModel>> getNombresLenguasManeja() async {
+  Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna() async {
     try {
       final uri = Uri.parse('${Constants.ifasorisBaseUrl}/nombrelenguamaneja');
 
@@ -31,7 +31,7 @@ class NombreLenguaManejaRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = nombresLenguasManejaFromJson(jsonEncode(decodedResp));
+        final result = nombresLenguasMaternaFromJson(jsonEncode(decodedResp));
         return result;
       } else {
         throw const ServerFailure(['Excepción no controlada']);

@@ -44,7 +44,8 @@ class MedioComunicacionLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionMediosComunicacion');
+    batch.delete('Asp1_UbicacionMediosComunicacion',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionMediosComunicacion = lstMediosComunica
         .map((item) => UbicacionMediosComunicacion(

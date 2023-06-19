@@ -47,7 +47,8 @@ class PresenciaAnimalViviendaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaPresenciaAnimales');
+    batch.delete('Asp2_DatosViviendaPresenciaAnimales',
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
     final viviendaPresenciaAnimales = lstPresenciaAnimales
         .map((item) => ViviendaPresenciaAnimales(

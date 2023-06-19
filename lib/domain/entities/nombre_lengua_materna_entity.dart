@@ -1,5 +1,5 @@
-class NombreLenguaManejaEntity {
-  NombreLenguaManejaEntity({
+class NombreLenguaMaternaEntity {
+  NombreLenguaMaternaEntity({
     required this.lenguaMaternaId,
     required this.descripcion,
   });

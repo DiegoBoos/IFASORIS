@@ -47,23 +47,18 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
     on<IsCompletedChanged>((event, emit) {
       emit(state.copyWith(isCompleted: event.isCompleted));
     });
-
     on<FamiliaRegistroChanged>((event, emit) {
       emit(state.copyWith(familiaRegistroId: event.familiaRegistroId));
     });
-
     on<TipoDocumentoChanged>((event, emit) {
       emit(state.copyWith(tipoDocumentoId: event.tipoDocumentoId));
     });
-
     on<DocumentoChanged>((event, emit) {
       emit(state.copyWith(documento: event.documento));
     });
-
     on<NombresApellidosChanged>((event, emit) {
       emit(state.copyWith(nombresApellidos: event.nombresApellidos));
     });
-
     on<GeneroChanged>((event, emit) {
       emit(state.copyWith(generoId: event.generoId));
     });
@@ -100,8 +95,8 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
     on<LenguaManejaChanged>((event, emit) {
       emit(state.copyWith(lenguaManejaId: event.lenguaManejaId));
     });
-    on<NombreLenguaManejaChanged>((event, emit) {
-      emit(state.copyWith(nombreLenguaManejaId: event.nombreLenguaManejaId));
+    on<NombreLenguaMaternaChanged>((event, emit) {
+      emit(state.copyWith(nombreLenguaMaternaId: event.nombreLenguaMaternaId));
     });
   }
 }

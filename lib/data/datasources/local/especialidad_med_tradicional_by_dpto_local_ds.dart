@@ -52,6 +52,8 @@ class EspecialidadMedTradicionalByDptoLocalDataSourceImpl
       int ubicacionId, List<LstEspMedTradicional> lstEspMedTradicional) async {
     final db = await ConnectionSQLiteService.db;
     Batch batch = db.batch();
+    batch.delete('Asp1_UbicacionEspecialidadMedTradicional',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionEspecialidadesMedTradicional = lstEspMedTradicional
         .map((item) => UbicacionEspecialidadMedTradicional(
@@ -76,7 +78,8 @@ class EspecialidadMedTradicionalByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionNombresMedTradicional');
+    batch.delete('Asp1_UbicacionNombresMedTradicional',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionNombresMedTradicional = lstNombreMedTradicional
         .map((item) => UbicacionNombresMedTradicional(

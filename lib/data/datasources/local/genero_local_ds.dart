@@ -11,7 +11,7 @@ class GeneroLocalDataSourceImpl implements GeneroLocalDataSource {
   @override
   Future<List<GeneroModel>> getGeneros() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Geneross_AspectosSocioEconomicos');
+    final res = await db.query('Genero_GrupoFamiliar');
     final result =
         List<GeneroModel>.from(res.map((m) => GeneroModel.fromJson(m)))
             .toList();
@@ -23,8 +23,7 @@ class GeneroLocalDataSourceImpl implements GeneroLocalDataSource {
   Future<int> saveGenero(GeneroEntity genero) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res =
-        await db.insert('Geneross_AspectosSocioEconomicos', genero.toJson());
+    final res = await db.insert('Genero_GrupoFamiliar', genero.toJson());
 
     return res;
   }

@@ -47,7 +47,8 @@ class MedioUtilizaMedTradicionalByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionMediosMedTradicional');
+    batch.delete('Asp1_UbicacionMediosMedTradicional',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionMediosMedTradicional = lstMediosMedTradicional
         .map((item) => UbicacionMediosMedTradicional(

@@ -11,7 +11,7 @@ class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
   @override
   Future<List<GrupoRiesgoModel>> getGruposRiesgo() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('GruposRiesgo_CentroAtencion');
+    final res = await db.query('GrupoRiesgo_GrupoFamiliar');
     final result = List<GrupoRiesgoModel>.from(
         res.map((m) => GrupoRiesgoModel.fromJson(m))).toList();
 
@@ -23,7 +23,7 @@ class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
     final db = await ConnectionSQLiteService.db;
 
     final res =
-        await db.insert('GruposRiesgo_CentroAtencion', grupoRiesgo.toJson());
+        await db.insert('GrupoRiesgo_GrupoFamiliar', grupoRiesgo.toJson());
 
     return res;
   }

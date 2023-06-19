@@ -46,7 +46,8 @@ class TratamientoAguaViviendaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaTratamientosAgua');
+    batch.delete('Asp2_DatosViviendaTratamientosAgua',
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
     final viviendaTratamientosAgua = lstTmtoAguas
         .map((item) => ViviendaTratamientosAgua(

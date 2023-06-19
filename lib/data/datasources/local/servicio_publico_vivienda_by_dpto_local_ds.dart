@@ -47,7 +47,8 @@ class ServicioPublicoViviendaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaServiciosPublicos');
+    batch.delete('Asp2_DatosViviendaServiciosPublicos',
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
     final viviendaServiciosPublicos = lstServPublicos
         .map((item) => ViviendaServiciosPublicos(

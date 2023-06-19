@@ -41,7 +41,8 @@ class TechoViviendaByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaTechos');
+    batch.delete('Asp2_DatosViviendaTechos',
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
     final viviendaTechos = lstTechos
         .map((item) => ViviendaTechos(

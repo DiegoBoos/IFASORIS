@@ -32,7 +32,7 @@ class GrupoFamiliarEntity {
     int? etniaId,
     int? puebloIndigenaId,
     int? lenguaManejaId,
-    int? nombreLenguaManejaId,
+    int? nombreLenguaMaternaId,
   }) =>
       GrupoFamiliarEntity(
         afiliadoId: afiliadoId ?? this.afiliadoId,

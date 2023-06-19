@@ -39,7 +39,7 @@ import 'ui/cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import 'ui/cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
 import 'ui/cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
 import 'ui/cubits/nivel_educativo/nivel_educativo_cubit.dart';
-import 'ui/cubits/nombre_lengua_maneja/nombre_lengua_maneja_cubit.dart';
+import 'ui/cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
 import 'ui/cubits/ocupacion/ocupacion_cubit.dart';
 import 'ui/cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import 'ui/cubits/parentesco/parentesco_cubit.dart';
@@ -245,7 +245,7 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<NivelEducativoCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<NombreLenguaManejaCubit>(),
+            create: (_) => di.locator<NombreLenguaMaternaCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<OcupacionCubit>(),

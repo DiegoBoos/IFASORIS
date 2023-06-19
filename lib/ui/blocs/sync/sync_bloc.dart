@@ -28,7 +28,7 @@ import '../../../domain/usecases/medio_comunicacion/medio_comunicacion_exports.d
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import '../../../domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/nivel_educativo/nivel_educativo_exports.dart';
-import '../../../domain/usecases/nombre_lengua_maneja/nombre_lengua_maneja_exports.dart';
+import '../../../domain/usecases/nombre_lengua_materna/nombre_lengua_materna_exports.dart';
 import '../../../domain/usecases/ocupacion/ocupacion_exports.dart';
 import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import '../../../domain/usecases/parentesco/parentesco_exports.dart';
@@ -155,8 +155,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final LenguaManejaUsecaseDB lenguaManejaUsecaseDB;
   final NivelEducativoUsecase nivelEducativoUsecase;
   final NivelEducativoUsecaseDB nivelEducativoUsecaseDB;
-  final NombreLenguaManejaUsecase nombreLenguaManejaUsecase;
-  final NombreLenguaManejaUsecaseDB nombreLenguaManejaUsecaseDB;
+  final NombreLenguaMaternaUsecase nombreLenguaMaternaUsecase;
+  final NombreLenguaMaternaUsecaseDB nombreLenguaMaternaUsecaseDB;
   final OcupacionUsecase ocupacionUsecase;
   final OcupacionUsecaseDB ocupacionUsecaseDB;
   final ParentescoUsecase parentescoUsecase;
@@ -220,7 +220,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<GrupoRiesgoEntity> gruposRiesgoTemp = [];
   List<LenguaManejaEntity> lenguasManejaTemp = [];
   List<NivelEducativoEntity> nivelesEducativosTemp = [];
-  List<NombreLenguaManejaEntity> nombresLenguasManejaTemp = [];
+  List<NombreLenguaMaternaEntity> nombresLenguasMaternaTemp = [];
   List<OcupacionEntity> ocupacionesTemp = [];
   List<ParentescoEntity> parentescosTemp = [];
   List<PuebloIndigenaEntity> pueblosIndigenasTemp = [];
@@ -310,8 +310,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.lenguaManejaUsecaseDB,
     required this.nivelEducativoUsecase,
     required this.nivelEducativoUsecaseDB,
-    required this.nombreLenguaManejaUsecase,
-    required this.nombreLenguaManejaUsecaseDB,
+    required this.nombreLenguaMaternaUsecase,
+    required this.nombreLenguaMaternaUsecaseDB,
     required this.ocupacionUsecase,
     required this.ocupacionUsecaseDB,
     required this.parentescoUsecase,
@@ -441,11 +441,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      AfiliadoEntity a = afiliadosTemp[data];
+      AfiliadoEntity afiliadoTemp = afiliadosTemp[data];
 
       await saveAfiliado(
         event,
-        a,
+        afiliadoTemp,
       );
     });
   }
@@ -487,11 +487,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      DificultadAccesoCAEntity d = dificultadesAccesoCATemp[data];
+      DificultadAccesoCAEntity dificultadAccesoCATemp =
+          dificultadesAccesoCATemp[data];
 
       await saveDificultadAccesoCA(
         event,
-        d,
+        dificultadAccesoCATemp,
       );
     });
   }
@@ -533,11 +534,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      EstadoViaEntity e = estadosViasTemp[data];
+      EstadoViaEntity estadoViaTemp = estadosViasTemp[data];
 
       await saveEstadoVia(
         event,
-        e,
+        estadoViaTemp,
       );
     });
   }
@@ -581,11 +582,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      MedioComunicacionEntity m = mediosComunicacionTemp[data];
+      MedioComunicacionEntity medioComunicacionTemp =
+          mediosComunicacionTemp[data];
 
       await saveMedioComunicacion(
         event,
-        m,
+        medioComunicacionTemp,
       );
     });
   }
@@ -628,11 +630,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      MedioUtilizaCAEntity m = mediosUtilizaCATemp[data];
+      MedioUtilizaCAEntity medioUtilizaCATemp = mediosUtilizaCATemp[data];
 
       await saveMedioUtilizaCA(
         event,
-        m,
+        medioUtilizaCATemp,
       );
     });
   }
@@ -647,7 +649,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       tiemposTardaCATemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando medios utiliza centro atención',
+          title: 'Sincronizando tiempos tarda centro atención',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -674,11 +676,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TiempoTardaCAEntity t = tiemposTardaCATemp[data];
+      TiempoTardaCAEntity tiempoTardaCATemp = tiemposTardaCATemp[data];
 
       await saveTiemposTardaCA(
         event,
-        t,
+        tiempoTardaCATemp,
       );
     });
   }
@@ -721,11 +723,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      ViaAccesoEntity v = viasAccesoTemp[data];
+      ViaAccesoEntity viaAccesoTemp = viasAccesoTemp[data];
 
       await saveViaAcceso(
         event,
-        v,
+        viaAccesoTemp,
       );
     });
   }
@@ -770,11 +772,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      AutoridadIndigenaEntity a = autoridadesIndigenasTemp[data];
+      AutoridadIndigenaEntity autoridadIndigenaTemp =
+          autoridadesIndigenasTemp[data];
 
       await saveAutoridadIndigena(
         event,
-        a,
+        autoridadIndigenaTemp,
       );
     });
   }
@@ -819,11 +822,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      CerealEntity c = cerealesByDptoTemp[data];
+      CerealEntity cerealByDptoTemp = cerealesByDptoTemp[data];
 
       await saveCerealByDpto(
         event,
-        c,
+        cerealByDptoTemp,
       );
     });
   }
@@ -868,11 +871,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      CostoDesplazamientoEntity c = costosDesplazamientoTemp[data];
+      CostoDesplazamientoEntity costoDesplazamientoTemp =
+          costosDesplazamientoTemp[data];
 
       await saveCostoDesplazamiento(
         event,
-        c,
+        costoDesplazamientoTemp,
       );
     });
   }
@@ -920,12 +924,13 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      DificultadAccesoMedTradicionalEntity d =
+      DificultadAccesoMedTradicionalEntity
+          dificultadAccesoMedTradicionalByDptoTemp =
           dificultadesAccesoMedTradicionalByDptoTemp[data];
 
       await saveDificultadAccesoMedTradicionalByDpto(
         event,
-        d,
+        dificultadAccesoMedTradicionalByDptoTemp,
       );
     });
   }
@@ -1021,11 +1026,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      EspecieAnimalEntity e = especiesAnimalesByDptoTemp[data];
+      EspecieAnimalEntity especieAnimalByDptoTemp =
+          especiesAnimalesByDptoTemp[data];
 
       await saveEspecieAnimalByDpto(
         event,
-        e,
+        especieAnimalByDptoTemp,
       );
     });
   }
@@ -1069,11 +1075,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      FrutoEntity f = frutosByDptoTemp[data];
+      FrutoEntity frutoByDptoTemp = frutosByDptoTemp[data];
 
       await saveFrutoByDpto(
         event,
-        f,
+        frutoByDptoTemp,
       );
     });
   }
@@ -1118,11 +1124,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      HortalizaEntity h = hortalizasByDptoTemp[data];
+      HortalizaEntity hortalizaByDptoTemp = hortalizasByDptoTemp[data];
 
       await saveHortalizaByDpto(
         event,
-        h,
+        hortalizaByDptoTemp,
       );
     });
   }
@@ -1167,11 +1173,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      LeguminosaEntity l = leguminosasByDptoTemp[data];
+      LeguminosaEntity leguminosaByDptoTemp = leguminosasByDptoTemp[data];
 
       await saveLeguminosaByDpto(
         event,
-        l,
+        leguminosaByDptoTemp,
       );
     });
   }
@@ -1217,12 +1223,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      MedioUtilizaMedTradicionalEntity m =
+      MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicionalByDptoTemp =
           mediosUtilizaMedTradicionalByDptoTemp[data];
 
       await saveMedioUtilizaMedTradicionalByDpto(
         event,
-        m,
+        medioUtilizaMedTradicionalByDptoTemp,
       );
     });
   }
@@ -1273,11 +1279,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         */
       }
 
-      OpcionSiNoEntity o = opcionesSiNoTemp[data];
+      OpcionSiNoEntity opcionSiNoTemp = opcionesSiNoTemp[data];
 
       await saveOpcionSiNo(
         event,
-        o,
+        opcionSiNoTemp,
       );
     });
   }
@@ -1322,11 +1328,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      ResguardoEntity r = resguardosByDptoTemp[data];
+      ResguardoEntity resguardoByDptoTemp = resguardosByDptoTemp[data];
 
       await saveResguardoByDpto(
         event,
-        r,
+        resguardoByDptoTemp,
       );
     });
   }
@@ -1371,11 +1377,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TiempoTardaMedTradicionalEntity t = tiemposTardaMedTradicionalTemp[data];
+      TiempoTardaMedTradicionalEntity tiempoTardaMedTradicionalTemp =
+          tiemposTardaMedTradicionalTemp[data];
 
       await saveTiempoTardaMedTradicional(
         event,
-        t,
+        tiempoTardaMedTradicionalTemp,
       );
     });
   }
@@ -1420,11 +1427,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TuberculoPlatanoEntity t = tuberculosPlatanosByDptoTemp[data];
+      TuberculoPlatanoEntity tuberculoPlatanoByDptoTemp =
+          tuberculosPlatanosByDptoTemp[data];
 
       await saveTuberculoPlatanoByDpto(
         event,
-        t,
+        tuberculoPlatanoByDptoTemp,
       );
     });
   }
@@ -1469,11 +1477,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      VerduraEntity v = verdurasByDptoTemp[data];
+      VerduraEntity verduraByDptoTemp = verdurasByDptoTemp[data];
 
       await saveVerduraByDpto(
         event,
-        v,
+        verduraByDptoTemp,
       );
     });
   }
@@ -1518,11 +1526,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      FactorRiesgoViviendaEntity f = factoresRiesgoViviendaByDptoTemp[data];
+      FactorRiesgoViviendaEntity factorRiesgoViviendaByDptoTemp =
+          factoresRiesgoViviendaByDptoTemp[data];
 
       await saveFactorRiesgoViviendaByDpto(
         event,
-        f,
+        factorRiesgoViviendaByDptoTemp,
       );
     });
   }
@@ -1566,11 +1575,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      IluminacionViviendaEntity i = iluminacionesViviendaTemp[data];
+      IluminacionViviendaEntity iluminacionViviendaTemp =
+          iluminacionesViviendaTemp[data];
 
       await saveIluminacionVivienda(
         event,
-        i,
+        iluminacionViviendaTemp,
       );
     });
   }
@@ -1615,11 +1625,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      PisoViviendaEntity i = pisosViviendaByDptoTemp[data];
+      PisoViviendaEntity pisoViviendaByDptoTemp = pisosViviendaByDptoTemp[data];
 
       await savePisoViviendaByDpto(
         event,
-        i,
+        pisoViviendaByDptoTemp,
       );
     });
   }
@@ -1665,12 +1675,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      PresenciaAnimalViviendaEntity i =
+      PresenciaAnimalViviendaEntity presenciaAnimalViviendaByDptoTemp =
           presenciaAnimalesViviendaByDptoTemp[data];
 
       await savePresenciaAnimalViviendaByDpto(
         event,
-        i,
+        presenciaAnimalViviendaByDptoTemp,
       );
     });
   }
@@ -1715,12 +1725,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      ServicioPublicoViviendaEntity i =
+      ServicioPublicoViviendaEntity servicioPublicoViviendaByDptoTemp =
           serviciosPublicosViviendaByDptoTemp[data];
 
       await saveServicioPublicoViviendaByDpto(
         event,
-        i,
+        servicioPublicoViviendaByDptoTemp,
       );
     });
   }
@@ -1764,11 +1774,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TechoViviendaEntity i = techosViviendaByDptoTemp[data];
+      TechoViviendaEntity techoViviendaByDptoTemp =
+          techosViviendaByDptoTemp[data];
 
       await saveTechoViviendaByDpto(
         event,
-        i,
+        techoViviendaByDptoTemp,
       );
     });
   }
@@ -1813,11 +1824,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TenenciaViviendaEntity i = tenenciasViviendaByDptoTemp[data];
+      TenenciaViviendaEntity tenenciaViviendaByDptoTemp =
+          tenenciasViviendaByDptoTemp[data];
 
       await saveTenenciaViviendaByDpto(
         event,
-        i,
+        tenenciaViviendaByDptoTemp,
       );
     });
   }
@@ -1863,12 +1875,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TipoCombustibleViviendaEntity i =
+      TipoCombustibleViviendaEntity tipoCombustibleViviendaByDptoTemp =
           tiposCombustibleViviendaByDptoTemp[data];
 
       await saveTipoCombustibleViviendaByDpto(
         event,
-        i,
+        tipoCombustibleViviendaByDptoTemp,
       );
     });
   }
@@ -1913,11 +1925,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TipoSanitarioViviendaEntity i = tiposSanitarioViviendaByDptoTemp[data];
+      TipoSanitarioViviendaEntity tipoSanitarioViviendaByDptoTemp =
+          tiposSanitarioViviendaByDptoTemp[data];
 
       await saveTipoSanitarioViviendaByDpto(
         event,
-        i,
+        tipoSanitarioViviendaByDptoTemp,
       );
     });
   }
@@ -1963,12 +1976,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TratamientoAguaViviendaEntity i =
+      TratamientoAguaViviendaEntity tratamientoAguaViviendaByDptoTemp =
           tratamientosAguaViviendaByDptoTemp[data];
 
       await saveTratamientoAguaViviendaByDpto(
         event,
-        i,
+        tratamientoAguaViviendaByDptoTemp,
       );
     });
   }
@@ -2012,11 +2025,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      VentilacionViviendaEntity i = ventilacionesViviendaTemp[data];
+      VentilacionViviendaEntity ventilacionViviendaTemp =
+          ventilacionesViviendaTemp[data];
 
       await saveVentilacionVivienda(
         event,
-        i,
+        ventilacionViviendaTemp,
       );
     });
   }
@@ -2061,11 +2075,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TipoViviendaEntity t = tiposViviendaTemp[data];
+      TipoViviendaEntity tipoViviendaTemp = tiposViviendaTemp[data];
 
       await saveTipoVivienda(
         event,
-        t,
+        tipoViviendaTemp,
       );
     });
   }
@@ -2108,11 +2122,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TipoCalendarioEntity t = tiposCalendarioTemp[data];
+      TipoCalendarioEntity tipoCalendarioTemp = tiposCalendarioTemp[data];
 
       await saveTipoCalendario(
         event,
-        t,
+        tipoCalendarioTemp,
       );
     });
   }
@@ -2146,7 +2160,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= cursosVidaTemp.length) {
-        //TODO: table doesn't exist
         ConnectionSQLiteService.truncateTable('Etnia_GrupoFamiliar')
             .then((value) async {
           etniasTemp = [];
@@ -2155,11 +2168,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      CursoVidaEntity t = cursosVidaTemp[data];
+      CursoVidaEntity cursoVidaTemp = cursosVidaTemp[data];
 
       await saveCursoVida(
         event,
-        t,
+        cursoVidaTemp,
       );
     });
   }
@@ -2193,7 +2206,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= etniasTemp.length) {
-        //TODO: table doesn't exist
         ConnectionSQLiteService.truncateTable('Genero_GrupoFamiliar')
             .then((value) async {
           generosTemp = [];
@@ -2202,11 +2214,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      EtniaEntity t = etniasTemp[data];
+      EtniaEntity etniaTemp = etniasTemp[data];
 
       await saveEtnia(
         event,
-        t,
+        etniaTemp,
       );
     });
   }
@@ -2240,7 +2252,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= generosTemp.length) {
-        ConnectionSQLiteService.truncateTable('GruposRiesgo_GrupoFamiliar')
+        ConnectionSQLiteService.truncateTable('GrupoRiesgo_GrupoFamiliar')
             .then((value) async {
           gruposRiesgoTemp = [];
           await syncGruposRiesgo(event);
@@ -2248,11 +2260,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      GeneroEntity t = generosTemp[data];
+      GeneroEntity generoTemp = generosTemp[data];
 
       await saveGenero(
         event,
-        t,
+        generoTemp,
       );
     });
   }
@@ -2383,8 +2395,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         ConnectionSQLiteService.truncateTable(
                 'NombreLenguaMaterna_GrupoFamiliar')
             .then((value) async {
-          nombresLenguasManejaTemp = [];
-          await syncNombresLenguasManeja(event);
+          nombresLenguasMaternaTemp = [];
+          await syncNombresLenguasMaterna(event);
         });
         return;
       }
@@ -2399,35 +2411,35 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** NivelesEducativos ****************************
 
-// ************************** NombresLenguasManeja ****************************
+// ************************** NombresLenguasMaterna ****************************
 
-  Future<void> syncNombresLenguasManeja(SyncStarted event) async {
+  Future<void> syncNombresLenguasMaterna(SyncStarted event) async {
     final result =
-        await nombreLenguaManejaUsecase.getNombresLenguasManejaUsecase();
+        await nombreLenguaMaternaUsecase.getNombresLenguasMaternaUsecase();
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      nombresLenguasManejaTemp.addAll(data);
+      nombresLenguasMaternaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando niveles educativos',
+          title: 'Sincronizando nombres lenguas maternas',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveNombreLenguaManeja(
+      await saveNombreLenguaMaterna(
         event,
-        nombresLenguasManejaTemp[0],
+        nombresLenguasMaternaTemp[0],
       );
     });
   }
 
-  Future<void> saveNombreLenguaManeja(
+  Future<void> saveNombreLenguaMaterna(
     SyncStarted event,
-    NombreLenguaManejaEntity nombreLenguaManeja,
+    NombreLenguaMaternaEntity nombreLenguaMaterna,
   ) async {
-    final result = await nombreLenguaManejaUsecaseDB
-        .saveNombreLenguaManejaUsecaseDB(nombreLenguaManeja);
+    final result = await nombreLenguaMaternaUsecaseDB
+        .saveNombreLenguaMaternaUsecaseDB(nombreLenguaMaterna);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= nombresLenguasManejaTemp.length) {
+      if (data >= nombresLenguasMaternaTemp.length) {
         ConnectionSQLiteService.truncateTable('Ocupacion_GrupoFamiliar')
             .then((value) async {
           ocupacionesTemp = [];
@@ -2435,17 +2447,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      NombreLenguaManejaEntity nombreLenguaManejaTemp =
-          nombresLenguasManejaTemp[data];
+      NombreLenguaMaternaEntity nombreLenguaMaternaTemp =
+          nombresLenguasMaternaTemp[data];
 
-      await saveNombreLenguaManeja(
+      await saveNombreLenguaMaterna(
         event,
-        nombreLenguaManejaTemp,
+        nombreLenguaMaternaTemp,
       );
     });
   }
 
-// ************************** NombresLenguasManeja ****************************
+// ************************** NombresLenguasMaterna ****************************
 
 // ************************** Ocupaciones ****************************
 
@@ -2567,7 +2579,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= pueblosIndigenasTemp.length) {
-        //TODO: Table doesn't exist
         ConnectionSQLiteService.truncateTable('Regimenes_GrupoFamiliar')
             .then((value) async {
           regimenesTemp = [];
@@ -2594,7 +2605,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       regimenesTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando pueblos indigenas',
+          title: 'Sincronizando regimenes',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
@@ -2613,7 +2624,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= regimenesTemp.length) {
-        //TODO: Table doesn't exist
         ConnectionSQLiteService.truncateTable('TiposDocumento_GrupoFamiliar')
             .then((value) async {
           tiposDocumentoTemp = [];
@@ -2640,7 +2650,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       tiposDocumentoTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando pueblos indigenas',
+          title: 'Sincronizando tipos documento',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 

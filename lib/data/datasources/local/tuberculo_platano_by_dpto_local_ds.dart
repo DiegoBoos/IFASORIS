@@ -44,7 +44,8 @@ class TuberculoPlatanoByDptoLocalDataSourceImpl
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionTuberculosPlatanos');
+    batch.delete('Asp1_UbicacionTuberculosPlatanos',
+        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
 
     final ubicacionTuberculosPlatanos = lstTuberculos
         .map((item) => UbicacionTuberculosPlatanos(

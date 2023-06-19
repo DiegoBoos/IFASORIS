@@ -11,7 +11,7 @@ class OcupacionLocalDataSourceImpl implements OcupacionLocalDataSource {
   @override
   Future<List<OcupacionModel>> getOcupaciones() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Ocupacioness_AspectosSocioEconomicos');
+    final res = await db.query('Ocupacion_GrupoFamiliar');
     final result =
         List<OcupacionModel>.from(res.map((m) => OcupacionModel.fromJson(m)))
             .toList();
@@ -23,8 +23,7 @@ class OcupacionLocalDataSourceImpl implements OcupacionLocalDataSource {
   Future<int> saveOcupacion(OcupacionEntity ocupacion) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert(
-        'Ocupacioness_AspectosSocioEconomicos', ocupacion.toJson());
+    final res = await db.insert('Ocupacion_GrupoFamiliar', ocupacion.toJson());
 
     return res;
   }

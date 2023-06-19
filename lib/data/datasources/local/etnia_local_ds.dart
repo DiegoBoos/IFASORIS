@@ -11,7 +11,7 @@ class EtniaLocalDataSourceImpl implements EtniaLocalDataSource {
   @override
   Future<List<EtniaModel>> getEtnias() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Etniass_AspectosSocioEconomicos');
+    final res = await db.query('Etnia_GrupoFamiliar');
     final result =
         List<EtniaModel>.from(res.map((m) => EtniaModel.fromJson(m))).toList();
 
@@ -22,8 +22,7 @@ class EtniaLocalDataSourceImpl implements EtniaLocalDataSource {
   Future<int> saveEtnia(EtniaEntity etnia) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res =
-        await db.insert('Etniass_AspectosSocioEconomicos', etnia.toJson());
+    final res = await db.insert('Etnia_GrupoFamiliar', etnia.toJson());
 
     return res;
   }

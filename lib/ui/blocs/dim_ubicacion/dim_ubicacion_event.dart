@@ -25,6 +25,12 @@ class DimUbicacionFormSubmissionSuccess extends DimUbicacionEvent {
   const DimUbicacionFormSubmissionSuccess(this.ubicacionId);
 }
 
+class DimUbicacionFormSubmissionFailed extends DimUbicacionEvent {
+  final String message;
+
+  const DimUbicacionFormSubmissionFailed(this.message);
+}
+
 class UbicacionChanged extends DimUbicacionEvent {
   final int ubicacionId;
 
