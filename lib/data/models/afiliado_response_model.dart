@@ -95,6 +95,7 @@ class AfiliadoModel extends AfiliadoEntity {
             familiaId: familiaId);
 
   factory AfiliadoModel.fromJson(Map<String, dynamic> json) => AfiliadoModel(
+        familiaId: json["Familia_id"],
         afiliadoId: json["Afiliado_id"],
         tipoDocAfiliado: json["TipoDoc_Afiliado"],
         documento: json["documento"],

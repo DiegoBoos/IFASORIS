@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/usecases/grupo_familiar/grupo_familiar_exports.dart';
+import 'package:ifasoris/ui/ficha/pages/grupo_familiar_page.dart';
 
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
+import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
+import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
 import '../../cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
@@ -58,7 +61,6 @@ import '../widgets/acceso_medico_form.dart';
 import '../widgets/aspectos_tierra.dart';
 import '../widgets/datos_ubicacion_form.dart';
 import '../widgets/datos_vivienda_form.dart';
-import '../widgets/grupo_familiar_form.dart';
 
 class FichaPage extends StatefulWidget {
   const FichaPage({super.key});
@@ -70,9 +72,10 @@ class FichaPage extends StatefulWidget {
 class _FichaPageState extends State<FichaPage> {
   final _formKeyUbicacion = GlobalKey<FormState>();
   final _formKeyVivienda = GlobalKey<FormState>();
-  final _formKeyGrupoFamiliar = GlobalKey<FormState>();
   int currentStep = 0;
   bool isCompleted = false;
+  double percentage = 0.0;
+  int registraAfiliados = 0;
 
   @override
   void initState() {
@@ -89,6 +92,9 @@ class _FichaPageState extends State<FichaPage> {
 
     BlocProvider.of<DimViviendaBloc>(context)
         .add(GetDimVivienda(afiliado.familiaId!));
+
+    BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context)
+        .add(GetAfiliadosGrupoFamiliar(afiliado.familiaId!));
 
     getAccesorias();
   }
@@ -175,6 +181,8 @@ class _FichaPageState extends State<FichaPage> {
         BlocProvider.of<DimUbicacionBloc>(context, listen: true);
     final dimViviendaBloc =
         BlocProvider.of<DimViviendaBloc>(context, listen: true);
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context, listen: true);
 
     return MultiBlocListener(
         listeners: [
@@ -211,7 +219,39 @@ class _FichaPageState extends State<FichaPage> {
                     context, formStatus.message.toString(), Colors.red);
               }
             },
-          )
+          ),
+          BlocListener<AfiliadosGrupoFamiliarBloc, AfiliadosGrupoFamiliarState>(
+            listener: (context, state) {
+              if (state is GrupoFamiliarSubmissionSuccess) {
+                CustomSnackBar.showSnackBar(
+                    context,
+                    'Datos del grupo familiar guardados correctamente',
+                    Colors.green);
+
+                setState(() {
+                  isCompleted = true;
+                });
+              }
+              if (state is GrupoFamiliarSubmissionFailed) {
+                CustomSnackBar.showSnackBar(
+                    context, state.message.toString(), Colors.red);
+              }
+            },
+          ),
+          BlocListener<AfiliadosGrupoFamiliarBloc, AfiliadosGrupoFamiliarState>(
+              listener: (context, state) {
+            if (state is AfiliadosGrupoFamiliarLoaded ||
+                state is AfiliadosGrupoFamiliarError) {
+              final grupoFamiliarCompleted = state.afiliadosGrupoFamiliar!
+                  .where((element) => element.isCompleted == true)
+                  .length;
+              setState(() {
+                percentage = (grupoFamiliarCompleted /
+                        state.afiliadosGrupoFamiliar!.length) *
+                    100;
+              });
+            }
+          })
         ],
         child: Scaffold(
           appBar: AppBar(
@@ -246,9 +286,11 @@ class _FichaPageState extends State<FichaPage> {
                           dimViviendaBloc.add(DimViviendaSubmitted());
                         }
                       } else if (isLastStep) {
-                        if (_formKeyGrupoFamiliar.currentState!.validate()) {
-                          _formKeyGrupoFamiliar.currentState!.save();
-                        }
+                        afiliadosGrupoFamiliarBloc.add(
+                            SaveAfiliadosGrupoFamiliar(
+                                afiliadosGrupoFamiliarBloc
+                                        .state.afiliadosGrupoFamiliar ??
+                                    []));
                       }
                     },
                     onStepCancel: currentStep == 0
@@ -261,7 +303,13 @@ class _FichaPageState extends State<FichaPage> {
                         child: Row(children: [
                           Expanded(
                               child: ElevatedButton(
-                            onPressed: details.onStepContinue,
+                            onPressed: !isLastStep ||
+                                    (isLastStep && percentage == 100.0) ||
+                                    (isLastStep &&
+                                        percentage == 0.0 &&
+                                        registraAfiliados == 1)
+                                ? details.onStepContinue
+                                : null,
                             child: Text(isLastStep ? 'Finalizar' : 'Siguiente'),
                           )),
                           const SizedBox(
@@ -332,28 +380,90 @@ class _FichaPageState extends State<FichaPage> {
           ),
         ),
         Step(
-            isActive: currentStep >= 2,
-            title: const Text('Grupo Familiar'),
-            content: BlocBuilder<GrupoFamiliarBloc, GrupoFamiliarEntity>(
-              builder: (context, state) {
-                if (state.formStatus is GrupoFamiliarFormEmpty) {
-                  return Form(
-                      key: _formKeyGrupoFamiliar,
-                      child: const GrupoFamiliarForm());
-                } else if (state.formStatus is GrupoFamiliarFormLoaded ||
-                    state.formStatus is GrupoFamiliarSubmissionSuccess) {
-                  return Form(
-                      key: _formKeyGrupoFamiliar,
-                      child: GrupoFamiliarForm(
-                        afiliadoGrupoFamiliar: state,
-                      ));
-                }
-                return Form(
-                    key: _formKeyGrupoFamiliar,
-                    child: const GrupoFamiliarForm());
-                /* return const Center(child: CircularProgressIndicator()); */
-              },
-            ))
+          isActive: currentStep >= 2,
+          title: const Text('Grupo Familiar'),
+          content: BlocConsumer<AfiliadosGrupoFamiliarBloc,
+              AfiliadosGrupoFamiliarState>(
+            listener: (context, state) {
+              if (state is AfiliadosGrupoFamiliarLoaded ||
+                  state is AfiliadosGrupoFamiliarError) {
+                final grupoFamiliarCompleted = state.afiliadosGrupoFamiliar!
+                    .where((element) => element.isCompleted == true)
+                    .length;
+                setState(() {
+                  percentage = (grupoFamiliarCompleted /
+                          state.afiliadosGrupoFamiliar!.length) *
+                      100;
+                });
+              }
+            },
+            builder: (context, state) {
+              if (state is AfiliadosGrupoFamiliarLoaded ||
+                  state is AfiliadosGrupoFamiliarError) {
+                return Column(
+                  children: [
+                    const Text('Tiene miembros en la familia para registrar'),
+                    RadioListTile(
+                      title: const Text('Si'),
+                      value: 0,
+                      groupValue: registraAfiliados,
+                      onChanged: (int? value) {
+                        setState(() {
+                          registraAfiliados = value!;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      title: const Text('No'),
+                      value: 1,
+                      groupValue: registraAfiliados,
+                      onChanged: (int? value) {
+                        setState(() {
+                          registraAfiliados = value!;
+                        });
+                      },
+                    ),
+                    GrupoFamiliarPage(
+                      percentage: percentage,
+                      registraAfiliados: registraAfiliados,
+                    ),
+                  ],
+                );
+              } else if (state is AfiliadosGrupoFamiliarEmpty) {
+                return Column(
+                  children: [
+                    const Text('Tiene miembros en la familia para registrar'),
+                    RadioListTile(
+                      title: const Text('Si'),
+                      value: 0,
+                      groupValue: registraAfiliados,
+                      onChanged: (int? value) {
+                        setState(() {
+                          registraAfiliados = value!;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      title: const Text('No'),
+                      value: 1,
+                      groupValue: registraAfiliados,
+                      onChanged: (int? value) {
+                        setState(() {
+                          registraAfiliados = value!;
+                        });
+                      },
+                    ),
+                    GrupoFamiliarPage(
+                      percentage: percentage,
+                      registraAfiliados: registraAfiliados,
+                    ),
+                  ],
+                );
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        )
       ];
 
   Widget buildCompleted() {

@@ -1,38 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:ifasoris/ui/search/search_afiliados.dart';
+import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../widgets/grupo_familiar_form.dart';
 
 class GrupoFamiliarPage extends StatefulWidget {
-  const GrupoFamiliarPage({super.key});
+  const GrupoFamiliarPage(
+      {super.key, required this.percentage, required this.registraAfiliados});
+
+  final double percentage;
+  final int registraAfiliados;
 
   @override
   State<GrupoFamiliarPage> createState() => _GrupoFamiliarState();
 }
 
 class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
-  double percentage = 0.0;
-
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AfiliadosGrupoFamiliarBloc,
-        AfiliadosGrupoFamiliarState>(
-      listener: (context, state) {
-        if (state is AfiliadosGrupoFamiliarLoaded ||
-            state is AfiliadosGrupoFamiliarError) {
-          final grupoFamiliarCompleted = state.afiliadosGrupoFamiliar!
-              .where((element) => element.isCompleted == true)
-              .length;
-          setState(() {
-            percentage = (grupoFamiliarCompleted /
-                    state.afiliadosGrupoFamiliar!.length) *
-                100;
-          });
-        }
-      },
-      child: Column(
+    final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
+    if (widget.registraAfiliados == 0) {
+      return Column(
         children: [
+          const SizedBox(height: 20),
           Container(
             width: double.infinity,
             height: 35,
@@ -43,7 +34,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
               children: [
                 LayoutBuilder(
                     builder: (context, constraints) => Container(
-                        width: constraints.maxWidth * (percentage / 100),
+                        width: constraints.maxWidth * (widget.percentage / 100),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             gradient: const LinearGradient(
@@ -71,12 +62,14 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
               ],
             ),
           ),
+          const SizedBox(height: 20),
           MaterialButton(
               elevation: 0,
               color: Theme.of(context).colorScheme.primary,
-              onPressed: () {
-                Navigator.pushNamed(context, 'search-afiliado');
-              },
+              onPressed: () => showSearch(
+                  context: context,
+                  delegate: SearchAfiliados(
+                      afiliadoBloc: afiliadoBloc, isGrupoFamiliar: true)),
               child: Container(
                 alignment: Alignment.center,
                 width: double.infinity,
@@ -96,7 +89,8 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                   itemBuilder: (BuildContext context, int index) {
                     final afiliadoGrupoFamiliar = afiliadosGrupoFamiliar[index];
                     return ListTile(
-                      title: Text(afiliadoGrupoFamiliar.afiliadoId.toString()),
+                      title: Text(
+                          '${afiliadoGrupoFamiliar.nombre1 ?? ''} ${afiliadoGrupoFamiliar.nombre2 ?? ''} ${afiliadoGrupoFamiliar.apellido1 ?? ''} ${afiliadoGrupoFamiliar.apellido2 ?? ''}'),
                       onTap: () {
                         Navigator.push<void>(
                           context,
@@ -136,7 +130,9 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
             },
           ),
         ],
-      ),
-    );
+      );
+    } else {
+      return Container();
+    }
   }
 }

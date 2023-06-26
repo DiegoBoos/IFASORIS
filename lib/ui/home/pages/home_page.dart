@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                         )
                       : PreferredSize(
                           preferredSize: Size.fromHeight(size.height * 0.08),
-                          child: MobileAppBar()),
+                          child: const MobileAppBar()),
                   //drawer: const AppDrawer(),
                   body: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,7 +193,8 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconHeader(
         icon: FontAwesomeIcons.userCheck,
-        title: '${afiliado?.nombre1} ${afiliado?.nombre2}',
+        title:
+            '${afiliado?.nombre1 ?? ''} ${afiliado?.nombre2 ?? ''} ${afiliado?.apellido1 ?? ''} ${afiliado?.apellido2 ?? ''}',
         subtitle: afiliado?.documento ?? '',
         color1: Theme.of(context).colorScheme.primary,
         color2: Colors.green);

@@ -5,8 +5,8 @@ import '../../entities/grupo_familiar_entity.dart';
 
 abstract class GrupoFamiliarRepositoryDB {
   Future<Either<Failure, int>> saveGrupoFamiliarRepositoryDB(
-      GrupoFamiliarEntity grupoFamiliar);
+      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar);
 
-  Future<Either<Failure, GrupoFamiliarEntity?>> getGrupoFamiliarRepositoryDB(
-      int familiaId);
+  Future<Either<Failure, List<GrupoFamiliarEntity>>>
+      getGrupoFamiliarRepositoryDB(int familiaId);
 }

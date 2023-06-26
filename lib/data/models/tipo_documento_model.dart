@@ -9,15 +9,18 @@ List<TipoDocumentoModel> tiposDocumentoFromJson(String str) =>
 class TipoDocumentoModel extends TipoDocumentoEntity {
   TipoDocumentoModel({
     required int tipoDocumentoId,
+    required String tipo,
     required String descripcion,
   }) : super(
           tipoDocumentoId: tipoDocumentoId,
+          tipo: tipo,
           descripcion: descripcion,
         );
 
   factory TipoDocumentoModel.fromJson(Map<String, dynamic> json) =>
       TipoDocumentoModel(
         tipoDocumentoId: json["TipoDocumento_id"],
+        tipo: json["Tipo"],
         descripcion: json["Descripcion"],
       );
 }

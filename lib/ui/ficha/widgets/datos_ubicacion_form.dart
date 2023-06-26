@@ -75,7 +75,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
     _documento = afiliado.documento;
     _telefonoFijoCtrl.text = afiliado.telefonofijo ?? '';
     _telefonocel1Ctrl.text = afiliado.telefonocel1 ?? '';
-    _telefonocel2Ctrl.text = afiliado.telefonocel2;
+    _telefonocel2Ctrl.text = afiliado.telefonocel2 ?? '';
 
     setState(() {
       _nombreRecibeVisitaCtrl.text =

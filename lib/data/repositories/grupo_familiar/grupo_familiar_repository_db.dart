@@ -13,10 +13,10 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
 
   @override
   Future<Either<Failure, int>> saveGrupoFamiliarRepositoryDB(
-      GrupoFamiliarEntity grupoFamiliar) async {
+      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar) async {
     try {
-      final result =
-          await grupoFamiliarLocalDataSource.saveGrupoFamiliar(grupoFamiliar);
+      final result = await grupoFamiliarLocalDataSource
+          .saveGrupoFamiliar(afiliadosGrupoFamiliar);
 
       return Right(result);
     } on ServerFailure catch (e) {
@@ -27,8 +27,8 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
   }
 
   @override
-  Future<Either<Failure, GrupoFamiliarEntity?>> getGrupoFamiliarRepositoryDB(
-      int familiaId) async {
+  Future<Either<Failure, List<GrupoFamiliarEntity>>>
+      getGrupoFamiliarRepositoryDB(int familiaId) async {
     try {
       final result =
           await grupoFamiliarLocalDataSource.getGrupoFamiliar(familiaId);

@@ -259,20 +259,26 @@ class ConnectionSQL {
 	[Familia_id]	integer NOT NULL,
 	[Afiliado_id]	integer NOT NULL,
 	[CursoVida_id]	integer NOT NULL,
+	[Parentesco_id]	integer NOT NULL,
+	[TipoRegimen_id]	integer NOT NULL,
 	[NivelEducativo_id]	integer NOT NULL,
 	[Ocupacion_id]	integer NOT NULL,
 	[GrupoRiesgo_id]	integer NOT NULL,
 	[OrigenEtnico5602_id]	integer NOT NULL,
-	[PuebloIndigena_id]	integer NOT NULL,
-	[LenguaManeja_id]	integer NOT NULL,
-	[LenguaMaterna_id]	integer NOT NULL,
-	[remoteGrupoFamiliarId]	integer,
+	[PuebloIndigena_id]	integer,
+	[LenguaManeja_id]	integer,
+	[LenguaMaterna_id]	integer,
+	[remoteGrupoFamiliar_id]	integer,
     FOREIGN KEY ([Afiliado_id])
         REFERENCES [Afiliado]([Afiliado_id]),
     FOREIGN KEY ([OrigenEtnico5602_id])
         REFERENCES [OrigenEtnico5602]([OrigenEtnico5602_id]),
     FOREIGN KEY ([CursoVida_id])
         REFERENCES [CursoVida_GrupoFamiliar]([CursoVida_id]),
+    FOREIGN KEY ([Parentesco_id])
+        REFERENCES [Parentesco_GrupoFamiliar]([Parentesco_id]),
+    FOREIGN KEY ([TipoRegimen_id])
+        REFERENCES [Regimenes_GrupoFamiliar]([TipoRegimen_id]),
     FOREIGN KEY ([Familia_id])
         REFERENCES [Familia]([Familia_id]),
     FOREIGN KEY ([GrupoRiesgo_id])
@@ -884,6 +890,7 @@ class ConnectionSQL {
   static const CREATE_TIPOS_DOCUMENTO = '''
   CREATE TABLE [TiposDocumento_GrupoFamiliar] (
 	[TipoDocumento_id]	integer NOT NULL,
+	[Tipo]	varchar(15) NOT NULL COLLATE NOCASE,
 	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE
   )''';
 }

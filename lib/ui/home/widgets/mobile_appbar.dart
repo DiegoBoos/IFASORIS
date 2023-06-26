@@ -10,17 +10,7 @@ import '../../search/search_afiliados.dart';
 import '../../utils/custom_snack_bar.dart';
 
 class MobileAppBar extends StatelessWidget {
-  final List<SyncTable> _downloadSyncTables = [
-    SyncTable(name: 'Afiliado', type: 'A'),
-    SyncTable(name: 'Accesorias', type: 'A'),
-  ];
-
-  final List<SyncTable> _uploadSyncTables = [
-    SyncTable(name: 'DimUbicacion', type: 'P'),
-    SyncTable(name: 'DimVivienda', type: 'P'),
-  ];
-
-  MobileAppBar({super.key});
+  const MobileAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +51,7 @@ class MobileAppBar extends StatelessWidget {
                 } else {
                   showSearch(
                       context: context,
-                      delegate: SearchAfiliados(afiliadoBloc));
+                      delegate: SearchAfiliados(afiliadoBloc: afiliadoBloc));
                 }
               },
               icon: const Icon(Icons.search)),
@@ -72,7 +62,7 @@ class MobileAppBar extends StatelessWidget {
                 showModalBottomSheet(
                     context: context,
                     builder: (_) {
-                      return SyncDialog(syncTables: _downloadSyncTables);
+                      return const SyncDialog(type: 'A');
                     });
               } else if (internetCubit.state is InternetDisconnected) {
                 CustomSnackBar.showSnackBar(
@@ -89,7 +79,7 @@ class MobileAppBar extends StatelessWidget {
                 showModalBottomSheet(
                     context: context,
                     builder: (_) {
-                      return SyncDialog(syncTables: _uploadSyncTables);
+                      return const SyncDialog(type: 'P');
                     });
               } else if (internetCubit.state is InternetDisconnected) {
                 CustomSnackBar.showSnackBar(

@@ -174,7 +174,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final SyncLogUsecaseDB syncLogDB;
 
   /* int totalAccesories = 46; */
-  int totalAccesories = 45;
+  int totalAccesories = 46;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -327,7 +327,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.syncLogDB,
   }) : super(SyncInitial()) {
     on<SyncStarted>((event, emit) async {
-      if (event.tablesNames.contains('Afiliado')) {
+      if (event.type == 'A') {
         add(Downloading(state.syncProgressModel.copyWith(
           title: 'Descargando afiliados',
         )));
@@ -335,20 +335,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           afiliadosTemp = [];
           await syncAfiliados(event, 1, 10000);
         });
-      } else if (event.tablesNames.contains('Accesorias')) {
-        ConnectionSQLiteService.truncateTable(
-                'DificultadesAcceso_CentroAtencion')
-            .then((value) async {
-          dificultadesAccesoCATemp = [];
-          await syncDificultadesAccesoCA(event);
-        });
-      } else if (event.tablesNames.contains('DimUbicacion')) {
+      } else if (event.type == 'P') {
         ConnectionSQLiteService.truncateTable('Asp1_Ubicacion')
-            .then((value) async {
-          await syncDimUbicacion(event);
-        });
-      } else if (event.tablesNames.contains('DimVivienda')) {
-        ConnectionSQLiteService.truncateTable('Asp2_DatosVivienda')
             .then((value) async {
           await syncDimUbicacion(event);
         });
@@ -436,8 +424,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           percent: calculatePercent())));
 
       if (data >= afiliadosTemp.length) {
-        event.tablesNames.remove('Afiliado');
-        add(SyncStarted(event.usuario, event.tablesNames));
+        ConnectionSQLiteService.truncateTable(
+                'DificultadesAcceso_CentroAtencion')
+            .then((value) async {
+          dificultadesAccesoCATemp = [];
+          await syncDificultadesAccesoCA(event);
+        });
         return;
       }
 
@@ -2670,8 +2662,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= tiposDocumentoTemp.length) {
-        event.tablesNames.remove('Accesorias');
-        add(SyncStarted(event.usuario, event.tablesNames));
+        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: 'Sincronización completada',
+            counter: state.syncProgressModel.counter + 1,
+            total: totalAccesories)));
         return;
       }
       TipoDocumentoEntity tipoDocumentoTemp = tiposDocumentoTemp[data];

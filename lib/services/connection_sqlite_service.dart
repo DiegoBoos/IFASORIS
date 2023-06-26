@@ -45,7 +45,7 @@ class ConnectionSQLiteService {
       //Path donde se almacena la base de datos
       Directory documentDirectory = await getApplicationDocumentsDirectory();
 
-      path = join(documentDirectory.path, 'paap.db');
+      path = join(documentDirectory.path, 'ifasoris.db');
       print('Ruta base móvil: $path');
 
       _db ??= await databaseFactory.openDatabase(path,

@@ -9,9 +9,9 @@ abstract class SyncEvent extends Equatable {
 
 class SyncStarted extends SyncEvent {
   final UsuarioEntity usuario;
-  final List<String> tablesNames;
+  final String type;
 
-  const SyncStarted(this.usuario, this.tablesNames);
+  const SyncStarted(this.usuario, this.type);
 }
 
 class Downloading extends SyncEvent {

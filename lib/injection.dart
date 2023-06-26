@@ -1868,7 +1868,8 @@ void tipoCalendarioInit() {
 
 void grupoFamiliarInit() {
   // bloc
-  locator.registerFactory(() => AfiliadosGrupoFamiliarBloc());
+  locator.registerFactory(
+      () => AfiliadosGrupoFamiliarBloc(grupoFamiliarUsecaseDB: locator()));
 
   // bloc
   locator.registerFactory(

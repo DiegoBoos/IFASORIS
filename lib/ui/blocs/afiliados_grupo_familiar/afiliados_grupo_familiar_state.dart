@@ -11,7 +11,15 @@ abstract class AfiliadosGrupoFamiliarState extends Equatable {
 
 class AfiliadosGrupoFamiliarInitial extends AfiliadosGrupoFamiliarState {}
 
-class AfiliadosGrupoFamiliarLoading extends AfiliadosGrupoFamiliarState {}
+class GrupoFamiliarSubmissionSuccess extends AfiliadosGrupoFamiliarState {}
+
+class GrupoFamiliarSubmissionFailed extends AfiliadosGrupoFamiliarState {
+  final String message;
+
+  const GrupoFamiliarSubmissionFailed(this.message);
+}
+
+class AfiliadosGrupoFamiliarEmpty extends AfiliadosGrupoFamiliarState {}
 
 class AfiliadosGrupoFamiliarLoaded extends AfiliadosGrupoFamiliarState {
   final List<GrupoFamiliarEntity>? afiliadosGrupoFamiliarLoaded;

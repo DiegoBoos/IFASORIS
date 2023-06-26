@@ -9,14 +9,10 @@ abstract class GrupoFamiliarEvent extends Equatable {
 
 class GrupoFamiliarInit extends GrupoFamiliarEvent {}
 
-class GrupoFamiliarReset extends GrupoFamiliarEvent {}
-
-class GrupoFamiliarSubmitted extends GrupoFamiliarEvent {}
-
-class GetGrupoFamiliar extends GrupoFamiliarEvent {
+class GrupoFamiliarFamiliaChanged extends GrupoFamiliarEvent {
   final int familiaId;
 
-  const GetGrupoFamiliar(this.familiaId);
+  const GrupoFamiliarFamiliaChanged(this.familiaId);
 }
 
 class IsCompletedChanged extends GrupoFamiliarEvent {
@@ -25,52 +21,10 @@ class IsCompletedChanged extends GrupoFamiliarEvent {
   const IsCompletedChanged(this.isCompleted);
 }
 
-class FamiliaRegistroChanged extends GrupoFamiliarEvent {
-  final int familiaRegistroId;
-
-  const FamiliaRegistroChanged(this.familiaRegistroId);
-}
-
-class TipoDocumentoChanged extends GrupoFamiliarEvent {
-  final int tipoDocumentoId;
-
-  const TipoDocumentoChanged(this.tipoDocumentoId);
-}
-
-class DocumentoChanged extends GrupoFamiliarEvent {
-  final String documento;
-
-  const DocumentoChanged(this.documento);
-}
-
-class NombresApellidosChanged extends GrupoFamiliarEvent {
-  final String nombresApellidos;
-
-  const NombresApellidosChanged(this.nombresApellidos);
-}
-
-class GeneroChanged extends GrupoFamiliarEvent {
-  final int generoId;
-
-  const GeneroChanged(this.generoId);
-}
-
-class FechaNacChanged extends GrupoFamiliarEvent {
-  final String fechaNac;
-
-  const FechaNacChanged(this.fechaNac);
-}
-
-class EdadChanged extends GrupoFamiliarEvent {
-  final String edad;
-
-  const EdadChanged(this.edad);
-}
-
 class CursoVidaChanged extends GrupoFamiliarEvent {
-  final int cursoVida;
+  final int cursoVidaId;
 
-  const CursoVidaChanged(this.cursoVida);
+  const CursoVidaChanged(this.cursoVidaId);
 }
 
 class ParentescoChanged extends GrupoFamiliarEvent {
@@ -79,10 +33,10 @@ class ParentescoChanged extends GrupoFamiliarEvent {
   const ParentescoChanged(this.parentescoId);
 }
 
-class RegimenChanged extends GrupoFamiliarEvent {
-  final int regimenId;
+class TipoRegimenChanged extends GrupoFamiliarEvent {
+  final int tipoRegimenId;
 
-  const RegimenChanged(this.regimenId);
+  const TipoRegimenChanged(this.tipoRegimenId);
 }
 
 class NivelEducativoChanged extends GrupoFamiliarEvent {
@@ -104,9 +58,9 @@ class GrupoRiesgoChanged extends GrupoFamiliarEvent {
 }
 
 class EtniaChanged extends GrupoFamiliarEvent {
-  final int etniaId;
+  final int origenEtnico5602Id;
 
-  const EtniaChanged(this.etniaId);
+  const EtniaChanged(this.origenEtnico5602Id);
 }
 
 class PuebloIndigenaChanged extends GrupoFamiliarEvent {
@@ -121,8 +75,8 @@ class LenguaManejaChanged extends GrupoFamiliarEvent {
   const LenguaManejaChanged(this.lenguaManejaId);
 }
 
-class NombreLenguaMaternaChanged extends GrupoFamiliarEvent {
-  final int nombreLenguaMaternaId;
+class LenguaMaternaChanged extends GrupoFamiliarEvent {
+  final int lenguaMaternaId;
 
-  const NombreLenguaMaternaChanged(this.nombreLenguaMaternaId);
+  const LenguaMaternaChanged(this.lenguaMaternaId);
 }

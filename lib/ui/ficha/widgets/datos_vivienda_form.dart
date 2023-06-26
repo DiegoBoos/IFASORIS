@@ -136,7 +136,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
     _selectedTechosVivienda = await techoViviendaByDptoCubit
         .getTechosViviendaDB(widget.dimVivienda?.datoViviendaId);
 
-    if (_selectedTechosVivienda.isNotEmpty) {
+    if (_selectedTechosVivienda.isNotEmpty &&
+        _selectedTechosVivienda[0].otroTipoTecho != null) {
       _showOtherTechoVivienda = true;
     }
 
@@ -150,14 +151,16 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
     _selectedTiposSanitarioVivienda = await tipoSanitarioViviendaByDptoCubit
         .getTiposSanitarioViviendaDB(widget.dimVivienda?.datoViviendaId);
 
-    if (_selectedTiposSanitarioVivienda.isNotEmpty) {
+    if (_selectedTiposSanitarioVivienda.isNotEmpty &&
+        _selectedTiposSanitarioVivienda[0].otroTipoSanitario != null) {
       _showOtherTipoSanitario = true;
     }
 
     _selectedTiposCombustibleVivienda = await tipoCombustibleViviendaByDptoCubit
         .getTiposCombustibleViviendaDB(widget.dimVivienda?.datoViviendaId);
 
-    if (_selectedTiposCombustibleVivienda.isNotEmpty) {
+    if (_selectedTiposCombustibleVivienda.isNotEmpty &&
+        _selectedTiposCombustibleVivienda[0].otroTipoCombustible != null) {
       _showOtherTipoCombustible = true;
     }
 
@@ -883,7 +886,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                         e.tipoSanitarioViviendaId),
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    if (e.tipoSanitarioViviendaId == 3) {
+                                    if (e.tipoSanitarioViviendaId == 2) {
                                       _selectedTiposSanitarioVivienda = [
                                         LstTiposSanitario(
                                             tipoSanitarioViviendaId:
@@ -891,7 +894,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       ];
                                       _showOtherTipoSanitario = false;
                                     }
-                                    if (e.tipoSanitarioViviendaId == 6) {
+                                    if (e.tipoSanitarioViviendaId == 5) {
                                       _selectedTiposSanitarioVivienda = [
                                         LstTiposSanitario(
                                             tipoSanitarioViviendaId:
@@ -902,9 +905,9 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _selectedTiposSanitarioVivienda
                                           .removeWhere((element) =>
                                               element.tipoSanitarioViviendaId ==
-                                                  6 ||
+                                                  2 ||
                                               element.tipoSanitarioViviendaId ==
-                                                  3);
+                                                  5);
                                       _selectedTiposSanitarioVivienda.add(
                                           LstTiposSanitario(
                                               tipoSanitarioViviendaId:
@@ -1017,7 +1020,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                         e.tipoCombustibleViviendaId),
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    if (e.tipoCombustibleViviendaId == 8) {
+                                    if (e.tipoCombustibleViviendaId == 7) {
                                       _selectedTiposCombustibleVivienda = [
                                         LstTiposCombustible(
                                             tipoCombustibleViviendaId:
@@ -1029,7 +1032,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                           .removeWhere((element) =>
                                               element
                                                   .tipoCombustibleViviendaId ==
-                                              8);
+                                              7);
                                       _selectedTiposCombustibleVivienda.add(
                                           LstTiposCombustible(
                                               tipoCombustibleViviendaId:
@@ -1145,7 +1148,17 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                         e.factorRiesgoViviendaId),
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    if (value!) {
+                                    if (e.factorRiesgoViviendaId == 7) {
+                                      _selectedFactoresRiesgoVivienda = [
+                                        LstFactoresRiesgo(
+                                            factorRiesgoViviendaId:
+                                                e.factorRiesgoViviendaId)
+                                      ];
+                                    } else if (value!) {
+                                      _selectedFactoresRiesgoVivienda
+                                          .removeWhere((element) =>
+                                              element.factorRiesgoViviendaId ==
+                                              7);
                                       _selectedFactoresRiesgoVivienda.add(
                                           LstFactoresRiesgo(
                                               factorRiesgoViviendaId:

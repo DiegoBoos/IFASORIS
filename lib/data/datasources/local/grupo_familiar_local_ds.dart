@@ -6,38 +6,46 @@ import '../../../services/connection_sqlite_service.dart';
 import '../../models/grupo_familiar_model.dart';
 
 abstract class GrupoFamiliarLocalDataSource {
-  Future<int> saveGrupoFamiliar(GrupoFamiliarEntity grupoFamiliar);
+  Future<int> saveGrupoFamiliar(
+      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar);
 
-  Future<GrupoFamiliarEntity?> getGrupoFamiliar(int familiaId);
+  Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId);
 }
 
 class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   @override
-  Future<int> saveGrupoFamiliar(GrupoFamiliarEntity grupoFamiliar) async {
+  Future<int> saveGrupoFamiliar(
+      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar) async {
     final db = await ConnectionSQLiteService.db;
 
     try {
-      final res = await db.insert(
-        'Asp2_DatosVivienda',
-        grupoFamiliar.toJson(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      return res;
+      final batch = db.batch();
+
+      for (var afiliado in afiliadosGrupoFamiliar) {
+        batch.insert(
+          'Asp3_GrupoFamiliar',
+          afiliado.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+
+      final results = await batch.commit();
+      return results.length;
     } catch (e) {
-      throw const DatabaseFailure(['Error al guardar la vivienda']);
+      throw const DatabaseFailure(['Error al guardar el grupo familiar']);
     }
   }
 
   @override
-  Future<GrupoFamiliarEntity?> getGrupoFamiliar(int familiaId) async {
+  Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId) async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp2_DatosVivienda',
-        where: 'Familia_id = ?', whereArgs: [familiaId]);
+    final res = await db.rawQuery('''SELECT * FROM Asp3_GrupoFamiliar 
+           JOIN Afiliado ON Asp3_GrupoFamiliar.Afiliado_id = Afiliado.Afiliado_id
+           WHERE Asp3_GrupoFamiliar.Familia_id = $familiaId''');
 
-    if (res.isEmpty) return null;
+    final result = List<GrupoFamiliarModel>.from(
+        res.map((m) => GrupoFamiliarModel.fromJson(m))).toList();
 
-    final resultMap = {for (var e in res[0].entries) e.key: e.value};
-    final result = GrupoFamiliarModel.fromJson(resultMap);
     return result;
   }
 }

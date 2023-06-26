@@ -149,28 +149,9 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
     setState(() {});
   }
 
-  Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
-    return TextFormField(
-      controller: controller,
-      focusNode: focusNode,
-      decoration: const InputDecoration(
-        labelText: 'Text Field',
-      ),
-      validator: (value) {
-        if (value!.isEmpty) {
-          return 'Field cannot be empty';
-        }
-        return null;
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
-    if (_nombresMedTrad.isEmpty) {
-      _nombresMedTrad.add(LstNombreMedTradicional(nombreMedTradicional: ''));
-    }
 
     return Column(children: [
       const Divider(),

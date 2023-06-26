@@ -16,66 +16,20 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
       emit(initObject());
     });
 
-    on<GrupoFamiliarSubmitted>((event, emit) async {
-      final result =
-          await grupoFamiliarUsecaseDB.saveGrupoFamiliarUsecaseDB(state);
-      result.fold((failure) {
-        emit(state.copyWith(
-            formStatus:
-                GrupoFamiliarSubmissionFailed(failure.properties.first)));
-      }, (data) {
-        emit(state.copyWith(formStatus: GrupoFamiliarSubmissionSuccess()));
-      });
+    on<GrupoFamiliarFamiliaChanged>((event, emit) {
+      emit(state.copyWith(familiaId: event.familiaId));
     });
-
-    on<GetGrupoFamiliar>((event, emit) async {
-      final result = await grupoFamiliarUsecaseDB
-          .getGrupoFamiliarUsecaseDB(event.familiaId);
-      result.fold(
-          (failure) => emit(state.copyWith(
-              formStatus:
-                  GrupoFamiliarSubmissionFailed(failure.properties.first))),
-          (data) {
-        if (data != null) {
-          emit(data.copyWith(formStatus: GrupoFamiliarFormLoaded()));
-        } else {
-          emit(state.copyWith(formStatus: GrupoFamiliarFormEmpty()));
-        }
-      });
-    });
-
     on<IsCompletedChanged>((event, emit) {
       emit(state.copyWith(isCompleted: event.isCompleted));
     });
-    on<FamiliaRegistroChanged>((event, emit) {
-      emit(state.copyWith(familiaRegistroId: event.familiaRegistroId));
-    });
-    on<TipoDocumentoChanged>((event, emit) {
-      emit(state.copyWith(tipoDocumentoId: event.tipoDocumentoId));
-    });
-    on<DocumentoChanged>((event, emit) {
-      emit(state.copyWith(documento: event.documento));
-    });
-    on<NombresApellidosChanged>((event, emit) {
-      emit(state.copyWith(nombresApellidos: event.nombresApellidos));
-    });
-    on<GeneroChanged>((event, emit) {
-      emit(state.copyWith(generoId: event.generoId));
-    });
-    on<FechaNacChanged>((event, emit) {
-      emit(state.copyWith(fechaNac: event.fechaNac));
-    });
-    on<EdadChanged>((event, emit) {
-      emit(state.copyWith(edad: event.edad));
-    });
     on<CursoVidaChanged>((event, emit) {
-      emit(state.copyWith(cursoVida: event.cursoVida));
+      emit(state.copyWith(cursoVidaId: event.cursoVidaId));
     });
     on<ParentescoChanged>((event, emit) {
       emit(state.copyWith(parentescoId: event.parentescoId));
     });
-    on<RegimenChanged>((event, emit) {
-      emit(state.copyWith(regimenId: event.regimenId));
+    on<TipoRegimenChanged>((event, emit) {
+      emit(state.copyWith(tipoRegimenId: event.tipoRegimenId));
     });
     on<NivelEducativoChanged>((event, emit) {
       emit(state.copyWith(nivelEducativoId: event.nivelEducativoId));
@@ -87,7 +41,7 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
       emit(state.copyWith(grupoRiesgoId: event.grupoRiesgoId));
     });
     on<EtniaChanged>((event, emit) {
-      emit(state.copyWith(etniaId: event.etniaId));
+      emit(state.copyWith(origenEtnico5602Id: event.origenEtnico5602Id));
     });
     on<PuebloIndigenaChanged>((event, emit) {
       emit(state.copyWith(puebloIndigenaId: event.puebloIndigenaId));
@@ -95,8 +49,8 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
     on<LenguaManejaChanged>((event, emit) {
       emit(state.copyWith(lenguaManejaId: event.lenguaManejaId));
     });
-    on<NombreLenguaMaternaChanged>((event, emit) {
-      emit(state.copyWith(nombreLenguaMaternaId: event.nombreLenguaMaternaId));
+    on<LenguaMaternaChanged>((event, emit) {
+      emit(state.copyWith(lenguaMaternaId: event.lenguaMaternaId));
     });
   }
 }
