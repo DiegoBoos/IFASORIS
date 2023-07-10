@@ -23,16 +23,17 @@ class AfiliadosGrupoFamiliarEmpty extends AfiliadosGrupoFamiliarState {}
 
 class AfiliadosGrupoFamiliarLoaded extends AfiliadosGrupoFamiliarState {
   final List<GrupoFamiliarEntity>? afiliadosGrupoFamiliarLoaded;
+  final String message;
 
-  const AfiliadosGrupoFamiliarLoaded({this.afiliadosGrupoFamiliarLoaded})
+  const AfiliadosGrupoFamiliarLoaded(
+      {this.afiliadosGrupoFamiliarLoaded, this.message = ''})
       : super(afiliadosGrupoFamiliar: afiliadosGrupoFamiliarLoaded);
 }
 
 class AfiliadosGrupoFamiliarError extends AfiliadosGrupoFamiliarState {
   final String message;
-  final List<GrupoFamiliarEntity>? currentAfiliadosGrupoFamiliar;
 
-  const AfiliadosGrupoFamiliarError(this.message,
-      {this.currentAfiliadosGrupoFamiliar})
-      : super(afiliadosGrupoFamiliar: currentAfiliadosGrupoFamiliar);
+  const AfiliadosGrupoFamiliarError(
+    this.message,
+  );
 }

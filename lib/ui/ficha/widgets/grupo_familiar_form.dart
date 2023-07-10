@@ -39,15 +39,16 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
   String? _genero;
   DateTime? _fechaNac;
   String formattedFechaNac = '';
-  String? _edad;
+  int? _edad;
   int? _cursoVidaId;
   int? _parentescoId;
   int? _tipoRegimenId;
+  String? _codRegimenAfiliado;
   int? _nivelEducativoId;
   int? _ocupacionId;
   int? _grupoRiesgoId;
   int? _etniaId;
-  int? _puebloIndigenaId;
+  int? _puebloIde;
   int? _lenguaManejaId;
   int? _lenguaMaternaId;
 
@@ -62,18 +63,36 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
           '${widget.afiliadoGrupoFamiliar?.nombre1 ?? ''} ${widget.afiliadoGrupoFamiliar?.nombre2 ?? ''} ${widget.afiliadoGrupoFamiliar?.apellido1 ?? ''} ${widget.afiliadoGrupoFamiliar?.apellido2 ?? ''}';
       _genero = widget.afiliadoGrupoFamiliar?.genero;
       _fechaNac = widget.afiliadoGrupoFamiliar?.fechaNac;
+
       if (_fechaNac != null) {
         formattedFechaNac = DateFormat('dd-MM-yyyy').format(_fechaNac!);
-        calculateAge();
       }
-      _cursoVidaId = widget.afiliadoGrupoFamiliar?.cursoVidaId;
+
+      _edad = widget.afiliadoGrupoFamiliar?.edad;
+      if (_edad != null) {
+        calculateCursoVida(_edad!);
+      }
+
+      _codRegimenAfiliado = widget.afiliadoGrupoFamiliar?.codRegimenAfiliado;
+      if (_codRegimenAfiliado != null) {
+        if (_codRegimenAfiliado == "S") {
+          _tipoRegimenId = 1;
+        } else if (_codRegimenAfiliado == "C") {
+          _tipoRegimenId = 2;
+        } else if (_codRegimenAfiliado == "U") {
+          _tipoRegimenId = 3;
+        }
+        BlocProvider.of<GrupoFamiliarBloc>(context)
+            .add(TipoRegimenChanged(_tipoRegimenId!));
+      }
+
       _parentescoId = widget.afiliadoGrupoFamiliar?.parentescoId;
-      _tipoRegimenId = widget.afiliadoGrupoFamiliar?.tipoRegimenId;
       _nivelEducativoId = widget.afiliadoGrupoFamiliar?.nivelEducativoId;
       _ocupacionId = widget.afiliadoGrupoFamiliar?.ocupacionId;
       _grupoRiesgoId = widget.afiliadoGrupoFamiliar?.grupoRiesgoId;
       _etniaId = widget.afiliadoGrupoFamiliar?.origenEtnico5602Id;
-      _puebloIndigenaId = widget.afiliadoGrupoFamiliar?.puebloIndigenaId == 0
+      //TODO: validation pending
+      _puebloIde = widget.afiliadoGrupoFamiliar?.puebloIndigenaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar?.puebloIndigenaId;
       _lenguaManejaId = widget.afiliadoGrupoFamiliar?.lenguaManejaId == 0
@@ -85,23 +104,22 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
     });
   }
 
-  void calculateAge() {
-    final DateFormat format = DateFormat('dd-MM-yyyy');
-    final DateTime now = DateTime.now();
-    final DateTime dob = format.parseStrict(formattedFechaNac);
-    final int years = now.year - dob.year;
-    final int months = now.month - dob.month;
-    final int days = now.day - dob.day;
-
-    if (months < 0 || (months == 0 && days < 0)) {
-      setState(() {
-        _edad = (years - 1).toString();
-      });
-    } else {
-      setState(() {
-        _edad = years.toString();
-      });
+  void calculateCursoVida(int edad) {
+    if (edad >= 0 && edad <= 5) {
+      _cursoVidaId = 1;
+    } else if (edad >= 6 && edad <= 11) {
+      _cursoVidaId = 2;
+    } else if (edad >= 12 && edad <= 18) {
+      _cursoVidaId = 3;
+    } else if (edad >= 14 && edad <= 26) {
+      _cursoVidaId = 4;
+    } else if (edad >= 27 && edad <= 59) {
+      _cursoVidaId = 5;
+    } else if (edad >= 60) {
+      _cursoVidaId = 6;
     }
+    BlocProvider.of<GrupoFamiliarBloc>(context)
+        .add(CursoVidaChanged(_cursoVidaId!));
   }
 
   @override
@@ -151,11 +169,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     decoration: const InputDecoration(
                         labelText: 'Tipo documento',
                         border: OutlineInputBorder()),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _tipoDocumento = newValue;
-                      });
-                    },
+                    onChanged: null,
                     validator: (value) {
                       if (value == null) {
                         return 'Campo Requerido';
@@ -175,7 +189,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               decoration: const InputDecoration(
                   labelText: 'Numero de Documento',
                   border: OutlineInputBorder()),
-              /*  validator: (value) {
+              validator: (value) {
                 if (value != null && value.isEmpty) {
                   return 'Campo requerido';
                 }
@@ -187,7 +201,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                 }
 
                 return null;
-              }, */
+              },
             ),
             const SizedBox(height: 20),
             const Divider(),
@@ -224,18 +238,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                                 children: state.generosLoaded!
                                     .map(
                                       (e) => RadioListTile<String>(
-                                        title: Text(
-                                          e.descripcion,
-                                        ),
-                                        value: e.tipo,
-                                        groupValue: _genero,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            _genero = value;
-                                            formstate.didChange(value);
-                                          });
-                                        },
-                                      ),
+                                          title: Text(
+                                            e.descripcion,
+                                          ),
+                                          value: e.tipo,
+                                          groupValue: _genero,
+                                          onChanged: null),
                                     )
                                     .toList(),
                               ),
@@ -263,16 +271,20 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
             ),
             const SizedBox(height: 20),
             TextFormField(
+              enabled: false,
               initialValue: formattedFechaNac,
               decoration: const InputDecoration(
-                labelText: 'Fecha de nacimiento',
+                labelText: 'Fecha de Nacimiento',
                 border: OutlineInputBorder(),
               ),
+              onSaved: (String? value) {
+                //TODO:  grupoFamiliarBloc.add(FechaNacChanged(newValue!));
+              },
             ),
             const SizedBox(height: 20),
             TextFormField(
               enabled: false,
-              initialValue: _edad,
+              initialValue: _edad.toString(),
               decoration: const InputDecoration(
                 labelText: 'Edad',
                 border: OutlineInputBorder(),
@@ -302,12 +314,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     decoration: const InputDecoration(
                         labelText: 'Curso de vida',
                         border: OutlineInputBorder()),
-                    onChanged: (int? newValue) {
-                      setState(() {
-                        _cursoVidaId = newValue;
-                      });
-                      grupoFamiliarBloc.add(CursoVidaChanged(newValue!));
-                    },
+                    onChanged: null,
                     validator: (value) {
                       if (value == null) {
                         return 'Campo Requerido';
@@ -384,12 +391,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     decoration: const InputDecoration(
                         labelText: 'Tipo régimen',
                         border: OutlineInputBorder()),
-                    onChanged: (int? newValue) {
-                      setState(() {
-                        _tipoRegimenId = newValue;
-                      });
-                      grupoFamiliarBloc.add(TipoRegimenChanged(newValue!));
-                    },
+                    onChanged: null,
                     validator: (value) {
                       if (value == null) {
                         return 'Campo Requerido';
@@ -551,7 +553,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                       setState(() {
                         _etniaId = newValue;
                         if (_etniaId != 2) {
-                          _puebloIndigenaId = null;
+                          _puebloIde = null;
                           grupoFamiliarBloc.add(const PuebloIndigenaChanged(0));
 
                           _lenguaManejaId = null;
@@ -584,18 +586,19 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     textAlign: TextAlign.center,
                   ),
                   const Divider(),
-                  BlocBuilder<PuebloIndigenaByDptoCubit,
-                      PueblosIndigenasByDptoState>(
+                  BlocBuilder<PuebloIndigenaCubit, PueblosIndigenasState>(
                     builder: (context, state) {
-                      if (state is PueblosIndigenasByDptoLoaded) {
+                      if (state is PueblosIndigenasLoaded) {
                         return DropdownButtonFormField<int>(
+                          isExpanded: true,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          value: _puebloIndigenaId,
-                          items: state.pueblosIndigenasByDptoLoaded!
+                          value: _puebloIde,
+                          items: state.pueblosIndigenasLoaded!
                               .map(
                                 (puebloIndigena) => DropdownMenuItem<int>(
-                                  value: puebloIndigena.puebloIndigenaId,
-                                  child: Text(puebloIndigena.descripcion),
+                                  value: puebloIndigena.puebloIde,
+                                  child: Text(
+                                      puebloIndigena.TPS_CMD_IND_RSG_NOMBRE),
                                 ),
                               )
                               .toList(),
@@ -604,7 +607,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               border: OutlineInputBorder()),
                           onChanged: (int? newValue) {
                             setState(() {
-                              _puebloIndigenaId = newValue;
+                              _puebloIde = newValue;
                             });
                             grupoFamiliarBloc
                                 .add(PuebloIndigenaChanged(newValue!));
@@ -725,14 +728,15 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                         apellido2: widget.afiliadoGrupoFamiliar!.apellido2,
                         genero: widget.afiliadoGrupoFamiliar!.genero,
                         fechaNac: widget.afiliadoGrupoFamiliar!.fechaNac,
+                        edad: widget.afiliadoGrupoFamiliar!.edad,
+                        codRegimenAfiliado:
+                            widget.afiliadoGrupoFamiliar!.codRegimenAfiliado,
                         afiliadoId: widget.afiliadoGrupoFamiliar!.afiliadoId,
                         familiaId: afiliadoPrefsBloc.state.afiliado!.familiaId,
                         isCompleted: true);
 
-                    afiliadosGrupoFamiliarBloc
-                        .add(UpdateAfiliadoGrupoFamiliar(newEditAfiliado));
-
-                    Navigator.pop(context);
+                    afiliadosGrupoFamiliarBloc.add(
+                        CreateOrUpdateAfiliadoGrupoFamiliar(newEditAfiliado));
                   }
                 },
                 child: Container(

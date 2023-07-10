@@ -9,7 +9,6 @@ import '../../../data/models/leguminosa_model.dart';
 import '../../../data/models/tuberculo_platano_model.dart';
 import '../../../data/models/verdura_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
-import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
 import '../../cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
@@ -159,7 +158,10 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
 
     _selectedEspeciesAnimales = await especieAnimalByDptoCubit
         .getUbicacionEspeciesAnimalesDB(widget.dimUbicacion?.ubicacionId);
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -175,86 +177,51 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
           textAlign: TextAlign.center,
         ),
         const Divider(),
-        const SizedBox(height: 20),
-        BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-          builder: (context, state) {
-            if (state is OpcionesSiNoLoaded) {
-              return FormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                initialValue: _poseeChagra,
-                builder: (FormFieldState<int> formstate) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Posee chagra'),
-                      Column(
-                        children: state.opcionesSiNoLoaded!
-                            .map(
-                              (e) => RadioListTile(
-                                title: Text(
-                                  e.descripcion,
-                                ),
-                                value: e.opcionId,
-                                groupValue: _poseeChagra,
-                                onChanged: (int? value) {
-                                  setState(() {
-                                    _poseeChagra = value;
-                                    formstate.didChange(value);
-                                    if (_poseeChagra != 1) {
-                                      _selectedTuberculosPlatanos = [];
-                                      dimUbicacionBloc.add(
-                                          const TuberculosPlatanosChanged([]));
+        Column(
+          children: [
+            const Text('Posee chagra'),
+            RadioListTile(
+              title: const Text('Si'),
+              value: 0,
+              groupValue: _poseeChagra,
+              onChanged: (int? value) {
+                setState(() {
+                  _poseeChagra = value!;
+                });
+                dimUbicacionBloc.add(PoseeChagraChanged(value!));
+              },
+            ),
+            RadioListTile(
+              title: const Text('No'),
+              value: 1,
+              groupValue: _poseeChagra,
+              onChanged: (int? value) {
+                setState(() {
+                  _poseeChagra = value!;
+                  _selectedTuberculosPlatanos = [];
+                  dimUbicacionBloc.add(const TuberculosPlatanosChanged([]));
 
-                                      _selectedLeguminosasByDpto = [];
-                                      dimUbicacionBloc
-                                          .add(const LeguminosasChanged([]));
+                  _selectedLeguminosasByDpto = [];
+                  dimUbicacionBloc.add(const LeguminosasChanged([]));
 
-                                      _selectedHortalizasByDpto = [];
-                                      dimUbicacionBloc
-                                          .add(const HortalizasChanged([]));
+                  _selectedHortalizasByDpto = [];
+                  dimUbicacionBloc.add(const HortalizasChanged([]));
 
-                                      _selectedVerdurasByDpto = [];
-                                      dimUbicacionBloc
-                                          .add(const VerdurasChanged([]));
+                  _selectedVerdurasByDpto = [];
+                  dimUbicacionBloc.add(const VerdurasChanged([]));
 
-                                      _selectedFrutosByDpto = [];
-                                      dimUbicacionBloc
-                                          .add(const FrutosChanged([]));
+                  _selectedFrutosByDpto = [];
+                  dimUbicacionBloc.add(const FrutosChanged([]));
 
-                                      _selectedCerealesByDpto = [];
-                                      dimUbicacionBloc
-                                          .add(const CerealesChanged([]));
-                                    }
-                                  });
-                                },
-                              ),
-                            )
-                            .toList(),
-                      ),
-                      formstate.hasError
-                          ? const Text(
-                              'Seleccione una opción',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container(),
-                    ],
-                  );
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Seleccione una opción';
-                  }
-                  return null;
-                },
-                onSaved: (int? value) {
-                  dimUbicacionBloc.add(PoseeChagraChanged(value!));
-                },
-              );
-            }
-            return Container();
-          },
+                  _selectedCerealesByDpto = [];
+                  dimUbicacionBloc.add(const CerealesChanged([]));
+                  dimUbicacionBloc.add(PoseeChagraChanged(value));
+                });
+              },
+            ),
+          ],
         ),
-        if (_poseeChagra == 1)
+        if (_poseeChagra == 0)
           Column(
             children: [
               const Divider(),

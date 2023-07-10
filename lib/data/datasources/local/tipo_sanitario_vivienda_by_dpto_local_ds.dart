@@ -71,7 +71,7 @@ class TipoSanitarioViviendaByDptoLocalDataSourceImpl
       int? datoViviendaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosViviendaTiposSanitario',
-        where: 'DatoVivienda_id', whereArgs: [datoViviendaId]);
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
     final result = List<LstTiposSanitario>.from(
         res.map((m) => LstTiposSanitario.fromJson(m))).toList();
 

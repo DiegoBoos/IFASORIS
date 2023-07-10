@@ -72,7 +72,7 @@ class TipoCombustibleViviendaByDptoLocalDataSourceImpl
       int? datoViviendaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosViviendaTiposCombustible',
-        where: 'DatoVivienda_id', whereArgs: [datoViviendaId]);
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
     final result = List<LstTiposCombustible>.from(
         res.map((m) => LstTiposCombustible.fromJson(m))).toList();
 

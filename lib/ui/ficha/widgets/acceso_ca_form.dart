@@ -50,7 +50,10 @@ class AccesoCAFormState extends State<AccesoCAForm> {
     );
     _selectedDificultadesAccesoCA = await dificultadAccesoCACubit
         .getUbicacionDificultadesAccesoCADB(widget.dimUbicacion?.ubicacionId);
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

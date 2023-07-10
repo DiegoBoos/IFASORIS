@@ -71,7 +71,7 @@ class FactorRiesgoViviendaByDptoLocalDataSourceImpl
       int? datoViviendaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosViviendaFactoresRiesgo',
-        where: 'DatoVivienda_id', whereArgs: [datoViviendaId]);
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
     final result = List<LstFactoresRiesgo>.from(
         res.map((m) => LstFactoresRiesgo.fromJson(m))).toList();
 

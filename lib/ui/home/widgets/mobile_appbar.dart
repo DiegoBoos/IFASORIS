@@ -15,8 +15,8 @@ class MobileAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-    final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
     final usuario = authBloc.state.usuario!;
+    final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
     final internetCubit = BlocProvider.of<InternetCubit>(context);
 
     return MultiBlocListener(

@@ -2,22 +2,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../domain/entities/pueblo_indigena_entity.dart';
-import '../../../domain/usecases/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/pueblo_indigena/pueblo_indigena_db_usecase.dart';
 
 part 'pueblo_indigena_by_dpto_state.dart';
 
-class PuebloIndigenaByDptoCubit extends Cubit<PueblosIndigenasByDptoState> {
-  final PuebloIndigenaByDptoUsecaseDB puebloIndigenaByDptoUsecaseDB;
+class PuebloIndigenaCubit extends Cubit<PueblosIndigenasState> {
+  final PuebloIndigenaUsecaseDB puebloIndigenaUsecaseDB;
 
-  PuebloIndigenaByDptoCubit({required this.puebloIndigenaByDptoUsecaseDB})
-      : super(PueblosIndigenasByDptoInitial());
+  PuebloIndigenaCubit({required this.puebloIndigenaUsecaseDB})
+      : super(PueblosIndigenasInitial());
 
-  void getPueblosIndigenasByDptoDB() async {
-    final result = await puebloIndigenaByDptoUsecaseDB
-        .getPueblosIndigenasByDptoUsecaseDB();
+  void getPueblosIndigenasDB() async {
+    final result = await puebloIndigenaUsecaseDB.getPueblosIndigenasUsecaseDB();
     result.fold(
-        (failure) =>
-            emit(PueblosIndigenasByDptoError(failure.properties.first)),
-        (data) => emit(PueblosIndigenasByDptoLoaded(data)));
+        (failure) => emit(PueblosIndigenasError(failure.properties.first)),
+        (data) => emit(PueblosIndigenasLoaded(data)));
   }
 }

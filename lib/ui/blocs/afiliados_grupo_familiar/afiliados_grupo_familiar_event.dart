@@ -19,14 +19,14 @@ class SaveAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   const SaveAfiliadosGrupoFamiliar(this.afiliadosGrupoFamiliar);
 }
 
-class SaveAfiliadoGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
+class CreateOrUpdateAfiliadoGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   final GrupoFamiliarEntity newAfiliado;
 
-  const SaveAfiliadoGrupoFamiliar(this.newAfiliado);
+  const CreateOrUpdateAfiliadoGrupoFamiliar(this.newAfiliado);
 }
 
-class UpdateAfiliadoGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
-  final GrupoFamiliarEntity newAfiliado;
+class ErrorMessage extends AfiliadosGrupoFamiliarEvent {
+  final String message;
 
-  const UpdateAfiliadoGrupoFamiliar(this.newAfiliado);
+  const ErrorMessage(this.message);
 }

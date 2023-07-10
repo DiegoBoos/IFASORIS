@@ -1,0 +1,10 @@
+export 'package:ifasoris/domain/usecases/pueblo_indigena/pueblo_indigena_usecase.dart';
+export 'package:ifasoris/domain/usecases/pueblo_indigena/pueblo_indigena_db_usecase.dart';
+export 'package:ifasoris/domain/repositories/pueblo_indigena/pueblo_indigena_repository.dart';
+export 'package:ifasoris/domain/repositories/pueblo_indigena/pueblo_indigena_repository_db.dart';
+export 'package:ifasoris/domain/entities/pueblo_indigena_entity.dart';
+export 'package:ifasoris/ui/cubits/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_cubit.dart';
+export 'package:ifasoris/data/repositories/pueblo_indigena/pueblo_indigena_repository.dart';
+export 'package:ifasoris/data/repositories/pueblo_indigena/pueblo_indigena_repository_db.dart';
+export 'package:ifasoris/data/datasources/remote/pueblo_indigena_remote_ds.dart';
+export 'package:ifasoris/data/datasources/local/pueblo_indigena_local_ds.dart';

@@ -10,6 +10,7 @@ import 'ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import 'ui/blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import 'ui/blocs/auth/auth_bloc.dart';
 import 'ui/blocs/dim_vivienda/dim_vivienda_bloc.dart';
+import 'ui/blocs/encuesta/encuesta_bloc.dart';
 import 'ui/blocs/familia/familia_bloc.dart';
 import 'ui/blocs/ficha/ficha_bloc.dart';
 import 'ui/blocs/grupo_familiar/grupo_familiar_bloc.dart';
@@ -224,6 +225,9 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<AfiliadosGrupoFamiliarBloc>(),
           ),
           BlocProvider(
+            create: (_) => di.locator<EncuestaBloc>(),
+          ),
+          BlocProvider(
             create: (_) => di.locator<GrupoFamiliarBloc>(),
           ),
           BlocProvider(
@@ -254,7 +258,7 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<ParentescoCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<PuebloIndigenaByDptoCubit>(),
+            create: (_) => di.locator<PuebloIndigenaCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<RegimenCubit>(),

@@ -5,12 +5,13 @@ import 'package:intl/intl.dart';
 import '../../../data/models/medio_comunicacion_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/usecases/estado_via/estado_via_exports.dart';
+import '../../../domain/usecases/tipo_documento/tipo_documento_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
-import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
 class DatosUbicacionForm extends StatefulWidget {
   const DatosUbicacionForm({super.key, this.dimUbicacion});
@@ -22,16 +23,17 @@ class DatosUbicacionForm extends StatefulWidget {
 }
 
 class DatosUbicacionFormState extends State<DatosUbicacionForm> {
-  DateTime? _fechafiliacion;
-  String formattedFecha = '';
+  final DateTime _fechaDiligenciamiento = DateTime.now();
+  String formattedFechaDiligenciamiento = '';
   String? _nomDptoAfiliado;
   String? _nomMpioAfiliado;
   String? _direccion;
-  String? _barrio;
   String? _codZonaAfiliado;
   String? _ipsPrimariaAfiliado;
   String? _documento;
   final _nombreRecibeVisitaCtrl = TextEditingController();
+  String? _tipoDocumentoRecibeVisita;
+  final _documentoRecibeVisitaCtrl = TextEditingController();
   final _telefonoFijoCtrl = TextEditingController();
   final _telefonocel1Ctrl = TextEditingController();
   final _telefonocel2Ctrl = TextEditingController();
@@ -55,37 +57,38 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   void initState() {
     super.initState();
 
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    final usuario = authBloc.state.usuario!;
+
     final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
       context,
     );
 
     final afiliado = afiliadoPrefsBloc.state.afiliado!;
 
-    _fechafiliacion = afiliado.fechafiliacion;
-    if (_fechafiliacion != null) {
-      formattedFecha = DateFormat('yyyy-MM-dd').format(_fechafiliacion!);
-    }
-
-    _nomDptoAfiliado = afiliado.nomDptoAfiliado;
-    _nomMpioAfiliado = afiliado.nomMpioAfiliado;
-    _direccion = afiliado.direccion;
-    //TODO: _barrio = afiliado.barrio;
-    _codZonaAfiliado = afiliado.codZonaAfiliado;
-    _ipsPrimariaAfiliado = afiliado.ipsPrimariaAfiliado;
-    _documento = afiliado.documento;
-    _telefonoFijoCtrl.text = afiliado.telefonofijo ?? '';
-    _telefonocel1Ctrl.text = afiliado.telefonocel1 ?? '';
-    _telefonocel2Ctrl.text = afiliado.telefonocel2 ?? '';
-
     setState(() {
+      formattedFechaDiligenciamiento =
+          DateFormat('dd-MM-yyyy').format(_fechaDiligenciamiento);
+      _nomDptoAfiliado = afiliado.nomDptoAfiliado;
+      _nomMpioAfiliado = afiliado.nomMpioAfiliado;
+      _direccion = afiliado.direccion;
+      _codZonaAfiliado = afiliado.codZonaAfiliado;
+      _ipsPrimariaAfiliado = afiliado.ipsPrimariaAfiliado;
+      _documento = afiliado.documento;
+      _telefonoFijoCtrl.text = afiliado.telefonofijo ?? '';
+      _telefonocel1Ctrl.text = afiliado.telefonocel1 ?? '';
+      _telefonocel2Ctrl.text = afiliado.telefonocel2 ?? '';
+
       _nombreRecibeVisitaCtrl.text =
-          widget.dimUbicacion?.nombreRecibeVisita ?? '';
+          widget.dimUbicacion?.nombreRecibeVisita ?? usuario.userName;
+      _tipoDocumentoRecibeVisita = widget.dimUbicacion?.tipoDocRecibeVisita;
+      _documentoRecibeVisitaCtrl.text =
+          widget.dimUbicacion?.documentoRecibeVisita ?? '';
       _perteneceResguardo = widget.dimUbicacion?.perteneceResguardo;
       _autoridadIndigena = widget.dimUbicacion?.autoridadIndigenaId;
       _viaAcceso = widget.dimUbicacion?.viaAccesoId;
       _estadoVia = widget.dimUbicacion?.estadoViaId;
     });
-
     getOptions();
   }
 
@@ -95,7 +98,10 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
     );
     _selectedMediosComunicacion = await medioComunicacionCubit
         .getUbicacionMediosComunicacionDB(widget.dimUbicacion?.ubicacionId);
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -114,16 +120,87 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         ),
         const SizedBox(height: 20),
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: _nombreRecibeVisitaCtrl,
+          decoration: const InputDecoration(
+            labelText: 'Nombre de quien recibe la visita',
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Campo Requerido';
+            }
+            return null;
+          },
+          onSaved: (String? value) {
+            dimUbicacionBloc.add(NombreRecibeVisitaChanged(value!));
+          },
+        ),
+        const SizedBox(height: 20),
+        BlocBuilder<TipoDocumentoCubit, TiposDocumentoState>(
+          builder: (context, state) {
+            if (state is TiposDocumentoLoaded) {
+              return DropdownButtonFormField<String>(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                value: _tipoDocumentoRecibeVisita,
+                items: state.tiposDocumento!
+                    .map(
+                      (tipoDocumento) => DropdownMenuItem<String>(
+                        value: tipoDocumento.tipo,
+                        child: Text(tipoDocumento.descripcion),
+                      ),
+                    )
+                    .toList(),
+                decoration: const InputDecoration(
+                    labelText: 'Tipo documento de quien recibe la visita',
+                    border: OutlineInputBorder()),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _tipoDocumentoRecibeVisita = newValue;
+                  });
+                  dimUbicacionBloc.add(TipoDocRecibeVisitaChanged(newValue!));
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo Requerido';
+                  }
+                  return null;
+                },
+              );
+            }
+            return Container();
+          },
+        ),
+        const SizedBox(height: 20),
+        TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: _documentoRecibeVisitaCtrl,
+          decoration: const InputDecoration(
+            labelText: 'Documento de quien recibe la visita',
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Campo Requerido';
+            }
+            return null;
+          },
+          onSaved: (String? value) {
+            dimUbicacionBloc.add(DocumentoRecibeVisitaChanged(value!));
+          },
+        ),
+        /*  const SizedBox(height: 20),
+        TextFormField(
           enabled: false,
-          initialValue: formattedFecha,
+          initialValue: formattedFechaDiligenciamiento,
           decoration: const InputDecoration(
             labelText: 'Fecha de Diligenciamiento',
             border: OutlineInputBorder(),
           ),
           onSaved: (String? value) {
-            //TODO: dimUbicacionBloc.changeFecha(newValue);
+            //TODO: dimUbicacionBloc.add(FechaDiligenciamientoChanged(newValue!));
           },
-        ),
+        ), */
         const SizedBox(height: 20),
         Row(
           children: [
@@ -154,26 +231,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               labelText: 'Dirección', border: OutlineInputBorder()),
         ),
         const SizedBox(height: 20),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                enabled: false,
-                initialValue: _barrio,
-                decoration: const InputDecoration(
-                    labelText: 'Barrio', border: OutlineInputBorder()),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: TextFormField(
-                enabled: false,
-                initialValue: _codZonaAfiliado,
-                decoration: const InputDecoration(
-                    labelText: 'Zona', border: OutlineInputBorder()),
-              ),
-            ),
-          ],
+        TextFormField(
+          enabled: false,
+          initialValue: _codZonaAfiliado,
+          decoration: const InputDecoration(
+              labelText: 'Zona', border: OutlineInputBorder()),
         ),
         const SizedBox(height: 20),
         TextFormField(
@@ -189,16 +251,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           decoration: const InputDecoration(
               labelText: 'Numero de Documento', border: OutlineInputBorder()),
         ),
-        const SizedBox(height: 20),
-        TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            controller: _nombreRecibeVisitaCtrl,
-            decoration: const InputDecoration(
-                labelText: 'Nombre de quien recibe la visita',
-                border: OutlineInputBorder()),
-            onSaved: (String? newValue) {
-              dimUbicacionBloc.add(NombreRecibeVisitaChanged(newValue!));
-            }),
         const SizedBox(height: 20),
         Row(
           children: [
@@ -230,64 +282,31 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           ],
         ),
         const SizedBox(height: 20),
-        BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-          builder: (context, state) {
-            if (state is OpcionesSiNoLoaded) {
-              return Column(
-                children: [
-                  FormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    initialValue: _perteneceResguardo,
-                    builder: (FormFieldState<int> formstate) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Pertenece a algún resguardo indígena'),
-                          Column(
-                            children: state.opcionesSiNoLoaded!
-                                .map(
-                                  (e) => RadioListTile(
-                                    title: Text(
-                                      e.descripcion,
-                                    ),
-                                    value: e.opcionId,
-                                    groupValue: _perteneceResguardo,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        _perteneceResguardo = value;
-                                        formstate.didChange(value);
-                                      });
-                                    },
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                          formstate.hasError
-                              ? const Text(
-                                  'Seleccione una opción',
-                                  style: TextStyle(color: Colors.red),
-                                )
-                              : Container(),
-                        ],
-                      );
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Seleccione una opción';
-                      }
-                      return null;
-                    },
-                    onSaved: (int? value) {
-                      dimUbicacionBloc.add(PerteneceResguardoChanged(value!));
-                    },
-                  ),
-                ],
-              );
-            }
-            return Container();
+        const Text('Pertenece a algún resguardo indígena'),
+        RadioListTile(
+          title: const Text('Si'),
+          value: 0,
+          groupValue: _perteneceResguardo,
+          onChanged: (int? value) {
+            setState(() {
+              _perteneceResguardo = value!;
+              dimUbicacionBloc.add(PerteneceResguardoChanged(value));
+            });
           },
         ),
-        const SizedBox(height: 20),
+        RadioListTile(
+          title: const Text('No'),
+          value: 1,
+          groupValue: _perteneceResguardo,
+          onChanged: (int? value) {
+            setState(() {
+              _perteneceResguardo = value!;
+              dimUbicacionBloc.add(PerteneceResguardoChanged(value));
+            });
+          },
+        ),
+
+        /*  const SizedBox(height: 20),
         TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: _nombreResguardoIndigenaCtrl,
@@ -295,8 +314,8 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                 labelText: 'Nombre del resguardo indígena',
                 border: OutlineInputBorder()),
             onSaved: (String? newValue) {
-              //TODO: dimUbicacionBloc.nombreResguardoIndigena(newValue);
-            }),
+              //TODO: dimUbicacionBloc.add(NombreResguardoChanged(newValue!));
+            }), */
         const SizedBox(height: 20),
         BlocBuilder<AutoridadIndigenaCubit, AutoridadesIndigenasState>(
           builder: (context, state) {

@@ -16,6 +16,7 @@ class GrupoFamiliarEntity {
   int? cursoVidaId;
   int? parentescoId;
   int? tipoRegimenId;
+  String? codRegimenAfiliado;
   int? nivelEducativoId;
   int? ocupacionId;
   int? grupoRiesgoId;
@@ -43,6 +44,7 @@ class GrupoFamiliarEntity {
       this.cursoVidaId,
       this.parentescoId,
       this.tipoRegimenId,
+      this.codRegimenAfiliado,
       this.nivelEducativoId,
       this.ocupacionId,
       this.grupoRiesgoId,
@@ -63,12 +65,14 @@ class GrupoFamiliarEntity {
     String? apellido2,
     String? genero,
     DateTime? fechaNac,
+    int? edad,
     int? grupoFamiliarId,
     int? familiaId,
     int? afiliadoId,
     int? cursoVidaId,
     int? parentescoId,
     int? tipoRegimenId,
+    String? codRegimenAfiliado,
     int? nivelEducativoId,
     int? ocupacionId,
     int? grupoRiesgoId,
@@ -88,12 +92,14 @@ class GrupoFamiliarEntity {
         apellido2: apellido2 ?? this.apellido2,
         genero: genero ?? this.genero,
         fechaNac: fechaNac ?? this.fechaNac,
+        edad: edad ?? this.edad,
         grupoFamiliarId: grupoFamiliarId ?? this.grupoFamiliarId,
         familiaId: familiaId ?? this.familiaId,
         afiliadoId: afiliadoId ?? this.afiliadoId,
         cursoVidaId: cursoVidaId ?? this.cursoVidaId,
         parentescoId: parentescoId ?? this.parentescoId,
         tipoRegimenId: tipoRegimenId ?? this.tipoRegimenId,
+        codRegimenAfiliado: codRegimenAfiliado ?? this.codRegimenAfiliado,
         nivelEducativoId: nivelEducativoId ?? this.nivelEducativoId,
         ocupacionId: ocupacionId ?? this.ocupacionId,
         grupoRiesgoId: grupoRiesgoId ?? this.grupoRiesgoId,

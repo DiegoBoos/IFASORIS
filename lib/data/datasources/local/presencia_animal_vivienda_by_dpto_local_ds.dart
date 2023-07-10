@@ -72,7 +72,7 @@ class PresenciaAnimalViviendaByDptoLocalDataSourceImpl
       int? datoViviendaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosViviendaPresenciaAnimales',
-        where: 'DatoVivienda_id', whereArgs: [datoViviendaId]);
+        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
     final result = List<LstPresenciaAnimal>.from(
         res.map((m) => LstPresenciaAnimal.fromJson(m))).toList();
 

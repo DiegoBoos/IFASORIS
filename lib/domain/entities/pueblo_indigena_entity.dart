@@ -1,17 +1,19 @@
+// ignore_for_file: non_constant_identifier_names
+
 class PuebloIndigenaEntity {
-  int puebloIndigenaId;
-  String descripcion;
-  int departamentoIde;
+  int puebloIde;
+  String TPS_CMD_IND_RSG_ID;
+  String TPS_CMD_IND_RSG_NOMBRE;
 
   PuebloIndigenaEntity({
-    required this.puebloIndigenaId,
-    required this.descripcion,
-    required this.departamentoIde,
+    required this.puebloIde,
+    required this.TPS_CMD_IND_RSG_ID,
+    required this.TPS_CMD_IND_RSG_NOMBRE,
   });
 
   Map<String, dynamic> toJson() => {
-        "PuebloIndigena_id": puebloIndigenaId,
-        "Descripcion": descripcion,
-        "Departamento_Ide": departamentoIde,
+        "Pueblo_ide": puebloIde,
+        "TPS_CMD_IND_RSG_ID": TPS_CMD_IND_RSG_ID,
+        "TPS_CMD_IND_RSG_NOMBRE": TPS_CMD_IND_RSG_NOMBRE,
       };
 }

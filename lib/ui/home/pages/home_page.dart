@@ -102,13 +102,11 @@ class _HomePageState extends State<HomePage> {
           builder: (context, state) {
             if (state is SyncDownloading || state is SyncPercentageInProgress) {
               return LoadingPage(
-                  title: state.syncProgressModel.title,
                   text:
                       '${state.syncProgressModel.title} ${state.syncProgressModel.percent}%');
             }
             if (state is SyncIncrementInProgress) {
               return LoadingPage(
-                  title: state.syncProgressModel.title,
                   text:
                       '${state.syncProgressModel.title} ${state.syncProgressModel.counter} / ${state.syncProgressModel.total}');
             } else {
@@ -121,7 +119,6 @@ class _HomePageState extends State<HomePage> {
                       : PreferredSize(
                           preferredSize: Size.fromHeight(size.height * 0.08),
                           child: const MobileAppBar()),
-                  //drawer: const AppDrawer(),
                   body: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

@@ -50,7 +50,6 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   String? _otroTipoSanitario;
   bool _showOtherTipoCombustible = false;
   String? _otroTipoCombustible;
-  bool _showOtherPresenciaAnimal = false;
 
   String? _validateTechosVivienda() {
     if (_selectedTechosVivienda.isEmpty) {
@@ -171,7 +170,10 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
         await presenciaAnimalViviendaByDptoCubit
             .getPresenciasAnimalesViviendaDB(
                 widget.dimVivienda?.datoViviendaId);
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -464,6 +466,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _selectedTechosVivienda.add(LstTecho(
                                           techoViviendaId: e.techoViviendaId));
                                       _showOtherTechoVivienda = false;
+                                      _otroTipoTecho = null;
                                     } else {
                                       _selectedTechosVivienda.removeWhere(
                                         (element) =>
@@ -893,8 +896,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 e.tipoSanitarioViviendaId)
                                       ];
                                       _showOtherTipoSanitario = false;
-                                    }
-                                    if (e.tipoSanitarioViviendaId == 5) {
+                                      _otroTipoSanitario = null;
+                                    } else if (e.tipoSanitarioViviendaId == 5) {
                                       _selectedTiposSanitarioVivienda = [
                                         LstTiposSanitario(
                                             tipoSanitarioViviendaId:
@@ -936,34 +939,28 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               const VerticalDivider(),
                           ],
                         );
-                      })
-                            ..add(
-                              _showOtherTipoSanitario
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: TextFormField(
-                                        initialValue:
-                                            _selectedTiposSanitarioVivienda[0]
-                                                .otroTipoSanitario,
-                                        decoration: CustomInputDecoration
-                                            .inputDecoration(
-                                                hintText: 'Otro',
-                                                labelText: 'Cuál'),
-                                        validator: (value) {
-                                          if (value == null) {
-                                            return 'Campo requerido';
-                                          }
-                                          return null;
-                                        },
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            _otroTipoSanitario = value;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                            )),
+                      })),
+                      if (_showOtherTipoSanitario)
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            initialValue: _selectedTiposSanitarioVivienda[0]
+                                .otroTipoSanitario,
+                            decoration: CustomInputDecoration.inputDecoration(
+                                hintText: 'Otro', labelText: 'Cuál'),
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Campo requerido';
+                              }
+                              return null;
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _otroTipoSanitario = value;
+                              });
+                            },
+                          ),
+                        ),
                       Text(
                         _validateTiposSanitariosVivienda() ?? '',
                         style: const TextStyle(color: Colors.red),
@@ -1038,6 +1035,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               tipoCombustibleViviendaId:
                                                   e.tipoCombustibleViviendaId));
                                       _showOtherTipoCombustible = false;
+                                      _otroTipoSanitario = null;
                                     } else {
                                       _selectedTiposCombustibleVivienda
                                           .removeWhere(
@@ -1061,34 +1059,28 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               const VerticalDivider(),
                           ],
                         );
-                      })
-                            ..add(
-                              _showOtherTipoCombustible
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: TextFormField(
-                                        initialValue:
-                                            _selectedTiposCombustibleVivienda[0]
-                                                .otroTipoCombustible,
-                                        decoration: CustomInputDecoration
-                                            .inputDecoration(
-                                                hintText: 'Otro',
-                                                labelText: 'Cuál'),
-                                        validator: (value) {
-                                          if (value == null) {
-                                            return 'Campo requerido';
-                                          }
-                                          return null;
-                                        },
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            _otroTipoCombustible = value;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                            )),
+                      })),
+                      if (_showOtherTipoCombustible)
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            initialValue: _selectedTiposCombustibleVivienda[0]
+                                .otroTipoCombustible,
+                            decoration: CustomInputDecoration.inputDecoration(
+                                hintText: 'Otro', labelText: 'Cuál'),
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Campo requerido';
+                              }
+                              return null;
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _otroTipoCombustible = value;
+                              });
+                            },
+                          ),
+                        ),
                       Text(
                         _validateTiposCombustibleVivienda() ?? '',
                         style: const TextStyle(color: Colors.red),
@@ -1243,27 +1235,11 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                         e.presenciaAnimalViviendaId),
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    formstate.didChange(
-                                        _selectedPresenciaAnimalesVivienda);
-                                    if (e.presenciaAnimalViviendaId == 5) {
-                                      _selectedPresenciaAnimalesVivienda = [
-                                        LstPresenciaAnimal(
-                                            presenciaAnimalViviendaId:
-                                                e.presenciaAnimalViviendaId)
-                                      ];
-                                      _showOtherPresenciaAnimal = true;
-                                    } else if (value!) {
-                                      //TODO: falta opcion otro
-                                      _selectedPresenciaAnimalesVivienda
-                                          .removeWhere((element) =>
-                                              element
-                                                  .presenciaAnimalViviendaId ==
-                                              5);
+                                    if (value!) {
                                       _selectedPresenciaAnimalesVivienda.add(
                                           LstPresenciaAnimal(
                                               presenciaAnimalViviendaId:
                                                   e.presenciaAnimalViviendaId));
-                                      _showOtherPresenciaAnimal = false;
                                     } else {
                                       _selectedPresenciaAnimalesVivienda
                                           .removeWhere(
@@ -1287,34 +1263,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               const VerticalDivider(),
                           ],
                         );
-                      })
-                            ..add(
-                              _showOtherPresenciaAnimal
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: TextFormField(
-                                        initialValue: '',
-                                        decoration: CustomInputDecoration
-                                            .inputDecoration(
-                                                hintText: 'Otro',
-                                                labelText: 'Cuál'),
-                                        validator: (value) {
-                                          if (value == null) {
-                                            return 'Campo requerido';
-                                          }
-                                          return null;
-                                        },
-                                        onSaved: (String? value) {
-                                          dimViviendaBloc.add(
-                                              PresenciaAnimalesViviendaChanged([
-                                            LstPresenciaAnimal(
-                                                otroPresenciaAnimal: value!)
-                                          ]));
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                            )),
+                      })),
                       formstate.hasError
                           ? const Text(
                               'Seleccione una opción',

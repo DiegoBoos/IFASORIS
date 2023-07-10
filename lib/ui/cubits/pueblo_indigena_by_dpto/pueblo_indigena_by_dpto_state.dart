@@ -1,26 +1,26 @@
 part of 'pueblo_indigena_by_dpto_cubit.dart';
 
-abstract class PueblosIndigenasByDptoState extends Equatable {
-  final List<PuebloIndigenaEntity>? pueblosIndigenasByDpto;
-  const PueblosIndigenasByDptoState({this.pueblosIndigenasByDpto});
+abstract class PueblosIndigenasState extends Equatable {
+  final List<PuebloIndigenaEntity>? pueblosIndigenas;
+  const PueblosIndigenasState({this.pueblosIndigenas});
 
   @override
   List<Object> get props => [];
 }
 
-class PueblosIndigenasByDptoInitial extends PueblosIndigenasByDptoState {}
+class PueblosIndigenasInitial extends PueblosIndigenasState {}
 
-class PueblosIndigenasByDptoLoading extends PueblosIndigenasByDptoState {}
+class PueblosIndigenasLoading extends PueblosIndigenasState {}
 
-class PueblosIndigenasByDptoLoaded extends PueblosIndigenasByDptoState {
-  final List<PuebloIndigenaEntity>? pueblosIndigenasByDptoLoaded;
+class PueblosIndigenasLoaded extends PueblosIndigenasState {
+  final List<PuebloIndigenaEntity>? pueblosIndigenasLoaded;
 
-  const PueblosIndigenasByDptoLoaded(this.pueblosIndigenasByDptoLoaded)
-      : super(pueblosIndigenasByDpto: pueblosIndigenasByDptoLoaded);
+  const PueblosIndigenasLoaded(this.pueblosIndigenasLoaded)
+      : super(pueblosIndigenas: pueblosIndigenasLoaded);
 }
 
-class PueblosIndigenasByDptoError extends PueblosIndigenasByDptoState {
+class PueblosIndigenasError extends PueblosIndigenasState {
   final String message;
 
-  const PueblosIndigenasByDptoError(this.message);
+  const PueblosIndigenasError(this.message);
 }

@@ -35,8 +35,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           },
           body: jsonEncode(formData));
 
-      final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
+        final decodedResp = jsonDecode(resp.body);
         final token = decodedResp['Result']['Token'];
         final resultMap = decodedResp['Result']['Usuario'];
         resultMap['Password'] = usuario.password;
@@ -51,7 +51,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           throw const ServerFailure(['Error de autenticación']);
         }
       } else {
-        throw const ServerFailure(['Usuario/contraseña no son correctos']);
+        if (resp.body != '') {
+          final decodedErrorResp = jsonDecode(resp.body);
+          throw ServerFailure(decodedErrorResp['ErrorMessages']);
+        } else {
+          throw const ServerFailure(['Excepción no controlada']);
+        }
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

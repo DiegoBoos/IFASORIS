@@ -34,7 +34,7 @@ import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import '../../../domain/usecases/parentesco/parentesco_exports.dart';
 import '../../../domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
-import '../../../domain/usecases/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_exports.dart';
+import '../../../domain/usecases/pueblo_indigena/pueblo_indigena_exports.dart';
 import '../../../domain/usecases/regimen/regimen_exports.dart';
 import '../../../domain/usecases/resguardo_by_dpto/resguardo_by_dpto_exports.dart';
 import '../../../domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
@@ -161,8 +161,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final OcupacionUsecaseDB ocupacionUsecaseDB;
   final ParentescoUsecase parentescoUsecase;
   final ParentescoUsecaseDB parentescoUsecaseDB;
-  final PuebloIndigenaByDptoUsecase puebloIndigenaByDptoUsecase;
-  final PuebloIndigenaByDptoUsecaseDB puebloIndigenaByDptoUsecaseDB;
+  final PuebloIndigenaUsecase puebloIndigenaUsecase;
+  final PuebloIndigenaUsecaseDB puebloIndigenaUsecaseDB;
   final RegimenUsecase regimenUsecase;
   final RegimenUsecaseDB regimenUsecaseDB;
   final TipoDocumentoUsecase tipoDocumentoUsecase;
@@ -316,8 +316,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.ocupacionUsecaseDB,
     required this.parentescoUsecase,
     required this.parentescoUsecaseDB,
-    required this.puebloIndigenaByDptoUsecase,
-    required this.puebloIndigenaByDptoUsecaseDB,
+    required this.puebloIndigenaUsecase,
+    required this.puebloIndigenaUsecaseDB,
     required this.regimenUsecase,
     required this.regimenUsecaseDB,
     required this.tipoDocumentoUsecase,
@@ -362,10 +362,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     SyncStarted event,
   ) async {
     final result = await dimUbicacionUsecase.uploadDimUbicacionUsecase();
-    return result.fold((failure) => add(SyncError(failure.properties.first)),
-        (data) async {
-      print(data);
-    });
+    return result.fold(
+        (failure) => add(SyncError(failure.properties.first)), (data) async {});
   }
 // ************************** DimUbicacion ****************************
 
@@ -374,10 +372,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     SyncStarted event,
   ) async {
     final result = await dimViviendaUsecase.uploadDimViviendaUsecase();
-    return result.fold((failure) => add(SyncError(failure.properties.first)),
-        (data) {
-      print(data);
-    });
+    return result.fold(
+        (failure) => add(SyncError(failure.properties.first)), (data) {});
   }
 // ************************** DimVivienda ****************************
 
@@ -398,11 +394,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           total: data.totalRegistros,
           percent: calculatePercent())));
 
-      /*  if (afiliadosTemp.length < data.totalRegistros &&
+      if (afiliadosTemp.length < data.totalRegistros &&
           pagina < data.totalPaginas) {
         pagina++;
         await syncAfiliados(event, pagina, registrosPorPagina);
-      } */
+      }
 
       for (int i = 0; i < afiliadosTemp.length; i++) {
         await saveAfiliado(event, afiliadosTemp[i]);
@@ -2527,7 +2523,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         ConnectionSQLiteService.truncateTable('PueblosIndigenas_GrupoFamiliar')
             .then((value) async {
           pueblosIndigenasTemp = [];
-          await syncPueblosIndigenasByDpto(event);
+          await syncPueblosIndigenas(event);
         });
         return;
       }
@@ -2542,11 +2538,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** Parentescos ****************************
 
-// ************************** PueblosIndigenasByDpto ****************************
+// ************************** PueblosIndigenas ****************************
 
-  Future<void> syncPueblosIndigenasByDpto(SyncStarted event) async {
-    final result = await puebloIndigenaByDptoUsecase
-        .getPueblosIndigenasByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncPueblosIndigenas(SyncStarted event) async {
+    final result = await puebloIndigenaUsecase.getPueblosIndigenasUsecase();
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       pueblosIndigenasTemp.addAll(data);
@@ -2566,8 +2561,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     SyncStarted event,
     PuebloIndigenaEntity puebloIndigena,
   ) async {
-    final result = await puebloIndigenaByDptoUsecaseDB
-        .savePuebloIndigenaByDptoUsecaseDB(puebloIndigena);
+    final result = await puebloIndigenaUsecaseDB
+        .savePuebloIndigenaUsecaseDB(puebloIndigena);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= pueblosIndigenasTemp.length) {
@@ -2587,7 +2582,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     });
   }
 
-// ************************** PueblosIndigenasByDpto ****************************
+// ************************** PueblosIndigenas ****************************
 
 // ************************** Regimenes ****************************
 

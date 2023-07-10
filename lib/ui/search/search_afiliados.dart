@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/afiliado/afiliado_exports.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
 import 'package:ifasoris/ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
-import 'package:ifasoris/ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 
 import '../../domain/entities/grupo_familiar_entity.dart';
+import '../ficha/widgets/grupo_familiar_form.dart';
 
 class SearchAfiliados extends SearchDelegate {
   final AfiliadoBloc afiliadoBloc;
@@ -20,7 +20,6 @@ class SearchAfiliados extends SearchDelegate {
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    // Las acciones de nuestro AppBar
     return [
       IconButton(
         icon: const Icon(Icons.clear),
@@ -74,22 +73,28 @@ class SearchAfiliados extends SearchDelegate {
                                 '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
                             onTap: () {
                               final newGrupoFamiliar = GrupoFamiliarEntity(
-                                afiliadoId: afiliado.afiliadoId,
-                                tipoDocumento: afiliado.tipoDocAfiliado,
-                                documento: afiliado.documento,
-                                nombre1: afiliado.nombre1,
-                                nombre2: afiliado.nombre2,
-                                apellido1: afiliado.apellido1,
-                                apellido2: afiliado.apellido2,
-                                genero: afiliado.codGeneroAfiliado,
-                                fechaNac: afiliado.fecnac,
-                              );
+                                  afiliadoId: afiliado.afiliadoId,
+                                  tipoDocumento: afiliado.tipoDocAfiliado,
+                                  documento: afiliado.documento,
+                                  nombre1: afiliado.nombre1,
+                                  nombre2: afiliado.nombre2,
+                                  apellido1: afiliado.apellido1,
+                                  apellido2: afiliado.apellido2,
+                                  genero: afiliado.codGeneroAfiliado,
+                                  fechaNac: afiliado.fecnac,
+                                  edad: afiliado.edad,
+                                  codRegimenAfiliado:
+                                      afiliado.codRegimenAfiliado);
 
-                              BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
-                                      context)
-                                  .add(SaveAfiliadoGrupoFamiliar(
-                                      newGrupoFamiliar));
-                              Navigator.pop(context);
+                              Navigator.push<void>(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      GrupoFamiliarForm(
+                                          afiliadoGrupoFamiliar:
+                                              newGrupoFamiliar),
+                                ),
+                              );
                             }),
                         const Divider()
                       ],

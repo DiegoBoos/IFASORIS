@@ -42,7 +42,10 @@ class ConnectionSQL {
 	[fechafiliacion]	datetime COLLATE NOCASE,
 	[CodZona_Afiliado]	varchar(1) COLLATE NOCASE,
 	[CodTipoPob_afiliado]	varchar(2) COLLATE NOCASE,
-	[IPSPrimaria_Afiliado]	varchar COLLATE NOCASE
+	[IPSPrimaria_Afiliado]	varchar COLLATE NOCASE,
+	[IDE_PRESTADOR]	integer,
+	[Edad]	integer NOT NULL,
+	[CodRegimen_Afiliado]	varchar(1) COLLATE NOCASE
   )''';
 
   static const CREATE_ALIMENTACION = '''
@@ -722,9 +725,9 @@ class ConnectionSQL {
 
   static const CREATE_PUEBLOS_INDIGENAS = '''
   CREATE TABLE [PueblosIndigenas_GrupoFamiliar] (
-	[PuebloIndigena_id]	integer NOT NULL,
-	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE,
-	[Departamento_Ide]	integer
+	[Pueblo_ide]	integer NOT NULL,
+	[TPS_CMD_IND_RSG_ID]	varchar(10) NOT NULL COLLATE NOCASE,
+	[TPS_CMD_IND_RSG_NOMBRE]	varchar(150) NOT NULL COLLATE NOCASE
   )''';
 
   static const CREATE_RELIGIONES_PROFESA = '''
@@ -882,8 +885,8 @@ class ConnectionSQL {
 
   static const CREATE_REGIMEN = '''
   CREATE TABLE [Regimenes_GrupoFamiliar] (
-	[TipoRegimen_id]	integer NOT NULL,
-	[Tipo]	varchar(15) NOT NULL COLLATE NOCASE,
+	[Regimen_id]	integer NOT NULL,
+	[Codigo]	varchar(15) NOT NULL COLLATE NOCASE,
 	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE
   )''';
 

@@ -17,8 +17,9 @@ class AfiliadosGrupoFamiliarBloc
       final result = await grupoFamiliarUsecaseDB
           .getGrupoFamiliarUsecaseDB(event.familiaId);
       result.fold((failure) {
-        emit(const AfiliadosGrupoFamiliarError('Excepción no controlada',
-            currentAfiliadosGrupoFamiliar: []));
+        emit(const AfiliadosGrupoFamiliarError(
+          'Excepción no controlada',
+        ));
       }, (data) {
         if (data.isNotEmpty) {
           List<GrupoFamiliarEntity> afiliadosGrupoFamiliarCompleted =
@@ -46,7 +47,7 @@ class AfiliadosGrupoFamiliarBloc
       });
     });
 
-    on<SaveAfiliadoGrupoFamiliar>((event, emit) {
+    on<CreateOrUpdateAfiliadoGrupoFamiliar>((event, emit) {
       List<GrupoFamiliarEntity> currentAfiliados =
           state.afiliadosGrupoFamiliar ?? [];
       GrupoFamiliarEntity newAfiliado = event.newAfiliado;
@@ -58,28 +59,24 @@ class AfiliadosGrupoFamiliarBloc
         List<GrupoFamiliarEntity> newAfiliados = List.from(currentAfiliados)
           ..add(newAfiliado);
         emit(AfiliadosGrupoFamiliarLoaded(
-            afiliadosGrupoFamiliarLoaded: newAfiliados));
+            afiliadosGrupoFamiliarLoaded: newAfiliados,
+            message: 'Afiliado agregado correctamente'));
       } else {
-        emit(AfiliadosGrupoFamiliarError('Duplicate item',
-            currentAfiliadosGrupoFamiliar: currentAfiliados));
+        currentAfiliados = currentAfiliados.map((afiliado) {
+          if (afiliado.afiliadoId == newAfiliado.afiliadoId) {
+            return newAfiliado;
+          }
+          return afiliado;
+        }).toList();
+
+        emit(AfiliadosGrupoFamiliarLoaded(
+            afiliadosGrupoFamiliarLoaded: currentAfiliados,
+            message: 'Afiliado editado correctamente'));
       }
     });
 
-    on<UpdateAfiliadoGrupoFamiliar>((event, emit) {
-      List<GrupoFamiliarEntity> currentAfiliados =
-          state.afiliadosGrupoFamiliar ?? [];
-      GrupoFamiliarEntity newAfiliado = event.newAfiliado;
-
-      currentAfiliados = currentAfiliados.map((afiliado) {
-        if (afiliado.afiliadoId == newAfiliado.afiliadoId) {
-          return newAfiliado;
-        }
-        return afiliado;
-      }).toList();
-
-      emit(AfiliadosGrupoFamiliarLoaded(
-        afiliadosGrupoFamiliarLoaded: currentAfiliados,
-      ));
+    on<ErrorMessage>((event, emit) {
+      emit(AfiliadosGrupoFamiliarError(event.message));
     });
   }
 }

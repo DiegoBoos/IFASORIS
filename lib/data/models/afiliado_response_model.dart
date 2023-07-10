@@ -65,6 +65,9 @@ class AfiliadoModel extends AfiliadoEntity {
       String? codZonaAfiliado,
       String? codTipoPobAfiliado,
       String? ipsPrimariaAfiliado,
+      int? idePrestador,
+      int? edad,
+      String? codRegimenAfiliado,
       int? familiaId})
       : super(
             afiliadoId: afiliadoId,
@@ -92,10 +95,12 @@ class AfiliadoModel extends AfiliadoEntity {
             codZonaAfiliado: codZonaAfiliado,
             codTipoPobAfiliado: codTipoPobAfiliado,
             ipsPrimariaAfiliado: ipsPrimariaAfiliado,
+            idePrestador: idePrestador,
+            edad: edad,
+            codRegimenAfiliado: codRegimenAfiliado,
             familiaId: familiaId);
 
   factory AfiliadoModel.fromJson(Map<String, dynamic> json) => AfiliadoModel(
-        familiaId: json["Familia_id"],
         afiliadoId: json["Afiliado_id"],
         tipoDocAfiliado: json["TipoDoc_Afiliado"],
         documento: json["documento"],
@@ -123,6 +128,10 @@ class AfiliadoModel extends AfiliadoEntity {
         codZonaAfiliado: json["CodZona_Afiliado"],
         codTipoPobAfiliado: json["CodTipoPob_afiliado"],
         ipsPrimariaAfiliado: json["IPSPrimaria_Afiliado"],
+        idePrestador: json["IDE_PRESTADOR"],
+        edad: json["Edad"],
+        codRegimenAfiliado: json["CodRegimen_Afiliado"],
+        familiaId: json["Familia_id"],
       );
 
   factory AfiliadoModel.fromDB(Map<String, dynamic> json) => AfiliadoModel(
@@ -153,6 +162,9 @@ class AfiliadoModel extends AfiliadoEntity {
         codZonaAfiliado: json["CodZona_Afiliado"],
         codTipoPobAfiliado: json["CodTipoPob_afiliado"],
         ipsPrimariaAfiliado: json["IPSPrimaria_Afiliado"],
+        idePrestador: json["IDE_PRESTADOR"],
+        edad: json["Edad"],
+        codRegimenAfiliado: json["CodRegimen_Afiliado"],
         familiaId: json["Familia_id"],
       );
 }

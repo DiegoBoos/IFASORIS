@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
-import 'package:ifasoris/services/shared_preferences_service.dart';
 
 import 'domain/usecases/afiliado/afiliado_exports.dart';
 import 'domain/usecases/auth/auth_exports.dart';
@@ -37,7 +36,7 @@ import 'domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import 'domain/usecases/parentesco/parentesco_exports.dart';
 import 'domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
-import 'domain/usecases/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_exports.dart';
+import 'domain/usecases/pueblo_indigena/pueblo_indigena_exports.dart';
 import 'domain/usecases/regimen/regimen_exports.dart';
 import 'domain/usecases/resguardo_by_dpto/resguardo_by_dpto_exports.dart';
 import 'domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
@@ -56,8 +55,10 @@ import 'domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_expo
 import 'domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import 'domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
 import 'domain/usecases/via_acceso/via_acceso_exports.dart';
+import 'services/shared_preferences_service.dart';
 import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import 'ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
+import 'ui/blocs/encuesta/encuesta_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
 
@@ -118,12 +119,13 @@ void init() {
   nombreLenguaMaternaInit();
   ocupacionInit();
   parentescoInit();
-  puebloIndigenaByDptoInit();
+  puebloIndigenaInit();
   regimenInit();
   tipoDocumentoInit();
   // external
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => SharedPreferencesService());
+  locator.registerFactory(() => EncuestaBloc());
 }
 
 void authInit() {
@@ -265,8 +267,8 @@ void syncInit() {
         ocupacionUsecaseDB: locator(),
         parentescoUsecase: locator(),
         parentescoUsecaseDB: locator(),
-        puebloIndigenaByDptoUsecase: locator(),
-        puebloIndigenaByDptoUsecaseDB: locator(),
+        puebloIndigenaUsecase: locator(),
+        puebloIndigenaUsecaseDB: locator(),
         regimenUsecase: locator(),
         regimenUsecaseDB: locator(),
         tipoDocumentoUsecase: locator(),
@@ -2246,41 +2248,41 @@ void parentescoInit() {
   );
 }
 
-void puebloIndigenaByDptoInit() {
+void puebloIndigenaInit() {
   // cubit
-  locator.registerFactory(() =>
-      PuebloIndigenaByDptoCubit(puebloIndigenaByDptoUsecaseDB: locator()));
+  locator.registerFactory(
+      () => PuebloIndigenaCubit(puebloIndigenaUsecaseDB: locator()));
 
   // remote usecase
-  locator.registerLazySingleton(() => PuebloIndigenaByDptoUsecase(locator()));
+  locator.registerLazySingleton(() => PuebloIndigenaUsecase(locator()));
 
   // local usecase
-  locator.registerLazySingleton(() => PuebloIndigenaByDptoUsecaseDB(locator()));
+  locator.registerLazySingleton(() => PuebloIndigenaUsecaseDB(locator()));
 
   // repository
-  locator.registerLazySingleton<PuebloIndigenaByDptoRepository>(
-    () => PuebloIndigenaByDptoRepositoryImpl(
-      puebloIndigenaByDptoRemoteDataSource: locator(),
+  locator.registerLazySingleton<PuebloIndigenaRepository>(
+    () => PuebloIndigenaRepositoryImpl(
+      puebloIndigenaRemoteDataSource: locator(),
     ),
   );
 
   // repository DB
-  locator.registerLazySingleton<PuebloIndigenaByDptoRepositoryDB>(
-    () => PuebloIndigenaByDptoRepositoryDBImpl(
-      puebloIndigenaByDptoLocalDataSource: locator(),
+  locator.registerLazySingleton<PuebloIndigenaRepositoryDB>(
+    () => PuebloIndigenaRepositoryDBImpl(
+      puebloIndigenaLocalDataSource: locator(),
     ),
   );
 
   // remote data source
-  locator.registerLazySingleton<PuebloIndigenaByDptoRemoteDataSource>(
-    () => PuebloIndigenaByDptoRemoteDataSourceImpl(
+  locator.registerLazySingleton<PuebloIndigenaRemoteDataSource>(
+    () => PuebloIndigenaRemoteDataSourceImpl(
       client: locator(),
     ),
   );
 
   // local data source
-  locator.registerLazySingleton<PuebloIndigenaByDptoLocalDataSource>(
-    () => PuebloIndigenaByDptoLocalDataSourceImpl(),
+  locator.registerLazySingleton<PuebloIndigenaLocalDataSource>(
+    () => PuebloIndigenaLocalDataSourceImpl(),
   );
 }
 

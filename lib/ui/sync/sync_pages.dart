@@ -13,11 +13,9 @@ import '../utils/styles.dart';
 class LoadingPage extends StatelessWidget {
   const LoadingPage({
     Key? key,
-    required this.title,
     required this.text,
   }) : super(key: key);
 
-  final String title;
   final String text;
 
   @override
@@ -25,22 +23,25 @@ class LoadingPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: AppBar(title: Text(title), centerTitle: true, actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: BlocListener<InternetCubit, InternetState>(
-              listener: (context, state) {
-                if (state is InternetDisconnected) {
-                  final syncBloc = BlocProvider.of<SyncBloc>(context);
+        appBar: AppBar(
+            title: const Text('Sincronizando...'),
+            centerTitle: true,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: BlocListener<InternetCubit, InternetState>(
+                  listener: (context, state) {
+                    if (state is InternetDisconnected) {
+                      final syncBloc = BlocProvider.of<SyncBloc>(context);
 
-                  syncBloc.add(const SyncError(
-                      'Error en la sincronización, no hay conexión a internet'));
-                }
-              },
-              child: const NetworkIcon(),
-            ),
-          )
-        ]),
+                      syncBloc.add(const SyncError(
+                          'Error en la sincronización, no hay conexión a internet'));
+                    }
+                  },
+                  child: const NetworkIcon(),
+                ),
+              )
+            ]),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

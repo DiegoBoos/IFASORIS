@@ -17,18 +17,30 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   Future<int> saveGrupoFamiliar(
       List<GrupoFamiliarEntity> afiliadosGrupoFamiliar) async {
     final db = await ConnectionSQLiteService.db;
+    final batch = db.batch();
 
-    try {
-      final batch = db.batch();
+    for (var afiliado in afiliadosGrupoFamiliar) {
+      final existingRecords = await db.rawQuery('''
+      SELECT COUNT(*) FROM Asp3_GrupoFamiliar WHERE Afiliado_id = ?
+    ''', [afiliado.afiliadoId]);
 
-      for (var afiliado in afiliadosGrupoFamiliar) {
+      final recordCount = Sqflite.firstIntValue(existingRecords);
+      if (recordCount == 0) {
         batch.insert(
           'Asp3_GrupoFamiliar',
           afiliado.toJson(),
-          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      } else {
+        batch.update(
+          'Asp3_GrupoFamiliar',
+          afiliado.toJson(),
+          where: 'Afiliado_id = ?',
+          whereArgs: [afiliado.afiliadoId],
         );
       }
+    }
 
+    try {
       final results = await batch.commit();
       return results.length;
     } catch (e) {

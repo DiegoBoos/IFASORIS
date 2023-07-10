@@ -17,8 +17,8 @@ class RegimenModel extends RegimenEntity {
         );
 
   factory RegimenModel.fromJson(Map<String, dynamic> json) => RegimenModel(
-        tipoRegimenId: json["TipoRegimen_id"],
-        tipo: json["Tipo"],
+        tipoRegimenId: json["Regimen_id"],
+        tipo: json["Codigo"],
         descripcion: json["Descripcion"],
       );
 }

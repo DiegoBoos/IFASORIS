@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import '../../domain/entities/pueblo_indigena_entity.dart';
@@ -8,19 +10,19 @@ List<PuebloIndigenaModel> pueblosIndigenasFromJson(String str) =>
 
 class PuebloIndigenaModel extends PuebloIndigenaEntity {
   PuebloIndigenaModel({
-    required int puebloIndigenaId,
-    required String descripcion,
-    required int departamentoIde,
+    required int puebloIde,
+    required String TPS_CMD_IND_RSG_ID,
+    required String TPS_CMD_IND_RSG_NOMBRE,
   }) : super(
-          puebloIndigenaId: puebloIndigenaId,
-          descripcion: descripcion,
-          departamentoIde: departamentoIde,
+          puebloIde: puebloIde,
+          TPS_CMD_IND_RSG_ID: TPS_CMD_IND_RSG_ID,
+          TPS_CMD_IND_RSG_NOMBRE: TPS_CMD_IND_RSG_NOMBRE,
         );
 
   factory PuebloIndigenaModel.fromJson(Map<String, dynamic> json) =>
       PuebloIndigenaModel(
-        puebloIndigenaId: json["PuebloIndigena_id"],
-        descripcion: json["Descripcion"],
-        departamentoIde: json["Departamento_Ide"],
+        puebloIde: json["Pueblo_ide"],
+        TPS_CMD_IND_RSG_ID: json["TPS_CMD_IND_RSG_ID"],
+        TPS_CMD_IND_RSG_NOMBRE: json["TPS_CMD_IND_RSG_NOMBRE"],
       );
 }

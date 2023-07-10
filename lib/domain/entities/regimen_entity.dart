@@ -10,8 +10,8 @@ class RegimenEntity {
   });
 
   Map<String, dynamic> toJson() => {
-        "TipoRegimen_id": tipoRegimenId,
-        "Tipo": tipo,
+        "Regimen_id": tipoRegimenId,
+        "Codigo": tipo,
         "Descripcion": descripcion,
       };
 }

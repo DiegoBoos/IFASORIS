@@ -2,15 +2,15 @@ import '../../../domain/entities/pueblo_indigena_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
 import '../../models/pueblo_indigena_model.dart';
 
-abstract class PuebloIndigenaByDptoLocalDataSource {
-  Future<List<PuebloIndigenaModel>> getPueblosIndigenasByDpto();
-  Future<int> savePuebloIndigenaByDpto(PuebloIndigenaEntity puebloIndigena);
+abstract class PuebloIndigenaLocalDataSource {
+  Future<List<PuebloIndigenaModel>> getPueblosIndigenas();
+  Future<int> savePuebloIndigena(PuebloIndigenaEntity puebloIndigena);
 }
 
-class PuebloIndigenaByDptoLocalDataSourceImpl
-    implements PuebloIndigenaByDptoLocalDataSource {
+class PuebloIndigenaLocalDataSourceImpl
+    implements PuebloIndigenaLocalDataSource {
   @override
-  Future<List<PuebloIndigenaModel>> getPueblosIndigenasByDpto() async {
+  Future<List<PuebloIndigenaModel>> getPueblosIndigenas() async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('PueblosIndigenas_GrupoFamiliar');
     final result = List<PuebloIndigenaModel>.from(
@@ -20,8 +20,7 @@ class PuebloIndigenaByDptoLocalDataSourceImpl
   }
 
   @override
-  Future<int> savePuebloIndigenaByDpto(
-      PuebloIndigenaEntity puebloIndigena) async {
+  Future<int> savePuebloIndigena(PuebloIndigenaEntity puebloIndigena) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

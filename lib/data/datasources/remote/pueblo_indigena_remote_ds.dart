@@ -7,22 +7,21 @@ import '../../../constants.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/pueblo_indigena_model.dart';
 
-abstract class PuebloIndigenaByDptoRemoteDataSource {
-  Future<List<PuebloIndigenaModel>> getPueblosIndigenasByDpto(int dtoId);
+abstract class PuebloIndigenaRemoteDataSource {
+  Future<List<PuebloIndigenaModel>> getPueblosIndigenas();
 }
 
-class PuebloIndigenaByDptoRemoteDataSourceImpl
-    implements PuebloIndigenaByDptoRemoteDataSource {
+class PuebloIndigenaRemoteDataSourceImpl
+    implements PuebloIndigenaRemoteDataSource {
   final prefs = SharedPreferencesService();
   final http.Client client;
 
-  PuebloIndigenaByDptoRemoteDataSourceImpl({required this.client});
+  PuebloIndigenaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<PuebloIndigenaModel>> getPueblosIndigenasByDpto(int dtoId) async {
+  Future<List<PuebloIndigenaModel>> getPueblosIndigenas() async {
     try {
-      final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/pueblosindigenasbyDpto?IdeDpto=$dtoId');
+      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/pueblosindigenas');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
