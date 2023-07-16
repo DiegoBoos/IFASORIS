@@ -11,12 +11,17 @@ import 'ui/blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import 'ui/blocs/auth/auth_bloc.dart';
 import 'ui/blocs/dim_vivienda/dim_vivienda_bloc.dart';
 import 'ui/blocs/encuesta/encuesta_bloc.dart';
+import 'ui/blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 import 'ui/blocs/familia/familia_bloc.dart';
 import 'ui/blocs/ficha/ficha_bloc.dart';
 import 'ui/blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
+import 'ui/cubits/actividad_fisica/actividad_fisica_cubit.dart';
+import 'ui/cubits/alimentacion/alimentacion_cubit.dart';
 import 'ui/cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import 'ui/cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
+import 'ui/cubits/cigarrillo_dia/cigarrillo_dia_cubit.dart';
+import 'ui/cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 import 'ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import 'ui/cubits/curso_vida/curso_vida_cubit.dart';
 import 'ui/cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
@@ -96,6 +101,27 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<AfiliadoBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<AfiliadoPrefsBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<DimUbicacionBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<DimViviendaBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<EncuestaBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<AfiliadosGrupoFamiliarBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<GrupoFamiliarBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<EstiloVidaSaludableBloc>(),
           ),
           BlocProvider(
             create: (_) => di.locator<DificultadAccesoCACubit>(),
@@ -213,24 +239,6 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<FamiliaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<AfiliadoPrefsBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<DimUbicacionBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<DimViviendaBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<AfiliadosGrupoFamiliarBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<EncuestaBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<GrupoFamiliarBloc>(),
-          ),
-          BlocProvider(
             create: (_) => di.locator<CursoVidaCubit>(),
           ),
           BlocProvider(
@@ -265,6 +273,18 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<TipoDocumentoCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<ActividadFisicaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<AlimentacionCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<CigarrilloDiaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<ConsumoAlcoholCubit>(),
           ),
         ],
         child: MaterialApp(

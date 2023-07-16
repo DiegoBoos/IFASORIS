@@ -9,8 +9,6 @@ abstract class DimViviendaEvent extends Equatable {
 
 class DimViviendaInit extends DimViviendaEvent {}
 
-class DimViviendaReset extends DimViviendaEvent {}
-
 class DimViviendaSubmitted extends DimViviendaEvent {}
 
 class GetDimVivienda extends DimViviendaEvent {

@@ -14,6 +14,7 @@ import '../../cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
 import '../../cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
 import '../../cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
 import '../../cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
+import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../cubits/tipo_calendario/tipo_calendario_cubit.dart';
 import '../../cubits/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_cubit.dart';
 import '../../cubits/verdura_by_dpto/verdura_by_dpto_cubit.dart';
@@ -180,48 +181,86 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
         Column(
           children: [
             const Text('Posee chagra'),
-            RadioListTile(
-              title: const Text('Si'),
-              value: 0,
-              groupValue: _poseeChagra,
-              onChanged: (int? value) {
-                setState(() {
-                  _poseeChagra = value!;
-                });
-                dimUbicacionBloc.add(PoseeChagraChanged(value!));
-              },
-            ),
-            RadioListTile(
-              title: const Text('No'),
-              value: 1,
-              groupValue: _poseeChagra,
-              onChanged: (int? value) {
-                setState(() {
-                  _poseeChagra = value!;
-                  _selectedTuberculosPlatanos = [];
-                  dimUbicacionBloc.add(const TuberculosPlatanosChanged([]));
+            BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+              builder: (context, state) {
+                if (state is OpcionesSiNoLoaded) {
+                  return FormField(
+                    initialValue: _poseeChagra,
+                    builder: (FormFieldState<int> formstate) => Column(
+                      children: [
+                        Column(
+                            children: state.opcionesSiNoLoaded!
+                                .map(
+                                  (e) => RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.opcionId,
+                                    groupValue: _poseeChagra,
+                                    onChanged: (int? newValue) {
+                                      if (newValue == 2) {
+                                        setState(() {
+                                          _poseeChagra = newValue!;
+                                          _selectedTuberculosPlatanos = [];
+                                          dimUbicacionBloc.add(
+                                              const TuberculosPlatanosChanged(
+                                                  []));
 
-                  _selectedLeguminosasByDpto = [];
-                  dimUbicacionBloc.add(const LeguminosasChanged([]));
+                                          _selectedLeguminosasByDpto = [];
+                                          dimUbicacionBloc.add(
+                                              const LeguminosasChanged([]));
 
-                  _selectedHortalizasByDpto = [];
-                  dimUbicacionBloc.add(const HortalizasChanged([]));
+                                          _selectedHortalizasByDpto = [];
+                                          dimUbicacionBloc
+                                              .add(const HortalizasChanged([]));
 
-                  _selectedVerdurasByDpto = [];
-                  dimUbicacionBloc.add(const VerdurasChanged([]));
+                                          _selectedVerdurasByDpto = [];
+                                          dimUbicacionBloc
+                                              .add(const VerdurasChanged([]));
 
-                  _selectedFrutosByDpto = [];
-                  dimUbicacionBloc.add(const FrutosChanged([]));
+                                          _selectedFrutosByDpto = [];
+                                          dimUbicacionBloc
+                                              .add(const FrutosChanged([]));
 
-                  _selectedCerealesByDpto = [];
-                  dimUbicacionBloc.add(const CerealesChanged([]));
-                  dimUbicacionBloc.add(PoseeChagraChanged(value));
-                });
+                                          _selectedCerealesByDpto = [];
+                                          dimUbicacionBloc
+                                              .add(const CerealesChanged([]));
+                                          dimUbicacionBloc.add(
+                                              PoseeChagraChanged(newValue));
+                                        });
+                                      } else {
+                                        setState(() {
+                                          _poseeChagra = newValue!;
+                                        });
+                                      }
+                                      dimUbicacionBloc
+                                          .add(PoseeChagraChanged(newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                                )
+                                .toList()),
+                        formstate.hasError
+                            ? const Text(
+                                'Seleccione una opción',
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Campo requerido';
+                      }
+                      return null;
+                    },
+                  );
+                } else {
+                  return Container();
+                }
               },
             ),
           ],
         ),
-        if (_poseeChagra == 0)
+        if (_poseeChagra == 1)
           Column(
             children: [
               const Divider(),

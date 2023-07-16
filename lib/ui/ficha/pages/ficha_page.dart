@@ -8,8 +8,12 @@ import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart'
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
 import '../../blocs/encuesta/encuesta_bloc.dart';
+import '../../cubits/actividad_fisica/actividad_fisica_cubit.dart';
+import '../../cubits/alimentacion/alimentacion_cubit.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
+import '../../cubits/cigarrillo_dia/cigarrillo_dia_cubit.dart';
+import '../../cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 import '../../cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import '../../cubits/curso_vida/curso_vida_cubit.dart';
 import '../../cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
@@ -59,8 +63,6 @@ import '../widgets/acceso_medico_form.dart';
 import '../widgets/aspectos_tierra.dart';
 import '../widgets/datos_ubicacion_form.dart';
 import '../widgets/datos_vivienda_form.dart';
-import '../widgets/estilos_vida_saludable_form.dart';
-import '../widgets/progress_bar.dart';
 import 'grupo_familiar_page.dart';
 
 class FichaPage extends StatefulWidget {
@@ -166,6 +168,10 @@ class _FichaPageState extends State<FichaPage> {
     BlocProvider.of<LenguaManejaCubit>(context).getLenguasManejaDB();
     BlocProvider.of<NombreLenguaMaternaCubit>(context)
         .getNombresLenguasMaternaDB();
+    BlocProvider.of<ActividadFisicaCubit>(context).getActividadFisicaDB();
+    BlocProvider.of<AlimentacionCubit>(context).getAlimentacionDB();
+    BlocProvider.of<CigarrilloDiaCubit>(context).getCigarrilloDiaDB();
+    BlocProvider.of<ConsumoAlcoholCubit>(context).getConsumoAlcoholDB();
   }
 
   @override
@@ -192,12 +198,12 @@ class _FichaPageState extends State<FichaPage> {
                     'Datos de ubicación guardados correctamente', Colors.green);
 
                 setState(() {
-                  currentStep = 1;
+                  currentStep += 1;
                 });
               }
               if (formStatus is DimUbicacionSubmissionFailed) {
                 CustomSnackBar.showSnackBar(
-                    context, formStatus.message.toString(), Colors.red);
+                    context, formStatus.message, Colors.red);
               }
             },
           ),
@@ -209,12 +215,12 @@ class _FichaPageState extends State<FichaPage> {
                     'Datos de vivienda guardados correctamente', Colors.green);
 
                 setState(() {
-                  currentStep = 2;
+                  currentStep += 1;
                 });
               }
               if (formStatus is DimViviendaSubmissionFailed) {
                 CustomSnackBar.showSnackBar(
-                    context, formStatus.message.toString(), Colors.red);
+                    context, formStatus.message, Colors.red);
               }
             },
           ),
@@ -226,17 +232,13 @@ class _FichaPageState extends State<FichaPage> {
                     'Datos del grupo familiar guardados correctamente',
                     Colors.green);
 
-                setState(() {
-                  currentStep = 3;
-                });
+                Navigator.pushReplacementNamed(context, 'componentes');
               }
               if (state is GrupoFamiliarSubmissionFailed) {
-                CustomSnackBar.showSnackBar(
-                    context, state.message.toString(), Colors.red);
+                CustomSnackBar.showSnackBar(context, state.message, Colors.red);
               }
               if (state is AfiliadosGrupoFamiliarError) {
-                CustomSnackBar.showSnackBar(
-                    context, state.message.toString(), Colors.red);
+                CustomSnackBar.showSnackBar(context, state.message, Colors.red);
               }
             },
           ),
@@ -252,7 +254,7 @@ class _FichaPageState extends State<FichaPage> {
                       colorScheme:
                           const ColorScheme.light(primary: Colors.green)),
                   child: Stepper(
-                    type: StepperType.vertical,
+                    type: StepperType.horizontal,
                     steps: getSteps(),
                     currentStep: currentStep,
                     onStepContinue: () async {
@@ -273,7 +275,7 @@ class _FichaPageState extends State<FichaPage> {
                               DimViviendaFamiliaChanged(afiliado.familiaId!));
                           dimViviendaBloc.add(DimViviendaSubmitted());
                         }
-                      } else if (currentStep == 2) {
+                      } else if (isLastStep) {
                         final afiliadosGrupoFamiliar =
                             afiliadosGrupoFamiliarBloc
                                 .state.afiliadosGrupoFamiliar;
@@ -297,26 +299,15 @@ class _FichaPageState extends State<FichaPage> {
                           afiliadosGrupoFamiliarBloc.add(const ErrorMessage(
                               'No hay afiliados en el grupo familiar'));
                         }
-                      } else if (isLastStep) {
-                        setState(() {
-                          isCompleted = true;
-                        });
                       }
                     },
-                    onStepCancel: currentStep == 0
-                        ? null
-                        : () => setState(() => currentStep -= 1),
                     controlsBuilder: (context, details) {
-                      final isLastStep = currentStep == getSteps().length - 1;
                       return Container(
                         margin: const EdgeInsets.only(top: 50),
                         child: Row(children: [
                           ElevatedButton(
                             onPressed: details.onStepContinue,
-                            child: Text(isLastStep ? 'Finalizar' : 'Siguiente'),
-                          ),
-                          const SizedBox(
-                            width: 12,
+                            child: const Text('Continuar'),
                           ),
                         ]),
                       );
@@ -330,7 +321,6 @@ class _FichaPageState extends State<FichaPage> {
         ubicacionStep(),
         viviendaStep(),
         grupoFamiliarStep(),
-        estilosVidaSaludableStep(),
       ];
 
   Step ubicacionStep() {
@@ -425,15 +415,6 @@ class _FichaPageState extends State<FichaPage> {
               registraAfiliados: registraAfiliados,
             ),
           ],
-        ));
-  }
-
-  Step estilosVidaSaludableStep() {
-    return Step(
-        isActive: currentStep >= 3,
-        title: const Text('Vida saludable'),
-        content: Column(
-          children: const [ProgressBar(), EstilosVidaSaludableForm()],
         ));
   }
 

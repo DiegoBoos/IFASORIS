@@ -43,7 +43,8 @@ class AfiliadosGrupoFamiliarBloc
       result.fold((failure) {
         emit(GrupoFamiliarSubmissionFailed(failure.properties.first));
       }, (data) {
-        emit(GrupoFamiliarSubmissionSuccess());
+        emit(GrupoFamiliarSubmissionSuccess(
+            afiliadosGrupoFamiliarSuccess: event.afiliadosGrupoFamiliar));
       });
     });
 

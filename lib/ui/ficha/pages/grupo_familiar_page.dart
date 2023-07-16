@@ -52,7 +52,8 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                   }
                 },
                 builder: (context, state) {
-                  if (state is AfiliadosGrupoFamiliarLoaded) {
+                  if (state is AfiliadosGrupoFamiliarLoaded ||
+                      state is GrupoFamiliarSubmissionSuccess) {
                     final afiliadosGrupoFamiliar =
                         state.afiliadosGrupoFamiliar!;
                     return ListView.builder(

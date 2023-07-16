@@ -300,10 +300,12 @@ class ConnectionSQL {
 
   static const CREATE_ESTILOS_VIDA_SALUDABLE = '''
   CREATE TABLE [Asp4_EstilosVidaSaludable] (
-	[EstilosVida_id]	integer NOT NULL,
+	[EstilosVida_id] integer PRIMARY KEY AUTOINCREMENT,
 	[Afiliado_id]	integer NOT NULL,
+	[Familia_id]	integer NOT NULL,
 	[ActividadFisica_id]	integer NOT NULL,
 	[Alimentacion_id]	integer NOT NULL,
+	[ConsumoAlcohol_id]	integer NOT NULL,
 	[ConsumeCigarrillo]	integer NOT NULL,
 	[NumeroCigarrilloDia_id]	integer NOT NULL,
 	[ConsumoSustanciasPsicoactivas]	integer NOT NULL,
@@ -673,6 +675,12 @@ class ConnectionSQL {
   static const CREATE_NUMERO_CIGARRILLOS_DIA = '''
   CREATE TABLE [NumeroCigarrilosDia_EstilosVidaSaludable] (
 	[NumeroCigarrilloDia_id]	integer NOT NULL,
+	[Descripcion]	varchar(10) NOT NULL COLLATE NOCASE
+  )''';
+
+  static const CREATE_CONSUMO_ALCOHOL = '''
+  CREATE TABLE [ConsumoAlcohol_EstilosVidaSaludable] (
+	[ConsumoAlcohol_id]	integer NOT NULL,
 	[Descripcion]	varchar(10) NOT NULL COLLATE NOCASE
   )''';
 

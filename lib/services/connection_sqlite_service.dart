@@ -123,6 +123,7 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_METODOS_PLANIFICACION);
       ref.execute(ConnectionSQL.CREATE_NOMBRES_ENFERMEDAD);
       ref.execute(ConnectionSQL.CREATE_NUMERO_CIGARRILLOS_DIA);
+      ref.execute(ConnectionSQL.CREATE_CONSUMO_ALCOHOL);
       ref.execute(ConnectionSQL.CREATE_OPCIONES_SI_NO);
       ref.execute(ConnectionSQL.CREATE_ORIGEN_ETNICO_5602);
       ref.execute(ConnectionSQL.CREATE_PISOS_VIVIENDA);

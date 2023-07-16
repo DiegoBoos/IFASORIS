@@ -12,6 +12,7 @@ import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialid
 import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
+import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
 class AccesoMedicoForm extends StatefulWidget {
   const AccesoMedicoForm({super.key, this.dimUbicacion});
@@ -170,49 +171,89 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
       const Divider(),
       const SizedBox(height: 20),
       const Text('Existe médico tradicional en la comunidad'),
-      RadioListTile(
-        title: const Text('Si'),
-        value: 0,
-        groupValue: _existeMedTradicionalComunidad,
-        onChanged: (int? value) {
-          setState(() {
-            _existeMedTradicionalComunidad = value!;
-            dimUbicacionBloc.add(ExisteMedTradicionalComunidadChanged(value));
-          });
-        },
-      ),
-      RadioListTile(
-        title: const Text('No'),
-        value: 1,
-        groupValue: _existeMedTradicionalComunidad,
-        onChanged: (int? value) {
-          setState(() {
-            _existeMedTradicionalComunidad = value!;
-            dimUbicacionBloc.add(ExisteMedTradicionalComunidadChanged(value));
-            _selectedEspecialidadesMedTradicional = [];
-            dimUbicacionBloc.add(const EspecialidadesMedTradChanged([]));
+      BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+        builder: (context, state) {
+          if (state is OpcionesSiNoLoaded) {
+            return FormField(
+              initialValue: _existeMedTradicionalComunidad,
+              builder: (FormFieldState<int> formstate) => Column(
+                children: [
+                  Column(
+                      children: state.opcionesSiNoLoaded!
+                          .map(
+                            (e) => RadioListTile(
+                              title: Text(e.descripcion),
+                              value: e.opcionId,
+                              groupValue: _existeMedTradicionalComunidad,
+                              onChanged: (int? newValue) {
+                                if (newValue == 2) {
+                                  setState(() {
+                                    _existeMedTradicionalComunidad = newValue!;
+                                    dimUbicacionBloc.add(
+                                        ExisteMedTradicionalComunidadChanged(
+                                            newValue));
+                                    _selectedEspecialidadesMedTradicional = [];
+                                    dimUbicacionBloc.add(
+                                        const EspecialidadesMedTradChanged([]));
 
-            _tiempoTardaMedTradId = null;
-            dimUbicacionBloc.add(const TiempoTardaMedTradChanged(0));
+                                    _tiempoTardaMedTradId = null;
+                                    dimUbicacionBloc.add(
+                                        const TiempoTardaMedTradChanged(0));
 
-            _selectedMediosUtilizaMedTradicional = [];
-            dimUbicacionBloc.add(const MediosUtilizaMedTradChanged([]));
+                                    _selectedMediosUtilizaMedTradicional = [];
+                                    dimUbicacionBloc.add(
+                                        const MediosUtilizaMedTradChanged([]));
 
-            _selectedDificultadesAccesoMedTradicional = [];
-            dimUbicacionBloc
-                .add(const DificultadesAccesoMedTradicionalChanged([]));
+                                    _selectedDificultadesAccesoMedTradicional =
+                                        [];
+                                    dimUbicacionBloc.add(
+                                        const DificultadesAccesoMedTradicionalChanged(
+                                            []));
 
-            _costoDesplazamientoMedTradicional = null;
-            dimUbicacionBloc
-                .add(const CostoDesplazamientoMedTradicionalChanged(0));
+                                    _costoDesplazamientoMedTradicional = null;
+                                    dimUbicacionBloc.add(
+                                        const CostoDesplazamientoMedTradicionalChanged(
+                                            0));
 
-            _nombresMedTrad = [];
-            dimUbicacionBloc.add(const NombresMedTradicionalChanged([]));
-          });
+                                    _nombresMedTrad = [];
+                                    dimUbicacionBloc.add(
+                                        const NombresMedTradicionalChanged([]));
+                                  });
+                                } else {
+                                  setState(() {
+                                    _existeMedTradicionalComunidad = newValue!;
+                                  });
+                                }
+                                dimUbicacionBloc.add(
+                                    ExisteMedTradicionalComunidadChanged(
+                                        newValue!));
+                                formstate.didChange(newValue);
+                              },
+                            ),
+                          )
+                          .toList()),
+                  formstate.hasError
+                      ? const Text(
+                          'Seleccione una opción',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container(),
+                ],
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
         },
       ),
       const SizedBox(height: 20),
-      if (_existeMedTradicionalComunidad == 0)
+      if (_existeMedTradicionalComunidad == 1)
         Column(
           children: [
             const Divider(),

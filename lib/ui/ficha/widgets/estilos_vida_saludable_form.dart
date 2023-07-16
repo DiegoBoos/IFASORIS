@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/domain/usecases/estilo_vida_saludable/estilo_vida_saludable_exports.dart';
+import 'package:ifasoris/ui/cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 
-import '../../blocs/encuesta/encuesta_bloc.dart';
+import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../cubits/actividad_fisica/actividad_fisica_cubit.dart';
+import '../../cubits/alimentacion/alimentacion_cubit.dart';
+import '../../cubits/cigarrillo_dia/cigarrillo_dia_cubit.dart';
+import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
 class EstilosVidaSaludableForm extends StatefulWidget {
-  const EstilosVidaSaludableForm({super.key});
+  const EstilosVidaSaludableForm({super.key, required this.currentAfiliado});
+
+  final GrupoFamiliarEntity currentAfiliado;
 
   @override
   State<EstilosVidaSaludableForm> createState() =>
@@ -13,306 +21,356 @@ class EstilosVidaSaludableForm extends StatefulWidget {
 
 class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
   final _nombresApellidosCtrl = TextEditingController();
-
   int? _actividadFisicaId;
-  List<Map<String, dynamic>> actividadesFisicas = [
-    {'actividadFisicaId': 1, 'descripcion': 'Gym'}
-  ];
-
   int? _alimentacionId;
-  List<Map<String, dynamic>> alimentaciones = [
-    {'alimentacionId': 1, 'descripcion': 'Vegano'}
-  ];
-
+  int? _consumoCigarrillo;
   int? _numeroCigarrillosDiaId;
-  List<Map<String, dynamic>> numeroCigarrillos = [
-    {'numeroCigarrilloId': 1, 'descripcion': '12'}
-  ];
-
   int? _consumoAlcoholId;
-  List<Map<String, dynamic>> consumoAlcohol = [
-    {'consumoAlcoholId': 1, 'descripcion': 'Cada 8'}
-  ];
-
   int? _consumoSustanciaId;
-  List<Map<String, dynamic>> consumoSustancias = [
-    {'consumoSustanciaId': 1, 'descripcion': 'SI'},
-    {'consumoSustanciaId': 2, 'descripcion': 'NO'},
-  ];
 
-  int? _consumoCigarrilloId;
-  List<Map<String, dynamic>> consumoCigarrillos = [
-    {'consumoCigarrilloId': 1, 'descripcion': 'SI'},
-    {'consumoCigarrilloId': 2, 'descripcion': 'NO'},
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _nombresApellidosCtrl.text = '${widget.currentAfiliado.nombre1 ?? ''}'
+        ' '
+        '${widget.currentAfiliado.nombre2 ?? ''}'
+        ' '
+        '${widget.currentAfiliado.apellido1 ?? ''}'
+        ' '
+        '${widget.currentAfiliado.apellido2 ?? ''}'
+        '';
+
+    BlocProvider.of<EstiloVidaSaludableBloc>(context)
+        .add(GetEstiloVidaSaludable(widget.currentAfiliado.afiliadoId!));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      const Divider(),
-      const Text(
-        'IV. ESTILOS DE VIDA SALUDABLE',
-        style: TextStyle(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      const Divider(),
-      const SizedBox(height: 20),
-      BlocBuilder<EncuestaBloc, EncuestaState>(
-        builder: (context, state) {
-          if (state.afiliados.isNotEmpty) {
-            _nombresApellidosCtrl.text = state.afiliados[0].nombre1 ?? '';
-            return TextFormField(
-              enabled: false,
-              controller: _nombresApellidosCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Apellidos y Nombres',
-                border: OutlineInputBorder(),
-              ),
-            );
-          } else {
-            return Container();
+    final estiloVidaSaludableBloc =
+        BlocProvider.of<EstiloVidaSaludableBloc>(context);
+    return BlocListener<EstiloVidaSaludableBloc, EstiloVidaSaludableEntity>(
+        listener: (context, state) {
+          if (state.formStatus is EstiloVidaSaludableFormLoaded) {
+            setState(() {
+              _actividadFisicaId = state.actividadFisicaId;
+              _alimentacionId = state.alimentacionId;
+              _consumoCigarrillo = state.consumeCigarrillo;
+              _numeroCigarrillosDiaId = state.numeroCigarrilloDiaId == 0
+                  ? null
+                  : state.numeroCigarrilloDiaId;
+              _consumoAlcoholId = state.consumoAlcoholId;
+              _consumoSustanciaId = state.consumoSustanciasPsicoactivas;
+            });
           }
         },
-      ),
-      const SizedBox(height: 20),
-      DropdownButtonFormField<int>(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        value: _actividadFisicaId,
-        items: actividadesFisicas
-            .map(
-              (actividadFisica) => DropdownMenuItem<int>(
-                value: actividadFisica['actividadFisicaId'],
-                child: Text(actividadFisica['descripcion']),
-              ),
-            )
-            .toList(),
-        decoration: const InputDecoration(
-            labelText: 'Seleccione una opción', border: OutlineInputBorder()),
-        onChanged: (int? newValue) {
-          setState(() {
-            _actividadFisicaId = newValue;
-          });
-          //dimUbicacionBloc.add(TiempoTardaChanged(newValue!));
-        },
-        validator: (value) {
-          if (value == null) {
-            return 'Campo Requerido';
-          }
-          return null;
-        },
-      ),
-      const Divider(),
-      const Text(
-        'Alimentación',
-        style: TextStyle(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      const Divider(),
-      DropdownButtonFormField<int>(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        value: _alimentacionId,
-        items: alimentaciones
-            .map(
-              (alimentacion) => DropdownMenuItem<int>(
-                value: alimentacion['alimentacionId'],
-                child: Text(alimentacion['descripcion']),
-              ),
-            )
-            .toList(),
-        decoration: const InputDecoration(
-            labelText: 'Seleccione una opción', border: OutlineInputBorder()),
-        onChanged: (int? newValue) {
-          setState(() {
-            _alimentacionId = newValue;
-          });
-          //dimUbicacionBloc.add(TiempoTardaChanged(newValue!));
-        },
-        validator: (value) {
-          if (value == null) {
-            return 'Campo Requerido';
-          }
-          return null;
-        },
-      ),
-      const Divider(),
-      const Text(
-        'Consumo de cigarrillo',
-        style: TextStyle(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      const Divider(),
-      FormField(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        initialValue: _consumoCigarrilloId,
-        builder: (FormFieldState<int> formstate) {
-          return Column(
-            children: [
-              Wrap(
-                children: List<Widget>.generate(
-                  consumoCigarrillos.length,
-                  (index) {
-                    final e = consumoCigarrillos[index];
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(
-                          value:
-                              _consumoCigarrilloId == e['consumoCigarrilloId'],
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _consumoCigarrilloId =
-                                  value! ? e['consumoCigarrilloId'] : null;
-                              formstate.didChange(_consumoCigarrilloId);
-                            });
-                          },
+        child: ListView(children: [
+          const Divider(),
+          const Text(
+            'IV. ESTILOS DE VIDA SALUDABLE',
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const Divider(),
+          const SizedBox(height: 20),
+          TextFormField(
+            enabled: false,
+            controller: _nombresApellidosCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Apellidos y Nombres',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const Divider(),
+          const Text(
+            'Actividad física',
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const Divider(),
+          BlocBuilder<ActividadFisicaCubit, ActividadesFisicasState>(
+            builder: (context, state) {
+              if (state is ActividadesFisicasLoaded) {
+                return DropdownButtonFormField<int>(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  value: _actividadFisicaId,
+                  items: state.actividadesFisicasLoaded!
+                      .map(
+                        (actividadFisica) => DropdownMenuItem<int>(
+                          value: actividadFisica.actividadFisicaId,
+                          child: Text(actividadFisica.descripcion),
                         ),
-                        Text(e['descripcion']),
-                        if (index < consumoCigarrillos.length - 1)
-                          const VerticalDivider(), // Adds a vertical separator between items
-                      ],
-                    );
+                      )
+                      .toList(),
+                  decoration: const InputDecoration(
+                      labelText: 'Seleccione una opción',
+                      border: OutlineInputBorder()),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      _actividadFisicaId = newValue;
+                    });
+                    estiloVidaSaludableBloc
+                        .add(ActividadFisicaChanged(newValue!));
                   },
-                ),
-              ),
-              formstate.hasError
-                  ? const Text(
-                      'Seleccione una opción',
-                      style: TextStyle(color: Colors.red),
-                    )
-                  : Container(),
-            ],
-          );
-        },
-        validator: (value) {
-          if (value == null) {
-            return 'Seleccione una opción';
-          }
-          return null;
-        },
-        onSaved: (int? value) {},
-      ),
-      const Divider(),
-      const Text(
-        'Número de cigarrillos por día',
-        style: TextStyle(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      const Divider(),
-      DropdownButtonFormField<int>(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        value: _numeroCigarrillosDiaId,
-        items: numeroCigarrillos
-            .map(
-              (numeroCigarrilloDia) => DropdownMenuItem<int>(
-                value: numeroCigarrilloDia['numeroCigarrilloId'],
-                child: Text(numeroCigarrilloDia['descripcion']),
-              ),
-            )
-            .toList(),
-        decoration: const InputDecoration(
-            labelText: 'Seleccione una opción', border: OutlineInputBorder()),
-        onChanged: (int? newValue) {
-          setState(() {
-            _numeroCigarrillosDiaId = newValue;
-          });
-          //dimUbicacionBloc.add(TiempoTardaChanged(newValue!));
-        },
-        validator: (value) {
-          if (value == null) {
-            return 'Campo Requerido';
-          }
-          return null;
-        },
-      ),
-      const Divider(),
-      const Text(
-        'Consumo de alcohol',
-        style: TextStyle(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      const Divider(),
-      DropdownButtonFormField<int>(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        value: _consumoAlcoholId,
-        items: consumoAlcohol
-            .map(
-              (consumoAlcohol) => DropdownMenuItem<int>(
-                value: consumoAlcohol['consumoAlcoholId'],
-                child: Text(consumoAlcohol['descripcion']),
-              ),
-            )
-            .toList(),
-        decoration: const InputDecoration(
-            labelText: 'Seleccione una opción', border: OutlineInputBorder()),
-        onChanged: (int? newValue) {
-          setState(() {
-            _consumoAlcoholId = newValue;
-          });
-          //dimUbicacionBloc.add(TiempoTardaChanged(newValue!));
-        },
-        validator: (value) {
-          if (value == null) {
-            return 'Campo Requerido';
-          }
-          return null;
-        },
-      ),
-      const Divider(),
-      const Text(
-        'Consumo de otras sustancias Psicoactivas',
-        style: TextStyle(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      const Divider(),
-      FormField(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        initialValue: _consumoSustanciaId,
-        builder: (FormFieldState<int> formstate) {
-          return Column(
-            children: [
-              Wrap(
-                children: List<Widget>.generate(
-                  consumoSustancias.length,
-                  (index) {
-                    final e = consumoSustancias[index];
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(
-                          value: _consumoSustanciaId == e['consumoSustanciaId'],
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _consumoSustanciaId =
-                                  value! ? e['consumoSustanciaId'] : null;
-                              formstate.didChange(_consumoSustanciaId);
-                            });
-                          },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Campo Requerido';
+                    }
+                    return null;
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+          const Divider(),
+          const Text(
+            'Alimentación',
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const Divider(),
+          BlocBuilder<AlimentacionCubit, AlimentacionesState>(
+            builder: (context, state) {
+              if (state is AlimentacionesLoaded) {
+                return DropdownButtonFormField<int>(
+                  isExpanded: true,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  value: _alimentacionId,
+                  items: state.alimentacionesLoaded!
+                      .map(
+                        (alimentacion) => DropdownMenuItem<int>(
+                          value: alimentacion.alimentacionId,
+                          child: Text(alimentacion.descripcion),
                         ),
-                        Text(e['descripcion']),
-                        if (index < consumoSustancias.length - 1)
-                          const VerticalDivider(), // Adds a vertical separator between items
-                      ],
-                    );
+                      )
+                      .toList(),
+                  decoration: const InputDecoration(
+                      labelText: 'Seleccione una opción',
+                      border: OutlineInputBorder()),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      _alimentacionId = newValue;
+                    });
+                    estiloVidaSaludableBloc.add(AlimentacionChanged(newValue!));
                   },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Campo Requerido';
+                    }
+                    return null;
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+          const Divider(),
+          const Text(
+            'Consumo de cigarrillo',
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const Divider(),
+          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+            builder: (context, state) {
+              if (state is OpcionesSiNoLoaded) {
+                return FormField(
+                  initialValue: _consumoCigarrillo,
+                  builder: (FormFieldState<int> formstate) => Column(
+                    children: [
+                      Column(
+                          children: state.opcionesSiNoLoaded!
+                              .map(
+                                (e) => RadioListTile(
+                                  title: Text(e.descripcion),
+                                  value: e.opcionId,
+                                  groupValue: _consumoCigarrillo,
+                                  onChanged: (int? newValue) {
+                                    if (newValue == 2) {
+                                      setState(() {
+                                        _consumoCigarrillo = newValue!;
+                                        _numeroCigarrillosDiaId = null;
+                                      });
+                                      estiloVidaSaludableBloc.add(
+                                          const NumeroCigarrillosDiaChanged(0));
+                                    } else {
+                                      setState(() {
+                                        _consumoCigarrillo = newValue!;
+                                      });
+                                    }
+                                    estiloVidaSaludableBloc.add(
+                                        ConsumeCigarrilloChanged(newValue!));
+                                    formstate.didChange(newValue);
+                                  },
+                                ),
+                              )
+                              .toList()),
+                      formstate.hasError
+                          ? const Text(
+                              'Seleccione una opción',
+                              style: TextStyle(color: Colors.red),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Campo requerido';
+                    }
+                    return null;
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+          if (_consumoCigarrillo == 1)
+            Column(
+              children: [
+                const Divider(),
+                const Text(
+                  'Número de cigarrillos por día',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              formstate.hasError
-                  ? const Text(
-                      'Seleccione una opción',
-                      style: TextStyle(color: Colors.red),
-                    )
-                  : Container(),
-            ],
-          );
-        },
-        validator: (value) {
-          if (value == null) {
-            return 'Seleccione una opción';
-          }
-          return null;
-        },
-        onSaved: (int? value) {},
-      ),
-    ]);
+                const Divider(),
+                BlocBuilder<CigarrilloDiaCubit, CigarrillosDiaState>(
+                  builder: (context, state) {
+                    if (state is CigarrillosDiaLoaded) {
+                      return DropdownButtonFormField<int>(
+                        value: _numeroCigarrillosDiaId,
+                        items: state.cigarrillosDiaLoaded!
+                            .map(
+                              (numeroCigarrilloDia) => DropdownMenuItem<int>(
+                                value:
+                                    numeroCigarrilloDia.numeroCigarrilloDiaId,
+                                child: Text(numeroCigarrilloDia.descripcion),
+                              ),
+                            )
+                            .toList(),
+                        decoration: const InputDecoration(
+                            labelText: 'Seleccione una opción',
+                            border: OutlineInputBorder()),
+                        onChanged: (int? newValue) {
+                          setState(() {
+                            _numeroCigarrillosDiaId = newValue!;
+                          });
+                          estiloVidaSaludableBloc
+                              .add(NumeroCigarrillosDiaChanged(newValue!));
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Campo Requerido';
+                          }
+                          return null;
+                        },
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                )
+              ],
+            ),
+          const Divider(),
+          const Text(
+            'Consumo de alcohol',
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const Divider(),
+          BlocBuilder<ConsumoAlcoholCubit, ConsumosAlcoholState>(
+            builder: (context, state) {
+              if (state is ConsumosAlcoholLoaded) {
+                return DropdownButtonFormField<int>(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  value: _consumoAlcoholId,
+                  items: state.consumosAlcoholLoaded!
+                      .map(
+                        (consumoAlcohol) => DropdownMenuItem<int>(
+                          value: consumoAlcohol.consumoAlcoholId,
+                          child: Text(consumoAlcohol.descripcion),
+                        ),
+                      )
+                      .toList(),
+                  decoration: const InputDecoration(
+                      labelText: 'Seleccione una opción',
+                      border: OutlineInputBorder()),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      _consumoAlcoholId = newValue!;
+                    });
+                    estiloVidaSaludableBloc
+                        .add(ConsumoAlcoholChanged(newValue!));
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Campo Requerido';
+                    }
+                    return null;
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+          const Divider(),
+          const Text(
+            'Consumo de otras sustancias Psicoactivas',
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const Divider(),
+          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+            builder: (context, state) {
+              if (state is OpcionesSiNoLoaded) {
+                return FormField(
+                  initialValue: _consumoSustanciaId,
+                  builder: (FormFieldState<int> formstate) => Column(
+                    children: [
+                      Column(
+                          children: state.opcionesSiNoLoaded!
+                              .map(
+                                (e) => RadioListTile(
+                                  title: Text(e.descripcion),
+                                  value: e.opcionId,
+                                  groupValue: _consumoSustanciaId,
+                                  onChanged: (int? newValue) {
+                                    setState(() {
+                                      _consumoSustanciaId = newValue!;
+                                    });
+
+                                    estiloVidaSaludableBloc.add(
+                                        ConsumoSustanciasChanged(newValue!));
+                                    formstate.didChange(newValue);
+                                  },
+                                ),
+                              )
+                              .toList()),
+                      formstate.hasError
+                          ? const Text(
+                              'Seleccione una opción',
+                              style: TextStyle(color: Colors.red),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Campo requerido';
+                    }
+                    return null;
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ]));
   }
 }

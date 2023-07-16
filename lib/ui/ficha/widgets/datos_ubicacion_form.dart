@@ -12,6 +12,7 @@ import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
+import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
 class DatosUbicacionForm extends StatefulWidget {
   const DatosUbicacionForm({super.key, this.dimUbicacion});
@@ -174,6 +175,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         const SizedBox(height: 20),
         TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          keyboardType: TextInputType.number,
           controller: _documentoRecibeVisitaCtrl,
           decoration: const InputDecoration(
             labelText: 'Documento de quien recibe la visita',
@@ -283,29 +285,51 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         ),
         const SizedBox(height: 20),
         const Text('Pertenece a algún resguardo indígena'),
-        RadioListTile(
-          title: const Text('Si'),
-          value: 0,
-          groupValue: _perteneceResguardo,
-          onChanged: (int? value) {
-            setState(() {
-              _perteneceResguardo = value!;
-              dimUbicacionBloc.add(PerteneceResguardoChanged(value));
-            });
+        BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+          builder: (context, state) {
+            if (state is OpcionesSiNoLoaded) {
+              return FormField(
+                initialValue: _perteneceResguardo,
+                builder: (FormFieldState<int> formstate) => Column(
+                  children: [
+                    Column(
+                        children: state.opcionesSiNoLoaded!
+                            .map(
+                              (e) => RadioListTile(
+                                title: Text(e.descripcion),
+                                value: e.opcionId,
+                                groupValue: _perteneceResguardo,
+                                onChanged: (int? newValue) {
+                                  setState(() {
+                                    _perteneceResguardo = newValue!;
+                                  });
+                                  dimUbicacionBloc.add(
+                                      PerteneceResguardoChanged(newValue!));
+                                  formstate.didChange(newValue);
+                                },
+                              ),
+                            )
+                            .toList()),
+                    formstate.hasError
+                        ? const Text(
+                            'Seleccione una opción',
+                            style: TextStyle(color: Colors.red),
+                          )
+                        : Container(),
+                  ],
+                ),
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo requerido';
+                  }
+                  return null;
+                },
+              );
+            } else {
+              return Container();
+            }
           },
         ),
-        RadioListTile(
-          title: const Text('No'),
-          value: 1,
-          groupValue: _perteneceResguardo,
-          onChanged: (int? value) {
-            setState(() {
-              _perteneceResguardo = value!;
-              dimUbicacionBloc.add(PerteneceResguardoChanged(value));
-            });
-          },
-        ),
-
         /*  const SizedBox(height: 20),
         TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,

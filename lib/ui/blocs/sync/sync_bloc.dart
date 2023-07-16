@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/services/connection_sqlite_service.dart';
 
 import '../../../domain/entities/usuario_entity.dart';
+import '../../../domain/usecases/actividad_fisica/actividad_fisica_exports.dart';
 import '../../../domain/usecases/afiliado/afiliado_exports.dart';
+import '../../../domain/usecases/alimentacion/alimentacion_exports.dart';
 import '../../../domain/usecases/autoridad_indigena/autoridad_indigena_exports.dart';
 import '../../../domain/usecases/cereal_by_dpto/cereal_by_dpto_exports.dart';
+import '../../../domain/usecases/cigarrillo_dia/cigarrillo_dia_exports.dart';
+import '../../../domain/usecases/consumo_alcohol/consumo_alcohol_exports.dart';
 import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import '../../../domain/usecases/curso_vida/curso_vida_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
@@ -167,6 +171,14 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final RegimenUsecaseDB regimenUsecaseDB;
   final TipoDocumentoUsecase tipoDocumentoUsecase;
   final TipoDocumentoUsecaseDB tipoDocumentoUsecaseDB;
+  final ActividadFisicaUsecase actividadFisicaUsecase;
+  final ActividadFisicaUsecaseDB actividadFisicaUsecaseDB;
+  final AlimentacionUsecase alimentacionUsecase;
+  final AlimentacionUsecaseDB alimentacionUsecaseDB;
+  final CigarrilloDiaUsecase cigarrilloDiaUsecase;
+  final CigarrilloDiaUsecaseDB cigarrilloDiaUsecaseDB;
+  final ConsumoAlcoholUsecase consumoAlcoholUsecase;
+  final ConsumoAlcoholUsecaseDB consumoAlcoholUsecaseDB;
 
   final DimUbicacionUsecase dimUbicacionUsecase;
   final DimViviendaUsecase dimViviendaUsecase;
@@ -174,7 +186,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final SyncLogUsecaseDB syncLogDB;
 
   /* int totalAccesories = 46; */
-  int totalAccesories = 46;
+  int totalAccesories = 50;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -226,6 +238,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<PuebloIndigenaEntity> pueblosIndigenasTemp = [];
   List<RegimenEntity> regimenesTemp = [];
   List<TipoDocumentoEntity> tiposDocumentoTemp = [];
+  List<ActividadFisicaEntity> actividadesFisicasTemp = [];
+  List<AlimentacionEntity> alimentacionesTemp = [];
+  List<CigarrilloDiaEntity> cigarrillosDiaTemp = [];
+  List<ConsumoAlcoholEntity> consumosAlcoholTemp = [];
 
   SyncBloc({
     required this.afiliadoUsecase,
@@ -322,6 +338,14 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.regimenUsecaseDB,
     required this.tipoDocumentoUsecase,
     required this.tipoDocumentoUsecaseDB,
+    required this.actividadFisicaUsecase,
+    required this.actividadFisicaUsecaseDB,
+    required this.alimentacionUsecase,
+    required this.alimentacionUsecaseDB,
+    required this.cigarrilloDiaUsecase,
+    required this.cigarrilloDiaUsecaseDB,
+    required this.consumoAlcoholUsecase,
+    required this.consumoAlcoholUsecaseDB,
     required this.dimUbicacionUsecase,
     required this.dimViviendaUsecase,
     required this.syncLogDB,
@@ -2657,10 +2681,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= tiposDocumentoTemp.length) {
-        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-            title: 'Sincronización completada',
-            counter: state.syncProgressModel.counter + 1,
-            total: totalAccesories)));
+        ConnectionSQLiteService.truncateTable(
+                'ActividadesFisicas_EstilosVidaSaludable')
+            .then((value) async {
+          actividadesFisicasTemp = [];
+          await syncActividadesFisicas(event);
+        });
         return;
       }
       TipoDocumentoEntity tipoDocumentoTemp = tiposDocumentoTemp[data];
@@ -2673,6 +2699,192 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** TiposDocumento ****************************
+
+// ************************** ActividadesFisicas ****************************
+
+  Future<void> syncActividadesFisicas(SyncStarted event) async {
+    final result = await actividadFisicaUsecase.getActividadesFisicasUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      actividadesFisicasTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando actividades físicas',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveActividadFisica(
+        event,
+        actividadesFisicasTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveActividadFisica(
+    SyncStarted event,
+    ActividadFisicaEntity actividadFisica,
+  ) async {
+    final result = await actividadFisicaUsecaseDB
+        .saveActividadFisicaUsecaseDB(actividadFisica);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= actividadesFisicasTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'Alimentacion_EstilosVidaSaludable')
+            .then((value) async {
+          alimentacionesTemp = [];
+          await syncAlimentaciones(event);
+        });
+        return;
+      }
+      ActividadFisicaEntity actividadFisicaTemp = actividadesFisicasTemp[data];
+
+      await saveActividadFisica(
+        event,
+        actividadFisicaTemp,
+      );
+    });
+  }
+
+// ************************** ActividadesFisicas ****************************
+
+// ************************** Alimentaciones ****************************
+
+  Future<void> syncAlimentaciones(SyncStarted event) async {
+    final result = await alimentacionUsecase.getAlimentacionesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      alimentacionesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando alimentación',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveAlimentacion(
+        event,
+        alimentacionesTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveAlimentacion(
+    SyncStarted event,
+    AlimentacionEntity alimentacion,
+  ) async {
+    final result =
+        await alimentacionUsecaseDB.saveAlimentacionUsecaseDB(alimentacion);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= alimentacionesTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'NumeroCigarrilosDia_EstilosVidaSaludable')
+            .then((value) async {
+          cigarrillosDiaTemp = [];
+          await syncCigarrillosDia(event);
+        });
+        return;
+      }
+      AlimentacionEntity alimentacionTemp = alimentacionesTemp[data];
+
+      await saveAlimentacion(
+        event,
+        alimentacionTemp,
+      );
+    });
+  }
+
+// ************************** Alimentaciones ****************************
+
+// ************************** CigarrillosDia ****************************
+
+  Future<void> syncCigarrillosDia(SyncStarted event) async {
+    final result = await cigarrilloDiaUsecase.getCigarrillosDiaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      cigarrillosDiaTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando cigarrillos día',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveCigarrilloDia(
+        event,
+        cigarrillosDiaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveCigarrilloDia(
+    SyncStarted event,
+    CigarrilloDiaEntity cigarrilloDia,
+  ) async {
+    final result =
+        await cigarrilloDiaUsecaseDB.saveCigarrilloDiaUsecaseDB(cigarrilloDia);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= cigarrillosDiaTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'ConsumoAlcohol_EstilosVidaSaludable')
+            .then((value) async {
+          consumosAlcoholTemp = [];
+          await syncConsumosAlcohol(event);
+        });
+        return;
+      }
+      CigarrilloDiaEntity cigarrilloDiaTemp = cigarrillosDiaTemp[data];
+
+      await saveCigarrilloDia(
+        event,
+        cigarrilloDiaTemp,
+      );
+    });
+  }
+
+// ************************** CigarrillosDia ****************************
+
+// ************************** ConsumosAlcohol ****************************
+
+  Future<void> syncConsumosAlcohol(SyncStarted event) async {
+    final result = await consumoAlcoholUsecase.getConsumosAlcoholUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      consumosAlcoholTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando consumo alcohol',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveConsumoAlcohol(
+        event,
+        consumosAlcoholTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveConsumoAlcohol(
+    SyncStarted event,
+    ConsumoAlcoholEntity consumoAlcohol,
+  ) async {
+    final result = await consumoAlcoholUsecaseDB
+        .saveConsumoAlcoholUsecaseDB(consumoAlcohol);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= consumosAlcoholTemp.length) {
+        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: 'Sincronización completada',
+            counter: state.syncProgressModel.counter + 1,
+            total: totalAccesories)));
+        return;
+      }
+      ConsumoAlcoholEntity consumoAlcoholTemp = consumosAlcoholTemp[data];
+
+      await saveConsumoAlcohol(
+        event,
+        consumoAlcoholTemp,
+      );
+    });
+  }
+
+// ************************** ConsumosAlcohol ****************************
 
   int calculatePercent() {
     final counter = state.syncProgressModel.counter <= 0
