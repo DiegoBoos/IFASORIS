@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ifasoris/ui/ficha/pages/componentes_grupo_familiar_page.dart';
 
 import 'ui/auth/pages/sign_in_page.dart';
+import 'ui/ficha/pages/atencion_salud_page.dart';
+import 'ui/ficha/pages/cuidado_salud_cond_riesgo_page.dart';
+import 'ui/ficha/pages/dimension_sociocultural_pueblos_indigenas_page.dart';
+import 'ui/ficha/pages/estilos_vida_saludable_page.dart';
 import 'ui/home/pages/home_page.dart';
 import 'ui/ficha/pages/ficha_page.dart';
 
@@ -12,7 +15,12 @@ class AppRouter {
     'sign-in': (BuildContext context) => const SignInPage(),
     'home': (BuildContext context) => const HomePage(),
     'ficha': (BuildContext context) => const FichaPage(),
-    'componentes': (BuildContext context) =>
-        const ComponentesGrupoFamiliarPage(),
+    'estilo-vida-saludable': (BuildContext context) =>
+        const EstilosVidaSaludablePage(),
+    'cuidado-salud-cond-riesgo': (BuildContext context) =>
+        const CuidadoSaludCondRiesgoPage(),
+    'dimension-sociocultural-pueblos-indigenas': (BuildContext context) =>
+        const DimensionSocioculturalPueblosIndigenasPage(),
+    'atenciones-en-salud': (BuildContext context) => const AtencionSaludPage(),
   };
 }

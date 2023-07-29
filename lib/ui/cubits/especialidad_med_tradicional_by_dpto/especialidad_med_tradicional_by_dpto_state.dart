@@ -1,36 +1,32 @@
 part of 'especialidad_med_tradicional_by_dpto_cubit.dart';
 
-abstract class EspecialidadesMedTradicionalByDptoState extends Equatable {
-  final List<EspecialidadMedTradicionalEntity>?
-      especialidadesMedtradicionalByDpto;
-  const EspecialidadesMedTradicionalByDptoState(
-      {this.especialidadesMedtradicionalByDpto});
+abstract class EspecialidadesMedTradicionalState extends Equatable {
+  final List<EspecialidadMedTradicionalEntity>? especialidadesMedTradicional;
+  const EspecialidadesMedTradicionalState({this.especialidadesMedTradicional});
 
   @override
   List<Object> get props => [];
 }
 
-class EspecialidadesMedTradicionalByDptoInitial
-    extends EspecialidadesMedTradicionalByDptoState {}
+class EspecialidadesMedTradicionalInitial
+    extends EspecialidadesMedTradicionalState {}
 
-class EspecialidadesMedTradicionalByDptoLoading
-    extends EspecialidadesMedTradicionalByDptoState {}
+class EspecialidadesMedTradicionalLoading
+    extends EspecialidadesMedTradicionalState {}
 
-class EspecialidadesMedTradicionalByDptoLoaded
-    extends EspecialidadesMedTradicionalByDptoState {
+class EspecialidadesMedTradicionalLoaded
+    extends EspecialidadesMedTradicionalState {
   final List<EspecialidadMedTradicionalEntity>?
-      especialidadesMedtradicionalByDptoLoaded;
+      especialidadesMedTradicionalLoaded;
 
-  const EspecialidadesMedTradicionalByDptoLoaded(
-      this.especialidadesMedtradicionalByDptoLoaded)
-      : super(
-            especialidadesMedtradicionalByDpto:
-                especialidadesMedtradicionalByDptoLoaded);
+  const EspecialidadesMedTradicionalLoaded(
+      this.especialidadesMedTradicionalLoaded)
+      : super(especialidadesMedTradicional: especialidadesMedTradicionalLoaded);
 }
 
-class EspecialidadesMedTradicionalByDptoError
-    extends EspecialidadesMedTradicionalByDptoState {
+class EspecialidadesMedTradicionalError
+    extends EspecialidadesMedTradicionalState {
   final String message;
 
-  const EspecialidadesMedTradicionalByDptoError(this.message);
+  const EspecialidadesMedTradicionalError(this.message);
 }

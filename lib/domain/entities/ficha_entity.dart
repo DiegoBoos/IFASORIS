@@ -34,6 +34,6 @@ class FichaEntity {
         "NumFicha": numFicha,
         "UserName": userName,
         "UltimaActualizacion": ultimaActualizacion?.toIso8601String(),
-        "remoteFichaId": remoteFichaId,
+        "remoteFicha_id": remoteFichaId,
       };
 }

@@ -93,6 +93,6 @@ class DimViviendaEntity {
         /*  "IluminacionVivienda_id": iluminacionViviendaId, */
         "PisoVivienda_id": pisoViviendaId,
         "OtroTipoPiso": otroTipoPiso,
-        "remoteViviendaId": remoteViviendaId,
+        "remoteVivienda_id": remoteViviendaId,
       };
 }

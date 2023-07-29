@@ -6,29 +6,29 @@ import '../../../core/error/failure.dart';
 import '../../entities/especialidad_med_tradicional_entity.dart';
 import '../../repositories/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_repository_db.dart';
 
-class EspecialidadMedTradicionalByDptoUsecaseDB {
-  final EspecialidadMedTradicionalByDptoRepositoryDB repositoryDB;
+class EspecialidadMedTradicionalUsecaseDB {
+  final EspecialidadMedTradicionalRepositoryDB repositoryDB;
 
-  EspecialidadMedTradicionalByDptoUsecaseDB(this.repositoryDB);
+  EspecialidadMedTradicionalUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, int>> saveEspecialidadMedTradicionalByDptoUsecaseDB(
-      EspecialidadMedTradicionalEntity especialidadMedTradicionalByDpto) {
-    return repositoryDB.saveEspecialidadMedTradicionalByDptoRepositoryDB(
-        especialidadMedTradicionalByDpto);
+  Future<Either<Failure, int>> saveEspecialidadMedTradicionalUsecaseDB(
+      EspecialidadMedTradicionalEntity especialidadMedTradicional) {
+    return repositoryDB
+        .saveEspecialidadMedTradicionalRepositoryDB(especialidadMedTradicional);
   }
 
   Future<Either<Failure, List<EspecialidadMedTradicionalEntity>>>
-      getEspecialidadesMedTradicionalByDptoUsecaseDB() {
-    return repositoryDB.getEspecialidadesMedTradicionalByDptoRepositoryDB();
+      getEspecialidadesMedTradicionalUsecaseDB() {
+    return repositoryDB.getEspecialidadesMedTradicionalRepositoryDB();
   }
 
-  saveUbicacionEspecialidadMedTradicionalUsecaseDB(
+  Future<Either<Failure, int>> saveUbicacionEspecialidadMedTradicionalUsecaseDB(
       int ubicacionId, List<LstEspMedTradicional> lstEspMedTradicional) {
     return repositoryDB.saveUbicacionEspecialidadMedTradicionalRepositoryDB(
         ubicacionId, lstEspMedTradicional);
   }
 
-  saveUbicacionNombresMedTradicionalUsecaseDB(
+  Future<Either<Failure, int>> saveUbicacionNombresMedTradicionalUsecaseDB(
       int ubicacionId, List<LstNombreMedTradicional> lstNombreMedTradicional) {
     return repositoryDB.saveUbicacionNombresMedTradicionalRepositoryDB(
         ubicacionId, lstNombreMedTradicional);
@@ -44,5 +44,21 @@ class EspecialidadMedTradicionalByDptoUsecaseDB {
       getUbicacionNombresMedTradicionalUsecaseDB(int? ubicacionId) {
     return repositoryDB
         .getUbicacionNombresMedTradicionalRepositoryDB(ubicacionId);
+  }
+
+  Future<Either<Failure, List<LstEspMedTradicional>>>
+      getEspecialidadesMedTradicionalAtencionSaludUsecaseDB(
+          int? atencionSaludId) {
+    return repositoryDB
+        .getEspecialidadesMedTradicionalAtencionSaludRepositoryDB(
+            atencionSaludId);
+  }
+
+  Future<Either<Failure, int>>
+      saveEspecialidadesMedTradicionalAtencionSaludUsecaseDB(
+          int atencionSalud, List<LstEspMedTradicional> lstEspMedTradicional) {
+    return repositoryDB
+        .saveEspecialidadesMedTradicionalAtencionSaludRepositoryDB(
+            atencionSalud, lstEspMedTradicional);
   }
 }

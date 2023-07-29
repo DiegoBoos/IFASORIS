@@ -8,20 +8,20 @@ import '../../../domain/entities/especialidad_med_tradicional_entity.dart';
 import '../../../domain/repositories/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_repository_db.dart';
 import '../../datasources/local/especialidad_med_tradicional_by_dpto_local_ds.dart';
 
-class EspecialidadMedTradicionalByDptoRepositoryDBImpl
-    implements EspecialidadMedTradicionalByDptoRepositoryDB {
-  final EspecialidadMedTradicionalByDptoLocalDataSource
-      especialidadMedTradicionalByDptoLocalDataSource;
+class EspecialidadMedTradicionalRepositoryDBImpl
+    implements EspecialidadMedTradicionalRepositoryDB {
+  final EspecialidadMedTradicionalLocalDataSource
+      especialidadMedTradicionalLocalDataSource;
 
-  EspecialidadMedTradicionalByDptoRepositoryDBImpl(
-      {required this.especialidadMedTradicionalByDptoLocalDataSource});
+  EspecialidadMedTradicionalRepositoryDBImpl(
+      {required this.especialidadMedTradicionalLocalDataSource});
 
   @override
   Future<Either<Failure, List<EspecialidadMedTradicionalEntity>>>
-      getEspecialidadesMedTradicionalByDptoRepositoryDB() async {
+      getEspecialidadesMedTradicionalRepositoryDB() async {
     try {
-      final result = await especialidadMedTradicionalByDptoLocalDataSource
-          .getEspecialidadesMedTradicionalByDpto();
+      final result = await especialidadMedTradicionalLocalDataSource
+          .getEspecialidadesMedTradicional();
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
@@ -31,12 +31,11 @@ class EspecialidadMedTradicionalByDptoRepositoryDBImpl
   }
 
   @override
-  Future<Either<Failure, int>> saveEspecialidadMedTradicionalByDptoRepositoryDB(
-      EspecialidadMedTradicionalEntity especialidadMedTradicionalByDpto) async {
+  Future<Either<Failure, int>> saveEspecialidadMedTradicionalRepositoryDB(
+      EspecialidadMedTradicionalEntity especialidadMedTradicional) async {
     try {
-      final result = await especialidadMedTradicionalByDptoLocalDataSource
-          .saveEspecialidadMedTradicionalByDpto(
-              especialidadMedTradicionalByDpto);
+      final result = await especialidadMedTradicionalLocalDataSource
+          .saveEspecialidadMedTradicional(especialidadMedTradicional);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
@@ -50,7 +49,7 @@ class EspecialidadMedTradicionalByDptoRepositoryDBImpl
       saveUbicacionEspecialidadMedTradicionalRepositoryDB(int ubicacionId,
           List<LstEspMedTradicional> lstEspMedTradicional) async {
     try {
-      final result = await especialidadMedTradicionalByDptoLocalDataSource
+      final result = await especialidadMedTradicionalLocalDataSource
           .saveUbicacionEspecialidadMedTradicional(
               ubicacionId, lstEspMedTradicional);
       return Right(result);
@@ -66,7 +65,7 @@ class EspecialidadMedTradicionalByDptoRepositoryDBImpl
       int ubicacionId,
       List<LstNombreMedTradicional> lstNombreMedTradicional) async {
     try {
-      final result = await especialidadMedTradicionalByDptoLocalDataSource
+      final result = await especialidadMedTradicionalLocalDataSource
           .saveUbicacionNombresMedTradicional(
               ubicacionId, lstNombreMedTradicional);
       return Right(result);
@@ -81,7 +80,7 @@ class EspecialidadMedTradicionalByDptoRepositoryDBImpl
   Future<Either<Failure, List<LstNombreMedTradicional>>>
       getUbicacionNombresMedTradicionalRepositoryDB(int? ubicacionId) async {
     try {
-      final result = await especialidadMedTradicionalByDptoLocalDataSource
+      final result = await especialidadMedTradicionalLocalDataSource
           .getUbicacionNombresMedTradicional(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
@@ -96,8 +95,40 @@ class EspecialidadMedTradicionalByDptoRepositoryDBImpl
       getUbicacionEspecialidadesMedTradicionalRepositoryDB(
           int? ubicacionId) async {
     try {
-      final result = await especialidadMedTradicionalByDptoLocalDataSource
+      final result = await especialidadMedTradicionalLocalDataSource
           .getUbicacionEspecialidadesMedTradicional(ubicacionId);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LstEspMedTradicional>>>
+      getEspecialidadesMedTradicionalAtencionSaludRepositoryDB(
+          int? atencionSaludId) async {
+    try {
+      final result = await especialidadMedTradicionalLocalDataSource
+          .getEspecialidadesMedTradicionalAtencionSalud(atencionSaludId);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>>
+      saveEspecialidadesMedTradicionalAtencionSaludRepositoryDB(
+          int atencionSaludId,
+          List<LstEspMedTradicional> lstEspMedTradicional) async {
+    try {
+      final result = await especialidadMedTradicionalLocalDataSource
+          .saveEspecialidadesMedTradicionalAtencionSalud(
+              atencionSaludId, lstEspMedTradicional);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

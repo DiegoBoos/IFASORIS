@@ -33,7 +33,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
       _selectedDificultadesAccesoMedTradicional = [];
   List<LstNombreMedTradicional> _nombresMedTrad = [];
 
-  String? _validateEspecialidadesMedTradicionalByDpto() {
+  String? _validateEspecialidadesMedTradicional() {
     if (_selectedEspecialidadesMedTradicional.isEmpty) {
       return 'Seleccione al menos una opción.';
     } else if (_selectedEspecialidadesMedTradicional.length > 5) {
@@ -116,8 +116,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
   }
 
   Future<void> getOptions() async {
-    final especialidadMedTradicionalByDptoCubit =
-        BlocProvider.of<EspecialidadMedTradicionalByDptoCubit>(
+    final especialidadMedTradicionalCubit =
+        BlocProvider.of<EspecialidadMedTradicionalCubit>(
       context,
     );
 
@@ -132,11 +132,11 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
     );
 
     _selectedEspecialidadesMedTradicional =
-        await especialidadMedTradicionalByDptoCubit
+        await especialidadMedTradicionalCubit
             .getUbicacionEspecialidadesMedTradicionalDB(
                 widget.dimUbicacion?.ubicacionId);
 
-    _nombresMedTrad = await especialidadMedTradicionalByDptoCubit
+    _nombresMedTrad = await especialidadMedTradicionalCubit
         .getUbicacionNombresMedTradicionalDB(widget.dimUbicacion?.ubicacionId);
 
     if (_nombresMedTrad.isEmpty) {
@@ -263,10 +263,10 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
               textAlign: TextAlign.center,
             ),
             const Divider(),
-            BlocBuilder<EspecialidadMedTradicionalByDptoCubit,
-                EspecialidadesMedTradicionalByDptoState>(
+            BlocBuilder<EspecialidadMedTradicionalCubit,
+                EspecialidadesMedTradicionalState>(
               builder: (context, state) {
-                if (state is EspecialidadesMedTradicionalByDptoLoaded) {
+                if (state is EspecialidadesMedTradicionalLoaded) {
                   return FormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     initialValue: _selectedEspecialidadesMedTradicional,
@@ -276,12 +276,10 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                         children: [
                           Wrap(
                               children: List<Widget>.generate(
-                                  state
-                                      .especialidadesMedtradicionalByDptoLoaded!
+                                  state.especialidadesMedTradicionalLoaded!
                                       .length, (index) {
-                            final e =
-                                state.especialidadesMedtradicionalByDptoLoaded![
-                                    index];
+                            final e = state
+                                .especialidadesMedTradicionalLoaded![index];
                             return Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -313,7 +311,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                   ),
                                 ),
                                 if (index <
-                                    state.especialidadesMedtradicionalByDptoLoaded!
+                                    state.especialidadesMedTradicionalLoaded!
                                             .length -
                                         1)
                                   const VerticalDivider(),
@@ -321,14 +319,13 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                             );
                           })),
                           Text(
-                            _validateEspecialidadesMedTradicionalByDpto() ?? '',
+                            _validateEspecialidadesMedTradicional() ?? '',
                             style: const TextStyle(color: Colors.red),
                           ),
                         ],
                       );
                     },
-                    validator: (_) =>
-                        _validateEspecialidadesMedTradicionalByDpto(),
+                    validator: (_) => _validateEspecialidadesMedTradicional(),
                     onSaved: (List<LstEspMedTradicional>? value) {
                       dimUbicacionBloc
                           .add(EspecialidadesMedTradChanged(value!));

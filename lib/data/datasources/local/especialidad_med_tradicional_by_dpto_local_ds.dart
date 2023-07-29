@@ -5,11 +5,11 @@ import '../../../domain/entities/especialidad_med_tradicional_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
 import '../../models/especialidad_med_tradicional_model.dart';
 
-abstract class EspecialidadMedTradicionalByDptoLocalDataSource {
+abstract class EspecialidadMedTradicionalLocalDataSource {
   Future<List<EspecialidadMedTradicionalModel>>
-      getEspecialidadesMedTradicionalByDpto();
-  Future<int> saveEspecialidadMedTradicionalByDpto(
-      EspecialidadMedTradicionalEntity especialidadMedTradicionalByDpto);
+      getEspecialidadesMedTradicional();
+  Future<int> saveEspecialidadMedTradicional(
+      EspecialidadMedTradicionalEntity especialidadMedTradicional);
 
   Future<int> saveUbicacionEspecialidadMedTradicional(
       int ubicacionId, List<LstEspMedTradicional> lstEspMedTradicional);
@@ -21,13 +21,19 @@ abstract class EspecialidadMedTradicionalByDptoLocalDataSource {
       int? ubicacionId);
   Future<List<LstNombreMedTradicional>> getUbicacionNombresMedTradicional(
       int? ubicacionId);
+
+  Future<List<LstEspMedTradicional>>
+      getEspecialidadesMedTradicionalAtencionSalud(int? atencionSaludId);
+
+  Future<int> saveEspecialidadesMedTradicionalAtencionSalud(
+      int atencionSaludId, List<LstEspMedTradicional> lstEspMedTradicional);
 }
 
-class EspecialidadMedTradicionalByDptoLocalDataSourceImpl
-    implements EspecialidadMedTradicionalByDptoLocalDataSource {
+class EspecialidadMedTradicionalLocalDataSourceImpl
+    implements EspecialidadMedTradicionalLocalDataSource {
   @override
   Future<List<EspecialidadMedTradicionalModel>>
-      getEspecialidadesMedTradicionalByDpto() async {
+      getEspecialidadesMedTradicional() async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('EspecialidadesMedTrad_AccesoMedTradicional');
     final result = List<EspecialidadMedTradicionalModel>.from(
@@ -37,12 +43,12 @@ class EspecialidadMedTradicionalByDptoLocalDataSourceImpl
   }
 
   @override
-  Future<int> saveEspecialidadMedTradicionalByDpto(
-      EspecialidadMedTradicionalEntity especialidadMedTradicionalByDpto) async {
+  Future<int> saveEspecialidadMedTradicional(
+      EspecialidadMedTradicionalEntity especialidadMedTradicional) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('EspecialidadesMedTrad_AccesoMedTradicional',
-        especialidadMedTradicionalByDpto.toJson());
+        especialidadMedTradicional.toJson());
 
     return res;
   }
@@ -120,5 +126,43 @@ class EspecialidadMedTradicionalByDptoLocalDataSourceImpl
         res.map((m) => LstEspMedTradicional.fromJson(m))).toList();
 
     return result;
+  }
+
+  @override
+  Future<List<LstEspMedTradicional>>
+      getEspecialidadesMedTradicionalAtencionSalud(int? atencionSaludId) async {
+    final db = await ConnectionSQLiteService.db;
+    final res = await db.query('Asp7_EspecialidadesMedTradAtencionSalud',
+        where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);
+    final result = List<LstEspMedTradicional>.from(
+        res.map((m) => LstEspMedTradicional.fromJson(m))).toList();
+
+    return result;
+  }
+
+  @override
+  Future<int> saveEspecialidadesMedTradicionalAtencionSalud(int atencionSaludId,
+      List<LstEspMedTradicional> lstEspMedTradicional) async {
+    final db = await ConnectionSQLiteService.db;
+
+    Batch batch = db.batch();
+    batch.delete('Asp7_EspecialidadesMedTradAtencionSalud',
+        where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);
+
+    final nombresMedTradicionalAtencionSalud = lstEspMedTradicional
+        .map((item) => EspecialidadMedTradAtencionSalud(
+            especialidadMedTradId: item.especialidadMedTradId,
+            atencionSaludId: atencionSaludId))
+        .toList();
+
+    for (final nombreMedTradicionalAtencionSalud
+        in nombresMedTradicionalAtencionSalud) {
+      batch.insert('Asp7_EspecialidadesMedTradAtencionSalud',
+          nombreMedTradicionalAtencionSalud.toJson());
+    }
+
+    final res = await batch.commit();
+
+    return res.length;
   }
 }

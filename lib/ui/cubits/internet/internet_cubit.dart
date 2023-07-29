@@ -13,8 +13,7 @@ class InternetCubit extends Cubit<InternetState> {
         .onConnectivityChanged
         .listen((ConnectivityResult connectivityResult) {
       if (connectivityResult == ConnectivityResult.wifi ||
-          connectivityResult == ConnectivityResult.mobile ||
-          connectivityResult == ConnectivityResult.vpn) {
+          connectivityResult == ConnectivityResult.mobile) {
         emit(InternetConnected());
       } else {
         emit(InternetDisconnected());
@@ -27,8 +26,7 @@ class InternetCubit extends Cubit<InternetState> {
     ConnectivityResult connectivityResult =
         await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.wifi ||
-        connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.vpn) {
+        connectivityResult == ConnectivityResult.mobile) {
       emit(InternetConnected());
     } else {
       emit(InternetDisconnected());

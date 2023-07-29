@@ -38,8 +38,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
       dificultadAccesoMedTradicionalByDptoUsecaseDB;
   final CerealByDptoUsecaseDB cerealByDptoUsecaseDB;
   final DificultadAccesoCAUsecaseDB dificultadAccesoCAUsecaseDB;
-  final EspecialidadMedTradicionalByDptoUsecaseDB
-      especialidadMedTradicionalByDptoUsecaseDB;
+  final EspecialidadMedTradicionalUsecaseDB especialidadMedTradicionalUsecaseDB;
   final EspecieAnimalByDptoUsecaseDB especieAnimalByDptoUsecaseDB;
   final FrutoByDptoUsecaseDB frutoByDptoUsecaseDB;
   final HortalizaByDptoUsecaseDB hortalizaByDptoUsecaseDB;
@@ -55,7 +54,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     required this.dificultadAccesoMedTradicionalByDptoUsecaseDB,
     required this.cerealByDptoUsecaseDB,
     required this.dificultadAccesoCAUsecaseDB,
-    required this.especialidadMedTradicionalByDptoUsecaseDB,
+    required this.especialidadMedTradicionalUsecaseDB,
     required this.especieAnimalByDptoUsecaseDB,
     required this.frutoByDptoUsecaseDB,
     required this.hortalizaByDptoUsecaseDB,
@@ -232,7 +231,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
   }
 
   void saveUbicacionEspecialidadMedTradicional(int ubicacionId) async {
-    final result = await especialidadMedTradicionalByDptoUsecaseDB
+    final result = await especialidadMedTradicionalUsecaseDB
         .saveUbicacionEspecialidadMedTradicionalUsecaseDB(
             ubicacionId, state.lstEspMedTradicional!);
     result.fold((failure) {
@@ -292,7 +291,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
   }
 
   void saveUbicacionNombresMedTradicional(int ubicacionId) async {
-    final result = await especialidadMedTradicionalByDptoUsecaseDB
+    final result = await especialidadMedTradicionalUsecaseDB
         .saveUbicacionNombresMedTradicionalUsecaseDB(
             ubicacionId, state.lstNombreMedTradicional!);
     result.fold((failure) {

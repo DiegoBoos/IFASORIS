@@ -76,7 +76,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
             enabled: false,
             controller: _nombresApellidosCtrl,
             decoration: const InputDecoration(
-              labelText: 'Apellidos y Nombres',
+              labelText: 'Integrante Grupo Familiar',
               border: OutlineInputBorder(),
             ),
           ),

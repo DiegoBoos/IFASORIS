@@ -32,6 +32,6 @@ class FamiliaEntity {
         "Ficha_id": fichaId,
         "ApellidosFlia": apellidosFlia,
         "Afiliado_id": afiliadoId,
-        "remoteFamiliaId": remoteFamiliaId,
+        "remoteFamilia_id": remoteFamiliaId,
       };
 }

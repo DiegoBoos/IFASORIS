@@ -61,7 +61,7 @@ class EspecieAnimalByDptoRepositoryDBImpl
       getUbicacionEspeciesAnimalesRepositoryDB(int? ubicacionId) async {
     try {
       final result = await especieAnimalByDptoLocalDataSource
-          .getUbicacionEspeciesAnimales(ubicacionId);
+          .getAsp1EspeciesAnimales(ubicacionId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

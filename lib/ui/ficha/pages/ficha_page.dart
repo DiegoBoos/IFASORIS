@@ -13,6 +13,8 @@ import '../../cubits/alimentacion/alimentacion_cubit.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
 import '../../cubits/cigarrillo_dia/cigarrillo_dia_cubit.dart';
+import '../../cubits/condicion_nutricional/condicion_nutricional_cubit.dart';
+import '../../cubits/conducta_seguir/conducta_seguir_cubit.dart';
 import '../../cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 import '../../cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import '../../cubits/curso_vida/curso_vida_cubit.dart';
@@ -20,6 +22,7 @@ import '../../cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import '../../cubits/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_cubit.dart';
 import '../../cubits/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_cubit.dart';
 import '../../cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
+import '../../cubits/esquema_vacunacion/esquema_vacunacion_cubit.dart';
 import '../../cubits/estado_via/estado_via_cubit.dart';
 import '../../cubits/etnia/etnia_cubit.dart';
 import '../../cubits/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_cubit.dart';
@@ -30,10 +33,13 @@ import '../../cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
 import '../../cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
 import '../../cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
 import '../../cubits/lengua_maneja/lengua_maneja_cubit.dart';
+import '../../cubits/lugar_vacunacion/lugar_vacunacion_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import '../../cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
 import '../../cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
+import '../../cubits/metodo_planificacion/metodo_planificacion_cubit.dart';
 import '../../cubits/nivel_educativo/nivel_educativo_cubit.dart';
+import '../../cubits/nombre_enfermedad/nombre_enfermedad_cubit.dart';
 import '../../cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
 import '../../cubits/ocupacion/ocupacion_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
@@ -42,7 +48,9 @@ import '../../cubits/piso_vivienda_by_dpto/piso_vivienda_by_dpto_cubit.dart';
 import '../../cubits/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_cubit.dart';
 import '../../cubits/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_cubit.dart';
 import '../../cubits/regimen/regimen_cubit.dart';
+import '../../cubits/seguimiento_enfermedad/seguimiento_enfermedad_cubit.dart';
 import '../../cubits/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_cubit.dart';
+import '../../cubits/servicio_solicitado/servicio_solicitado_cubit.dart';
 import '../../cubits/techo_vivienda_by_dpto/techo_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
@@ -54,6 +62,7 @@ import '../../cubits/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_
 import '../../cubits/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_cubit.dart';
 import '../../cubits/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_cubit.dart';
+import '../../cubits/ultima_vez_inst_salud/ultima_vez_inst_salud_cubit.dart';
 import '../../cubits/ventilacion_vivienda/ventilacion_vivienda_cubit.dart';
 import '../../cubits/verdura_by_dpto/verdura_by_dpto_cubit.dart';
 import '../../cubits/via_acceso/via_acceso_cubit.dart';
@@ -114,8 +123,8 @@ class _FichaPageState extends State<FichaPage> {
         .getCostosDesplazamientoDB();
     BlocProvider.of<MedioUtilizaMedTradicionalByDptoCubit>(context)
         .getMediosUtilizaMedTradicionalByDpto();
-    BlocProvider.of<EspecialidadMedTradicionalByDptoCubit>(context)
-        .getEspecialidadesMedTradicionalByDptoDB();
+    BlocProvider.of<EspecialidadMedTradicionalCubit>(context)
+        .getEspecialidadesMedTradicionalDB();
     BlocProvider.of<TiempoTardaMedTradicionalCubit>(context)
         .getTiemposTardaMedTradicionalDB();
     BlocProvider.of<DificultadAccesoMedTradicionalByDptoCubit>(context)
@@ -172,6 +181,18 @@ class _FichaPageState extends State<FichaPage> {
     BlocProvider.of<AlimentacionCubit>(context).getAlimentacionDB();
     BlocProvider.of<CigarrilloDiaCubit>(context).getCigarrilloDiaDB();
     BlocProvider.of<ConsumoAlcoholCubit>(context).getConsumoAlcoholDB();
+    BlocProvider.of<CondicionNutricionalCubit>(context)
+        .getCondicionNutricionalDB();
+    BlocProvider.of<ConductaSeguirCubit>(context).getConductaSeguirDB();
+    BlocProvider.of<EsquemaVacunacionCubit>(context).getEsquemaVacunacionDB();
+    BlocProvider.of<LugarVacunacionCubit>(context).getLugarVacunacionDB();
+    BlocProvider.of<MetodoPlanificacionCubit>(context)
+        .getMetodoPlanificacionDB();
+    BlocProvider.of<NombreEnfermedadCubit>(context).getNombreEnfermedadDB();
+    BlocProvider.of<SeguimientoEnfermedadCubit>(context)
+        .getSeguimientoEnfermedadDB();
+    BlocProvider.of<ServicioSolicitadoCubit>(context).getServicioSolicitadoDB();
+    BlocProvider.of<UltimaVezInstSaludCubit>(context).getUltimaVezInstSaludDB();
   }
 
   @override
@@ -232,7 +253,8 @@ class _FichaPageState extends State<FichaPage> {
                     'Datos del grupo familiar guardados correctamente',
                     Colors.green);
 
-                Navigator.pushReplacementNamed(context, 'componentes');
+                Navigator.pushReplacementNamed(
+                    context, 'estilo-vida-saludable');
               }
               if (state is GrupoFamiliarSubmissionFailed) {
                 CustomSnackBar.showSnackBar(context, state.message, Colors.red);

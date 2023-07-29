@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 
-import '../../../domain/entities/estilo_vida_saludable_entity.dart';
+import '../../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
+import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
-import '../widgets/estilos_vida_saludable_form.dart';
+import '../widgets/cuidado_salud_cond_riesgo_form.dart';
 import '../widgets/progress_bar.dart';
 
-class ComponentesGrupoFamiliarPage extends StatefulWidget {
-  const ComponentesGrupoFamiliarPage({super.key});
+class CuidadoSaludCondRiesgoPage extends StatefulWidget {
+  const CuidadoSaludCondRiesgoPage({super.key});
 
   @override
-  State<ComponentesGrupoFamiliarPage> createState() =>
-      _ComponentesGrupoFamiliarPageState();
+  State<CuidadoSaludCondRiesgoPage> createState() =>
+      _CuidadoSaludCondRiesgoPageState();
 }
 
-class _ComponentesGrupoFamiliarPageState
-    extends State<ComponentesGrupoFamiliarPage> {
+class _CuidadoSaludCondRiesgoPageState
+    extends State<CuidadoSaludCondRiesgoPage> {
   int afiliadoPageIndex = 0;
   final afiliadoPageController = PageController(initialPage: 0);
   late List<GlobalKey<FormState>> formKeys;
@@ -29,7 +29,7 @@ class _ComponentesGrupoFamiliarPageState
 
     formKeys = List.generate(
       encuestaBloc.state.afiliados.length,
-      (_) => GlobalKey<FormState>(), // Generate unique form keys
+      (_) => GlobalKey<FormState>(),
     );
   }
 
@@ -41,33 +41,34 @@ class _ComponentesGrupoFamiliarPageState
       final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
       final afiliados = encuestaBloc.state.afiliados;
 
-      final estiloVidaSaludableBloc =
-          BlocProvider.of<EstiloVidaSaludableBloc>(context);
+      final cuidadoSaludCondRiesgoBloc =
+          BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context);
 
-      final currentEstiloVidaSaludable = estiloVidaSaludableBloc.state.copyWith(
-          afiliadoId: afiliados[afiliadoPageIndex].afiliadoId,
-          familiaId: afiliados[afiliadoPageIndex].familiaId);
+      final currentCuidadoSaludCondRiesgo = cuidadoSaludCondRiesgoBloc.state
+          .copyWith(
+              afiliadoId: afiliados[afiliadoPageIndex].afiliadoId,
+              familiaId: afiliados[afiliadoPageIndex].familiaId);
 
-      estiloVidaSaludableBloc
-          .add(EstiloVidaSaludableSubmitted(currentEstiloVidaSaludable));
+      cuidadoSaludCondRiesgoBloc
+          .add(CuidadoSaludCondRiesgoSubmitted(currentCuidadoSaludCondRiesgo));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
-    final estiloVidaSaludableBloc =
-        BlocProvider.of<EstiloVidaSaludableBloc>(context);
+    final cuidadoSaludCondRiesgoBloc =
+        BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context);
     return MultiBlocListener(
       listeners: [
-        BlocListener<EstiloVidaSaludableBloc, EstiloVidaSaludableEntity>(
+        BlocListener<CuidadoSaludCondRiesgoBloc, CuidadoSaludCondRiesgoEntity>(
           listener: (context, state) {
             final formStatus = state.formStatus;
-            if (formStatus is EstiloVidaSaludableSubmissionSuccess) {
+            if (formStatus is CuidadoSaludCondRiesgoSubmissionSuccess) {
               CustomSnackBar.showSnackBar(
-                  context, 'Datos guardados correctamente', Colors.green);
-
-              /*  estiloVidaSaludableBloc.add(EstiloVidaSaludableInit()); */
+                  context,
+                  'Datos de cuidado salud condiciones riesgo guardados correctamente',
+                  Colors.green);
 
               if (afiliadoPageIndex < encuestaBloc.state.afiliados.length - 1) {
                 afiliadoPageController.animateToPage(
@@ -80,17 +81,17 @@ class _ComponentesGrupoFamiliarPageState
               }
             }
 
-            if (formStatus is EstiloVidaSaludableSubmissionFailed) {
+            if (formStatus is CuidadoSaludCondRiesgoSubmissionFailed) {
               CustomSnackBar.showSnackBar(
                   context, formStatus.message, Colors.red);
 
-              estiloVidaSaludableBloc.add(EstiloVidaSaludableInit());
+              cuidadoSaludCondRiesgoBloc.add(CuidadoSaludCondRiesgoInit());
             }
           },
         )
       ],
       child: Scaffold(
-        appBar: AppBar(title: const Text('Componentes')),
+        appBar: AppBar(title: const Text('Estilos de vida saludable')),
         body: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -111,7 +112,7 @@ class _ComponentesGrupoFamiliarPageState
 
                     return Form(
                       key: formKeys[index],
-                      child: EstilosVidaSaludableForm(
+                      child: CuidadoSaludCondRiesgoForm(
                         currentAfiliado: currentAfiliado,
                       ),
                     );

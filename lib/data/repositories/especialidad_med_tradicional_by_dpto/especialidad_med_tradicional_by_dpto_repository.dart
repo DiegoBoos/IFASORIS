@@ -8,20 +8,20 @@ import '../../../domain/entities/especialidad_med_tradicional_entity.dart';
 import '../../../domain/repositories/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_repository.dart';
 import '../../datasources/remote/especialidad_med_tradicional_by_dpto_remote_ds.dart';
 
-class EspecialidadMedTradicionalByDptoRepositoryImpl
-    implements EspecialidadMedTradicionalByDptoRepository {
-  final EspecialidadMedTradicionalByDptoRemoteDataSource
-      especialidadMedTradicionalByDptoRemoteDataSource;
+class EspecialidadMedTradicionalRepositoryImpl
+    implements EspecialidadMedTradicionalRepository {
+  final EspecialidadMedTradicionalRemoteDataSource
+      especialidadMedTradicionalRemoteDataSource;
 
-  EspecialidadMedTradicionalByDptoRepositoryImpl(
-      {required this.especialidadMedTradicionalByDptoRemoteDataSource});
+  EspecialidadMedTradicionalRepositoryImpl(
+      {required this.especialidadMedTradicionalRemoteDataSource});
 
   @override
   Future<Either<Failure, List<EspecialidadMedTradicionalEntity>>>
-      getEspecialidadesMedTradicionalByDptoRepository(int dtoId) async {
+      getEspecialidadesMedTradicionalRepository(int dtoId) async {
     try {
-      final result = await especialidadMedTradicionalByDptoRemoteDataSource
-          .getEspecialidadesMedTradicionalByDpto(dtoId);
+      final result = await especialidadMedTradicionalRemoteDataSource
+          .getEspecialidadesMedTradicional(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

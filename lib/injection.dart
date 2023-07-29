@@ -4,22 +4,33 @@ import 'package:get_it/get_it.dart';
 import 'domain/usecases/actividad_fisica/actividad_fisica_exports.dart';
 import 'domain/usecases/afiliado/afiliado_exports.dart';
 import 'domain/usecases/alimentacion/alimentacion_exports.dart';
+import 'domain/usecases/atencion_salud/atencion_salud_exports.dart';
 import 'domain/usecases/auth/auth_exports.dart';
 import 'domain/usecases/autoridad_indigena/autoridad_indigena_exports.dart';
 import 'domain/usecases/cereal_by_dpto/cereal_by_dpto_exports.dart';
 import 'domain/usecases/cigarrillo_dia/cigarrillo_dia_exports.dart';
+import 'domain/usecases/condicion_nutricional/condicion_nutricional_exports.dart';
+import 'domain/usecases/conducta_seguir/conducta_seguir_exports.dart';
 import 'domain/usecases/consumo_alcohol/consumo_alcohol_exports.dart';
 import 'domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
+import 'domain/usecases/costumbre_practica/costumbre_practica_exports.dart';
+import 'domain/usecases/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_exports.dart';
 import 'domain/usecases/curso_vida/curso_vida_exports.dart';
 import 'domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import 'domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
 import 'domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
 import 'domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
+import 'domain/usecases/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_exports.dart';
+import 'domain/usecases/enfermedad_acude/enfermedad_acude_exports.dart';
+import 'domain/usecases/enfermedad_tradicional/enfermedad_tradicional_exports.dart';
+import 'domain/usecases/enfermedad_tratamiento/enfermedad_tratamiento_exports.dart';
 import 'domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import 'domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_exports.dart';
+import 'domain/usecases/esquema_vacunacion/esquema_vacunacion_exports.dart';
 import 'domain/usecases/estado_via/estado_via_exports.dart';
 import 'domain/usecases/estilo_vida_saludable/estilo_vida_saludable_exports.dart';
 import 'domain/usecases/etnia/etnia_exports.dart';
+import 'domain/usecases/evento_costumbre_participa/evento_costumbre_participa_exports.dart';
 import 'domain/usecases/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/familia/familia_exports.dart';
 import 'domain/usecases/ficha/ficha_exports.dart';
@@ -31,20 +42,30 @@ import 'domain/usecases/hortaliza_by_dpto/hortaliza_by_dpto_exports.dart';
 import 'domain/usecases/iluminacion_vivienda/iluminacion_vivienda_exports.dart';
 import 'domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
 import 'domain/usecases/lengua_maneja/lengua_maneja_exports.dart';
+import 'domain/usecases/lugar_atencion_medico/lugar_atencion_medico_exports.dart';
+import 'domain/usecases/lugar_planta_medicinal/lugar_planta_medicinal_exports.dart';
+import 'domain/usecases/lugar_vacunacion/lugar_vacunacion_exports.dart';
 import 'domain/usecases/medio_comunicacion/medio_comunicacion_exports.dart';
 import 'domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import 'domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_exports.dart';
+import 'domain/usecases/metodo_planificacion/metodo_planificacion_exports.dart';
 import 'domain/usecases/nivel_educativo/nivel_educativo_exports.dart';
+import 'domain/usecases/nombre_enfermedad/nombre_enfermedad_exports.dart';
 import 'domain/usecases/nombre_lengua_materna/nombre_lengua_materna_exports.dart';
 import 'domain/usecases/ocupacion/ocupacion_exports.dart';
 import 'domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import 'domain/usecases/parentesco/parentesco_exports.dart';
 import 'domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
+import 'domain/usecases/planta_medicinal/planta_medicinal_exports.dart';
 import 'domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/pueblo_indigena/pueblo_indigena_exports.dart';
 import 'domain/usecases/regimen/regimen_exports.dart';
+import 'domain/usecases/religion_profesa/religion_profesa_exports.dart';
 import 'domain/usecases/resguardo_by_dpto/resguardo_by_dpto_exports.dart';
+import 'domain/usecases/sancion_justicia/sancion_justicia_exports.dart';
+import 'domain/usecases/seguimiento_enfermedad/seguimiento_enfermedad_exports.dart';
 import 'domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
+import 'domain/usecases/servicio_solicitado/servicio_solicitado_exports.dart';
 import 'domain/usecases/sync_log/sync_log_exports.dart';
 import 'domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_exports.dart';
@@ -57,6 +78,7 @@ import 'domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_
 import 'domain/usecases/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_exports.dart';
 import 'domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_exports.dart';
+import 'domain/usecases/ultima_vez_inst_salud/ultima_vez_inst_salud_exports.dart';
 import 'domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import 'domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
 import 'domain/usecases/via_acceso/via_acceso_exports.dart';
@@ -80,6 +102,9 @@ void init() {
   dimViviendaInit();
   grupoFamiliarInit();
   estiloVidaSaludableInit();
+  cuidadoSaludCondRiesgoInit();
+  atencionSaludInit();
+  dimensionSocioculturalPueblosIndigenasInit();
   dificultadAccesoCAInit();
   estadoViaInit();
   medioComunicacionInit();
@@ -90,7 +115,7 @@ void init() {
   cerealByDptoInit();
   costoDesplazamientoInit();
   dificultadAccesoMedTradicionalByDptoInit();
-  especialidadMedTradicionalByDptoInit();
+  especialidadMedTradicionalInit();
   especieAnimalByDptoInit();
   frutoByDptoInit();
   hortalizaByDptoInit();
@@ -132,6 +157,25 @@ void init() {
   alimentacionInit();
   cigarrilloDiaInit();
   consumoAlcoholInit();
+  condicionNutricionalInit();
+  conductaSeguirInit();
+  esquemaVacunacionInit();
+  lugarVacunacionInit();
+  metodoPlanificacionInit();
+  nombreEnfermedadInit();
+  seguimientoEnfermedadInit();
+  servicioSolicitadoInit();
+  ultimaVezInstSaludInit();
+  enfermedadAcudeInit();
+  enfermedadTratamientoInit();
+  enfermedadTradicionalInit();
+  lugarAtencionMedicoInit();
+  lugarPlantaMedicinalInit();
+  plantaMedicinalInit();
+  religionProfesaInit();
+  eventoCostumbreParticipaInit();
+  costumbrePracticaInit();
+  sancionJusticiaInit();
   // external
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => SharedPreferencesService());
@@ -209,8 +253,8 @@ void syncInit() {
         costoDesplazamientoUsecaseDB: locator(),
         dificultadAccesoMedTradicionalByDptoUsecase: locator(),
         dificultadAccesoMedTradicionalByDptoUsecaseDB: locator(),
-        especialidadMedTradicionalByDptoUsecase: locator(),
-        especialidadMedTradicionalByDptoUsecaseDB: locator(),
+        especialidadMedTradicionalUsecase: locator(),
+        especialidadMedTradicionalUsecaseDB: locator(),
         especieAnimalByDptoUsecase: locator(),
         especieAnimalByDptoUsecaseDB: locator(),
         frutoByDptoUsecase: locator(),
@@ -291,6 +335,44 @@ void syncInit() {
         cigarrilloDiaUsecaseDB: locator(),
         consumoAlcoholUsecase: locator(),
         consumoAlcoholUsecaseDB: locator(),
+        condicionNutricionalUsecase: locator(),
+        condicionNutricionalUsecaseDB: locator(),
+        conductaSeguirUsecase: locator(),
+        conductaSeguirUsecaseDB: locator(),
+        esquemaVacunacionUsecase: locator(),
+        esquemaVacunacionUsecaseDB: locator(),
+        lugarVacunacionUsecase: locator(),
+        lugarVacunacionUsecaseDB: locator(),
+        metodoPlanificacionUsecase: locator(),
+        metodoPlanificacionUsecaseDB: locator(),
+        nombreEnfermedadUsecase: locator(),
+        nombreEnfermedadUsecaseDB: locator(),
+        seguimientoEnfermedadUsecase: locator(),
+        seguimientoEnfermedadUsecaseDB: locator(),
+        servicioSolicitadoUsecase: locator(),
+        servicioSolicitadoUsecaseDB: locator(),
+        ultimaVezInstSaludUsecase: locator(),
+        ultimaVezInstSaludUsecaseDB: locator(),
+        enfermedadAcudeUsecase: locator(),
+        enfermedadAcudeUsecaseDB: locator(),
+        enfermedadTradicionalUsecase: locator(),
+        enfermedadTradicionalUsecaseDB: locator(),
+        enfermedadTratamientoUsecase: locator(),
+        enfermedadTratamientoUsecaseDB: locator(),
+        lugarAtencionMedicoUsecase: locator(),
+        lugarAtencionMedicoUsecaseDB: locator(),
+        lugarPlantaMedicinalUsecase: locator(),
+        lugarPlantaMedicinalUsecaseDB: locator(),
+        plantaMedicinalUsecase: locator(),
+        plantaMedicinalUsecaseDB: locator(),
+        costumbrePracticaUsecase: locator(),
+        costumbrePracticaUsecaseDB: locator(),
+        eventoCostumbreParticipaUsecase: locator(),
+        eventoCostumbreParticipaUsecaseDB: locator(),
+        religionProfesaUsecase: locator(),
+        religionProfesaUsecaseDB: locator(),
+        sancionJusticiaUsecase: locator(),
+        sancionJusticiaUsecaseDB: locator(),
       ));
 }
 
@@ -364,7 +446,7 @@ void dimUbicacionInit() {
       cerealByDptoUsecaseDB: locator(),
       dificultadAccesoCAUsecaseDB: locator(),
       dificultadAccesoMedTradicionalByDptoUsecaseDB: locator(),
-      especialidadMedTradicionalByDptoUsecaseDB: locator(),
+      especialidadMedTradicionalUsecaseDB: locator(),
       especieAnimalByDptoUsecaseDB: locator(),
       frutoByDptoUsecaseDB: locator(),
       hortalizaByDptoUsecaseDB: locator(),
@@ -529,6 +611,127 @@ void estiloVidaSaludableInit() {
   // local data source
   locator.registerLazySingleton<EstiloVidaSaludableLocalDataSource>(
     () => EstiloVidaSaludableLocalDataSourceImpl(),
+  );
+}
+
+void cuidadoSaludCondRiesgoInit() {
+  // bloc
+  locator.registerFactory(() =>
+      CuidadoSaludCondRiesgoBloc(cuidadoSaludCondRiesgoUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => CuidadoSaludCondRiesgoUsecase(locator()));
+
+  // local usecase
+  locator
+      .registerLazySingleton(() => CuidadoSaludCondRiesgoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<CuidadoSaludCondRiesgoRepository>(
+    () => CuidadoSaludCondRiesgoRepositoryImpl(
+      cuidadoSaludCondRiesgoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<CuidadoSaludCondRiesgoRepositoryDB>(
+    () => CuidadoSaludCondRiesgoRepositoryDBImpl(
+      cuidadoSaludCondRiesgoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<CuidadoSaludCondRiesgoRemoteDataSource>(
+    () => CuidadoSaludCondRiesgoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<CuidadoSaludCondRiesgoLocalDataSource>(
+    () => CuidadoSaludCondRiesgoLocalDataSourceImpl(),
+  );
+}
+
+void atencionSaludInit() {
+  // bloc
+  locator.registerFactory(
+      () => AtencionSaludBloc(atencionSaludUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => AtencionSaludUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => AtencionSaludUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<AtencionSaludRepository>(
+    () => AtencionSaludRepositoryImpl(
+      atencionSaludRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<AtencionSaludRepositoryDB>(
+    () => AtencionSaludRepositoryDBImpl(
+      atencionSaludLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<AtencionSaludRemoteDataSource>(
+    () => AtencionSaludRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<AtencionSaludLocalDataSource>(
+    () => AtencionSaludLocalDataSourceImpl(),
+  );
+}
+
+void dimensionSocioculturalPueblosIndigenasInit() {
+  // bloc
+  locator.registerFactory(() => DimensionSocioculturalPueblosIndigenasBloc(
+      dimensionSocioculturalPueblosIndigenasUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(
+      () => DimensionSocioculturalPueblosIndigenasUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(
+      () => DimensionSocioculturalPueblosIndigenasUsecaseDB(locator()));
+
+  // repository
+  locator
+      .registerLazySingleton<DimensionSocioculturalPueblosIndigenasRepository>(
+    () => DimensionSocioculturalPueblosIndigenasRepositoryImpl(
+      dimensionSocioculturalPueblosIndigenasRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<
+      DimensionSocioculturalPueblosIndigenasRepositoryDB>(
+    () => DimensionSocioculturalPueblosIndigenasRepositoryDBImpl(
+      dimensionSocioculturalPueblosIndigenasLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<
+      DimensionSocioculturalPueblosIndigenasRemoteDataSource>(
+    () => DimensionSocioculturalPueblosIndigenasRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<
+      DimensionSocioculturalPueblosIndigenasLocalDataSource>(
+    () => DimensionSocioculturalPueblosIndigenasLocalDataSourceImpl(),
   );
 }
 
@@ -921,46 +1124,44 @@ void dificultadAccesoMedTradicionalByDptoInit() {
   );
 }
 
-void especialidadMedTradicionalByDptoInit() {
+void especialidadMedTradicionalInit() {
   // cubit
-  locator.registerFactory(() => EspecialidadMedTradicionalByDptoCubit(
-        especialidadMedTradicionalByDptoUsecaseDB: locator(),
+  locator.registerFactory(() => EspecialidadMedTradicionalCubit(
+        especialidadMedTradicionalUsecaseDB: locator(),
       ));
 
   // remote usecase
   locator.registerLazySingleton(
-      () => EspecialidadMedTradicionalByDptoUsecase(locator()));
+      () => EspecialidadMedTradicionalUsecase(locator()));
 
   // local usecase
   locator.registerLazySingleton(
-      () => EspecialidadMedTradicionalByDptoUsecaseDB(locator()));
+      () => EspecialidadMedTradicionalUsecaseDB(locator()));
 
   // repository
-  locator.registerLazySingleton<EspecialidadMedTradicionalByDptoRepository>(
-    () => EspecialidadMedTradicionalByDptoRepositoryImpl(
-      especialidadMedTradicionalByDptoRemoteDataSource: locator(),
+  locator.registerLazySingleton<EspecialidadMedTradicionalRepository>(
+    () => EspecialidadMedTradicionalRepositoryImpl(
+      especialidadMedTradicionalRemoteDataSource: locator(),
     ),
   );
 
   // repository DB
-  locator.registerLazySingleton<EspecialidadMedTradicionalByDptoRepositoryDB>(
-    () => EspecialidadMedTradicionalByDptoRepositoryDBImpl(
-      especialidadMedTradicionalByDptoLocalDataSource: locator(),
+  locator.registerLazySingleton<EspecialidadMedTradicionalRepositoryDB>(
+    () => EspecialidadMedTradicionalRepositoryDBImpl(
+      especialidadMedTradicionalLocalDataSource: locator(),
     ),
   );
 
   // remote data source
-  locator
-      .registerLazySingleton<EspecialidadMedTradicionalByDptoRemoteDataSource>(
-    () => EspecialidadMedTradicionalByDptoRemoteDataSourceImpl(
+  locator.registerLazySingleton<EspecialidadMedTradicionalRemoteDataSource>(
+    () => EspecialidadMedTradicionalRemoteDataSourceImpl(
       client: locator(),
     ),
   );
 
   // local data source
-  locator
-      .registerLazySingleton<EspecialidadMedTradicionalByDptoLocalDataSource>(
-    () => EspecialidadMedTradicionalByDptoLocalDataSourceImpl(),
+  locator.registerLazySingleton<EspecialidadMedTradicionalLocalDataSource>(
+    () => EspecialidadMedTradicionalLocalDataSourceImpl(),
   );
 }
 
@@ -2566,5 +2767,732 @@ void consumoAlcoholInit() {
   // local data source
   locator.registerLazySingleton<ConsumoAlcoholLocalDataSource>(
     () => ConsumoAlcoholLocalDataSourceImpl(),
+  );
+}
+
+void condicionNutricionalInit() {
+  // cubit
+  locator.registerFactory(() =>
+      CondicionNutricionalCubit(condicionNutricionalUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => CondicionNutricionalUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => CondicionNutricionalUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<CondicionNutricionalRepository>(
+    () => CondicionNutricionalRepositoryImpl(
+      condicionNutricionalRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<CondicionNutricionalRepositoryDB>(
+    () => CondicionNutricionalRepositoryDBImpl(
+      condicionNutricionalLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<CondicionNutricionalRemoteDataSource>(
+    () => CondicionNutricionalRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<CondicionNutricionalLocalDataSource>(
+    () => CondicionNutricionalLocalDataSourceImpl(),
+  );
+}
+
+void conductaSeguirInit() {
+  // cubit
+  locator.registerFactory(
+      () => ConductaSeguirCubit(conductaSeguirUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => ConductaSeguirUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => ConductaSeguirUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<ConductaSeguirRepository>(
+    () => ConductaSeguirRepositoryImpl(
+      conductaSeguirRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<ConductaSeguirRepositoryDB>(
+    () => ConductaSeguirRepositoryDBImpl(
+      conductaSeguirLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<ConductaSeguirRemoteDataSource>(
+    () => ConductaSeguirRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<ConductaSeguirLocalDataSource>(
+    () => ConductaSeguirLocalDataSourceImpl(),
+  );
+}
+
+void esquemaVacunacionInit() {
+  // cubit
+  locator.registerFactory(
+      () => EsquemaVacunacionCubit(esquemaVacunacionUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => EsquemaVacunacionUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => EsquemaVacunacionUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<EsquemaVacunacionRepository>(
+    () => EsquemaVacunacionRepositoryImpl(
+      esquemaVacunacionRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<EsquemaVacunacionRepositoryDB>(
+    () => EsquemaVacunacionRepositoryDBImpl(
+      esquemaVacunacionLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<EsquemaVacunacionRemoteDataSource>(
+    () => EsquemaVacunacionRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<EsquemaVacunacionLocalDataSource>(
+    () => EsquemaVacunacionLocalDataSourceImpl(),
+  );
+}
+
+void lugarVacunacionInit() {
+  // cubit
+  locator.registerFactory(
+      () => LugarVacunacionCubit(lugarVacunacionUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => LugarVacunacionUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => LugarVacunacionUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<LugarVacunacionRepository>(
+    () => LugarVacunacionRepositoryImpl(
+      lugarVacunacionRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<LugarVacunacionRepositoryDB>(
+    () => LugarVacunacionRepositoryDBImpl(
+      lugarVacunacionLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<LugarVacunacionRemoteDataSource>(
+    () => LugarVacunacionRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<LugarVacunacionLocalDataSource>(
+    () => LugarVacunacionLocalDataSourceImpl(),
+  );
+}
+
+void metodoPlanificacionInit() {
+  // cubit
+  locator.registerFactory(
+      () => MetodoPlanificacionCubit(metodoPlanificacionUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => MetodoPlanificacionUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => MetodoPlanificacionUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<MetodoPlanificacionRepository>(
+    () => MetodoPlanificacionRepositoryImpl(
+      metodoPlanificacionRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<MetodoPlanificacionRepositoryDB>(
+    () => MetodoPlanificacionRepositoryDBImpl(
+      metodoPlanificacionLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<MetodoPlanificacionRemoteDataSource>(
+    () => MetodoPlanificacionRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<MetodoPlanificacionLocalDataSource>(
+    () => MetodoPlanificacionLocalDataSourceImpl(),
+  );
+}
+
+void nombreEnfermedadInit() {
+  // cubit
+  locator.registerFactory(
+      () => NombreEnfermedadCubit(nombreEnfermedadUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => NombreEnfermedadUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => NombreEnfermedadUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<NombreEnfermedadRepository>(
+    () => NombreEnfermedadRepositoryImpl(
+      nombreEnfermedadRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<NombreEnfermedadRepositoryDB>(
+    () => NombreEnfermedadRepositoryDBImpl(
+      nombreEnfermedadLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<NombreEnfermedadRemoteDataSource>(
+    () => NombreEnfermedadRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<NombreEnfermedadLocalDataSource>(
+    () => NombreEnfermedadLocalDataSourceImpl(),
+  );
+}
+
+void seguimientoEnfermedadInit() {
+  // cubit
+  locator.registerFactory(() =>
+      SeguimientoEnfermedadCubit(seguimientoEnfermedadUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => SeguimientoEnfermedadUsecase(locator()));
+
+  // local usecase
+  locator
+      .registerLazySingleton(() => SeguimientoEnfermedadUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<SeguimientoEnfermedadRepository>(
+    () => SeguimientoEnfermedadRepositoryImpl(
+      seguimientoEnfermedadRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<SeguimientoEnfermedadRepositoryDB>(
+    () => SeguimientoEnfermedadRepositoryDBImpl(
+      seguimientoEnfermedadLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<SeguimientoEnfermedadRemoteDataSource>(
+    () => SeguimientoEnfermedadRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<SeguimientoEnfermedadLocalDataSource>(
+    () => SeguimientoEnfermedadLocalDataSourceImpl(),
+  );
+}
+
+void servicioSolicitadoInit() {
+  // cubit
+  locator.registerFactory(
+      () => ServicioSolicitadoCubit(servicioSolicitadoUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => ServicioSolicitadoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => ServicioSolicitadoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<ServicioSolicitadoRepository>(
+    () => ServicioSolicitadoRepositoryImpl(
+      servicioSolicitadoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<ServicioSolicitadoRepositoryDB>(
+    () => ServicioSolicitadoRepositoryDBImpl(
+      servicioSolicitadoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<ServicioSolicitadoRemoteDataSource>(
+    () => ServicioSolicitadoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<ServicioSolicitadoLocalDataSource>(
+    () => ServicioSolicitadoLocalDataSourceImpl(),
+  );
+}
+
+void ultimaVezInstSaludInit() {
+  // cubit
+  locator.registerFactory(
+      () => UltimaVezInstSaludCubit(ultimaVezInstSaludUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => UltimaVezInstSaludUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => UltimaVezInstSaludUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<UltimaVezInstSaludRepository>(
+    () => UltimaVezInstSaludRepositoryImpl(
+      ultimaVezInstSaludRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<UltimaVezInstSaludRepositoryDB>(
+    () => UltimaVezInstSaludRepositoryDBImpl(
+      ultimaVezInstSaludLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<UltimaVezInstSaludRemoteDataSource>(
+    () => UltimaVezInstSaludRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<UltimaVezInstSaludLocalDataSource>(
+    () => UltimaVezInstSaludLocalDataSourceImpl(),
+  );
+}
+
+void enfermedadAcudeInit() {
+  // cubit
+  locator.registerFactory(
+      () => EnfermedadAcudeCubit(enfermedadAcudeUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => EnfermedadAcudeUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => EnfermedadAcudeUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<EnfermedadAcudeRepository>(
+    () => EnfermedadAcudeRepositoryImpl(
+      enfermedadAcudeRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<EnfermedadAcudeRepositoryDB>(
+    () => EnfermedadAcudeRepositoryDBImpl(
+      enfermedadAcudeLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<EnfermedadAcudeRemoteDataSource>(
+    () => EnfermedadAcudeRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<EnfermedadAcudeLocalDataSource>(
+    () => EnfermedadAcudeLocalDataSourceImpl(),
+  );
+}
+
+void enfermedadTratamientoInit() {
+  // cubit
+  locator.registerFactory(() =>
+      EnfermedadTratamientoCubit(enfermedadTratamientoUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => EnfermedadTratamientoUsecase(locator()));
+
+  // local usecase
+  locator
+      .registerLazySingleton(() => EnfermedadTratamientoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<EnfermedadTratamientoRepository>(
+    () => EnfermedadTratamientoRepositoryImpl(
+      enfermedadTratamientoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<EnfermedadTratamientoRepositoryDB>(
+    () => EnfermedadTratamientoRepositoryDBImpl(
+      enfermedadTratamientoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<EnfermedadTratamientoRemoteDataSource>(
+    () => EnfermedadTratamientoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<EnfermedadTratamientoLocalDataSource>(
+    () => EnfermedadTratamientoLocalDataSourceImpl(),
+  );
+}
+
+void enfermedadTradicionalInit() {
+  // cubit
+  locator.registerFactory(() =>
+      EnfermedadTradicionalCubit(enfermedadTradicionalUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => EnfermedadTradicionalUsecase(locator()));
+
+  // local usecase
+  locator
+      .registerLazySingleton(() => EnfermedadTradicionalUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<EnfermedadTradicionalRepository>(
+    () => EnfermedadTradicionalRepositoryImpl(
+      enfermedadTradicionalRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<EnfermedadTradicionalRepositoryDB>(
+    () => EnfermedadTradicionalRepositoryDBImpl(
+      enfermedadTradicionalLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<EnfermedadTradicionalRemoteDataSource>(
+    () => EnfermedadTradicionalRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<EnfermedadTradicionalLocalDataSource>(
+    () => EnfermedadTradicionalLocalDataSourceImpl(),
+  );
+}
+
+void lugarAtencionMedicoInit() {
+  // cubit
+  locator.registerFactory(
+      () => LugarAtencionMedicoCubit(lugarAtencionMedicoUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => LugarAtencionMedicoUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => LugarAtencionMedicoUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<LugarAtencionMedicoRepository>(
+    () => LugarAtencionMedicoRepositoryImpl(
+      lugarAtencionMedicoRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<LugarAtencionMedicoRepositoryDB>(
+    () => LugarAtencionMedicoRepositoryDBImpl(
+      lugarAtencionMedicoLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<LugarAtencionMedicoRemoteDataSource>(
+    () => LugarAtencionMedicoRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<LugarAtencionMedicoLocalDataSource>(
+    () => LugarAtencionMedicoLocalDataSourceImpl(),
+  );
+}
+
+void lugarPlantaMedicinalInit() {
+  // cubit
+  locator.registerFactory(() =>
+      LugarPlantaMedicinalCubit(lugarPlantaMedicinalUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => LugarPlantaMedicinalUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => LugarPlantaMedicinalUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<LugarPlantaMedicinalRepository>(
+    () => LugarPlantaMedicinalRepositoryImpl(
+      lugarPlantaMedicinalRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<LugarPlantaMedicinalRepositoryDB>(
+    () => LugarPlantaMedicinalRepositoryDBImpl(
+      lugarPlantaMedicinalLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<LugarPlantaMedicinalRemoteDataSource>(
+    () => LugarPlantaMedicinalRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<LugarPlantaMedicinalLocalDataSource>(
+    () => LugarPlantaMedicinalLocalDataSourceImpl(),
+  );
+}
+
+void plantaMedicinalInit() {
+  // cubit
+  locator.registerFactory(
+      () => PlantaMedicinalCubit(plantaMedicinalUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => PlantaMedicinalUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => PlantaMedicinalUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<PlantaMedicinalRepository>(
+    () => PlantaMedicinalRepositoryImpl(
+      plantaMedicinalRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<PlantaMedicinalRepositoryDB>(
+    () => PlantaMedicinalRepositoryDBImpl(
+      plantaMedicinalLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<PlantaMedicinalRemoteDataSource>(
+    () => PlantaMedicinalRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<PlantaMedicinalLocalDataSource>(
+    () => PlantaMedicinalLocalDataSourceImpl(),
+  );
+}
+
+void religionProfesaInit() {
+  // cubit
+  locator.registerFactory(
+      () => ReligionProfesaCubit(religionProfesaUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => ReligionProfesaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => ReligionProfesaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<ReligionProfesaRepository>(
+    () => ReligionProfesaRepositoryImpl(
+      religionProfesaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<ReligionProfesaRepositoryDB>(
+    () => ReligionProfesaRepositoryDBImpl(
+      religionProfesaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<ReligionProfesaRemoteDataSource>(
+    () => ReligionProfesaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<ReligionProfesaLocalDataSource>(
+    () => ReligionProfesaLocalDataSourceImpl(),
+  );
+}
+
+void eventoCostumbreParticipaInit() {
+  // cubit
+  locator.registerFactory(() => EventoCostumbreParticipaCubit(
+      eventoCostumbreParticipaUsecaseDB: locator()));
+
+  // remote usecase
+  locator
+      .registerLazySingleton(() => EventoCostumbreParticipaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(
+      () => EventoCostumbreParticipaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<EventoCostumbreParticipaRepository>(
+    () => EventoCostumbreParticipaRepositoryImpl(
+      eventoCostumbreParticipaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<EventoCostumbreParticipaRepositoryDB>(
+    () => EventoCostumbreParticipaRepositoryDBImpl(
+      eventoCostumbreParticipaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<EventoCostumbreParticipaRemoteDataSource>(
+    () => EventoCostumbreParticipaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<EventoCostumbreParticipaLocalDataSource>(
+    () => EventoCostumbreParticipaLocalDataSourceImpl(),
+  );
+}
+
+void costumbrePracticaInit() {
+  // cubit
+  locator.registerFactory(
+      () => CostumbrePracticaCubit(costumbrePracticaUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => CostumbrePracticaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => CostumbrePracticaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<CostumbrePracticaRepository>(
+    () => CostumbrePracticaRepositoryImpl(
+      costumbrePracticaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<CostumbrePracticaRepositoryDB>(
+    () => CostumbrePracticaRepositoryDBImpl(
+      costumbrePracticaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<CostumbrePracticaRemoteDataSource>(
+    () => CostumbrePracticaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<CostumbrePracticaLocalDataSource>(
+    () => CostumbrePracticaLocalDataSourceImpl(),
+  );
+}
+
+void sancionJusticiaInit() {
+  // cubit
+  locator.registerFactory(
+      () => SancionJusticiaCubit(sancionJusticiaUsecaseDB: locator()));
+
+  // remote usecase
+  locator.registerLazySingleton(() => SancionJusticiaUsecase(locator()));
+
+  // local usecase
+  locator.registerLazySingleton(() => SancionJusticiaUsecaseDB(locator()));
+
+  // repository
+  locator.registerLazySingleton<SancionJusticiaRepository>(
+    () => SancionJusticiaRepositoryImpl(
+      sancionJusticiaRemoteDataSource: locator(),
+    ),
+  );
+
+  // repository DB
+  locator.registerLazySingleton<SancionJusticiaRepositoryDB>(
+    () => SancionJusticiaRepositoryDBImpl(
+      sancionJusticiaLocalDataSource: locator(),
+    ),
+  );
+
+  // remote data source
+  locator.registerLazySingleton<SancionJusticiaRemoteDataSource>(
+    () => SancionJusticiaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+
+  // local data source
+  locator.registerLazySingleton<SancionJusticiaLocalDataSource>(
+    () => SancionJusticiaLocalDataSourceImpl(),
   );
 }

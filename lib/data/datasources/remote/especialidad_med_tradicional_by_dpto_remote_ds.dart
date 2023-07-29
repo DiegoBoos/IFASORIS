@@ -7,24 +7,24 @@ import '../../../constants.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/especialidad_med_tradicional_model.dart';
 
-abstract class EspecialidadMedTradicionalByDptoRemoteDataSource {
-  Future<List<EspecialidadMedTradicionalModel>>
-      getEspecialidadesMedTradicionalByDpto(int dtoId);
+abstract class EspecialidadMedTradicionalRemoteDataSource {
+  Future<List<EspecialidadMedTradicionalModel>> getEspecialidadesMedTradicional(
+      int dtoId);
 }
 
-class EspecialidadMedTradicionalByDptoRemoteDataSourceImpl
-    implements EspecialidadMedTradicionalByDptoRemoteDataSource {
+class EspecialidadMedTradicionalRemoteDataSourceImpl
+    implements EspecialidadMedTradicionalRemoteDataSource {
   final prefs = SharedPreferencesService();
   final http.Client client;
 
-  EspecialidadMedTradicionalByDptoRemoteDataSourceImpl({required this.client});
+  EspecialidadMedTradicionalRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<EspecialidadMedTradicionalModel>>
-      getEspecialidadesMedTradicionalByDpto(int dtoId) async {
+  Future<List<EspecialidadMedTradicionalModel>> getEspecialidadesMedTradicional(
+      int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/especialidadesmedtradicionalbyDpto?IdeDpto=$dtoId');
+          '${Constants.ifasorisBaseUrl}/EspecialidadesMedTradicional?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

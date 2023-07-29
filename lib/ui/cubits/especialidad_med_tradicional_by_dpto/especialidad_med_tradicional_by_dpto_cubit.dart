@@ -8,35 +8,42 @@ import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialid
 
 part 'especialidad_med_tradicional_by_dpto_state.dart';
 
-class EspecialidadMedTradicionalByDptoCubit
-    extends Cubit<EspecialidadesMedTradicionalByDptoState> {
-  final EspecialidadMedTradicionalByDptoUsecaseDB
-      especialidadMedTradicionalByDptoUsecaseDB;
+class EspecialidadMedTradicionalCubit
+    extends Cubit<EspecialidadesMedTradicionalState> {
+  final EspecialidadMedTradicionalUsecaseDB especialidadMedTradicionalUsecaseDB;
 
-  EspecialidadMedTradicionalByDptoCubit(
-      {required this.especialidadMedTradicionalByDptoUsecaseDB})
-      : super(EspecialidadesMedTradicionalByDptoInitial());
+  EspecialidadMedTradicionalCubit(
+      {required this.especialidadMedTradicionalUsecaseDB})
+      : super(EspecialidadesMedTradicionalInitial());
 
-  void getEspecialidadesMedTradicionalByDptoDB() async {
-    final result = await especialidadMedTradicionalByDptoUsecaseDB
-        .getEspecialidadesMedTradicionalByDptoUsecaseDB();
+  void getEspecialidadesMedTradicionalDB() async {
+    final result = await especialidadMedTradicionalUsecaseDB
+        .getEspecialidadesMedTradicionalUsecaseDB();
     result.fold(
-        (failure) => emit(
-            EspecialidadesMedTradicionalByDptoError(failure.properties.first)),
-        (data) => emit(EspecialidadesMedTradicionalByDptoLoaded(data)));
+        (failure) =>
+            emit(EspecialidadesMedTradicionalError(failure.properties.first)),
+        (data) => emit(EspecialidadesMedTradicionalLoaded(data)));
   }
 
   Future<List<LstEspMedTradicional>> getUbicacionEspecialidadesMedTradicionalDB(
       int? ubicacionId) async {
-    final result = await especialidadMedTradicionalByDptoUsecaseDB
+    final result = await especialidadMedTradicionalUsecaseDB
         .getUbicacionEspecialidadesMedTradicionalUsecaseDB(ubicacionId);
     return result.fold((failure) => [], (data) => data);
   }
 
   Future<List<LstNombreMedTradicional>> getUbicacionNombresMedTradicionalDB(
       int? ubicacionId) async {
-    final result = await especialidadMedTradicionalByDptoUsecaseDB
+    final result = await especialidadMedTradicionalUsecaseDB
         .getUbicacionNombresMedTradicionalUsecaseDB(ubicacionId);
+    return result.fold((failure) => [], (data) => data);
+  }
+
+  Future<List<LstEspMedTradicional>>
+      getEspecialidadesMedTradicionalAtencionSaludDB(
+          int? atencionSaludId) async {
+    final result = await especialidadMedTradicionalUsecaseDB
+        .getEspecialidadesMedTradicionalAtencionSaludUsecaseDB(atencionSaludId);
     return result.fold((failure) => [], (data) => data);
   }
 }

@@ -9,7 +9,7 @@ abstract class EspecieAnimalByDptoLocalDataSource {
   Future<int> saveEspecieAnimalByDpto(EspecieAnimalEntity especieAnimal);
   Future<int> saveUbicacionEspecieAnimalesCria(
       int ubicacionId, List<LstAnimalCria> lstAnimalCria);
-  Future<List<LstAnimalCria>> getUbicacionEspeciesAnimales(int? ubicacionId);
+  Future<List<LstAnimalCria>> getAsp1EspeciesAnimales(int? ubicacionId);
 }
 
 class EspecieAnimalByDptoLocalDataSourceImpl
@@ -60,8 +60,7 @@ class EspecieAnimalByDptoLocalDataSourceImpl
   }
 
   @override
-  Future<List<LstAnimalCria>> getUbicacionEspeciesAnimales(
-      int? ubicacionId) async {
+  Future<List<LstAnimalCria>> getAsp1EspeciesAnimales(int? ubicacionId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp1_UbicacionEspecieAnimalesCria',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);

@@ -1,18 +1,18 @@
 import '../../ui/blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 
 class EstiloVidaSaludableEntity {
-  EstiloVidaSaludableEntity({
-    this.estilosVidaId,
-    this.afiliadoId,
-    this.familiaId,
-    this.actividadFisicaId,
-    this.alimentacionId,
-    this.consumoAlcoholId,
-    this.consumeCigarrillo,
-    this.numeroCigarrilloDiaId,
-    this.consumoSustanciasPsicoactivas,
-    this.formStatus = const EstiloVidaSaludableFormInitial(),
-  });
+  EstiloVidaSaludableEntity(
+      {this.estilosVidaId,
+      this.afiliadoId,
+      this.familiaId,
+      this.actividadFisicaId,
+      this.alimentacionId,
+      this.consumoAlcoholId,
+      this.consumeCigarrillo,
+      this.numeroCigarrilloDiaId,
+      this.consumoSustanciasPsicoactivas,
+      this.formStatus = const EstiloVidaSaludableFormInitial(),
+      this.remoteEstilosVidaId});
 
   int? estilosVidaId;
   int? afiliadoId;
@@ -24,6 +24,7 @@ class EstiloVidaSaludableEntity {
   int? numeroCigarrilloDiaId;
   int? consumoSustanciasPsicoactivas;
   EstiloVidaSaludableState formStatus;
+  int? remoteEstilosVidaId;
 
   EstiloVidaSaludableEntity copyWith({
     int? estilosVidaId,
@@ -62,5 +63,6 @@ class EstiloVidaSaludableEntity {
         "ConsumeCigarrillo": consumeCigarrillo,
         "NumeroCigarrilloDia_id": numeroCigarrilloDiaId,
         "ConsumoSustanciasPsicoactivas": consumoSustanciasPsicoactivas,
+        "remoteEstilosVida_id": remoteEstilosVidaId,
       };
 }

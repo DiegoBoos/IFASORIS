@@ -216,7 +216,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               enabled: false,
               initialValue: _nombresApellidos,
               decoration: const InputDecoration(
-                labelText: 'Apellidos y Nombres',
+                labelText: 'Integrante Grupo Familiar',
                 border: OutlineInputBorder(),
               ),
             ),

@@ -185,7 +185,7 @@ class DimUbicacionEntity {
         "PoseeChagra": poseeChagra,
         "ProduccionMinera": produccionMinera,
         "TipoCalendario_id": tipoCalendarioId,
-        "remoteUbicacionId": remoteUbicacionId,
+        "remoteUbicacion_id": remoteUbicacionId,
       };
 
   Map<String, dynamic> toJsonUpload() {
@@ -208,7 +208,7 @@ class DimUbicacionEntity {
       "PoseeChagra": poseeChagra,
       "ProduccionMinera": produccionMinera,
       "TipoCalendario_id": tipoCalendarioId,
-      "remoteUbicacionId": remoteUbicacionId,
+      "remoteUbicacion_id": remoteUbicacionId,
     };
 
     if (lstDificultadAccesoMedTradicional != null) {

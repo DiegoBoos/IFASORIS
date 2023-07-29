@@ -75,3 +75,35 @@ class UbicacionEspecialidadMedTradicional {
         "EspecialidadMedTrad_id": especialidadMedTradicionalId,
       };
 }
+
+List<EspecialidadMedTradAtencionSalud>
+    especialidadesMedTradAtencionSaludFromJson(String str) =>
+        List<EspecialidadMedTradAtencionSalud>.from(json
+            .decode(str)
+            .map((x) => EspecialidadMedTradAtencionSalud.fromJson(x)));
+
+class EspecialidadMedTradAtencionSalud {
+  int? especialidadMedTradAtencionSaludId;
+  int? atencionSaludId;
+  int? especialidadMedTradId;
+
+  EspecialidadMedTradAtencionSalud({
+    this.especialidadMedTradAtencionSaludId,
+    this.atencionSaludId,
+    this.especialidadMedTradId,
+  });
+
+  factory EspecialidadMedTradAtencionSalud.fromJson(
+          Map<String, dynamic> json) =>
+      EspecialidadMedTradAtencionSalud(
+        especialidadMedTradAtencionSaludId:
+            json["EspecialidadesMedTradAtencionSalud_id"],
+        atencionSaludId: json["AtencionSalud_id"],
+        especialidadMedTradId: json["EspecialidadMedTrad_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "AtencionSalud_id": atencionSaludId,
+        "EnfermedadTradicional_id": especialidadMedTradId,
+      };
+}

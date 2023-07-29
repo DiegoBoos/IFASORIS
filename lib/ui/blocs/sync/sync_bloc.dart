@@ -9,17 +9,25 @@ import '../../../domain/usecases/alimentacion/alimentacion_exports.dart';
 import '../../../domain/usecases/autoridad_indigena/autoridad_indigena_exports.dart';
 import '../../../domain/usecases/cereal_by_dpto/cereal_by_dpto_exports.dart';
 import '../../../domain/usecases/cigarrillo_dia/cigarrillo_dia_exports.dart';
+import '../../../domain/usecases/condicion_nutricional/condicion_nutricional_exports.dart';
+import '../../../domain/usecases/conducta_seguir/conducta_seguir_exports.dart';
 import '../../../domain/usecases/consumo_alcohol/consumo_alcohol_exports.dart';
 import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
+import '../../../domain/usecases/costumbre_practica/costumbre_practica_exports.dart';
 import '../../../domain/usecases/curso_vida/curso_vida_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
 import '../../../domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
+import '../../../domain/usecases/enfermedad_acude/enfermedad_acude_exports.dart';
+import '../../../domain/usecases/enfermedad_tradicional/enfermedad_tradicional_exports.dart';
+import '../../../domain/usecases/enfermedad_tratamiento/enfermedad_tratamiento_exports.dart';
 import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
 import '../../../domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_exports.dart';
+import '../../../domain/usecases/esquema_vacunacion/esquema_vacunacion_exports.dart';
 import '../../../domain/usecases/estado_via/estado_via_exports.dart';
 import '../../../domain/usecases/etnia/etnia_exports.dart';
+import '../../../domain/usecases/evento_costumbre_participa/evento_costumbre_participa_exports.dart';
 import '../../../domain/usecases/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/fruto_by_dpto/fruto_by_dpto_exports.dart';
 import '../../../domain/usecases/genero/genero_exports.dart';
@@ -28,20 +36,30 @@ import '../../../domain/usecases/hortaliza_by_dpto/hortaliza_by_dpto_exports.dar
 import '../../../domain/usecases/iluminacion_vivienda/iluminacion_vivienda_exports.dart';
 import '../../../domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
 import '../../../domain/usecases/lengua_maneja/lengua_maneja_exports.dart';
+import '../../../domain/usecases/lugar_atencion_medico/lugar_atencion_medico_exports.dart';
+import '../../../domain/usecases/lugar_planta_medicinal/lugar_planta_medicinal_exports.dart';
+import '../../../domain/usecases/lugar_vacunacion/lugar_vacunacion_exports.dart';
 import '../../../domain/usecases/medio_comunicacion/medio_comunicacion_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import '../../../domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_exports.dart';
+import '../../../domain/usecases/metodo_planificacion/metodo_planificacion_exports.dart';
 import '../../../domain/usecases/nivel_educativo/nivel_educativo_exports.dart';
+import '../../../domain/usecases/nombre_enfermedad/nombre_enfermedad_exports.dart';
 import '../../../domain/usecases/nombre_lengua_materna/nombre_lengua_materna_exports.dart';
 import '../../../domain/usecases/ocupacion/ocupacion_exports.dart';
 import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import '../../../domain/usecases/parentesco/parentesco_exports.dart';
 import '../../../domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/planta_medicinal/planta_medicinal_exports.dart';
 import '../../../domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/pueblo_indigena/pueblo_indigena_exports.dart';
 import '../../../domain/usecases/regimen/regimen_exports.dart';
+import '../../../domain/usecases/religion_profesa/religion_profesa_exports.dart';
 import '../../../domain/usecases/resguardo_by_dpto/resguardo_by_dpto_exports.dart';
+import '../../../domain/usecases/sancion_justicia/sancion_justicia_exports.dart';
+import '../../../domain/usecases/seguimiento_enfermedad/seguimiento_enfermedad_exports.dart';
 import '../../../domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/servicio_solicitado/servicio_solicitado_exports.dart';
 import '../../../domain/usecases/sync_log/sync_log_exports.dart';
 import '../../../domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_exports.dart';
@@ -54,6 +72,7 @@ import '../../../domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_
 import '../../../domain/usecases/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_exports.dart';
 import '../../../domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_exports.dart';
+import '../../../domain/usecases/ultima_vez_inst_salud/ultima_vez_inst_salud_exports.dart';
 import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import '../../../domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
@@ -86,10 +105,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       dificultadAccesoMedTradicionalByDptoUsecase;
   final DificultadAccesoMedTradicionalByDptoUsecaseDB
       dificultadAccesoMedTradicionalByDptoUsecaseDB;
-  final EspecialidadMedTradicionalByDptoUsecase
-      especialidadMedTradicionalByDptoUsecase;
-  final EspecialidadMedTradicionalByDptoUsecaseDB
-      especialidadMedTradicionalByDptoUsecaseDB;
+  final EspecialidadMedTradicionalUsecase especialidadMedTradicionalUsecase;
+  final EspecialidadMedTradicionalUsecaseDB especialidadMedTradicionalUsecaseDB;
   final EspecieAnimalByDptoUsecase especieAnimalByDptoUsecase;
   final EspecieAnimalByDptoUsecaseDB especieAnimalByDptoUsecaseDB;
   final FrutoByDptoUsecase frutoByDptoUsecase;
@@ -179,14 +196,51 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final CigarrilloDiaUsecaseDB cigarrilloDiaUsecaseDB;
   final ConsumoAlcoholUsecase consumoAlcoholUsecase;
   final ConsumoAlcoholUsecaseDB consumoAlcoholUsecaseDB;
+  final CondicionNutricionalUsecase condicionNutricionalUsecase;
+  final CondicionNutricionalUsecaseDB condicionNutricionalUsecaseDB;
+  final ConductaSeguirUsecase conductaSeguirUsecase;
+  final ConductaSeguirUsecaseDB conductaSeguirUsecaseDB;
+  final EsquemaVacunacionUsecase esquemaVacunacionUsecase;
+  final EsquemaVacunacionUsecaseDB esquemaVacunacionUsecaseDB;
+  final LugarVacunacionUsecase lugarVacunacionUsecase;
+  final LugarVacunacionUsecaseDB lugarVacunacionUsecaseDB;
+  final MetodoPlanificacionUsecase metodoPlanificacionUsecase;
+  final MetodoPlanificacionUsecaseDB metodoPlanificacionUsecaseDB;
+  final NombreEnfermedadUsecase nombreEnfermedadUsecase;
+  final NombreEnfermedadUsecaseDB nombreEnfermedadUsecaseDB;
+  final SeguimientoEnfermedadUsecase seguimientoEnfermedadUsecase;
+  final SeguimientoEnfermedadUsecaseDB seguimientoEnfermedadUsecaseDB;
+  final ServicioSolicitadoUsecase servicioSolicitadoUsecase;
+  final ServicioSolicitadoUsecaseDB servicioSolicitadoUsecaseDB;
+  final UltimaVezInstSaludUsecase ultimaVezInstSaludUsecase;
+  final UltimaVezInstSaludUsecaseDB ultimaVezInstSaludUsecaseDB;
+  final EnfermedadAcudeUsecase enfermedadAcudeUsecase;
+  final EnfermedadAcudeUsecaseDB enfermedadAcudeUsecaseDB;
+  final EnfermedadTratamientoUsecase enfermedadTratamientoUsecase;
+  final EnfermedadTratamientoUsecaseDB enfermedadTratamientoUsecaseDB;
+  final EnfermedadTradicionalUsecase enfermedadTradicionalUsecase;
+  final EnfermedadTradicionalUsecaseDB enfermedadTradicionalUsecaseDB;
+  final LugarAtencionMedicoUsecase lugarAtencionMedicoUsecase;
+  final LugarAtencionMedicoUsecaseDB lugarAtencionMedicoUsecaseDB;
+  final LugarPlantaMedicinalUsecase lugarPlantaMedicinalUsecase;
+  final LugarPlantaMedicinalUsecaseDB lugarPlantaMedicinalUsecaseDB;
+  final PlantaMedicinalUsecase plantaMedicinalUsecase;
+  final PlantaMedicinalUsecaseDB plantaMedicinalUsecaseDB;
+  final ReligionProfesaUsecase religionProfesaUsecase;
+  final ReligionProfesaUsecaseDB religionProfesaUsecaseDB;
+  final EventoCostumbreParticipaUsecase eventoCostumbreParticipaUsecase;
+  final EventoCostumbreParticipaUsecaseDB eventoCostumbreParticipaUsecaseDB;
+  final CostumbrePracticaUsecase costumbrePracticaUsecase;
+  final CostumbrePracticaUsecaseDB costumbrePracticaUsecaseDB;
+  final SancionJusticiaUsecase sancionJusticiaUsecase;
+  final SancionJusticiaUsecaseDB sancionJusticiaUsecaseDB;
 
   final DimUbicacionUsecase dimUbicacionUsecase;
   final DimViviendaUsecase dimViviendaUsecase;
 
   final SyncLogUsecaseDB syncLogDB;
 
-  /* int totalAccesories = 46; */
-  int totalAccesories = 50;
+  int totalAccesories = 69;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -200,8 +254,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<CostoDesplazamientoEntity> costosDesplazamientoTemp = [];
   List<DificultadAccesoMedTradicionalEntity>
       dificultadesAccesoMedTradicionalByDptoTemp = [];
-  List<EspecialidadMedTradicionalEntity>
-      especialidadesMedTradicionalByDptoTemp = [];
+  List<EspecialidadMedTradicionalEntity> especialidadesMedTradicionalTemp = [];
   List<EspecieAnimalEntity> especiesAnimalesByDptoTemp = [];
   List<FrutoEntity> frutosByDptoTemp = [];
   List<HortalizaEntity> hortalizasByDptoTemp = [];
@@ -242,6 +295,25 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<AlimentacionEntity> alimentacionesTemp = [];
   List<CigarrilloDiaEntity> cigarrillosDiaTemp = [];
   List<ConsumoAlcoholEntity> consumosAlcoholTemp = [];
+  List<CondicionNutricionalEntity> condicionesNutricionalesTemp = [];
+  List<ConductaSeguirEntity> conductasSeguirTemp = [];
+  List<EsquemaVacunacionEntity> esquemasVacunacionTemp = [];
+  List<LugarVacunacionEntity> lugaresVacunacionTemp = [];
+  List<MetodoPlanificacionEntity> metodosPlanificacionTemp = [];
+  List<NombreEnfermedadEntity> nombresEnfermedadesTemp = [];
+  List<SeguimientoEnfermedadEntity> seguimientoEnfermedadesTemp = [];
+  List<ServicioSolicitadoEntity> serviciosSolicitadosTemp = [];
+  List<UltimaVezInstSaludEntity> ultimasVecesInstSaludTemp = [];
+  List<EnfermedadAcudeEntity> enfermedadesAcudeTemp = [];
+  List<EnfermedadTratamientoEntity> enfermedadesTratamientoTemp = [];
+  List<EnfermedadTradicionalEntity> enfermedadesTradicionalesTemp = [];
+  List<LugarAtencionMedicoEntity> lugaresAtencionMedicoTemp = [];
+  List<LugarPlantaMedicinalEntity> lugaresPlantasMedicinalesTemp = [];
+  List<PlantaMedicinalEntity> plantasMedicinalesTemp = [];
+  List<ReligionProfesaEntity> religionesProfesaTemp = [];
+  List<EventoCostumbreParticipaEntity> eventosCostumbresParticipaTemp = [];
+  List<CostumbrePracticaEntity> costumbresPracticanTemp = [];
+  List<SancionJusticiaEntity> sancionesJusticiaTemp = [];
 
   SyncBloc({
     required this.afiliadoUsecase,
@@ -266,8 +338,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.costoDesplazamientoUsecaseDB,
     required this.dificultadAccesoMedTradicionalByDptoUsecase,
     required this.dificultadAccesoMedTradicionalByDptoUsecaseDB,
-    required this.especialidadMedTradicionalByDptoUsecase,
-    required this.especialidadMedTradicionalByDptoUsecaseDB,
+    required this.especialidadMedTradicionalUsecase,
+    required this.especialidadMedTradicionalUsecaseDB,
     required this.especieAnimalByDptoUsecase,
     required this.especieAnimalByDptoUsecaseDB,
     required this.frutoByDptoUsecase,
@@ -346,6 +418,44 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.cigarrilloDiaUsecaseDB,
     required this.consumoAlcoholUsecase,
     required this.consumoAlcoholUsecaseDB,
+    required this.condicionNutricionalUsecase,
+    required this.condicionNutricionalUsecaseDB,
+    required this.conductaSeguirUsecase,
+    required this.conductaSeguirUsecaseDB,
+    required this.esquemaVacunacionUsecase,
+    required this.esquemaVacunacionUsecaseDB,
+    required this.lugarVacunacionUsecase,
+    required this.lugarVacunacionUsecaseDB,
+    required this.metodoPlanificacionUsecase,
+    required this.metodoPlanificacionUsecaseDB,
+    required this.nombreEnfermedadUsecase,
+    required this.nombreEnfermedadUsecaseDB,
+    required this.seguimientoEnfermedadUsecase,
+    required this.seguimientoEnfermedadUsecaseDB,
+    required this.servicioSolicitadoUsecase,
+    required this.servicioSolicitadoUsecaseDB,
+    required this.ultimaVezInstSaludUsecase,
+    required this.ultimaVezInstSaludUsecaseDB,
+    required this.enfermedadAcudeUsecase,
+    required this.enfermedadAcudeUsecaseDB,
+    required this.enfermedadTratamientoUsecase,
+    required this.enfermedadTratamientoUsecaseDB,
+    required this.enfermedadTradicionalUsecase,
+    required this.enfermedadTradicionalUsecaseDB,
+    required this.lugarAtencionMedicoUsecase,
+    required this.lugarAtencionMedicoUsecaseDB,
+    required this.lugarPlantaMedicinalUsecase,
+    required this.lugarPlantaMedicinalUsecaseDB,
+    required this.plantaMedicinalUsecase,
+    required this.plantaMedicinalUsecaseDB,
+    required this.religionProfesaUsecase,
+    required this.religionProfesaUsecaseDB,
+    required this.eventoCostumbreParticipaUsecase,
+    required this.eventoCostumbreParticipaUsecaseDB,
+    required this.costumbrePracticaUsecase,
+    required this.costumbrePracticaUsecaseDB,
+    required this.sancionJusticiaUsecase,
+    required this.sancionJusticiaUsecaseDB,
     required this.dimUbicacionUsecase,
     required this.dimViviendaUsecase,
     required this.syncLogDB,
@@ -355,6 +465,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         add(Downloading(state.syncProgressModel.copyWith(
           title: 'Descargando afiliados',
         )));
+
         ConnectionSQLiteService.truncateTable('Afiliado').then((value) async {
           afiliadosTemp = [];
           await syncAfiliados(event, 1, 10000);
@@ -473,7 +584,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       dificultadesAccesoCATemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando dificultades acceso',
-          counter: 1,
+          counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
       await saveDificultadAccesoCA(
@@ -520,7 +631,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       estadosViasTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando estados vías',
-          counter: 2,
+          counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
       await saveEstadoVia(
@@ -930,8 +1041,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         ConnectionSQLiteService.truncateTable(
                 'EspecialidadesMedTrad_AccesoMedTradicional')
             .then((value) async {
-          especialidadesMedTradicionalByDptoTemp = [];
-          await syncEspecialidadesMedTradicionalByDpto(event);
+          especialidadesMedTradicionalTemp = [];
+          await syncEspecialidadesMedTradicional(event);
         });
         return;
       }
@@ -949,37 +1060,35 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** DificultadAccesoMedTradicionalByDpto ****************************
 
-// ************************** EspecialidadMedTradicionalByDpto ****************************
+// ************************** EspecialidadMedTradicional ****************************
 
-  Future<void> syncEspecialidadesMedTradicionalByDpto(SyncStarted event) async {
-    final result = await especialidadMedTradicionalByDptoUsecase
-        .getEspecialidadesMedTradicionalByDptoUsecase(
-            event.usuario.departamentoId!);
+  Future<void> syncEspecialidadesMedTradicional(SyncStarted event) async {
+    final result = await especialidadMedTradicionalUsecase
+        .getEspecialidadesMedTradicionalUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      especialidadesMedTradicionalByDptoTemp.addAll(data);
+      especialidadesMedTradicionalTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando especialidades médico tradicional',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveEspecialidadMedTradicionalByDpto(
+      await saveEspecialidadMedTradicional(
         event,
-        especialidadesMedTradicionalByDptoTemp[0],
+        especialidadesMedTradicionalTemp[0],
       );
     });
   }
 
-  Future<void> saveEspecialidadMedTradicionalByDpto(
+  Future<void> saveEspecialidadMedTradicional(
     SyncStarted event,
     EspecialidadMedTradicionalEntity especialidadMedTradicional,
   ) async {
-    final result = await especialidadMedTradicionalByDptoUsecaseDB
-        .saveEspecialidadMedTradicionalByDptoUsecaseDB(
-            especialidadMedTradicional);
+    final result = await especialidadMedTradicionalUsecaseDB
+        .saveEspecialidadMedTradicionalUsecaseDB(especialidadMedTradicional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= especialidadesMedTradicionalByDptoTemp.length) {
+      if (data >= especialidadesMedTradicionalTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'EspecieAnimalesCria_AspectosSocioEconomicos')
             .then((value) async {
@@ -990,16 +1099,16 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       EspecialidadMedTradicionalEntity e =
-          especialidadesMedTradicionalByDptoTemp[data];
+          especialidadesMedTradicionalTemp[data];
 
-      await saveEspecialidadMedTradicionalByDpto(
+      await saveEspecialidadMedTradicional(
         event,
         e,
       );
     });
   }
 
-// ************************** EspecialidadMedTradicionalByDpto ****************************
+// ************************** EspecialidadMedTradicional ****************************
 
 // ************************** EspecieAnimalByDpto ****************************
 
@@ -2869,10 +2978,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= consumosAlcoholTemp.length) {
-        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-            title: 'Sincronización completada',
-            counter: state.syncProgressModel.counter + 1,
-            total: totalAccesories)));
+        ConnectionSQLiteService.truncateTable(
+                'CondicionesNutricionales_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          condicionesNutricionalesTemp = [];
+          await syncCondicionesNutricionales(event);
+        });
         return;
       }
       ConsumoAlcoholEntity consumoAlcoholTemp = consumosAlcoholTemp[data];
@@ -2885,6 +2996,922 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** ConsumosAlcohol ****************************
+
+// ************************** CondicionesNutricionales ****************************
+
+  Future<void> syncCondicionesNutricionales(SyncStarted event) async {
+    final result =
+        await condicionNutricionalUsecase.getCondicionesNutricionalesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      condicionesNutricionalesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando condiciones nutricionales',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveCondicionNutricional(
+        event,
+        condicionesNutricionalesTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveCondicionNutricional(
+    SyncStarted event,
+    CondicionNutricionalEntity condicionNutricional,
+  ) async {
+    final result = await condicionNutricionalUsecaseDB
+        .saveCondicionNutricionalUsecaseDB(condicionNutricional);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= condicionesNutricionalesTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'ConductasSeguir_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          conductasSeguirTemp = [];
+          await syncConductasSeguir(event);
+        });
+        return;
+      }
+      CondicionNutricionalEntity condicionNutricionalTemp =
+          condicionesNutricionalesTemp[data];
+
+      await saveCondicionNutricional(
+        event,
+        condicionNutricionalTemp,
+      );
+    });
+  }
+
+// ************************** CondicionesNutricionales ****************************
+
+// ************************** ConductasSeguir ****************************
+
+  Future<void> syncConductasSeguir(SyncStarted event) async {
+    final result = await conductaSeguirUsecase.getConductasSeguirUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      conductasSeguirTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando conductas seguir',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveConductaSeguir(
+        event,
+        conductasSeguirTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveConductaSeguir(
+    SyncStarted event,
+    ConductaSeguirEntity conductaSeguir,
+  ) async {
+    final result = await conductaSeguirUsecaseDB
+        .saveConductaSeguirUsecaseDB(conductaSeguir);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= conductasSeguirTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'EsquemasVacunacion_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          esquemasVacunacionTemp = [];
+          await syncEsquemasVacunacion(event);
+        });
+        return;
+      }
+      ConductaSeguirEntity conductaSeguirTemp = conductasSeguirTemp[data];
+
+      await saveConductaSeguir(
+        event,
+        conductaSeguirTemp,
+      );
+    });
+  }
+
+// ************************** ConductasSeguir ****************************
+
+// ************************** EsquemasVacunacion ****************************
+
+  Future<void> syncEsquemasVacunacion(SyncStarted event) async {
+    final result =
+        await esquemaVacunacionUsecase.getEsquemasVacunacionUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      esquemasVacunacionTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando esquemas vacunacion',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveEsquemaVacunacion(
+        event,
+        esquemasVacunacionTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveEsquemaVacunacion(
+    SyncStarted event,
+    EsquemaVacunacionEntity esquemaVacunacion,
+  ) async {
+    final result = await esquemaVacunacionUsecaseDB
+        .saveEsquemaVacunacionUsecaseDB(esquemaVacunacion);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= esquemasVacunacionTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'LugaresVacunacion_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          lugaresVacunacionTemp = [];
+          await syncLugaresVacunacion(event);
+        });
+        return;
+      }
+      EsquemaVacunacionEntity esquemaVacunacionTemp =
+          esquemasVacunacionTemp[data];
+
+      await saveEsquemaVacunacion(
+        event,
+        esquemaVacunacionTemp,
+      );
+    });
+  }
+
+// ************************** EsquemasVacunacion ****************************
+
+// ************************** LugaresVacunacion ****************************
+
+  Future<void> syncLugaresVacunacion(SyncStarted event) async {
+    final result = await lugarVacunacionUsecase.getLugaresVacunacionUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      lugaresVacunacionTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando lugares vacunacion',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveLugarVacunacion(
+        event,
+        lugaresVacunacionTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveLugarVacunacion(
+    SyncStarted event,
+    LugarVacunacionEntity lugarVacunacion,
+  ) async {
+    final result = await lugarVacunacionUsecaseDB
+        .saveLugarVacunacionUsecaseDB(lugarVacunacion);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= lugaresVacunacionTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'MetodosPlanificacion_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          metodosPlanificacionTemp = [];
+          await syncMetodosPlanificacion(event);
+        });
+        return;
+      }
+      LugarVacunacionEntity lugarVacunacionTemp = lugaresVacunacionTemp[data];
+
+      await saveLugarVacunacion(
+        event,
+        lugarVacunacionTemp,
+      );
+    });
+  }
+
+// ************************** LugaresVacunacion ****************************
+
+// ************************** MetodosPlanificacion ****************************
+
+  Future<void> syncMetodosPlanificacion(SyncStarted event) async {
+    final result =
+        await metodoPlanificacionUsecase.getMetodosPlanificacionUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      metodosPlanificacionTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando metodos planificacion',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveMetodoPlanificacion(
+        event,
+        metodosPlanificacionTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveMetodoPlanificacion(
+    SyncStarted event,
+    MetodoPlanificacionEntity metodoPlanificacion,
+  ) async {
+    final result = await metodoPlanificacionUsecaseDB
+        .saveMetodoPlanificacionUsecaseDB(metodoPlanificacion);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= metodosPlanificacionTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'NombresEnfermedad_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          nombresEnfermedadesTemp = [];
+          await syncNombresEnfermedades(event);
+        });
+        return;
+      }
+      MetodoPlanificacionEntity metodoPlanificacionTemp =
+          metodosPlanificacionTemp[data];
+
+      await saveMetodoPlanificacion(
+        event,
+        metodoPlanificacionTemp,
+      );
+    });
+  }
+
+// ************************** MetodosPlanificacion ****************************
+
+// ************************** NombresEnfermedades ****************************
+
+  Future<void> syncNombresEnfermedades(SyncStarted event) async {
+    final result =
+        await nombreEnfermedadUsecase.getNombresEnfermedadesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      nombresEnfermedadesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando nombres enfermedades',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveNombreEnfermedad(
+        event,
+        nombresEnfermedadesTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveNombreEnfermedad(
+    SyncStarted event,
+    NombreEnfermedadEntity nombreEnfermedad,
+  ) async {
+    final result = await nombreEnfermedadUsecaseDB
+        .saveNombreEnfermedadUsecaseDB(nombreEnfermedad);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= nombresEnfermedadesTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          seguimientoEnfermedadesTemp = [];
+          await syncSeguimientoEnfermedades(event);
+        });
+        return;
+      }
+      NombreEnfermedadEntity nombreEnfermedadTemp =
+          nombresEnfermedadesTemp[data];
+
+      await saveNombreEnfermedad(
+        event,
+        nombreEnfermedadTemp,
+      );
+    });
+  }
+
+// ************************** NombresEnfermedades ****************************
+
+// ************************** SeguimientoEnfermedades ****************************
+
+  Future<void> syncSeguimientoEnfermedades(SyncStarted event) async {
+    final result =
+        await seguimientoEnfermedadUsecase.getSeguimientoEnfermedadesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      seguimientoEnfermedadesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando seguimiento enfermedades',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveSeguimientoEnfermedad(
+        event,
+        seguimientoEnfermedadesTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveSeguimientoEnfermedad(
+    SyncStarted event,
+    SeguimientoEnfermedadEntity seguimientoEnfermedad,
+  ) async {
+    final result = await seguimientoEnfermedadUsecaseDB
+        .saveSeguimientoEnfermedadUsecaseDB(seguimientoEnfermedad);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= seguimientoEnfermedadesTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'ServiciosSolicitados_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          serviciosSolicitadosTemp = [];
+          await syncServiciosSolicitados(event);
+        });
+        return;
+      }
+      SeguimientoEnfermedadEntity seguimientoEnfermedadTemp =
+          seguimientoEnfermedadesTemp[data];
+
+      await saveSeguimientoEnfermedad(
+        event,
+        seguimientoEnfermedadTemp,
+      );
+    });
+  }
+
+// ************************** SeguimientoEnfermedades ****************************
+
+// ************************** ServiciosSolicitados ****************************
+
+  Future<void> syncServiciosSolicitados(SyncStarted event) async {
+    final result =
+        await servicioSolicitadoUsecase.getServiciosSolicitadosUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      serviciosSolicitadosTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando servicios solicitados',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveServicioSolicitado(
+        event,
+        serviciosSolicitadosTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveServicioSolicitado(
+    SyncStarted event,
+    ServicioSolicitadoEntity servicioSolicitado,
+  ) async {
+    final result = await servicioSolicitadoUsecaseDB
+        .saveServicioSolicitadoUsecaseDB(servicioSolicitado);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= serviciosSolicitadosTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'UltimaVezInstSalud_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          ultimasVecesInstSaludTemp = [];
+          await syncUltimasVecesInstSalud(event);
+        });
+        return;
+      }
+      ServicioSolicitadoEntity servicioSolicitadoTemp =
+          serviciosSolicitadosTemp[data];
+
+      await saveServicioSolicitado(
+        event,
+        servicioSolicitadoTemp,
+      );
+    });
+  }
+
+// ************************** ServiciosSolicitados ****************************
+
+// ************************** UltimasVecesInstSalud ****************************
+
+  Future<void> syncUltimasVecesInstSalud(SyncStarted event) async {
+    final result =
+        await ultimaVezInstSaludUsecase.getUltimasVecesInstSaludUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      ultimasVecesInstSaludTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando ultima vez inst salud',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveUltimaVezInstSalud(
+        event,
+        ultimasVecesInstSaludTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveUltimaVezInstSalud(
+    SyncStarted event,
+    UltimaVezInstSaludEntity ultimaVezInstSalud,
+  ) async {
+    final result = await ultimaVezInstSaludUsecaseDB
+        .saveUltimaVezInstSaludUsecaseDB(ultimaVezInstSalud);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= ultimasVecesInstSaludTemp.length) {
+        ConnectionSQLiteService.truncateTable('EnfermedadesAcude_AtencionSalud')
+            .then((value) async {
+          enfermedadesAcudeTemp = [];
+          await syncEnfermedadesAcude(event);
+        });
+        return;
+      }
+      UltimaVezInstSaludEntity ultimaVezInstSaludTemp =
+          ultimasVecesInstSaludTemp[data];
+
+      await saveUltimaVezInstSalud(
+        event,
+        ultimaVezInstSaludTemp,
+      );
+    });
+  }
+
+// ************************** UltimasVecesInstSalud ****************************
+
+// ************************** EnfermedadesAcude ****************************
+
+  Future<void> syncEnfermedadesAcude(SyncStarted event) async {
+    final result = await enfermedadAcudeUsecase.getEnfermedadesAcudeUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      enfermedadesAcudeTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando enfermedades acude',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveEnfermedadAcude(
+        event,
+        enfermedadesAcudeTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveEnfermedadAcude(
+    SyncStarted event,
+    EnfermedadAcudeEntity enfermedadAcude,
+  ) async {
+    final result = await enfermedadAcudeUsecaseDB
+        .saveEnfermedadAcudeUsecaseDB(enfermedadAcude);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= enfermedadesAcudeTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'EnfermedadesTratamientos_AtencionSalud')
+            .then((value) async {
+          enfermedadesTratamientoTemp = [];
+          await syncEnfermedadesTratamiento(event);
+        });
+        return;
+      }
+      EnfermedadAcudeEntity enfermedadAcudeTemp = enfermedadesAcudeTemp[data];
+
+      await saveEnfermedadAcude(
+        event,
+        enfermedadAcudeTemp,
+      );
+    });
+  }
+
+// ************************** EnfermedadesAcude ****************************
+
+// ************************** EnfermedadesTratamiento ****************************
+
+  Future<void> syncEnfermedadesTratamiento(SyncStarted event) async {
+    final result =
+        await enfermedadTratamientoUsecase.getEnfermedadesTratamientoUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      enfermedadesTratamientoTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando enfermedades tratamiento',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveEnfermedadTratamiento(
+        event,
+        enfermedadesTratamientoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveEnfermedadTratamiento(
+    SyncStarted event,
+    EnfermedadTratamientoEntity enfermedadTratamiento,
+  ) async {
+    final result = await enfermedadTratamientoUsecaseDB
+        .saveEnfermedadTratamientoUsecaseDB(enfermedadTratamiento);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= enfermedadesTratamientoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'EnfermedadesTradicionales_AtencionSalud')
+            .then((value) async {
+          enfermedadesTradicionalesTemp = [];
+          await syncEnfermedadesTradicionales(event);
+        });
+        return;
+      }
+      EnfermedadTratamientoEntity enfermedadTratamientoTemp =
+          enfermedadesTratamientoTemp[data];
+
+      await saveEnfermedadTratamiento(
+        event,
+        enfermedadTratamientoTemp,
+      );
+    });
+  }
+
+// ************************** EnfermedadesTratamiento ****************************
+
+// ************************** EnfermedadesTradicionales ****************************
+
+  Future<void> syncEnfermedadesTradicionales(SyncStarted event) async {
+    final result = await enfermedadTradicionalUsecase
+        .getEnfermedadesTradicionalesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      enfermedadesTradicionalesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando enfermedades tradicionales',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveEnfermedadTradicional(
+        event,
+        enfermedadesTradicionalesTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveEnfermedadTradicional(
+    SyncStarted event,
+    EnfermedadTradicionalEntity enfermedadTradicional,
+  ) async {
+    final result = await enfermedadTradicionalUsecaseDB
+        .saveEnfermedadTradicionalUsecaseDB(enfermedadTradicional);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= enfermedadesTradicionalesTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'LugaresAtencionMedico_AtencionSalud')
+            .then((value) async {
+          lugaresAtencionMedicoTemp = [];
+          await syncLugaresAtencionMedico(event);
+        });
+        return;
+      }
+      EnfermedadTradicionalEntity enfermedadTradicionalTemp =
+          enfermedadesTradicionalesTemp[data];
+
+      await saveEnfermedadTradicional(
+        event,
+        enfermedadTradicionalTemp,
+      );
+    });
+  }
+
+// ************************** EnfermedadesTradicionales ****************************
+
+// ************************** LugaresAtencionMedico ****************************
+
+  Future<void> syncLugaresAtencionMedico(SyncStarted event) async {
+    final result =
+        await lugarAtencionMedicoUsecase.getLugaresAtencionMedicoUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      lugaresAtencionMedicoTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando lugares atención médico',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveLugarAtencionMedico(
+        event,
+        lugaresAtencionMedicoTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveLugarAtencionMedico(
+    SyncStarted event,
+    LugarAtencionMedicoEntity lugarAtencionMedico,
+  ) async {
+    final result = await lugarAtencionMedicoUsecaseDB
+        .saveLugarAtencionMedicoUsecaseDB(lugarAtencionMedico);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= lugaresAtencionMedicoTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'LugaresPlantasMedicinales_AtencionSalud')
+            .then((value) async {
+          lugaresPlantasMedicinalesTemp = [];
+          await syncLugaresPlantasMedicinales(event);
+        });
+        return;
+      }
+      LugarAtencionMedicoEntity lugarAtencionMedicoTemp =
+          lugaresAtencionMedicoTemp[data];
+
+      await saveLugarAtencionMedico(
+        event,
+        lugarAtencionMedicoTemp,
+      );
+    });
+  }
+
+// ************************** LugaresAtencionMedico ****************************
+
+// ************************** LugaresPlantasMedicinales ****************************
+
+  Future<void> syncLugaresPlantasMedicinales(SyncStarted event) async {
+    final result =
+        await lugarPlantaMedicinalUsecase.getLugaresPlantasMedicinalesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      lugaresPlantasMedicinalesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando lugares plantas medicinales',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveLugarPlantaMedicinal(
+        event,
+        lugaresPlantasMedicinalesTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveLugarPlantaMedicinal(
+    SyncStarted event,
+    LugarPlantaMedicinalEntity lugarPlantaMedicinal,
+  ) async {
+    final result = await lugarPlantaMedicinalUsecaseDB
+        .saveLugarPlantaMedicinalUsecaseDB(lugarPlantaMedicinal);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= lugaresPlantasMedicinalesTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'PlantasMedicinales_AtencionSalud')
+            .then((value) async {
+          plantasMedicinalesTemp = [];
+          await syncPlantasMedicinales(event);
+        });
+        return;
+      }
+      LugarPlantaMedicinalEntity lugarPlantaMedicinalTemp =
+          lugaresPlantasMedicinalesTemp[data];
+
+      await saveLugarPlantaMedicinal(
+        event,
+        lugarPlantaMedicinalTemp,
+      );
+    });
+  }
+
+// ************************** LugaresPlantasMedicinales ****************************
+
+// ************************** PlantasMedicinales ****************************
+
+  Future<void> syncPlantasMedicinales(SyncStarted event) async {
+    final result = await plantaMedicinalUsecase.getPlantasMedicinalesUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      plantasMedicinalesTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando plantas medicinales',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await savePlantaMedicinal(
+        event,
+        plantasMedicinalesTemp[0],
+      );
+    });
+  }
+
+  Future<void> savePlantaMedicinal(
+    SyncStarted event,
+    PlantaMedicinalEntity plantaMedicinal,
+  ) async {
+    final result = await plantaMedicinalUsecaseDB
+        .savePlantaMedicinalUsecaseDB(plantaMedicinal);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= plantasMedicinalesTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
+            .then((value) async {
+          religionesProfesaTemp = [];
+          await syncReligionesProfesa(event);
+        });
+        return;
+      }
+      PlantaMedicinalEntity plantaMedicinalTemp = plantasMedicinalesTemp[data];
+
+      await savePlantaMedicinal(
+        event,
+        plantaMedicinalTemp,
+      );
+    });
+  }
+
+// ************************** PlantasMedicinales ****************************
+
+// ************************** ReligionesProfesa ****************************
+
+  Future<void> syncReligionesProfesa(SyncStarted event) async {
+    final result = await religionProfesaUsecase.getReligionesProfesaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      religionesProfesaTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando religiones profesa',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveReligionProfesa(
+        event,
+        religionesProfesaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveReligionProfesa(
+    SyncStarted event,
+    ReligionProfesaEntity religionProfesa,
+  ) async {
+    final result = await religionProfesaUsecaseDB
+        .saveReligionProfesaUsecaseDB(religionProfesa);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= religionesProfesaTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
+            .then((value) async {
+          eventosCostumbresParticipaTemp = [];
+          await syncEventosCostumbresParticipa(event);
+        });
+        return;
+      }
+      ReligionProfesaEntity religionProfesaTemp = religionesProfesaTemp[data];
+
+      await saveReligionProfesa(
+        event,
+        religionProfesaTemp,
+      );
+    });
+  }
+
+// ************************** ReligionesProfesa ****************************
+
+// ************************** EventosCostumbresParticipa ****************************
+
+  Future<void> syncEventosCostumbresParticipa(SyncStarted event) async {
+    final result = await eventoCostumbreParticipaUsecase
+        .getEventosCostumbresParticipaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      eventosCostumbresParticipaTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando eventos costumbres participa',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveEventoCostumbreParticipa(
+        event,
+        eventosCostumbresParticipaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveEventoCostumbreParticipa(
+    SyncStarted event,
+    EventoCostumbreParticipaEntity eventoCostumbreParticipa,
+  ) async {
+    final result = await eventoCostumbreParticipaUsecaseDB
+        .saveEventoCostumbreParticipaUsecaseDB(eventoCostumbreParticipa);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= eventosCostumbresParticipaTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'CostumbresPractican_DimSocioCulturalPueblosIndigenas')
+            .then((value) async {
+          costumbresPracticanTemp = [];
+          await syncCostumbresPractican(event);
+        });
+        return;
+      }
+      EventoCostumbreParticipaEntity eventoCostumbreParticipaTemp =
+          eventosCostumbresParticipaTemp[data];
+
+      await saveEventoCostumbreParticipa(
+        event,
+        eventoCostumbreParticipaTemp,
+      );
+    });
+  }
+
+// ************************** EventosCostumbresParticipa ****************************
+
+// ************************** CostumbresPractican ****************************
+
+  Future<void> syncCostumbresPractican(SyncStarted event) async {
+    final result =
+        await costumbrePracticaUsecase.getCostumbresPracticanUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      costumbresPracticanTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando eventos costumbres participa',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveCostumbrePractica(
+        event,
+        costumbresPracticanTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveCostumbrePractica(
+    SyncStarted event,
+    CostumbrePracticaEntity costumbrePractica,
+  ) async {
+    final result = await costumbrePracticaUsecaseDB
+        .saveCostumbrePracticaUsecaseDB(costumbrePractica);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= costumbresPracticanTemp.length) {
+        ConnectionSQLiteService.truncateTable(
+                'SancionesJusticia_DimSocioCulturalPueblosIndigenas')
+            .then((value) async {
+          sancionesJusticiaTemp = [];
+          await syncSancionesJusticia(event);
+        });
+        return;
+      }
+      CostumbrePracticaEntity costumbrePracticaTemp =
+          costumbresPracticanTemp[data];
+
+      await saveCostumbrePractica(
+        event,
+        costumbrePracticaTemp,
+      );
+    });
+  }
+
+// ************************** CostumbresPractican ****************************
+
+// ************************** SancionesJusticia ****************************
+
+  Future<void> syncSancionesJusticia(SyncStarted event) async {
+    final result = await sancionJusticiaUsecase.getSancionesJusticiaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      sancionesJusticiaTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando eventos costumbres participa',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveSancionJusticia(
+        event,
+        sancionesJusticiaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveSancionJusticia(
+    SyncStarted event,
+    SancionJusticiaEntity sancionJusticia,
+  ) async {
+    final result = await sancionJusticiaUsecaseDB
+        .saveSancionJusticiaUsecaseDB(sancionJusticia);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= sancionesJusticiaTemp.length) {
+        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: 'Sincronización completada',
+            counter: state.syncProgressModel.counter + 1,
+            total: totalAccesories)));
+        return;
+      }
+      SancionJusticiaEntity sancionJusticiaTemp = sancionesJusticiaTemp[data];
+
+      await saveSancionJusticia(
+        event,
+        sancionJusticiaTemp,
+      );
+    });
+  }
+
+// ************************** SancionesJusticia ****************************
 
   int calculatePercent() {
     final counter = state.syncProgressModel.counter <= 0

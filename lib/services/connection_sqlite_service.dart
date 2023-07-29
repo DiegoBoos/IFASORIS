@@ -89,8 +89,19 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_GRUPO_FAMILIAR);
       ref.execute(ConnectionSQL.CREATE_ESTILOS_VIDA_SALUDABLE);
       ref.execute(ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO);
+      ref.execute(
+          ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO_NOMBRES_ENFERMEDAD);
+      ref.execute(
+          ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO_SERVICIOS_SOLICITADOS);
       ref.execute(ConnectionSQL.CREATE_DIM_SOCIO_CULTURAL_PUEBLOS_INDIGENAS);
+      ref.execute(
+          ConnectionSQL.CREATE_DIM_SOCIO_CULTURAL_EVENTOS_COSTUMBRES_PARTICIPO);
       ref.execute(ConnectionSQL.CREATE_ATENCION_SALUD);
+      ref.execute(
+          ConnectionSQL.CREATE_ENFERMEDADES_TRADICIONALES_ATENCION_SALUD);
+      ref.execute(ConnectionSQL.CREATE_ESPECIALIDADES_MED_TRAD_ATENCION_SALUD);
+      ref.execute(ConnectionSQL.CREATE_LUGARES_ATENCION_ATENCION_SALUD);
+      ref.execute(ConnectionSQL.CREATE_PLANTAS_MEDICINALES_ATENCION_SALUD);
       ref.execute(ConnectionSQL.CREATE_AUTORIDADES_INDIGENAS);
       ref.execute(ConnectionSQL.CREATE_CEREALES);
       ref.execute(ConnectionSQL.CREATE_CONDICIONES_NUTRICIONALES);
