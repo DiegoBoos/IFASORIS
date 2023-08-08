@@ -5,6 +5,8 @@ import '../../../data/models/nombre_enfermedad_model.dart';
 import '../../../data/models/servicio_solicitado_model.dart';
 import '../../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
 import '../../../domain/usecases/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_db_usecase.dart';
+import '../../../domain/usecases/nombre_enfermedad/nombre_enfermedad_db_usecase.dart';
+import '../../../domain/usecases/servicio_solicitado/servicio_solicitado_db_usecase.dart';
 
 part 'cuidado_salud_cond_riesgo_event.dart';
 part 'cuidado_salud_cond_riesgo_state.dart';
@@ -12,8 +14,13 @@ part 'cuidado_salud_cond_riesgo_state.dart';
 class CuidadoSaludCondRiesgoBloc
     extends Bloc<CuidadoSaludCondRiesgoEvent, CuidadoSaludCondRiesgoEntity> {
   final CuidadoSaludCondRiesgoUsecaseDB cuidadoSaludCondRiesgoUsecaseDB;
+  final ServicioSolicitadoUsecaseDB servicioSolicitadoUsecaseDB;
+  final NombreEnfermedadUsecaseDB nombreEnfermedadUsecaseDB;
 
-  CuidadoSaludCondRiesgoBloc({required this.cuidadoSaludCondRiesgoUsecaseDB})
+  CuidadoSaludCondRiesgoBloc(
+      {required this.cuidadoSaludCondRiesgoUsecaseDB,
+      required this.servicioSolicitadoUsecaseDB,
+      required this.nombreEnfermedadUsecaseDB})
       : super(initObject()) {
     on<CuidadoSaludCondRiesgoInit>((event, emit) {
       emit(initObject());
@@ -21,15 +28,12 @@ class CuidadoSaludCondRiesgoBloc
 
     on<CuidadoSaludCondRiesgoSubmitted>((event, emit) async {
       final result = await cuidadoSaludCondRiesgoUsecaseDB
-          .saveCuidadoSaludCondRiesgoUsecaseDB(event.cuidadoSaludCondRiesgo);
+          .saveCuidadoSaludCondRiesgoUsecaseDB(state);
       result.fold((failure) {
         emit(state.copyWith(
             formStatus: CuidadoSaludCondRiesgoSubmissionFailed(
                 failure.properties.first)));
-      }, (data) {
-        emit(state.copyWith(
-            formStatus: CuidadoSaludCondRiesgoSubmissionSuccess()));
-      });
+      }, (data) => saveServiciosSolicitados(data));
     });
 
     on<GetCuidadoSaludCondRiesgo>((event, emit) async {
@@ -41,11 +45,48 @@ class CuidadoSaludCondRiesgoBloc
                 failure.properties.first)));
       }, (data) {
         if (data != null) {
-          emit(data.copyWith(formStatus: CuidadoSaludCondRiesgoFormLoaded()));
+          emit(data);
+          add(GetServiciosSolicitados(data.cuidadoSaludCondRiesgoId));
         } else {
           emit(state.copyWith(formStatus: CuidadoSaludCondRiesgoFormEmpty()));
         }
       });
+    });
+
+    on<GetServiciosSolicitados>((event, emit) async {
+      final result = await servicioSolicitadoUsecaseDB
+          .getLstServiciosSolicitadosUsecaseDB(event.cuidadoSaludCondRiesgoId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus: CuidadoSaludCondRiesgoSubmissionFailed(
+                failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(
+          lstServiciosSolicitados: data,
+        ));
+        add(GetNombresEnfermedades(event.cuidadoSaludCondRiesgoId));
+      });
+    });
+
+    on<GetNombresEnfermedades>((event, emit) async {
+      final result = await nombreEnfermedadUsecaseDB
+          .getLstNombresEnfermedadesUsecaseDB(event.cuidadoSaludCondRiesgoId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus: CuidadoSaludCondRiesgoSubmissionFailed(
+                failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(
+            lstNombresEnfermedades: data,
+            formStatus: CuidadoSaludCondRiesgoFormLoaded()));
+      });
+    });
+
+    on<CuidadoSaludCondRiesgoFormSubmissionSuccess>((event, emit) {
+      emit(state.copyWith(
+        cuidadoSaludCondRiesgoId: event.cuidadoSaludCondRiesgoId,
+        formStatus: CuidadoSaludCondRiesgoSubmissionSuccess(),
+      ));
     });
 
     on<CuidadoSaludCondRiesgoChanged>((event, emit) {
@@ -101,6 +142,27 @@ class CuidadoSaludCondRiesgoBloc
     on<ServiciosSolicitadosChanged>((event, emit) {
       emit(state.copyWith(
           lstServiciosSolicitados: event.lstServiciosSolicitados));
+    });
+  }
+
+  void saveServiciosSolicitados(int cuidadoSaludCondRiesgoId) async {
+    final result =
+        await servicioSolicitadoUsecaseDB.saveServiciosSolicitadosUsecaseDB(
+            cuidadoSaludCondRiesgoId, state.lstServiciosSolicitados!);
+    result.fold((failure) {
+      add(CuidadoSaludCondRiesgoFormSubmissionFailed(failure.properties.first));
+    }, (data) => saveNombresEnfermedades(cuidadoSaludCondRiesgoId));
+  }
+
+  void saveNombresEnfermedades(int cuidadoSaludCondRiesgoId) async {
+    final result =
+        await nombreEnfermedadUsecaseDB.saveNombresEnfermedadesUsecaseDB(
+            cuidadoSaludCondRiesgoId, state.lstNombresEnfermedades!);
+    result.fold((failure) {
+      add(CuidadoSaludCondRiesgoFormSubmissionFailed(failure.properties.first));
+    }, (data) {
+      add(CuidadoSaludCondRiesgoFormSubmissionSuccess(
+          cuidadoSaludCondRiesgoId));
     });
   }
 }

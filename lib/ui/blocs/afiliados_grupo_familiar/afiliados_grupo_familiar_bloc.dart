@@ -13,6 +13,16 @@ class AfiliadosGrupoFamiliarBloc
 
   AfiliadosGrupoFamiliarBloc({required this.grupoFamiliarUsecaseDB})
       : super(AfiliadosGrupoFamiliarInitial()) {
+    on<EmptyAfiliadosGrupoFamiliar>((event, emit) async {
+      final result = await grupoFamiliarUsecaseDB
+          .emptyGrupoFamiliarUsecaseDB(event.familiaId);
+      result.fold((failure) {
+        emit(const AfiliadosGrupoFamiliarError(
+          'Excepción no controlada',
+        ));
+      }, (data) => emit(AfiliadosGrupoFamiliarEmptied()));
+    });
+
     on<GetAfiliadosGrupoFamiliar>((event, emit) async {
       final result = await grupoFamiliarUsecaseDB
           .getGrupoFamiliarUsecaseDB(event.familiaId);
@@ -22,17 +32,10 @@ class AfiliadosGrupoFamiliarBloc
         ));
       }, (data) {
         if (data.isNotEmpty) {
-          List<GrupoFamiliarEntity> afiliadosGrupoFamiliarCompleted =
-              data.map((afiliadoGrupoFamiliar) {
-            final afiliadoCompleted =
-                afiliadoGrupoFamiliar.copyWith(isCompleted: true);
-            return afiliadoCompleted;
-          }).toList();
-
-          emit(AfiliadosGrupoFamiliarLoaded(
-              afiliadosGrupoFamiliarLoaded: afiliadosGrupoFamiliarCompleted));
+          emit(
+              AfiliadosGrupoFamiliarLoaded(afiliadosGrupoFamiliarLoaded: data));
         } else {
-          emit(AfiliadosGrupoFamiliarEmpty());
+          emit(AfiliadosGrupoFamiliarInitial());
         }
       });
     });
@@ -59,8 +62,8 @@ class AfiliadosGrupoFamiliarBloc
       if (!isDuplicate) {
         List<GrupoFamiliarEntity> newAfiliados = List.from(currentAfiliados)
           ..add(newAfiliado);
-        emit(AfiliadosGrupoFamiliarLoaded(
-            afiliadosGrupoFamiliarLoaded: newAfiliados,
+        emit(AfiliadosGrupoFamiliarSaved(
+            afiliadosGrupoFamiliarSaved: newAfiliados,
             message: 'Afiliado agregado correctamente'));
       } else {
         currentAfiliados = currentAfiliados.map((afiliado) {
@@ -70,8 +73,8 @@ class AfiliadosGrupoFamiliarBloc
           return afiliado;
         }).toList();
 
-        emit(AfiliadosGrupoFamiliarLoaded(
-            afiliadosGrupoFamiliarLoaded: currentAfiliados,
+        emit(AfiliadosGrupoFamiliarSaved(
+            afiliadosGrupoFamiliarSaved: currentAfiliados,
             message: 'Afiliado editado correctamente'));
       }
     });

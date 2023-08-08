@@ -8,7 +8,7 @@ class EventoCostumbreParticipaEntity {
   });
 
   Map<String, dynamic> toJson() => {
-        "EventoCostumbreParticipa_id": eventoCostumbreParticipaId,
+        "EventoCostumbreParticipo_id": eventoCostumbreParticipaId,
         "Descripcion": descripcion,
       };
 }

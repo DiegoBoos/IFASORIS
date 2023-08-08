@@ -73,18 +73,18 @@ class SearchAfiliados extends SearchDelegate {
                                 '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
                             onTap: () {
                               final newGrupoFamiliar = GrupoFamiliarEntity(
-                                  afiliadoId: afiliado.afiliadoId,
-                                  tipoDocumento: afiliado.tipoDocAfiliado,
-                                  documento: afiliado.documento,
-                                  nombre1: afiliado.nombre1,
-                                  nombre2: afiliado.nombre2,
-                                  apellido1: afiliado.apellido1,
-                                  apellido2: afiliado.apellido2,
-                                  genero: afiliado.codGeneroAfiliado,
-                                  fechaNac: afiliado.fecnac,
-                                  edad: afiliado.edad,
-                                  codRegimenAfiliado:
-                                      afiliado.codRegimenAfiliado);
+                                afiliadoId: afiliado.afiliadoId,
+                                documento: afiliado.documento,
+                                edad: afiliado.edad,
+                                fechaNacimiento: afiliado.fecnac,
+                                nombre1: afiliado.nombre1,
+                                nombre2: afiliado.nombre2,
+                                apellido1: afiliado.apellido1,
+                                apellido2: afiliado.apellido2,
+                                tipoDocAfiliado: afiliado.tipoDocAfiliado,
+                                codGeneroAfiliado: afiliado.codGeneroAfiliado,
+                                codRegimenAfiliado: afiliado.codRegimenAfiliado,
+                              );
 
                               Navigator.push<void>(
                                 context,
@@ -130,11 +130,12 @@ class SearchAfiliados extends SearchDelegate {
                         final afiliadoPrefsBloc =
                             BlocProvider.of<AfiliadoPrefsBloc>(context);
 
-                        final afiliadoHasFicha = await afiliadoBloc
-                            .afiliadoHasFicha(afiliado.afiliadoId!)
+                        final afiliadoTieneFicha = await afiliadoBloc
+                            .afiliadoTieneFicha(afiliado.afiliadoId!)
                             .whenComplete(() => close(context, null));
-                        if (afiliadoHasFicha != null) {
-                          afiliadoPrefsBloc.add(SaveAfiliado(afiliadoHasFicha));
+                        if (afiliadoTieneFicha != null) {
+                          afiliadoPrefsBloc
+                              .add(SaveAfiliado(afiliadoTieneFicha));
                         } else {
                           afiliadoPrefsBloc.add(SaveAfiliado(afiliado));
                         }

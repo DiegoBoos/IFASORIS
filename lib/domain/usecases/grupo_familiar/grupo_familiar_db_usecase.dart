@@ -18,4 +18,8 @@ class GrupoFamiliarUsecaseDB {
       int familiaId) {
     return repositoryDB.getGrupoFamiliarRepositoryDB(familiaId);
   }
+
+  Future<Either<Failure, int>> emptyGrupoFamiliarUsecaseDB(int familiaId) {
+    return repositoryDB.emptyGrupoFamiliarRepositoryDB(familiaId);
+  }
 }

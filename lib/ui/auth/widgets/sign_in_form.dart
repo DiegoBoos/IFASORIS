@@ -27,7 +27,6 @@ class _SignInFormState extends State<SignInForm> {
         const SizedBox(height: 20.0),
         TextFormField(
           controller: widget.userNameCtrl,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           autocorrect: false,
           decoration: CustomInputDecoration.inputDecoration(
               hintText: 'Nombre de usuario',
@@ -43,7 +42,6 @@ class _SignInFormState extends State<SignInForm> {
         const SizedBox(height: 30.0),
         TextFormField(
           controller: widget.passwordCtrl,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           autocorrect: false,
           obscureText: eyeToggle,
           decoration: CustomInputDecoration.inputDecoration(

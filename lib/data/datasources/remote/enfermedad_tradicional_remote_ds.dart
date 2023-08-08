@@ -23,7 +23,7 @@ class EnfermedadTradicionalRemoteDataSourceImpl
       getEnfermedadesTradicionales() async {
     try {
       final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/enfermedadestradicionaless');
+          Uri.parse('${Constants.ifasorisBaseUrl}/enfermedadestradicionales');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

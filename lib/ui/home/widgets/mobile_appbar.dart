@@ -61,9 +61,7 @@ class MobileAppBar extends StatelessWidget {
               if (internetCubit.state is InternetConnected) {
                 showModalBottomSheet(
                     context: context,
-                    builder: (_) {
-                      return const SyncDialog(type: 'A');
-                    });
+                    builder: (_) => const SyncDialog(type: 'A'));
               } else if (internetCubit.state is InternetDisconnected) {
                 CustomSnackBar.showSnackBar(
                     context,
@@ -78,9 +76,7 @@ class MobileAppBar extends StatelessWidget {
               if (internetCubit.state is InternetConnected) {
                 showModalBottomSheet(
                     context: context,
-                    builder: (_) {
-                      return const SyncDialog(type: 'P');
-                    });
+                    builder: (_) => const SyncDialog(type: 'P'));
               } else if (internetCubit.state is InternetDisconnected) {
                 CustomSnackBar.showSnackBar(
                     context,

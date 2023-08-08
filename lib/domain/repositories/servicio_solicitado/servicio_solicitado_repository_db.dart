@@ -13,4 +13,8 @@ abstract class ServicioSolicitadoRepositoryDB {
 
   Future<Either<Failure, List<LstServicioSolicitado>>>
       getLstServiciosSolicitadosRepositoryDB(int? cuidadoSaludCondRiesgoId);
+
+  Future<Either<Failure, int>> saveServiciosSolicitadosRepositoryDB(
+      int cuidadoSaludCondRiesgoId,
+      List<LstServicioSolicitado> lstServiciosSolicitados);
 }

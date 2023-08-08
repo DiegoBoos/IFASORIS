@@ -25,4 +25,11 @@ class NombreEnfermedadUsecaseDB {
     return repositoryDB
         .getLstNombresEnfermedadesRepositoryDB(cuidadoSaludCondRiesgoId);
   }
+
+  Future<Either<Failure, int>> saveNombresEnfermedadesUsecaseDB(
+      int cuidadoSaludCondRiesgoId,
+      List<LstNombreEnfermedad> lstNombresEnfermedades) {
+    return repositoryDB.saveNombresEnfermedadesRepositoryDB(
+        cuidadoSaludCondRiesgoId, lstNombresEnfermedades);
+  }
 }

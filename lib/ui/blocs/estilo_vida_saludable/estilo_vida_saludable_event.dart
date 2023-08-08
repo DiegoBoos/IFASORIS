@@ -9,11 +9,7 @@ abstract class EstiloVidaSaludableEvent extends Equatable {
 
 class EstiloVidaSaludableInit extends EstiloVidaSaludableEvent {}
 
-class EstiloVidaSaludableSubmitted extends EstiloVidaSaludableEvent {
-  final EstiloVidaSaludableEntity estiloVidaSaludable;
-
-  const EstiloVidaSaludableSubmitted(this.estiloVidaSaludable);
-}
+class EstiloVidaSaludableSubmitted extends EstiloVidaSaludableEvent {}
 
 class GetEstiloVidaSaludable extends EstiloVidaSaludableEvent {
   final int afiliadoId;
@@ -32,6 +28,18 @@ class EstiloVidaSaludableFormSubmissionFailed extends EstiloVidaSaludableEvent {
   final String message;
 
   const EstiloVidaSaludableFormSubmissionFailed(this.message);
+}
+
+class AfiliadoChanged extends EstiloVidaSaludableEvent {
+  final int afiliadoId;
+
+  const AfiliadoChanged(this.afiliadoId);
+}
+
+class FamiliaChanged extends EstiloVidaSaludableEvent {
+  final int familiaId;
+
+  const FamiliaChanged(this.familiaId);
 }
 
 class ActividadFisicaChanged extends EstiloVidaSaludableEvent {

@@ -4,22 +4,22 @@ import '../../../core/error/failure.dart';
 import '../../entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
 import '../../repositories/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_repository_db.dart';
 
-class DimensionSocioculturalPueblosIndigenasUsecaseDB {
-  final DimensionSocioculturalPueblosIndigenasRepositoryDB repositoryDB;
+class DimensionSocioCulturalPueblosIndigenasUsecaseDB {
+  final DimensionSocioCulturalPueblosIndigenasRepositoryDB repositoryDB;
 
-  DimensionSocioculturalPueblosIndigenasUsecaseDB(this.repositoryDB);
+  DimensionSocioCulturalPueblosIndigenasUsecaseDB(this.repositoryDB);
 
   Future<Either<Failure, int>>
-      saveDimensionSocioculturalPueblosIndigenasUsecaseDB(
-          DimensionSocioculturalPueblosIndigenasEntity
-              dimensionSocioculturalPueblosIndigenas) {
-    return repositoryDB.saveDimensionSocioculturalPueblosIndigenasRepositoryDB(
-        dimensionSocioculturalPueblosIndigenas);
+      saveDimensionSocioCulturalPueblosIndigenasUsecaseDB(
+          DimensionSocioCulturalPueblosIndigenasEntity
+              dimensionSocioCulturalPueblosIndigenas) {
+    return repositoryDB.saveDimensionSocioCulturalPueblosIndigenasRepositoryDB(
+        dimensionSocioCulturalPueblosIndigenas);
   }
 
-  Future<Either<Failure, DimensionSocioculturalPueblosIndigenasEntity?>>
-      getDimensionSocioculturalPueblosIndigenasUsecaseDB(int afiliadoId) {
+  Future<Either<Failure, DimensionSocioCulturalPueblosIndigenasEntity?>>
+      getDimensionSocioCulturalPueblosIndigenasUsecaseDB(int afiliadoId) {
     return repositoryDB
-        .getDimensionSocioculturalPueblosIndigenasRepositoryDB(afiliadoId);
+        .getDimensionSocioCulturalPueblosIndigenasRepositoryDB(afiliadoId);
   }
 }

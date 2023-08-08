@@ -9,10 +9,10 @@ abstract class GrupoFamiliarEvent extends Equatable {
 
 class GrupoFamiliarInit extends GrupoFamiliarEvent {}
 
-class GrupoFamiliarFamiliaChanged extends GrupoFamiliarEvent {
+class FamiliaChanged extends GrupoFamiliarEvent {
   final int familiaId;
 
-  const GrupoFamiliarFamiliaChanged(this.familiaId);
+  const FamiliaChanged(this.familiaId);
 }
 
 class IsCompletedChanged extends GrupoFamiliarEvent {

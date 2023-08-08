@@ -9,11 +9,7 @@ abstract class AtencionSaludEvent extends Equatable {
 
 class AtencionSaludInit extends AtencionSaludEvent {}
 
-class AtencionSaludSubmitted extends AtencionSaludEvent {
-  final AtencionSaludEntity atencionSalud;
-
-  const AtencionSaludSubmitted(this.atencionSalud);
-}
+class AtencionSaludSubmitted extends AtencionSaludEvent {}
 
 class GetAtencionSalud extends AtencionSaludEvent {
   final int afiliadoId;
@@ -22,9 +18,9 @@ class GetAtencionSalud extends AtencionSaludEvent {
 }
 
 class AtencionSaludFormSubmissionSuccess extends AtencionSaludEvent {
-  final int ubicacionId;
+  final int atencionSaludId;
 
-  const AtencionSaludFormSubmissionSuccess(this.ubicacionId);
+  const AtencionSaludFormSubmissionSuccess(this.atencionSaludId);
 }
 
 class AtencionSaludFormSubmissionFailed extends AtencionSaludEvent {
@@ -57,34 +53,47 @@ class EnfermedadAcudeChanged extends AtencionSaludEvent {
   const EnfermedadAcudeChanged(this.enfermedadAcudeId);
 }
 
+class RecibioAtencionMedTradicionalChanged extends AtencionSaludEvent {
+  final int recibioAtencionMedTradicionalId;
+
+  const RecibioAtencionMedTradicionalChanged(
+      this.recibioAtencionMedTradicionalId);
+}
+
 class EnfermedadTratamientoChanged extends AtencionSaludEvent {
   final int enfermedadTratamientoId;
 
   const EnfermedadTratamientoChanged(this.enfermedadTratamientoId);
 }
 
-class EnfermedadTradicionalChanged extends AtencionSaludEvent {
-  final int enfermedadTradicionalId;
+class UtilizaPlantasMedChanged extends AtencionSaludEvent {
+  final int utilizaPlantasMedId;
 
-  const EnfermedadTradicionalChanged(this.enfermedadTradicionalId);
+  const UtilizaPlantasMedChanged(this.utilizaPlantasMedId);
 }
 
-class PlantaMedicinalChanged extends AtencionSaludEvent {
-  final int plantaMedicinalId;
+class LugarPlantaMedicinalChanged extends AtencionSaludEvent {
+  final int lugarPlantaMedicinalId;
 
-  const PlantaMedicinalChanged(this.plantaMedicinalId);
+  const LugarPlantaMedicinalChanged(this.lugarPlantaMedicinalId);
 }
 
-class UtilizaMetodoPlanificacionChanged extends AtencionSaludEvent {
-  final int utilizaMetodoPlanificacionId;
+class GetEnfermedadesTradicionales extends AtencionSaludEvent {
+  final int? atencionSaludId;
 
-  const UtilizaMetodoPlanificacionChanged(this.utilizaMetodoPlanificacionId);
+  const GetEnfermedadesTradicionales(this.atencionSaludId);
 }
 
 class EnfermedadesTradicionalesChanged extends AtencionSaludEvent {
   final List<LstEnfermedadTradicional> lstEnfermedadesTradicionales;
 
   const EnfermedadesTradicionalesChanged(this.lstEnfermedadesTradicionales);
+}
+
+class GetEspecialidadesMedTradicional extends AtencionSaludEvent {
+  final int? atencionSaludId;
+
+  const GetEspecialidadesMedTradicional(this.atencionSaludId);
 }
 
 class EspecialidadesMedTradicionalChanged extends AtencionSaludEvent {
@@ -94,10 +103,22 @@ class EspecialidadesMedTradicionalChanged extends AtencionSaludEvent {
       this.lstEspecialidadesMedTradicional);
 }
 
+class GetLugaresAtencionMedico extends AtencionSaludEvent {
+  final int? atencionSaludId;
+
+  const GetLugaresAtencionMedico(this.atencionSaludId);
+}
+
 class LugaresAtencionMedicoChanged extends AtencionSaludEvent {
   final List<LstLugarAtencionMedico> lstLugaresAtencionMedico;
 
   const LugaresAtencionMedicoChanged(this.lstLugaresAtencionMedico);
+}
+
+class GetPlantasMedicinales extends AtencionSaludEvent {
+  final int? atencionSaludId;
+
+  const GetPlantasMedicinales(this.atencionSaludId);
 }
 
 class PlantasMedicinalesChanged extends AtencionSaludEvent {

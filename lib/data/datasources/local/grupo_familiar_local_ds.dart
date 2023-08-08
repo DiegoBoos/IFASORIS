@@ -10,6 +10,8 @@ abstract class GrupoFamiliarLocalDataSource {
       List<GrupoFamiliarEntity> afiliadosGrupoFamiliar);
 
   Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId);
+
+  Future<int> emptyGrupoFamiliar(int familiaId);
 }
 
 class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
@@ -57,6 +59,16 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
 
     final result = List<GrupoFamiliarModel>.from(
         res.map((m) => GrupoFamiliarModel.fromJson(m))).toList();
+
+    return result;
+  }
+
+  @override
+  Future<int> emptyGrupoFamiliar(int familiaId) async {
+    final db = await ConnectionSQLiteService.db;
+
+    final result = await db.delete('Asp3_GrupoFamiliar',
+        where: 'Familia_id = ?', whereArgs: [familiaId]);
 
     return result;
   }

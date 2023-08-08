@@ -25,4 +25,11 @@ class ServicioSolicitadoUsecaseDB {
     return repositoryDB
         .getLstServiciosSolicitadosRepositoryDB(cuidadoSaludCondRiesgoId);
   }
+
+  Future<Either<Failure, int>> saveServiciosSolicitadosUsecaseDB(
+      int cuidadoSaludCondRiesgoId,
+      List<LstServicioSolicitado> lstServiciosSolicitados) {
+    return repositoryDB.saveServiciosSolicitadosRepositoryDB(
+        cuidadoSaludCondRiesgoId, lstServiciosSolicitados);
+  }
 }

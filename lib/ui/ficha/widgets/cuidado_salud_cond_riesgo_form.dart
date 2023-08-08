@@ -18,9 +18,11 @@ import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dar
 import '../../cubits/metodo_planificacion/metodo_planificacion_cubit.dart';
 
 class CuidadoSaludCondRiesgoForm extends StatefulWidget {
-  const CuidadoSaludCondRiesgoForm({super.key, required this.currentAfiliado});
+  const CuidadoSaludCondRiesgoForm(
+      {super.key, required this.currentAfiliado, this.cuidadoSaludCondRiesgo});
 
   final GrupoFamiliarEntity currentAfiliado;
+  final CuidadoSaludCondRiesgoEntity? cuidadoSaludCondRiesgo;
 
   @override
   State<CuidadoSaludCondRiesgoForm> createState() =>
@@ -43,27 +45,6 @@ class _CuidadoSaludCondRiesgoFormState
   int? _conductaSeguirId;
   int? _tieneEnfermedad;
 
-  List<LstServicioSolicitado> _selectedServiciosSolicitados = [];
-  List<LstNombreEnfermedad> _selectedNombresEnfermedades = [];
-
-  String? _validateServiciosSolicitados() {
-    if (_selectedServiciosSolicitados.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedServiciosSolicitados.length > 3) {
-      return 'Máximo tres opciones.';
-    }
-    return null;
-  }
-
-  String? _validateNombresEnfermedades() {
-    if (_selectedNombresEnfermedades.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedNombresEnfermedades.length > 3) {
-      return 'Máximo tres opciones.';
-    }
-    return null;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -76,164 +57,165 @@ class _CuidadoSaludCondRiesgoFormState
         '${widget.currentAfiliado.apellido2 ?? ''}'
         '';
 
-    BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context)
-        .add(GetCuidadoSaludCondRiesgo(widget.currentAfiliado.afiliadoId!));
-  }
+    setState(() {
+      _ultimaVezInstSaludId =
+          widget.cuidadoSaludCondRiesgo?.ultimaVezInstSaludId;
+      _seguimientoEnfermedadId =
+          widget.cuidadoSaludCondRiesgo?.seguimientoEnfermedadId == 0
+              ? null
+              : widget.cuidadoSaludCondRiesgo?.seguimientoEnfermedadId;
+      _condicionNutricionalId =
+          widget.cuidadoSaludCondRiesgo?.condicionNutricionalId;
+      _tosFlemaId = widget.cuidadoSaludCondRiesgo?.tosFlemaId;
+      _manchasPielId = widget.cuidadoSaludCondRiesgo?.manchasPielId;
+      _carnetVacunacionId = widget.cuidadoSaludCondRiesgo?.carnetVacunacionId;
+      _esquemaVacunacionId =
+          widget.cuidadoSaludCondRiesgo?.esquemaVacunacionId == 0
+              ? null
+              : widget.cuidadoSaludCondRiesgo?.esquemaVacunacionId;
+      _lugarVacunacionId = widget.cuidadoSaludCondRiesgo?.lugarVacunacionId == 0
+          ? null
+          : widget.cuidadoSaludCondRiesgo?.lugarVacunacionId;
+      _utilizaMetodoPlanificacionId =
+          widget.cuidadoSaludCondRiesgo?.utilizaMetodoPlanificacionId == 0
+              ? null
+              : widget.cuidadoSaludCondRiesgo?.utilizaMetodoPlanificacionId;
+      _metodoPlanificacionId =
+          widget.cuidadoSaludCondRiesgo?.metodoPlanificacionId;
+      _conductaSeguirId = widget.cuidadoSaludCondRiesgo?.conductaSeguirId;
 
-  Future<void> getOptions(int? cuidadoSaludCondRiesgoId) async {
-    final servicioSolicitadoCubit = BlocProvider.of<ServicioSolicitadoCubit>(
-      context,
-    );
-
-    final nombreEnfermedadCubit = BlocProvider.of<NombreEnfermedadCubit>(
-      context,
-    );
-
-    _selectedServiciosSolicitados = await servicioSolicitadoCubit
-        .getServiciosSolicitadosDB(cuidadoSaludCondRiesgoId);
-    _selectedNombresEnfermedades = await nombreEnfermedadCubit
-        .getNombresEnfermedadesDB(cuidadoSaludCondRiesgoId);
-
-    if (mounted) {
-      setState(() {});
-    }
+      if (widget.cuidadoSaludCondRiesgo != null &&
+          widget.cuidadoSaludCondRiesgo!.lstNombresEnfermedades!.isNotEmpty) {
+        _tieneEnfermedad = 1;
+      } else {
+        _tieneEnfermedad = 2;
+        BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context)
+            .add(const NombresEnfermedadesChanged([]));
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final cuidadoSaludCondRiesgoBloc =
         BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context);
-    return BlocListener<CuidadoSaludCondRiesgoBloc,
-            CuidadoSaludCondRiesgoEntity>(
-        listener: (context, state) {
-          if (state.formStatus is CuidadoSaludCondRiesgoFormLoaded) {
-            setState(() {
-              _ultimaVezInstSaludId = state.ultimaVezInstSaludId;
-              _seguimientoEnfermedadId = state.seguimientoEnfermedadId;
-              _condicionNutricionalId = state.condicionNutricionalId;
-              _tosFlemaId = state.tosFlemaId;
-              _manchasPielId = state.manchasPielId;
-              _carnetVacunacionId = state.carnetVacunacionId;
-              _esquemaVacunacionId = state.esquemaVacunacionId;
-              _lugarVacunacionId = state.lugarVacunacionId;
-              _utilizaMetodoPlanificacionId =
-                  state.utilizaMetodoPlanificacionId;
-              _metodoPlanificacionId = state.metodoPlanificacionId;
-              _conductaSeguirId = state.conductaSeguirId;
-              _tosFlemaId = state.tosFlemaId;
-              _manchasPielId = state.manchasPielId;
-              _carnetVacunacionId = state.carnetVacunacionId;
-            });
-            getOptions(state.cuidadoSaludCondRiesgoId);
+    return ListView(children: [
+      const Divider(),
+      const Text(
+        'V. CUIDADO DE LA SALUD Y CONDICIONES DE RIESGO',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      const SizedBox(height: 20),
+      TextFormField(
+        enabled: false,
+        controller: _nombresApellidosCtrl,
+        decoration: const InputDecoration(
+          labelText: 'Integrante Grupo Familiar',
+          border: OutlineInputBorder(),
+        ),
+      ),
+      const Divider(),
+      const Text(
+        'Cuando fue la última vez que asistió a la institución de salud',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<UltimaVezInstSaludCubit, UltimasVecesInstSaludState>(
+        builder: (context, state) {
+          if (state is UltimasVecesInstSaludLoaded) {
+            return DropdownButtonFormField<int>(
+              value: _ultimaVezInstSaludId,
+              items: state.ultimasVecesInstSaludLoaded!
+                  .map(
+                    (ultimaVezInstSalud) => DropdownMenuItem<int>(
+                      value: ultimaVezInstSalud.ultimaVezInstSaludId,
+                      child: Text(ultimaVezInstSalud.descripcion),
+                    ),
+                  )
+                  .toList(),
+              decoration: const InputDecoration(
+                  labelText: 'Seleccione una opción',
+                  border: OutlineInputBorder()),
+              onChanged: (int? newValue) {
+                setState(() {
+                  _ultimaVezInstSaludId = newValue;
+                });
+                cuidadoSaludCondRiesgoBloc
+                    .add(UltimaVezInstSaludChanged(newValue!));
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo Requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
           }
         },
-        child: ListView(children: [
-          const Divider(),
-          const Text(
-            'V. CUIDADO DE LA SALUD Y CONDICIONES DE RIESGO',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          const SizedBox(height: 20),
-          TextFormField(
-            enabled: false,
-            controller: _nombresApellidosCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Integrante Grupo Familiar',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const Divider(),
-          const Text(
-            'Cuando fue la última vez que asistió a la institución de salud',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<UltimaVezInstSaludCubit, UltimasVecesInstSaludState>(
-            builder: (context, state) {
-              if (state is UltimasVecesInstSaludLoaded) {
-                return DropdownButtonFormField<int>(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  value: _ultimaVezInstSaludId,
-                  items: state.ultimasVecesInstSaludLoaded!
-                      .map(
-                        (ultimaVezInstSalud) => DropdownMenuItem<int>(
-                          value: ultimaVezInstSalud.ultimaVezInstSaludId,
-                          child: Text(ultimaVezInstSalud.descripcion),
-                        ),
-                      )
-                      .toList(),
-                  decoration: const InputDecoration(
-                      labelText: 'Seleccione una opción',
-                      border: OutlineInputBorder()),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _ultimaVezInstSaludId = newValue;
-                    });
-                    cuidadoSaludCondRiesgoBloc
-                        .add(UltimaVezInstSaludChanged(newValue!));
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo Requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          const Divider(),
-          const Text(
-            'Servicios Solicitados',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<ServicioSolicitadoCubit, ServiciosSolicitadosState>(
-            builder: (context, state) {
-              if (state is ServiciosSolicitadosLoaded) {
-                return FormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  initialValue: _selectedServiciosSolicitados,
-                  builder:
-                      (FormFieldState<List<LstServicioSolicitado>> formstate) {
-                    return Column(
-                      children: [
-                        Wrap(
-                            children: List<Widget>.generate(
-                                state.serviciosSolicitadosLoaded!.length,
-                                (index) {
+      ),
+      const Divider(),
+      const Text(
+        'Servicios Solicitados',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<ServicioSolicitadoCubit, ServiciosSolicitadosState>(
+        builder: (context, state) {
+          if (state is ServiciosSolicitadosLoaded) {
+            return FormField<List<LstServicioSolicitado>>(
+              initialValue:
+                  cuidadoSaludCondRiesgoBloc.state.lstServiciosSolicitados,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Seleccione al menos una opción.';
+                } else if (value.length > 3) {
+                  return 'Máximo tres opciones.';
+                }
+                return null;
+              },
+              builder: (FormFieldState<List<LstServicioSolicitado>> formState) {
+                return Column(
+                  children: [
+                    Wrap(
+                      children: List<Widget>.generate(
+                        state.serviciosSolicitadosLoaded!.length,
+                        (index) {
                           final e = state.serviciosSolicitadosLoaded![index];
                           return Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Checkbox(
-                                  value: _selectedServiciosSolicitados.any(
+                                value: formState.value?.any((element) =>
+                                        element.servicioSolicitadoId ==
+                                        e.servicioSolicitadoId) ??
+                                    false,
+                                onChanged: (bool? value) {
+                                  var selectedItems =
+                                      List<LstServicioSolicitado>.from(
+                                          formState.value ?? []);
+                                  if (value == true) {
+                                    selectedItems.add(LstServicioSolicitado(
+                                        servicioSolicitadoId:
+                                            e.servicioSolicitadoId));
+                                  } else {
+                                    selectedItems.removeWhere(
                                       (element) =>
                                           element.servicioSolicitadoId ==
-                                          e.servicioSolicitadoId),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        _selectedServiciosSolicitados.add(
-                                            LstServicioSolicitado(
-                                                servicioSolicitadoId:
-                                                    e.servicioSolicitadoId));
-                                      } else {
-                                        _selectedServiciosSolicitados
-                                            .removeWhere(
-                                          (element) =>
-                                              element.servicioSolicitadoId ==
-                                              e.servicioSolicitadoId,
-                                        );
-                                      }
-                                    });
-                                  }),
+                                          e.servicioSolicitadoId,
+                                    );
+                                  }
+                                  formState.didChange(selectedItems);
+                                  cuidadoSaludCondRiesgoBloc.add(
+                                      ServiciosSolicitadosChanged(
+                                          selectedItems));
+                                },
+                              ),
                               Flexible(
                                 child: Text(
                                   e.descripcion,
@@ -245,137 +227,146 @@ class _CuidadoSaludCondRiesgoFormState
                                 const VerticalDivider(),
                             ],
                           );
-                        })),
-                        Text(
-                          _validateServiciosSolicitados() ?? '',
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      ],
-                    );
-                  },
-                  validator: (_) => _validateServiciosSolicitados(),
-                  onSaved: (List<LstServicioSolicitado>? value) {
-                    cuidadoSaludCondRiesgoBloc
-                        .add(ServiciosSolicitadosChanged(value!));
-                  },
+                        },
+                      ),
+                    ),
+                    Text(
+                      formState.errorText ?? '',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ],
                 );
-              }
-              return Container();
-            },
-          ),
-          const Divider(),
-          const Text(
-            'Le han diagnosticado alguna enfermedad que requiere tratamiento permanente o supervisado',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-            builder: (context, state) {
-              if (state is OpcionesSiNoLoaded) {
-                return FormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  initialValue: _tieneEnfermedad,
-                  builder: (FormFieldState<int> formstate) => Column(
-                    children: [
-                      Column(
-                          children: state.opcionesSiNoLoaded!
-                              .map(
-                                (e) => RadioListTile(
-                                  title: Text(e.descripcion),
-                                  value: e.opcionId,
-                                  groupValue: _tieneEnfermedad,
-                                  onChanged: (int? newValue) {
-                                    if (newValue == 2) {
-                                      setState(() {
-                                        _tieneEnfermedad = newValue!;
-                                        _selectedNombresEnfermedades = [];
-                                      });
-                                      cuidadoSaludCondRiesgoBloc.add(
-                                          const NombresEnfermedadesChanged([]));
-                                    } else {
-                                      setState(() {
-                                        _tieneEnfermedad = newValue!;
-                                      });
-                                    }
+              },
+            );
+          }
+          return Container();
+        },
+      ),
+      const Divider(),
+      const Text(
+        'Le han diagnosticado alguna enfermedad que requiere tratamiento permanente o supervisado',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+        builder: (context, state) {
+          if (state is OpcionesSiNoLoaded) {
+            return FormField(
+              initialValue: _tieneEnfermedad,
+              builder: (FormFieldState<int> formstate) => Column(
+                children: [
+                  Column(
+                      children: state.opcionesSiNoLoaded!
+                          .map(
+                            (e) => e.opcionId == 3
+                                ? Container()
+                                : RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.opcionId,
+                                    groupValue: _tieneEnfermedad,
+                                    onChanged: (int? newValue) {
+                                      if (newValue == 2) {
+                                        _seguimientoEnfermedadId = null;
+                                        cuidadoSaludCondRiesgoBloc.add(
+                                            const NombresEnfermedadesChanged(
+                                                []));
+                                        cuidadoSaludCondRiesgoBloc.add(
+                                            const SeguimientoEnfermedadChanged(
+                                                0));
+                                      }
 
-                                    formstate.didChange(newValue);
-                                  },
-                                ),
-                              )
-                              .toList()),
-                      formstate.hasError
-                          ? const Text(
-                              'Seleccione una opción',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          if (_tieneEnfermedad == 1)
-            Column(
-              children: [
-                const Divider(),
-                const Text(
-                  'Nombre de la enfermedad',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                BlocBuilder<NombreEnfermedadCubit, NombresEnfermedadesState>(
-                  builder: (context, state) {
-                    if (state is NombresEnfermedadesLoaded) {
-                      return FormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        initialValue: _selectedNombresEnfermedades,
-                        builder: (FormFieldState<List<LstNombreEnfermedad>>
-                            formstate) {
-                          return Column(
-                            children: [
-                              Wrap(
-                                  children: List<Widget>.generate(
-                                      state.nombresEnfermedadesLoaded!.length,
-                                      (index) {
+                                      setState(() {
+                                        _tieneEnfermedad = newValue!;
+                                      });
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                          )
+                          .toList()),
+                  formstate.hasError
+                      ? const Text(
+                          'Seleccione una opción',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container(),
+                ],
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      if (_tieneEnfermedad == 1)
+        Column(
+          children: [
+            const Divider(),
+            const Text(
+              'Nombre de la enfermedad',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const Divider(),
+            BlocBuilder<NombreEnfermedadCubit, NombresEnfermedadesState>(
+              builder: (context, state) {
+                if (state is NombresEnfermedadesLoaded) {
+                  return FormField<List<LstNombreEnfermedad>>(
+                    initialValue:
+                        cuidadoSaludCondRiesgoBloc.state.lstNombresEnfermedades,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Seleccione al menos una opción.';
+                      } else if (value.length > 3) {
+                        return 'Máximo tres opciones.';
+                      }
+                      return null;
+                    },
+                    builder:
+                        (FormFieldState<List<LstNombreEnfermedad>> formState) {
+                      return Column(
+                        children: [
+                          Wrap(
+                            children: List<Widget>.generate(
+                              state.nombresEnfermedadesLoaded!.length,
+                              (index) {
                                 final e =
                                     state.nombresEnfermedadesLoaded![index];
                                 return Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Checkbox(
-                                        value: _selectedNombresEnfermedades.any(
+                                      value: formState.value?.any((element) =>
+                                              element.nombreEnfermedadId ==
+                                              e.nombreEnfermedadId) ??
+                                          false,
+                                      onChanged: (bool? value) {
+                                        var selectedItems =
+                                            List<LstNombreEnfermedad>.from(
+                                                formState.value ?? []);
+                                        if (value == true) {
+                                          selectedItems.add(LstNombreEnfermedad(
+                                              nombreEnfermedadId:
+                                                  e.nombreEnfermedadId));
+                                        } else {
+                                          selectedItems.removeWhere(
                                             (element) =>
                                                 element.nombreEnfermedadId ==
-                                                e.nombreEnfermedadId),
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            if (value!) {
-                                              _selectedNombresEnfermedades.add(
-                                                  LstNombreEnfermedad(
-                                                      nombreEnfermedadId: e
-                                                          .nombreEnfermedadId));
-                                            } else {
-                                              _selectedNombresEnfermedades
-                                                  .removeWhere(
-                                                (element) =>
-                                                    element
-                                                        .nombreEnfermedadId ==
-                                                    e.nombreEnfermedadId,
-                                              );
-                                            }
-                                          });
-                                        }),
+                                                e.nombreEnfermedadId,
+                                          );
+                                        }
+                                        formState.didChange(selectedItems);
+                                        cuidadoSaludCondRiesgoBloc.add(
+                                            NombresEnfermedadesChanged(
+                                                selectedItems));
+                                      },
+                                    ),
                                     Flexible(
                                       child: Text(
                                         e.descripcion,
@@ -389,550 +380,528 @@ class _CuidadoSaludCondRiesgoFormState
                                       const VerticalDivider(),
                                   ],
                                 );
-                              })),
-                              Text(
-                                _validateNombresEnfermedades() ?? '',
-                                style: const TextStyle(color: Colors.red),
-                              ),
-                            ],
-                          );
-                        },
-                        validator: (_) => _validateNombresEnfermedades(),
-                        onSaved: (List<LstNombreEnfermedad>? value) {
-                          cuidadoSaludCondRiesgoBloc
-                              .add(NombresEnfermedadesChanged(value!));
-                        },
+                              },
+                            ),
+                          ),
+                          Text(
+                            formState.errorText ?? '',
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ],
                       );
-                    }
-                    return Container();
-                  },
-                ),
-                const Divider(),
-                const Text(
-                  'Seguimiento de la Enfermedad',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                BlocBuilder<SeguimientoEnfermedadCubit,
-                    SeguimientoEnfermedadesState>(
-                  builder: (context, state) {
-                    if (state is SeguimientoEnfermedadesLoaded) {
-                      return DropdownButtonFormField<int>(
-                        isExpanded: true,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        value: _seguimientoEnfermedadId,
-                        items: state.seguimientoEnfermedadesLoaded!
-                            .map(
-                              (seguimientoEnfermedad) => DropdownMenuItem<int>(
-                                value: seguimientoEnfermedad
-                                    .seguimientoEnfermedadId,
-                                child: Text(seguimientoEnfermedad.descripcion),
-                              ),
-                            )
-                            .toList(),
-                        decoration: const InputDecoration(
-                            labelText: 'Seleccione una opción',
-                            border: OutlineInputBorder()),
-                        onChanged: (int? newValue) {
-                          setState(() {
-                            _seguimientoEnfermedadId = newValue!;
-                          });
-                          cuidadoSaludCondRiesgoBloc
-                              .add(SeguimientoEnfermedadChanged(newValue!));
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Campo Requerido';
-                          }
-                          return null;
-                        },
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              ],
+                    },
+                  );
+                }
+                return Container();
+              },
             ),
-          const Divider(),
-          const Text(
-            'Condición Nutricional',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<CondicionNutricionalCubit, CondicionesNutricionalesState>(
-            builder: (context, state) {
-              if (state is CondicionesNutricionalesLoaded) {
-                return DropdownButtonFormField<int>(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  value: _condicionNutricionalId,
-                  items: state.condicionesNutricionalesLoaded!
-                      .map(
-                        (condicionNutricional) => DropdownMenuItem<int>(
-                          value: condicionNutricional.condicionNutricionalId,
-                          child: Text(condicionNutricional.descripcion),
-                        ),
-                      )
-                      .toList(),
-                  decoration: const InputDecoration(
-                      labelText: 'Seleccione una opción',
-                      border: OutlineInputBorder()),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _condicionNutricionalId = newValue!;
-                    });
-                    cuidadoSaludCondRiesgoBloc
-                        .add(CondicionNutricionalChanged(newValue!));
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo Requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          const Divider(),
-          const Text(
-            'Presenta tos con flema por mas de 15 días',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-            builder: (context, state) {
-              if (state is OpcionesSiNoLoaded) {
-                return FormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  initialValue: _tosFlemaId,
-                  builder: (FormFieldState<int> formstate) => Column(
-                    children: [
-                      Column(
-                          children: state.opcionesSiNoLoaded!
-                              .map(
-                                (e) => RadioListTile(
-                                  title: Text(e.descripcion),
-                                  value: e.opcionId,
-                                  groupValue: _tosFlemaId,
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      _tosFlemaId = newValue!;
-                                    });
-
-                                    cuidadoSaludCondRiesgoBloc
-                                        .add(TosFlemaChanged(newValue!));
-                                    formstate.didChange(newValue);
-                                  },
-                                ),
-                              )
-                              .toList()),
-                      formstate.hasError
-                          ? const Text(
-                              'Seleccione una opción',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          const Divider(),
-          const Text(
-            'Presenta manchas inusuales en la piel que no pican y no duelen',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-            builder: (context, state) {
-              if (state is OpcionesSiNoLoaded) {
-                return FormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  initialValue: _manchasPielId,
-                  builder: (FormFieldState<int> formstate) => Column(
-                    children: [
-                      Column(
-                          children: state.opcionesSiNoLoaded!
-                              .map(
-                                (e) => RadioListTile(
-                                  title: Text(e.descripcion),
-                                  value: e.opcionId,
-                                  groupValue: _manchasPielId,
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      _manchasPielId = newValue!;
-                                    });
-
-                                    cuidadoSaludCondRiesgoBloc
-                                        .add(ManchasPielChanged(newValue!));
-                                    formstate.didChange(newValue);
-                                  },
-                                ),
-                              )
-                              .toList()),
-                      formstate.hasError
-                          ? const Text(
-                              'Seleccione una opción',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          const Divider(),
-          const Text(
-            'Cuenta con Carnet de Vacunación',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-            builder: (context, state) {
-              if (state is OpcionesSiNoLoaded) {
-                return FormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  initialValue: _carnetVacunacionId,
-                  builder: (FormFieldState<int> formstate) => Column(
-                    children: [
-                      Column(
-                          children: state.opcionesSiNoLoaded!
-                              .map(
-                                (e) => RadioListTile(
-                                  title: Text(e.descripcion),
-                                  value: e.opcionId,
-                                  groupValue: _carnetVacunacionId,
-                                  onChanged: (int? newValue) {
-                                    if (newValue == 2) {
-                                      setState(() {
-                                        _carnetVacunacionId = newValue!;
-                                        _esquemaVacunacionId = null;
-                                      });
-                                      cuidadoSaludCondRiesgoBloc.add(
-                                          const EsquemaVacunacionChanged(0));
-                                    } else {
-                                      setState(() {
-                                        _carnetVacunacionId = newValue!;
-                                      });
-                                    }
-
-                                    formstate.didChange(newValue);
-                                  },
-                                ),
-                              )
-                              .toList()),
-                      formstate.hasError
-                          ? const Text(
-                              'Seleccione una opción',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          if (_carnetVacunacionId == 1)
-            Column(
-              children: [
-                const Divider(),
-                const Text(
-                  'Esquema de vacunación acorde a la edad',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                BlocBuilder<EsquemaVacunacionCubit, EsquemasVacunacionState>(
-                  builder: (context, state) {
-                    if (state is EsquemasVacunacionLoaded) {
-                      return FormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        initialValue: _esquemaVacunacionId,
-                        builder: (FormFieldState<int> formstate) => Column(
-                          children: [
-                            Column(
-                                children: state.esquemasVacunacionLoaded!
-                                    .map(
-                                      (e) => RadioListTile(
-                                        title: Text(e.descripcion),
-                                        value: e.esquemaVacunacionId,
-                                        groupValue: _esquemaVacunacionId,
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            _esquemaVacunacionId = newValue!;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                    .toList()),
-                            formstate.hasError
-                                ? const Text(
-                                    'Seleccione una opción',
-                                    style: TextStyle(color: Colors.red),
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Campo requerido';
-                          }
-                          return null;
-                        },
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-                const Text(
-                  'Donde fue vacunado',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                BlocBuilder<LugarVacunacionCubit, LugaresVacunacionState>(
-                  builder: (context, state) {
-                    if (state is LugaresVacunacionLoaded) {
-                      return FormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        initialValue: _lugarVacunacionId,
-                        builder: (FormFieldState<int> formstate) => Column(
-                          children: [
-                            Column(
-                                children: state.lugaresVacunacionLoaded!
-                                    .map(
-                                      (e) => RadioListTile(
-                                        title: Text(e.descripcion),
-                                        value: e.lugarVacunacionId,
-                                        groupValue: _lugarVacunacionId,
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            _lugarVacunacionId = newValue!;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                    .toList()),
-                            formstate.hasError
-                                ? const Text(
-                                    'Seleccione una opción',
-                                    style: TextStyle(color: Colors.red),
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Campo requerido';
-                          }
-                          return null;
-                        },
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              ],
+            const Divider(),
+            const Text(
+              'Seguimiento de la Enfermedad',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-          const Divider(),
-          const Text(
-            'Utiliza algún método de planificación familiar',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-            builder: (context, state) {
-              if (state is OpcionesSiNoLoaded) {
-                return FormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  initialValue: _utilizaMetodoPlanificacionId,
-                  builder: (FormFieldState<int> formstate) => Column(
-                    children: [
-                      Column(
-                          children: state.opcionesSiNoLoaded!
-                              .map(
-                                (e) => RadioListTile(
-                                  title: Text(e.descripcion),
-                                  value: e.opcionId,
-                                  groupValue: _utilizaMetodoPlanificacionId,
-                                  onChanged: (int? newValue) {
-                                    if (newValue == 2 || newValue == 3) {
+            const Divider(),
+            BlocBuilder<SeguimientoEnfermedadCubit,
+                SeguimientoEnfermedadesState>(
+              builder: (context, state) {
+                if (state is SeguimientoEnfermedadesLoaded) {
+                  return DropdownButtonFormField<int>(
+                    isExpanded: true,
+                    value: _seguimientoEnfermedadId,
+                    items: state.seguimientoEnfermedadesLoaded!
+                        .map(
+                          (seguimientoEnfermedad) => DropdownMenuItem<int>(
+                            value:
+                                seguimientoEnfermedad.seguimientoEnfermedadId,
+                            child: Text(seguimientoEnfermedad.descripcion),
+                          ),
+                        )
+                        .toList(),
+                    decoration: const InputDecoration(
+                        labelText: 'Seleccione una opción',
+                        border: OutlineInputBorder()),
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        _seguimientoEnfermedadId = newValue!;
+                      });
+                      cuidadoSaludCondRiesgoBloc
+                          .add(SeguimientoEnfermedadChanged(newValue!));
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Campo Requerido';
+                      }
+                      return null;
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ],
+        ),
+      const Divider(),
+      const Text(
+        'Condición Nutricional',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<CondicionNutricionalCubit, CondicionesNutricionalesState>(
+        builder: (context, state) {
+          if (state is CondicionesNutricionalesLoaded) {
+            return DropdownButtonFormField<int>(
+              value: _condicionNutricionalId,
+              items: state.condicionesNutricionalesLoaded!
+                  .map(
+                    (condicionNutricional) => DropdownMenuItem<int>(
+                      value: condicionNutricional.condicionNutricionalId,
+                      child: Text(condicionNutricional.descripcion),
+                    ),
+                  )
+                  .toList(),
+              decoration: const InputDecoration(
+                  labelText: 'Seleccione una opción',
+                  border: OutlineInputBorder()),
+              onChanged: (int? newValue) {
+                setState(() {
+                  _condicionNutricionalId = newValue!;
+                });
+                cuidadoSaludCondRiesgoBloc
+                    .add(CondicionNutricionalChanged(newValue!));
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo Requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      const Divider(),
+      const Text(
+        'Presenta tos con flema por mas de 15 días',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+        builder: (context, state) {
+          if (state is OpcionesSiNoLoaded) {
+            return FormField(
+              initialValue: _tosFlemaId,
+              builder: (FormFieldState<int> formstate) => Column(
+                children: [
+                  Column(
+                      children: state.opcionesSiNoLoaded!
+                          .map(
+                            (e) => e.opcionId == 3
+                                ? Container()
+                                : RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.opcionId,
+                                    groupValue: _tosFlemaId,
+                                    onChanged: (int? newValue) {
                                       setState(() {
-                                        _utilizaMetodoPlanificacionId =
-                                            newValue!;
-                                        _metodoPlanificacionId = null;
-                                        _conductaSeguirId = null;
+                                        _tosFlemaId = newValue!;
                                       });
-                                      cuidadoSaludCondRiesgoBloc.add(
-                                          const UtilizaMetodoPlanificacionChanged(
-                                              0));
-                                      cuidadoSaludCondRiesgoBloc.add(
-                                          const MetodoPlanificacionChanged(0));
                                       cuidadoSaludCondRiesgoBloc
-                                          .add(const ConductaSeguirChanged(0));
-                                    } else {
+                                          .add(TosFlemaChanged(newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                          )
+                          .toList()),
+                  formstate.hasError
+                      ? const Text(
+                          'Seleccione una opción',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container(),
+                ],
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      const Divider(),
+      const Text(
+        'Presenta manchas inusuales en la piel que no pican y no duelen',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+        builder: (context, state) {
+          if (state is OpcionesSiNoLoaded) {
+            return FormField(
+              initialValue: _manchasPielId,
+              builder: (FormFieldState<int> formstate) => Column(
+                children: [
+                  Column(
+                      children: state.opcionesSiNoLoaded!
+                          .map(
+                            (e) => e.opcionId == 3
+                                ? Container()
+                                : RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.opcionId,
+                                    groupValue: _manchasPielId,
+                                    onChanged: (int? newValue) {
                                       setState(() {
-                                        _utilizaMetodoPlanificacionId =
-                                            newValue!;
+                                        _manchasPielId = newValue!;
                                       });
-                                    }
+                                      cuidadoSaludCondRiesgoBloc
+                                          .add(ManchasPielChanged(newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                          )
+                          .toList()),
+                  formstate.hasError
+                      ? const Text(
+                          'Seleccione una opción',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container(),
+                ],
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      const Divider(),
+      const Text(
+        'Cuenta con Carnet de Vacunación',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+        builder: (context, state) {
+          if (state is OpcionesSiNoLoaded) {
+            return FormField(
+              initialValue: _carnetVacunacionId,
+              builder: (FormFieldState<int> formstate) => Column(
+                children: [
+                  Column(
+                      children: state.opcionesSiNoLoaded!
+                          .map(
+                            (e) => e.opcionId == 3
+                                ? Container()
+                                : RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.opcionId,
+                                    groupValue: _carnetVacunacionId,
+                                    onChanged: (int? newValue) {
+                                      if (newValue == 2) {
+                                        setState(() {
+                                          _esquemaVacunacionId = null;
+                                          _lugarVacunacionId = null;
+                                        });
+                                        cuidadoSaludCondRiesgoBloc.add(
+                                            const EsquemaVacunacionChanged(0));
+                                        cuidadoSaludCondRiesgoBloc.add(
+                                            const LugarVacunacionChanged(0));
+                                      }
+                                      setState(() {
+                                        _carnetVacunacionId = newValue!;
+                                      });
 
-                                    formstate.didChange(newValue);
-                                  },
-                                ),
-                              )
-                              .toList()),
-                      formstate.hasError
-                          ? const Text(
-                              'Seleccione una opción',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          if (_utilizaMetodoPlanificacionId == 1)
-            Column(
-              children: [
-                const Divider(),
-                const Text(
-                  'Que metodo de planificación utiliza al momento de la consulta',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                BlocBuilder<MetodoPlanificacionCubit,
-                    MetodosPlanificacionState>(
-                  builder: (context, state) {
-                    if (state is MetodosPlanificacionLoaded) {
-                      return DropdownButtonFormField<int>(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        value: _metodoPlanificacionId,
-                        items: state.metodosPlanificacionLoaded!
-                            .map(
-                              (metodoPlanificacion) => DropdownMenuItem<int>(
-                                value:
-                                    metodoPlanificacion.metodoPlanificacionId,
-                                child: Text(metodoPlanificacion.descripcion),
-                              ),
-                            )
-                            .toList(),
-                        decoration: const InputDecoration(
-                            labelText: 'Seleccione una opción',
-                            border: OutlineInputBorder()),
-                        onChanged: (int? newValue) {
-                          setState(() {
-                            _metodoPlanificacionId = newValue!;
-                          });
-                          cuidadoSaludCondRiesgoBloc
-                              .add(MetodoPlanificacionChanged(newValue!));
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Campo Requerido';
-                          }
-                          return null;
-                        },
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-                const Divider(),
-                const Text(
-                  'Conducta a seguir',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                BlocBuilder<ConductaSeguirCubit, ConductasSeguirState>(
-                  builder: (context, state) {
-                    if (state is ConductasSeguirLoaded) {
-                      return DropdownButtonFormField<int>(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        value: _conductaSeguirId,
-                        items: state.conductasSeguirLoaded!
-                            .map(
-                              (conductaSeguir) => DropdownMenuItem<int>(
-                                value: conductaSeguir.conductaSeguirId,
-                                child: Text(conductaSeguir.descripcion),
-                              ),
-                            )
-                            .toList(),
-                        decoration: const InputDecoration(
-                            labelText: 'Seleccione una opción',
-                            border: OutlineInputBorder()),
-                        onChanged: (int? newValue) {
-                          setState(() {
-                            _conductaSeguirId = newValue!;
-                          });
-                          cuidadoSaludCondRiesgoBloc
-                              .add(ConductaSeguirChanged(newValue!));
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Campo Requerido';
-                          }
-                          return null;
-                        },
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              ],
+                                      cuidadoSaludCondRiesgoBloc.add(
+                                          CarnetVacunacionChanged(newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                          )
+                          .toList()),
+                  formstate.hasError
+                      ? const Text(
+                          'Seleccione una opción',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container(),
+                ],
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      if (_carnetVacunacionId == 1)
+        Column(
+          children: [
+            const Divider(),
+            const Text(
+              'Esquema de vacunación acorde a la edad',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-        ]));
+            const Divider(),
+            BlocBuilder<EsquemaVacunacionCubit, EsquemasVacunacionState>(
+              builder: (context, state) {
+                if (state is EsquemasVacunacionLoaded) {
+                  return FormField(
+                    initialValue: _esquemaVacunacionId,
+                    builder: (FormFieldState<int> formstate) => Column(
+                      children: [
+                        Column(
+                            children: state.esquemasVacunacionLoaded!
+                                .map(
+                                  (e) => RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.esquemaVacunacionId,
+                                    groupValue: _esquemaVacunacionId,
+                                    onChanged: (int? newValue) {
+                                      setState(() {
+                                        _esquemaVacunacionId = newValue!;
+                                      });
+                                      cuidadoSaludCondRiesgoBloc.add(
+                                          EsquemaVacunacionChanged(newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                                )
+                                .toList()),
+                        formstate.hasError
+                            ? const Text(
+                                'Seleccione una opción',
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Campo requerido';
+                      }
+                      return null;
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            const Text(
+              'Donde fue vacunado',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const Divider(),
+            BlocBuilder<LugarVacunacionCubit, LugaresVacunacionState>(
+              builder: (context, state) {
+                if (state is LugaresVacunacionLoaded) {
+                  return FormField(
+                    initialValue: _lugarVacunacionId,
+                    builder: (FormFieldState<int> formstate) => Column(
+                      children: [
+                        Column(
+                            children: state.lugaresVacunacionLoaded!
+                                .map(
+                                  (e) => RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.lugarVacunacionId,
+                                    groupValue: _lugarVacunacionId,
+                                    onChanged: (int? newValue) {
+                                      setState(() {
+                                        _lugarVacunacionId = newValue!;
+                                      });
+                                      cuidadoSaludCondRiesgoBloc.add(
+                                          LugarVacunacionChanged(newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                                )
+                                .toList()),
+                        formstate.hasError
+                            ? const Text(
+                                'Seleccione una opción',
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Campo requerido';
+                      }
+                      return null;
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ],
+        ),
+      const Divider(),
+      const Text(
+        'Utiliza algún método de planificación familiar',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+        builder: (context, state) {
+          if (state is OpcionesSiNoLoaded) {
+            return FormField(
+              initialValue: _utilizaMetodoPlanificacionId,
+              builder: (FormFieldState<int> formstate) => Column(
+                children: [
+                  Column(
+                      children: state.opcionesSiNoLoaded!
+                          .map(
+                            (e) => RadioListTile(
+                              title: Text(e.descripcion),
+                              value: e.opcionId,
+                              groupValue: _utilizaMetodoPlanificacionId,
+                              onChanged: (int? newValue) {
+                                setState(() {
+                                  _utilizaMetodoPlanificacionId = newValue!;
+                                });
+                                cuidadoSaludCondRiesgoBloc.add(
+                                    UtilizaMetodoPlanificacionChanged(
+                                        newValue!));
+                                formstate.didChange(newValue);
+                              },
+                            ),
+                          )
+                          .toList()),
+                  formstate.hasError
+                      ? const Text(
+                          'Seleccione una opción',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container(),
+                ],
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      const Divider(),
+      const Text(
+        'Que metodo de planificación utiliza al momento de la consulta',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<MetodoPlanificacionCubit, MetodosPlanificacionState>(
+        builder: (context, state) {
+          if (state is MetodosPlanificacionLoaded) {
+            return DropdownButtonFormField<int>(
+              value: _metodoPlanificacionId,
+              items: state.metodosPlanificacionLoaded!
+                  .map(
+                    (metodoPlanificacion) => DropdownMenuItem<int>(
+                      value: metodoPlanificacion.metodoPlanificacionId,
+                      child: Text(metodoPlanificacion.descripcion),
+                    ),
+                  )
+                  .toList(),
+              decoration: const InputDecoration(
+                  labelText: 'Seleccione una opción',
+                  border: OutlineInputBorder()),
+              onChanged: (int? newValue) {
+                setState(() {
+                  _metodoPlanificacionId = newValue!;
+                });
+                cuidadoSaludCondRiesgoBloc
+                    .add(MetodoPlanificacionChanged(newValue!));
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo Requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      const Divider(),
+      const Text(
+        'Conducta a seguir',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<ConductaSeguirCubit, ConductasSeguirState>(
+        builder: (context, state) {
+          if (state is ConductasSeguirLoaded) {
+            return DropdownButtonFormField<int>(
+              value: _conductaSeguirId,
+              items: state.conductasSeguirLoaded!
+                  .map(
+                    (conductaSeguir) => DropdownMenuItem<int>(
+                      value: conductaSeguir.conductaSeguirId,
+                      child: Text(conductaSeguir.descripcion),
+                    ),
+                  )
+                  .toList(),
+              decoration: const InputDecoration(
+                  labelText: 'Seleccione una opción',
+                  border: OutlineInputBorder()),
+              onChanged: (int? newValue) {
+                setState(() {
+                  _conductaSeguirId = newValue!;
+                });
+                cuidadoSaludCondRiesgoBloc
+                    .add(ConductaSeguirChanged(newValue!));
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo Requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+    ]);
   }
 }

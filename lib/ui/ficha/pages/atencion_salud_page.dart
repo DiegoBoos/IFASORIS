@@ -19,6 +19,7 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
   int afiliadoPageIndex = 0;
   final afiliadoPageController = PageController(initialPage: 0);
   late List<GlobalKey<FormState>> formKeys;
+  bool _isCompleted = false;
 
   @override
   void initState() {
@@ -41,11 +42,11 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
 
       final atencionSaludBloc = BlocProvider.of<AtencionSaludBloc>(context);
 
-      final currentAtencionSalud = atencionSaludBloc.state.copyWith(
-          afiliadoId: afiliados[afiliadoPageIndex].afiliadoId,
-          familiaId: afiliados[afiliadoPageIndex].familiaId);
-
-      atencionSaludBloc.add(AtencionSaludSubmitted(currentAtencionSalud));
+      atencionSaludBloc
+          .add(AfiliadoChanged(afiliados[afiliadoPageIndex].afiliadoId!));
+      atencionSaludBloc
+          .add(FamiliaChanged(afiliados[afiliadoPageIndex].familiaId!));
+      atencionSaludBloc.add(AtencionSaludSubmitted());
     }
   }
 
@@ -53,77 +54,136 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
   Widget build(BuildContext context) {
     final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
     final atencionSaludBloc = BlocProvider.of<AtencionSaludBloc>(context);
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<AtencionSaludBloc, AtencionSaludEntity>(
-          listener: (context, state) {
-            final formStatus = state.formStatus;
-            if (formStatus is AtencionSaludSubmissionSuccess) {
-              CustomSnackBar.showSnackBar(
-                  context,
-                  'Datos de atenciones en salud guardados correctamente',
-                  Colors.green);
+    return WillPopScope(
+        onWillPop: () async {
+          CustomSnackBar.showCustomDialog(
+              context,
+              'Está seguro que desea salir',
+              'Se perderán los datos no guardados.', () {
+            Navigator.popUntil(context, ModalRoute.withName('home'));
+            return;
+          }, true);
+          return false;
+        },
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<AtencionSaludBloc, AtencionSaludEntity>(
+              listener: (context, state) {
+                final formStatus = state.formStatus;
+                if (formStatus is AtencionSaludSubmissionSuccess) {
+                  CustomSnackBar.showSnackBar(
+                      context,
+                      'Datos de atenciones en salud guardados correctamente',
+                      Colors.green);
 
-              if (afiliadoPageIndex < encuestaBloc.state.afiliados.length - 1) {
-                afiliadoPageController.animateToPage(
-                  afiliadoPageIndex + 1,
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInExpo,
-                );
-              } else {
-                Navigator.pop(context);
-              }
-            }
+                  atencionSaludBloc.add(AtencionSaludInit());
 
-            if (formStatus is AtencionSaludSubmissionFailed) {
-              CustomSnackBar.showSnackBar(
-                  context, formStatus.message, Colors.red);
-
-              atencionSaludBloc.add(AtencionSaludInit());
-            }
-          },
-        )
-      ],
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Estilos de vida saludable')),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const ProgressBar(),
-              Expanded(
-                child: PageView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: afiliadoPageController,
-                  itemCount: encuestaBloc.state.afiliados.length,
-                  onPageChanged: (index) {
-                    setState(() {
-                      afiliadoPageIndex = index;
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    final currentAfiliado = encuestaBloc.state.afiliados[index];
-
-                    return Form(
-                      key: formKeys[index],
-                      child: AtencionSaludForm(
-                        currentAfiliado: currentAfiliado,
-                      ),
+                  if (afiliadoPageIndex <
+                      encuestaBloc.state.afiliados.length - 1) {
+                    afiliadoPageController.animateToPage(
+                      afiliadoPageIndex + 1,
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInExpo,
                     );
-                  },
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Guardar'),
-                ),
-              ),
-            ],
+                  } else {
+                    setState(() {
+                      _isCompleted = true;
+                    });
+                  }
+                }
+
+                if (formStatus is AtencionSaludSubmissionFailed) {
+                  CustomSnackBar.showSnackBar(
+                      context, formStatus.message, Colors.red);
+
+                  atencionSaludBloc.add(AtencionSaludInit());
+                }
+              },
+            )
+          ],
+          child: Scaffold(
+            appBar: AppBar(title: const Text('Atención en salud')),
+            body: _isCompleted
+                ? buildCompleted()
+                : Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        /*  const ProgressBar(), */
+                        Expanded(
+                          child: PageView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            controller: afiliadoPageController,
+                            itemCount: encuestaBloc.state.afiliados.length,
+                            onPageChanged: (index) {
+                              setState(() {
+                                afiliadoPageIndex = index;
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              final currentAfiliado =
+                                  encuestaBloc.state.afiliados[index];
+
+                              BlocProvider.of<AtencionSaludBloc>(context).add(
+                                  GetAtencionSalud(
+                                      currentAfiliado.afiliadoId!));
+
+                              return BlocBuilder<AtencionSaludBloc,
+                                  AtencionSaludEntity>(
+                                builder: (context, state) {
+                                  if (state.formStatus
+                                      is AtencionSaludFormEmpty) {
+                                    return Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: formKeys[index],
+                                      child: AtencionSaludForm(
+                                        currentAfiliado: currentAfiliado,
+                                      ),
+                                    );
+                                  } else if (state.formStatus
+                                          is AtencionSaludFormLoaded ||
+                                      state.formStatus
+                                          is AtencionSaludSubmissionSuccess) {
+                                    return Form(
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        key: formKeys[index],
+                                        child: AtencionSaludForm(
+                                            currentAfiliado: currentAfiliado,
+                                            atencionSalud: state));
+                                  }
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _submitForm,
+                            child: const Text('Guardar'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
           ),
+        ));
+  }
+
+  Widget buildCompleted() {
+    return AlertDialog(
+      title: const Text('Ficha guardada'),
+      content: const Text('Registro completado.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
+          child: const Text('Aceptar'),
         ),
-      ),
+      ],
     );
   }
 }

@@ -1,27 +1,26 @@
 import '../../data/models/evento_costumbre_participa_model.dart';
 import '../../ui/blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 
-class DimensionSocioculturalPueblosIndigenasEntity {
-  DimensionSocioculturalPueblosIndigenasEntity(
-      {this.dimensionSocioculturalPueblosIndigenasId,
-      this.afiliadoId,
-      this.familiaId,
-      this.religionProfesaId,
-      this.conoceUsosCostumbresId,
-      this.cualesUsosCostumbres,
-      this.participaCostumbresId,
-      this.costumbrePracticaId,
-      this.sancionJusticiaId,
-      this.sitiosSagradosId,
-      this.cualesSitiosSagrados,
-      this.lstEventoCostumbreParticipa,
-      this.formStatus =
-          const DimensionSocioculturalPueblosIndigenasFormInitial(),
-      this.remoteDimensionSocioculturalPuebloIndigena});
+class DimensionSocioCulturalPueblosIndigenasEntity {
+  DimensionSocioCulturalPueblosIndigenasEntity({
+    this.dimSocioCulturalPueblosIndigenasId,
+    this.familiaId,
+    this.afiliadoId,
+    this.religionProfesaId,
+    this.conoceUsosCostumbresId,
+    this.cualesUsosCostumbres,
+    this.participaCostumbresId,
+    this.costumbrePracticaId,
+    this.sancionJusticiaId,
+    this.sitiosSagradosId,
+    this.cualesSitiosSagrados,
+    this.lstEventoCostumbreParticipa,
+    this.formStatus = const DimensionSocioCulturalPueblosIndigenasFormInitial(),
+  });
 
-  int? dimensionSocioculturalPueblosIndigenasId;
-  int? afiliadoId;
+  int? dimSocioCulturalPueblosIndigenasId;
   int? familiaId;
+  int? afiliadoId;
   int? religionProfesaId;
   int? conoceUsosCostumbresId;
   String? cualesUsosCostumbres;
@@ -31,13 +30,12 @@ class DimensionSocioculturalPueblosIndigenasEntity {
   int? sitiosSagradosId;
   String? cualesSitiosSagrados;
   List<LstEventoCostumbreParticipa>? lstEventoCostumbreParticipa;
-  DimensionSocioculturalPueblosIndigenasState formStatus;
-  int? remoteDimensionSocioculturalPuebloIndigena;
+  DimensionSocioCulturalPueblosIndigenasState formStatus;
 
-  DimensionSocioculturalPueblosIndigenasEntity copyWith({
-    int? dimensionSocioculturalPueblosIndigenasId,
-    int? afiliadoId,
+  DimensionSocioCulturalPueblosIndigenasEntity copyWith({
+    int? dimSocioCulturalPueblosIndigenasId,
     int? familiaId,
+    int? afiliadoId,
     int? religionProfesaId,
     int? conoceUsosCostumbresId,
     String? cualesUsosCostumbres,
@@ -47,14 +45,14 @@ class DimensionSocioculturalPueblosIndigenasEntity {
     int? sitiosSagradosId,
     String? cualesSitiosSagrados,
     List<LstEventoCostumbreParticipa>? lstEventoCostumbreParticipa,
-    DimensionSocioculturalPueblosIndigenasState? formStatus,
+    DimensionSocioCulturalPueblosIndigenasState? formStatus,
   }) =>
-      DimensionSocioculturalPueblosIndigenasEntity(
-        dimensionSocioculturalPueblosIndigenasId:
-            dimensionSocioculturalPueblosIndigenasId ??
-                this.dimensionSocioculturalPueblosIndigenasId,
-        afiliadoId: afiliadoId ?? this.afiliadoId,
+      DimensionSocioCulturalPueblosIndigenasEntity(
+        dimSocioCulturalPueblosIndigenasId:
+            dimSocioCulturalPueblosIndigenasId ??
+                this.dimSocioCulturalPueblosIndigenasId,
         familiaId: familiaId ?? this.familiaId,
+        afiliadoId: afiliadoId ?? this.afiliadoId,
         religionProfesaId: religionProfesaId ?? this.religionProfesaId,
         conoceUsosCostumbresId:
             conoceUsosCostumbresId ?? this.conoceUsosCostumbresId,
@@ -66,15 +64,15 @@ class DimensionSocioculturalPueblosIndigenasEntity {
         sitiosSagradosId: sitiosSagradosId ?? this.sitiosSagradosId,
         cualesSitiosSagrados: cualesSitiosSagrados ?? this.cualesSitiosSagrados,
         lstEventoCostumbreParticipa:
-            lstEventoCostumbreParticipa ?? lstEventoCostumbreParticipa,
+            lstEventoCostumbreParticipa ?? this.lstEventoCostumbreParticipa,
         formStatus: formStatus ?? this.formStatus,
       );
 
   Map<String, dynamic> toJson() => {
-        "DimensionSocioculturalPuebloIndigena_id":
-            dimensionSocioculturalPueblosIndigenasId,
-        "Afiliado_id": afiliadoId,
+        "DimSocioCulturalPueblosIndigenas_id":
+            dimSocioCulturalPueblosIndigenasId,
         "Familia_id": familiaId,
+        "Afiliado_id": afiliadoId,
         "ReligionProfesa_id": religionProfesaId,
         "ConoceUsosCostumbres_id": conoceUsosCostumbresId,
         "Cuales_UsosCostumbres": cualesUsosCostumbres,
@@ -82,8 +80,6 @@ class DimensionSocioculturalPueblosIndigenasEntity {
         "CostumbrePractica_id": costumbrePracticaId,
         "SancionJusticia_id": sancionJusticiaId,
         "SitiosSagrados_id": sitiosSagradosId,
-        "Cuales_SitiosSagrados": cualesSitiosSagrados,
-        "remoteDimensionSocioculturalPuebloIndigena_id":
-            remoteDimensionSocioculturalPuebloIndigena,
+        "Cuales_SitiosSagrados": cualesSitiosSagrados
       };
 }

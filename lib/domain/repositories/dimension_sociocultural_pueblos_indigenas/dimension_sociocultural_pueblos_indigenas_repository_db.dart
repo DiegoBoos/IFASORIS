@@ -3,12 +3,12 @@ import 'package:dartz/dartz.dart';
 import '../../../core/error/failure.dart';
 import '../../entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
 
-abstract class DimensionSocioculturalPueblosIndigenasRepositoryDB {
+abstract class DimensionSocioCulturalPueblosIndigenasRepositoryDB {
   Future<Either<Failure, int>>
-      saveDimensionSocioculturalPueblosIndigenasRepositoryDB(
-          DimensionSocioculturalPueblosIndigenasEntity
-              dimensionSocioculturalPueblosIndigenas);
+      saveDimensionSocioCulturalPueblosIndigenasRepositoryDB(
+          DimensionSocioCulturalPueblosIndigenasEntity
+              dimensionSocioCulturalPueblosIndigenas);
 
-  Future<Either<Failure, DimensionSocioculturalPueblosIndigenasEntity?>>
-      getDimensionSocioculturalPueblosIndigenasRepositoryDB(int afiliadoId);
+  Future<Either<Failure, DimensionSocioCulturalPueblosIndigenasEntity?>>
+      getDimensionSocioCulturalPueblosIndigenasRepositoryDB(int afiliadoId);
 }

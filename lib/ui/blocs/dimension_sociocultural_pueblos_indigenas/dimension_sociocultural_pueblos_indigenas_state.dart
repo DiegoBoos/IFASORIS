@@ -1,31 +1,31 @@
 part of 'dimension_sociocultural_pueblos_indigenas_bloc.dart';
 
-abstract class DimensionSocioculturalPueblosIndigenasState {
-  const DimensionSocioculturalPueblosIndigenasState();
+abstract class DimensionSocioCulturalPueblosIndigenasState {
+  const DimensionSocioCulturalPueblosIndigenasState();
 }
 
-class DimensionSocioculturalPueblosIndigenasFormInitial
-    extends DimensionSocioculturalPueblosIndigenasState {
-  const DimensionSocioculturalPueblosIndigenasFormInitial();
+class DimensionSocioCulturalPueblosIndigenasFormInitial
+    extends DimensionSocioCulturalPueblosIndigenasState {
+  const DimensionSocioCulturalPueblosIndigenasFormInitial();
 }
 
-class DimensionSocioculturalPueblosIndigenasFormLoaded
-    extends DimensionSocioculturalPueblosIndigenasState {}
+class DimensionSocioCulturalPueblosIndigenasFormLoaded
+    extends DimensionSocioCulturalPueblosIndigenasState {}
 
-class DimensionSocioculturalPueblosIndigenasFormEmpty
-    extends DimensionSocioculturalPueblosIndigenasState {}
+class DimensionSocioCulturalPueblosIndigenasFormEmpty
+    extends DimensionSocioCulturalPueblosIndigenasState {}
 
-class DimensionSocioculturalPueblosIndigenasSubmissionSuccess
-    extends DimensionSocioculturalPueblosIndigenasState {}
+class DimensionSocioCulturalPueblosIndigenasSubmissionSuccess
+    extends DimensionSocioCulturalPueblosIndigenasState {}
 
-class DimensionSocioculturalPueblosIndigenasSubmissionFailed
-    extends DimensionSocioculturalPueblosIndigenasState {
+class DimensionSocioCulturalPueblosIndigenasSubmissionFailed
+    extends DimensionSocioCulturalPueblosIndigenasState {
   final String message;
 
-  DimensionSocioculturalPueblosIndigenasSubmissionFailed(this.message);
+  DimensionSocioCulturalPueblosIndigenasSubmissionFailed(this.message);
 }
 
-DimensionSocioculturalPueblosIndigenasEntity initObject() {
-  return DimensionSocioculturalPueblosIndigenasEntity(
-      formStatus: const DimensionSocioculturalPueblosIndigenasFormInitial());
+DimensionSocioCulturalPueblosIndigenasEntity initObject() {
+  return DimensionSocioCulturalPueblosIndigenasEntity(
+      formStatus: const DimensionSocioCulturalPueblosIndigenasFormInitial());
 }

@@ -1,62 +1,86 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/data/models/evento_costumbre_participa_model.dart';
+
 import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
 import '../../../domain/usecases/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_db_usecase.dart';
+import '../../../domain/usecases/evento_costumbre_participa/evento_costumbre_participa_db_usecase.dart';
 
 part 'dimension_sociocultural_pueblos_indigenas_event.dart';
 part 'dimension_sociocultural_pueblos_indigenas_state.dart';
 
-class DimensionSocioculturalPueblosIndigenasBloc extends Bloc<
-    DimensionSocioculturalPueblosIndigenasEvent,
-    DimensionSocioculturalPueblosIndigenasEntity> {
-  final DimensionSocioculturalPueblosIndigenasUsecaseDB
-      dimensionSocioculturalPueblosIndigenasUsecaseDB;
+class DimensionSocioCulturalPueblosIndigenasBloc extends Bloc<
+    DimensionSocioCulturalPueblosIndigenasEvent,
+    DimensionSocioCulturalPueblosIndigenasEntity> {
+  final DimensionSocioCulturalPueblosIndigenasUsecaseDB
+      dimensionSocioCulturalPueblosIndigenasUsecaseDB;
+  final EventoCostumbreParticipaUsecaseDB eventoCostumbreParticipaUsecaseDB;
 
-  DimensionSocioculturalPueblosIndigenasBloc(
-      {required this.dimensionSocioculturalPueblosIndigenasUsecaseDB})
+  DimensionSocioCulturalPueblosIndigenasBloc(
+      {required this.dimensionSocioCulturalPueblosIndigenasUsecaseDB,
+      required this.eventoCostumbreParticipaUsecaseDB})
       : super(initObject()) {
-    on<DimensionSocioculturalPueblosIndigenasInit>((event, emit) {
+    on<DimensionSocioCulturalPueblosIndigenasInit>((event, emit) {
       emit(initObject());
     });
 
-    on<DimensionSocioculturalPueblosIndigenasSubmitted>((event, emit) async {
-      final result = await dimensionSocioculturalPueblosIndigenasUsecaseDB
-          .saveDimensionSocioculturalPueblosIndigenasUsecaseDB(
-              event.dimensionSocioculturalPueblosIndigenas);
+    on<DimensionSocioCulturalPueblosIndigenasSubmitted>((event, emit) async {
+      final result = await dimensionSocioCulturalPueblosIndigenasUsecaseDB
+          .saveDimensionSocioCulturalPueblosIndigenasUsecaseDB(state);
       result.fold((failure) {
         emit(state.copyWith(
-            formStatus: DimensionSocioculturalPueblosIndigenasSubmissionFailed(
+            formStatus: DimensionSocioCulturalPueblosIndigenasSubmissionFailed(
                 failure.properties.first)));
-      }, (data) {
-        emit(state.copyWith(
-            formStatus:
-                DimensionSocioculturalPueblosIndigenasSubmissionSuccess()));
-      });
+      }, (data) async => await saveAsp6EventosCostumbresParticipa(data));
     });
 
-    on<GetDimensionSocioculturalPueblosIndigenas>((event, emit) async {
-      final result = await dimensionSocioculturalPueblosIndigenasUsecaseDB
-          .getDimensionSocioculturalPueblosIndigenasUsecaseDB(event.afiliadoId);
+    on<GetDimensionSocioCulturalPueblosIndigenas>((event, emit) async {
+      final result = await dimensionSocioCulturalPueblosIndigenasUsecaseDB
+          .getDimensionSocioCulturalPueblosIndigenasUsecaseDB(event.afiliadoId);
       result.fold((failure) {
         emit(state.copyWith(
-            formStatus: DimensionSocioculturalPueblosIndigenasSubmissionFailed(
+            formStatus: DimensionSocioCulturalPueblosIndigenasSubmissionFailed(
                 failure.properties.first)));
       }, (data) {
         if (data != null) {
-          emit(data.copyWith(
-              formStatus: DimensionSocioculturalPueblosIndigenasFormLoaded()));
+          emit(data);
+          add(GetEventosCostumbresParticipa(
+              data.dimSocioCulturalPueblosIndigenasId));
         } else {
           emit(state.copyWith(
-              formStatus: DimensionSocioculturalPueblosIndigenasFormEmpty()));
+              formStatus: DimensionSocioCulturalPueblosIndigenasFormEmpty()));
         }
       });
     });
 
-    on<DimensionSocioculturalPuebloIndigenaChanged>((event, emit) {
+    on<GetEventosCostumbresParticipa>((event, emit) async {
+      final result = await eventoCostumbreParticipaUsecaseDB
+          .getAsp6EventosCostumbresParticipaUsecaseDB(
+              event.dimSocioCulturalPueblosIndigenasId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus: DimensionSocioCulturalPueblosIndigenasSubmissionFailed(
+                failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(
+            lstEventoCostumbreParticipa: data,
+            formStatus: DimensionSocioCulturalPueblosIndigenasFormLoaded()));
+      });
+    });
+
+    on<DimensionSocioCulturalPueblosIndigenasFormSubmissionSuccess>(
+        (event, emit) {
       emit(state.copyWith(
-          dimensionSocioculturalPueblosIndigenasId:
-              event.dimensionSocioculturalPueblosIndigenasId));
+        dimSocioCulturalPueblosIndigenasId:
+            event.dimSocioCulturalPueblosIndigenasId,
+        formStatus: DimensionSocioCulturalPueblosIndigenasSubmissionSuccess(),
+      ));
+    });
+
+    on<DimensionSocioCulturalPueblosIndigenasChanged>((event, emit) {
+      emit(state.copyWith(
+          dimSocioCulturalPueblosIndigenasId:
+              event.dimSocioCulturalPueblosIndigenasId));
     });
     on<AfiliadoChanged>((event, emit) {
       emit(state.copyWith(afiliadoId: event.afiliadoId));
@@ -95,6 +119,22 @@ class DimensionSocioculturalPueblosIndigenasBloc extends Bloc<
     });
     on<CualesSitiosSagradosChanged>((event, emit) {
       emit(state.copyWith(cualesSitiosSagrados: event.cualesSitiosSagrados));
+    });
+  }
+
+  Future<void> saveAsp6EventosCostumbresParticipa(
+    int dimSocioCulturalPueblosIndigenasId,
+  ) async {
+    final result = await eventoCostumbreParticipaUsecaseDB
+        .saveAsp6EventosCostumbresParticipaUsecaseDB(
+            dimSocioCulturalPueblosIndigenasId,
+            state.lstEventoCostumbreParticipa!);
+    result.fold((failure) {
+      add(DimensionSocioCulturalPueblosIndigenasFormSubmissionFailed(
+          failure.properties.first));
+    }, (data) {
+      add(DimensionSocioCulturalPueblosIndigenasFormSubmissionSuccess(
+          dimSocioCulturalPueblosIndigenasId));
     });
   }
 }

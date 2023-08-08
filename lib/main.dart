@@ -21,7 +21,7 @@ import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/actividad_fisica/actividad_fisica_cubit.dart';
 import 'ui/cubits/alimentacion/alimentacion_cubit.dart';
 import 'ui/cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
-import 'ui/cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
+import 'ui/cubits/cereal/cereal_cubit.dart';
 import 'ui/cubits/cigarrillo_dia/cigarrillo_dia_cubit.dart';
 import 'ui/cubits/condicion_nutricional/condicion_nutricional_cubit.dart';
 import 'ui/cubits/conducta_seguir/conducta_seguir_cubit.dart';
@@ -30,33 +30,33 @@ import 'ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import 'ui/cubits/costumbre_practica/costumbre_practica_cubit.dart';
 import 'ui/cubits/curso_vida/curso_vida_cubit.dart';
 import 'ui/cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
-import 'ui/cubits/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_cubit.dart';
+import 'ui/cubits/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_cubit.dart';
 import 'ui/cubits/enfermedad_acude/enfermedad_acude_cubit.dart';
 import 'ui/cubits/enfermedad_tradicional/enfermedad_tradicional_cubit.dart';
 import 'ui/cubits/enfermedad_tratamiento/enfermedad_tratamiento_cubit.dart';
-import 'ui/cubits/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_cubit.dart';
-import 'ui/cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
+import 'ui/cubits/especialidad_med_tradicional/especialidad_med_tradicional_cubit.dart';
+import 'ui/cubits/especie_animal/especie_animal_cubit.dart';
 import 'ui/cubits/esquema_vacunacion/esquema_vacunacion_cubit.dart';
 import 'ui/cubits/estado_via/estado_via_cubit.dart';
 import 'ui/cubits/etnia/etnia_cubit.dart';
 import 'ui/cubits/evento_costumbre_participa/evento_costumbre_participa_cubit.dart';
-import 'ui/cubits/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/factor_riesgo_vivienda/factor_riesgo_vivienda_cubit.dart';
 import 'ui/cubits/familia/familia_cubit.dart';
 import 'ui/cubits/ficha/ficha_cubit.dart';
-import 'ui/cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
+import 'ui/cubits/fruto/fruto_cubit.dart';
 import 'ui/cubits/genero/genero_cubit.dart';
 import 'ui/cubits/grupo_riesgo/grupo_riesgo_cubit.dart';
-import 'ui/cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
+import 'ui/cubits/hortaliza/hortaliza_cubit.dart';
 import 'ui/cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
-import 'ui/cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
+import 'ui/cubits/leguminosa/leguminosa_cubit.dart';
 import 'ui/cubits/lengua_maneja/lengua_maneja_cubit.dart';
 import 'ui/cubits/lugar_atencion_medico/lugar_atencion_medico_cubit.dart';
 import 'ui/cubits/lugar_planta_medicinal/lugar_planta_medicinal_cubit.dart';
 import 'ui/cubits/lugar_vacunacion/lugar_vacunacion_cubit.dart';
 import 'ui/cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import 'ui/cubits/medio_utiliza_ca/medio_utiliza_ca_cubit.dart';
-import 'ui/cubits/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_cubit.dart';
+import 'ui/cubits/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_cubit.dart';
 import 'ui/cubits/metodo_planificacion/metodo_planificacion_cubit.dart';
 import 'ui/cubits/nivel_educativo/nivel_educativo_cubit.dart';
 import 'ui/cubits/nombre_enfermedad/nombre_enfermedad_cubit.dart';
@@ -64,32 +64,32 @@ import 'ui/cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
 import 'ui/cubits/ocupacion/ocupacion_cubit.dart';
 import 'ui/cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import 'ui/cubits/parentesco/parentesco_cubit.dart';
-import 'ui/cubits/piso_vivienda_by_dpto/piso_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/piso_vivienda/piso_vivienda_cubit.dart';
 import 'ui/cubits/planta_medicinal/planta_medicinal_cubit.dart';
-import 'ui/cubits/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_cubit.dart';
-import 'ui/cubits/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_cubit.dart';
+import 'ui/cubits/presencia_animal_vivienda/presencia_animal_vivienda_cubit.dart';
+import 'ui/cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
 import 'ui/cubits/regimen/regimen_cubit.dart';
 import 'ui/cubits/religion_profesa/religion_profesa_cubit.dart';
-import 'ui/cubits/resguardo_by_dpto/resguardo_by_dpto_cubit.dart';
+import 'ui/cubits/resguardo/resguardo_cubit.dart';
 import 'ui/cubits/sancion_justicia/sancion_justicia_cubit.dart';
 import 'ui/cubits/seguimiento_enfermedad/seguimiento_enfermedad_cubit.dart';
-import 'ui/cubits/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/servicio_publico_vivienda/servicio_publico_vivienda_cubit.dart';
 import 'ui/cubits/servicio_solicitado/servicio_solicitado_cubit.dart';
 import 'ui/cubits/sync_log/sync_log_cubit.dart';
-import 'ui/cubits/techo_vivienda_by_dpto/techo_vivienda_by_dpto_cubit.dart';
-import 'ui/cubits/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/techo_vivienda/techo_vivienda_cubit.dart';
+import 'ui/cubits/tenencia_vivienda/tenencia_vivienda_cubit.dart';
 import 'ui/cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
 import 'ui/cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_cubit.dart';
 import 'ui/cubits/tipo_calendario/tipo_calendario_cubit.dart';
-import 'ui/cubits/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_cubit.dart';
+import 'ui/cubits/tipo_combustible_vivienda/tipo_combustible_vivienda_cubit.dart';
 import 'ui/cubits/tipo_documento/tipo_documento_cubit.dart';
-import 'ui/cubits/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_cubit.dart';
-import 'ui/cubits/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_cubit.dart';
-import 'ui/cubits/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_cubit.dart';
-import 'ui/cubits/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_cubit.dart';
+import 'ui/cubits/tipo_sanitario_vivienda/tipo_sanitario_vivienda_cubit.dart';
+import 'ui/cubits/tipo_vivienda/tipo_vivienda_cubit.dart';
+import 'ui/cubits/tratamiento_agua_vivienda/tratamiento_agua_vivienda_cubit.dart';
+import 'ui/cubits/tuberculo_platano/tuberculo_platano_cubit.dart';
 import 'ui/cubits/ultima_vez_inst_salud/ultima_vez_inst_salud_cubit.dart';
 import 'ui/cubits/ventilacion_vivienda/ventilacion_vivienda_cubit.dart';
-import 'ui/cubits/verdura_by_dpto/verdura_by_dpto_cubit.dart';
+import 'ui/cubits/verdura/verdura_cubit.dart';
 import 'ui/cubits/via_acceso/via_acceso_cubit.dart';
 import 'ui/utils/styles.dart';
 
@@ -153,7 +153,7 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) =>
-                di.locator<DimensionSocioculturalPueblosIndigenasBloc>(),
+                di.locator<DimensionSocioCulturalPueblosIndigenasBloc>(),
           ),
           BlocProvider(
             create: (_) => di.locator<DificultadAccesoCACubit>(),
@@ -177,80 +177,79 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<AutoridadIndigenaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<CerealByDptoCubit>(),
+            create: (_) => di.locator<CerealCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<CostoDesplazamientoCubit>(),
           ),
           BlocProvider(
-            create: (_) =>
-                di.locator<DificultadAccesoMedTradicionalByDptoCubit>(),
+            create: (_) => di.locator<DificultadAccesoMedTradicionalCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<EspecialidadMedTradicionalCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<EspecieAnimalByDptoCubit>(),
+            create: (_) => di.locator<EspecieAnimalCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<FrutoByDptoCubit>(),
+            create: (_) => di.locator<FrutoCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<HortalizaByDptoCubit>(),
+            create: (_) => di.locator<HortalizaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<LeguminosaByDptoCubit>(),
+            create: (_) => di.locator<LeguminosaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<MedioUtilizaMedTradicionalByDptoCubit>(),
+            create: (_) => di.locator<MedioUtilizaMedTradicionalCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<OpcionSiNoCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<ResguardoByDptoCubit>(),
+            create: (_) => di.locator<ResguardoCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<TiempoTardaMedTradicionalCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<TuberculoPlatanoByDptoCubit>(),
+            create: (_) => di.locator<TuberculoPlatanoCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<VerduraByDptoCubit>(),
+            create: (_) => di.locator<VerduraCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<FactorRiesgoViviendaByDptoCubit>(),
+            create: (_) => di.locator<FactorRiesgoViviendaCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<IluminacionViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<PisoViviendaByDptoCubit>(),
+            create: (_) => di.locator<PisoViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<PresenciaAnimalViviendaByDptoCubit>(),
+            create: (_) => di.locator<PresenciaAnimalViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<ServicioPublicoViviendaByDptoCubit>(),
+            create: (_) => di.locator<ServicioPublicoViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<TechoViviendaByDptoCubit>(),
+            create: (_) => di.locator<TechoViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<TenenciaViviendaByDptoCubit>(),
+            create: (_) => di.locator<TenenciaViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<TipoCombustibleViviendaByDptoCubit>(),
+            create: (_) => di.locator<TipoCombustibleViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<TipoSanitarioViviendaByDptoCubit>(),
+            create: (_) => di.locator<TipoSanitarioViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<TipoViviendaByDptoCubit>(),
+            create: (_) => di.locator<TipoViviendaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<TratamientoAguaViviendaByDptoCubit>(),
+            create: (_) => di.locator<TratamientoAguaViviendaCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<VentilacionViviendaCubit>(),

@@ -5,48 +5,48 @@ import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entit
 import '../../../services/connection_sqlite_service.dart';
 import '../../models/dimension_sociocultural_pueblos_indigenas_model.dart';
 
-abstract class DimensionSocioculturalPueblosIndigenasLocalDataSource {
-  Future<int> saveDimensionSocioculturalPueblosIndigenas(
-      DimensionSocioculturalPueblosIndigenasEntity
-          dimensionSocioculturalPueblosIndigenas);
+abstract class DimensionSocioCulturalPueblosIndigenasLocalDataSource {
+  Future<int> saveDimensionSocioCulturalPueblosIndigenas(
+      DimensionSocioCulturalPueblosIndigenasEntity
+          dimensionSocioCulturalPueblosIndigenas);
 
-  Future<DimensionSocioculturalPueblosIndigenasEntity?>
-      getDimensionSocioculturalPueblosIndigenas(int afiliadoId);
+  Future<DimensionSocioCulturalPueblosIndigenasEntity?>
+      getDimensionSocioCulturalPueblosIndigenas(int afiliadoId);
 }
 
-class DimensionSocioculturalPueblosIndigenasLocalDataSourceImpl
-    implements DimensionSocioculturalPueblosIndigenasLocalDataSource {
+class DimensionSocioCulturalPueblosIndigenasLocalDataSourceImpl
+    implements DimensionSocioCulturalPueblosIndigenasLocalDataSource {
   @override
-  Future<int> saveDimensionSocioculturalPueblosIndigenas(
-      DimensionSocioculturalPueblosIndigenasEntity
-          dimensionSocioculturalPueblosIndigenas) async {
+  Future<int> saveDimensionSocioCulturalPueblosIndigenas(
+      DimensionSocioCulturalPueblosIndigenasEntity
+          dimensionSocioCulturalPueblosIndigenas) async {
     final db = await ConnectionSQLiteService.db;
 
     try {
       final res = await db.insert(
-        'Asp5_DimensionSocioculturalPueblosIndigenas',
-        dimensionSocioculturalPueblosIndigenas.toJson(),
+        'Asp6_DimSocioCulturalPueblosIndigenas',
+        dimensionSocioCulturalPueblosIndigenas.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
       return res;
     } catch (e) {
       throw const DatabaseFailure(
-          ['Error al guardar estilo de vida saludable']);
+          ['Error al guardar dim sociocultural pueblos indigenas']);
     }
   }
 
   @override
-  Future<DimensionSocioculturalPueblosIndigenasEntity?>
-      getDimensionSocioculturalPueblosIndigenas(int afiliadoId) async {
+  Future<DimensionSocioCulturalPueblosIndigenasEntity?>
+      getDimensionSocioCulturalPueblosIndigenas(int afiliadoId) async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp5_DimensionSocioculturalPueblosIndigenas',
+    final res = await db.query('Asp6_DimSocioCulturalPueblosIndigenas',
         where: 'Afiliado_id = ?', whereArgs: [afiliadoId]);
 
     if (res.isEmpty) return null;
 
     final resultMap = {for (var e in res[0].entries) e.key: e.value};
     final result =
-        DimensionSocioculturalPueblosIndigenasModel.fromJson(resultMap);
+        DimensionSocioCulturalPueblosIndigenasModel.fromJson(resultMap);
     return result;
   }
 }

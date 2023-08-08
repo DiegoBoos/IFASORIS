@@ -55,4 +55,20 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
       return const Left(ServerFailure(['Excepción no controlada']));
     }
   }
+
+  @override
+  Future<Either<Failure, int>> saveNombresEnfermedadesRepositoryDB(
+      int cuidadoSaludCondRiesgoId,
+      List<LstNombreEnfermedad> lstNombresEnfermedades) async {
+    try {
+      final result =
+          await nombreEnfermedadLocalDataSource.saveNombresEnfermedades(
+              cuidadoSaludCondRiesgoId, lstNombresEnfermedades);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
 }

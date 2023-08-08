@@ -1,13 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/services/connection_sqlite_service.dart';
 
 import '../../../domain/entities/usuario_entity.dart';
 import '../../../domain/usecases/actividad_fisica/actividad_fisica_exports.dart';
 import '../../../domain/usecases/afiliado/afiliado_exports.dart';
 import '../../../domain/usecases/alimentacion/alimentacion_exports.dart';
 import '../../../domain/usecases/autoridad_indigena/autoridad_indigena_exports.dart';
-import '../../../domain/usecases/cereal_by_dpto/cereal_by_dpto_exports.dart';
+import '../../../domain/usecases/cereal/cereal_exports.dart';
 import '../../../domain/usecases/cigarrillo_dia/cigarrillo_dia_exports.dart';
 import '../../../domain/usecases/condicion_nutricional/condicion_nutricional_exports.dart';
 import '../../../domain/usecases/conducta_seguir/conducta_seguir_exports.dart';
@@ -16,32 +15,31 @@ import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_expor
 import '../../../domain/usecases/costumbre_practica/costumbre_practica_exports.dart';
 import '../../../domain/usecases/curso_vida/curso_vida_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
-import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_exports.dart';
-import '../../../domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
-import '../../../domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
+import '../../../domain/usecases/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_exports.dart';
 import '../../../domain/usecases/enfermedad_acude/enfermedad_acude_exports.dart';
 import '../../../domain/usecases/enfermedad_tradicional/enfermedad_tradicional_exports.dart';
 import '../../../domain/usecases/enfermedad_tratamiento/enfermedad_tratamiento_exports.dart';
-import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_exports.dart';
-import '../../../domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_exports.dart';
+import '../../../domain/usecases/especialidad_med_tradicional/especialidad_med_tradicional_exports.dart';
+import '../../../domain/usecases/especie_animal/especie_animal_exports.dart';
 import '../../../domain/usecases/esquema_vacunacion/esquema_vacunacion_exports.dart';
 import '../../../domain/usecases/estado_via/estado_via_exports.dart';
 import '../../../domain/usecases/etnia/etnia_exports.dart';
 import '../../../domain/usecases/evento_costumbre_participa/evento_costumbre_participa_exports.dart';
-import '../../../domain/usecases/factor_riesgo_vivienda_by_dpto/factor_riesgo_vivienda_by_dpto_exports.dart';
-import '../../../domain/usecases/fruto_by_dpto/fruto_by_dpto_exports.dart';
+import '../../../domain/usecases/factor_riesgo_vivienda/factor_riesgo_vivienda_exports.dart';
+import '../../../domain/usecases/ficha/ficha_usecase.dart';
+import '../../../domain/usecases/fruto/fruto_exports.dart';
 import '../../../domain/usecases/genero/genero_exports.dart';
 import '../../../domain/usecases/grupo_riesgo/grupo_riesgo_exports.dart';
-import '../../../domain/usecases/hortaliza_by_dpto/hortaliza_by_dpto_exports.dart';
+import '../../../domain/usecases/hortaliza/hortaliza_exports.dart';
 import '../../../domain/usecases/iluminacion_vivienda/iluminacion_vivienda_exports.dart';
-import '../../../domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_exports.dart';
+import '../../../domain/usecases/leguminosa/leguminosa_exports.dart';
 import '../../../domain/usecases/lengua_maneja/lengua_maneja_exports.dart';
 import '../../../domain/usecases/lugar_atencion_medico/lugar_atencion_medico_exports.dart';
 import '../../../domain/usecases/lugar_planta_medicinal/lugar_planta_medicinal_exports.dart';
 import '../../../domain/usecases/lugar_vacunacion/lugar_vacunacion_exports.dart';
 import '../../../domain/usecases/medio_comunicacion/medio_comunicacion_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
-import '../../../domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_exports.dart';
+import '../../../domain/usecases/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_exports.dart';
 import '../../../domain/usecases/metodo_planificacion/metodo_planificacion_exports.dart';
 import '../../../domain/usecases/nivel_educativo/nivel_educativo_exports.dart';
 import '../../../domain/usecases/nombre_enfermedad/nombre_enfermedad_exports.dart';
@@ -49,33 +47,34 @@ import '../../../domain/usecases/nombre_lengua_materna/nombre_lengua_materna_exp
 import '../../../domain/usecases/ocupacion/ocupacion_exports.dart';
 import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import '../../../domain/usecases/parentesco/parentesco_exports.dart';
-import '../../../domain/usecases/piso_vivienda_by_dpto/piso_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/piso_vivienda/piso_vivienda_exports.dart';
 import '../../../domain/usecases/planta_medicinal/planta_medicinal_exports.dart';
-import '../../../domain/usecases/presencia_animal_vivienda_by_dpto/presencia_animal_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/presencia_animal_vivienda/presencia_animal_vivienda_exports.dart';
 import '../../../domain/usecases/pueblo_indigena/pueblo_indigena_exports.dart';
 import '../../../domain/usecases/regimen/regimen_exports.dart';
 import '../../../domain/usecases/religion_profesa/religion_profesa_exports.dart';
-import '../../../domain/usecases/resguardo_by_dpto/resguardo_by_dpto_exports.dart';
+import '../../../domain/usecases/resguardo/resguardo_exports.dart';
 import '../../../domain/usecases/sancion_justicia/sancion_justicia_exports.dart';
 import '../../../domain/usecases/seguimiento_enfermedad/seguimiento_enfermedad_exports.dart';
-import '../../../domain/usecases/servicio_publico_vivienda_by_dpto/servicio_publico_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/servicio_publico_vivienda/servicio_publico_vivienda_exports.dart';
 import '../../../domain/usecases/servicio_solicitado/servicio_solicitado_exports.dart';
 import '../../../domain/usecases/sync_log/sync_log_exports.dart';
-import '../../../domain/usecases/techo_vivienda_by_dpto/techo_vivienda_by_dpto_exports.dart';
-import '../../../domain/usecases/tenencia_vivienda_by_dpto/tenencia_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/techo_vivienda/techo_vivienda_exports.dart';
+import '../../../domain/usecases/tenencia_vivienda/tenencia_vivienda_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_exports.dart';
 import '../../../domain/usecases/tipo_calendario/tipo_calendario_exports.dart';
-import '../../../domain/usecases/tipo_combustible_vivienda_by_dpto/tipo_combustible_vivienda_by_dpto_exports.dart';
+import '../../../domain/usecases/tipo_combustible_vivienda/tipo_combustible_vivienda_exports.dart';
 import '../../../domain/usecases/tipo_documento/tipo_documento_exports.dart';
-import '../../../domain/usecases/tipo_sanitario_vivienda_by_dpto/tipo_sanitario_vivienda_by_dpto_exports.dart';
-import '../../../domain/usecases/tipo_vivienda_by_dpto/tipo_vivienda_by_dpto_exports.dart';
-import '../../../domain/usecases/tratamiento_agua_vivienda_by_dpto/tratamiento_agua_vivienda_by_dpto_exports.dart';
-import '../../../domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_exports.dart';
+import '../../../domain/usecases/tipo_sanitario_vivienda/tipo_sanitario_vivienda_exports.dart';
+import '../../../domain/usecases/tipo_vivienda/tipo_vivienda_exports.dart';
+import '../../../domain/usecases/tratamiento_agua_vivienda/tratamiento_agua_vivienda_exports.dart';
+import '../../../domain/usecases/tuberculo_platano/tuberculo_platano_exports.dart';
 import '../../../domain/usecases/ultima_vez_inst_salud/ultima_vez_inst_salud_exports.dart';
 import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
-import '../../../domain/usecases/verdura_by_dpto/verdura_by_dpto_exports.dart';
+import '../../../domain/usecases/verdura/verdura_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
+import '../../../services/connection_sqlite_service.dart';
 
 part 'sync_event.dart';
 part 'sync_state.dart';
@@ -97,71 +96,60 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final ViaAccesoUsecaseDB viaAccesoUsecaseDB;
   final AutoridadIndigenaUsecase autoridadIndigenaUsecase;
   final AutoridadIndigenaUsecaseDB autoridadIndigenaUsecaseDB;
-  final CerealByDptoUsecase cerealByDptoUsecase;
-  final CerealByDptoUsecaseDB cerealByDptoUsecaseDB;
+  final CerealUsecase cerealUsecase;
+  final CerealUsecaseDB cerealUsecaseDB;
   final CostoDesplazamientoUsecase costoDesplazamientoUsecase;
   final CostoDesplazamientoUsecaseDB costoDesplazamientoUsecaseDB;
-  final DificultadAccesoMedTradicionalByDptoUsecase
-      dificultadAccesoMedTradicionalByDptoUsecase;
-  final DificultadAccesoMedTradicionalByDptoUsecaseDB
-      dificultadAccesoMedTradicionalByDptoUsecaseDB;
+  final DificultadAccesoMedTradicionalUsecase
+      dificultadAccesoMedTradicionalUsecase;
+  final DificultadAccesoMedTradicionalUsecaseDB
+      dificultadAccesoMedTradicionalUsecaseDB;
   final EspecialidadMedTradicionalUsecase especialidadMedTradicionalUsecase;
   final EspecialidadMedTradicionalUsecaseDB especialidadMedTradicionalUsecaseDB;
-  final EspecieAnimalByDptoUsecase especieAnimalByDptoUsecase;
-  final EspecieAnimalByDptoUsecaseDB especieAnimalByDptoUsecaseDB;
-  final FrutoByDptoUsecase frutoByDptoUsecase;
-  final FrutoByDptoUsecaseDB frutoByDptoUsecaseDB;
-  final HortalizaByDptoUsecase hortalizaByDptoUsecase;
-  final HortalizaByDptoUsecaseDB hortalizaByDptoUsecaseDB;
-  final LeguminosaByDptoUsecase leguminosaByDptoUsecase;
-  final LeguminosaByDptoUsecaseDB leguminosaByDptoUsecaseDB;
-  final MedioUtilizaMedTradicionalByDptoUsecase
-      medioUtilizaMedTradicionalByDptoUsecase;
-  final MedioUtilizaMedTradicionalByDptoUsecaseDB
-      medioUtilizaMedTradicionalByDptoUsecaseDB;
+  final EspecieAnimalUsecase especieAnimalUsecase;
+  final EspecieAnimalUsecaseDB especieAnimalUsecaseDB;
+  final FrutoUsecase frutoUsecase;
+  final FrutoUsecaseDB frutoUsecaseDB;
+  final HortalizaUsecase hortalizaUsecase;
+  final HortalizaUsecaseDB hortalizaUsecaseDB;
+  final LeguminosaUsecase leguminosaUsecase;
+  final LeguminosaUsecaseDB leguminosaUsecaseDB;
+  final MedioUtilizaMedTradicionalUsecase medioUtilizaMedTradicionalUsecase;
+  final MedioUtilizaMedTradicionalUsecaseDB medioUtilizaMedTradicionalUsecaseDB;
   final OpcionSiNoUsecase opcionSiNoUsecase;
   final OpcionSiNoUsecaseDB opcionSiNoUsecaseDB;
-  final ResguardoByDptoUsecase resguardoByDptoUsecase;
-  final ResguardoByDptoUsecaseDB resguardoByDptoUsecaseDB;
+  final ResguardoUsecase resguardoUsecase;
+  final ResguardoUsecaseDB resguardoUsecaseDB;
   final TiempoTardaMedTradicionalUsecase tiempoTardaMedTradicionalUsecase;
   final TiempoTardaMedTradicionalUsecaseDB tiempoTardaMedTradicionalUsecaseDB;
-  final TuberculoPlatanoByDptoUsecase tuberculoPlatanoByDptoUsecase;
-  final TuberculoPlatanoByDptoUsecaseDB tuberculoPlatanoByDptoUsecaseDB;
-  final VerduraByDptoUsecase verduraByDptoUsecase;
-  final VerduraByDptoUsecaseDB verduraByDptoUsecaseDB;
-  final FactorRiesgoViviendaByDptoUsecase factorRiesgoViviendaByDptoUsecase;
-  final FactorRiesgoViviendaByDptoUsecaseDB factorRiesgoViviendaByDptoUsecaseDB;
+  final TuberculoPlatanoUsecase tuberculoPlatanoUsecase;
+  final TuberculoPlatanoUsecaseDB tuberculoPlatanoUsecaseDB;
+  final VerduraUsecase verduraUsecase;
+  final VerduraUsecaseDB verduraUsecaseDB;
+  final FactorRiesgoViviendaUsecase factorRiesgoViviendaUsecase;
+  final FactorRiesgoViviendaUsecaseDB factorRiesgoViviendaUsecaseDB;
   final IluminacionViviendaUsecase iluminacionViviendaUsecase;
   final IluminacionViviendaUsecaseDB iluminacionViviendaUsecaseDB;
-  final PisoViviendaByDptoUsecase pisoViviendaByDptoUsecase;
-  final PisoViviendaByDptoUsecaseDB pisoViviendaByDptoUsecaseDB;
-  final PresenciaAnimalViviendaByDptoUsecase
-      presenciaAnimalViviendaByDptoUsecase;
-  final PresenciaAnimalViviendaByDptoUsecaseDB
-      presenciaAnimalViviendaByDptoUsecaseDB;
-  final ServicioPublicoViviendaByDptoUsecase
-      servicioPublicoViviendaByDptoUsecase;
-  final ServicioPublicoViviendaByDptoUsecaseDB
-      servicioPublicoViviendaByDptoUsecaseDB;
-  final TechoViviendaByDptoUsecase techoViviendaByDptoUsecase;
-  final TechoViviendaByDptoUsecaseDB techoViviendaByDptoUsecaseDB;
-  final TenenciaViviendaByDptoUsecase tenenciaViviendaByDptoUsecase;
-  final TenenciaViviendaByDptoUsecaseDB tenenciaViviendaByDptoUsecaseDB;
-  final TipoCombustibleViviendaByDptoUsecase
-      tipoCombustibleViviendaByDptoUsecase;
-  final TipoCombustibleViviendaByDptoUsecaseDB
-      tipoCombustibleViviendaByDptoUsecaseDB;
-  final TipoSanitarioViviendaByDptoUsecase tipoSanitarioViviendaByDptoUsecase;
-  final TipoSanitarioViviendaByDptoUsecaseDB
-      tipoSanitarioViviendaByDptoUsecaseDB;
-  final TratamientoAguaViviendaByDptoUsecase
-      tratamientoAguaViviendaByDptoUsecase;
-  final TratamientoAguaViviendaByDptoUsecaseDB
-      tratamientoAguaViviendaByDptoUsecaseDB;
+  final PisoViviendaUsecase pisoViviendaUsecase;
+  final PisoViviendaUsecaseDB pisoViviendaUsecaseDB;
+  final PresenciaAnimalViviendaUsecase presenciaAnimalViviendaUsecase;
+  final PresenciaAnimalViviendaUsecaseDB presenciaAnimalViviendaUsecaseDB;
+  final ServicioPublicoViviendaUsecase servicioPublicoViviendaUsecase;
+  final ServicioPublicoViviendaUsecaseDB servicioPublicoViviendaUsecaseDB;
+  final TechoViviendaUsecase techoViviendaUsecase;
+  final TechoViviendaUsecaseDB techoViviendaUsecaseDB;
+  final TenenciaViviendaUsecase tenenciaViviendaUsecase;
+  final TenenciaViviendaUsecaseDB tenenciaViviendaUsecaseDB;
+  final TipoCombustibleViviendaUsecase tipoCombustibleViviendaUsecase;
+  final TipoCombustibleViviendaUsecaseDB tipoCombustibleViviendaUsecaseDB;
+  final TipoSanitarioViviendaUsecase tipoSanitarioViviendaUsecase;
+  final TipoSanitarioViviendaUsecaseDB tipoSanitarioViviendaUsecaseDB;
+  final TratamientoAguaViviendaUsecase tratamientoAguaViviendaUsecase;
+  final TratamientoAguaViviendaUsecaseDB tratamientoAguaViviendaUsecaseDB;
   final VentilacionViviendaUsecase ventilacionViviendaUsecase;
   final VentilacionViviendaUsecaseDB ventilacionViviendaUsecaseDB;
-  final TipoViviendaByDptoUsecase tipoViviendaByDptoUsecase;
-  final TipoViviendaByDptoUsecaseDB tipoViviendaByDptoUsecaseDB;
+  final TipoViviendaUsecase tipoViviendaUsecase;
+  final TipoViviendaUsecaseDB tipoViviendaUsecaseDB;
   final TipoCalendarioUsecase tipoCalendarioUsecase;
   final TipoCalendarioUsecaseDB tipoCalendarioUsecaseDB;
   final CursoVidaUsecase cursoVidaUsecase;
@@ -235,9 +223,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final SancionJusticiaUsecase sancionJusticiaUsecase;
   final SancionJusticiaUsecaseDB sancionJusticiaUsecaseDB;
 
-  final DimUbicacionUsecase dimUbicacionUsecase;
-  final DimViviendaUsecase dimViviendaUsecase;
-
+  final FichaUsecase fichaUsecase;
   final SyncLogUsecaseDB syncLogDB;
 
   int totalAccesories = 69;
@@ -250,32 +236,31 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<TiempoTardaCAEntity> tiemposTardaCATemp = [];
   List<ViaAccesoEntity> viasAccesoTemp = [];
   List<AutoridadIndigenaEntity> autoridadesIndigenasTemp = [];
-  List<CerealEntity> cerealesByDptoTemp = [];
+  List<CerealEntity> cerealesTemp = [];
   List<CostoDesplazamientoEntity> costosDesplazamientoTemp = [];
   List<DificultadAccesoMedTradicionalEntity>
-      dificultadesAccesoMedTradicionalByDptoTemp = [];
+      dificultadesAccesoMedTradicionalTemp = [];
   List<EspecialidadMedTradicionalEntity> especialidadesMedTradicionalTemp = [];
-  List<EspecieAnimalEntity> especiesAnimalesByDptoTemp = [];
-  List<FrutoEntity> frutosByDptoTemp = [];
-  List<HortalizaEntity> hortalizasByDptoTemp = [];
-  List<LeguminosaEntity> leguminosasByDptoTemp = [];
-  List<MedioUtilizaMedTradicionalEntity> mediosUtilizaMedTradicionalByDptoTemp =
-      [];
+  List<EspecieAnimalEntity> especiesAnimalesTemp = [];
+  List<FrutoEntity> frutosTemp = [];
+  List<HortalizaEntity> hortalizasTemp = [];
+  List<LeguminosaEntity> leguminosasTemp = [];
+  List<MedioUtilizaMedTradicionalEntity> mediosUtilizaMedTradicionalTemp = [];
   List<OpcionSiNoEntity> opcionesSiNoTemp = [];
-  List<ResguardoEntity> resguardosByDptoTemp = [];
+  List<ResguardoEntity> resguardosTemp = [];
   List<TiempoTardaMedTradicionalEntity> tiemposTardaMedTradicionalTemp = [];
-  List<TuberculoPlatanoEntity> tuberculosPlatanosByDptoTemp = [];
-  List<VerduraEntity> verdurasByDptoTemp = [];
-  List<FactorRiesgoViviendaEntity> factoresRiesgoViviendaByDptoTemp = [];
+  List<TuberculoPlatanoEntity> tuberculosPlatanosTemp = [];
+  List<VerduraEntity> verdurasTemp = [];
+  List<FactorRiesgoViviendaEntity> factoresRiesgoViviendaTemp = [];
   List<IluminacionViviendaEntity> iluminacionesViviendaTemp = [];
-  List<PisoViviendaEntity> pisosViviendaByDptoTemp = [];
-  List<PresenciaAnimalViviendaEntity> presenciaAnimalesViviendaByDptoTemp = [];
-  List<ServicioPublicoViviendaEntity> serviciosPublicosViviendaByDptoTemp = [];
-  List<TechoViviendaEntity> techosViviendaByDptoTemp = [];
-  List<TenenciaViviendaEntity> tenenciasViviendaByDptoTemp = [];
-  List<TipoCombustibleViviendaEntity> tiposCombustibleViviendaByDptoTemp = [];
-  List<TipoSanitarioViviendaEntity> tiposSanitarioViviendaByDptoTemp = [];
-  List<TratamientoAguaViviendaEntity> tratamientosAguaViviendaByDptoTemp = [];
+  List<PisoViviendaEntity> pisosViviendaTemp = [];
+  List<PresenciaAnimalViviendaEntity> presenciaAnimalesViviendaTemp = [];
+  List<ServicioPublicoViviendaEntity> serviciosPublicosViviendaTemp = [];
+  List<TechoViviendaEntity> techosViviendaTemp = [];
+  List<TenenciaViviendaEntity> tenenciasViviendaTemp = [];
+  List<TipoCombustibleViviendaEntity> tiposCombustibleViviendaTemp = [];
+  List<TipoSanitarioViviendaEntity> tiposSanitarioViviendaTemp = [];
+  List<TratamientoAguaViviendaEntity> tratamientosAguaViviendaTemp = [];
   List<VentilacionViviendaEntity> ventilacionesViviendaTemp = [];
   List<TipoViviendaEntity> tiposViviendaTemp = [];
   List<TipoCalendarioEntity> tiposCalendarioTemp = [];
@@ -332,58 +317,58 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.viaAccesoUsecaseDB,
     required this.autoridadIndigenaUsecase,
     required this.autoridadIndigenaUsecaseDB,
-    required this.cerealByDptoUsecase,
-    required this.cerealByDptoUsecaseDB,
+    required this.cerealUsecase,
+    required this.cerealUsecaseDB,
     required this.costoDesplazamientoUsecase,
     required this.costoDesplazamientoUsecaseDB,
-    required this.dificultadAccesoMedTradicionalByDptoUsecase,
-    required this.dificultadAccesoMedTradicionalByDptoUsecaseDB,
+    required this.dificultadAccesoMedTradicionalUsecase,
+    required this.dificultadAccesoMedTradicionalUsecaseDB,
     required this.especialidadMedTradicionalUsecase,
     required this.especialidadMedTradicionalUsecaseDB,
-    required this.especieAnimalByDptoUsecase,
-    required this.especieAnimalByDptoUsecaseDB,
-    required this.frutoByDptoUsecase,
-    required this.frutoByDptoUsecaseDB,
-    required this.hortalizaByDptoUsecase,
-    required this.hortalizaByDptoUsecaseDB,
-    required this.leguminosaByDptoUsecase,
-    required this.leguminosaByDptoUsecaseDB,
-    required this.medioUtilizaMedTradicionalByDptoUsecase,
-    required this.medioUtilizaMedTradicionalByDptoUsecaseDB,
+    required this.especieAnimalUsecase,
+    required this.especieAnimalUsecaseDB,
+    required this.frutoUsecase,
+    required this.frutoUsecaseDB,
+    required this.hortalizaUsecase,
+    required this.hortalizaUsecaseDB,
+    required this.leguminosaUsecase,
+    required this.leguminosaUsecaseDB,
+    required this.medioUtilizaMedTradicionalUsecase,
+    required this.medioUtilizaMedTradicionalUsecaseDB,
     required this.opcionSiNoUsecase,
     required this.opcionSiNoUsecaseDB,
-    required this.resguardoByDptoUsecase,
-    required this.resguardoByDptoUsecaseDB,
+    required this.resguardoUsecase,
+    required this.resguardoUsecaseDB,
     required this.tiempoTardaMedTradicionalUsecase,
     required this.tiempoTardaMedTradicionalUsecaseDB,
-    required this.tuberculoPlatanoByDptoUsecase,
-    required this.tuberculoPlatanoByDptoUsecaseDB,
-    required this.verduraByDptoUsecase,
-    required this.verduraByDptoUsecaseDB,
-    required this.factorRiesgoViviendaByDptoUsecase,
-    required this.factorRiesgoViviendaByDptoUsecaseDB,
+    required this.tuberculoPlatanoUsecase,
+    required this.tuberculoPlatanoUsecaseDB,
+    required this.verduraUsecase,
+    required this.verduraUsecaseDB,
+    required this.factorRiesgoViviendaUsecase,
+    required this.factorRiesgoViviendaUsecaseDB,
     required this.iluminacionViviendaUsecase,
     required this.iluminacionViviendaUsecaseDB,
-    required this.pisoViviendaByDptoUsecase,
-    required this.pisoViviendaByDptoUsecaseDB,
-    required this.presenciaAnimalViviendaByDptoUsecase,
-    required this.presenciaAnimalViviendaByDptoUsecaseDB,
-    required this.servicioPublicoViviendaByDptoUsecase,
-    required this.servicioPublicoViviendaByDptoUsecaseDB,
-    required this.techoViviendaByDptoUsecase,
-    required this.techoViviendaByDptoUsecaseDB,
-    required this.tenenciaViviendaByDptoUsecase,
-    required this.tenenciaViviendaByDptoUsecaseDB,
-    required this.tipoCombustibleViviendaByDptoUsecase,
-    required this.tipoCombustibleViviendaByDptoUsecaseDB,
-    required this.tipoSanitarioViviendaByDptoUsecase,
-    required this.tipoSanitarioViviendaByDptoUsecaseDB,
-    required this.tratamientoAguaViviendaByDptoUsecase,
-    required this.tratamientoAguaViviendaByDptoUsecaseDB,
+    required this.pisoViviendaUsecase,
+    required this.pisoViviendaUsecaseDB,
+    required this.presenciaAnimalViviendaUsecase,
+    required this.presenciaAnimalViviendaUsecaseDB,
+    required this.servicioPublicoViviendaUsecase,
+    required this.servicioPublicoViviendaUsecaseDB,
+    required this.techoViviendaUsecase,
+    required this.techoViviendaUsecaseDB,
+    required this.tenenciaViviendaUsecase,
+    required this.tenenciaViviendaUsecaseDB,
+    required this.tipoCombustibleViviendaUsecase,
+    required this.tipoCombustibleViviendaUsecaseDB,
+    required this.tipoSanitarioViviendaUsecase,
+    required this.tipoSanitarioViviendaUsecaseDB,
+    required this.tratamientoAguaViviendaUsecase,
+    required this.tratamientoAguaViviendaUsecaseDB,
     required this.ventilacionViviendaUsecase,
     required this.ventilacionViviendaUsecaseDB,
-    required this.tipoViviendaByDptoUsecase,
-    required this.tipoViviendaByDptoUsecaseDB,
+    required this.tipoViviendaUsecase,
+    required this.tipoViviendaUsecaseDB,
     required this.tipoCalendarioUsecase,
     required this.tipoCalendarioUsecaseDB,
     required this.cursoVidaUsecase,
@@ -456,8 +441,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.costumbrePracticaUsecaseDB,
     required this.sancionJusticiaUsecase,
     required this.sancionJusticiaUsecaseDB,
-    required this.dimUbicacionUsecase,
-    required this.dimViviendaUsecase,
+    required this.fichaUsecase,
     required this.syncLogDB,
   }) : super(SyncInitial()) {
     on<SyncStarted>((event, emit) async {
@@ -471,10 +455,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           await syncAfiliados(event, 1, 10000);
         });
       } else if (event.type == 'P') {
-        ConnectionSQLiteService.truncateTable('Asp1_Ubicacion')
-            .then((value) async {
-          await syncDimUbicacion(event);
-        });
+        await syncFicha(event);
       }
     });
     on<Downloading>((event, emit) => emit(SyncDownloading(event.syncProgress)));
@@ -492,25 +473,19 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     on<SyncLog>((event, emit) => emit(IncompleteSync(event.syncLog)));
   }
 
-// ************************** DimUbicacion ****************************
-  Future<void> syncDimUbicacion(
+// ************************** Ficha ****************************
+  Future<void> syncFicha(
     SyncStarted event,
   ) async {
-    final result = await dimUbicacionUsecase.uploadDimUbicacionUsecase();
-    return result.fold(
-        (failure) => add(SyncError(failure.properties.first)), (data) async {});
+    final result = await fichaUsecase.createFichaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) {
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+        title: 'Sincronización ficha completada',
+      )));
+    });
   }
-// ************************** DimUbicacion ****************************
-
-// ************************** DimVivienda ****************************
-  Future<void> syncDimVivienda(
-    SyncStarted event,
-  ) async {
-    final result = await dimViviendaUsecase.uploadDimViviendaUsecase();
-    return result.fold(
-        (failure) => add(SyncError(failure.properties.first)), (data) {});
-  }
-// ************************** DimVivienda ****************************
+// ************************** Ficha ****************************
 
 // ************************** Afiliados ****************************
   Future<void> syncAfiliados(
@@ -889,8 +864,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         ConnectionSQLiteService.truncateTable(
                 'Cereales_AspectosSocioEconomicos')
             .then((value) async {
-          cerealesByDptoTemp = [];
-          await syncCerealesByDpto(event);
+          cerealesTemp = [];
+          await syncCereales(event);
         });
         return;
       }
@@ -907,35 +882,34 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** AutoridadIndigena ****************************
 
-// ************************** CerealByDpto ****************************
+// ************************** Cereal ****************************
 
-  Future<void> syncCerealesByDpto(SyncStarted event) async {
-    final result = await cerealByDptoUsecase
-        .getCerealesByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncCereales(SyncStarted event) async {
+    final result =
+        await cerealUsecase.getCerealesUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      cerealesByDptoTemp.addAll(data);
+      cerealesTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando cereales',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveCerealByDpto(
+      await saveCereal(
         event,
-        cerealesByDptoTemp[0],
+        cerealesTemp[0],
       );
     });
   }
 
-  Future<void> saveCerealByDpto(
+  Future<void> saveCereal(
     SyncStarted event,
     CerealEntity cereal,
   ) async {
-    final result =
-        await cerealByDptoUsecaseDB.saveCerealByDptoUsecaseDB(cereal);
+    final result = await cerealUsecaseDB.saveCerealUsecaseDB(cereal);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= cerealesByDptoTemp.length) {
+      if (data >= cerealesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'CostosDesplazamiento_CentroAtencion')
             .then((value) async {
@@ -945,16 +919,16 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      CerealEntity cerealByDptoTemp = cerealesByDptoTemp[data];
+      CerealEntity cerealTemp = cerealesTemp[data];
 
-      await saveCerealByDpto(
+      await saveCereal(
         event,
-        cerealByDptoTemp,
+        cerealTemp,
       );
     });
   }
 
-// ************************** CerealByDpto ****************************
+// ************************** Cereal ****************************
 
 // ************************** CostoDesplazamiento ****************************
 
@@ -988,8 +962,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         ConnectionSQLiteService.truncateTable(
                 'DificultadesAcceso_AccesoMedTradicional')
             .then((value) async {
-          dificultadesAccesoMedTradicionalByDptoTemp = [];
-          await syncDificultadesAccesoMedTradicionalByDpto(event);
+          dificultadesAccesoMedTradicionalTemp = [];
+          await syncDificultadesAccesoMedTradicional(event);
         });
         return;
       }
@@ -1006,38 +980,37 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** CostoDesplazamiento ****************************
 
-// ************************** DificultadAccesoMedTradicionalByDpto ****************************
+// ************************** DificultadAccesoMedTradicional ****************************
 
-  Future<void> syncDificultadesAccesoMedTradicionalByDpto(
-      SyncStarted event) async {
-    final result = await dificultadAccesoMedTradicionalByDptoUsecase
-        .getDificultadesAccesoMedTradicionalByDptoUsecase(
+  Future<void> syncDificultadesAccesoMedTradicional(SyncStarted event) async {
+    final result = await dificultadAccesoMedTradicionalUsecase
+        .getDificultadesAccesoMedTradicionalUsecase(
             event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      dificultadesAccesoMedTradicionalByDptoTemp.addAll(data);
+      dificultadesAccesoMedTradicionalTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando dificultades acceso médico tradicional',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveDificultadAccesoMedTradicionalByDpto(
+      await saveDificultadAccesoMedTradicional(
         event,
-        dificultadesAccesoMedTradicionalByDptoTemp[0],
+        dificultadesAccesoMedTradicionalTemp[0],
       );
     });
   }
 
-  Future<void> saveDificultadAccesoMedTradicionalByDpto(
+  Future<void> saveDificultadAccesoMedTradicional(
     SyncStarted event,
     DificultadAccesoMedTradicionalEntity dificultadAccesoMedTradicional,
   ) async {
-    final result = await dificultadAccesoMedTradicionalByDptoUsecaseDB
-        .saveDificultadAccesoMedTradicionalByDptoUsecaseDB(
+    final result = await dificultadAccesoMedTradicionalUsecaseDB
+        .saveDificultadAccesoMedTradicionalUsecaseDB(
             dificultadAccesoMedTradicional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= dificultadesAccesoMedTradicionalByDptoTemp.length) {
+      if (data >= dificultadesAccesoMedTradicionalTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'EspecialidadesMedTrad_AccesoMedTradicional')
             .then((value) async {
@@ -1047,18 +1020,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      DificultadAccesoMedTradicionalEntity
-          dificultadAccesoMedTradicionalByDptoTemp =
-          dificultadesAccesoMedTradicionalByDptoTemp[data];
+      DificultadAccesoMedTradicionalEntity dificultadAccesoMedTradicionalTemp =
+          dificultadesAccesoMedTradicionalTemp[data];
 
-      await saveDificultadAccesoMedTradicionalByDpto(
+      await saveDificultadAccesoMedTradicional(
         event,
-        dificultadAccesoMedTradicionalByDptoTemp,
+        dificultadAccesoMedTradicionalTemp,
       );
     });
   }
 
-// ************************** DificultadAccesoMedTradicionalByDpto ****************************
+// ************************** DificultadAccesoMedTradicional ****************************
 
 // ************************** EspecialidadMedTradicional ****************************
 
@@ -1092,8 +1064,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         ConnectionSQLiteService.truncateTable(
                 'EspecieAnimalesCria_AspectosSocioEconomicos')
             .then((value) async {
-          especiesAnimalesByDptoTemp = [];
-          await syncEspeciesAnimalesByDpto(event);
+          especiesAnimalesTemp = [];
+          await syncEspeciesAnimales(event);
         });
         return;
       }
@@ -1110,232 +1082,228 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** EspecialidadMedTradicional ****************************
 
-// ************************** EspecieAnimalByDpto ****************************
+// ************************** EspecieAnimal ****************************
 
-  Future<void> syncEspeciesAnimalesByDpto(SyncStarted event) async {
-    final result = await especieAnimalByDptoUsecase
-        .getEspeciesAnimalesByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncEspeciesAnimales(SyncStarted event) async {
+    final result = await especieAnimalUsecase
+        .getEspeciesAnimalesUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      especiesAnimalesByDptoTemp.addAll(data);
+      especiesAnimalesTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando especies animales',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveEspecieAnimalByDpto(
+      await saveEspecieAnimal(
         event,
-        especiesAnimalesByDptoTemp[0],
+        especiesAnimalesTemp[0],
       );
     });
   }
 
-  Future<void> saveEspecieAnimalByDpto(
+  Future<void> saveEspecieAnimal(
     SyncStarted event,
     EspecieAnimalEntity especieAnimal,
   ) async {
-    final result = await especieAnimalByDptoUsecaseDB
-        .saveEspecieAnimalByDptoUsecaseDB(especieAnimal);
+    final result =
+        await especieAnimalUsecaseDB.saveEspecieAnimalUsecaseDB(especieAnimal);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= especiesAnimalesByDptoTemp.length) {
+      if (data >= especiesAnimalesTemp.length) {
         ConnectionSQLiteService.truncateTable('Frutos_AspectosSocioEconomicos')
             .then((value) async {
-          frutosByDptoTemp = [];
-          await syncFrutosByDpto(event);
+          frutosTemp = [];
+          await syncFrutos(event);
         });
         return;
       }
 
-      EspecieAnimalEntity especieAnimalByDptoTemp =
-          especiesAnimalesByDptoTemp[data];
+      EspecieAnimalEntity especieAnimalTemp = especiesAnimalesTemp[data];
 
-      await saveEspecieAnimalByDpto(
+      await saveEspecieAnimal(
         event,
-        especieAnimalByDptoTemp,
+        especieAnimalTemp,
       );
     });
   }
 
-// ************************** EspecieAnimalByDpto ****************************
+// ************************** EspecieAnimal ****************************
 
-// ************************** FrutoByDpto ****************************
+// ************************** Fruto ****************************
 
-  Future<void> syncFrutosByDpto(SyncStarted event) async {
-    final result = await frutoByDptoUsecase
-        .getFrutosByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncFrutos(SyncStarted event) async {
+    final result =
+        await frutoUsecase.getFrutosUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      frutosByDptoTemp.addAll(data);
+      frutosTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando frutos',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveFrutoByDpto(
+      await saveFruto(
         event,
-        frutosByDptoTemp[0],
+        frutosTemp[0],
       );
     });
   }
 
-  Future<void> saveFrutoByDpto(
+  Future<void> saveFruto(
     SyncStarted event,
     FrutoEntity fruto,
   ) async {
-    final result = await frutoByDptoUsecaseDB.saveFrutoByDptoUsecaseDB(fruto);
+    final result = await frutoUsecaseDB.saveFrutoUsecaseDB(fruto);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= frutosByDptoTemp.length) {
+      if (data >= frutosTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'Hortalizas_AspectosSocioEconomicos')
             .then((value) async {
-          hortalizasByDptoTemp = [];
-          await syncHortalizasByDpto(event);
+          hortalizasTemp = [];
+          await syncHortalizas(event);
         });
         return;
       }
 
-      FrutoEntity frutoByDptoTemp = frutosByDptoTemp[data];
+      FrutoEntity frutoTemp = frutosTemp[data];
 
-      await saveFrutoByDpto(
+      await saveFruto(
         event,
-        frutoByDptoTemp,
+        frutoTemp,
       );
     });
   }
 
-// ************************** FrutoByDpto ****************************
+// ************************** Fruto ****************************
 
-// ************************** HortalizaByDpto ****************************
+// ************************** Hortaliza ****************************
 
-  Future<void> syncHortalizasByDpto(SyncStarted event) async {
-    final result = await hortalizaByDptoUsecase
-        .getHortalizasByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncHortalizas(SyncStarted event) async {
+    final result = await hortalizaUsecase
+        .getHortalizasUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      hortalizasByDptoTemp.addAll(data);
+      hortalizasTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando hortalizas',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveHortalizaByDpto(
+      await saveHortaliza(
         event,
-        hortalizasByDptoTemp[0],
+        hortalizasTemp[0],
       );
     });
   }
 
-  Future<void> saveHortalizaByDpto(
+  Future<void> saveHortaliza(
     SyncStarted event,
     HortalizaEntity hortaliza,
   ) async {
-    final result =
-        await hortalizaByDptoUsecaseDB.saveHortalizaByDptoUsecaseDB(hortaliza);
+    final result = await hortalizaUsecaseDB.saveHortalizaUsecaseDB(hortaliza);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= hortalizasByDptoTemp.length) {
+      if (data >= hortalizasTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'Leguminosas_AspectosSocioEconomicos')
             .then((value) async {
-          leguminosasByDptoTemp = [];
-          await syncLeguminosasByDpto(event);
+          leguminosasTemp = [];
+          await syncLeguminosas(event);
         });
         return;
       }
 
-      HortalizaEntity hortalizaByDptoTemp = hortalizasByDptoTemp[data];
+      HortalizaEntity hortalizaTemp = hortalizasTemp[data];
 
-      await saveHortalizaByDpto(
+      await saveHortaliza(
         event,
-        hortalizaByDptoTemp,
+        hortalizaTemp,
       );
     });
   }
 
-// ************************** HortalizaByDpto ****************************
+// ************************** Hortaliza ****************************
 
-// ************************** LeguminosaByDpto ****************************
+// ************************** Leguminosa ****************************
 
-  Future<void> syncLeguminosasByDpto(SyncStarted event) async {
-    final result = await leguminosaByDptoUsecase
-        .getLeguminosasByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncLeguminosas(SyncStarted event) async {
+    final result = await leguminosaUsecase
+        .getLeguminosasUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      leguminosasByDptoTemp.addAll(data);
+      leguminosasTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando leguminosas',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveLeguminosaByDpto(
+      await saveLeguminosa(
         event,
-        leguminosasByDptoTemp[0],
+        leguminosasTemp[0],
       );
     });
   }
 
-  Future<void> saveLeguminosaByDpto(
+  Future<void> saveLeguminosa(
     SyncStarted event,
     LeguminosaEntity leguminosa,
   ) async {
-    final result = await leguminosaByDptoUsecaseDB
-        .saveLeguminosaByDptoUsecaseDB(leguminosa);
+    final result =
+        await leguminosaUsecaseDB.saveLeguminosaUsecaseDB(leguminosa);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= leguminosasByDptoTemp.length) {
+      if (data >= leguminosasTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'MediosUtiliza_AccesoMedTradicional')
             .then((value) async {
-          mediosUtilizaMedTradicionalByDptoTemp = [];
-          await syncMediosUtilizaMedTradicionalByDpto(event);
+          mediosUtilizaMedTradicionalTemp = [];
+          await syncMediosUtilizaMedTradicional(event);
         });
         return;
       }
 
-      LeguminosaEntity leguminosaByDptoTemp = leguminosasByDptoTemp[data];
+      LeguminosaEntity leguminosaTemp = leguminosasTemp[data];
 
-      await saveLeguminosaByDpto(
+      await saveLeguminosa(
         event,
-        leguminosaByDptoTemp,
+        leguminosaTemp,
       );
     });
   }
 
-// ************************** LeguminosaByDpto ****************************
+// ************************** Leguminosa ****************************
 
-// ************************** MedioUtilizaMedTradicionalByDpto ****************************
+// ************************** MedioUtilizaMedTradicional ****************************
 
-  Future<void> syncMediosUtilizaMedTradicionalByDpto(SyncStarted event) async {
-    final result = await medioUtilizaMedTradicionalByDptoUsecase
-        .getMediosUtilizaMedTradicionalByDptoUsecase(
-            event.usuario.departamentoId!);
+  Future<void> syncMediosUtilizaMedTradicional(SyncStarted event) async {
+    final result = await medioUtilizaMedTradicionalUsecase
+        .getMediosUtilizaMedTradicionalUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      mediosUtilizaMedTradicionalByDptoTemp.addAll(data);
+      mediosUtilizaMedTradicionalTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando medios utiliza médico tradicional',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveMedioUtilizaMedTradicionalByDpto(
+      await saveMedioUtilizaMedTradicional(
         event,
-        mediosUtilizaMedTradicionalByDptoTemp[0],
+        mediosUtilizaMedTradicionalTemp[0],
       );
     });
   }
 
-  Future<void> saveMedioUtilizaMedTradicionalByDpto(
+  Future<void> saveMedioUtilizaMedTradicional(
     SyncStarted event,
     MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicional,
   ) async {
-    final result = await medioUtilizaMedTradicionalByDptoUsecaseDB
-        .saveMedioUtilizaMedTradicionalByDptoUsecaseDB(
-            medioUtilizaMedTradicional);
+    final result = await medioUtilizaMedTradicionalUsecaseDB
+        .saveMedioUtilizaMedTradicionalUsecaseDB(medioUtilizaMedTradicional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= mediosUtilizaMedTradicionalByDptoTemp.length) {
+      if (data >= mediosUtilizaMedTradicionalTemp.length) {
         ConnectionSQLiteService.truncateTable('OpcionesSi_No')
             .then((value) async {
           opcionesSiNoTemp = [];
@@ -1344,17 +1312,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicionalByDptoTemp =
-          mediosUtilizaMedTradicionalByDptoTemp[data];
+      MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicionalTemp =
+          mediosUtilizaMedTradicionalTemp[data];
 
-      await saveMedioUtilizaMedTradicionalByDpto(
+      await saveMedioUtilizaMedTradicional(
         event,
-        medioUtilizaMedTradicionalByDptoTemp,
+        medioUtilizaMedTradicionalTemp,
       );
     });
   }
 
-// ************************** MedioUtilizaMedTradicionalByDpto ****************************
+// ************************** MedioUtilizaMedTradicional ****************************
 
 // ************************** OpcionSiNo ****************************
 
@@ -1393,8 +1361,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
         /* ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
-          resguardosByDptoTemp = [];
-          await syncResguardosByDpto(event);
+          resguardosTemp = [];
+          await syncResguardos(event);
         }); 
         return;
         */
@@ -1411,35 +1379,34 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** OpcionSiNo ****************************
 
-// ************************** ResguardoByDpto ****************************
+// ************************** Resguardo ****************************
 
-  Future<void> syncResguardosByDpto(SyncStarted event) async {
-    final result = await resguardoByDptoUsecase
-        .getResguardosByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncResguardos(SyncStarted event) async {
+    final result = await resguardoUsecase
+        .getResguardosUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      resguardosByDptoTemp.addAll(data);
+      resguardosTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando resguardos',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveResguardoByDpto(
+      await saveResguardo(
         event,
-        resguardosByDptoTemp[0],
+        resguardosTemp[0],
       );
     });
   }
 
-  Future<void> saveResguardoByDpto(
+  Future<void> saveResguardo(
     SyncStarted event,
     ResguardoEntity resguardo,
   ) async {
-    final result =
-        await resguardoByDptoUsecaseDB.saveResguardoByDptoUsecaseDB(resguardo);
+    final result = await resguardoUsecaseDB.saveResguardoUsecaseDB(resguardo);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= resguardosByDptoTemp.length) {
+      if (data >= resguardosTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TiemposTarda_AccesoMedTradicional')
             .then((value) async {
@@ -1449,16 +1416,16 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      ResguardoEntity resguardoByDptoTemp = resguardosByDptoTemp[data];
+      ResguardoEntity resguardoTemp = resguardosTemp[data];
 
-      await saveResguardoByDpto(
+      await saveResguardo(
         event,
-        resguardoByDptoTemp,
+        resguardoTemp,
       );
     });
   }
 
-// ************************** ResguardoByDpto ****************************
+// ************************** Resguardo ****************************
 
 // ************************** TiempoTardaMedTradicional ****************************
 
@@ -1492,8 +1459,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         ConnectionSQLiteService.truncateTable(
                 'TuberculosPlatanos_AspectosSocioEconomicos')
             .then((value) async {
-          tuberculosPlatanosByDptoTemp = [];
-          await syncTuberculosPlatanosByDpto(event);
+          tuberculosPlatanosTemp = [];
+          await syncTuberculosPlatanos(event);
         });
         return;
       }
@@ -1510,134 +1477,133 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** TiempoTardaMedTradicional ****************************
 
-// ************************** TuberculoPlatanoByDpto ****************************
+// ************************** TuberculoPlatano ****************************
 
-  Future<void> syncTuberculosPlatanosByDpto(SyncStarted event) async {
-    final result = await tuberculoPlatanoByDptoUsecase
-        .getTuberculosPlatanosByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncTuberculosPlatanos(SyncStarted event) async {
+    final result = await tuberculoPlatanoUsecase
+        .getTuberculosPlatanosUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      tuberculosPlatanosByDptoTemp.addAll(data);
+      tuberculosPlatanosTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tubérculos plátanos',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveTuberculoPlatanoByDpto(
+      await saveTuberculoPlatano(
         event,
-        tuberculosPlatanosByDptoTemp[0],
+        tuberculosPlatanosTemp[0],
       );
     });
   }
 
-  Future<void> saveTuberculoPlatanoByDpto(
+  Future<void> saveTuberculoPlatano(
     SyncStarted event,
     TuberculoPlatanoEntity tuberculoPlatano,
   ) async {
-    final result = await tuberculoPlatanoByDptoUsecaseDB
-        .saveTuberculoPlatanoByDptoUsecaseDB(tuberculoPlatano);
+    final result = await tuberculoPlatanoUsecaseDB
+        .saveTuberculoPlatanoUsecaseDB(tuberculoPlatano);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tuberculosPlatanosByDptoTemp.length) {
+      if (data >= tuberculosPlatanosTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'Verduras_AspectosSocioEconomicos')
             .then((value) async {
-          verdurasByDptoTemp = [];
-          await syncVerdurasByDpto(event);
+          verdurasTemp = [];
+          await syncVerduras(event);
         });
         return;
       }
 
-      TuberculoPlatanoEntity tuberculoPlatanoByDptoTemp =
-          tuberculosPlatanosByDptoTemp[data];
+      TuberculoPlatanoEntity tuberculoPlatanoTemp =
+          tuberculosPlatanosTemp[data];
 
-      await saveTuberculoPlatanoByDpto(
+      await saveTuberculoPlatano(
         event,
-        tuberculoPlatanoByDptoTemp,
+        tuberculoPlatanoTemp,
       );
     });
   }
 
-// ************************** TuberculoPlatanoByDpto ****************************
+// ************************** TuberculoPlatano ****************************
 
-// ************************** VerduraByDpto ****************************
+// ************************** Verdura ****************************
 
-  Future<void> syncVerdurasByDpto(SyncStarted event) async {
-    final result = await verduraByDptoUsecase
-        .getVerdurasByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncVerduras(SyncStarted event) async {
+    final result =
+        await verduraUsecase.getVerdurasUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      verdurasByDptoTemp.addAll(data);
+      verdurasTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando verduras',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveVerduraByDpto(
+      await saveVerdura(
         event,
-        verdurasByDptoTemp[0],
+        verdurasTemp[0],
       );
     });
   }
 
-  Future<void> saveVerduraByDpto(
+  Future<void> saveVerdura(
     SyncStarted event,
     VerduraEntity verdura,
   ) async {
-    final result =
-        await verduraByDptoUsecaseDB.saveVerduraByDptoUsecaseDB(verdura);
+    final result = await verduraUsecaseDB.saveVerduraUsecaseDB(verdura);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= verdurasByDptoTemp.length) {
+      if (data >= verdurasTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'FactoresRiesgoVivienda_DatosVivienda')
             .then((value) async {
-          factoresRiesgoViviendaByDptoTemp = [];
-          await syncFactoresRiesgoViviendaByDpto(event);
+          factoresRiesgoViviendaTemp = [];
+          await syncFactoresRiesgoVivienda(event);
         });
         return;
       }
 
-      VerduraEntity verduraByDptoTemp = verdurasByDptoTemp[data];
+      VerduraEntity verduraTemp = verdurasTemp[data];
 
-      await saveVerduraByDpto(
+      await saveVerdura(
         event,
-        verduraByDptoTemp,
+        verduraTemp,
       );
     });
   }
 
-// ************************** VerduraByDpto ****************************
+// ************************** Verdura ****************************
 
-// ************************** FactorRiesgoViviendaByDpto ****************************
+// ************************** FactorRiesgoVivienda ****************************
 
-  Future<void> syncFactoresRiesgoViviendaByDpto(SyncStarted event) async {
-    final result = await factorRiesgoViviendaByDptoUsecase
-        .getFactoresRiesgoViviendaByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncFactoresRiesgoVivienda(SyncStarted event) async {
+    final result = await factorRiesgoViviendaUsecase
+        .getFactoresRiesgoViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      factoresRiesgoViviendaByDptoTemp.addAll(data);
+      factoresRiesgoViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando factores riesgo vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveFactorRiesgoViviendaByDpto(
+      await saveFactorRiesgoVivienda(
         event,
-        factoresRiesgoViviendaByDptoTemp[0],
+        factoresRiesgoViviendaTemp[0],
       );
     });
   }
 
-  Future<void> saveFactorRiesgoViviendaByDpto(
+  Future<void> saveFactorRiesgoVivienda(
     SyncStarted event,
     FactorRiesgoViviendaEntity factorRiesgoVivienda,
   ) async {
-    final result = await factorRiesgoViviendaByDptoUsecaseDB
-        .saveFactorRiesgoViviendaByDptoUsecaseDB(factorRiesgoVivienda);
+    final result = await factorRiesgoViviendaUsecaseDB
+        .saveFactorRiesgoViviendaUsecaseDB(factorRiesgoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= factoresRiesgoViviendaByDptoTemp.length) {
+      if (data >= factoresRiesgoViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'IluminacionVivienda_DatosVivienda')
             .then((value) async {
@@ -1647,17 +1613,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      FactorRiesgoViviendaEntity factorRiesgoViviendaByDptoTemp =
-          factoresRiesgoViviendaByDptoTemp[data];
+      FactorRiesgoViviendaEntity factorRiesgoViviendaTemp =
+          factoresRiesgoViviendaTemp[data];
 
-      await saveFactorRiesgoViviendaByDpto(
+      await saveFactorRiesgoVivienda(
         event,
-        factorRiesgoViviendaByDptoTemp,
+        factorRiesgoViviendaTemp,
       );
     });
   }
 
-// ************************** FactorRiesgoViviendaByDpto ****************************
+// ************************** FactorRiesgoVivienda ****************************
 
 // ************************** IluminacionVivienda ****************************
 
@@ -1690,8 +1656,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       if (data >= iluminacionesViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable('PisosVivienda_DatosVivienda')
             .then((value) async {
-          pisosViviendaByDptoTemp = [];
-          await syncPisosViviendaByDpto(event);
+          pisosViviendaTemp = [];
+          await syncPisosVivienda(event);
         });
         return;
       }
@@ -1708,386 +1674,380 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** IluminacionVivienda ****************************
 
-// ************************** PisoViviendaByDpto ****************************
+// ************************** PisoVivienda ****************************
 
-  Future<void> syncPisosViviendaByDpto(SyncStarted event) async {
-    final result = await pisoViviendaByDptoUsecase
-        .getPisosViviendaByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncPisosVivienda(SyncStarted event) async {
+    final result = await pisoViviendaUsecase
+        .getPisosViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      pisosViviendaByDptoTemp.addAll(data);
+      pisosViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando pisos vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await savePisoViviendaByDpto(
+      await savePisoVivienda(
         event,
-        pisosViviendaByDptoTemp[0],
+        pisosViviendaTemp[0],
       );
     });
   }
 
-  Future<void> savePisoViviendaByDpto(
+  Future<void> savePisoVivienda(
     SyncStarted event,
     PisoViviendaEntity pisoVivienda,
   ) async {
-    final result = await pisoViviendaByDptoUsecaseDB
-        .savePisoViviendaByDptoUsecaseDB(pisoVivienda);
+    final result =
+        await pisoViviendaUsecaseDB.savePisoViviendaUsecaseDB(pisoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= pisosViviendaByDptoTemp.length) {
+      if (data >= pisosViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'PresenciaAnimalesVivienda_DatosVivienda')
             .then((value) async {
-          presenciaAnimalesViviendaByDptoTemp = [];
-          await syncPresenciaAnimalesViviendaByDpto(event);
+          presenciaAnimalesViviendaTemp = [];
+          await syncPresenciaAnimalesVivienda(event);
         });
         return;
       }
 
-      PisoViviendaEntity pisoViviendaByDptoTemp = pisosViviendaByDptoTemp[data];
+      PisoViviendaEntity pisoViviendaTemp = pisosViviendaTemp[data];
 
-      await savePisoViviendaByDpto(
+      await savePisoVivienda(
         event,
-        pisoViviendaByDptoTemp,
+        pisoViviendaTemp,
       );
     });
   }
 
-// ************************** PisoViviendaByDpto ****************************
+// ************************** PisoVivienda ****************************
 
-// ************************** PresenciaAnimalViviendaByDpto ****************************
+// ************************** PresenciaAnimalVivienda ****************************
 
-  Future<void> syncPresenciaAnimalesViviendaByDpto(SyncStarted event) async {
-    final result = await presenciaAnimalViviendaByDptoUsecase
-        .getPresenciaAnimalesViviendaByDptoUsecase(
-            event.usuario.departamentoId!);
+  Future<void> syncPresenciaAnimalesVivienda(SyncStarted event) async {
+    final result = await presenciaAnimalViviendaUsecase
+        .getPresenciaAnimalesViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      presenciaAnimalesViviendaByDptoTemp.addAll(data);
+      presenciaAnimalesViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando presencia animales',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await savePresenciaAnimalViviendaByDpto(
+      await savePresenciaAnimalVivienda(
         event,
-        presenciaAnimalesViviendaByDptoTemp[0],
+        presenciaAnimalesViviendaTemp[0],
       );
     });
   }
 
-  Future<void> savePresenciaAnimalViviendaByDpto(
+  Future<void> savePresenciaAnimalVivienda(
     SyncStarted event,
     PresenciaAnimalViviendaEntity presenciaAnimalVivienda,
   ) async {
-    final result = await presenciaAnimalViviendaByDptoUsecaseDB
-        .savePresenciaAnimalViviendaByDptoUsecaseDB(presenciaAnimalVivienda);
+    final result = await presenciaAnimalViviendaUsecaseDB
+        .savePresenciaAnimalViviendaUsecaseDB(presenciaAnimalVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= presenciaAnimalesViviendaByDptoTemp.length) {
+      if (data >= presenciaAnimalesViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'ServiciosPublicosVivienda_DatosVivienda')
             .then((value) async {
-          serviciosPublicosViviendaByDptoTemp = [];
-          await syncServiciosPublicosViviendaByDpto(event);
+          serviciosPublicosViviendaTemp = [];
+          await syncServiciosPublicosVivienda(event);
         });
         return;
       }
 
-      PresenciaAnimalViviendaEntity presenciaAnimalViviendaByDptoTemp =
-          presenciaAnimalesViviendaByDptoTemp[data];
+      PresenciaAnimalViviendaEntity presenciaAnimalViviendaTemp =
+          presenciaAnimalesViviendaTemp[data];
 
-      await savePresenciaAnimalViviendaByDpto(
+      await savePresenciaAnimalVivienda(
         event,
-        presenciaAnimalViviendaByDptoTemp,
+        presenciaAnimalViviendaTemp,
       );
     });
   }
 
-// ************************** PresenciaAnimalViviendaByDpto ****************************
+// ************************** PresenciaAnimalVivienda ****************************
 
-// ************************** ServicioPublicoViviendaByDpto ****************************
+// ************************** ServicioPublicoVivienda ****************************
 
-  Future<void> syncServiciosPublicosViviendaByDpto(SyncStarted event) async {
-    final result = await servicioPublicoViviendaByDptoUsecase
-        .getServiciosPublicosViviendaByDptoUsecase(
-            event.usuario.departamentoId!);
+  Future<void> syncServiciosPublicosVivienda(SyncStarted event) async {
+    final result = await servicioPublicoViviendaUsecase
+        .getServiciosPublicosViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      serviciosPublicosViviendaByDptoTemp.addAll(data);
+      serviciosPublicosViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando servicios públicos',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveServicioPublicoViviendaByDpto(
+      await saveServicioPublicoVivienda(
         event,
-        serviciosPublicosViviendaByDptoTemp[0],
+        serviciosPublicosViviendaTemp[0],
       );
     });
   }
 
-  Future<void> saveServicioPublicoViviendaByDpto(
+  Future<void> saveServicioPublicoVivienda(
     SyncStarted event,
     ServicioPublicoViviendaEntity servicioPublicoVivienda,
   ) async {
-    final result = await servicioPublicoViviendaByDptoUsecaseDB
-        .saveServicioPublicoViviendaByDptoUsecaseDB(servicioPublicoVivienda);
+    final result = await servicioPublicoViviendaUsecaseDB
+        .saveServicioPublicoViviendaUsecaseDB(servicioPublicoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= serviciosPublicosViviendaByDptoTemp.length) {
+      if (data >= serviciosPublicosViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable('TechosVivienda_DatosVivienda')
             .then((value) async {
-          techosViviendaByDptoTemp = [];
-          await syncTechosViviendaByDpto(event);
+          techosViviendaTemp = [];
+          await syncTechosVivienda(event);
         });
         return;
       }
 
-      ServicioPublicoViviendaEntity servicioPublicoViviendaByDptoTemp =
-          serviciosPublicosViviendaByDptoTemp[data];
+      ServicioPublicoViviendaEntity servicioPublicoViviendaTemp =
+          serviciosPublicosViviendaTemp[data];
 
-      await saveServicioPublicoViviendaByDpto(
+      await saveServicioPublicoVivienda(
         event,
-        servicioPublicoViviendaByDptoTemp,
+        servicioPublicoViviendaTemp,
       );
     });
   }
 
-// ************************** ServicioPublicoViviendaByDpto ****************************
+// ************************** ServicioPublicoVivienda ****************************
 
-// ************************** TechoViviendaByDpto ****************************
+// ************************** TechoVivienda ****************************
 
-  Future<void> syncTechosViviendaByDpto(SyncStarted event) async {
-    final result = await techoViviendaByDptoUsecase
-        .getTechosViviendaByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncTechosVivienda(SyncStarted event) async {
+    final result = await techoViviendaUsecase
+        .getTechosViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      techosViviendaByDptoTemp.addAll(data);
+      techosViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando techos vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveTechoViviendaByDpto(
+      await saveTechoVivienda(
         event,
-        techosViviendaByDptoTemp[0],
+        techosViviendaTemp[0],
       );
     });
   }
 
-  Future<void> saveTechoViviendaByDpto(
+  Future<void> saveTechoVivienda(
     SyncStarted event,
     TechoViviendaEntity techoVivienda,
   ) async {
-    final result = await techoViviendaByDptoUsecaseDB
-        .saveTechoViviendaByDptoUsecaseDB(techoVivienda);
+    final result =
+        await techoViviendaUsecaseDB.saveTechoViviendaUsecaseDB(techoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= techosViviendaByDptoTemp.length) {
+      if (data >= techosViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable('TenenciasVivienda_DatosVivienda')
             .then((value) async {
-          tenenciasViviendaByDptoTemp = [];
-          await syncTenenciasViviendaByDpto(event);
+          tenenciasViviendaTemp = [];
+          await syncTenenciasVivienda(event);
         });
         return;
       }
 
-      TechoViviendaEntity techoViviendaByDptoTemp =
-          techosViviendaByDptoTemp[data];
+      TechoViviendaEntity techoViviendaTemp = techosViviendaTemp[data];
 
-      await saveTechoViviendaByDpto(
+      await saveTechoVivienda(
         event,
-        techoViviendaByDptoTemp,
+        techoViviendaTemp,
       );
     });
   }
 
-// ************************** TechoViviendaByDpto ****************************
+// ************************** TechoVivienda ****************************
 
-// ************************** TenenciaViviendaByDpto ****************************
+// ************************** TenenciaVivienda ****************************
 
-  Future<void> syncTenenciasViviendaByDpto(SyncStarted event) async {
-    final result = await tenenciaViviendaByDptoUsecase
-        .getTenenciasViviendaByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncTenenciasVivienda(SyncStarted event) async {
+    final result = await tenenciaViviendaUsecase
+        .getTenenciasViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      tenenciasViviendaByDptoTemp.addAll(data);
+      tenenciasViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tenencias vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveTenenciaViviendaByDpto(
+      await saveTenenciaVivienda(
         event,
-        tenenciasViviendaByDptoTemp[0],
+        tenenciasViviendaTemp[0],
       );
     });
   }
 
-  Future<void> saveTenenciaViviendaByDpto(
+  Future<void> saveTenenciaVivienda(
     SyncStarted event,
     TenenciaViviendaEntity tenenciaVivienda,
   ) async {
-    final result = await tenenciaViviendaByDptoUsecaseDB
-        .saveTenenciaViviendaByDptoUsecaseDB(tenenciaVivienda);
+    final result = await tenenciaViviendaUsecaseDB
+        .saveTenenciaViviendaUsecaseDB(tenenciaVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tenenciasViviendaByDptoTemp.length) {
+      if (data >= tenenciasViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TiposCombustibleVivienda_DatosVivienda')
             .then((value) async {
-          tiposCombustibleViviendaByDptoTemp = [];
-          await syncTiposCombustibleViviendaByDpto(event);
+          tiposCombustibleViviendaTemp = [];
+          await syncTiposCombustibleVivienda(event);
         });
         return;
       }
 
-      TenenciaViviendaEntity tenenciaViviendaByDptoTemp =
-          tenenciasViviendaByDptoTemp[data];
+      TenenciaViviendaEntity tenenciaViviendaTemp = tenenciasViviendaTemp[data];
 
-      await saveTenenciaViviendaByDpto(
+      await saveTenenciaVivienda(
         event,
-        tenenciaViviendaByDptoTemp,
+        tenenciaViviendaTemp,
       );
     });
   }
 
-// ************************** TenenciaViviendaByDpto ****************************
+// ************************** TenenciaVivienda ****************************
 
-// ************************** TipoCombustibleViviendaByDpto ****************************
+// ************************** TipoCombustibleVivienda ****************************
 
-  Future<void> syncTiposCombustibleViviendaByDpto(SyncStarted event) async {
-    final result = await tipoCombustibleViviendaByDptoUsecase
-        .getTiposCombustibleViviendaByDptoUsecase(
-            event.usuario.departamentoId!);
+  Future<void> syncTiposCombustibleVivienda(SyncStarted event) async {
+    final result = await tipoCombustibleViviendaUsecase
+        .getTiposCombustibleViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      tiposCombustibleViviendaByDptoTemp.addAll(data);
+      tiposCombustibleViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tipos combustible vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveTipoCombustibleViviendaByDpto(
+      await saveTipoCombustibleVivienda(
         event,
-        tiposCombustibleViviendaByDptoTemp[0],
+        tiposCombustibleViviendaTemp[0],
       );
     });
   }
 
-  Future<void> saveTipoCombustibleViviendaByDpto(
+  Future<void> saveTipoCombustibleVivienda(
     SyncStarted event,
     TipoCombustibleViviendaEntity tipoCombustibleVivienda,
   ) async {
-    final result = await tipoCombustibleViviendaByDptoUsecaseDB
-        .saveTipoCombustibleViviendaByDptoUsecaseDB(tipoCombustibleVivienda);
+    final result = await tipoCombustibleViviendaUsecaseDB
+        .saveTipoCombustibleViviendaUsecaseDB(tipoCombustibleVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiposCombustibleViviendaByDptoTemp.length) {
+      if (data >= tiposCombustibleViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TiposSanitarioVivienda_DatosVivienda')
             .then((value) async {
-          tiposSanitarioViviendaByDptoTemp = [];
-          await syncTiposSanitarioViviendaByDpto(event);
+          tiposSanitarioViviendaTemp = [];
+          await syncTiposSanitarioVivienda(event);
         });
         return;
       }
 
-      TipoCombustibleViviendaEntity tipoCombustibleViviendaByDptoTemp =
-          tiposCombustibleViviendaByDptoTemp[data];
+      TipoCombustibleViviendaEntity tipoCombustibleViviendaTemp =
+          tiposCombustibleViviendaTemp[data];
 
-      await saveTipoCombustibleViviendaByDpto(
+      await saveTipoCombustibleVivienda(
         event,
-        tipoCombustibleViviendaByDptoTemp,
+        tipoCombustibleViviendaTemp,
       );
     });
   }
 
-// ************************** TipoCombustibleViviendaByDpto ****************************
+// ************************** TipoCombustibleVivienda ****************************
 
-// ************************** TipoSanitarioViviendaByDpto ****************************
+// ************************** TipoSanitarioVivienda ****************************
 
-  Future<void> syncTiposSanitarioViviendaByDpto(SyncStarted event) async {
-    final result = await tipoSanitarioViviendaByDptoUsecase
-        .getTiposSanitarioViviendaByDptoUsecase(event.usuario.departamentoId!);
+  Future<void> syncTiposSanitarioVivienda(SyncStarted event) async {
+    final result = await tipoSanitarioViviendaUsecase
+        .getTiposSanitarioViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      tiposSanitarioViviendaByDptoTemp.addAll(data);
+      tiposSanitarioViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tipos sanitario vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveTipoSanitarioViviendaByDpto(
+      await saveTipoSanitarioVivienda(
         event,
-        tiposSanitarioViviendaByDptoTemp[0],
+        tiposSanitarioViviendaTemp[0],
       );
     });
   }
 
-  Future<void> saveTipoSanitarioViviendaByDpto(
+  Future<void> saveTipoSanitarioVivienda(
     SyncStarted event,
     TipoSanitarioViviendaEntity tipoSanitarioVivienda,
   ) async {
-    final result = await tipoSanitarioViviendaByDptoUsecaseDB
-        .saveTipoSanitarioViviendaByDptoUsecaseDB(tipoSanitarioVivienda);
+    final result = await tipoSanitarioViviendaUsecaseDB
+        .saveTipoSanitarioViviendaUsecaseDB(tipoSanitarioVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiposSanitarioViviendaByDptoTemp.length) {
+      if (data >= tiposSanitarioViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TratamientoAguaVivienda_DatosVivienda')
             .then((value) async {
-          tratamientosAguaViviendaByDptoTemp = [];
-          await syncTratamientosAguaViviendaByDpto(event);
+          tratamientosAguaViviendaTemp = [];
+          await syncTratamientosAguaVivienda(event);
         });
         return;
       }
 
-      TipoSanitarioViviendaEntity tipoSanitarioViviendaByDptoTemp =
-          tiposSanitarioViviendaByDptoTemp[data];
+      TipoSanitarioViviendaEntity tipoSanitarioViviendaTemp =
+          tiposSanitarioViviendaTemp[data];
 
-      await saveTipoSanitarioViviendaByDpto(
+      await saveTipoSanitarioVivienda(
         event,
-        tipoSanitarioViviendaByDptoTemp,
+        tipoSanitarioViviendaTemp,
       );
     });
   }
 
-// ************************** TipoSanitarioViviendaByDpto ****************************
+// ************************** TipoSanitarioVivienda ****************************
 
-// ************************** TratamientoAguaViviendaByDpto ****************************
+// ************************** TratamientoAguaVivienda ****************************
 
-  Future<void> syncTratamientosAguaViviendaByDpto(SyncStarted event) async {
-    final result = await tratamientoAguaViviendaByDptoUsecase
-        .getTratamientosAguaViviendaByDptoUsecase(
-            event.usuario.departamentoId!);
+  Future<void> syncTratamientosAguaVivienda(SyncStarted event) async {
+    final result = await tratamientoAguaViviendaUsecase
+        .getTratamientosAguaViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      tratamientosAguaViviendaByDptoTemp.addAll(data);
+      tratamientosAguaViviendaTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tratamientos agua vivienda',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      await saveTratamientoAguaViviendaByDpto(
+      await saveTratamientoAguaVivienda(
         event,
-        tratamientosAguaViviendaByDptoTemp[0],
+        tratamientosAguaViviendaTemp[0],
       );
     });
   }
 
-  Future<void> saveTratamientoAguaViviendaByDpto(
+  Future<void> saveTratamientoAguaVivienda(
     SyncStarted event,
     TratamientoAguaViviendaEntity tratamientoAguaVivienda,
   ) async {
-    final result = await tratamientoAguaViviendaByDptoUsecaseDB
-        .saveTratamientoAguaViviendaByDptoUsecaseDB(tratamientoAguaVivienda);
+    final result = await tratamientoAguaViviendaUsecaseDB
+        .saveTratamientoAguaViviendaUsecaseDB(tratamientoAguaVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tratamientosAguaViviendaByDptoTemp.length) {
+      if (data >= tratamientosAguaViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'VentilacionVivienda_DatosVivienda')
             .then((value) async {
@@ -2097,17 +2057,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TratamientoAguaViviendaEntity tratamientoAguaViviendaByDptoTemp =
-          tratamientosAguaViviendaByDptoTemp[data];
+      TratamientoAguaViviendaEntity tratamientoAguaViviendaTemp =
+          tratamientosAguaViviendaTemp[data];
 
-      await saveTratamientoAguaViviendaByDpto(
+      await saveTratamientoAguaVivienda(
         event,
-        tratamientoAguaViviendaByDptoTemp,
+        tratamientoAguaViviendaTemp,
       );
     });
   }
 
-// ************************** TratamientoAguaViviendaByDpto ****************************
+// ************************** TratamientoAguaVivienda ****************************
 
 // ************************** VentilacionesVivienda ****************************
 
@@ -2161,8 +2121,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** TiposVivienda ****************************
 
   Future<void> syncTiposVivienda(SyncStarted event) async {
-    final result = await tipoViviendaByDptoUsecase
-        .getTiposViviendaByDptoUsecase(event.usuario.departamentoId!);
+    final result = await tipoViviendaUsecase
+        .getTiposViviendaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       tiposViviendaTemp.addAll(data);
@@ -2182,8 +2142,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     SyncStarted event,
     TipoViviendaEntity tipoVivienda,
   ) async {
-    final result = await tipoViviendaByDptoUsecaseDB
-        .saveTipoViviendaByDptoUsecaseDB(tipoVivienda);
+    final result =
+        await tipoViviendaUsecaseDB.saveTipoViviendaUsecaseDB(tipoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= tiposViviendaTemp.length) {

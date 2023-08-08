@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
+import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../cubits/curso_vida/curso_vida_cubit.dart';
 import '../../cubits/etnia/etnia_cubit.dart';
@@ -15,7 +16,7 @@ import '../../cubits/nivel_educativo/nivel_educativo_cubit.dart';
 import '../../cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
 import '../../cubits/ocupacion/ocupacion_cubit.dart';
 import '../../cubits/parentesco/parentesco_cubit.dart';
-import '../../cubits/pueblo_indigena_by_dpto/pueblo_indigena_by_dpto_cubit.dart';
+import '../../cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
 import '../../cubits/regimen/regimen_cubit.dart';
 import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 
@@ -33,12 +34,12 @@ class GrupoFamiliarForm extends StatefulWidget {
 
 class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
   final _formKeyGrupoFamiliar = GlobalKey<FormState>();
-  String? _tipoDocumento;
+  int? _tipoDocumentoId;
   String? _documento;
   String? _nombresApellidos;
-  String? _genero;
-  DateTime? _fechaNac;
-  String formattedFechaNac = '';
+  int? _generoId;
+  DateTime? _fechaNacimiento;
+  String formattedFechaNacimiento = '';
   int? _edad;
   int? _cursoVidaId;
   int? _parentescoId;
@@ -56,16 +57,36 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
   void initState() {
     super.initState();
 
+    final tipoDocumentoCubit = BlocProvider.of<TipoDocumentoCubit>(context);
+    final generoCubit = BlocProvider.of<GeneroCubit>(context);
+
     setState(() {
-      _tipoDocumento = widget.afiliadoGrupoFamiliar?.tipoDocumento;
+      if (widget.afiliadoGrupoFamiliar?.tipoDocumentoId != null) {
+        _tipoDocumentoId = widget.afiliadoGrupoFamiliar?.tipoDocumentoId;
+      } else {
+        _tipoDocumentoId = tipoDocumentoCubit.state.tiposDocumento!
+            .firstWhere((element) =>
+                element.tipo == widget.afiliadoGrupoFamiliar?.tipoDocAfiliado)
+            .tipoDocumentoId;
+      }
+
+      if (widget.afiliadoGrupoFamiliar?.generoId != null) {
+        _generoId = widget.afiliadoGrupoFamiliar?.generoId;
+      } else {
+        _generoId = generoCubit.state.generos!
+            .firstWhere((element) =>
+                element.tipo == widget.afiliadoGrupoFamiliar?.codGeneroAfiliado)
+            .generoId;
+      }
+
       _documento = widget.afiliadoGrupoFamiliar?.documento;
       _nombresApellidos =
           '${widget.afiliadoGrupoFamiliar?.nombre1 ?? ''} ${widget.afiliadoGrupoFamiliar?.nombre2 ?? ''} ${widget.afiliadoGrupoFamiliar?.apellido1 ?? ''} ${widget.afiliadoGrupoFamiliar?.apellido2 ?? ''}';
-      _genero = widget.afiliadoGrupoFamiliar?.genero;
-      _fechaNac = widget.afiliadoGrupoFamiliar?.fechaNac;
+      _fechaNacimiento = widget.afiliadoGrupoFamiliar?.fechaNacimiento;
 
-      if (_fechaNac != null) {
-        formattedFechaNac = DateFormat('dd-MM-yyyy').format(_fechaNac!);
+      if (_fechaNacimiento != null) {
+        formattedFechaNacimiento =
+            DateFormat('dd-MM-yyyy').format(_fechaNacimiento!);
       }
 
       _edad = widget.afiliadoGrupoFamiliar?.edad;
@@ -91,7 +112,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
       _ocupacionId = widget.afiliadoGrupoFamiliar?.ocupacionId;
       _grupoRiesgoId = widget.afiliadoGrupoFamiliar?.grupoRiesgoId;
       _etniaId = widget.afiliadoGrupoFamiliar?.origenEtnico5602Id;
-      //TODO: validation pending
+      //TODO: validar puebloIde
       _puebloIde = widget.afiliadoGrupoFamiliar?.puebloIndigenaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar?.puebloIndigenaId;
@@ -130,14 +151,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
     final grupoFamiliarBloc =
         BlocProvider.of<GrupoFamiliarBloc>(context, listen: true);
 
-    final afiliadoPrefsBloc =
-        BlocProvider.of<AfiliadoPrefsBloc>(context, listen: true);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ficha'),
       ),
       body: Form(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         key: _formKeyGrupoFamiliar,
         child: ListView(
           padding: const EdgeInsets.all(10.0),
@@ -155,13 +174,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
             BlocBuilder<TipoDocumentoCubit, TiposDocumentoState>(
               builder: (context, state) {
                 if (state is TiposDocumentoLoaded) {
-                  return DropdownButtonFormField<String>(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    value: _tipoDocumento,
+                  return DropdownButtonFormField<int>(
+                    value: _tipoDocumentoId,
                     items: state.tiposDocumento!
                         .map(
-                          (tipoDocumento) => DropdownMenuItem<String>(
-                            value: tipoDocumento.tipo,
+                          (tipoDocumento) => DropdownMenuItem<int>(
+                            value: tipoDocumento.tipoDocumentoId,
                             child: Text(tipoDocumento.descripcion),
                           ),
                         )
@@ -170,12 +188,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                         labelText: 'Tipo documento',
                         border: OutlineInputBorder()),
                     onChanged: null,
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Campo Requerido';
-                      }
-                      return null;
-                    },
                   );
                 }
                 return Container();
@@ -227,9 +239,8 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                   return Column(
                     children: [
                       FormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        initialValue: _genero,
-                        builder: (FormFieldState<String> formstate) {
+                        initialValue: _generoId,
+                        builder: (FormFieldState<int> formstate) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -237,12 +248,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               Column(
                                 children: state.generosLoaded!
                                     .map(
-                                      (e) => RadioListTile<String>(
+                                      (e) => RadioListTile<int>(
                                           title: Text(
                                             e.descripcion,
                                           ),
-                                          value: e.tipo,
-                                          groupValue: _genero,
+                                          value: e.generoId,
+                                          groupValue: _generoId,
                                           onChanged: null),
                                     )
                                     .toList(),
@@ -272,7 +283,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
             const SizedBox(height: 20),
             TextFormField(
               enabled: false,
-              initialValue: formattedFechaNac,
+              initialValue: formattedFechaNacimiento,
               decoration: const InputDecoration(
                 labelText: 'Fecha de Nacimiento',
                 border: OutlineInputBorder(),
@@ -301,7 +312,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               builder: (context, state) {
                 if (state is CursosVidaLoaded) {
                   return DropdownButtonFormField<int>(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     value: _cursoVidaId,
                     items: state.cursosVidaLoaded!
                         .map(
@@ -338,7 +348,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               builder: (context, state) {
                 if (state is ParentescosLoaded) {
                   return DropdownButtonFormField<int>(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     value: _parentescoId,
                     items: state.parentescosLoaded!
                         .map(
@@ -378,7 +387,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               builder: (context, state) {
                 if (state is RegimenesLoaded) {
                   return DropdownButtonFormField<int>(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     value: _tipoRegimenId,
                     items: state.regimenesLoaded!
                         .map(
@@ -414,7 +422,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               builder: (context, state) {
                 if (state is NivelesEducativosLoaded) {
                   return DropdownButtonFormField<int>(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     value: _nivelEducativoId,
                     items: state.nivelesEducativosLoaded!
                         .map(
@@ -455,7 +462,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               builder: (context, state) {
                 if (state is OcupacionesLoaded) {
                   return DropdownButtonFormField<int>(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     value: _ocupacionId,
                     items: state.ocupacionesLoaded!
                         .map(
@@ -495,7 +501,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               builder: (context, state) {
                 if (state is GruposRiesgoLoaded) {
                   return DropdownButtonFormField<int>(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     value: _grupoRiesgoId,
                     items: state.gruposRiesgoLoaded!
                         .map(
@@ -537,7 +542,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                 if (state is EtniasLoaded) {
                   return DropdownButtonFormField<int>(
                     isExpanded: true,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     value: _etniaId,
                     items: state.etniasLoaded!
                         .map(
@@ -550,19 +554,22 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     decoration: const InputDecoration(
                         labelText: 'Etnia', border: OutlineInputBorder()),
                     onChanged: (int? newValue) {
+                      if (newValue != 2) {
+                        setState(() {
+                          _puebloIde = null;
+                          _lenguaManejaId = null;
+                          _lenguaMaternaId = null;
+                        });
+
+                        grupoFamiliarBloc.add(const PuebloIndigenaChanged(0));
+                        grupoFamiliarBloc.add(const LenguaManejaChanged(0));
+                        grupoFamiliarBloc.add(const LenguaMaternaChanged(0));
+                      }
+
                       setState(() {
                         _etniaId = newValue;
-                        if (_etniaId != 2) {
-                          _puebloIde = null;
-                          grupoFamiliarBloc.add(const PuebloIndigenaChanged(0));
-
-                          _lenguaManejaId = null;
-                          grupoFamiliarBloc.add(const LenguaManejaChanged(0));
-
-                          _lenguaMaternaId = null;
-                          grupoFamiliarBloc.add(const LenguaMaternaChanged(0));
-                        }
                       });
+
                       grupoFamiliarBloc.add(EtniaChanged(newValue!));
                     },
                     validator: (value) {
@@ -591,7 +598,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                       if (state is PueblosIndigenasLoaded) {
                         return DropdownButtonFormField<int>(
                           isExpanded: true,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           value: _puebloIde,
                           items: state.pueblosIndigenasLoaded!
                               .map(
@@ -634,7 +640,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     builder: (context, state) {
                       if (state is LenguasManejaLoaded) {
                         return DropdownButtonFormField<int>(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           value: _lenguaManejaId,
                           items: state.lenguasManejaLoaded!
                               .map(
@@ -677,7 +682,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     builder: (context, state) {
                       if (state is NombresLenguasMaternaLoaded) {
                         return DropdownButtonFormField<int>(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           value: _lenguaMaternaId,
                           items: state.nombresLenguasMaternaLoaded!
                               .map(
@@ -718,25 +722,40 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                   if (_formKeyGrupoFamiliar.currentState!.validate()) {
                     _formKeyGrupoFamiliar.currentState!.save();
 
+                    final afiliadoPrefsBloc =
+                        BlocProvider.of<AfiliadoPrefsBloc>(context);
+
                     final newEditAfiliado = grupoFamiliarBloc.state.copyWith(
-                        tipoDocumento:
-                            widget.afiliadoGrupoFamiliar!.tipoDocumento,
-                        documento: widget.afiliadoGrupoFamiliar!.documento,
+                        familiaId: afiliadoPrefsBloc.state.afiliado!.familiaId,
+                        afiliadoId: widget.afiliadoGrupoFamiliar!.afiliadoId,
+                        tipoDocumentoId: _tipoDocumentoId,
+                        documento: _documento,
+                        generoId: _generoId,
+                        fechaNacimiento: _fechaNacimiento,
+                        edad: _edad,
                         nombre1: widget.afiliadoGrupoFamiliar!.nombre1,
                         nombre2: widget.afiliadoGrupoFamiliar!.nombre2,
                         apellido1: widget.afiliadoGrupoFamiliar!.apellido1,
                         apellido2: widget.afiliadoGrupoFamiliar!.apellido2,
-                        genero: widget.afiliadoGrupoFamiliar!.genero,
-                        fechaNac: widget.afiliadoGrupoFamiliar!.fechaNac,
-                        edad: widget.afiliadoGrupoFamiliar!.edad,
+                        tipoDocAfiliado:
+                            widget.afiliadoGrupoFamiliar!.tipoDocAfiliado,
+                        codGeneroAfiliado:
+                            widget.afiliadoGrupoFamiliar!.codGeneroAfiliado,
                         codRegimenAfiliado:
                             widget.afiliadoGrupoFamiliar!.codRegimenAfiliado,
-                        afiliadoId: widget.afiliadoGrupoFamiliar!.afiliadoId,
-                        familiaId: afiliadoPrefsBloc.state.afiliado!.familiaId,
-                        isCompleted: true);
+                        isCompleted: widget.afiliadoGrupoFamiliar!.isCompleted);
 
-                    afiliadosGrupoFamiliarBloc.add(
-                        CreateOrUpdateAfiliadoGrupoFamiliar(newEditAfiliado));
+                    if (newEditAfiliado.isCompleted!) {
+                      afiliadosGrupoFamiliarBloc
+                          .add(SaveAfiliadosGrupoFamiliar([newEditAfiliado]));
+                      BlocProvider.of<EncuestaBloc>(context)
+                          .add(SaveAfiliadosEncuesta([newEditAfiliado]));
+                      Navigator.pushReplacementNamed(
+                          context, 'estilo-vida-saludable');
+                    } else {
+                      afiliadosGrupoFamiliarBloc.add(
+                          CreateOrUpdateAfiliadoGrupoFamiliar(newEditAfiliado));
+                    }
                   }
                 },
                 child: Container(

@@ -10,6 +10,6 @@ abstract class AfiliadoRepositoryDB {
   Future<Either<Failure, List<AfiliadoEntity>>> getAfiliadosRepositoryDB(
       String query);
 
-  Future<Either<Failure, AfiliadoEntity?>> afiliadoHasFichaRepositoryDB(
+  Future<Either<Failure, AfiliadoEntity?>> afiliadoTieneFichaRepositoryDB(
       int afiliadoId);
 }

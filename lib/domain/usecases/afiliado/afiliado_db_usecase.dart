@@ -18,8 +18,8 @@ class AfiliadoUsecaseDB {
     return repositoryDB.getAfiliadosRepositoryDB(query);
   }
 
-  Future<Either<Failure, AfiliadoEntity?>> afiliadoHasFichaRepositoryDB(
+  Future<Either<Failure, AfiliadoEntity?>> afiliadoTieneFichaRepositoryDB(
       int afiliadoId) {
-    return repositoryDB.afiliadoHasFichaRepositoryDB(afiliadoId);
+    return repositoryDB.afiliadoTieneFichaRepositoryDB(afiliadoId);
   }
 }

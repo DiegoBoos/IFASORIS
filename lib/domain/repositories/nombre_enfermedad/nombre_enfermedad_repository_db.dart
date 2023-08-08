@@ -13,4 +13,8 @@ abstract class NombreEnfermedadRepositoryDB {
 
   Future<Either<Failure, List<LstNombreEnfermedad>>>
       getLstNombresEnfermedadesRepositoryDB(int? cuidadoSaludCondRiesgoId);
+
+  Future<Either<Failure, int>> saveNombresEnfermedadesRepositoryDB(
+      int cuidadoSaludCondRiesgoId,
+      List<LstNombreEnfermedad> lstNombresEnfermedades);
 }

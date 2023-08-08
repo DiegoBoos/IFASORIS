@@ -46,11 +46,11 @@ class EventoCostumbreParticipaRepositoryDBImpl
   @override
   Future<Either<Failure, List<LstEventoCostumbreParticipa>>>
       getAsp6EventosCostumbresParticipaRepositoryDB(
-          int? dimensionSocioculturalPueblosIndigenasId) async {
+          int? dimensionSocioCulturalPueblosIndigenasId) async {
     try {
       final result = await eventoCostumbreParticipaLocalDataSource
           .getAsp6EventosCostumbresParticipa(
-              dimensionSocioculturalPueblosIndigenasId);
+              dimensionSocioCulturalPueblosIndigenasId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
@@ -61,12 +61,12 @@ class EventoCostumbreParticipaRepositoryDBImpl
 
   @override
   Future<Either<Failure, int>> saveAsp6EventosCostumbresParticipaRepositoryDB(
-      int? dimensionSocioculturalPueblosIndigenasId,
+      int? dimensionSocioCulturalPueblosIndigenasId,
       List<LstEventoCostumbreParticipa> lstEventoCostumbreParticipa) async {
     try {
       final result = await eventoCostumbreParticipaLocalDataSource
           .saveAsp6EventosCostumbresParticipa(
-              dimensionSocioculturalPueblosIndigenasId,
+              dimensionSocioCulturalPueblosIndigenasId,
               lstEventoCostumbreParticipa);
       return Right(result);
     } on ServerFailure catch (e) {

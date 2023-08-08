@@ -6,23 +6,23 @@ import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entit
 import '../../../domain/repositories/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_repository_db.dart';
 import '../../datasources/local/dimension_sociocultural_pueblos_indigenas_local_ds.dart';
 
-class DimensionSocioculturalPueblosIndigenasRepositoryDBImpl
-    implements DimensionSocioculturalPueblosIndigenasRepositoryDB {
-  final DimensionSocioculturalPueblosIndigenasLocalDataSource
-      dimensionSocioculturalPueblosIndigenasLocalDataSource;
+class DimensionSocioCulturalPueblosIndigenasRepositoryDBImpl
+    implements DimensionSocioCulturalPueblosIndigenasRepositoryDB {
+  final DimensionSocioCulturalPueblosIndigenasLocalDataSource
+      dimensionSocioCulturalPueblosIndigenasLocalDataSource;
 
-  DimensionSocioculturalPueblosIndigenasRepositoryDBImpl(
-      {required this.dimensionSocioculturalPueblosIndigenasLocalDataSource});
+  DimensionSocioCulturalPueblosIndigenasRepositoryDBImpl(
+      {required this.dimensionSocioCulturalPueblosIndigenasLocalDataSource});
 
   @override
   Future<Either<Failure, int>>
-      saveDimensionSocioculturalPueblosIndigenasRepositoryDB(
-          DimensionSocioculturalPueblosIndigenasEntity
-              dimensionSocioculturalPueblosIndigenas) async {
+      saveDimensionSocioCulturalPueblosIndigenasRepositoryDB(
+          DimensionSocioCulturalPueblosIndigenasEntity
+              dimensionSocioCulturalPueblosIndigenas) async {
     try {
-      final result = await dimensionSocioculturalPueblosIndigenasLocalDataSource
-          .saveDimensionSocioculturalPueblosIndigenas(
-              dimensionSocioculturalPueblosIndigenas);
+      final result = await dimensionSocioCulturalPueblosIndigenasLocalDataSource
+          .saveDimensionSocioCulturalPueblosIndigenas(
+              dimensionSocioCulturalPueblosIndigenas);
 
       return Right(result);
     } on ServerFailure catch (e) {
@@ -33,12 +33,12 @@ class DimensionSocioculturalPueblosIndigenasRepositoryDBImpl
   }
 
   @override
-  Future<Either<Failure, DimensionSocioculturalPueblosIndigenasEntity?>>
-      getDimensionSocioculturalPueblosIndigenasRepositoryDB(
+  Future<Either<Failure, DimensionSocioCulturalPueblosIndigenasEntity?>>
+      getDimensionSocioCulturalPueblosIndigenasRepositoryDB(
           int afiliadoId) async {
     try {
-      final result = await dimensionSocioculturalPueblosIndigenasLocalDataSource
-          .getDimensionSocioculturalPueblosIndigenas(afiliadoId);
+      final result = await dimensionSocioCulturalPueblosIndigenasLocalDataSource
+          .getDimensionSocioCulturalPueblosIndigenas(afiliadoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

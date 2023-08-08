@@ -75,7 +75,6 @@ class ConnectionSQL {
 	[PoseeChagra]	integer NOT NULL,
 	[ProduccionMinera]	integer NOT NULL,
 	[TipoCalendario_id]	integer NOT NULL,
-  [remoteUbicacion_id]	integer,
     FOREIGN KEY ([Resguardo_id])
         REFERENCES [Resguardos]([Resguardo_id]),
     FOREIGN KEY ([AutoridadIndigena_id])
@@ -207,8 +206,7 @@ class ConnectionSQL {
 	[TenenciaVivienda_id]	integer NOT NULL,
 	[PisoVivienda_id]	integer NOT NULL,
 	[OtroTipoPiso]	varchar(50) COLLATE NOCASE,
-	[VentilacionVivienda_id]	integer NOT NULL,
-  [remoteVivienda_id]	integer
+	[VentilacionVivienda_id]	integer NOT NULL
   )''';
 
   static const CREATE_DATOS_VIVIENDA_FACTORES_RIESGO = '''
@@ -261,27 +259,24 @@ class ConnectionSQL {
 	[GrupoFamiliar_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Familia_id]	integer NOT NULL,
 	[Afiliado_id]	integer NOT NULL,
-	[CursoVida_id]	integer NOT NULL,
-	[Parentesco_id]	integer NOT NULL,
+	[TipoDocumento_id]	integer NOT NULL,
+	[Documento]	varchar(30) NOT NULL COLLATE NOCASE,
+	[Genero_id]	integer NOT NULL,
+	[FechaNacimiento]	datetime NOT NULL COLLATE NOCASE,
+	[Edad]	integer NOT NULL,
 	[TipoRegimen_id]	integer NOT NULL,
+	[Parentesco_id]	integer NOT NULL,
+	[Etnia_id]	integer NOT NULL,
+	[CursoVida_id]	integer NOT NULL,
 	[NivelEducativo_id]	integer NOT NULL,
 	[Ocupacion_id]	integer NOT NULL,
 	[GrupoRiesgo_id]	integer NOT NULL,
 	[OrigenEtnico5602_id]	integer NOT NULL,
-	[PuebloIndigena_id]	integer,
-	[LenguaManeja_id]	integer,
-	[LenguaMaterna_id]	integer,
-	[remoteGrupoFamiliar_id]	integer,
-    FOREIGN KEY ([Afiliado_id])
-        REFERENCES [Afiliado]([Afiliado_id]),
-    FOREIGN KEY ([OrigenEtnico5602_id])
-        REFERENCES [OrigenEtnico5602]([OrigenEtnico5602_id]),
+	[PuebloIndigena_id]	integer NOT NULL,
+	[LenguaManeja_id]	integer NOT NULL,
+	[LenguaMaterna_id]	integer NOT NULL,
     FOREIGN KEY ([CursoVida_id])
         REFERENCES [CursoVida_GrupoFamiliar]([CursoVida_id]),
-    FOREIGN KEY ([Parentesco_id])
-        REFERENCES [Parentesco_GrupoFamiliar]([Parentesco_id]),
-    FOREIGN KEY ([TipoRegimen_id])
-        REFERENCES [Regimenes_GrupoFamiliar]([TipoRegimen_id]),
     FOREIGN KEY ([Familia_id])
         REFERENCES [Familia]([Familia_id]),
     FOREIGN KEY ([GrupoRiesgo_id])
@@ -289,7 +284,7 @@ class ConnectionSQL {
     FOREIGN KEY ([LenguaManeja_id])
         REFERENCES [LenguaManeja_GrupoFamiliar]([LenguaManeja_id]),
     FOREIGN KEY ([NivelEducativo_id])
-        REFERENCES [NivelEducativo_GrupoFamiliar]([NivelEducativo_id]),
+        REFERENCES [NivelEductativo_GrupoFamiliar]([NivelEducativo_id]),
     FOREIGN KEY ([LenguaMaterna_id])
         REFERENCES [NombreLenguaMaterna_GrupoFamiliar]([LenguaMaterna_id]),
     FOREIGN KEY ([Ocupacion_id])
@@ -309,7 +304,6 @@ class ConnectionSQL {
 	[ConsumeCigarrillo]	integer NOT NULL,
 	[NumeroCigarrilloDia_id]	integer NOT NULL,
 	[ConsumoSustanciasPsicoactivas]	integer NOT NULL,
-	[remoteEstilosVida_id]	integer,
     FOREIGN KEY ([ActividadFisica_id])
         REFERENCES [ActividadesFisicas_EstilosVidaSaludable]([ActividadFisica_id]),
     FOREIGN KEY ([Alimentacion_id])
@@ -326,7 +320,7 @@ class ConnectionSQL {
 
   static const CREATE_CUIDADO_SALUD_COND_RIESGO = '''
   CREATE TABLE [Asp5_CuidadoSaludCondRiesgo] (
-	[CuidadoSaludCondRiesgo_id]	integer NOT NULL,
+	[CuidadoSaludCondRiesgo_id] integer PRIMARY KEY AUTOINCREMENT,
 	[Afiliado_id]	integer NOT NULL,
 	[Familia_id]	integer NOT NULL,
 	[UltimaVezInstSalud_id]	integer NOT NULL,
@@ -340,7 +334,6 @@ class ConnectionSQL {
 	[UtilizaMetodoPlanificacion_id]	integer NOT NULL,
 	[MetodoPlanificacion_id]	integer NOT NULL,
 	[ConductaSeguir_id]	integer NOT NULL,
-  [remoteCuidadoSaludCondRiesgo_id]	integer,
     FOREIGN KEY ([CondicionNutricional_id])
         REFERENCES [CondicionesNutricionales_CuidadoSaludCondRiesgo]([CondicionNutricional_id]),
     FOREIGN KEY ([ConductaSeguir_id])
@@ -381,7 +374,7 @@ class ConnectionSQL {
 
   static const CREATE_DIM_SOCIO_CULTURAL_PUEBLOS_INDIGENAS = ''' 
   CREATE TABLE [Asp6_DimSocioCulturalPueblosIndigenas] (
-	[DimSocioCulturalPueblosIndigenas_id]	integer NOT NULL,
+	[DimSocioCulturalPueblosIndigenas_id] integer PRIMARY KEY AUTOINCREMENT,
 	[Afiliado_id]	integer NOT NULL,
 	[Familia_id]	integer NOT NULL,
 	[ReligionProfesa_id]	integer NOT NULL,
@@ -408,70 +401,55 @@ class ConnectionSQL {
 
   static const CREATE_DIM_SOCIO_CULTURAL_EVENTOS_COSTUMBRES_PARTICIPO = '''
   CREATE TABLE [Asp6_DimSocioCulturalEventosCostumbresParticipo] (
-  [DimSocioCulturalEventosCostumbresParticipo_id]	integer NOT NULL,
+  [DimSocioCulturalEventosCostumbresParticipo_id]	integer PRIMARY KEY AUTOINCREMENT,
   [DimSocioCulturalPueblosIndigenas_id]	integer NOT NULL,
   [EventoCostumbreParticipo_id]	integer NOT NULL
   )''';
 
   static const CREATE_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_AtencionSalud] (
-	[DatoVivienda_id]	integer NOT NULL,
+	[AtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Afiliado_id]	integer NOT NULL,
+	[Familia_id]	integer NOT NULL,
 	[EnfermedadAcude_id]	integer NOT NULL,
 	[RecibioAtencionMedTradicional_id]	integer NOT NULL,
-	[EspecialidadMedTrad_id]	integer NOT NULL,
-	[EnfermedadTradicional_id]	integer NOT NULL,
-	[LugarAtencionMedico_id]	integer NOT NULL,
 	[EnfermedadTratamiento_id]	integer NOT NULL,
 	[UtilizaPlantasMed_id]	integer NOT NULL,
 	[LugarPlantaMedicinal_id]	integer NOT NULL,
-	[PlantaMedicinal_id]	integer NOT NULL,
-    FOREIGN KEY ([Afiliado_id])
-        REFERENCES [Afiliado]([Afiliado_id]),
-    FOREIGN KEY ([EnfermedadAcude_id])
-        REFERENCES [EnfermedadesAcude_AtencionSalud]([EnfermedadAcude_id]),
-    FOREIGN KEY ([EnfermedadTradicional_id])
-        REFERENCES [EnfermedadesTradicionales_AtencionSalud]([EnfermedadTradicional_id]),
     FOREIGN KEY ([EnfermedadTratamiento_id])
         REFERENCES [EnfermedadesTratamientos_AtencionSalud]([EnfermedadTratamiento_id]),
-    FOREIGN KEY ([EspecialidadMedTrad_id])
-        REFERENCES [EspecialidadesMedTrad_AccesoMedTradicional]([EspecialidadMedTrad_id]),
-    FOREIGN KEY ([LugarAtencionMedico_id])
-        REFERENCES [LugaresAtencionMedico_AtencionSalud]([LugarAtencionMedico_id]),
     FOREIGN KEY ([LugarPlantaMedicinal_id])
         REFERENCES [LugaresPlantasMedicinales_AtencionSalud]([LugarPlantaMedicinal_id]),
     FOREIGN KEY ([RecibioAtencionMedTradicional_id])
         REFERENCES [OpcionesSi_No]([Opcion_id]),
     FOREIGN KEY ([UtilizaPlantasMed_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([PlantaMedicinal_id])
-        REFERENCES [PlantasMedicinales_AtencionSalud]([PlantaMedicinal_id])
+        REFERENCES [OpcionesSi_No]([Opcion_id])
   )''';
 
   static const CREATE_ENFERMEDADES_TRADICIONALES_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_EnfermedadesTradicionales_AtencionSalud] (
-	[EnfermedadesTradicionales_AtencionSalud_id]	integer NOT NULL,
+	[EnfermedadesTradicionales_AtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[AtencionSalud_id]	integer NOT NULL,
 	[EnfermedadTradicional_id]	integer NOT NULL
   )''';
 
   static const CREATE_ESPECIALIDADES_MED_TRAD_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_EspecialidadesMedTradAtencionSalud] (
-	[EspecialidadesMedTradAtencionSalud_id]	integer NOT NULL,
+	[EspecialidadesMedTradAtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[AtencionSalud_id]	integer NOT NULL,
 	[EspecialidadMedTrad_id]	integer NOT NULL
   )''';
 
   static const CREATE_LUGARES_ATENCION_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_LugaresAtencionAtencionSalud] (
-	[LugaresAtencionAtencionSalud_id]	integer NOT NULL,
+	[LugaresAtencionAtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[AtencionSalud_id]	integer NOT NULL,
 	[LugarAtencionMedico_id]	integer NOT NULL
   )''';
 
   static const CREATE_PLANTAS_MEDICINALES_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_PlantasMedicinales_AtencionSalud] (
-	[PlantasMedicinales_AtencionSalud_id]	integer NOT NULL,
+	[PlantasMedicinales_AtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[AtencionSalud_id]	integer NOT NULL,
 	[PlantaMedicinal_id]	integer NOT NULL
   )''';
@@ -596,8 +574,7 @@ class ConnectionSQL {
 	[Familia_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ficha_id]	integer NOT NULL,
 	[ApellidosFlia]	varchar(150) NOT NULL COLLATE NOCASE,
-	[Afiliado_id]	integer NOT NULL,
-  [remoteFamilia_id]	integer
+	[Afiliado_id]	integer NOT NULL
   )''';
 
   static const CREATE_FICHA = '''
@@ -606,8 +583,7 @@ class ConnectionSQL {
 	[FechaCreacion]	datetime NOT NULL,
 	[NumFicha]	varchar(30) NOT NULL COLLATE NOCASE,
 	[UserName]	varchar(20) NOT NULL COLLATE NOCASE,
-	[UltimaActualizacion]	datetime NOT NULL,
-	[remoteFicha_id]	integer
+	[UltimaActualizacion]	datetime NOT NULL
   )''';
 
   static const CREATE_FRUTOS = '''

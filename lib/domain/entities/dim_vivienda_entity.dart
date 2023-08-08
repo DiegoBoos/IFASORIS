@@ -13,7 +13,7 @@ class DimViviendaEntity {
   int? tipoViviendaId;
   int? tenenciaViviendaId;
   int? ventilacionViviendaId;
-  /*  int? iluminacionViviendaId; */
+  int? iluminacionViviendaId;
   int? pisoViviendaId;
   String? otroTipoPiso;
   List<LstTecho>? lstTechos;
@@ -24,7 +24,6 @@ class DimViviendaEntity {
   List<LstTiposCombustible>? lstTiposCombustible;
   List<LstPresenciaAnimal>? lstPresenciaAnimales;
   DimViviendaState formStatus;
-  int? remoteViviendaId;
 
   DimViviendaEntity({
     this.datoViviendaId,
@@ -32,7 +31,7 @@ class DimViviendaEntity {
     this.tipoViviendaId,
     this.tenenciaViviendaId,
     this.ventilacionViviendaId,
-    /*  this.iluminacionViviendaId, */
+    this.iluminacionViviendaId,
     this.pisoViviendaId,
     this.otroTipoPiso,
     this.lstTechos,
@@ -43,7 +42,6 @@ class DimViviendaEntity {
     this.lstTiposCombustible,
     this.lstPresenciaAnimales,
     this.formStatus = const DimViviendaFormInitial(),
-    this.remoteViviendaId,
   });
 
   DimViviendaEntity copyWith(
@@ -52,7 +50,7 @@ class DimViviendaEntity {
           int? tipoViviendaId,
           int? tenenciaViviendaId,
           int? ventilacionViviendaId,
-          /*  int? iluminacionViviendaId, */
+          int? iluminacionViviendaId,
           int? pisoViviendaId,
           String? otroTipoPiso,
           List<LstTecho>? lstTechos,
@@ -70,8 +68,8 @@ class DimViviendaEntity {
         tenenciaViviendaId: tenenciaViviendaId ?? this.tenenciaViviendaId,
         ventilacionViviendaId:
             ventilacionViviendaId ?? this.ventilacionViviendaId,
-        /*   iluminacionViviendaId:
-            iluminacionViviendaId ?? this.iluminacionViviendaId, */
+        iluminacionViviendaId:
+            iluminacionViviendaId ?? this.iluminacionViviendaId,
         pisoViviendaId: pisoViviendaId ?? this.pisoViviendaId,
         otroTipoPiso: otroTipoPiso ?? this.otroTipoPiso,
         lstTechos: lstTechos ?? this.lstTechos,
@@ -90,9 +88,8 @@ class DimViviendaEntity {
         "TipoVivienda_id": tipoViviendaId,
         "TenenciaVivienda_id": tenenciaViviendaId,
         "VentilacionVivienda_id": ventilacionViviendaId,
-        /*  "IluminacionVivienda_id": iluminacionViviendaId, */
+        /* "IluminacionVivienda_id": iluminacionViviendaId, */
         "PisoVivienda_id": pisoViviendaId,
-        "OtroTipoPiso": otroTipoPiso,
-        "remoteVivienda_id": remoteViviendaId,
+        "OtroTipoPiso": otroTipoPiso
       };
 }

@@ -20,7 +20,7 @@ class AppRouter {
     'cuidado-salud-cond-riesgo': (BuildContext context) =>
         const CuidadoSaludCondRiesgoPage(),
     'dimension-sociocultural-pueblos-indigenas': (BuildContext context) =>
-        const DimensionSocioculturalPueblosIndigenasPage(),
+        const DimensionSocioCulturalPueblosIndigenasPage(),
     'atenciones-en-salud': (BuildContext context) => const AtencionSaludPage(),
   };
 }

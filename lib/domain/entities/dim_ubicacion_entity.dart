@@ -47,7 +47,6 @@ class DimUbicacionEntity {
   List<LstTuberculo>? lstTuberculos;
   List<LstVerdura>? lstVerduras;
   DimUbicacionState formStatus;
-  int? remoteUbicacionId;
 
   DimUbicacionEntity({
     this.ubicacionId,
@@ -83,7 +82,6 @@ class DimUbicacionEntity {
     this.lstTuberculos,
     this.lstVerduras,
     this.formStatus = const DimUbicacionFormInitial(),
-    this.remoteUbicacionId,
   });
 
   DimUbicacionEntity copyWith(
@@ -184,91 +182,6 @@ class DimUbicacionEntity {
         "CostoDesplazamiento_MedTradicional": costoDesplazamientoMedTradicional,
         "PoseeChagra": poseeChagra,
         "ProduccionMinera": produccionMinera,
-        "TipoCalendario_id": tipoCalendarioId,
-        "remoteUbicacion_id": remoteUbicacionId,
+        "TipoCalendario_id": tipoCalendarioId
       };
-
-  Map<String, dynamic> toJsonUpload() {
-    final Map<String, dynamic> data = {
-      "Familia_id": familiaId,
-      "NombreRecibeVisita": nombreRecibeVisita,
-      "TipoDoc_RecibeVisita": tipoDocRecibeVisita,
-      "Documento_RecibeVisita": documentoRecibeVisita,
-      "PerteneceResguardo": perteneceResguardo,
-      "ViaAcceso_id": viaAccesoId,
-      "Resguardo_id": resguardoId,
-      "AutoridadIndigena_id": autoridadIndigenaId,
-      "EstadoVia_id": estadoViaId,
-      "TiempoTarda_id": tiempoTardaId,
-      "MedioUtiliza_id": medioUtilizaId,
-      "CostoDesplazamiento_id": costoDesplazamientoId,
-      "ExisteMedTradicionalComunidad": existeMedTradicionalComunidad,
-      "TiempoTardaMedTrad_id": tiempoTardaMedTradId,
-      "CostoDesplazamiento_MedTradicional": costoDesplazamientoMedTradicional,
-      "PoseeChagra": poseeChagra,
-      "ProduccionMinera": produccionMinera,
-      "TipoCalendario_id": tipoCalendarioId,
-      "remoteUbicacion_id": remoteUbicacionId,
-    };
-
-    if (lstDificultadAccesoMedTradicional != null) {
-      data["lstDificultadAccesoMedTradicional"] =
-          lstDificultadAccesoMedTradicional!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstCereales != null) {
-      data["lstCereales"] = lstCereales!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstDificultadAccesoAtencion != null) {
-      data["lstDificultadAccesoAtencion"] =
-          lstDificultadAccesoAtencion!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstEspMedTradicional != null) {
-      data["lstEspMedTradicional"] =
-          lstEspMedTradicional!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstAnimalCria != null) {
-      data["lstAnimalCria"] = lstAnimalCria!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstFrutos != null) {
-      data["lstFrutos"] = lstFrutos!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstHortalizas != null) {
-      data["lstHortalizas"] = lstHortalizas!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstLeguminosas != null) {
-      data["lstLeguminosas"] = lstLeguminosas!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstMediosComunica != null) {
-      data["lstMediosComunica"] =
-          lstMediosComunica!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstMediosMedTradicional != null) {
-      data["lstMediosMedTradicional"] =
-          lstMediosMedTradicional!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstNombreMedTradicional != null) {
-      data["lstNombreMedTradicional"] =
-          lstNombreMedTradicional!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstTuberculos != null) {
-      data["lstTuberculos"] = lstTuberculos!.map((x) => x.toJson()).toList();
-    }
-
-    if (lstVerduras != null) {
-      data["lstVerduras"] = lstVerduras!.map((x) => x.toJson()).toList();
-    }
-
-    return data;
-  }
 }

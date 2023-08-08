@@ -10,15 +10,15 @@ import '../../../data/models/tuberculo_platano_model.dart';
 import '../../../data/models/verdura_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
-import '../../cubits/especie_animal_by_dpto/especie_animal_by_dpto_cubit.dart';
-import '../../cubits/fruto_by_dpto/fruto_by_dpto_cubit.dart';
-import '../../cubits/hortaliza_by_dpto/hortaliza_by_dpto_cubit.dart';
-import '../../cubits/leguminosa_by_dpto/leguminosa_by_dpto_cubit.dart';
+import '../../cubits/especie_animal/especie_animal_cubit.dart';
+import '../../cubits/fruto/fruto_cubit.dart';
+import '../../cubits/hortaliza/hortaliza_cubit.dart';
+import '../../cubits/leguminosa/leguminosa_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../cubits/tipo_calendario/tipo_calendario_cubit.dart';
-import '../../cubits/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_cubit.dart';
-import '../../cubits/verdura_by_dpto/verdura_by_dpto_cubit.dart';
-import '../../cubits/cereal_by_dpto/cereal_by_dpto_cubit.dart';
+import '../../cubits/tuberculo_platano/tuberculo_platano_cubit.dart';
+import '../../cubits/verdura/verdura_cubit.dart';
+import '../../cubits/cereal/cereal_cubit.dart';
 
 class AspectosTierraForm extends StatefulWidget {
   const AspectosTierraForm({super.key, this.dimUbicacion});
@@ -31,76 +31,6 @@ class AspectosTierraForm extends StatefulWidget {
 class AspectosTierraFormState extends State<AspectosTierraForm> {
   int? _poseeChagra;
   int? _tipoCalendarioId;
-  List<LstTuberculo> _selectedTuberculosPlatanos = [];
-  List<LstAnimalCria> _selectedEspeciesAnimales = [];
-  List<LstLeguminosa> _selectedLeguminosasByDpto = [];
-  List<LstHortaliza> _selectedHortalizasByDpto = [];
-  List<LstVerdura> _selectedVerdurasByDpto = [];
-  List<LstFruto> _selectedFrutosByDpto = [];
-  List<LstCereal> _selectedCerealesByDpto = [];
-
-  String? _validateTuberculosPlatanos() {
-    if (_selectedTuberculosPlatanos.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedTuberculosPlatanos.length > 4) {
-      return 'Máximo cuatro opciones.';
-    }
-    return null;
-  }
-
-  String? _validateEspeciesAnimales() {
-    if (_selectedEspeciesAnimales.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedEspeciesAnimales.length > 5) {
-      return 'Máximo cinco opciones.';
-    }
-    return null;
-  }
-
-  String? _validateLeguminosas() {
-    if (_selectedLeguminosasByDpto.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedLeguminosasByDpto.length > 5) {
-      return 'Máximo cinco opciones.';
-    }
-    return null;
-  }
-
-  String? _validateHortalizas() {
-    if (_selectedHortalizasByDpto.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedHortalizasByDpto.length > 5) {
-      return 'Máximo cinco opciones.';
-    }
-    return null;
-  }
-
-  String? _validateVerduras() {
-    if (_selectedVerdurasByDpto.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedVerdurasByDpto.length > 3) {
-      return 'Máximo tres opciones.';
-    }
-    return null;
-  }
-
-  String? _validateFrutos() {
-    if (_selectedFrutosByDpto.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedFrutosByDpto.length > 5) {
-      return 'Máximo cinco opciones.';
-    }
-    return null;
-  }
-
-  String? _validateCereales() {
-    if (_selectedCerealesByDpto.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedCerealesByDpto.length > 3) {
-      return 'Máximo tres opciones.';
-    }
-    return null;
-  }
 
   @override
   void initState() {
@@ -110,59 +40,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
       _poseeChagra = widget.dimUbicacion?.poseeChagra;
       _tipoCalendarioId = widget.dimUbicacion?.tipoCalendarioId;
     });
-    getOptions();
-  }
-
-  Future<void> getOptions() async {
-    final tuberculoPlatanoByDptoCubit =
-        BlocProvider.of<TuberculoPlatanoByDptoCubit>(
-      context,
-    );
-
-    final leguminosaByDptoCubit = BlocProvider.of<LeguminosaByDptoCubit>(
-      context,
-    );
-
-    final hortalizaByDptoCubit = BlocProvider.of<HortalizaByDptoCubit>(
-      context,
-    );
-    final verduraByDptoCubit = BlocProvider.of<VerduraByDptoCubit>(
-      context,
-    );
-    final frutoByDptoCubit = BlocProvider.of<FrutoByDptoCubit>(
-      context,
-    );
-    final cerealByDptoCubit = BlocProvider.of<CerealByDptoCubit>(
-      context,
-    );
-    final especieAnimalByDptoCubit = BlocProvider.of<EspecieAnimalByDptoCubit>(
-      context,
-    );
-
-    _selectedTuberculosPlatanos = await tuberculoPlatanoByDptoCubit
-        .getUbicacionTuberculosPlatanosDB(widget.dimUbicacion?.ubicacionId);
-
-    _selectedLeguminosasByDpto = await leguminosaByDptoCubit
-        .getUbicacionLeguminosasDB(widget.dimUbicacion?.ubicacionId);
-
-    _selectedHortalizasByDpto = await hortalizaByDptoCubit
-        .getUbicacionHortalizasDB(widget.dimUbicacion?.ubicacionId);
-
-    _selectedVerdurasByDpto = await verduraByDptoCubit
-        .getUbicacionVerdurasDB(widget.dimUbicacion?.ubicacionId);
-
-    _selectedFrutosByDpto = await frutoByDptoCubit
-        .getUbicacionFrutosDB(widget.dimUbicacion?.ubicacionId);
-
-    _selectedCerealesByDpto = await cerealByDptoCubit
-        .getUbicacionCerealesDB(widget.dimUbicacion?.ubicacionId);
-
-    _selectedEspeciesAnimales = await especieAnimalByDptoCubit
-        .getUbicacionEspeciesAnimalesDB(widget.dimUbicacion?.ubicacionId);
-
-    if (mounted) {
-      setState(() {});
-    }
   }
 
   @override
@@ -191,51 +68,42 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                         Column(
                             children: state.opcionesSiNoLoaded!
                                 .map(
-                                  (e) => RadioListTile(
-                                    title: Text(e.descripcion),
-                                    value: e.opcionId,
-                                    groupValue: _poseeChagra,
-                                    onChanged: (int? newValue) {
-                                      if (newValue == 2) {
-                                        setState(() {
-                                          _poseeChagra = newValue!;
-                                          _selectedTuberculosPlatanos = [];
-                                          dimUbicacionBloc.add(
-                                              const TuberculosPlatanosChanged(
-                                                  []));
+                                  (e) => e.opcionId == 3
+                                      ? Container()
+                                      : RadioListTile(
+                                          title: Text(e.descripcion),
+                                          value: e.opcionId,
+                                          groupValue: _poseeChagra,
+                                          onChanged: (int? newValue) {
+                                            if (newValue == 2) {
+                                              dimUbicacionBloc.add(
+                                                  const TuberculosPlatanosChanged(
+                                                      []));
 
-                                          _selectedLeguminosasByDpto = [];
-                                          dimUbicacionBloc.add(
-                                              const LeguminosasChanged([]));
+                                              dimUbicacionBloc.add(
+                                                  const LeguminosasChanged([]));
 
-                                          _selectedHortalizasByDpto = [];
-                                          dimUbicacionBloc
-                                              .add(const HortalizasChanged([]));
+                                              dimUbicacionBloc.add(
+                                                  const HortalizasChanged([]));
 
-                                          _selectedVerdurasByDpto = [];
-                                          dimUbicacionBloc
-                                              .add(const VerdurasChanged([]));
+                                              dimUbicacionBloc.add(
+                                                  const VerdurasChanged([]));
 
-                                          _selectedFrutosByDpto = [];
-                                          dimUbicacionBloc
-                                              .add(const FrutosChanged([]));
+                                              dimUbicacionBloc
+                                                  .add(const FrutosChanged([]));
 
-                                          _selectedCerealesByDpto = [];
-                                          dimUbicacionBloc
-                                              .add(const CerealesChanged([]));
-                                          dimUbicacionBloc.add(
-                                              PoseeChagraChanged(newValue));
-                                        });
-                                      } else {
-                                        setState(() {
-                                          _poseeChagra = newValue!;
-                                        });
-                                      }
-                                      dimUbicacionBloc
-                                          .add(PoseeChagraChanged(newValue!));
-                                      formstate.didChange(newValue);
-                                    },
-                                  ),
+                                              dimUbicacionBloc.add(
+                                                  const CerealesChanged([]));
+                                            }
+                                            setState(() {
+                                              _poseeChagra = newValue!;
+                                            });
+
+                                            dimUbicacionBloc.add(
+                                                PoseeChagraChanged(newValue!));
+                                            formstate.didChange(newValue);
+                                          },
+                                        ),
                                 )
                                 .toList()),
                         formstate.hasError
@@ -270,71 +138,78 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 textAlign: TextAlign.center,
               ),
               const Divider(),
-              BlocBuilder<TuberculoPlatanoByDptoCubit,
-                  TuberculosPlatanosByDptoState>(
+              BlocBuilder<TuberculoPlatanoCubit, TuberculosPlatanosState>(
                 builder: (context, state) {
-                  if (state is TuberculosPlatanosByDptoLoaded) {
-                    return FormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      initialValue: _selectedTuberculosPlatanos,
-                      builder: (FormFieldState<List<LstTuberculo>> formstate) {
+                  if (state is TuberculosPlatanosLoaded) {
+                    return FormField<List<LstTuberculo>>(
+                      initialValue: dimUbicacionBloc.state.lstTuberculos,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Seleccione al menos una opción.';
+                        } else if (value.length > 4) {
+                          return 'Máximo cuatro opciones.';
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<List<LstTuberculo>> formState) {
                         return Column(
                           children: [
                             Wrap(
-                                children: List<Widget>.generate(
-                                    state.tuberculosPlatanosByDptoLoaded!
-                                        .length, (index) {
-                              final e =
-                                  state.tuberculosPlatanosByDptoLoaded![index];
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                      value: _selectedTuberculosPlatanos.any(
-                                          (element) =>
-                                              element.tuberculoPlatanoId ==
-                                              e.tuberculoPlatanoId),
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          if (value!) {
-                                            _selectedTuberculosPlatanos.add(
-                                                LstTuberculo(
-                                                    tuberculoPlatanoId:
-                                                        e.tuberculoPlatanoId));
+                              children: List<Widget>.generate(
+                                state.tuberculosPlatanosLoaded!.length,
+                                (index) {
+                                  final e =
+                                      state.tuberculosPlatanosLoaded![index];
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Checkbox(
+                                        value: formState.value?.any((element) =>
+                                                element.tuberculoPlatanoId ==
+                                                e.tuberculoPlatanoId) ??
+                                            false,
+                                        onChanged: (bool? value) {
+                                          var selectedItems =
+                                              formState.value ?? [];
+                                          if (value == true) {
+                                            selectedItems.add(LstTuberculo(
+                                                tuberculoPlatanoId:
+                                                    e.tuberculoPlatanoId));
                                           } else {
-                                            _selectedTuberculosPlatanos
-                                                .removeWhere(
+                                            selectedItems.removeWhere(
                                               (element) =>
                                                   element.tuberculoPlatanoId ==
                                                   e.tuberculoPlatanoId,
                                             );
                                           }
-                                        });
-                                      }),
-                                  Flexible(
-                                    child: Text(
-                                      e.descripcion,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (index <
-                                      state.tuberculosPlatanosByDptoLoaded!
-                                              .length -
-                                          1)
-                                    const VerticalDivider(),
-                                ],
-                              );
-                            })),
+                                          formState.didChange(selectedItems);
+                                          dimUbicacionBloc.add(
+                                              TuberculosPlatanosChanged(
+                                                  selectedItems));
+                                        },
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          e.descripcion,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (index <
+                                          state.tuberculosPlatanosLoaded!
+                                                  .length -
+                                              1)
+                                        const VerticalDivider(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
                             Text(
-                              _validateTuberculosPlatanos() ?? '',
+                              formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
                           ],
                         );
-                      },
-                      validator: (_) => _validateTuberculosPlatanos(),
-                      onSaved: (List<LstTuberculo>? value) {
-                        dimUbicacionBloc.add(TuberculosPlatanosChanged(value!));
                       },
                     );
                   }
@@ -348,67 +223,74 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 textAlign: TextAlign.center,
               ),
               const Divider(),
-              BlocBuilder<LeguminosaByDptoCubit, LeguminosasByDptoState>(
+              BlocBuilder<LeguminosaCubit, LeguminosasState>(
                 builder: (context, state) {
-                  if (state is LeguminosasByDptoLoaded) {
-                    return FormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      initialValue: _selectedLeguminosasByDpto,
-                      builder: (FormFieldState<List<LstLeguminosa>> formstate) {
+                  if (state is LeguminosasLoaded) {
+                    return FormField<List<LstLeguminosa>>(
+                      initialValue: dimUbicacionBloc.state.lstLeguminosas,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Seleccione al menos una opción.';
+                        } else if (value.length > 5) {
+                          return 'Máximo cinco opciones.';
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<List<LstLeguminosa>> formState) {
                         return Column(
                           children: [
                             Wrap(
-                                children: List<Widget>.generate(
-                                    state.leguminosasByDptoLoaded!.length,
-                                    (index) {
-                              final e = state.leguminosasByDptoLoaded![index];
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                      value: _selectedLeguminosasByDpto.any(
-                                          (element) =>
-                                              element.leguminosaId ==
-                                              e.leguminosaId),
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          if (value!) {
-                                            _selectedLeguminosasByDpto.add(
-                                                LstLeguminosa(
-                                                    leguminosaId:
-                                                        e.leguminosaId));
+                              children: List<Widget>.generate(
+                                state.leguminosasLoaded!.length,
+                                (index) {
+                                  final e = state.leguminosasLoaded![index];
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Checkbox(
+                                        value: formState.value?.any((element) =>
+                                                element.leguminosaId ==
+                                                e.leguminosaId) ??
+                                            false,
+                                        onChanged: (bool? value) {
+                                          var selectedItems =
+                                              formState.value ?? [];
+                                          if (value == true) {
+                                            selectedItems.add(LstLeguminosa(
+                                                leguminosaId: e.leguminosaId));
                                           } else {
-                                            _selectedLeguminosasByDpto
-                                                .removeWhere(
+                                            selectedItems.removeWhere(
                                               (element) =>
                                                   element.leguminosaId ==
                                                   e.leguminosaId,
                                             );
                                           }
-                                        });
-                                      }),
-                                  Flexible(
-                                    child: Text(
-                                      e.descripcion,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (index <
-                                      state.leguminosasByDptoLoaded!.length - 1)
-                                    const VerticalDivider(),
-                                ],
-                              );
-                            })),
+                                          formState.didChange(selectedItems);
+                                          dimUbicacionBloc.add(
+                                              LeguminosasChanged(
+                                                  selectedItems));
+                                        },
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          e.descripcion,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (index <
+                                          state.leguminosasLoaded!.length - 1)
+                                        const VerticalDivider(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
                             Text(
-                              _validateLeguminosas() ?? '',
+                              formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
                           ],
                         );
-                      },
-                      validator: (_) => _validateLeguminosas(),
-                      onSaved: (List<LstLeguminosa>? value) {
-                        dimUbicacionBloc.add(LeguminosasChanged(value!));
                       },
                     );
                   }
@@ -422,67 +304,73 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 textAlign: TextAlign.center,
               ),
               const Divider(),
-              BlocBuilder<HortalizaByDptoCubit, HortalizasByDptoState>(
+              BlocBuilder<HortalizaCubit, HortalizasState>(
                 builder: (context, state) {
-                  if (state is HortalizasByDptoLoaded) {
-                    return FormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      initialValue: _selectedHortalizasByDpto,
-                      builder: (FormFieldState<List<LstHortaliza>> formstate) {
+                  if (state is HortalizasLoaded) {
+                    return FormField<List<LstHortaliza>>(
+                      initialValue: dimUbicacionBloc.state.lstHortalizas,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Seleccione al menos una opción.';
+                        } else if (value.length > 5) {
+                          return 'Máximo cinco opciones.';
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<List<LstHortaliza>> formState) {
                         return Column(
                           children: [
                             Wrap(
-                                children: List<Widget>.generate(
-                                    state.hortalizasByDptoLoaded!.length,
-                                    (index) {
-                              final e = state.hortalizasByDptoLoaded![index];
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                      value: _selectedHortalizasByDpto.any(
-                                          (element) =>
-                                              element.hortalizaId ==
-                                              e.hortalizaId),
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          if (value!) {
-                                            _selectedHortalizasByDpto.add(
-                                                LstHortaliza(
-                                                    hortalizaId:
-                                                        e.hortalizaId));
+                              children: List<Widget>.generate(
+                                state.hortalizasLoaded!.length,
+                                (index) {
+                                  final e = state.hortalizasLoaded![index];
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Checkbox(
+                                        value: formState.value?.any((element) =>
+                                                element.hortalizaId ==
+                                                e.hortalizaId) ??
+                                            false,
+                                        onChanged: (bool? value) {
+                                          var selectedItems =
+                                              formState.value ?? [];
+                                          if (value == true) {
+                                            selectedItems.add(LstHortaliza(
+                                                hortalizaId: e.hortalizaId));
                                           } else {
-                                            _selectedHortalizasByDpto
-                                                .removeWhere(
+                                            selectedItems.removeWhere(
                                               (element) =>
                                                   element.hortalizaId ==
                                                   e.hortalizaId,
                                             );
                                           }
-                                        });
-                                      }),
-                                  Flexible(
-                                    child: Text(
-                                      e.descripcion,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (index <
-                                      state.hortalizasByDptoLoaded!.length - 1)
-                                    const VerticalDivider(),
-                                ],
-                              );
-                            })),
+                                          formState.didChange(selectedItems);
+                                          dimUbicacionBloc.add(
+                                              HortalizasChanged(selectedItems));
+                                        },
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          e.descripcion,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (index <
+                                          state.hortalizasLoaded!.length - 1)
+                                        const VerticalDivider(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
                             Text(
-                              _validateHortalizas() ?? '',
+                              formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
                           ],
                         );
-                      },
-                      validator: (_) => _validateHortalizas(),
-                      onSaved: (List<LstHortaliza>? value) {
-                        dimUbicacionBloc.add(HortalizasChanged(value!));
                       },
                     );
                   }
@@ -496,64 +384,73 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 textAlign: TextAlign.center,
               ),
               const Divider(),
-              BlocBuilder<VerduraByDptoCubit, VerdurasByDptoState>(
+              BlocBuilder<VerduraCubit, VerdurasState>(
                 builder: (context, state) {
-                  if (state is VerdurasByDptoLoaded) {
-                    return FormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      initialValue: _selectedVerdurasByDpto,
-                      builder: (FormFieldState<List<LstVerdura>> formstate) {
+                  if (state is VerdurasLoaded) {
+                    return FormField<List<LstVerdura>>(
+                      initialValue: dimUbicacionBloc.state.lstVerduras,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Seleccione al menos una opción.';
+                        } else if (value.length > 3) {
+                          return 'Máximo tres opciones.';
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<List<LstVerdura>> formState) {
                         return Column(
                           children: [
                             Wrap(
-                                children: List<Widget>.generate(
-                                    state.verdurasByDptoLoaded!.length,
-                                    (index) {
-                              final e = state.verdurasByDptoLoaded![index];
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                      value: _selectedVerdurasByDpto.any(
-                                          (element) =>
-                                              element.verduraId == e.verduraId),
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          if (value!) {
-                                            _selectedVerdurasByDpto.add(
-                                                LstVerdura(
-                                                    verduraId: e.verduraId));
+                              children: List<Widget>.generate(
+                                state.verdurasLoaded!.length,
+                                (index) {
+                                  final e = state.verdurasLoaded![index];
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Checkbox(
+                                        value: formState.value?.any((element) =>
+                                                element.verduraId ==
+                                                e.verduraId) ??
+                                            false,
+                                        onChanged: (bool? value) {
+                                          var selectedItems =
+                                              formState.value ?? [];
+                                          if (value == true) {
+                                            selectedItems.add(LstVerdura(
+                                                verduraId: e.verduraId));
                                           } else {
-                                            _selectedVerdurasByDpto.removeWhere(
+                                            selectedItems.removeWhere(
                                               (element) =>
                                                   element.verduraId ==
                                                   e.verduraId,
                                             );
                                           }
-                                        });
-                                      }),
-                                  Flexible(
-                                    child: Text(
-                                      e.descripcion,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (index <
-                                      state.verdurasByDptoLoaded!.length - 1)
-                                    const VerticalDivider(),
-                                ],
-                              );
-                            })),
+                                          formState.didChange(selectedItems);
+                                          dimUbicacionBloc.add(
+                                              VerdurasChanged(selectedItems));
+                                        },
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          e.descripcion,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (index <
+                                          state.verdurasLoaded!.length - 1)
+                                        const VerticalDivider(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
                             Text(
-                              _validateVerduras() ?? '',
+                              formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
                           ],
                         );
-                      },
-                      validator: (_) => _validateVerduras(),
-                      onSaved: (List<LstVerdura>? value) {
-                        dimUbicacionBloc.add(VerdurasChanged(value!));
                       },
                     );
                   }
@@ -567,61 +464,71 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 textAlign: TextAlign.center,
               ),
               const Divider(),
-              BlocBuilder<FrutoByDptoCubit, FrutosByDptoState>(
+              BlocBuilder<FrutoCubit, FrutosState>(
                 builder: (context, state) {
-                  if (state is FrutosByDptoLoaded) {
-                    return FormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      initialValue: _selectedFrutosByDpto,
-                      builder: (FormFieldState<List<LstFruto>> formstate) {
+                  if (state is FrutosLoaded) {
+                    return FormField<List<LstFruto>>(
+                      initialValue: dimUbicacionBloc.state.lstFrutos,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Seleccione al menos una opción.';
+                        } else if (value.length > 5) {
+                          return 'Máximo cinco opciones.';
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<List<LstFruto>> formState) {
                         return Column(
                           children: [
                             Wrap(
-                                children: List<Widget>.generate(
-                                    state.frutosByDptoLoaded!.length, (index) {
-                              final e = state.frutosByDptoLoaded![index];
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                      value: _selectedFrutosByDpto.any(
-                                          (element) =>
-                                              element.frutoId == e.frutoId),
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          if (value!) {
-                                            _selectedFrutosByDpto.add(
+                              children: List<Widget>.generate(
+                                state.frutosLoaded!.length,
+                                (index) {
+                                  final e = state.frutosLoaded![index];
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Checkbox(
+                                        value: formState.value?.any((element) =>
+                                                element.frutoId == e.frutoId) ??
+                                            false,
+                                        onChanged: (bool? value) {
+                                          var selectedItems =
+                                              formState.value ?? [];
+                                          if (value == true) {
+                                            selectedItems.add(
                                                 LstFruto(frutoId: e.frutoId));
                                           } else {
-                                            _selectedFrutosByDpto.removeWhere(
+                                            selectedItems.removeWhere(
                                               (element) =>
                                                   element.frutoId == e.frutoId,
                                             );
                                           }
-                                        });
-                                      }),
-                                  Flexible(
-                                    child: Text(
-                                      e.descripcion,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (index <
-                                      state.frutosByDptoLoaded!.length - 1)
-                                    const VerticalDivider(),
-                                ],
-                              );
-                            })),
+                                          formState.didChange(selectedItems);
+                                          dimUbicacionBloc.add(
+                                              FrutosChanged(selectedItems));
+                                        },
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          e.descripcion,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (index <
+                                          state.frutosLoaded!.length - 1)
+                                        const VerticalDivider(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
                             Text(
-                              _validateFrutos() ?? '',
+                              formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
                           ],
                         );
-                      },
-                      validator: (_) => _validateFrutos(),
-                      onSaved: (List<LstFruto>? value) {
-                        dimUbicacionBloc.add(FrutosChanged(value!));
                       },
                     );
                   }
@@ -635,64 +542,73 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 textAlign: TextAlign.center,
               ),
               const Divider(),
-              BlocBuilder<CerealByDptoCubit, CerealesByDptoState>(
+              BlocBuilder<CerealCubit, CerealesState>(
                 builder: (context, state) {
-                  if (state is CerealesByDptoLoaded) {
-                    return FormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      initialValue: _selectedCerealesByDpto,
-                      builder: (FormFieldState<List<LstCereal>> formstate) {
+                  if (state is CerealesLoaded) {
+                    return FormField<List<LstCereal>>(
+                      initialValue: dimUbicacionBloc.state.lstCereales,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Seleccione al menos una opción.';
+                        } else if (value.length > 3) {
+                          return 'Máximo tres opciones.';
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<List<LstCereal>> formState) {
                         return Column(
                           children: [
                             Wrap(
-                                children: List<Widget>.generate(
-                                    state.cerealesByDptoLoaded!.length,
-                                    (index) {
-                              final e = state.cerealesByDptoLoaded![index];
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                      value: _selectedCerealesByDpto.any(
-                                          (element) =>
-                                              element.cerealId == e.cerealId),
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          if (value!) {
-                                            _selectedCerealesByDpto.add(
-                                                LstCereal(
-                                                    cerealId: e.cerealId));
+                              children: List<Widget>.generate(
+                                state.cerealesLoaded!.length,
+                                (index) {
+                                  final e = state.cerealesLoaded![index];
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Checkbox(
+                                        value: formState.value?.any((element) =>
+                                                element.cerealId ==
+                                                e.cerealId) ??
+                                            false,
+                                        onChanged: (bool? value) {
+                                          var selectedItems =
+                                              formState.value ?? [];
+                                          if (value == true) {
+                                            selectedItems.add(LstCereal(
+                                                cerealId: e.cerealId));
                                           } else {
-                                            _selectedCerealesByDpto.removeWhere(
+                                            selectedItems.removeWhere(
                                               (element) =>
                                                   element.cerealId ==
                                                   e.cerealId,
                                             );
                                           }
-                                        });
-                                      }),
-                                  Flexible(
-                                    child: Text(
-                                      e.descripcion,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (index <
-                                      state.cerealesByDptoLoaded!.length - 1)
-                                    const VerticalDivider(),
-                                ],
-                              );
-                            })),
+                                          formState.didChange(selectedItems);
+                                          dimUbicacionBloc.add(
+                                              CerealesChanged(selectedItems));
+                                        },
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          e.descripcion,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (index <
+                                          state.cerealesLoaded!.length - 1)
+                                        const VerticalDivider(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
                             Text(
-                              _validateCereales() ?? '',
+                              formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
                           ],
                         );
-                      },
-                      validator: (_) => _validateCereales(),
-                      onSaved: (List<LstCereal>? value) {
-                        dimUbicacionBloc.add(CerealesChanged(value!));
                       },
                     );
                   }
@@ -708,75 +624,84 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
           textAlign: TextAlign.center,
         ),
         const Divider(),
-        BlocBuilder<EspecieAnimalByDptoCubit, EspeciesAnimalesByDptoState>(
+        BlocBuilder<EspecieAnimalCubit, EspeciesAnimalesState>(
           builder: (context, state) {
-            if (state is EspeciesAnimalesByDptoLoaded) {
-              return FormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                initialValue: _selectedEspeciesAnimales,
-                builder: (FormFieldState<List<LstAnimalCria>> formstate) {
+            if (state is EspeciesAnimalesLoaded) {
+              return FormField<List<LstAnimalCria>>(
+                initialValue: dimUbicacionBloc.state.lstAnimalCria,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Seleccione al menos una opción.';
+                  } else if (value.length > 5) {
+                    return 'Máximo cinco opciones.';
+                  }
+                  return null;
+                },
+                builder: (FormFieldState<List<LstAnimalCria>> formState) {
                   return Column(
                     children: [
                       Wrap(
-                          children: List<Widget>.generate(
-                              state.especiesAnimalesByDptoLoaded!.length,
-                              (index) {
-                        final e = state.especiesAnimalesByDptoLoaded![index];
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                                value: _selectedEspeciesAnimales.any(
-                                    (element) =>
-                                        element.especieAnimalCriaId ==
-                                        e.especieAnimalCriaId),
-                                onChanged: (bool? value) {
-                                  setState(() {
+                        children: List<Widget>.generate(
+                          state.especiesAnimalesLoaded!.length,
+                          (index) {
+                            final e = state.especiesAnimalesLoaded![index];
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Checkbox(
+                                  value: formState.value?.any((element) =>
+                                          element.especieAnimalCriaId ==
+                                          e.especieAnimalCriaId) ??
+                                      false,
+                                  onChanged: (bool? value) {
+                                    var selectedItems =
+                                        List<LstAnimalCria>.from(
+                                            formState.value ?? []);
                                     if (e.especieAnimalCriaId == 9) {
-                                      _selectedEspeciesAnimales = [
+                                      selectedItems = [
                                         LstAnimalCria(
                                             especieAnimalCriaId:
                                                 e.especieAnimalCriaId)
                                       ];
-                                    } else if (value!) {
-                                      _selectedEspeciesAnimales.removeWhere(
-                                          (element) =>
-                                              element.especieAnimalCriaId == 9);
-                                      _selectedEspeciesAnimales.add(
-                                          LstAnimalCria(
-                                              especieAnimalCriaId:
-                                                  e.especieAnimalCriaId));
+                                    } else if (value == true) {
+                                      selectedItems.removeWhere((element) =>
+                                          element.especieAnimalCriaId == 9);
+                                      selectedItems.add(LstAnimalCria(
+                                          especieAnimalCriaId:
+                                              e.especieAnimalCriaId));
                                     } else {
-                                      _selectedEspeciesAnimales.removeWhere(
+                                      selectedItems.removeWhere(
                                         (element) =>
                                             element.especieAnimalCriaId ==
                                             e.especieAnimalCriaId,
                                       );
                                     }
-                                  });
-                                }),
-                            Flexible(
-                              child: Text(
-                                e.descripcion,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (index <
-                                state.especiesAnimalesByDptoLoaded!.length - 1)
-                              const VerticalDivider(),
-                          ],
-                        );
-                      })),
+                                    formState.didChange(selectedItems);
+                                    dimUbicacionBloc.add(
+                                        EspeciesAnimalesCriaChanged(
+                                            selectedItems));
+                                  },
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    e.descripcion,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (index <
+                                    state.especiesAnimalesLoaded!.length - 1)
+                                  const VerticalDivider(),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                       Text(
-                        _validateEspeciesAnimales() ?? '',
+                        formState.errorText ?? '',
                         style: const TextStyle(color: Colors.red),
                       ),
                     ],
                   );
-                },
-                validator: (_) => _validateEspeciesAnimales(),
-                onSaved: (List<LstAnimalCria>? value) {
-                  dimUbicacionBloc.add(EspeciesAnimalesCriaChanged(value!));
                 },
               );
             }
@@ -788,7 +713,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
           builder: (context, state) {
             if (state is TiposCalendarioLoaded) {
               return DropdownButtonFormField<int>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _tipoCalendarioId,
                 items: state.tiposCalendarioLoaded!
                     .map(

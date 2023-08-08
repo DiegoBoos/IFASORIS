@@ -17,6 +17,84 @@ class GetDimUbicacion extends DimUbicacionEvent {
   const GetDimUbicacion(this.familiaId);
 }
 
+class GetDificultadesAcceso extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetDificultadesAcceso(this.ubicacionId);
+}
+
+class GetEspecialidadesMedTradicional extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetEspecialidadesMedTradicional(this.ubicacionId);
+}
+
+class GetNombresMedTrad extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetNombresMedTrad(this.ubicacionId);
+}
+
+class GetMediosUtilizaMedTradicional extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetMediosUtilizaMedTradicional(this.ubicacionId);
+}
+
+class GetDificultadesAccesoMedTradicional extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetDificultadesAccesoMedTradicional(this.ubicacionId);
+}
+
+class GetTuberculosPlatanos extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetTuberculosPlatanos(this.ubicacionId);
+}
+
+class GetLeguminosas extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetLeguminosas(this.ubicacionId);
+}
+
+class GetHortalizas extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetHortalizas(this.ubicacionId);
+}
+
+class GetVerduras extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetVerduras(this.ubicacionId);
+}
+
+class GetFrutos extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetFrutos(this.ubicacionId);
+}
+
+class GetCereales extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetCereales(this.ubicacionId);
+}
+
+class GetEspeciesAnimales extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetEspeciesAnimales(this.ubicacionId);
+}
+
+class GetMediosComunicacion extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetMediosComunicacion(this.ubicacionId);
+}
+
 class DimUbicacionFormSubmissionSuccess extends DimUbicacionEvent {
   final int ubicacionId;
 

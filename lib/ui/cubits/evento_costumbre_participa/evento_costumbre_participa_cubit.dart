@@ -25,10 +25,10 @@ class EventoCostumbreParticipaCubit
   }
 
   Future<List<LstEventoCostumbreParticipa>> getAsp6EventosCostumbresParticipaDB(
-      int? dimensionSocioculturalPueblosIndigenasId) async {
+      int? dimensionSocioCulturalPueblosIndigenasId) async {
     final result = await eventoCostumbreParticipaUsecaseDB
         .getAsp6EventosCostumbresParticipaUsecaseDB(
-            dimensionSocioculturalPueblosIndigenasId);
+            dimensionSocioCulturalPueblosIndigenasId);
     return result.fold((failure) => [], (data) => data);
   }
 }

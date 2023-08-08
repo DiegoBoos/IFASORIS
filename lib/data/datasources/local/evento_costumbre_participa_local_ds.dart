@@ -10,10 +10,10 @@ abstract class EventoCostumbreParticipaLocalDataSource {
       EventoCostumbreParticipaEntity eventoCostumbreParticipa);
 
   Future<List<LstEventoCostumbreParticipa>> getAsp6EventosCostumbresParticipa(
-      int? dimensionSocioculturalPueblosIndigenasId);
+      int? dimensionSocioCulturalPueblosIndigenasId);
 
   Future<int> saveAsp6EventosCostumbresParticipa(
-      int? dimensionSocioculturalPueblosIndigenasId,
+      int? dimensionSocioCulturalPueblosIndigenasId,
       List<LstEventoCostumbreParticipa> lstEventoCostumbreParticipa);
 }
 
@@ -45,20 +45,20 @@ class EventoCostumbreParticipaLocalDataSourceImpl
 
   @override
   Future<int> saveAsp6EventosCostumbresParticipa(
-      int? dimensionSocioculturalPueblosIndigenasId,
+      int? dimensionSocioCulturalPueblosIndigenasId,
       List<LstEventoCostumbreParticipa> lstEventoCostumbreParticipa) async {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
     batch.delete('Asp6_DimSocioCulturalEventosCostumbresParticipo',
         where: 'DimSocioCulturalPueblosIndigenas_id = ?',
-        whereArgs: [dimensionSocioculturalPueblosIndigenasId]);
+        whereArgs: [dimensionSocioCulturalPueblosIndigenasId]);
 
     final ubicacionEspeciesAnimalesCria = lstEventoCostumbreParticipa
         .map((item) => Asp6EventoCostumbreParticipa(
             eventoCostumbreParticipaId: item.eventoCostumbreParticipaId,
             dimSocioCulturalPueblosIndigenasId:
-                dimensionSocioculturalPueblosIndigenasId))
+                dimensionSocioCulturalPueblosIndigenasId))
         .toList();
 
     for (final ubicacionEspecieAnimalCria in ubicacionEspeciesAnimalesCria) {
@@ -73,12 +73,12 @@ class EventoCostumbreParticipaLocalDataSourceImpl
 
   @override
   Future<List<LstEventoCostumbreParticipa>> getAsp6EventosCostumbresParticipa(
-      int? dimensionSocioculturalPueblosIndigenasId) async {
+      int? dimensionSocioCulturalPueblosIndigenasId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query(
         'Asp6_DimSocioCulturalEventosCostumbresParticipo',
         where: 'DimSocioCulturalPueblosIndigenas_id = ?',
-        whereArgs: [dimensionSocioculturalPueblosIndigenasId]);
+        whereArgs: [dimensionSocioCulturalPueblosIndigenasId]);
     final result = List<LstEventoCostumbreParticipa>.from(
         res.map((m) => LstEventoCostumbreParticipa.fromJson(m))).toList();
 

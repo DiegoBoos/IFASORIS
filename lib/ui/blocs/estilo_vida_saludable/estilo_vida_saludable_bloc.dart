@@ -19,7 +19,7 @@ class EstiloVidaSaludableBloc
 
     on<EstiloVidaSaludableSubmitted>((event, emit) async {
       final result = await estiloVidaSaludableUsecaseDB
-          .saveEstiloVidaSaludableUsecaseDB(event.estiloVidaSaludable);
+          .saveEstiloVidaSaludableUsecaseDB(state);
       result.fold((failure) {
         emit(state.copyWith(
             formStatus:
@@ -46,6 +46,12 @@ class EstiloVidaSaludableBloc
       });
     });
 
+    on<AfiliadoChanged>((event, emit) {
+      emit(state.copyWith(afiliadoId: event.afiliadoId));
+    });
+    on<FamiliaChanged>((event, emit) {
+      emit(state.copyWith(familiaId: event.familiaId));
+    });
     on<ActividadFisicaChanged>((event, emit) {
       emit(state.copyWith(actividadFisicaId: event.actividadFisicaId));
     });

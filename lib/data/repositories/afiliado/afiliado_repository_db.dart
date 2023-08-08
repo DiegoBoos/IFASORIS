@@ -25,10 +25,11 @@ class AfiliadoRepositoryDBImpl implements AfiliadoRepositoryDB {
   }
 
   @override
-  Future<Either<Failure, AfiliadoEntity?>> afiliadoHasFichaRepositoryDB(
+  Future<Either<Failure, AfiliadoEntity?>> afiliadoTieneFichaRepositoryDB(
       int afiliadoId) async {
     try {
-      final result = await afiliadoLocalDataSource.afiliadoHasFicha(afiliadoId);
+      final result =
+          await afiliadoLocalDataSource.afiliadoTieneFicha(afiliadoId);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

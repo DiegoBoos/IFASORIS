@@ -1,138 +1,139 @@
 part of 'dimension_sociocultural_pueblos_indigenas_bloc.dart';
 
-abstract class DimensionSocioculturalPueblosIndigenasEvent extends Equatable {
-  const DimensionSocioculturalPueblosIndigenasEvent();
+abstract class DimensionSocioCulturalPueblosIndigenasEvent extends Equatable {
+  const DimensionSocioCulturalPueblosIndigenasEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class DimensionSocioculturalPueblosIndigenasInit
-    extends DimensionSocioculturalPueblosIndigenasEvent {}
+class DimensionSocioCulturalPueblosIndigenasInit
+    extends DimensionSocioCulturalPueblosIndigenasEvent {}
 
-class DimensionSocioculturalPueblosIndigenasSubmitted
-    extends DimensionSocioculturalPueblosIndigenasEvent {
-  final DimensionSocioculturalPueblosIndigenasEntity
-      dimensionSocioculturalPueblosIndigenas;
+class DimensionSocioCulturalPueblosIndigenasSubmitted
+    extends DimensionSocioCulturalPueblosIndigenasEvent {}
 
-  const DimensionSocioculturalPueblosIndigenasSubmitted(
-      this.dimensionSocioculturalPueblosIndigenas);
-}
-
-class GetDimensionSocioculturalPueblosIndigenas
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+class GetDimensionSocioCulturalPueblosIndigenas
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int afiliadoId;
 
-  const GetDimensionSocioculturalPueblosIndigenas(this.afiliadoId);
+  const GetDimensionSocioCulturalPueblosIndigenas(this.afiliadoId);
 }
 
-class DimensionSocioculturalPueblosIndigenasFormSubmissionSuccess
-    extends DimensionSocioculturalPueblosIndigenasEvent {
-  final int ubicacionId;
+class DimensionSocioCulturalPueblosIndigenasFormSubmissionSuccess
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
+  final int dimSocioCulturalPueblosIndigenasId;
 
-  const DimensionSocioculturalPueblosIndigenasFormSubmissionSuccess(
-      this.ubicacionId);
+  const DimensionSocioCulturalPueblosIndigenasFormSubmissionSuccess(
+      this.dimSocioCulturalPueblosIndigenasId);
 }
 
-class DimensionSocioculturalPueblosIndigenasFormSubmissionFailed
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+class DimensionSocioCulturalPueblosIndigenasFormSubmissionFailed
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final String message;
 
-  const DimensionSocioculturalPueblosIndigenasFormSubmissionFailed(
+  const DimensionSocioCulturalPueblosIndigenasFormSubmissionFailed(
       this.message);
 }
 
-class DimensionSocioculturalPuebloIndigenaChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
-  final int dimensionSocioculturalPueblosIndigenasId;
+class DimensionSocioCulturalPueblosIndigenasChanged
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
+  final int dimSocioCulturalPueblosIndigenasId;
 
-  const DimensionSocioculturalPuebloIndigenaChanged(
-      this.dimensionSocioculturalPueblosIndigenasId);
+  const DimensionSocioCulturalPueblosIndigenasChanged(
+      this.dimSocioCulturalPueblosIndigenasId);
 }
 
-class AfiliadoChanged extends DimensionSocioculturalPueblosIndigenasEvent {
+class AfiliadoChanged extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int afiliadoId;
 
   const AfiliadoChanged(this.afiliadoId);
 }
 
-class FamiliaChanged extends DimensionSocioculturalPueblosIndigenasEvent {
+class FamiliaChanged extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int familiaId;
 
   const FamiliaChanged(this.familiaId);
 }
 
 class ConoceUsosCostumbresChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int conoceUsosCostumbresId;
 
   const ConoceUsosCostumbresChanged(this.conoceUsosCostumbresId);
 }
 
 class EventoCostumbreParticipoChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int eventoCostumbreParticipoId;
 
   const EventoCostumbreParticipoChanged(this.eventoCostumbreParticipoId);
 }
 
 class CostumbrePracticaChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int costumbrePracticaId;
 
   const CostumbrePracticaChanged(this.costumbrePracticaId);
 }
 
 class JusticiaSancionaChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int sancionJusticiaId;
 
   const JusticiaSancionaChanged(this.sancionJusticiaId);
 }
 
-class SitioSagradoChanged extends DimensionSocioculturalPueblosIndigenasEvent {
+class SitioSagradoChanged extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int sitiosSagradosId;
 
   const SitioSagradoChanged(this.sitiosSagradosId);
 }
 
 class ReligionProfesaChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int religionProfesaId;
 
   const ReligionProfesaChanged(this.religionProfesaId);
 }
 
 class CualesUsosCostumbresChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final String cualesUsosCostumbres;
 
   const CualesUsosCostumbresChanged(this.cualesUsosCostumbres);
 }
 
 class ParticipaCostumbresChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int participaCostumbresId;
 
   const ParticipaCostumbresChanged(this.participaCostumbresId);
 }
 
+class GetEventosCostumbresParticipa
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
+  final int? dimSocioCulturalPueblosIndigenasId;
+
+  const GetEventosCostumbresParticipa(this.dimSocioCulturalPueblosIndigenasId);
+}
+
 class EventosCostumbresParticipaChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final List<LstEventoCostumbreParticipa> lstEventoCostumbreParticipa;
 
   const EventosCostumbresParticipaChanged(this.lstEventoCostumbreParticipa);
 }
 
 class SancionJusticiaChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final int sancionJusticiaId;
 
   const SancionJusticiaChanged(this.sancionJusticiaId);
 }
 
 class CualesSitiosSagradosChanged
-    extends DimensionSocioculturalPueblosIndigenasEvent {
+    extends DimensionSocioCulturalPueblosIndigenasEvent {
   final String cualesSitiosSagrados;
 
   const CualesSitiosSagradosChanged(this.cualesSitiosSagrados);

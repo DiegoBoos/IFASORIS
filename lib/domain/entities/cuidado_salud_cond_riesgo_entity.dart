@@ -3,27 +3,25 @@ import '../../data/models/servicio_solicitado_model.dart';
 import '../../ui/blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 
 class CuidadoSaludCondRiesgoEntity {
-  CuidadoSaludCondRiesgoEntity(
-      {this.cuidadoSaludCondRiesgoId,
-      this.afiliadoId,
-      this.familiaId,
-      this.ultimaVezInstSaludId,
-      this.seguimientoEnfermedadId,
-      this.condicionNutricionalId,
-      this.tosFlemaId,
-      this.manchasPielId,
-      this.carnetVacunacionId,
-      this.esquemaVacunacionId,
-      this.lugarVacunacionId,
-      this.utilizaMetodoPlanificacionId,
-      this.metodoPlanificacionId,
-      this.conductaSeguirId,
-      this.lstNombresEnfermedades,
-      this.lstServiciosSolicitados,
-      this.presentaTos,
-      this.presentaManchas,
-      this.formStatus = const CuidadoSaludCondRiesgoFormInitial(),
-      this.remoteCuidadoSaludCondRiesgo});
+  CuidadoSaludCondRiesgoEntity({
+    this.cuidadoSaludCondRiesgoId,
+    this.afiliadoId,
+    this.familiaId,
+    this.ultimaVezInstSaludId,
+    this.seguimientoEnfermedadId,
+    this.condicionNutricionalId,
+    this.tosFlemaId,
+    this.manchasPielId,
+    this.carnetVacunacionId,
+    this.esquemaVacunacionId,
+    this.lugarVacunacionId,
+    this.utilizaMetodoPlanificacionId,
+    this.metodoPlanificacionId,
+    this.conductaSeguirId,
+    this.lstServiciosSolicitados,
+    this.lstNombresEnfermedades,
+    this.formStatus = const CuidadoSaludCondRiesgoFormInitial(),
+  });
 
   int? cuidadoSaludCondRiesgoId;
   int? afiliadoId;
@@ -39,12 +37,9 @@ class CuidadoSaludCondRiesgoEntity {
   int? utilizaMetodoPlanificacionId;
   int? metodoPlanificacionId;
   int? conductaSeguirId;
-  List<LstNombreEnfermedad>? lstNombresEnfermedades;
   List<LstServicioSolicitado>? lstServiciosSolicitados;
-  int? presentaTos;
-  int? presentaManchas;
+  List<LstNombreEnfermedad>? lstNombresEnfermedades;
   CuidadoSaludCondRiesgoState formStatus;
-  int? remoteCuidadoSaludCondRiesgo;
 
   CuidadoSaludCondRiesgoEntity copyWith({
     int? cuidadoSaludCondRiesgoId,
@@ -61,37 +56,34 @@ class CuidadoSaludCondRiesgoEntity {
     int? utilizaMetodoPlanificacionId,
     int? metodoPlanificacionId,
     int? conductaSeguirId,
-    List<LstNombreEnfermedad>? lstNombresEnfermedades,
     List<LstServicioSolicitado>? lstServiciosSolicitados,
-    int? presentaTos,
-    int? presentaManchas,
+    List<LstNombreEnfermedad>? lstNombresEnfermedades,
     CuidadoSaludCondRiesgoState? formStatus,
   }) =>
       CuidadoSaludCondRiesgoEntity(
         cuidadoSaludCondRiesgoId:
-            cuidadoSaludCondRiesgoId ?? cuidadoSaludCondRiesgoId,
-        afiliadoId: afiliadoId ?? afiliadoId,
-        familiaId: familiaId ?? familiaId,
-        ultimaVezInstSaludId: ultimaVezInstSaludId ?? ultimaVezInstSaludId,
+            cuidadoSaludCondRiesgoId ?? this.cuidadoSaludCondRiesgoId,
+        afiliadoId: afiliadoId ?? this.afiliadoId,
+        familiaId: familiaId ?? this.familiaId,
+        ultimaVezInstSaludId: ultimaVezInstSaludId ?? this.ultimaVezInstSaludId,
         seguimientoEnfermedadId:
-            seguimientoEnfermedadId ?? seguimientoEnfermedadId,
+            seguimientoEnfermedadId ?? this.seguimientoEnfermedadId,
         condicionNutricionalId:
-            condicionNutricionalId ?? condicionNutricionalId,
-        tosFlemaId: tosFlemaId ?? tosFlemaId,
-        manchasPielId: manchasPielId ?? manchasPielId,
-        carnetVacunacionId: carnetVacunacionId ?? carnetVacunacionId,
-        esquemaVacunacionId: esquemaVacunacionId ?? esquemaVacunacionId,
-        lugarVacunacionId: lugarVacunacionId ?? lugarVacunacionId,
+            condicionNutricionalId ?? this.condicionNutricionalId,
+        tosFlemaId: tosFlemaId ?? this.tosFlemaId,
+        manchasPielId: manchasPielId ?? this.manchasPielId,
+        carnetVacunacionId: carnetVacunacionId ?? this.carnetVacunacionId,
+        esquemaVacunacionId: esquemaVacunacionId ?? this.esquemaVacunacionId,
+        lugarVacunacionId: lugarVacunacionId ?? this.lugarVacunacionId,
         utilizaMetodoPlanificacionId:
-            utilizaMetodoPlanificacionId ?? utilizaMetodoPlanificacionId,
-        metodoPlanificacionId: metodoPlanificacionId ?? metodoPlanificacionId,
-        conductaSeguirId: conductaSeguirId ?? conductaSeguirId,
-        lstNombresEnfermedades:
-            lstNombresEnfermedades ?? lstNombresEnfermedades,
+            utilizaMetodoPlanificacionId ?? this.utilizaMetodoPlanificacionId,
+        metodoPlanificacionId:
+            metodoPlanificacionId ?? this.metodoPlanificacionId,
+        conductaSeguirId: conductaSeguirId ?? this.conductaSeguirId,
         lstServiciosSolicitados:
-            lstServiciosSolicitados ?? lstServiciosSolicitados,
-        presentaTos: presentaTos ?? presentaTos,
-        presentaManchas: presentaManchas ?? presentaManchas,
+            lstServiciosSolicitados ?? this.lstServiciosSolicitados,
+        lstNombresEnfermedades:
+            lstNombresEnfermedades ?? this.lstNombresEnfermedades,
         formStatus: formStatus ?? this.formStatus,
       );
 
@@ -109,7 +101,6 @@ class CuidadoSaludCondRiesgoEntity {
         "LugarVacunacion_id": lugarVacunacionId,
         "UtilizaMetodoPlanificacion_id": utilizaMetodoPlanificacionId,
         "MetodoPlanificacion_id": metodoPlanificacionId,
-        "ConductaSeguir_id": conductaSeguirId,
-        "remoteCuidadoSaludCondRiesgo_id": remoteCuidadoSaludCondRiesgo,
+        "ConductaSeguir_id": conductaSeguirId
       };
 }

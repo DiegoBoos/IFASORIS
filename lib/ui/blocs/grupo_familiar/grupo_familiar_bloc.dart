@@ -16,7 +16,7 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
       emit(initObject());
     });
 
-    on<GrupoFamiliarFamiliaChanged>((event, emit) {
+    on<FamiliaChanged>((event, emit) {
       emit(state.copyWith(familiaId: event.familiaId));
     });
     on<IsCompletedChanged>((event, emit) {
@@ -41,7 +41,9 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
       emit(state.copyWith(grupoRiesgoId: event.grupoRiesgoId));
     });
     on<EtniaChanged>((event, emit) {
-      emit(state.copyWith(origenEtnico5602Id: event.origenEtnico5602Id));
+      emit(state.copyWith(
+          origenEtnico5602Id: event.origenEtnico5602Id,
+          etniaId: event.origenEtnico5602Id));
     });
     on<PuebloIndigenaChanged>((event, emit) {
       emit(state.copyWith(puebloIndigenaId: event.puebloIndigenaId));

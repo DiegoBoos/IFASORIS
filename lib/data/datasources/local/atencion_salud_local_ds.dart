@@ -18,21 +18,20 @@ class AtencionSaludLocalDataSourceImpl implements AtencionSaludLocalDataSource {
 
     try {
       final res = await db.insert(
-        'Asp5_AtencionSalud',
+        'Asp7_AtencionSalud',
         atencionSalud.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
       return res;
     } catch (e) {
-      throw const DatabaseFailure(
-          ['Error al guardar estilo de vida saludable']);
+      throw const DatabaseFailure(['Error al guardar atencion en salud']);
     }
   }
 
   @override
   Future<AtencionSaludEntity?> getAtencionSalud(int afiliadoId) async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp5_AtencionSalud',
+    final res = await db.query('Asp7_AtencionSalud',
         where: 'Afiliado_id = ?', whereArgs: [afiliadoId]);
 
     if (res.isEmpty) return null;

@@ -1,39 +1,83 @@
+import 'atencion_salud_entity.dart';
+import 'cuidado_salud_cond_riesgo_entity.dart';
+import 'dim_ubicacion_entity.dart';
+import 'dim_vivienda_entity.dart';
+import 'dimension_sociocultural_pueblos_indigenas_entity.dart';
+import 'estilo_vida_saludable_entity.dart';
+import 'familia_entity.dart';
+import 'grupo_familiar_entity.dart';
+
 class FichaEntity {
+  int? fichaId;
+  DateTime? fechaCreacion;
+  String? numFicha;
+  String? userName;
+  DateTime? ultimaActualizacion;
+  List<FamiliaEntity>? familia;
+  List<DimViviendaEntity>? vivienda;
+  List<DimUbicacionEntity>? ubicacion;
+  List<GrupoFamiliarEntity>? grupoFamiliar;
+  List<EstiloVidaSaludableEntity>? estilosVidaSaludable;
+  List<CuidadoSaludCondRiesgoEntity>? cuidadoSaludCondRiesgo;
+  List<DimensionSocioCulturalPueblosIndigenasEntity>?
+      socioCulturalPueblosIndigenas;
+  List<AtencionSaludEntity>? atencionSalud;
+
   FichaEntity({
     this.fichaId,
     this.fechaCreacion,
-    required this.numFicha,
-    required this.userName,
+    this.numFicha,
+    this.userName,
     this.ultimaActualizacion,
-    this.remoteFichaId,
+    this.familia,
+    this.vivienda,
+    this.ubicacion,
+    this.grupoFamiliar,
+    this.estilosVidaSaludable,
+    this.cuidadoSaludCondRiesgo,
+    this.socioCulturalPueblosIndigenas,
+    this.atencionSalud,
   });
-  int? fichaId;
-  DateTime? fechaCreacion;
-  String numFicha;
-  String userName;
-  DateTime? ultimaActualizacion;
-  int? remoteFichaId;
 
-  FichaEntity copyWith({
-    int? fichaId,
-    DateTime? fechaCreacion,
-    String? numFicha,
-    String? userName,
-    DateTime? ultimaActualizacion,
-  }) =>
-      FichaEntity(
-        fichaId: fichaId ?? this.fichaId,
-        fechaCreacion: fechaCreacion ?? this.fechaCreacion,
-        numFicha: numFicha ?? this.numFicha,
-        userName: userName ?? this.userName,
-        ultimaActualizacion: ultimaActualizacion ?? this.ultimaActualizacion,
-      );
-
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJsonLocal() => {
+        "Ficha_id": fichaId,
         "FechaCreacion": fechaCreacion?.toIso8601String(),
         "NumFicha": numFicha,
         "UserName": userName,
         "UltimaActualizacion": ultimaActualizacion?.toIso8601String(),
-        "remoteFicha_id": remoteFichaId,
+      };
+
+  Map<String, dynamic> toJsonRemote() => {
+        "Ficha_id": fichaId,
+        "FechaCreacion": fechaCreacion?.toIso8601String(),
+        "NumFicha": numFicha,
+        "UserName": userName,
+        "UltimaActualizacion": ultimaActualizacion?.toIso8601String(),
+        "Familia": familia == null
+            ? []
+            : List<dynamic>.from(familia!.map((x) => x.toJson())),
+        "Vivienda": vivienda == null
+            ? []
+            : List<dynamic>.from(vivienda!.map((x) => x.toJson())),
+        "Ubicacion": ubicacion == null
+            ? []
+            : List<dynamic>.from(ubicacion!.map((x) => x.toJson())),
+        "GrupoFamiliar": grupoFamiliar == null
+            ? []
+            : List<dynamic>.from(grupoFamiliar!.map((x) => x.toJson())),
+        "EstilosVidaSaludable": estilosVidaSaludable == null
+            ? []
+            : List<dynamic>.from(estilosVidaSaludable!.map((x) => x.toJson())),
+        "CuidadoSaludCondRiesgo": cuidadoSaludCondRiesgo == null
+            ? []
+            : List<dynamic>.from(
+                cuidadoSaludCondRiesgo!.map((x) => x.toJson())),
+        "SocioCulturalPueblosIndigenas": socioCulturalPueblosIndigenas == null
+            ? []
+            : List<dynamic>.from(
+                socioCulturalPueblosIndigenas!.map((x) => x.toJson())),
+        "AtencionSalud": atencionSalud == null
+            ? []
+            : List<dynamic>.from(atencionSalud!.map((x) => x.toJson())),
       };
 }

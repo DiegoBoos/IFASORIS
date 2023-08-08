@@ -56,4 +56,20 @@ class ServicioSolicitadoRepositoryDBImpl
       return const Left(ServerFailure(['Excepción no controlada']));
     }
   }
+
+  @override
+  Future<Either<Failure, int>> saveServiciosSolicitadosRepositoryDB(
+      int cuidadoSaludCondRiesgoId,
+      List<LstServicioSolicitado> lstServiciosSolicitados) async {
+    try {
+      final result =
+          await servicioSolicitadoLocalDataSource.saveServiciosSolicitados(
+              cuidadoSaludCondRiesgoId, lstServiciosSolicitados);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
 }

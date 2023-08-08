@@ -43,16 +43,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   int? _autoridadIndigena;
   int? _viaAcceso;
   int? _estadoVia;
-  List<LstMediosComunica> _selectedMediosComunicacion = [];
-
-  String? _validateMediosComunicacion() {
-    if (_selectedMediosComunicacion.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedMediosComunicacion.length > 3) {
-      return 'Máximo tres opciones.';
-    }
-    return null;
-  }
 
   @override
   void initState() {
@@ -90,19 +80,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
       _viaAcceso = widget.dimUbicacion?.viaAccesoId;
       _estadoVia = widget.dimUbicacion?.estadoViaId;
     });
-    getOptions();
-  }
-
-  Future<void> getOptions() async {
-    final medioComunicacionCubit = BlocProvider.of<MedioComunicacionCubit>(
-      context,
-    );
-    _selectedMediosComunicacion = await medioComunicacionCubit
-        .getUbicacionMediosComunicacionDB(widget.dimUbicacion?.ubicacionId);
-
-    if (mounted) {
-      setState(() {});
-    }
   }
 
   @override
@@ -121,7 +98,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         ),
         const SizedBox(height: 20),
         TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: _nombreRecibeVisitaCtrl,
           decoration: const InputDecoration(
             labelText: 'Nombre de quien recibe la visita',
@@ -142,7 +118,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           builder: (context, state) {
             if (state is TiposDocumentoLoaded) {
               return DropdownButtonFormField<String>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _tipoDocumentoRecibeVisita,
                 items: state.tiposDocumento!
                     .map(
@@ -174,7 +149,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         ),
         const SizedBox(height: 20),
         TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: TextInputType.number,
           controller: _documentoRecibeVisitaCtrl,
           decoration: const InputDecoration(
@@ -295,19 +269,22 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     Column(
                         children: state.opcionesSiNoLoaded!
                             .map(
-                              (e) => RadioListTile(
-                                title: Text(e.descripcion),
-                                value: e.opcionId,
-                                groupValue: _perteneceResguardo,
-                                onChanged: (int? newValue) {
-                                  setState(() {
-                                    _perteneceResguardo = newValue!;
-                                  });
-                                  dimUbicacionBloc.add(
-                                      PerteneceResguardoChanged(newValue!));
-                                  formstate.didChange(newValue);
-                                },
-                              ),
+                              (e) => e.opcionId == 3
+                                  ? Container()
+                                  : RadioListTile(
+                                      title: Text(e.descripcion),
+                                      value: e.opcionId,
+                                      groupValue: _perteneceResguardo,
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          _perteneceResguardo = newValue!;
+                                        });
+                                        dimUbicacionBloc.add(
+                                            PerteneceResguardoChanged(
+                                                newValue!));
+                                        formstate.didChange(newValue);
+                                      },
+                                    ),
                             )
                             .toList()),
                     formstate.hasError
@@ -332,7 +309,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         ),
         /*  const SizedBox(height: 20),
         TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: _nombreResguardoIndigenaCtrl,
             decoration: const InputDecoration(
                 labelText: 'Nombre del resguardo indígena',
@@ -345,7 +321,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           builder: (context, state) {
             if (state is AutoridadesIndigenasLoaded) {
               return DropdownButtonFormField<int>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _autoridadIndigena,
                 items: state.autoridadesIndigenas!
                     .map(
@@ -381,7 +356,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           builder: (context, state) {
             if (state is ViasAccesoLoaded) {
               return DropdownButtonFormField<int>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _viaAcceso,
                 items: state.viasAccesoLoaded!
                     .map((viaAcceso) => DropdownMenuItem<int>(
@@ -414,7 +388,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           builder: (context, state) {
             if (state is EstadosViasLoaded) {
               return DropdownButtonFormField<int>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _estadoVia,
                 items: state.estadosViasLoaded!
                     .map(
@@ -454,70 +427,81 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<MedioComunicacionCubit, MediosComunicacionState>(
           builder: (context, state) {
             if (state is MediosComunicacionLoaded) {
-              return FormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                initialValue: _selectedMediosComunicacion,
-                builder: (FormFieldState<List<LstMediosComunica>> formstate) {
+              return FormField<List<LstMediosComunica>>(
+                initialValue: dimUbicacionBloc.state.lstMediosComunica,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Seleccione al menos una opción.';
+                  } else if (value.length > 3) {
+                    return 'Máximo tres opciones.';
+                  }
+                  return null;
+                },
+                builder: (FormFieldState<List<LstMediosComunica>> formState) {
                   return Column(
                     children: [
                       Wrap(
-                          children: List<Widget>.generate(
-                              state.mediosComunicacionLoaded!.length, (index) {
-                        final e = state.mediosComunicacionLoaded![index];
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                                value: _selectedMediosComunicacion.any(
-                                    (element) =>
-                                        element.medioComunicacionId ==
-                                        e.medioComunicacionId),
-                                onChanged: (bool? value) {
-                                  setState(() {
+                        children: List<Widget>.generate(
+                          state.mediosComunicacionLoaded!.length,
+                          (index) {
+                            final e = state.mediosComunicacionLoaded![index];
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Checkbox(
+                                  value: formState.value?.any((element) =>
+                                          element.medioComunicacionId ==
+                                          e.medioComunicacionId) ??
+                                      false,
+                                  onChanged: (bool? value) {
+                                    var selectedItems =
+                                        List<LstMediosComunica>.from(
+                                            formState.value ?? []);
                                     if (e.medioComunicacionId == 7) {
-                                      _selectedMediosComunicacion = [
+                                      selectedItems = [
                                         LstMediosComunica(
                                             medioComunicacionId:
                                                 e.medioComunicacionId)
                                       ];
-                                    } else if (value!) {
-                                      _selectedMediosComunicacion.removeWhere(
-                                          (element) =>
-                                              element.medioComunicacionId == 7);
-                                      _selectedMediosComunicacion.add(
-                                          LstMediosComunica(
-                                              medioComunicacionId:
-                                                  e.medioComunicacionId));
+                                    } else if (value == true) {
+                                      selectedItems.removeWhere((element) =>
+                                          element.medioComunicacionId == 7);
+                                      selectedItems.add(LstMediosComunica(
+                                          medioComunicacionId:
+                                              e.medioComunicacionId));
                                     } else {
-                                      _selectedMediosComunicacion.removeWhere(
-                                          (element) =>
-                                              element.medioComunicacionId ==
-                                              e.medioComunicacionId);
+                                      selectedItems.removeWhere(
+                                        (element) =>
+                                            element.medioComunicacionId ==
+                                            e.medioComunicacionId,
+                                      );
                                     }
-                                  });
-                                }),
-                            Flexible(
-                              child: Text(
-                                e.descripcion,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (index <
-                                state.mediosComunicacionLoaded!.length - 1)
-                              const VerticalDivider(),
-                          ],
-                        );
-                      })),
+                                    formState.didChange(selectedItems);
+                                    dimUbicacionBloc.add(
+                                        MediosComunicacionChanged(
+                                            selectedItems));
+                                  },
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    e.descripcion,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (index <
+                                    state.mediosComunicacionLoaded!.length - 1)
+                                  const VerticalDivider(),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                       Text(
-                        _validateMediosComunicacion() ?? '',
+                        formState.errorText ?? '',
                         style: const TextStyle(color: Colors.red),
                       ),
                     ],
                   );
-                },
-                validator: (_) => _validateMediosComunicacion(),
-                onSaved: (List<LstMediosComunica>? value) {
-                  dimUbicacionBloc.add(MediosComunicacionChanged(value!));
                 },
               );
             }

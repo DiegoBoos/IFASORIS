@@ -152,7 +152,7 @@ class AfiliadoEntity {
         "CodTipoPob_afiliado": codTipoPobAfiliado,
         "IPSPrimaria_Afiliado": ipsPrimariaAfiliado,
         "IDE_PRESTADOR": idePrestador,
-        "EDAD": edad,
+        "Edad": edad,
         "CodRegimen_Afiliado": codRegimenAfiliado,
       };
 
@@ -183,7 +183,7 @@ class AfiliadoEntity {
         "CodTipoPob_afiliado": codTipoPobAfiliado,
         "IPSPrimaria_Afiliado": ipsPrimariaAfiliado,
         "IDE_PRESTADOR": idePrestador,
-        "EDAD": edad,
+        "Edad": edad,
         "CodRegimen_Afiliado": codRegimenAfiliado,
         "Familia_id": familiaId,
       };

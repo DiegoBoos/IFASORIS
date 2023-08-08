@@ -11,19 +11,23 @@ import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocul
 import '../../cubits/costumbre_practica/costumbre_practica_cubit.dart';
 import '../../cubits/religion_profesa/religion_profesa_cubit.dart';
 
-class DimensionSocioculturalPueblosIndigenasForm extends StatefulWidget {
-  const DimensionSocioculturalPueblosIndigenasForm(
-      {super.key, required this.currentAfiliado});
+class DimensionSocioCulturalPueblosIndigenasForm extends StatefulWidget {
+  const DimensionSocioCulturalPueblosIndigenasForm(
+      {super.key,
+      required this.currentAfiliado,
+      this.dimensionSocioCulturalPueblosIndigenas});
 
   final GrupoFamiliarEntity currentAfiliado;
+  final DimensionSocioCulturalPueblosIndigenasEntity?
+      dimensionSocioCulturalPueblosIndigenas;
 
   @override
-  State<DimensionSocioculturalPueblosIndigenasForm> createState() =>
-      _DimensionSocioculturalPueblosIndigenasFormState();
+  State<DimensionSocioCulturalPueblosIndigenasForm> createState() =>
+      _DimensionSocioCulturalPueblosIndigenasFormState();
 }
 
-class _DimensionSocioculturalPueblosIndigenasFormState
-    extends State<DimensionSocioculturalPueblosIndigenasForm> {
+class _DimensionSocioCulturalPueblosIndigenasFormState
+    extends State<DimensionSocioCulturalPueblosIndigenasForm> {
   final _nombresApellidosCtrl = TextEditingController();
   int? _religionProfesaId;
   int? _conoceUsosCostumbresId;
@@ -33,17 +37,6 @@ class _DimensionSocioculturalPueblosIndigenasFormState
   int? _sancionJusticiaId;
   int? _sitiosSagradosId;
   final _cualesSitiosSagradosCtrl = TextEditingController();
-
-  List<LstEventoCostumbreParticipa> _selectedEventosCostumbresParticipa = [];
-
-  String? _validateEventosCostumbresParticipa() {
-    if (_selectedEventosCostumbresParticipa.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedEventosCostumbresParticipa.length > 4) {
-      return 'Máximo cuatro opciones.';
-    }
-    return null;
-  }
 
   @override
   void initState() {
@@ -57,293 +50,320 @@ class _DimensionSocioculturalPueblosIndigenasFormState
         '${widget.currentAfiliado.apellido2 ?? ''}'
         '';
 
-    BlocProvider.of<DimensionSocioculturalPueblosIndigenasBloc>(context).add(
-        GetDimensionSocioculturalPueblosIndigenas(
-            widget.currentAfiliado.afiliadoId!));
-  }
-
-  Future<void> getOptions(int? dimensionSocioculturalPueblosIndigenasId) async {
-    final eventoCostumbreParticipaCubit =
-        BlocProvider.of<EventoCostumbreParticipaCubit>(
-      context,
-    );
-
-    _selectedEventosCostumbresParticipa =
-        await eventoCostumbreParticipaCubit.getAsp6EventosCostumbresParticipaDB(
-            dimensionSocioculturalPueblosIndigenasId);
-
-    if (mounted) {
-      setState(() {});
-    }
+    setState(() {
+      _religionProfesaId =
+          widget.dimensionSocioCulturalPueblosIndigenas?.religionProfesaId;
+      _conoceUsosCostumbresId =
+          widget.dimensionSocioCulturalPueblosIndigenas?.conoceUsosCostumbresId;
+      _cualesUsosCostumbresCtrl.text =
+          widget.dimensionSocioCulturalPueblosIndigenas?.cualesUsosCostumbres ??
+              '';
+      _participaCostumbresId =
+          widget.dimensionSocioCulturalPueblosIndigenas?.participaCostumbresId;
+      _costumbrePracticaId = widget.dimensionSocioCulturalPueblosIndigenas
+                  ?.costumbrePracticaId ==
+              0
+          ? null
+          : widget.dimensionSocioCulturalPueblosIndigenas?.costumbrePracticaId;
+      _sancionJusticiaId =
+          widget.dimensionSocioCulturalPueblosIndigenas?.sancionJusticiaId == 0
+              ? null
+              : widget
+                  .dimensionSocioCulturalPueblosIndigenas?.sancionJusticiaId;
+      _sitiosSagradosId =
+          widget.dimensionSocioCulturalPueblosIndigenas?.sitiosSagradosId;
+      _cualesSitiosSagradosCtrl.text =
+          widget.dimensionSocioCulturalPueblosIndigenas?.cualesSitiosSagrados ??
+              '';
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final dimensionSocioculturalPueblosIndigenasBloc =
-        BlocProvider.of<DimensionSocioculturalPueblosIndigenasBloc>(context);
-    return BlocListener<DimensionSocioculturalPueblosIndigenasBloc,
-            DimensionSocioculturalPueblosIndigenasEntity>(
-        listener: (context, state) {
-          if (state.formStatus
-              is DimensionSocioculturalPueblosIndigenasFormLoaded) {
-            setState(() {
-              _religionProfesaId = state.religionProfesaId;
-              _conoceUsosCostumbresId = state.conoceUsosCostumbresId;
-              _cualesUsosCostumbresCtrl.text = state.cualesUsosCostumbres ?? '';
-              _participaCostumbresId = state.participaCostumbresId;
-              _costumbrePracticaId = state.costumbrePracticaId;
-              _sancionJusticiaId = state.sancionJusticiaId;
-              _sitiosSagradosId = state.sitiosSagradosId;
-              _cualesSitiosSagradosCtrl.text = state.cualesSitiosSagrados ?? '';
-            });
-            getOptions(state.dimensionSocioculturalPueblosIndigenasId);
+    final dimensionSocioCulturalPueblosIndigenasBloc =
+        BlocProvider.of<DimensionSocioCulturalPueblosIndigenasBloc>(context);
+    return ListView(children: [
+      const Divider(),
+      const Text(
+        'VI. DIMENSION SOCIOCULTURAL DE LOS PUEBLOS INDIGENAS',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      const SizedBox(height: 20),
+      TextFormField(
+        enabled: false,
+        controller: _nombresApellidosCtrl,
+        decoration: const InputDecoration(
+          labelText: 'Integrante Grupo Familiar',
+          border: OutlineInputBorder(),
+        ),
+      ),
+      const Divider(),
+      const Text(
+        'Religión Que Profesa',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<ReligionProfesaCubit, ReligionesProfesaState>(
+        builder: (context, state) {
+          if (state is ReligionesProfesaLoaded) {
+            return DropdownButtonFormField<int>(
+              value: _religionProfesaId,
+              items: state.religionesProfesaLoaded!
+                  .map(
+                    (religionProfesa) => DropdownMenuItem<int>(
+                      value: religionProfesa.religionProfesaId,
+                      child: Text(religionProfesa.descripcion),
+                    ),
+                  )
+                  .toList(),
+              decoration: const InputDecoration(
+                  labelText: 'Seleccione una opción',
+                  border: OutlineInputBorder()),
+              onChanged: (int? newValue) {
+                setState(() {
+                  _religionProfesaId = newValue;
+                });
+                dimensionSocioCulturalPueblosIndigenasBloc
+                    .add(ReligionProfesaChanged(newValue!));
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo Requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
           }
         },
-        child: ListView(children: [
-          const Divider(),
-          const Text(
-            'VI. DIMENSION SOCIOCULTURAL DE LOS PUEBLOS INDIGENAS',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          const SizedBox(height: 20),
-          TextFormField(
-            enabled: false,
-            controller: _nombresApellidosCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Integrante Grupo Familiar',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const Divider(),
-          const Text(
-            'Religión Que Profesa',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<ReligionProfesaCubit, ReligionesProfesaState>(
-            builder: (context, state) {
-              if (state is ReligionesProfesaLoaded) {
-                return DropdownButtonFormField<int>(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  value: _religionProfesaId,
-                  items: state.religionesProfesaLoaded!
-                      .map(
-                        (religionProfesa) => DropdownMenuItem<int>(
-                          value: religionProfesa.religionProfesaId,
-                          child: Text(religionProfesa.descripcion),
-                        ),
-                      )
-                      .toList(),
-                  decoration: const InputDecoration(
-                      labelText: 'Seleccione una opción',
-                      border: OutlineInputBorder()),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _religionProfesaId = newValue;
-                    });
-                    dimensionSocioculturalPueblosIndigenasBloc
-                        .add(ReligionProfesaChanged(newValue!));
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo Requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          const Divider(),
-          const Text(
-            'Conoce los usos y costumbres Propios de su comunidad:',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-            builder: (context, state) {
-              if (state is OpcionesSiNoLoaded) {
-                return FormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  initialValue: _conoceUsosCostumbresId,
-                  builder: (FormFieldState<int> formstate) => Column(
-                    children: [
-                      Column(
-                          children: state.opcionesSiNoLoaded!
-                              .map(
-                                (e) => RadioListTile(
-                                  title: Text(e.descripcion),
-                                  value: e.opcionId,
-                                  groupValue: _conoceUsosCostumbresId,
-                                  onChanged: (int? newValue) {
-                                    if (newValue == 2) {
-                                      setState(() {
-                                        _cualesUsosCostumbresCtrl.text = '';
-                                      });
-                                      dimensionSocioculturalPueblosIndigenasBloc
-                                          .add(
-                                              const ConoceUsosCostumbresChanged(
-                                                  0));
-                                    } else {
+      ),
+      const Divider(),
+      const Text(
+        'Conoce los usos y costumbres Propios de su comunidad:',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+        builder: (context, state) {
+          if (state is OpcionesSiNoLoaded) {
+            return FormField(
+              initialValue: _conoceUsosCostumbresId,
+              builder: (FormFieldState<int> formstate) => Column(
+                children: [
+                  Column(
+                      children: state.opcionesSiNoLoaded!
+                          .map(
+                            (e) => e.opcionId == 3
+                                ? Container()
+                                : RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.opcionId,
+                                    groupValue: _conoceUsosCostumbresId,
+                                    onChanged: (int? newValue) {
+                                      if (newValue == 2) {
+                                        setState(() {
+                                          _cualesUsosCostumbresCtrl.text = '';
+                                        });
+                                        dimensionSocioCulturalPueblosIndigenasBloc
+                                            .add(
+                                                const CualesUsosCostumbresChanged(
+                                                    ''));
+                                        dimensionSocioCulturalPueblosIndigenasBloc
+                                            .add(
+                                                const ParticipaCostumbresChanged(
+                                                    0));
+                                        dimensionSocioCulturalPueblosIndigenasBloc
+                                            .add(const CostumbrePracticaChanged(
+                                                0));
+                                        dimensionSocioCulturalPueblosIndigenasBloc
+                                            .add(const SancionJusticiaChanged(
+                                                0));
+                                        dimensionSocioCulturalPueblosIndigenasBloc
+                                            .add(
+                                                EventosCostumbresParticipaChanged([
+                                          LstEventoCostumbreParticipa(
+                                              eventoCostumbreParticipaId: 5)
+                                        ]));
+                                      }
                                       setState(() {
                                         _conoceUsosCostumbresId = newValue!;
                                       });
-                                    }
+                                      dimensionSocioCulturalPueblosIndigenasBloc
+                                          .add(ConoceUsosCostumbresChanged(
+                                              newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                          )
+                          .toList()),
+                  formstate.hasError
+                      ? const Text(
+                          'Seleccione una opción',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container(),
+                ],
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      if (_conoceUsosCostumbresId == 1)
+        Column(
+          children: [
+            const Divider(),
+            const Text(
+              'Cuales Conoce',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const Divider(),
+            TextFormField(
+              maxLines: 3,
+              controller: _cualesUsosCostumbresCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Cuales Conoce',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+              onSaved: (String? newValue) {
+                dimensionSocioCulturalPueblosIndigenasBloc
+                    .add(CualesUsosCostumbresChanged(newValue!));
+              },
+            ),
+            const Divider(),
+            const Text(
+              'Participa de los Costumbres Propios de su Comunidad',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const Divider(),
+            BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+              builder: (context, state) {
+                if (state is OpcionesSiNoLoaded) {
+                  return FormField(
+                    initialValue: _participaCostumbresId,
+                    builder: (FormFieldState<int> formstate) => Column(
+                      children: [
+                        Column(
+                            children: state.opcionesSiNoLoaded!
+                                .map(
+                                  (e) => e.opcionId == 3
+                                      ? Container()
+                                      : RadioListTile(
+                                          title: Text(e.descripcion),
+                                          value: e.opcionId,
+                                          groupValue: _participaCostumbresId,
+                                          onChanged: (int? newValue) {
+                                            if (newValue == 2) {
+                                              setState(() {
+                                                _costumbrePracticaId = null;
+                                                _sancionJusticiaId = null;
+                                              });
+                                              dimensionSocioCulturalPueblosIndigenasBloc
+                                                  .add(
+                                                      EventosCostumbresParticipaChanged([
+                                                LstEventoCostumbreParticipa(
+                                                    eventoCostumbreParticipaId:
+                                                        5)
+                                              ]));
+                                              dimensionSocioCulturalPueblosIndigenasBloc
+                                                  .add(
+                                                      const CostumbrePracticaChanged(
+                                                          0));
+                                              dimensionSocioCulturalPueblosIndigenasBloc
+                                                  .add(
+                                                      const SancionJusticiaChanged(
+                                                          0));
+                                            }
 
-                                    formstate.didChange(newValue);
-                                  },
-                                ),
-                              )
-                              .toList()),
-                      formstate.hasError
-                          ? const Text(
-                              'Seleccione una opción',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          if (_conoceUsosCostumbresId == 1)
-            Column(
-              children: [
-                const Divider(),
-                const Text(
-                  'Cuales Conoce',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                //TODO: expand textfield
-                TextFormField(
-                  controller: _cualesUsosCostumbresCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Integrante Grupo Familiar',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                  onSaved: (String? newValue) {
-                    dimensionSocioculturalPueblosIndigenasBloc
-                        .add(CualesUsosCostumbresChanged(newValue!));
-                  },
-                ),
-                const Divider(),
-                const Text(
-                  'Participa de los Costumbres Propios de su Comunidad',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-                  builder: (context, state) {
-                    if (state is OpcionesSiNoLoaded) {
-                      return FormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        initialValue: _participaCostumbresId,
-                        builder: (FormFieldState<int> formstate) => Column(
-                          children: [
-                            Column(
-                                children: state.opcionesSiNoLoaded!
-                                    .map(
-                                      (e) => RadioListTile(
-                                        title: Text(e.descripcion),
-                                        value: e.opcionId,
-                                        groupValue: _participaCostumbresId,
-                                        onChanged: (int? newValue) {
-                                          if (newValue == 2) {
                                             setState(() {
-                                              _selectedEventosCostumbresParticipa =
-                                                  [];
+                                              _participaCostumbresId =
+                                                  newValue!;
                                             });
-                                            dimensionSocioculturalPueblosIndigenasBloc
-                                                .add(
-                                                    const EventosCostumbresParticipaChanged(
-                                                        []));
-                                          }
 
-                                          setState(() {
-                                            _participaCostumbresId = newValue!;
-                                          });
-
-                                          dimensionSocioculturalPueblosIndigenasBloc
-                                              .add(ParticipaCostumbresChanged(
-                                                  newValue!));
-
-                                          formstate.didChange(newValue);
-                                        },
-                                      ),
-                                    )
-                                    .toList()),
-                            formstate.hasError
-                                ? const Text(
-                                    'Seleccione una opción',
-                                    style: TextStyle(color: Colors.red),
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Campo requerido';
-                          }
-                          return null;
-                        },
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-                if (_selectedEventosCostumbresParticipa.isNotEmpty)
-                  Column(
-                    children: [
-                      const Divider(),
-                      const Text(
-                        'En que eventos propios de usos y costumbres Participa',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                      const Divider(),
-                      BlocBuilder<EventoCostumbreParticipaCubit,
-                          EventosCostumbresParticipaState>(
-                        builder: (context, state) {
-                          if (state is EventosCostumbresParticipaLoaded) {
-                            return FormField(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              initialValue: _selectedEventosCostumbresParticipa,
-                              builder: (FormFieldState<
-                                      List<LstEventoCostumbreParticipa>>
-                                  formstate) {
-                                return Column(
-                                  children: [
-                                    Wrap(
-                                        children: List<Widget>.generate(
-                                            state
-                                                .eventosCostumbresParticipaLoaded!
-                                                .length, (index) {
+                                            dimensionSocioCulturalPueblosIndigenasBloc
+                                                .add(ParticipaCostumbresChanged(
+                                                    newValue!));
+                                            formstate.didChange(newValue);
+                                          },
+                                        ),
+                                )
+                                .toList()),
+                        formstate.hasError
+                            ? const Text(
+                                'Seleccione una opción',
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Campo requerido';
+                      }
+                      return null;
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            if (_participaCostumbresId == 1)
+              Column(
+                children: [
+                  const Divider(),
+                  const Text(
+                    'En que eventos propios de usos y costumbres Participa',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<EventoCostumbreParticipaCubit,
+                      EventosCostumbresParticipaState>(
+                    builder: (context, state) {
+                      if (state is EventosCostumbresParticipaLoaded) {
+                        return FormField<List<LstEventoCostumbreParticipa>>(
+                          initialValue:
+                              dimensionSocioCulturalPueblosIndigenasBloc
+                                  .state.lstEventoCostumbreParticipa,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Seleccione al menos una opción.';
+                            } else if (value.length > 4) {
+                              return 'Máximo cuatro opciones.';
+                            }
+                            return null;
+                          },
+                          builder:
+                              (FormFieldState<List<LstEventoCostumbreParticipa>>
+                                  formState) {
+                            return Column(
+                              children: [
+                                Wrap(
+                                  children: List<Widget>.generate(
+                                    state.eventosCostumbresParticipaLoaded!
+                                        .length,
+                                    (index) {
                                       final e = state
                                               .eventosCostumbresParticipaLoaded![
                                           index];
@@ -351,29 +371,47 @@ class _DimensionSocioculturalPueblosIndigenasFormState
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Checkbox(
-                                              value: _selectedEventosCostumbresParticipa
-                                                  .any((element) =>
+                                            value: formState.value?.any((element) =>
+                                                    element
+                                                        .eventoCostumbreParticipaId ==
+                                                    e.eventoCostumbreParticipaId) ??
+                                                false,
+                                            onChanged: (bool? value) {
+                                              var selectedItems =
+                                                  formState.value ?? [];
+                                              if (e.eventoCostumbreParticipaId ==
+                                                  5) {
+                                                selectedItems = [
+                                                  LstEventoCostumbreParticipa(
+                                                      eventoCostumbreParticipaId:
+                                                          e.eventoCostumbreParticipaId)
+                                                ];
+                                              } else if (value == true) {
+                                                selectedItems.removeWhere(
+                                                    (element) =>
+                                                        element
+                                                            .eventoCostumbreParticipaId ==
+                                                        5);
+                                                selectedItems.add(
+                                                    LstEventoCostumbreParticipa(
+                                                        eventoCostumbreParticipaId:
+                                                            e.eventoCostumbreParticipaId));
+                                              } else {
+                                                selectedItems.removeWhere(
+                                                  (element) =>
                                                       element
                                                           .eventoCostumbreParticipaId ==
-                                                      e.eventoCostumbreParticipaId),
-                                              onChanged: (bool? value) {
-                                                setState(() {
-                                                  if (value!) {
-                                                    _selectedEventosCostumbresParticipa.add(
-                                                        LstEventoCostumbreParticipa(
-                                                            eventoCostumbreParticipaId:
-                                                                e.eventoCostumbreParticipaId));
-                                                  } else {
-                                                    _selectedEventosCostumbresParticipa
-                                                        .removeWhere(
-                                                      (element) =>
-                                                          element
-                                                              .eventoCostumbreParticipaId ==
-                                                          e.eventoCostumbreParticipaId,
-                                                    );
-                                                  }
-                                                });
-                                              }),
+                                                      e.eventoCostumbreParticipaId,
+                                                );
+                                              }
+                                              formState
+                                                  .didChange(selectedItems);
+                                              dimensionSocioCulturalPueblosIndigenasBloc
+                                                  .add(
+                                                      EventosCostumbresParticipaChanged(
+                                                          selectedItems));
+                                            },
+                                          ),
                                           Flexible(
                                             child: Text(
                                               e.descripcion,
@@ -387,205 +425,204 @@ class _DimensionSocioculturalPueblosIndigenasFormState
                                             const VerticalDivider(),
                                         ],
                                       );
-                                    })),
-                                    Text(
-                                      _validateEventosCostumbresParticipa() ??
-                                          '',
-                                      style: const TextStyle(color: Colors.red),
-                                    ),
-                                  ],
-                                );
-                              },
-                              validator: (_) =>
-                                  _validateEventosCostumbresParticipa(),
-                              onSaved:
-                                  (List<LstEventoCostumbreParticipa>? value) {
-                                dimensionSocioculturalPueblosIndigenasBloc.add(
-                                    EventosCostumbresParticipaChanged(value!));
-                              },
+                                    },
+                                  ),
+                                ),
+                                Text(
+                                  formState.errorText ?? '',
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              ],
                             );
-                          }
-                          return Container();
-                        },
-                      ),
-                      const Divider(),
-                      const Text(
-                        'Que costumbres se practican en las etapas del desarrollo humano',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                      const Divider(),
-                      BlocBuilder<CostumbrePracticaCubit,
-                          CostumbresPracticanState>(
-                        builder: (context, state) {
-                          if (state is CostumbresPracticanLoaded) {
-                            return DropdownButtonFormField<int>(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              value: _costumbrePracticaId,
-                              items: state.costumbresPracticanLoaded!
-                                  .map(
-                                    (costumbrePractica) =>
-                                        DropdownMenuItem<int>(
-                                      value:
-                                          costumbrePractica.costumbrePracticaId,
-                                      child:
-                                          Text(costumbrePractica.descripcion),
-                                    ),
-                                  )
-                                  .toList(),
-                              decoration: const InputDecoration(
-                                  labelText: 'Seleccione una opción',
-                                  border: OutlineInputBorder()),
-                              onChanged: (int? newValue) {
-                                setState(() {
-                                  _costumbrePracticaId = newValue;
-                                });
-                                dimensionSocioculturalPueblosIndigenasBloc
-                                    .add(CostumbrePracticaChanged(newValue!));
-                              },
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'Campo Requerido';
-                                }
-                                return null;
-                              },
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
-                      ),
-                    ],
+                          },
+                        );
+                      }
+                      return Container();
+                    },
                   ),
-              ],
-            ),
-          const Divider(),
-          const Text(
-            'En su Comunidad con que justicia se sanciona',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<SancionJusticiaCubit, SancionesJusticiaState>(
-            builder: (context, state) {
-              if (state is SancionesJusticiaLoaded) {
-                return DropdownButtonFormField<int>(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  value: _sancionJusticiaId,
-                  items: state.sancionesJusticiaLoaded!
-                      .map(
-                        (sancionJusticia) => DropdownMenuItem<int>(
-                          value: sancionJusticia.sancionJusticiaId,
-                          child: Text(sancionJusticia.descripcion),
-                        ),
-                      )
-                      .toList(),
-                  decoration: const InputDecoration(
-                      labelText: 'Seleccione una opción',
-                      border: OutlineInputBorder()),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _sancionJusticiaId = newValue!;
-                    });
-                    dimensionSocioculturalPueblosIndigenasBloc
-                        .add(SancionJusticiaChanged(newValue!));
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo Requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          const Divider(),
-          const Text(
-            'Su territorio cuenta con sitios sagrados',
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const Divider(),
-          BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
-            builder: (context, state) {
-              if (state is OpcionesSiNoLoaded) {
-                return FormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  initialValue: _sitiosSagradosId,
-                  builder: (FormFieldState<int> formstate) => Column(
-                    children: [
-                      Column(
-                          children: state.opcionesSiNoLoaded!
+                  const Divider(),
+                  const Text(
+                    'Que costumbres se practican en las etapas del desarrollo humano',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<CostumbrePracticaCubit, CostumbresPracticanState>(
+                    builder: (context, state) {
+                      if (state is CostumbresPracticanLoaded) {
+                        return DropdownButtonFormField<int>(
+                          isExpanded: true,
+                          value: _costumbrePracticaId,
+                          items: state.costumbresPracticanLoaded!
                               .map(
-                                (e) => RadioListTile(
-                                  title: Text(e.descripcion),
-                                  value: e.opcionId,
-                                  groupValue: _sitiosSagradosId,
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      _sitiosSagradosId = newValue!;
-                                    });
-
-                                    dimensionSocioculturalPueblosIndigenasBloc
-                                        .add(SitioSagradoChanged(newValue!));
-                                    formstate.didChange(newValue);
-                                  },
+                                (costumbrePractica) => DropdownMenuItem<int>(
+                                  value: costumbrePractica.costumbrePracticaId,
+                                  child: Text(costumbrePractica.descripcion),
                                 ),
                               )
-                              .toList()),
-                      formstate.hasError
-                          ? const Text(
-                              'Seleccione una opción',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container(),
-                    ],
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Seleccione una opción',
+                              border: OutlineInputBorder()),
+                          onChanged: (int? newValue) {
+                            setState(() {
+                              _costumbrePracticaId = newValue;
+                            });
+                            dimensionSocioCulturalPueblosIndigenasBloc
+                                .add(CostumbrePracticaChanged(newValue!));
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Campo Requerido';
+                            }
+                            return null;
+                          },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          if (_sitiosSagradosId == 1)
-            Column(
-              children: [
-                const Divider(),
-                const Text(
-                  'Su territorio cuenta con  sitios sagrados',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(),
-                TextFormField(
-                  controller: _cualesSitiosSagradosCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Cuáles',
-                    border: OutlineInputBorder(),
+                  const Divider(),
+                  const Text(
+                    'En su Comunidad con que justicia se sanciona',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Campo requerido';
-                    }
-                    return null;
-                  },
-                  onSaved: (String? newValue) {
-                    dimensionSocioculturalPueblosIndigenasBloc
-                        .add(CualesSitiosSagradosChanged(newValue!));
-                  },
-                ),
-              ],
+                  const Divider(),
+                  BlocBuilder<SancionJusticiaCubit, SancionesJusticiaState>(
+                    builder: (context, state) {
+                      if (state is SancionesJusticiaLoaded) {
+                        return DropdownButtonFormField<int>(
+                          value: _sancionJusticiaId,
+                          items: state.sancionesJusticiaLoaded!
+                              .map(
+                                (sancionJusticia) => DropdownMenuItem<int>(
+                                  value: sancionJusticia.sancionJusticiaId,
+                                  child: Text(sancionJusticia.descripcion),
+                                ),
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Seleccione una opción',
+                              border: OutlineInputBorder()),
+                          onChanged: (int? newValue) {
+                            setState(() {
+                              _sancionJusticiaId = newValue!;
+                            });
+                            dimensionSocioCulturalPueblosIndigenasBloc
+                                .add(SancionJusticiaChanged(newValue!));
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Campo Requerido';
+                            }
+                            return null;
+                          },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
+                ],
+              ),
+          ],
+        ),
+      const Divider(),
+      const Text(
+        'Su territorio cuenta con sitios sagrados',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+        builder: (context, state) {
+          if (state is OpcionesSiNoLoaded) {
+            return FormField(
+              initialValue: _sitiosSagradosId,
+              builder: (FormFieldState<int> formstate) => Column(
+                children: [
+                  Column(
+                      children: state.opcionesSiNoLoaded!
+                          .map(
+                            (e) => e.opcionId == 3
+                                ? Container()
+                                : RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.opcionId,
+                                    groupValue: _sitiosSagradosId,
+                                    onChanged: (int? newValue) {
+                                      if (newValue == 2) {
+                                        setState(() {
+                                          _cualesSitiosSagradosCtrl.text = '';
+                                        });
+                                        dimensionSocioCulturalPueblosIndigenasBloc
+                                            .add(
+                                                const CualesSitiosSagradosChanged(
+                                                    ''));
+                                      }
+                                      setState(() {
+                                        _sitiosSagradosId = newValue!;
+                                      });
+
+                                      dimensionSocioCulturalPueblosIndigenasBloc
+                                          .add(SitioSagradoChanged(newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
+                          )
+                          .toList()),
+                  formstate.hasError
+                      ? const Text(
+                          'Seleccione una opción',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Container(),
+                ],
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+      if (_sitiosSagradosId == 1)
+        Column(
+          children: [
+            const Divider(),
+            const Text(
+              'Su territorio cuenta con  sitios sagrados',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-        ]));
+            const Divider(),
+            TextFormField(
+              maxLines: 3,
+              controller: _cualesSitiosSagradosCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Cuáles',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Campo requerido';
+                }
+                return null;
+              },
+              onSaved: (String? newValue) {
+                dimensionSocioCulturalPueblosIndigenasBloc
+                    .add(CualesSitiosSagradosChanged(newValue!));
+              },
+            ),
+          ],
+        ),
+    ]);
   }
 }

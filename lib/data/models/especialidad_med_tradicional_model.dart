@@ -104,6 +104,6 @@ class EspecialidadMedTradAtencionSalud {
 
   Map<String, dynamic> toJson() => {
         "AtencionSalud_id": atencionSaludId,
-        "EnfermedadTradicional_id": especialidadMedTradId,
+        "EspecialidadMedTrad_id": especialidadMedTradId,
       };
 }

@@ -13,9 +13,9 @@ abstract class EventoCostumbreParticipaRepositoryDB {
 
   Future<Either<Failure, List<LstEventoCostumbreParticipa>>>
       getAsp6EventosCostumbresParticipaRepositoryDB(
-          int? dimensionSocioculturalPueblosIndigenasId);
+          int? dimensionSocioCulturalPueblosIndigenasId);
 
   Future<Either<Failure, int>> saveAsp6EventosCostumbresParticipaRepositoryDB(
-      int? dimensionSocioculturalPueblosIndigenasId,
+      int? dimensionSocioCulturalPueblosIndigenasId,
       List<LstEventoCostumbreParticipa> lstEventoCostumbreParticipa);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/ui/search/search_afiliados.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
+import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/grupo_familiar_form.dart';
@@ -19,6 +20,19 @@ class GrupoFamiliarPage extends StatefulWidget {
 }
 
 class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
+      context,
+    );
+
+    final afiliado = afiliadoPrefsBloc.state.afiliado!;
+    BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context)
+        .add(GetAfiliadosGrupoFamiliar(afiliado.familiaId!));
+  }
+
   @override
   Widget build(BuildContext context) {
     final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
@@ -46,13 +60,14 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
               BlocConsumer<AfiliadosGrupoFamiliarBloc,
                   AfiliadosGrupoFamiliarState>(
                 listener: (context, state) {
-                  if (state is AfiliadosGrupoFamiliarLoaded) {
+                  if (state is AfiliadosGrupoFamiliarSaved) {
                     CustomSnackBar.showSnackBar(
                         context, state.message, Colors.green);
                   }
                 },
                 builder: (context, state) {
                   if (state is AfiliadosGrupoFamiliarLoaded ||
+                      state is AfiliadosGrupoFamiliarSaved ||
                       state is GrupoFamiliarSubmissionSuccess) {
                     final afiliadosGrupoFamiliar =
                         state.afiliadosGrupoFamiliar!;

@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/ficha_entity.dart';
 import '../../../domain/repositories/ficha/ficha_repository.dart';
 import '../../datasources/remote/ficha_remote_ds.dart';
 
@@ -14,10 +13,9 @@ class FichaRepositoryImpl implements FichaRepository {
   FichaRepositoryImpl({required this.fichaRemoteDataSource});
 
   @override
-  Future<Either<Failure, FichaEntity>> createFichaRepository(
-      FichaEntity ficha) async {
+  Future<Either<Failure, String>> createFichaRepository() async {
     try {
-      final result = await fichaRemoteDataSource.createFicha(ficha);
+      final result = await fichaRemoteDataSource.createFicha();
 
       return Right(result);
     } on ServerFailure catch (e) {

@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import '../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
 
-DimensionSocioculturalPueblosIndigenasModel
-    dimensionSocioculturalPueblosIndigenasFromJson(String str) =>
-        DimensionSocioculturalPueblosIndigenasModel.fromJson(json.decode(str));
+DimensionSocioCulturalPueblosIndigenasModel
+    dimensionSocioCulturalPueblosIndigenasFromJson(String str) =>
+        DimensionSocioCulturalPueblosIndigenasModel.fromJson(json.decode(str));
 
-class DimensionSocioculturalPueblosIndigenasModel
-    extends DimensionSocioculturalPueblosIndigenasEntity {
-  DimensionSocioculturalPueblosIndigenasModel({
-    int? dimensionSocioculturalPueblosIndigenasId,
+class DimensionSocioCulturalPueblosIndigenasModel
+    extends DimensionSocioCulturalPueblosIndigenasEntity {
+  DimensionSocioCulturalPueblosIndigenasModel({
+    int? dimSocioCulturalPueblosIndigenasId,
     int? afiliadoId,
     int? familiaId,
     int? religionProfesaId,
@@ -21,8 +21,8 @@ class DimensionSocioculturalPueblosIndigenasModel
     int? sitiosSagradosId,
     String? cualesSitiosSagrados,
   }) : super(
-          dimensionSocioculturalPueblosIndigenasId:
-              dimensionSocioculturalPueblosIndigenasId,
+          dimSocioCulturalPueblosIndigenasId:
+              dimSocioCulturalPueblosIndigenasId,
           afiliadoId: afiliadoId,
           familiaId: familiaId,
           religionProfesaId: religionProfesaId,
@@ -35,11 +35,11 @@ class DimensionSocioculturalPueblosIndigenasModel
           cualesSitiosSagrados: cualesSitiosSagrados,
         );
 
-  factory DimensionSocioculturalPueblosIndigenasModel.fromJson(
+  factory DimensionSocioCulturalPueblosIndigenasModel.fromJson(
           Map<String, dynamic> json) =>
-      DimensionSocioculturalPueblosIndigenasModel(
-        dimensionSocioculturalPueblosIndigenasId:
-            json["DimensionSocioculturalPuebloIndigena_id"],
+      DimensionSocioCulturalPueblosIndigenasModel(
+        dimSocioCulturalPueblosIndigenasId:
+            json["DimSocioCulturalPueblosIndigenas_id"],
         afiliadoId: json["Afiliado_id"],
         familiaId: json["Familia_id"],
         religionProfesaId: json["ReligionProfesa_id"],

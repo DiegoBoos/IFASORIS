@@ -5,7 +5,7 @@ import '../../../services/connection_sqlite_service.dart';
 
 abstract class AfiliadoLocalDataSource {
   Future<List<AfiliadoModel>> getAfiliados(String query);
-  Future<AfiliadoModel?> afiliadoHasFicha(int afiliadoId);
+  Future<AfiliadoModel?> afiliadoTieneFicha(int afiliadoId);
   Future<int> saveAfiliado(AfiliadoEntity afiliado);
 }
 
@@ -23,7 +23,7 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
   }
 
   @override
-  Future<AfiliadoModel?> afiliadoHasFicha(int afiliadoId) async {
+  Future<AfiliadoModel?> afiliadoTieneFicha(int afiliadoId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.rawQuery('''SELECT * FROM Afiliado 
            JOIN Familia ON Afiliado.Afiliado_id = Familia.Afiliado_id 

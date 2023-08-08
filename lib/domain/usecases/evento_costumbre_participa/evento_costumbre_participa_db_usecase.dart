@@ -23,15 +23,15 @@ class EventoCostumbreParticipaUsecaseDB {
 
   Future<Either<Failure, List<LstEventoCostumbreParticipa>>>
       getAsp6EventosCostumbresParticipaUsecaseDB(
-          int? dimensionSocioculturalPueblosIndigenasId) {
+          int? dimensionSocioCulturalPueblosIndigenasId) {
     return repositoryDB.getAsp6EventosCostumbresParticipaRepositoryDB(
-        dimensionSocioculturalPueblosIndigenasId);
+        dimensionSocioCulturalPueblosIndigenasId);
   }
 
   Future<Either<Failure, int>> saveAsp6EventosCostumbresParticipaUsecaseDB(
-      int? dimensionSocioculturalPueblosIndigenasId,
+      int? dimensionSocioCulturalPueblosIndigenasId,
       List<LstEventoCostumbreParticipa> lstEventoCostumbreParticipa) {
     return repositoryDB.saveAsp6EventosCostumbresParticipaRepositoryDB(
-        dimensionSocioculturalPueblosIndigenasId, lstEventoCostumbreParticipa);
+        dimensionSocioCulturalPueblosIndigenasId, lstEventoCostumbreParticipa);
   }
 }

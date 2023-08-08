@@ -11,6 +11,8 @@ abstract class AfiliadosGrupoFamiliarState extends Equatable {
 
 class AfiliadosGrupoFamiliarInitial extends AfiliadosGrupoFamiliarState {}
 
+class AfiliadosGrupoFamiliarEmptied extends AfiliadosGrupoFamiliarState {}
+
 class GrupoFamiliarSubmissionSuccess extends AfiliadosGrupoFamiliarState {
   final List<GrupoFamiliarEntity>? afiliadosGrupoFamiliarSuccess;
 
@@ -24,8 +26,6 @@ class GrupoFamiliarSubmissionFailed extends AfiliadosGrupoFamiliarState {
   const GrupoFamiliarSubmissionFailed(this.message);
 }
 
-class AfiliadosGrupoFamiliarEmpty extends AfiliadosGrupoFamiliarState {}
-
 class AfiliadosGrupoFamiliarLoaded extends AfiliadosGrupoFamiliarState {
   final List<GrupoFamiliarEntity>? afiliadosGrupoFamiliarLoaded;
   final String message;
@@ -33,6 +33,15 @@ class AfiliadosGrupoFamiliarLoaded extends AfiliadosGrupoFamiliarState {
   const AfiliadosGrupoFamiliarLoaded(
       {this.afiliadosGrupoFamiliarLoaded, this.message = ''})
       : super(afiliadosGrupoFamiliar: afiliadosGrupoFamiliarLoaded);
+}
+
+class AfiliadosGrupoFamiliarSaved extends AfiliadosGrupoFamiliarState {
+  final List<GrupoFamiliarEntity>? afiliadosGrupoFamiliarSaved;
+  final String message;
+
+  const AfiliadosGrupoFamiliarSaved(
+      {this.afiliadosGrupoFamiliarSaved, this.message = ''})
+      : super(afiliadosGrupoFamiliar: afiliadosGrupoFamiliarSaved);
 }
 
 class AfiliadosGrupoFamiliarError extends AfiliadosGrupoFamiliarState {

@@ -15,54 +15,53 @@ import '../../../data/models/nombre_med_tradicional_model.dart';
 import '../../../data/models/tuberculo_platano_model.dart';
 import '../../../data/models/verdura_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
-import '../../../domain/usecases/cereal_by_dpto/cereal_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/cereal/cereal_db_usecase.dart';
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_db_usecase.dart';
-import '../../../domain/usecases/dificultad_acceso_med_tradicional_by_dpto/dificultad_acceso_med_tradicional_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_db_usecase.dart';
 import '../../../domain/usecases/dim_ubicacion/dim_ubicacion_db_usecase.dart';
-import '../../../domain/usecases/especialidad_med_tradicional_by_dpto/especialidad_med_tradicional_by_dpto_db_usecase.dart';
-import '../../../domain/usecases/especie_animal_by_dpto/especie_animal_by_dpto_db_usecase.dart';
-import '../../../domain/usecases/fruto_by_dpto/fruto_by_dpto_db_usecase.dart';
-import '../../../domain/usecases/hortaliza_by_dpto/hortaliza_by_dpto_db_usecase.dart';
-import '../../../domain/usecases/leguminosa_by_dpto/leguminosa_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/especialidad_med_tradicional/especialidad_med_tradicional_db_usecase.dart';
+import '../../../domain/usecases/especie_animal/especie_animal_db_usecase.dart';
+import '../../../domain/usecases/fruto/fruto_db_usecase.dart';
+import '../../../domain/usecases/hortaliza/hortaliza_db_usecase.dart';
+import '../../../domain/usecases/leguminosa/leguminosa_db_usecase.dart';
 import '../../../domain/usecases/medio_comunicacion/medio_comunicacion_db_usecase.dart';
-import '../../../domain/usecases/medio_utiliza_med_tradicional_by_dpto/medio_utiliza_med_tradicional_by_dpto_db_usecase.dart';
-import '../../../domain/usecases/tuberculo_platano_by_dpto/tuberculo_platano_by_dpto_db_usecase.dart';
-import '../../../domain/usecases/verdura_by_dpto/verdura_by_dpto_db_usecase.dart';
+import '../../../domain/usecases/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_db_usecase.dart';
+import '../../../domain/usecases/tuberculo_platano/tuberculo_platano_db_usecase.dart';
+import '../../../domain/usecases/verdura/verdura_db_usecase.dart';
 
 part 'dim_ubicacion_event.dart';
 part 'dim_ubicacion_state.dart';
 
 class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
   final DimUbicacionUsecaseDB dimUbicacionUsecaseDB;
-  final DificultadAccesoMedTradicionalByDptoUsecaseDB
-      dificultadAccesoMedTradicionalByDptoUsecaseDB;
-  final CerealByDptoUsecaseDB cerealByDptoUsecaseDB;
+  final DificultadAccesoMedTradicionalUsecaseDB
+      dificultadAccesoMedTradicionalUsecaseDB;
+  final CerealUsecaseDB cerealUsecaseDB;
   final DificultadAccesoCAUsecaseDB dificultadAccesoCAUsecaseDB;
   final EspecialidadMedTradicionalUsecaseDB especialidadMedTradicionalUsecaseDB;
-  final EspecieAnimalByDptoUsecaseDB especieAnimalByDptoUsecaseDB;
-  final FrutoByDptoUsecaseDB frutoByDptoUsecaseDB;
-  final HortalizaByDptoUsecaseDB hortalizaByDptoUsecaseDB;
-  final LeguminosaByDptoUsecaseDB leguminosaByDptoUsecaseDB;
+  final EspecieAnimalUsecaseDB especieAnimalUsecaseDB;
+  final FrutoUsecaseDB frutoUsecaseDB;
+  final HortalizaUsecaseDB hortalizaUsecaseDB;
+  final LeguminosaUsecaseDB leguminosaUsecaseDB;
   final MedioComunicacionUsecaseDB medioComunicacionUsecaseDB;
-  final MedioUtilizaMedTradicionalByDptoUsecaseDB
-      medioUtilizaMedTradicionalByDptoUsecaseDB;
-  final TuberculoPlatanoByDptoUsecaseDB tuberculoPlatanoByDptoUsecaseDB;
-  final VerduraByDptoUsecaseDB verduraByDptoUsecaseDB;
+  final MedioUtilizaMedTradicionalUsecaseDB medioUtilizaMedTradicionalUsecaseDB;
+  final TuberculoPlatanoUsecaseDB tuberculoPlatanoUsecaseDB;
+  final VerduraUsecaseDB verduraUsecaseDB;
 
   DimUbicacionBloc({
     required this.dimUbicacionUsecaseDB,
-    required this.dificultadAccesoMedTradicionalByDptoUsecaseDB,
-    required this.cerealByDptoUsecaseDB,
+    required this.dificultadAccesoMedTradicionalUsecaseDB,
+    required this.cerealUsecaseDB,
     required this.dificultadAccesoCAUsecaseDB,
     required this.especialidadMedTradicionalUsecaseDB,
-    required this.especieAnimalByDptoUsecaseDB,
-    required this.frutoByDptoUsecaseDB,
-    required this.hortalizaByDptoUsecaseDB,
-    required this.leguminosaByDptoUsecaseDB,
+    required this.especieAnimalUsecaseDB,
+    required this.frutoUsecaseDB,
+    required this.hortalizaUsecaseDB,
+    required this.leguminosaUsecaseDB,
     required this.medioComunicacionUsecaseDB,
-    required this.medioUtilizaMedTradicionalByDptoUsecaseDB,
-    required this.tuberculoPlatanoByDptoUsecaseDB,
-    required this.verduraByDptoUsecaseDB,
+    required this.medioUtilizaMedTradicionalUsecaseDB,
+    required this.tuberculoPlatanoUsecaseDB,
+    required this.verduraUsecaseDB,
   }) : super(initObject()) {
     on<DimUbicacionInit>((event, emit) {
       emit(initObject());
@@ -75,7 +74,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
         emit(state.copyWith(
             formStatus:
                 DimUbicacionSubmissionFailed(failure.properties.first)));
-      }, (data) => saveUbicacionAccesoMedTradicional(data));
+      }, (data) async => await saveUbicacionAccesoMedTradicional(data));
     });
 
     on<GetDimUbicacion>((event, emit) async {
@@ -87,10 +86,181 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
                   DimUbicacionSubmissionFailed(failure.properties.first))),
           (data) {
         if (data != null) {
-          emit(data.copyWith(formStatus: DimUbicacionFormLoaded()));
+          emit(data);
+          add(GetDificultadesAcceso(data.ubicacionId));
         } else {
           emit(state.copyWith(formStatus: DimUbicacionFormEmpty()));
         }
+      });
+    });
+
+    on<GetDificultadesAcceso>((event, emit) async {
+      final result = await dificultadAccesoCAUsecaseDB
+          .getUbicacionDificultadesAccesoUsecaseDB(event.ubicacionId);
+      result.fold(
+          (failure) => emit(state.copyWith(
+              formStatus:
+                  DimUbicacionSubmissionFailed(failure.properties.first))),
+          (data) {
+        emit(state.copyWith(lstDificultadAccesoAtencion: data));
+        add(GetEspecialidadesMedTradicional(event.ubicacionId));
+      });
+    });
+
+    on<GetEspecialidadesMedTradicional>((event, emit) async {
+      final result = await especialidadMedTradicionalUsecaseDB
+          .getUbicacionEspecialidadesMedTradicionalUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstEspMedTradicional: data));
+        add(GetNombresMedTrad(event.ubicacionId));
+      });
+    });
+
+    on<GetNombresMedTrad>((event, emit) async {
+      final result = await especialidadMedTradicionalUsecaseDB
+          .getUbicacionNombresMedTradicionalUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstNombreMedTradicional: data));
+        add(GetMediosUtilizaMedTradicional(event.ubicacionId));
+      });
+    });
+
+    on<GetMediosUtilizaMedTradicional>((event, emit) async {
+      final result = await medioUtilizaMedTradicionalUsecaseDB
+          .getUbicacionMediosUtilizaMedTradicionalUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstMediosMedTradicional: data));
+        add(GetDificultadesAccesoMedTradicional(event.ubicacionId));
+      });
+    });
+
+    on<GetDificultadesAccesoMedTradicional>((event, emit) async {
+      final result = await dificultadAccesoMedTradicionalUsecaseDB
+          .getUbicacionDificultadesAccesoMedTradicionalUsecaseDB(
+              event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstDificultadAccesoMedTradicional: data));
+        add(GetTuberculosPlatanos(event.ubicacionId));
+      });
+    });
+
+    on<GetTuberculosPlatanos>((event, emit) async {
+      final result = await tuberculoPlatanoUsecaseDB
+          .getUbicacionTuberculosPlatanosUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstTuberculos: data));
+        add(GetLeguminosas(event.ubicacionId));
+      });
+    });
+
+    on<GetLeguminosas>((event, emit) async {
+      final result = await leguminosaUsecaseDB
+          .getUbicacionLeguminosasUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstLeguminosas: data));
+        add(GetHortalizas(event.ubicacionId));
+      });
+    });
+
+    on<GetHortalizas>((event, emit) async {
+      final result = await hortalizaUsecaseDB
+          .getUbicacionHortalizasUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstHortalizas: data));
+        add(GetVerduras(event.ubicacionId));
+      });
+    });
+
+    on<GetVerduras>((event, emit) async {
+      final result = await verduraUsecaseDB
+          .getUbicacionVerdurasUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstVerduras: data));
+        add(GetFrutos(event.ubicacionId));
+      });
+    });
+
+    on<GetFrutos>((event, emit) async {
+      final result =
+          await frutoUsecaseDB.getUbicacionFrutosUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstFrutos: data));
+        add(GetCereales(event.ubicacionId));
+      });
+    });
+
+    on<GetCereales>((event, emit) async {
+      final result = await cerealUsecaseDB
+          .getUbicacionCerealesUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstCereales: data));
+        add(GetEspeciesAnimales(event.ubicacionId));
+      });
+    });
+
+    on<GetEspeciesAnimales>((event, emit) async {
+      final result = await especieAnimalUsecaseDB
+          .getUbicacionEspeciesAnimalesUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstAnimalCria: data));
+        add(GetMediosComunicacion(event.ubicacionId));
+      });
+    });
+
+    on<GetMediosComunicacion>((event, emit) async {
+      final result = await medioComunicacionUsecaseDB
+          .getUbicacionMediosComunicacionUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(
+            lstMediosComunica: data, formStatus: DimUbicacionFormLoaded()));
       });
     });
 
@@ -204,112 +374,114 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
   }
 
-  void saveUbicacionAccesoMedTradicional(int ubicacionId) async {
-    final result = await dificultadAccesoMedTradicionalByDptoUsecaseDB
+  Future<void> saveUbicacionAccesoMedTradicional(int ubicacionId) async {
+    final result = await dificultadAccesoMedTradicionalUsecaseDB
         .saveUbicacionAccesoMedTradicionalUsecaseDB(
             ubicacionId, state.lstDificultadAccesoMedTradicional!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionCereales(ubicacionId));
+    }, (data) async => await saveUbicacionCereales(ubicacionId));
   }
 
-  void saveUbicacionCereales(int ubicacionId) async {
-    final result = await cerealByDptoUsecaseDB.saveUbicacionCerealesUsecaseDB(
+  Future<void> saveUbicacionCereales(int ubicacionId) async {
+    final result = await cerealUsecaseDB.saveUbicacionCerealesUsecaseDB(
         ubicacionId, state.lstCereales!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionDificultadAcceso(ubicacionId));
+    }, (data) async => await saveUbicacionDificultadAcceso(ubicacionId));
   }
 
-  void saveUbicacionDificultadAcceso(int ubicacionId) async {
+  Future<void> saveUbicacionDificultadAcceso(int ubicacionId) async {
     final result = await dificultadAccesoCAUsecaseDB
         .saveUbicacionDificultadesAccesoUsecaseDB(
             ubicacionId, state.lstDificultadAccesoAtencion!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionEspecialidadMedTradicional(ubicacionId));
+    }, (data) async {
+      await saveUbicacionEspecialidadMedTradicional(ubicacionId);
+    });
   }
 
-  void saveUbicacionEspecialidadMedTradicional(int ubicacionId) async {
+  Future<void> saveUbicacionEspecialidadMedTradicional(int ubicacionId) async {
     final result = await especialidadMedTradicionalUsecaseDB
         .saveUbicacionEspecialidadMedTradicionalUsecaseDB(
             ubicacionId, state.lstEspMedTradicional!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionEspecieAnimalesCria(ubicacionId));
+    }, (data) async => await saveUbicacionEspecieAnimalesCria(ubicacionId));
   }
 
-  void saveUbicacionEspecieAnimalesCria(int ubicacionId) async {
-    final result = await especieAnimalByDptoUsecaseDB
-        .saveUbicacionEspecieAnimalesCriaUsecaseDB(
+  Future<void> saveUbicacionEspecieAnimalesCria(int ubicacionId) async {
+    final result =
+        await especieAnimalUsecaseDB.saveUbicacionEspecieAnimalesCriaUsecaseDB(
             ubicacionId, state.lstAnimalCria!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionFrutos(ubicacionId));
+    }, (data) async => await saveUbicacionFrutos(ubicacionId));
   }
 
-  void saveUbicacionFrutos(int ubicacionId) async {
-    final result = await frutoByDptoUsecaseDB.saveUbicacionFrutosUsecaseDB(
+  Future<void> saveUbicacionFrutos(int ubicacionId) async {
+    final result = await frutoUsecaseDB.saveUbicacionFrutosUsecaseDB(
         ubicacionId, state.lstFrutos!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionHortalizas(ubicacionId));
+    }, (data) async => await saveUbicacionHortalizas(ubicacionId));
   }
 
-  void saveUbicacionHortalizas(int ubicacionId) async {
-    final result = await hortalizaByDptoUsecaseDB
-        .saveUbicacionHortalizasUsecaseDB(ubicacionId, state.lstHortalizas!);
+  Future<void> saveUbicacionHortalizas(int ubicacionId) async {
+    final result = await hortalizaUsecaseDB.saveUbicacionHortalizasUsecaseDB(
+        ubicacionId, state.lstHortalizas!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionLeguminosas(ubicacionId));
+    }, (data) async => await saveUbicacionLeguminosas(ubicacionId));
   }
 
-  void saveUbicacionLeguminosas(int ubicacionId) async {
-    final result = await leguminosaByDptoUsecaseDB
-        .saveUbicacionLeguminosasUsecaseDB(ubicacionId, state.lstLeguminosas!);
+  Future<void> saveUbicacionLeguminosas(int ubicacionId) async {
+    final result = await leguminosaUsecaseDB.saveUbicacionLeguminosasUsecaseDB(
+        ubicacionId, state.lstLeguminosas!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionMediosComunicacion(ubicacionId));
+    }, (data) async => await saveUbicacionMediosComunicacion(ubicacionId));
   }
 
-  void saveUbicacionMediosComunicacion(int ubicacionId) async {
+  Future<void> saveUbicacionMediosComunicacion(int ubicacionId) async {
     final result = await medioComunicacionUsecaseDB
         .saveUbicacionMediosComunicacionUsecaseDB(
             ubicacionId, state.lstMediosComunica!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionMediosMedTradicional(ubicacionId));
+    }, (data) async => await saveUbicacionMediosMedTradicional(ubicacionId));
   }
 
-  void saveUbicacionMediosMedTradicional(int ubicacionId) async {
-    final result = await medioUtilizaMedTradicionalByDptoUsecaseDB
+  Future<void> saveUbicacionMediosMedTradicional(int ubicacionId) async {
+    final result = await medioUtilizaMedTradicionalUsecaseDB
         .saveUbicacionMediosMedTradicionalUsecaseDB(
             ubicacionId, state.lstMediosMedTradicional!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionNombresMedTradicional(ubicacionId));
+    }, (data) async => await saveUbicacionNombresMedTradicional(ubicacionId));
   }
 
-  void saveUbicacionNombresMedTradicional(int ubicacionId) async {
+  Future<void> saveUbicacionNombresMedTradicional(int ubicacionId) async {
     final result = await especialidadMedTradicionalUsecaseDB
         .saveUbicacionNombresMedTradicionalUsecaseDB(
             ubicacionId, state.lstNombreMedTradicional!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionTuberculosPlatanos(ubicacionId));
+    }, (data) async => await saveUbicacionTuberculosPlatanos(ubicacionId));
   }
 
-  void saveUbicacionTuberculosPlatanos(int ubicacionId) async {
-    final result = await tuberculoPlatanoByDptoUsecaseDB
+  Future<void> saveUbicacionTuberculosPlatanos(int ubicacionId) async {
+    final result = await tuberculoPlatanoUsecaseDB
         .saveUbicacionTuberculosPlatanosUsecaseDB(
             ubicacionId, state.lstTuberculos!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
-    }, (data) => saveUbicacionVerduras(ubicacionId));
+    }, (data) async => await saveUbicacionVerduras(ubicacionId));
   }
 
-  void saveUbicacionVerduras(int ubicacionId) async {
-    final result = await verduraByDptoUsecaseDB.saveUbicacionVerdurasUsecaseDB(
+  Future<void> saveUbicacionVerduras(int ubicacionId) async {
+    final result = await verduraUsecaseDB.saveUbicacionVerdurasUsecaseDB(
         ubicacionId, state.lstVerduras!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));

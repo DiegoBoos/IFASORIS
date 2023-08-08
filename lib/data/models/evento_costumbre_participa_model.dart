@@ -17,7 +17,7 @@ class EventoCostumbreParticipaModel extends EventoCostumbreParticipaEntity {
 
   factory EventoCostumbreParticipaModel.fromJson(Map<String, dynamic> json) =>
       EventoCostumbreParticipaModel(
-        eventoCostumbreParticipaId: json["EventoCostumbreParticipa_id"],
+        eventoCostumbreParticipaId: json["EventoCostumbreParticipo_id"],
         descripcion: json["Descripcion"],
       );
 }

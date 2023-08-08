@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../../../domain/entities/servicio_solicitado_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
 import '../../models/servicio_solicitado_model.dart';
@@ -9,6 +11,9 @@ abstract class ServicioSolicitadoLocalDataSource {
 
   Future<List<LstServicioSolicitado>> getLstServiciosSolicitados(
       int? cuidadoSaludCondRiesgoId);
+
+  Future<int> saveServiciosSolicitados(int cuidadoSaludCondRiesgoId,
+      List<LstServicioSolicitado> lstServiciosSolicitados);
 }
 
 class ServicioSolicitadoLocalDataSourceImpl
@@ -45,5 +50,32 @@ class ServicioSolicitadoLocalDataSourceImpl
         res.map((m) => LstServicioSolicitado.fromJson(m))).toList();
 
     return result;
+  }
+
+  @override
+  Future<int> saveServiciosSolicitados(int cuidadoSaludCondRiesgoId,
+      List<LstServicioSolicitado> lstServiciosSolicitados) async {
+    final db = await ConnectionSQLiteService.db;
+
+    Batch batch = db.batch();
+    batch.delete('Asp5_CuidadoSaludCondRiesgoServiciosSolicita',
+        where: 'CuidadoSaludCondRiesgo_id = ?',
+        whereArgs: [cuidadoSaludCondRiesgoId]);
+
+    final cuidadoSaludCondRiesgoServiciosSolicitados = lstServiciosSolicitados
+        .map((item) => CuidadoSaludCondRiesgoServiciosSolicitados(
+            servicioSolicitadoId: item.servicioSolicitadoId,
+            cuidadoSaludCondRiesgoId: cuidadoSaludCondRiesgoId))
+        .toList();
+
+    for (final cuidadoSaludCondRiesgoServicioSolicitado
+        in cuidadoSaludCondRiesgoServiciosSolicitados) {
+      batch.insert('Asp5_CuidadoSaludCondRiesgoServiciosSolicita',
+          cuidadoSaludCondRiesgoServicioSolicitado.toJson());
+    }
+
+    final res = await batch.commit();
+
+    return res.length;
   }
 }

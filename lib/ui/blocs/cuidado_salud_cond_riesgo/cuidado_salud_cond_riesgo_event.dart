@@ -9,11 +9,7 @@ abstract class CuidadoSaludCondRiesgoEvent extends Equatable {
 
 class CuidadoSaludCondRiesgoInit extends CuidadoSaludCondRiesgoEvent {}
 
-class CuidadoSaludCondRiesgoSubmitted extends CuidadoSaludCondRiesgoEvent {
-  final CuidadoSaludCondRiesgoEntity cuidadoSaludCondRiesgo;
-
-  const CuidadoSaludCondRiesgoSubmitted(this.cuidadoSaludCondRiesgo);
-}
+class CuidadoSaludCondRiesgoSubmitted extends CuidadoSaludCondRiesgoEvent {}
 
 class GetCuidadoSaludCondRiesgo extends CuidadoSaludCondRiesgoEvent {
   final int afiliadoId;
@@ -23,9 +19,10 @@ class GetCuidadoSaludCondRiesgo extends CuidadoSaludCondRiesgoEvent {
 
 class CuidadoSaludCondRiesgoFormSubmissionSuccess
     extends CuidadoSaludCondRiesgoEvent {
-  final int ubicacionId;
+  final int cuidadoSaludCondRiesgoId;
 
-  const CuidadoSaludCondRiesgoFormSubmissionSuccess(this.ubicacionId);
+  const CuidadoSaludCondRiesgoFormSubmissionSuccess(
+      this.cuidadoSaludCondRiesgoId);
 }
 
 class CuidadoSaludCondRiesgoFormSubmissionFailed
@@ -119,14 +116,26 @@ class ConductaSeguirChanged extends CuidadoSaludCondRiesgoEvent {
   const ConductaSeguirChanged(this.conductaSeguirId);
 }
 
-class NombresEnfermedadesChanged extends CuidadoSaludCondRiesgoEvent {
-  final List<LstNombreEnfermedad> lstNombresEnfermedades;
+class GetServiciosSolicitados extends CuidadoSaludCondRiesgoEvent {
+  final int? cuidadoSaludCondRiesgoId;
 
-  const NombresEnfermedadesChanged(this.lstNombresEnfermedades);
+  const GetServiciosSolicitados(this.cuidadoSaludCondRiesgoId);
 }
 
 class ServiciosSolicitadosChanged extends CuidadoSaludCondRiesgoEvent {
   final List<LstServicioSolicitado> lstServiciosSolicitados;
 
   const ServiciosSolicitadosChanged(this.lstServiciosSolicitados);
+}
+
+class GetNombresEnfermedades extends CuidadoSaludCondRiesgoEvent {
+  final int? cuidadoSaludCondRiesgoId;
+
+  const GetNombresEnfermedades(this.cuidadoSaludCondRiesgoId);
+}
+
+class NombresEnfermedadesChanged extends CuidadoSaludCondRiesgoEvent {
+  final List<LstNombreEnfermedad> lstNombresEnfermedades;
+
+  const NombresEnfermedadesChanged(this.lstNombresEnfermedades);
 }

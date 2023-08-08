@@ -20,17 +20,7 @@ class AccesoCAForm extends StatefulWidget {
 class AccesoCAFormState extends State<AccesoCAForm> {
   int? _tiempoTardaId;
   int? _medioUtilizaId;
-  List<LstDificultadAccesoAtencion> _selectedDificultadesAccesoCA = [];
   int? _costoDesplazamientoId;
-
-  String? _validateDificultadesAccesoCA() {
-    if (_selectedDificultadesAccesoCA.isEmpty) {
-      return 'Seleccione al menos una opción.';
-    } else if (_selectedDificultadesAccesoCA.length > 3) {
-      return 'Máximo tres opciones.';
-    }
-    return null;
-  }
 
   @override
   void initState() {
@@ -41,19 +31,6 @@ class AccesoCAFormState extends State<AccesoCAForm> {
       _medioUtilizaId = widget.dimUbicacion?.medioUtilizaId;
       _costoDesplazamientoId = widget.dimUbicacion?.costoDesplazamientoId;
     });
-    getOptions();
-  }
-
-  Future<void> getOptions() async {
-    final dificultadAccesoCACubit = BlocProvider.of<DificultadAccesoCACubit>(
-      context,
-    );
-    _selectedDificultadesAccesoCA = await dificultadAccesoCACubit
-        .getUbicacionDificultadesAccesoCADB(widget.dimUbicacion?.ubicacionId);
-
-    if (mounted) {
-      setState(() {});
-    }
   }
 
   @override
@@ -74,7 +51,6 @@ class AccesoCAFormState extends State<AccesoCAForm> {
           builder: (context, state) {
             if (state is TiemposTardaCALoaded) {
               return DropdownButtonFormField<int>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _tiempoTardaId,
                 items: state.tiemposTardaCALoaded!
                     .map(
@@ -116,7 +92,6 @@ class AccesoCAFormState extends State<AccesoCAForm> {
           builder: (context, state) {
             if (state is MediosUtilizaCALoaded) {
               return DropdownButtonFormField<int>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _medioUtilizaId,
                 items: state.mediosUtilizaCALoaded!
                     .map(
@@ -157,73 +132,86 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         BlocBuilder<DificultadAccesoCACubit, DificultadesAccesoCAState>(
           builder: (context, state) {
             if (state is DificultadesAccesoCALoaded) {
-              return FormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                initialValue: _selectedDificultadesAccesoCA,
+              return FormField<List<LstDificultadAccesoAtencion>>(
+                initialValue:
+                    dimUbicacionBloc.state.lstDificultadAccesoAtencion,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Seleccione al menos una opción.';
+                  } else if (value.length > 3) {
+                    return 'Máximo tres opciones.';
+                  }
+                  return null;
+                },
                 builder: (FormFieldState<List<LstDificultadAccesoAtencion>>
-                    formstate) {
+                    formState) {
                   return Column(
                     children: [
                       Wrap(
-                          children: List<Widget>.generate(
-                              state.dificultadesAccesoCALoaded!.length,
-                              (index) {
-                        final e = state.dificultadesAccesoCALoaded![index];
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                                value: _selectedDificultadesAccesoCA.any(
-                                    (element) =>
-                                        element.dificultaAccesoId ==
-                                        e.dificultaAccesoId),
-                                onChanged: (bool? value) {
-                                  setState(() {
+                        children: List<Widget>.generate(
+                          state.dificultadesAccesoCALoaded!.length,
+                          (index) {
+                            final e = state.dificultadesAccesoCALoaded![index];
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Checkbox(
+                                  value: formState.value?.any((element) =>
+                                          element.dificultaAccesoId ==
+                                          e.dificultaAccesoId) ??
+                                      false,
+                                  onChanged: (bool? value) {
+                                    var selectedItems =
+                                        List<LstDificultadAccesoAtencion>.from(
+                                            formState.value ?? []);
+
                                     if (e.dificultaAccesoId == 5) {
-                                      _selectedDificultadesAccesoCA = [
+                                      selectedItems = [
                                         LstDificultadAccesoAtencion(
                                             dificultaAccesoId:
                                                 e.dificultaAccesoId)
                                       ];
-                                    } else if (value!) {
-                                      _selectedDificultadesAccesoCA.removeWhere(
-                                          ((element) =>
-                                              element.dificultaAccesoId == 5));
-                                      _selectedDificultadesAccesoCA.add(
+                                    } else if (value == true) {
+                                      selectedItems.removeWhere(((element) =>
+                                          element.dificultaAccesoId == 5));
+                                      selectedItems.add(
                                           LstDificultadAccesoAtencion(
                                               dificultaAccesoId:
                                                   e.dificultaAccesoId));
                                     } else {
-                                      _selectedDificultadesAccesoCA.removeWhere(
+                                      selectedItems.removeWhere(
                                         (element) =>
                                             element.dificultaAccesoId ==
                                             e.dificultaAccesoId,
                                       );
                                     }
-                                  });
-                                }),
-                            Flexible(
-                              child: Text(
-                                e.descripcion,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (index <
-                                state.dificultadesAccesoCALoaded!.length - 1)
-                              const VerticalDivider(),
-                          ],
-                        );
-                      })),
+                                    formState.didChange(selectedItems);
+                                    dimUbicacionBloc.add(
+                                        DificultadesAccesoCAChanged(
+                                            selectedItems));
+                                  },
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    e.descripcion,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (index <
+                                    state.dificultadesAccesoCALoaded!.length -
+                                        1)
+                                  const VerticalDivider(),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                       Text(
-                        _validateDificultadesAccesoCA() ?? '',
+                        formState.errorText ?? '',
                         style: const TextStyle(color: Colors.red),
                       ),
                     ],
                   );
-                },
-                validator: (_) => _validateDificultadesAccesoCA(),
-                onSaved: (List<LstDificultadAccesoAtencion>? value) {
-                  dimUbicacionBloc.add(DificultadesAccesoCAChanged(value!));
                 },
               );
             }
@@ -235,7 +223,6 @@ class AccesoCAFormState extends State<AccesoCAForm> {
           builder: (context, state) {
             if (state is CostosDesplazamientoLoaded) {
               return DropdownButtonFormField<int>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 value: _costoDesplazamientoId,
                 items: state.costosDesplazamientoLoaded!
                     .map(

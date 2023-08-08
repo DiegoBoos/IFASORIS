@@ -29,7 +29,7 @@ class CuidadoSaludCondRiesgoLocalDataSourceImpl
       return res;
     } catch (e) {
       throw const DatabaseFailure(
-          ['Error al guardar estilo de vida saludable']);
+          ['Error al guardar cuidado salud cond riesgo']);
     }
   }
 
