@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/utils/custom_snack_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/medio_comunicacion_model.dart';
@@ -165,7 +166,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             dimUbicacionBloc.add(DocumentoRecibeVisitaChanged(value!));
           },
         ),
-        /*  const SizedBox(height: 20),
+        const SizedBox(height: 20),
         TextFormField(
           enabled: false,
           initialValue: formattedFechaDiligenciamiento,
@@ -176,7 +177,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           onSaved: (String? value) {
             //TODO: dimUbicacionBloc.add(FechaDiligenciamientoChanged(newValue!));
           },
-        ), */
+        ),
         const SizedBox(height: 20),
         Row(
           children: [
@@ -257,8 +258,13 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             ),
           ],
         ),
-        const SizedBox(height: 20),
-        const Text('Pertenece a algún resguardo indígena'),
+        const Divider(),
+        const Text(
+          'Pertenece a algún resguardo indígena',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const Divider(),
         BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
           builder: (context, state) {
             if (state is OpcionesSiNoLoaded) {
@@ -432,8 +438,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Seleccione al menos una opción.';
-                  } else if (value.length > 3) {
-                    return 'Máximo tres opciones.';
                   }
                   return null;
                 },
@@ -454,32 +458,49 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                                           e.medioComunicacionId) ??
                                       false,
                                   onChanged: (bool? value) {
-                                    var selectedItems =
-                                        List<LstMediosComunica>.from(
-                                            formState.value ?? []);
-                                    if (e.medioComunicacionId == 7) {
-                                      selectedItems = [
-                                        LstMediosComunica(
-                                            medioComunicacionId:
-                                                e.medioComunicacionId)
-                                      ];
-                                    } else if (value == true) {
-                                      selectedItems.removeWhere((element) =>
-                                          element.medioComunicacionId == 7);
-                                      selectedItems.add(LstMediosComunica(
-                                          medioComunicacionId:
-                                              e.medioComunicacionId));
-                                    } else {
-                                      selectedItems.removeWhere(
-                                        (element) =>
-                                            element.medioComunicacionId ==
-                                            e.medioComunicacionId,
-                                      );
-                                    }
-                                    formState.didChange(selectedItems);
-                                    dimUbicacionBloc.add(
-                                        MediosComunicacionChanged(
-                                            selectedItems));
+                                    (value! &&
+                                            formState.value != null &&
+                                            formState.value!.length >= 3 &&
+                                            e.medioComunicacionId != 7)
+                                        ? CustomSnackBar.showCustomDialog(
+                                            context,
+                                            'Error',
+                                            'Máximo tres opciones',
+                                            () => Navigator.pop(context),
+                                            false)
+                                        : setState(() {
+                                            var selectedItems =
+                                                List<LstMediosComunica>.from(
+                                                    formState.value ?? []);
+                                            if (e.medioComunicacionId == 7) {
+                                              selectedItems = [
+                                                LstMediosComunica(
+                                                    medioComunicacionId:
+                                                        e.medioComunicacionId)
+                                              ];
+                                            } else if (value == true) {
+                                              selectedItems.removeWhere(
+                                                  (element) =>
+                                                      element
+                                                          .medioComunicacionId ==
+                                                      7);
+                                              selectedItems.add(
+                                                  LstMediosComunica(
+                                                      medioComunicacionId: e
+                                                          .medioComunicacionId));
+                                            } else {
+                                              selectedItems.removeWhere(
+                                                (element) =>
+                                                    element
+                                                        .medioComunicacionId ==
+                                                    e.medioComunicacionId,
+                                              );
+                                            }
+                                            formState.didChange(selectedItems);
+                                            dimUbicacionBloc.add(
+                                                MediosComunicacionChanged(
+                                                    selectedItems));
+                                          });
                                   },
                                 ),
                                 Flexible(

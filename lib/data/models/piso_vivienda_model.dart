@@ -24,3 +24,54 @@ class PisoViviendaModel extends PisoViviendaEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstPiso {
+  int? pisoViviendaId;
+  String? otroTipoPiso;
+
+  LstPiso({
+    this.pisoViviendaId,
+    this.otroTipoPiso,
+  });
+
+  factory LstPiso.fromJson(Map<String, dynamic> json) => LstPiso(
+        pisoViviendaId: json["PisoVivienda_id"],
+        otroTipoPiso: json["OtroTipoPiso"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "PisoVivienda_id": pisoViviendaId,
+        "OtroTipoPiso": otroTipoPiso,
+      };
+}
+
+List<ViviendaPisos> viviendaPisosFromJson(String str) =>
+    List<ViviendaPisos>.from(
+        json.decode(str).map((x) => ViviendaPisos.fromJson(x)));
+
+class ViviendaPisos {
+  int? viviendaPisoId;
+  int? datoViviendaId;
+  int? pisoViviendaId;
+  String? otroTipoPiso;
+
+  ViviendaPisos({
+    this.viviendaPisoId,
+    this.datoViviendaId,
+    this.pisoViviendaId,
+    this.otroTipoPiso,
+  });
+
+  factory ViviendaPisos.fromJson(Map<String, dynamic> json) => ViviendaPisos(
+        viviendaPisoId: json["ViviendaPiso_id"],
+        datoViviendaId: json["DatoVivienda_id"],
+        pisoViviendaId: json["PisoVivienda_id"],
+        otroTipoPiso: json["OtroTipoPiso"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": datoViviendaId,
+        "PisoVivienda_id": pisoViviendaId,
+        "OtroTipoPiso": otroTipoPiso,
+      };
+}

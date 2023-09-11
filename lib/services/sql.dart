@@ -67,7 +67,6 @@ class ConnectionSQL {
 	[AutoridadIndigena_id]	integer NOT NULL,
 	[EstadoVia_id]	integer NOT NULL,
 	[TiempoTarda_id]	integer NOT NULL,
-	[MedioUtiliza_id]	integer NOT NULL,
 	[CostoDesplazamiento_id]	integer NOT NULL,
 	[ExisteMedTradicionalComunidad]	integer NOT NULL,
 	[TiempoTardaMedTrad_id]	integer NOT NULL,
@@ -75,8 +74,6 @@ class ConnectionSQL {
 	[PoseeChagra]	integer NOT NULL,
 	[ProduccionMinera]	integer NOT NULL,
 	[TipoCalendario_id]	integer NOT NULL,
-    FOREIGN KEY ([Resguardo_id])
-        REFERENCES [Resguardos]([Resguardo_id]),
     FOREIGN KEY ([AutoridadIndigena_id])
         REFERENCES [AutoridadesIndigenas_DatosVivienda]([AutoridadIndigena_id]),
     FOREIGN KEY ([CostoDesplazamiento_id])
@@ -85,8 +82,6 @@ class ConnectionSQL {
         REFERENCES [EstadoVias]([EstadoVia_id]),
     FOREIGN KEY ([Familia_id])
         REFERENCES [Familia]([Familia_id]),
-    FOREIGN KEY ([MedioUtiliza_id])
-        REFERENCES [MediosUtiliza_CentroAtencion]([MedioUtiliza_id]),
     FOREIGN KEY ([PerteneceResguardo])
         REFERENCES [OpcionesSi_No]([Opcion_id]),
     FOREIGN KEY ([ExisteMedTradicionalComunidad])
@@ -198,15 +193,22 @@ class ConnectionSQL {
 	[Verdura_id]	integer NOT NULL
   )''';
 
+  static const CREATE_UBICACION_MEDIOS_CENTRO_ATENCION = '''
+  CREATE TABLE [Asp1_UbicacionMediosCentroAtencion] (
+	[UbicacionMediosCentroAtencion_id] integer PRIMARY KEY AUTOINCREMENT,
+	[Ubicacion_id]	integer NOT NULL,
+	[MedioUtiliza_id]	integer NOT NULL
+  )''';
+
   static const CREATE_DATOS_VIVIENDA = '''
   CREATE TABLE [Asp2_DatosVivienda] (
 	[DatoVivienda_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Familia_id]	integer NOT NULL,
 	[TipoVivienda_id]	integer NOT NULL,
 	[TenenciaVivienda_id]	integer NOT NULL,
-	[PisoVivienda_id]	integer NOT NULL,
-	[OtroTipoPiso]	varchar(50) COLLATE NOCASE,
-	[VentilacionVivienda_id]	integer NOT NULL
+	[VentilacionVivienda_id]	integer NOT NULL,
+	[IluminacionVivienda_id]	integer NOT NULL,
+	[NroCuartosVivienda_id]	integer NOT NULL
   )''';
 
   static const CREATE_DATOS_VIVIENDA_FACTORES_RIESGO = '''
@@ -214,6 +216,14 @@ class ConnectionSQL {
 	[ViviendaFactorRiesgo_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[FactorRiesgoVivienda_id]	integer NOT NULL
+  )''';
+
+  static const CREATE_DATOS_VIVIENDA_PISOS = '''
+  CREATE TABLE [Asp2_DatosViviendaPisos] (
+	[ViviendaPisos_id]	integer PRIMARY KEY AUTOINCREMENT,
+	[DatoVivienda_id]	integer NOT NULL,
+	[PisoVivienda_id]	integer NOT NULL,
+	[OtroTipoPiso]	varchar(250) COLLATE NOCASE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_SERVICIOS_PUBLICOS = '''
@@ -363,6 +373,12 @@ class ConnectionSQL {
 	[CuidadoSaludCondRiesgoNombresEnfermedad_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[CuidadoSaludCondRiesgo_id]	integer NOT NULL,
 	[NombreEnfermedad_id]	integer NOT NULL
+  )''';
+
+  static const CREATE_NRO_CUARTOS_VIVIENDA = ''' 
+  CREATE TABLE [NroCuartosVivienda_DatosVivienda] (
+	[NroCuartosVivienda_id]	integer NOT NULL,
+	[Descripcion]	varchar(30) NOT NULL COLLATE NOCASE
   )''';
 
   static const CREATE_CUIDADO_SALUD_COND_RIESGO_SERVICIOS_SOLICITADOS = ''' 

@@ -78,8 +78,10 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_UBICACION_NOMBRES_MED_TRADICIONAL);
       ref.execute(ConnectionSQL.CREATE_UBICACION_TUBERCULOS_PLATANOS);
       ref.execute(ConnectionSQL.CREATE_UBICACION_VERDURAS);
+      ref.execute(ConnectionSQL.CREATE_UBICACION_MEDIOS_CENTRO_ATENCION);
       ref.execute(ConnectionSQL.CREATE_DATOS_VIVIENDA);
       ref.execute(ConnectionSQL.CREATE_DATOS_VIVIENDA_FACTORES_RIESGO);
+      ref.execute(ConnectionSQL.CREATE_DATOS_VIVIENDA_PISOS);
       ref.execute(ConnectionSQL.CREATE_DATOS_VIVIENDA_PRESENCIA_ANIMALES);
       ref.execute(ConnectionSQL.CREATE_DATOS_VIVIENDA_SERVICIOS_PUBLICOS);
       ref.execute(ConnectionSQL.CREATE_DATOS_VIVIENDA_TECHOS);
@@ -91,6 +93,7 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO);
       ref.execute(
           ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO_NOMBRES_ENFERMEDAD);
+      ref.execute(ConnectionSQL.CREATE_NRO_CUARTOS_VIVIENDA);
       ref.execute(
           ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO_SERVICIOS_SOLICITADOS);
       ref.execute(ConnectionSQL.CREATE_DIM_SOCIO_CULTURAL_PUEBLOS_INDIGENAS);

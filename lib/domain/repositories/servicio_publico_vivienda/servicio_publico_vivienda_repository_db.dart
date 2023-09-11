@@ -12,7 +12,7 @@ abstract class ServicioPublicoViviendaRepositoryDB {
       getServiciosPublicosRepositoryDB();
 
   Future<Either<Failure, int>> saveServiciosPublicosViviendaRepositoryDB(
-      int datoViviendaId, List<LstServPublico> lstServPublicos);
+      int datoViviendaId, List<LstServPublico> lstServPublico);
 
   Future<Either<Failure, List<LstServPublico>>>
       getServiciosPublicosViviendaRepositoryDB(int? datoViviendaId);

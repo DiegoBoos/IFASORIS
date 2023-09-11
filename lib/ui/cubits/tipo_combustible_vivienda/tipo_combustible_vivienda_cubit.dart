@@ -23,7 +23,7 @@ class TipoCombustibleViviendaCubit
         (data) => emit(TiposCombustibleViviendaLoaded(data)));
   }
 
-  Future<List<LstTiposCombustible>> getTiposCombustibleViviendaDB(
+  Future<List<LstTipoCombustible>> getTiposCombustibleViviendaDB(
       int? datoViviendaId) async {
     final result = await tipoCombustibleViviendaUsecaseDB
         .getTiposCombustibleViviendaUsecaseDB(datoViviendaId);

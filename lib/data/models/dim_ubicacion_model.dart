@@ -13,6 +13,7 @@ import 'fruto_model.dart';
 import 'hortaliza_model.dart';
 import 'leguminosa_model.dart';
 import 'medio_comunicacion_model.dart';
+import 'medio_utiliza_ca_model.dart';
 import 'medio_utiliza_med_tradicional_model.dart';
 import 'nombre_med_tradicional_model.dart';
 
@@ -49,6 +50,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
     List<LstHortaliza>? lstHortalizas,
     List<LstLeguminosa>? lstLeguminosas,
     List<LstMediosComunica>? lstMediosComunica,
+    List<LstMediosUtilizaCA>? lstMediosUtilizaCA,
     List<LstMediosMedTradicional>? lstMediosMedTradicional,
     List<LstNombreMedTradicional>? lstNombreMedTradicional,
     List<LstTuberculo>? lstTuberculos,
@@ -65,7 +67,6 @@ class DimUbicacionModel extends DimUbicacionEntity {
           autoridadIndigenaId: autoridadIndigenaId,
           estadoViaId: estadoViaId,
           tiempoTardaId: tiempoTardaId,
-          medioUtilizaId: medioUtilizaId,
           costoDesplazamientoId: costoDesplazamientoId,
           existeMedTradicionalComunidad: existeMedTradicionalComunidad,
           tiempoTardaMedTradId: tiempoTardaMedTradId,
@@ -82,6 +83,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
           lstHortalizas: lstHortalizas,
           lstLeguminosas: lstLeguminosas,
           lstMediosComunica: lstMediosComunica,
+          lstMediosUtilizaCA: lstMediosUtilizaCA,
           lstMediosMedTradicional: lstMediosMedTradicional,
           lstNombreMedTradicional: lstNombreMedTradicional,
           lstTuberculos: lstTuberculos,

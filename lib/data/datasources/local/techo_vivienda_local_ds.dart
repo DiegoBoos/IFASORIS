@@ -8,7 +8,7 @@ abstract class TechoViviendaLocalDataSource {
   Future<List<TechoViviendaModel>> getTechosVivienda();
   Future<int> saveTechoVivienda(TechoViviendaEntity techoVivienda);
 
-  Future<int> saveTechosVivienda(int datoViviendaId, List<LstTecho> lstTechos);
+  Future<int> saveTechosVivienda(int datoViviendaId, List<LstTecho> lstTecho);
 
   Future<List<LstTecho>> getTechosViviendaVivienda(int? datoViviendaId);
 }
@@ -36,14 +36,14 @@ class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
 
   @override
   Future<int> saveTechosVivienda(
-      int datoViviendaId, List<LstTecho> lstTechos) async {
+      int datoViviendaId, List<LstTecho> lstTecho) async {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaTechos',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
-    final viviendaTechos = lstTechos
+    final viviendaTechos = lstTecho
         .map((item) => ViviendaTechos(
             techoViviendaId: item.techoViviendaId,
             datoViviendaId: datoViviendaId,

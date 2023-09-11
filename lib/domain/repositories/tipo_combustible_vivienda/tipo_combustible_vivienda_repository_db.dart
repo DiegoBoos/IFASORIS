@@ -12,8 +12,8 @@ abstract class TipoCombustibleViviendaRepositoryDB {
       getTiposCombustibleRepositoryDB();
 
   Future<Either<Failure, int>> saveTiposCombustibleViviendaRepositoryDB(
-      int datoViviendaId, List<LstTiposCombustible> lstTiposCombustible);
+      int datoViviendaId, List<LstTipoCombustible> lstTipoCombustible);
 
-  Future<Either<Failure, List<LstTiposCombustible>>>
+  Future<Either<Failure, List<LstTipoCombustible>>>
       getTiposCombustibleViviendaRepositoryDB(int? datoViviendaId);
 }

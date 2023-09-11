@@ -85,9 +85,6 @@ class MobileAppBar extends StatelessWidget {
               }
             },
           ),
-          IconButton(
-              onPressed: () => authBloc.add(LogOut()),
-              icon: const Icon(Icons.logout)),
         ],
       ),
     );

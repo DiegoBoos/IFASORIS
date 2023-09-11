@@ -10,10 +10,9 @@ abstract class FactorRiesgoViviendaLocalDataSource {
       FactorRiesgoViviendaEntity factorRiesgoVivienda);
 
   Future<int> saveFactoresRiesgoVivienda(
-      int datoViviendaId, List<LstFactoresRiesgo> lstFactoresRiesgo);
+      int datoViviendaId, List<LstFactorRiesgo> lstFactorRiesgo);
 
-  Future<List<LstFactoresRiesgo>> getFactoresRiesgoVivienda(
-      int? datoViviendaId);
+  Future<List<LstFactorRiesgo>> getFactoresRiesgoVivienda(int? datoViviendaId);
 }
 
 class FactorRiesgoViviendaLocalDataSourceImpl
@@ -41,14 +40,14 @@ class FactorRiesgoViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveFactoresRiesgoVivienda(
-      int datoViviendaId, List<LstFactoresRiesgo> lstFactoresRiesgo) async {
+      int datoViviendaId, List<LstFactorRiesgo> lstFactorRiesgo) async {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaFactoresRiesgo',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
-    final factoresRiesgoVivienda = lstFactoresRiesgo
+    final factoresRiesgoVivienda = lstFactorRiesgo
         .map((item) => ViviendaFactoresRiesgo(
               factorRiesgoViviendaId: item.factorRiesgoViviendaId,
               datoViviendaId: datoViviendaId,
@@ -66,13 +65,14 @@ class FactorRiesgoViviendaLocalDataSourceImpl
   }
 
   @override
-  Future<List<LstFactoresRiesgo>> getFactoresRiesgoVivienda(
+  Future<List<LstFactorRiesgo>> getFactoresRiesgoVivienda(
       int? datoViviendaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosViviendaFactoresRiesgo',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
-    final result = List<LstFactoresRiesgo>.from(
-        res.map((m) => LstFactoresRiesgo.fromJson(m))).toList();
+    final result =
+        List<LstFactorRiesgo>.from(res.map((m) => LstFactorRiesgo.fromJson(m)))
+            .toList();
 
     return result;
   }

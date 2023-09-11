@@ -45,10 +45,10 @@ class TipoSanitarioViviendaRepositoryDBImpl
 
   @override
   Future<Either<Failure, int>> saveTiposSanitarioViviendaRepositoryDB(
-      int datoViviendaId, List<LstTiposSanitario> lstTiposSanitario) async {
+      int datoViviendaId, List<LstTipoSanitario> lstTipoSanitario) async {
     try {
       final result = await tipoSanitarioViviendaLocalDataSource
-          .saveTiposSanitarioVivienda(datoViviendaId, lstTiposSanitario);
+          .saveTiposSanitarioVivienda(datoViviendaId, lstTipoSanitario);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
@@ -58,7 +58,7 @@ class TipoSanitarioViviendaRepositoryDBImpl
   }
 
   @override
-  Future<Either<Failure, List<LstTiposSanitario>>>
+  Future<Either<Failure, List<LstTipoSanitario>>>
       getTiposSanitarioViviendaRepositoryDB(int? datoViviendaId) async {
     try {
       final result = await tipoSanitarioViviendaLocalDataSource

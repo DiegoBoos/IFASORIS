@@ -12,8 +12,8 @@ abstract class FactorRiesgoViviendaRepositoryDB {
       getFactoresRiesgoRepositoryDB();
 
   Future<Either<Failure, int>> saveFactoresRiesgoViviendaRepositoryDB(
-      int datoViviendaId, List<LstFactoresRiesgo> lstFactoresRiesgo);
+      int datoViviendaId, List<LstFactorRiesgo> lstFactorRiesgo);
 
-  Future<Either<Failure, List<LstFactoresRiesgo>>>
+  Future<Either<Failure, List<LstFactorRiesgo>>>
       getFactoresRiesgoViviendaRepositoryDB(int? datoViviendaId);
 }

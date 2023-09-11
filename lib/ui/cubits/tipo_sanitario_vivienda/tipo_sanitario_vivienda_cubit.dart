@@ -22,7 +22,7 @@ class TipoSanitarioViviendaCubit extends Cubit<TiposSanitarioViviendaState> {
         (data) => emit(TiposSanitarioViviendaLoaded(data)));
   }
 
-  Future<List<LstTiposSanitario>> getTiposSanitarioViviendaDB(
+  Future<List<LstTipoSanitario>> getTiposSanitarioViviendaDB(
       int? datoViviendaId) async {
     final result = await tipoSanitarioViviendaUsecaseDB
         .getTiposSanitarioViviendaUsecaseDB(datoViviendaId);

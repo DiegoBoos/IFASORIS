@@ -12,7 +12,7 @@ abstract class TratamientoAguaViviendaRepositoryDB {
       getTratamientosAguaRepositoryDB();
 
   Future<Either<Failure, int>> saveTmtoAguasViviendaRepositoryDB(
-      int datoViviendaId, List<LstTmtoAgua> lstTmtoAguas);
+      int datoViviendaId, List<LstTmtoAgua> lstTmtoAgua);
 
   Future<Either<Failure, List<LstTmtoAgua>>>
       getTratamientosAguaViviendaRepositoryDB(int? datoViviendaId);

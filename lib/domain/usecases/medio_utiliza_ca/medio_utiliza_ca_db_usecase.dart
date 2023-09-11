@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/data/models/medio_utiliza_ca_model.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/medio_utiliza_ca_entity.dart';
@@ -17,5 +18,16 @@ class MedioUtilizaCAUsecaseDB {
   Future<Either<Failure, List<MedioUtilizaCAEntity>>>
       getMediosUtilizaCAUsecase() {
     return repositoryDB.getMediosUtilizaCARepositoryDB();
+  }
+
+  Future<Either<Failure, List<LstMediosUtilizaCA>>>
+      getUbicacionMediosUtilizaCAUsecaseDB(int? datoViviendaId) {
+    return repositoryDB.getUbicacionMediosUtilizaCARepositoryDB(datoViviendaId);
+  }
+
+  Future<Either<Failure, int>> saveUbicacionMediosUtilizaCAUsecaseDB(
+      int datoViviendaId, List<LstMediosUtilizaCA> lstCuarto) {
+    return repositoryDB.saveUbicacionMediosUtilizaCARepositoryDB(
+        datoViviendaId, lstCuarto);
   }
 }

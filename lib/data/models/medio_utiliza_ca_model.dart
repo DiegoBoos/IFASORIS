@@ -24,3 +24,48 @@ class MedioUtilizaCAModel extends MedioUtilizaCAEntity {
         departamentoIde: json["Departamento_Ide"],
       );
 }
+
+class LstMediosUtilizaCA {
+  int? medioUtilizaId;
+
+  LstMediosUtilizaCA({
+    this.medioUtilizaId,
+  });
+
+  factory LstMediosUtilizaCA.fromJson(Map<String, dynamic> json) =>
+      LstMediosUtilizaCA(
+        medioUtilizaId: json["MedioUtiliza_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "MedioUtiliza_id": medioUtilizaId,
+      };
+}
+
+List<UbicacionMediosUtilizaCA> ubicacionMediosCAFromJson(String str) =>
+    List<UbicacionMediosUtilizaCA>.from(
+        json.decode(str).map((x) => UbicacionMediosUtilizaCA.fromJson(x)));
+
+class UbicacionMediosUtilizaCA {
+  int? ubicacionMedioCAId;
+  int? ubicacionId;
+  int? medioUtilizaId;
+
+  UbicacionMediosUtilizaCA({
+    this.ubicacionMedioCAId,
+    this.ubicacionId,
+    this.medioUtilizaId,
+  });
+
+  factory UbicacionMediosUtilizaCA.fromJson(Map<String, dynamic> json) =>
+      UbicacionMediosUtilizaCA(
+        ubicacionMedioCAId: json["UbicacionMediosCentroAtencion_id"],
+        ubicacionId: json["Ubicacion_id"],
+        medioUtilizaId: json["MedioUtiliza_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
+        "MedioUtiliza_id": medioUtilizaId,
+      };
+}

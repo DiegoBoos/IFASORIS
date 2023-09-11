@@ -10,9 +10,9 @@ abstract class TipoCombustibleViviendaLocalDataSource {
       TipoCombustibleViviendaEntity tipoCombustibleVivienda);
 
   Future<int> saveTiposCombustibleVivienda(
-      int datoViviendaId, List<LstTiposCombustible> lstTiposCombustible);
+      int datoViviendaId, List<LstTipoCombustible> lstTipoCombustible);
 
-  Future<List<LstTiposCombustible>> getTiposCombustibleVivienda(
+  Future<List<LstTipoCombustible>> getTiposCombustibleVivienda(
       int? datoViviendaId);
 }
 
@@ -41,14 +41,14 @@ class TipoCombustibleViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveTiposCombustibleVivienda(
-      int datoViviendaId, List<LstTiposCombustible> lstTiposCombustible) async {
+      int datoViviendaId, List<LstTipoCombustible> lstTipoCombustible) async {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaTiposCombustible',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
-    final viviendaTiposCombustible = lstTiposCombustible
+    final viviendaTiposCombustible = lstTipoCombustible
         .map((item) => ViviendaTiposCombustible(
             tipoCombustibleViviendaId: item.tipoCombustibleViviendaId,
             datoViviendaId: datoViviendaId,
@@ -66,13 +66,13 @@ class TipoCombustibleViviendaLocalDataSourceImpl
   }
 
   @override
-  Future<List<LstTiposCombustible>> getTiposCombustibleVivienda(
+  Future<List<LstTipoCombustible>> getTiposCombustibleVivienda(
       int? datoViviendaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosViviendaTiposCombustible',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
-    final result = List<LstTiposCombustible>.from(
-        res.map((m) => LstTiposCombustible.fromJson(m))).toList();
+    final result = List<LstTipoCombustible>.from(
+        res.map((m) => LstTipoCombustible.fromJson(m))).toList();
 
     return result;
   }

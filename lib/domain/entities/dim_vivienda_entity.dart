@@ -1,4 +1,5 @@
 import '../../data/models/factor_riesgo_vivienda_model.dart';
+import '../../data/models/piso_vivienda_model.dart';
 import '../../data/models/presencia_animal_vivienda_model.dart';
 import '../../data/models/servicio_publico_vivienda_model.dart';
 import '../../data/models/techo_vivienda_model.dart';
@@ -14,15 +15,15 @@ class DimViviendaEntity {
   int? tenenciaViviendaId;
   int? ventilacionViviendaId;
   int? iluminacionViviendaId;
-  int? pisoViviendaId;
-  String? otroTipoPiso;
-  List<LstTecho>? lstTechos;
-  List<LstServPublico>? lstServPublicos;
-  List<LstTmtoAgua>? lstTmtoAguas;
-  List<LstFactoresRiesgo>? lstFactoresRiesgo;
-  List<LstTiposSanitario>? lstTiposSanitario;
-  List<LstTiposCombustible>? lstTiposCombustible;
-  List<LstPresenciaAnimal>? lstPresenciaAnimales;
+  int? nroCuartosViviendaId;
+  List<LstPiso>? lstPiso;
+  List<LstTecho>? lstTecho;
+  List<LstServPublico>? lstServPublico;
+  List<LstTmtoAgua>? lstTmtoAgua;
+  List<LstFactorRiesgo>? lstFactorRiesgo;
+  List<LstTipoSanitario>? lstTipoSanitario;
+  List<LstTipoCombustible>? lstTipoCombustible;
+  List<LstPresenciaAnimal>? lstPresenciaAnimal;
   DimViviendaState formStatus;
 
   DimViviendaEntity({
@@ -32,15 +33,15 @@ class DimViviendaEntity {
     this.tenenciaViviendaId,
     this.ventilacionViviendaId,
     this.iluminacionViviendaId,
-    this.pisoViviendaId,
-    this.otroTipoPiso,
-    this.lstTechos,
-    this.lstServPublicos,
-    this.lstTmtoAguas,
-    this.lstFactoresRiesgo,
-    this.lstTiposSanitario,
-    this.lstTiposCombustible,
-    this.lstPresenciaAnimales,
+    this.nroCuartosViviendaId,
+    this.lstPiso,
+    this.lstTecho,
+    this.lstServPublico,
+    this.lstTmtoAgua,
+    this.lstFactorRiesgo,
+    this.lstTipoSanitario,
+    this.lstTipoCombustible,
+    this.lstPresenciaAnimal,
     this.formStatus = const DimViviendaFormInitial(),
   });
 
@@ -51,15 +52,15 @@ class DimViviendaEntity {
           int? tenenciaViviendaId,
           int? ventilacionViviendaId,
           int? iluminacionViviendaId,
-          int? pisoViviendaId,
-          String? otroTipoPiso,
-          List<LstTecho>? lstTechos,
-          List<LstServPublico>? lstServPublicos,
-          List<LstTmtoAgua>? lstTmtoAguas,
-          List<LstFactoresRiesgo>? lstFactoresRiesgo,
-          List<LstTiposSanitario>? lstTiposSanitario,
-          List<LstTiposCombustible>? lstTiposCombustible,
-          List<LstPresenciaAnimal>? lstPresenciaAnimales,
+          int? nroCuartosViviendaId,
+          List<LstPiso>? lstPiso,
+          List<LstTecho>? lstTecho,
+          List<LstServPublico>? lstServPublico,
+          List<LstTmtoAgua>? lstTmtoAgua,
+          List<LstFactorRiesgo>? lstFactorRiesgo,
+          List<LstTipoSanitario>? lstTipoSanitario,
+          List<LstTipoCombustible>? lstTipoCombustible,
+          List<LstPresenciaAnimal>? lstPresenciaAnimal,
           DimViviendaState? formStatus}) =>
       DimViviendaEntity(
         datoViviendaId: datoViviendaId ?? this.datoViviendaId,
@@ -70,15 +71,15 @@ class DimViviendaEntity {
             ventilacionViviendaId ?? this.ventilacionViviendaId,
         iluminacionViviendaId:
             iluminacionViviendaId ?? this.iluminacionViviendaId,
-        pisoViviendaId: pisoViviendaId ?? this.pisoViviendaId,
-        otroTipoPiso: otroTipoPiso ?? this.otroTipoPiso,
-        lstTechos: lstTechos ?? this.lstTechos,
-        lstServPublicos: lstServPublicos ?? this.lstServPublicos,
-        lstTmtoAguas: lstTmtoAguas ?? this.lstTmtoAguas,
-        lstFactoresRiesgo: lstFactoresRiesgo ?? this.lstFactoresRiesgo,
-        lstTiposSanitario: lstTiposSanitario ?? this.lstTiposSanitario,
-        lstTiposCombustible: lstTiposCombustible ?? this.lstTiposCombustible,
-        lstPresenciaAnimales: lstPresenciaAnimales ?? this.lstPresenciaAnimales,
+        nroCuartosViviendaId: nroCuartosViviendaId ?? this.nroCuartosViviendaId,
+        lstPiso: lstPiso ?? this.lstPiso,
+        lstTecho: lstTecho ?? this.lstTecho,
+        lstServPublico: lstServPublico ?? this.lstServPublico,
+        lstTmtoAgua: lstTmtoAgua ?? this.lstTmtoAgua,
+        lstFactorRiesgo: lstFactorRiesgo ?? this.lstFactorRiesgo,
+        lstTipoSanitario: lstTipoSanitario ?? this.lstTipoSanitario,
+        lstTipoCombustible: lstTipoCombustible ?? this.lstTipoCombustible,
+        lstPresenciaAnimal: lstPresenciaAnimal ?? this.lstPresenciaAnimal,
         formStatus: formStatus ?? this.formStatus,
       );
 
@@ -88,8 +89,7 @@ class DimViviendaEntity {
         "TipoVivienda_id": tipoViviendaId,
         "TenenciaVivienda_id": tenenciaViviendaId,
         "VentilacionVivienda_id": ventilacionViviendaId,
-        /* "IluminacionVivienda_id": iluminacionViviendaId, */
-        "PisoVivienda_id": pisoViviendaId,
-        "OtroTipoPiso": otroTipoPiso
+        "IluminacionVivienda_id": iluminacionViviendaId,
+        "NroCuartosVivienda_id": nroCuartosViviendaId,
       };
 }

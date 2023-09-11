@@ -26,17 +26,17 @@ class TipoCombustibleViviendaModel extends TipoCombustibleViviendaEntity {
       );
 }
 
-class LstTiposCombustible {
+class LstTipoCombustible {
   int? tipoCombustibleViviendaId;
   String? otroTipoCombustible;
 
-  LstTiposCombustible({
+  LstTipoCombustible({
     this.tipoCombustibleViviendaId,
     this.otroTipoCombustible,
   });
 
-  factory LstTiposCombustible.fromJson(Map<String, dynamic> json) =>
-      LstTiposCombustible(
+  factory LstTipoCombustible.fromJson(Map<String, dynamic> json) =>
+      LstTipoCombustible(
         tipoCombustibleViviendaId: json["TipoCombustibleVivienda_id"],
         otroTipoCombustible: json["OtroTipoCombustible"],
       );

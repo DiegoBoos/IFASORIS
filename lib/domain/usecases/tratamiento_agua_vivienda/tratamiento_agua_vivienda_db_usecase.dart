@@ -22,9 +22,9 @@ class TratamientoAguaViviendaUsecaseDB {
   }
 
   Future<Either<Failure, int>> saveTmtoAguasViviendaUsecaseDB(
-      int datoViviendaId, List<LstTmtoAgua> lstTmtoAguas) {
+      int datoViviendaId, List<LstTmtoAgua> lstTmtoAgua) {
     return repositoryDB.saveTmtoAguasViviendaRepositoryDB(
-        datoViviendaId, lstTmtoAguas);
+        datoViviendaId, lstTmtoAgua);
   }
 
   Future<Either<Failure, List<LstTmtoAgua>>>

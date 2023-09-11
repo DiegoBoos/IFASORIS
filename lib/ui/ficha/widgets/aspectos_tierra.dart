@@ -19,6 +19,7 @@ import '../../cubits/tipo_calendario/tipo_calendario_cubit.dart';
 import '../../cubits/tuberculo_platano/tuberculo_platano_cubit.dart';
 import '../../cubits/verdura/verdura_cubit.dart';
 import '../../cubits/cereal/cereal_cubit.dart';
+import '../../utils/custom_snack_bar.dart';
 
 class AspectosTierraForm extends StatefulWidget {
   const AspectosTierraForm({super.key, this.dimUbicacion});
@@ -146,8 +147,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 4) {
-                          return 'Máximo cuatro opciones.';
                         }
                         return null;
                       },
@@ -169,23 +168,51 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                 e.tuberculoPlatanoId) ??
                                             false,
                                         onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(LstTuberculo(
-                                                tuberculoPlatanoId:
-                                                    e.tuberculoPlatanoId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
-                                                  element.tuberculoPlatanoId ==
-                                                  e.tuberculoPlatanoId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          dimUbicacionBloc.add(
-                                              TuberculosPlatanosChanged(
-                                                  selectedItems));
+                                          (value! &&
+                                                  formState.value != null &&
+                                                  formState.value!.length >=
+                                                      4 &&
+                                                  e.tuberculoPlatanoId != 8)
+                                              ? CustomSnackBar.showCustomDialog(
+                                                  context,
+                                                  'Error',
+                                                  'Máximo cuatro opciones',
+                                                  () => Navigator.pop(context),
+                                                  false)
+                                              : setState(() {
+                                                  var selectedItems =
+                                                      formState.value ?? [];
+
+                                                  if (e.tuberculoPlatanoId ==
+                                                      8) {
+                                                    selectedItems = [
+                                                      LstTuberculo(
+                                                          tuberculoPlatanoId: e
+                                                              .tuberculoPlatanoId)
+                                                    ];
+                                                  } else if (value == true) {
+                                                    selectedItems.removeWhere(
+                                                        (element) =>
+                                                            element
+                                                                .tuberculoPlatanoId ==
+                                                            8);
+                                                    selectedItems.add(LstTuberculo(
+                                                        tuberculoPlatanoId: e
+                                                            .tuberculoPlatanoId));
+                                                  } else {
+                                                    selectedItems.removeWhere(
+                                                      (element) =>
+                                                          element
+                                                              .tuberculoPlatanoId ==
+                                                          e.tuberculoPlatanoId,
+                                                    );
+                                                  }
+                                                  formState
+                                                      .didChange(selectedItems);
+                                                  dimUbicacionBloc.add(
+                                                      TuberculosPlatanosChanged(
+                                                          selectedItems));
+                                                });
                                         },
                                       ),
                                       Flexible(
@@ -231,8 +258,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 5) {
-                          return 'Máximo cinco opciones.';
                         }
                         return null;
                       },
@@ -253,22 +278,51 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                 e.leguminosaId) ??
                                             false,
                                         onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(LstLeguminosa(
-                                                leguminosaId: e.leguminosaId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
-                                                  element.leguminosaId ==
-                                                  e.leguminosaId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          dimUbicacionBloc.add(
-                                              LeguminosasChanged(
-                                                  selectedItems));
+                                          (value! &&
+                                                  formState.value != null &&
+                                                  formState.value!.length >=
+                                                      5 &&
+                                                  e.leguminosaId != 10)
+                                              ? CustomSnackBar.showCustomDialog(
+                                                  context,
+                                                  'Error',
+                                                  'Máximo cinco opciones',
+                                                  () => Navigator.pop(context),
+                                                  false)
+                                              : setState(() {
+                                                  var selectedItems =
+                                                      formState.value ?? [];
+
+                                                  if (e.leguminosaId == 10) {
+                                                    selectedItems = [
+                                                      LstLeguminosa(
+                                                          leguminosaId:
+                                                              e.leguminosaId)
+                                                    ];
+                                                  } else if (value == true) {
+                                                    selectedItems.removeWhere(
+                                                        (element) =>
+                                                            element
+                                                                .leguminosaId ==
+                                                            10);
+                                                    selectedItems.add(
+                                                        LstLeguminosa(
+                                                            leguminosaId: e
+                                                                .leguminosaId));
+                                                  } else {
+                                                    selectedItems.removeWhere(
+                                                      (element) =>
+                                                          element
+                                                              .leguminosaId ==
+                                                          e.leguminosaId,
+                                                    );
+                                                  }
+                                                  formState
+                                                      .didChange(selectedItems);
+                                                  dimUbicacionBloc.add(
+                                                      LeguminosasChanged(
+                                                          selectedItems));
+                                                });
                                         },
                                       ),
                                       Flexible(
@@ -312,8 +366,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 5) {
-                          return 'Máximo cinco opciones.';
                         }
                         return null;
                       },
@@ -329,28 +381,63 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element.hortalizaId ==
-                                                e.hortalizaId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(LstHortaliza(
-                                                hortalizaId: e.hortalizaId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
-                                                  element.hortalizaId ==
-                                                  e.hortalizaId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          dimUbicacionBloc.add(
-                                              HortalizasChanged(selectedItems));
-                                        },
-                                      ),
+                                          value: formState.value?.any(
+                                                  (element) =>
+                                                      element.hortalizaId ==
+                                                      e.hortalizaId) ??
+                                              false,
+                                          onChanged: (bool? value) {
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        5 &&
+                                                    e.hortalizaId != 13)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo cinco opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(
+                                                    () {
+                                                      var selectedItems =
+                                                          formState.value ?? [];
+                                                      if (e.hortalizaId == 13) {
+                                                        selectedItems = [
+                                                          LstHortaliza(
+                                                              hortalizaId:
+                                                                  e.hortalizaId)
+                                                        ];
+                                                      } else if (value ==
+                                                          true) {
+                                                        selectedItems.removeWhere(
+                                                            (element) =>
+                                                                element
+                                                                    .hortalizaId ==
+                                                                13);
+                                                        selectedItems.add(
+                                                            LstHortaliza(
+                                                                hortalizaId: e
+                                                                    .hortalizaId));
+                                                      } else {
+                                                        selectedItems
+                                                            .removeWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .hortalizaId ==
+                                                              e.hortalizaId,
+                                                        );
+                                                      }
+                                                      formState.didChange(
+                                                          selectedItems);
+                                                      dimUbicacionBloc.add(
+                                                          HortalizasChanged(
+                                                              selectedItems));
+                                                    },
+                                                  );
+                                          }),
                                       Flexible(
                                         child: Text(
                                           e.descripcion,
@@ -392,8 +479,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 3) {
-                          return 'Máximo tres opciones.';
                         }
                         return null;
                       },
@@ -409,28 +494,64 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element.verduraId ==
-                                                e.verduraId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(LstVerdura(
-                                                verduraId: e.verduraId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
-                                                  element.verduraId ==
-                                                  e.verduraId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          dimUbicacionBloc.add(
-                                              VerdurasChanged(selectedItems));
-                                        },
-                                      ),
+                                          value: formState.value?.any(
+                                                  (element) =>
+                                                      element.verduraId ==
+                                                      e.verduraId) ??
+                                              false,
+                                          onChanged: (bool? value) {
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        3 &&
+                                                    e.verduraId != 7)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo tres opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(
+                                                    () {
+                                                      var selectedItems =
+                                                          formState.value ?? [];
+
+                                                      if (e.verduraId == 7) {
+                                                        selectedItems = [
+                                                          LstVerdura(
+                                                              verduraId:
+                                                                  e.verduraId)
+                                                        ];
+                                                      } else if (value ==
+                                                          true) {
+                                                        selectedItems.removeWhere(
+                                                            (element) =>
+                                                                element
+                                                                    .verduraId ==
+                                                                7);
+                                                        selectedItems.add(
+                                                            LstVerdura(
+                                                                verduraId: e
+                                                                    .verduraId));
+                                                      } else {
+                                                        selectedItems
+                                                            .removeWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .verduraId ==
+                                                              e.verduraId,
+                                                        );
+                                                      }
+                                                      formState.didChange(
+                                                          selectedItems);
+                                                      dimUbicacionBloc.add(
+                                                          VerdurasChanged(
+                                                              selectedItems));
+                                                    },
+                                                  );
+                                          }),
                                       Flexible(
                                         child: Text(
                                           e.descripcion,
@@ -472,8 +593,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 5) {
-                          return 'Máximo cinco opciones.';
                         }
                         return null;
                       },
@@ -489,26 +608,62 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element.frutoId == e.frutoId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(
-                                                LstFruto(frutoId: e.frutoId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
-                                                  element.frutoId == e.frutoId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          dimUbicacionBloc.add(
-                                              FrutosChanged(selectedItems));
-                                        },
-                                      ),
+                                          value: formState.value?.any(
+                                                  (element) =>
+                                                      element.frutoId ==
+                                                      e.frutoId) ??
+                                              false,
+                                          onChanged: (bool? value) {
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        5 &&
+                                                    e.frutoId != 16)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo cinco opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(
+                                                    () {
+                                                      var selectedItems =
+                                                          formState.value ?? [];
+                                                      if (e.frutoId == 16) {
+                                                        selectedItems = [
+                                                          LstFruto(
+                                                              frutoId:
+                                                                  e.frutoId)
+                                                        ];
+                                                      } else if (value ==
+                                                          true) {
+                                                        selectedItems.removeWhere(
+                                                            (element) =>
+                                                                element
+                                                                    .frutoId ==
+                                                                16);
+                                                        selectedItems.add(
+                                                            LstFruto(
+                                                                frutoId:
+                                                                    e.frutoId));
+                                                      } else {
+                                                        selectedItems
+                                                            .removeWhere(
+                                                          (element) =>
+                                                              element.frutoId ==
+                                                              e.frutoId,
+                                                        );
+                                                      }
+                                                      formState.didChange(
+                                                          selectedItems);
+                                                      dimUbicacionBloc.add(
+                                                          FrutosChanged(
+                                                              selectedItems));
+                                                    },
+                                                  );
+                                          }),
                                       Flexible(
                                         child: Text(
                                           e.descripcion,
@@ -550,8 +705,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 3) {
-                          return 'Máximo tres opciones.';
                         }
                         return null;
                       },
@@ -567,28 +720,63 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element.cerealId ==
-                                                e.cerealId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(LstCereal(
-                                                cerealId: e.cerealId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
-                                                  element.cerealId ==
-                                                  e.cerealId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          dimUbicacionBloc.add(
-                                              CerealesChanged(selectedItems));
-                                        },
-                                      ),
+                                          value: formState.value?.any(
+                                                  (element) =>
+                                                      element.cerealId ==
+                                                      e.cerealId) ??
+                                              false,
+                                          onChanged: (bool? value) {
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        3 &&
+                                                    e.cerealId != 7)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo tres opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(
+                                                    () {
+                                                      var selectedItems =
+                                                          formState.value ?? [];
+                                                      if (e.cerealId == 7) {
+                                                        selectedItems = [
+                                                          LstCereal(
+                                                              cerealId:
+                                                                  e.cerealId)
+                                                        ];
+                                                      } else if (value ==
+                                                          true) {
+                                                        selectedItems.removeWhere(
+                                                            (element) =>
+                                                                element
+                                                                    .cerealId ==
+                                                                7);
+                                                        selectedItems.add(
+                                                            LstCereal(
+                                                                cerealId: e
+                                                                    .cerealId));
+                                                      } else {
+                                                        selectedItems
+                                                            .removeWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .cerealId ==
+                                                              e.cerealId,
+                                                        );
+                                                      }
+                                                      formState.didChange(
+                                                          selectedItems);
+                                                      dimUbicacionBloc.add(
+                                                          CerealesChanged(
+                                                              selectedItems));
+                                                    },
+                                                  );
+                                          }),
                                       Flexible(
                                         child: Text(
                                           e.descripcion,
@@ -632,8 +820,6 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Seleccione al menos una opción.';
-                  } else if (value.length > 5) {
-                    return 'Máximo cinco opciones.';
                   }
                   return null;
                 },
@@ -649,39 +835,58 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Checkbox(
-                                  value: formState.value?.any((element) =>
-                                          element.especieAnimalCriaId ==
-                                          e.especieAnimalCriaId) ??
-                                      false,
-                                  onChanged: (bool? value) {
-                                    var selectedItems =
-                                        List<LstAnimalCria>.from(
-                                            formState.value ?? []);
-                                    if (e.especieAnimalCriaId == 9) {
-                                      selectedItems = [
-                                        LstAnimalCria(
-                                            especieAnimalCriaId:
-                                                e.especieAnimalCriaId)
-                                      ];
-                                    } else if (value == true) {
-                                      selectedItems.removeWhere((element) =>
-                                          element.especieAnimalCriaId == 9);
-                                      selectedItems.add(LstAnimalCria(
-                                          especieAnimalCriaId:
-                                              e.especieAnimalCriaId));
-                                    } else {
-                                      selectedItems.removeWhere(
-                                        (element) =>
+                                    value: formState.value?.any((element) =>
                                             element.especieAnimalCriaId ==
-                                            e.especieAnimalCriaId,
-                                      );
-                                    }
-                                    formState.didChange(selectedItems);
-                                    dimUbicacionBloc.add(
-                                        EspeciesAnimalesCriaChanged(
-                                            selectedItems));
-                                  },
-                                ),
+                                            e.especieAnimalCriaId) ??
+                                        false,
+                                    onChanged: (bool? value) {
+                                      (value! &&
+                                              formState.value != null &&
+                                              formState.value!.length >= 5 &&
+                                              e.especieAnimalCriaId != 9)
+                                          ? CustomSnackBar.showCustomDialog(
+                                              context,
+                                              'Error',
+                                              'Máximo cinco opciones',
+                                              () => Navigator.pop(context),
+                                              false)
+                                          : setState(
+                                              () {
+                                                var selectedItems =
+                                                    List<LstAnimalCria>.from(
+                                                        formState.value ?? []);
+                                                if (e.especieAnimalCriaId ==
+                                                    9) {
+                                                  selectedItems = [
+                                                    LstAnimalCria(
+                                                        especieAnimalCriaId: e
+                                                            .especieAnimalCriaId)
+                                                  ];
+                                                } else if (value == true) {
+                                                  selectedItems.removeWhere(
+                                                      (element) =>
+                                                          element
+                                                              .especieAnimalCriaId ==
+                                                          9);
+                                                  selectedItems.add(LstAnimalCria(
+                                                      especieAnimalCriaId: e
+                                                          .especieAnimalCriaId));
+                                                } else {
+                                                  selectedItems.removeWhere(
+                                                    (element) =>
+                                                        element
+                                                            .especieAnimalCriaId ==
+                                                        e.especieAnimalCriaId,
+                                                  );
+                                                }
+                                                formState
+                                                    .didChange(selectedItems);
+                                                dimUbicacionBloc.add(
+                                                    EspeciesAnimalesCriaChanged(
+                                                        selectedItems));
+                                              },
+                                            );
+                                    }),
                                 Flexible(
                                   child: Text(
                                     e.descripcion,

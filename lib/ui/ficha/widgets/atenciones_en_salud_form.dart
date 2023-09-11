@@ -16,6 +16,7 @@ import '../../cubits/enfermedad_tratamiento/enfermedad_tratamiento_cubit.dart';
 import '../../cubits/especialidad_med_tradicional/especialidad_med_tradicional_cubit.dart';
 import '../../cubits/lugar_atencion_medico/lugar_atencion_medico_cubit.dart';
 import '../../cubits/planta_medicinal/planta_medicinal_cubit.dart';
+import '../../utils/custom_snack_bar.dart';
 
 class AtencionSaludForm extends StatefulWidget {
   const AtencionSaludForm(
@@ -215,8 +216,6 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 3) {
-                          return 'Máximo tres opciones.';
                         }
                         return null;
                       },
@@ -236,32 +235,50 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element.especialidadMedTradId ==
-                                                e.especialidadMedTradId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(
-                                                LstEspMedTradicional(
-                                                    especialidadMedTradId: e
-                                                        .especialidadMedTradId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
+                                          value: formState.value?.any((element) =>
                                                   element
                                                       .especialidadMedTradId ==
-                                                  e.especialidadMedTradId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          atencionSaludBloc.add(
-                                              EspecialidadesMedTradicionalChanged(
-                                                  selectedItems));
-                                        },
-                                      ),
+                                                  e.especialidadMedTradId) ??
+                                              false,
+                                          onChanged: (bool? value) {
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        3)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo tres opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(
+                                                    () {
+                                                      var selectedItems =
+                                                          formState.value ?? [];
+                                                      if (value == true) {
+                                                        selectedItems.add(
+                                                            LstEspMedTradicional(
+                                                                especialidadMedTradId:
+                                                                    e.especialidadMedTradId));
+                                                      } else {
+                                                        selectedItems
+                                                            .removeWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .especialidadMedTradId ==
+                                                              e.especialidadMedTradId,
+                                                        );
+                                                      }
+                                                      formState.didChange(
+                                                          selectedItems);
+                                                      atencionSaludBloc.add(
+                                                          EspecialidadesMedTradicionalChanged(
+                                                              selectedItems));
+                                                    },
+                                                  );
+                                          }),
                                       Flexible(
                                         child: Text(
                                           e.descripcion,
@@ -307,8 +324,6 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 3) {
-                          return 'Máximo tres opciones.';
                         }
                         return null;
                       },
@@ -326,33 +341,50 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element
-                                                    .enfermedadTradicionalId ==
-                                                e.enfermedadTradicionalId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(
-                                                LstEnfermedadTradicional(
-                                                    enfermedadTradicionalId: e
-                                                        .enfermedadTradicionalId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
+                                          value: formState.value?.any((element) =>
                                                   element
                                                       .enfermedadTradicionalId ==
-                                                  e.enfermedadTradicionalId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          atencionSaludBloc.add(
-                                              EnfermedadesTradicionalesChanged(
-                                                  selectedItems));
-                                        },
-                                      ),
+                                                  e.enfermedadTradicionalId) ??
+                                              false,
+                                          onChanged: (bool? value) {
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        3)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo tres opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(
+                                                    () {
+                                                      var selectedItems =
+                                                          formState.value ?? [];
+                                                      if (value == true) {
+                                                        selectedItems.add(
+                                                            LstEnfermedadTradicional(
+                                                                enfermedadTradicionalId:
+                                                                    e.enfermedadTradicionalId));
+                                                      } else {
+                                                        selectedItems
+                                                            .removeWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .enfermedadTradicionalId ==
+                                                              e.enfermedadTradicionalId,
+                                                        );
+                                                      }
+                                                      formState.didChange(
+                                                          selectedItems);
+                                                      atencionSaludBloc.add(
+                                                          EnfermedadesTradicionalesChanged(
+                                                              selectedItems));
+                                                    },
+                                                  );
+                                          }),
                                       Flexible(
                                         child: Text(
                                           e.descripcion,
@@ -397,8 +429,6 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 3) {
-                          return 'Máximo tres opciones.';
                         }
                         return null;
                       },
@@ -416,32 +446,50 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element.lugarAtencionMedicoId ==
-                                                e.lugarAtencionMedicoId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(
-                                                LstLugarAtencionMedico(
-                                                    lugarAtencionMedicoId: e
-                                                        .lugarAtencionMedicoId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
+                                          value: formState.value?.any((element) =>
                                                   element
                                                       .lugarAtencionMedicoId ==
-                                                  e.lugarAtencionMedicoId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          atencionSaludBloc.add(
-                                              LugaresAtencionMedicoChanged(
-                                                  selectedItems));
-                                        },
-                                      ),
+                                                  e.lugarAtencionMedicoId) ??
+                                              false,
+                                          onChanged: (bool? value) {
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        3)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo tres opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(
+                                                    () {
+                                                      var selectedItems =
+                                                          formState.value ?? [];
+                                                      if (value == true) {
+                                                        selectedItems.add(
+                                                            LstLugarAtencionMedico(
+                                                                lugarAtencionMedicoId:
+                                                                    e.lugarAtencionMedicoId));
+                                                      } else {
+                                                        selectedItems
+                                                            .removeWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .lugarAtencionMedicoId ==
+                                                              e.lugarAtencionMedicoId,
+                                                        );
+                                                      }
+                                                      formState.didChange(
+                                                          selectedItems);
+                                                      atencionSaludBloc.add(
+                                                          LugaresAtencionMedicoChanged(
+                                                              selectedItems));
+                                                    },
+                                                  );
+                                          }),
                                       Flexible(
                                         child: Text(
                                           e.descripcion,
@@ -647,8 +695,6 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Seleccione al menos una opción.';
-                        } else if (value.length > 3) {
-                          return 'Máximo tres opciones.';
                         }
                         return null;
                       },
@@ -666,31 +712,53 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element.plantaMedicinalId ==
-                                                e.plantaMedicinalId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          var selectedItems =
-                                              formState.value ?? [];
-                                          if (value == true) {
-                                            selectedItems.add(
-                                                LstPlantaMedicinal(
-                                                    plantaMedicinalId:
-                                                        e.plantaMedicinalId));
-                                          } else {
-                                            selectedItems.removeWhere(
-                                              (element) =>
-                                                  element.plantaMedicinalId ==
-                                                  e.plantaMedicinalId,
-                                            );
-                                          }
-                                          formState.didChange(selectedItems);
-                                          atencionSaludBloc.add(
-                                              PlantasMedicinalesChanged(
-                                                  selectedItems));
-                                        },
-                                      ),
+                                          value: formState.value?.any(
+                                                  (element) =>
+                                                      element
+                                                          .plantaMedicinalId ==
+                                                      e.plantaMedicinalId) ??
+                                              false,
+                                          onChanged: (bool? value) {
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        3)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo tres opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(
+                                                    () {
+                                                      var selectedItems = List<
+                                                              LstPlantaMedicinal>.from(
+                                                          formState.value ??
+                                                              []);
+                                                      if (value == true) {
+                                                        selectedItems.add(
+                                                            LstPlantaMedicinal(
+                                                                plantaMedicinalId:
+                                                                    e.plantaMedicinalId));
+                                                      } else {
+                                                        selectedItems
+                                                            .removeWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .plantaMedicinalId ==
+                                                              e.plantaMedicinalId,
+                                                        );
+                                                      }
+                                                      formState.didChange(
+                                                          selectedItems);
+                                                      atencionSaludBloc.add(
+                                                          PlantasMedicinalesChanged(
+                                                              selectedItems));
+                                                    },
+                                                  );
+                                          }),
                                       Flexible(
                                         child: Text(
                                           e.descripcion,

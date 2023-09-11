@@ -10,7 +10,7 @@ abstract class ServicioPublicoViviendaLocalDataSource {
       ServicioPublicoViviendaEntity servicioPublicoVivienda);
 
   Future<int> saveServiciosPublicosVivienda(
-      int datoViviendaId, List<LstServPublico> lstServPublicos);
+      int datoViviendaId, List<LstServPublico> lstServPublico);
 
   Future<List<LstServPublico>> getServiciosPublicosVivienda(
       int? datoViviendaId);
@@ -41,14 +41,14 @@ class ServicioPublicoViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveServiciosPublicosVivienda(
-      int datoViviendaId, List<LstServPublico> lstServPublicos) async {
+      int datoViviendaId, List<LstServPublico> lstServPublico) async {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaServiciosPublicos',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
-    final viviendaServiciosPublicos = lstServPublicos
+    final viviendaServiciosPublicos = lstServPublico
         .map((item) => ViviendaServiciosPublicos(
             servicioPublicoViviendaId: item.servicioPublicoViviendaId,
             datoViviendaId: datoViviendaId))

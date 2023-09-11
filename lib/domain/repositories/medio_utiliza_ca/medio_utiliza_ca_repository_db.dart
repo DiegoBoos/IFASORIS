@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
+import '../../../data/models/medio_utiliza_ca_model.dart';
 import '../../entities/medio_utiliza_ca_entity.dart';
 
 abstract class MedioUtilizaCARepositoryDB {
@@ -9,4 +10,10 @@ abstract class MedioUtilizaCARepositoryDB {
 
   Future<Either<Failure, List<MedioUtilizaCAEntity>>>
       getMediosUtilizaCARepositoryDB();
+
+  Future<Either<Failure, List<LstMediosUtilizaCA>>>
+      getUbicacionMediosUtilizaCARepositoryDB(int? ubicacionId);
+
+  Future<Either<Failure, int>> saveUbicacionMediosUtilizaCARepositoryDB(
+      int datoViviendaId, List<LstMediosUtilizaCA> lstMediosUtilizaCA);
 }

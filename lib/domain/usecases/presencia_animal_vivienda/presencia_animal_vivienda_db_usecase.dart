@@ -28,8 +28,8 @@ class PresenciaAnimalViviendaUsecaseDB {
   }
 
   Future<Either<Failure, int>> savePresenciaAnimalesViviendaUsecaseDB(
-      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimales) {
+      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimal) {
     return repositoryDB.savePresenciaAnimalesViviendaRepositoryDB(
-        datoViviendaId, lstPresenciaAnimales);
+        datoViviendaId, lstPresenciaAnimal);
   }
 }

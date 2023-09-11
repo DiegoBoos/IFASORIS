@@ -22,12 +22,12 @@ class TipoCombustibleViviendaUsecaseDB {
   }
 
   Future<Either<Failure, int>> saveTiposCombustibleViviendaUsecaseDB(
-      int datoViviendaId, List<LstTiposCombustible> lstTiposCombustible) {
+      int datoViviendaId, List<LstTipoCombustible> lstTipoCombustible) {
     return repositoryDB.saveTiposCombustibleViviendaRepositoryDB(
-        datoViviendaId, lstTiposCombustible);
+        datoViviendaId, lstTipoCombustible);
   }
 
-  Future<Either<Failure, List<LstTiposCombustible>>>
+  Future<Either<Failure, List<LstTipoCombustible>>>
       getTiposCombustibleViviendaUsecaseDB(int? datoViviendaId) {
     return repositoryDB.getTiposCombustibleViviendaRepositoryDB(datoViviendaId);
   }

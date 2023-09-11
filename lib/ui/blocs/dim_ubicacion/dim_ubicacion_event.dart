@@ -95,6 +95,12 @@ class GetMediosComunicacion extends DimUbicacionEvent {
   const GetMediosComunicacion(this.ubicacionId);
 }
 
+class GetMediosUtilizaCA extends DimUbicacionEvent {
+  final int? ubicacionId;
+
+  const GetMediosUtilizaCA(this.ubicacionId);
+}
+
 class DimUbicacionFormSubmissionSuccess extends DimUbicacionEvent {
   final int ubicacionId;
 
@@ -173,16 +179,16 @@ class MediosComunicacionChanged extends DimUbicacionEvent {
   const MediosComunicacionChanged(this.lstMediosComunica);
 }
 
+class MediosUtilizaCAChanged extends DimUbicacionEvent {
+  final List<LstMediosUtilizaCA> lstMediosUtilizaCA;
+
+  const MediosUtilizaCAChanged(this.lstMediosUtilizaCA);
+}
+
 class TiempoTardaChanged extends DimUbicacionEvent {
   final int tiempoTardaId;
 
   const TiempoTardaChanged(this.tiempoTardaId);
-}
-
-class MedioUtilizaCAChanged extends DimUbicacionEvent {
-  final int medioUtilizaId;
-
-  const MedioUtilizaCAChanged(this.medioUtilizaId);
 }
 
 class DificultadesAccesoCAChanged extends DimUbicacionEvent {

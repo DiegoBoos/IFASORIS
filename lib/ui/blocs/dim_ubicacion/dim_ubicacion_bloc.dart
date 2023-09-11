@@ -10,24 +10,25 @@ import '../../../data/models/fruto_model.dart';
 import '../../../data/models/hortaliza_model.dart';
 import '../../../data/models/leguminosa_model.dart';
 import '../../../data/models/medio_comunicacion_model.dart';
+import '../../../data/models/medio_utiliza_ca_model.dart';
 import '../../../data/models/medio_utiliza_med_tradicional_model.dart';
 import '../../../data/models/nombre_med_tradicional_model.dart';
 import '../../../data/models/tuberculo_platano_model.dart';
 import '../../../data/models/verdura_model.dart';
-import '../../../domain/entities/dim_ubicacion_entity.dart';
-import '../../../domain/usecases/cereal/cereal_db_usecase.dart';
-import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_db_usecase.dart';
-import '../../../domain/usecases/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_db_usecase.dart';
-import '../../../domain/usecases/dim_ubicacion/dim_ubicacion_db_usecase.dart';
-import '../../../domain/usecases/especialidad_med_tradicional/especialidad_med_tradicional_db_usecase.dart';
-import '../../../domain/usecases/especie_animal/especie_animal_db_usecase.dart';
-import '../../../domain/usecases/fruto/fruto_db_usecase.dart';
-import '../../../domain/usecases/hortaliza/hortaliza_db_usecase.dart';
-import '../../../domain/usecases/leguminosa/leguminosa_db_usecase.dart';
-import '../../../domain/usecases/medio_comunicacion/medio_comunicacion_db_usecase.dart';
-import '../../../domain/usecases/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_db_usecase.dart';
-import '../../../domain/usecases/tuberculo_platano/tuberculo_platano_db_usecase.dart';
-import '../../../domain/usecases/verdura/verdura_db_usecase.dart';
+import '../../../domain/usecases/cereal/cereal_exports.dart';
+import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
+import '../../../domain/usecases/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_exports.dart';
+import '../../../domain/usecases/dim_ubicacion/dim_ubicacion_exports.dart';
+import '../../../domain/usecases/especialidad_med_tradicional/especialidad_med_tradicional_exports.dart';
+import '../../../domain/usecases/especie_animal/especie_animal_exports.dart';
+import '../../../domain/usecases/fruto/fruto_exports.dart';
+import '../../../domain/usecases/hortaliza/hortaliza_exports.dart';
+import '../../../domain/usecases/leguminosa/leguminosa_exports.dart';
+import '../../../domain/usecases/medio_comunicacion/medio_comunicacion_exports.dart';
+import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
+import '../../../domain/usecases/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_exports.dart';
+import '../../../domain/usecases/tuberculo_platano/tuberculo_platano_exports.dart';
+import '../../../domain/usecases/verdura/verdura_exports.dart';
 
 part 'dim_ubicacion_event.dart';
 part 'dim_ubicacion_state.dart';
@@ -44,6 +45,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
   final HortalizaUsecaseDB hortalizaUsecaseDB;
   final LeguminosaUsecaseDB leguminosaUsecaseDB;
   final MedioComunicacionUsecaseDB medioComunicacionUsecaseDB;
+  final MedioUtilizaCAUsecaseDB medioUtilizaCAUsecaseDB;
   final MedioUtilizaMedTradicionalUsecaseDB medioUtilizaMedTradicionalUsecaseDB;
   final TuberculoPlatanoUsecaseDB tuberculoPlatanoUsecaseDB;
   final VerduraUsecaseDB verduraUsecaseDB;
@@ -59,6 +61,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     required this.hortalizaUsecaseDB,
     required this.leguminosaUsecaseDB,
     required this.medioComunicacionUsecaseDB,
+    required this.medioUtilizaCAUsecaseDB,
     required this.medioUtilizaMedTradicionalUsecaseDB,
     required this.tuberculoPlatanoUsecaseDB,
     required this.verduraUsecaseDB,
@@ -259,8 +262,21 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
             formStatus:
                 DimUbicacionSubmissionFailed(failure.properties.first)));
       }, (data) {
+        emit(state.copyWith(lstMediosComunica: data));
+        add(GetMediosUtilizaCA(event.ubicacionId));
+      });
+    });
+
+    on<GetMediosUtilizaCA>((event, emit) async {
+      final result = await medioUtilizaCAUsecaseDB
+          .getUbicacionMediosUtilizaCAUsecaseDB(event.ubicacionId);
+      result.fold((failure) {
         emit(state.copyWith(
-            lstMediosComunica: data, formStatus: DimUbicacionFormLoaded()));
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(
+            lstMediosUtilizaCA: data, formStatus: DimUbicacionFormLoaded()));
       });
     });
 
@@ -304,8 +320,8 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     on<TiempoTardaChanged>((event, emit) {
       emit(state.copyWith(tiempoTardaId: event.tiempoTardaId));
     });
-    on<MedioUtilizaCAChanged>((event, emit) {
-      emit(state.copyWith(medioUtilizaId: event.medioUtilizaId));
+    on<MediosUtilizaCAChanged>((event, emit) {
+      emit(state.copyWith(lstMediosUtilizaCA: event.lstMediosUtilizaCA));
     });
     on<DificultadesAccesoCAChanged>((event, emit) {
       emit(state.copyWith(
@@ -448,6 +464,15 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     final result = await medioComunicacionUsecaseDB
         .saveUbicacionMediosComunicacionUsecaseDB(
             ubicacionId, state.lstMediosComunica!);
+    result.fold((failure) {
+      add(DimUbicacionFormSubmissionFailed(failure.properties.first));
+    }, (data) async => await saveUbicacionMediosUtilizaCAChanged(ubicacionId));
+  }
+
+  Future<void> saveUbicacionMediosUtilizaCAChanged(int ubicacionId) async {
+    final result =
+        await medioUtilizaCAUsecaseDB.saveUbicacionMediosUtilizaCAUsecaseDB(
+            ubicacionId, state.lstMediosUtilizaCA!);
     result.fold((failure) {
       add(DimUbicacionFormSubmissionFailed(failure.properties.first));
     }, (data) async => await saveUbicacionMediosMedTradicional(ubicacionId));

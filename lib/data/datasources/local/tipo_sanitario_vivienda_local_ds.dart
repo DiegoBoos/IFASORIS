@@ -10,10 +10,9 @@ abstract class TipoSanitarioViviendaLocalDataSource {
       TipoSanitarioViviendaEntity tipoSanitarioVivienda);
 
   Future<int> saveTiposSanitarioVivienda(
-      int datoViviendaId, List<LstTiposSanitario> lstTiposSanitario);
+      int datoViviendaId, List<LstTipoSanitario> lstTipoSanitario);
 
-  Future<List<LstTiposSanitario>> getTiposSanitarioVivienda(
-      int? datoViviendaId);
+  Future<List<LstTipoSanitario>> getTiposSanitarioVivienda(int? datoViviendaId);
 }
 
 class TipoSanitarioViviendaLocalDataSourceImpl
@@ -41,14 +40,14 @@ class TipoSanitarioViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveTiposSanitarioVivienda(
-      int datoViviendaId, List<LstTiposSanitario> lstTiposSanitario) async {
+      int datoViviendaId, List<LstTipoSanitario> lstTipoSanitario) async {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaTiposSanitario',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
-    final viviendaTiposSanitario = lstTiposSanitario
+    final viviendaTiposSanitario = lstTipoSanitario
         .map((item) => ViviendaTiposSanitario(
             tipoSanitarioViviendaId: item.tipoSanitarioViviendaId,
             datoViviendaId: datoViviendaId,
@@ -66,13 +65,13 @@ class TipoSanitarioViviendaLocalDataSourceImpl
   }
 
   @override
-  Future<List<LstTiposSanitario>> getTiposSanitarioVivienda(
+  Future<List<LstTipoSanitario>> getTiposSanitarioVivienda(
       int? datoViviendaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosViviendaTiposSanitario',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
-    final result = List<LstTiposSanitario>.from(
-        res.map((m) => LstTiposSanitario.fromJson(m))).toList();
+    final result = List<LstTipoSanitario>.from(
+        res.map((m) => LstTipoSanitario.fromJson(m))).toList();
 
     return result;
   }

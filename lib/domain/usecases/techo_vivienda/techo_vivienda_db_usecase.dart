@@ -21,9 +21,9 @@ class TechoViviendaUsecaseDB {
   }
 
   Future<Either<Failure, int>> saveTechosViviendaUsecaseDB(
-      int datoViviendaId, List<LstTecho> lstTechos) {
+      int datoViviendaId, List<LstTecho> lstTecho) {
     return repositoryDB.saveTechosViviendaRepositoryDB(
-        datoViviendaId, lstTechos);
+        datoViviendaId, lstTecho);
   }
 
   Future<Either<Failure, List<LstTecho>>> getTechosViviendaViviendaUsecaseDB(

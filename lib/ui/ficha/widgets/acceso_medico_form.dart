@@ -138,6 +138,12 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                                 []));
                                       }
 
+                                      if (_nombresMedTrad.isEmpty) {
+                                        _nombresMedTrad.add(
+                                            LstNombreMedTradicional(
+                                                nombreMedTradicional: ''));
+                                      }
+
                                       setState(() {
                                         _existeMedTradicionalComunidad =
                                             newValue!;
@@ -191,8 +197,6 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Seleccione al menos una opción.';
-                      } else if (value.length > 5) {
-                        return 'Máximo cinco opciones.';
                       }
                       return null;
                     },
@@ -215,24 +219,39 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                               e.especialidadMedTradId) ??
                                           false,
                                       onChanged: (bool? value) {
-                                        var selectedItems =
-                                            formState.value ?? [];
-                                        if (value == true) {
-                                          selectedItems.add(
-                                              LstEspMedTradicional(
-                                                  especialidadMedTradId:
-                                                      e.especialidadMedTradId));
-                                        } else {
-                                          selectedItems.removeWhere(
-                                            (element) =>
-                                                element.especialidadMedTradId ==
-                                                e.especialidadMedTradId,
-                                          );
-                                        }
-                                        formState.didChange(selectedItems);
-                                        dimUbicacionBloc.add(
-                                            EspecialidadesMedTradChanged(
-                                                selectedItems));
+                                        (value! &&
+                                                formState.value != null &&
+                                                formState.value!.length >= 5 &&
+                                                e.especialidadMedTradId != 5)
+                                            ? CustomSnackBar.showCustomDialog(
+                                                context,
+                                                'Error',
+                                                'Máximo cinco opciones',
+                                                () => Navigator.pop(context),
+                                                false)
+                                            : setState(() {
+                                                var selectedItems = List<
+                                                        LstEspMedTradicional>.from(
+                                                    formState.value ?? []);
+                                                if (value == true) {
+                                                  selectedItems.add(
+                                                      LstEspMedTradicional(
+                                                          especialidadMedTradId:
+                                                              e.especialidadMedTradId));
+                                                } else {
+                                                  selectedItems.removeWhere(
+                                                    (element) =>
+                                                        element
+                                                            .especialidadMedTradId ==
+                                                        e.especialidadMedTradId,
+                                                  );
+                                                }
+                                                formState
+                                                    .didChange(selectedItems);
+                                                dimUbicacionBloc.add(
+                                                    EspecialidadesMedTradChanged(
+                                                        selectedItems));
+                                              });
                                       },
                                     ),
                                     Flexible(
@@ -318,8 +337,6 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Seleccione al menos una opción.';
-                      } else if (value.length > 3) {
-                        return 'Máximo tres opciones.';
                       }
                       return null;
                     },
@@ -342,24 +359,38 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                               e.medioUtilizaMedTradId) ??
                                           false,
                                       onChanged: (bool? value) {
-                                        var selectedItems =
-                                            formState.value ?? [];
-                                        if (value == true) {
-                                          selectedItems.add(
-                                              LstMediosMedTradicional(
-                                                  medioUtilizaMedTradId:
-                                                      e.medioUtilizaMedTradId));
-                                        } else {
-                                          selectedItems.removeWhere(
-                                            (element) =>
-                                                element.medioUtilizaMedTradId ==
-                                                e.medioUtilizaMedTradId,
-                                          );
-                                        }
-                                        formState.didChange(selectedItems);
-                                        dimUbicacionBloc.add(
-                                            MediosUtilizaMedTradChanged(
-                                                selectedItems));
+                                        (value! &&
+                                                formState.value != null &&
+                                                formState.value!.length >= 3)
+                                            ? CustomSnackBar.showCustomDialog(
+                                                context,
+                                                'Error',
+                                                'Máximo tres opciones',
+                                                () => Navigator.pop(context),
+                                                false)
+                                            : setState(() {
+                                                var selectedItems = List<
+                                                        LstMediosMedTradicional>.from(
+                                                    formState.value ?? []);
+                                                if (value == true) {
+                                                  selectedItems.add(
+                                                      LstMediosMedTradicional(
+                                                          medioUtilizaMedTradId:
+                                                              e.medioUtilizaMedTradId));
+                                                } else {
+                                                  selectedItems.removeWhere(
+                                                    (element) =>
+                                                        element
+                                                            .medioUtilizaMedTradId ==
+                                                        e.medioUtilizaMedTradId,
+                                                  );
+                                                }
+                                                formState
+                                                    .didChange(selectedItems);
+                                                dimUbicacionBloc.add(
+                                                    MediosUtilizaMedTradChanged(
+                                                        selectedItems));
+                                              });
                                       },
                                     ),
                                     Flexible(
@@ -407,8 +438,6 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Seleccione al menos una opción.';
-                      } else if (value.length > 3) {
-                        return 'Máximo tres opciones.';
                       }
                       return null;
                     },
@@ -435,36 +464,53 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                               e.dificultadAccesoMedTradId) ??
                                           false,
                                       onChanged: (bool? value) {
-                                        var selectedItems =
-                                            formState.value ?? [];
+                                        (value! &&
+                                                formState.value != null &&
+                                                formState.value!.length >= 3 &&
+                                                e.dificultadAccesoMedTradId !=
+                                                    5)
+                                            ? CustomSnackBar.showCustomDialog(
+                                                context,
+                                                'Error',
+                                                'Máximo tres opciones',
+                                                () => Navigator.pop(context),
+                                                false)
+                                            : setState(() {
+                                                var selectedItems = List<
+                                                        LstDificultadAccesoMedTradicional>.from(
+                                                    formState.value ?? []);
 
-                                        if (e.dificultadAccesoMedTradId == 5) {
-                                          selectedItems = [
-                                            LstDificultadAccesoMedTradicional(
-                                                dificultadAccesoMedTradId:
-                                                    e.dificultadAccesoMedTradId)
-                                          ];
-                                        } else if (value == true) {
-                                          selectedItems.removeWhere((element) =>
-                                              element
-                                                  .dificultadAccesoMedTradId ==
-                                              5);
-                                          selectedItems.add(
-                                              LstDificultadAccesoMedTradicional(
-                                                  dificultadAccesoMedTradId: e
-                                                      .dificultadAccesoMedTradId));
-                                        } else {
-                                          selectedItems.removeWhere(
-                                            (element) =>
-                                                element
-                                                    .dificultadAccesoMedTradId ==
-                                                e.dificultadAccesoMedTradId,
-                                          );
-                                        }
-                                        formState.didChange(selectedItems);
-                                        dimUbicacionBloc.add(
-                                            DificultadesAccesoMedTradicionalChanged(
-                                                selectedItems));
+                                                if (e.dificultadAccesoMedTradId ==
+                                                    5) {
+                                                  selectedItems = [
+                                                    LstDificultadAccesoMedTradicional(
+                                                        dificultadAccesoMedTradId:
+                                                            e.dificultadAccesoMedTradId)
+                                                  ];
+                                                } else if (value == true) {
+                                                  selectedItems.removeWhere(
+                                                      (element) =>
+                                                          element
+                                                              .dificultadAccesoMedTradId ==
+                                                          5);
+                                                  selectedItems.add(
+                                                      LstDificultadAccesoMedTradicional(
+                                                          dificultadAccesoMedTradId:
+                                                              e.dificultadAccesoMedTradId));
+                                                } else {
+                                                  selectedItems.removeWhere(
+                                                    (element) =>
+                                                        element
+                                                            .dificultadAccesoMedTradId ==
+                                                        e.dificultadAccesoMedTradId,
+                                                  );
+                                                }
+                                                formState
+                                                    .didChange(selectedItems);
+                                                dimUbicacionBloc.add(
+                                                    DificultadesAccesoMedTradicionalChanged(
+                                                        selectedItems));
+                                              });
                                       },
                                     ),
                                     Flexible(

@@ -22,7 +22,7 @@ class FactorRiesgoViviendaCubit extends Cubit<FactoresRiesgoViviendaState> {
         (data) => emit(FactoresRiesgoViviendaLoaded(data)));
   }
 
-  Future<List<LstFactoresRiesgo>> getFactoresRiesgoViviendaDB(
+  Future<List<LstFactorRiesgo>> getFactoresRiesgoViviendaDB(
       int? datoViviendaId) async {
     final result = await factorRiesgoViviendaUsecaseDB
         .getFactoresRiesgoViviendaUsecaseDB(datoViviendaId);

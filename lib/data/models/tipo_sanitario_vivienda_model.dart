@@ -25,17 +25,17 @@ class TipoSanitarioViviendaModel extends TipoSanitarioViviendaEntity {
       );
 }
 
-class LstTiposSanitario {
+class LstTipoSanitario {
   int? tipoSanitarioViviendaId;
   String? otroTipoSanitario;
 
-  LstTiposSanitario({
+  LstTipoSanitario({
     this.tipoSanitarioViviendaId,
     this.otroTipoSanitario,
   });
 
-  factory LstTiposSanitario.fromJson(Map<String, dynamic> json) =>
-      LstTiposSanitario(
+  factory LstTipoSanitario.fromJson(Map<String, dynamic> json) =>
+      LstTipoSanitario(
         tipoSanitarioViviendaId: json["TipoSanitarioVivienda_id"],
         otroTipoSanitario: json["OtroTipoSanitario"],
       );

@@ -12,7 +12,7 @@ abstract class TechoViviendaRepositoryDB {
       getTechosViviendaRepositoryDB();
 
   Future<Either<Failure, int>> saveTechosViviendaRepositoryDB(
-      int datoViviendaId, List<LstTecho> lstTechos);
+      int datoViviendaId, List<LstTecho> lstTecho);
 
   Future<Either<Failure, List<LstTecho>>> getTechosViviendaViviendaRepositoryDB(
       int? datoViviendaId);

@@ -12,8 +12,8 @@ abstract class TipoSanitarioViviendaRepositoryDB {
       getTiposSanitarioRepositoryDB();
 
   Future<Either<Failure, int>> saveTiposSanitarioViviendaRepositoryDB(
-      int datoViviendaId, List<LstTiposSanitario> lstTiposSanitario);
+      int datoViviendaId, List<LstTipoSanitario> lstTipoSanitario);
 
-  Future<Either<Failure, List<LstTiposSanitario>>>
+  Future<Either<Failure, List<LstTipoSanitario>>>
       getTiposSanitarioViviendaRepositoryDB(int? datoViviendaId);
 }

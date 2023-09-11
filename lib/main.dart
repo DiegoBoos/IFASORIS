@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'back_services.dart';
 import 'injection.dart' as di;
 import 'router.dart';
 import 'ui/blocs/afiliado/afiliado_bloc.dart';
@@ -28,6 +30,7 @@ import 'ui/cubits/conducta_seguir/conducta_seguir_cubit.dart';
 import 'ui/cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 import 'ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import 'ui/cubits/costumbre_practica/costumbre_practica_cubit.dart';
+import 'ui/cubits/cuarto_vivienda/cuarto_vivienda_cubit.dart';
 import 'ui/cubits/curso_vida/curso_vida_cubit.dart';
 import 'ui/cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import 'ui/cubits/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_cubit.dart';
@@ -97,6 +100,12 @@ final prefs = SharedPreferencesService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  /*  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+  });
+  await initializeService(); */
   di.init();
   await prefs.initPrefs();
   runApp(const MyApp());
@@ -373,6 +382,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<SancionJusticiaCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => di.locator<NroCuartoViviendaCubit>(),
           ),
         ],
         child: MaterialApp(

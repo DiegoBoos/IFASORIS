@@ -1,3 +1,5 @@
+import 'package:ifasoris/data/models/medio_utiliza_ca_model.dart';
+
 import '../../data/models/cereal_model.dart';
 import '../../data/models/dificultad_acceso_ca_model.dart';
 import '../../data/models/dificultad_acceso_med_tradicional_model.dart';
@@ -25,7 +27,6 @@ class DimUbicacionEntity {
   int? autoridadIndigenaId;
   int? estadoViaId;
   int? tiempoTardaId;
-  int? medioUtilizaId;
   int? costoDesplazamientoId;
   int? existeMedTradicionalComunidad;
   int? tiempoTardaMedTradId;
@@ -42,6 +43,7 @@ class DimUbicacionEntity {
   List<LstHortaliza>? lstHortalizas;
   List<LstLeguminosa>? lstLeguminosas;
   List<LstMediosComunica>? lstMediosComunica;
+  List<LstMediosUtilizaCA>? lstMediosUtilizaCA;
   List<LstMediosMedTradicional>? lstMediosMedTradicional;
   List<LstNombreMedTradicional>? lstNombreMedTradicional;
   List<LstTuberculo>? lstTuberculos;
@@ -60,7 +62,6 @@ class DimUbicacionEntity {
     this.autoridadIndigenaId,
     this.estadoViaId,
     this.tiempoTardaId,
-    this.medioUtilizaId,
     this.costoDesplazamientoId,
     this.existeMedTradicionalComunidad,
     this.tiempoTardaMedTradId,
@@ -77,6 +78,7 @@ class DimUbicacionEntity {
     this.lstHortalizas,
     this.lstLeguminosas,
     this.lstMediosComunica,
+    this.lstMediosUtilizaCA,
     this.lstMediosMedTradicional,
     this.lstNombreMedTradicional,
     this.lstTuberculos,
@@ -114,6 +116,7 @@ class DimUbicacionEntity {
           List<LstHortaliza>? lstHortalizas,
           List<LstLeguminosa>? lstLeguminosas,
           List<LstMediosComunica>? lstMediosComunica,
+          List<LstMediosUtilizaCA>? lstMediosUtilizaCA,
           List<LstMediosMedTradicional>? lstMediosMedTradicional,
           List<LstNombreMedTradicional>? lstNombreMedTradicional,
           List<LstTuberculo>? lstTuberculos,
@@ -132,7 +135,6 @@ class DimUbicacionEntity {
         autoridadIndigenaId: autoridadIndigenaId ?? this.autoridadIndigenaId,
         estadoViaId: estadoViaId ?? this.estadoViaId,
         tiempoTardaId: tiempoTardaId ?? this.tiempoTardaId,
-        medioUtilizaId: medioUtilizaId ?? this.medioUtilizaId,
         costoDesplazamientoId:
             costoDesplazamientoId ?? this.costoDesplazamientoId,
         existeMedTradicionalComunidad:
@@ -154,6 +156,7 @@ class DimUbicacionEntity {
         lstHortalizas: lstHortalizas ?? this.lstHortalizas,
         lstLeguminosas: lstLeguminosas ?? this.lstLeguminosas,
         lstMediosComunica: lstMediosComunica ?? this.lstMediosComunica,
+        lstMediosUtilizaCA: lstMediosUtilizaCA ?? this.lstMediosUtilizaCA,
         lstMediosMedTradicional:
             lstMediosMedTradicional ?? this.lstMediosMedTradicional,
         lstNombreMedTradicional:
@@ -175,7 +178,6 @@ class DimUbicacionEntity {
         "AutoridadIndigena_id": autoridadIndigenaId,
         "EstadoVia_id": estadoViaId,
         "TiempoTarda_id": tiempoTardaId,
-        "MedioUtiliza_id": medioUtilizaId,
         "CostoDesplazamiento_id": costoDesplazamientoId,
         "ExisteMedTradicionalComunidad": existeMedTradicionalComunidad,
         "TiempoTardaMedTrad_id": tiempoTardaMedTradId,

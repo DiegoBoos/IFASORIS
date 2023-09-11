@@ -22,12 +22,12 @@ class FactorRiesgoViviendaUsecaseDB {
   }
 
   Future<Either<Failure, int>> saveFactoresRiesgoViviendaUsecaseDB(
-      int datoViviendaId, List<LstFactoresRiesgo> lstFactoresRiesgo) {
+      int datoViviendaId, List<LstFactorRiesgo> lstFactorRiesgo) {
     return repositoryDB.saveFactoresRiesgoViviendaRepositoryDB(
-        datoViviendaId, lstFactoresRiesgo);
+        datoViviendaId, lstFactorRiesgo);
   }
 
-  Future<Either<Failure, List<LstFactoresRiesgo>>>
+  Future<Either<Failure, List<LstFactorRiesgo>>>
       getFactoresRiesgoViviendaUsecaseDB(int? datoViviendaId) {
     return repositoryDB.getFactoresRiesgoViviendaRepositoryDB(datoViviendaId);
   }

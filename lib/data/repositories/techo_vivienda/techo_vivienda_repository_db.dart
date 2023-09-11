@@ -41,10 +41,10 @@ class TechoViviendaRepositoryDBImpl implements TechoViviendaRepositoryDB {
 
   @override
   Future<Either<Failure, int>> saveTechosViviendaRepositoryDB(
-      int datoViviendaId, List<LstTecho> lstTechos) async {
+      int datoViviendaId, List<LstTecho> lstTecho) async {
     try {
       final result = await techoViviendaLocalDataSource.saveTechosVivienda(
-          datoViviendaId, lstTechos);
+          datoViviendaId, lstTecho);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

@@ -13,7 +13,7 @@ abstract class PresenciaAnimalViviendaLocalDataSource {
       int? datoViviendaId);
 
   Future<int> savePresenciaAnimalesVivienda(
-      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimales);
+      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimal);
 }
 
 class PresenciaAnimalViviendaLocalDataSourceImpl
@@ -41,14 +41,14 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
 
   @override
   Future<int> savePresenciaAnimalesVivienda(
-      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimales) async {
+      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimal) async {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaPresenciaAnimales',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
-    final viviendaPresenciaAnimales = lstPresenciaAnimales
+    final viviendaPresenciaAnimales = lstPresenciaAnimal
         .map((item) => ViviendaPresenciaAnimales(
             presenciaAnimalViviendaId: item.presenciaAnimalViviendaId,
             datoViviendaId: datoViviendaId,

@@ -16,6 +16,7 @@ import '../../../domain/usecases/servicio_solicitado/servicio_solicitado_exports
 import '../../../domain/usecases/ultima_vez_inst_salud/ultima_vez_inst_salud_exports.dart';
 import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 import '../../cubits/metodo_planificacion/metodo_planificacion_cubit.dart';
+import '../../utils/custom_snack_bar.dart';
 
 class CuidadoSaludCondRiesgoForm extends StatefulWidget {
   const CuidadoSaludCondRiesgoForm(
@@ -81,8 +82,12 @@ class _CuidadoSaludCondRiesgoFormState
               ? null
               : widget.cuidadoSaludCondRiesgo?.utilizaMetodoPlanificacionId;
       _metodoPlanificacionId =
-          widget.cuidadoSaludCondRiesgo?.metodoPlanificacionId;
-      _conductaSeguirId = widget.cuidadoSaludCondRiesgo?.conductaSeguirId;
+          widget.cuidadoSaludCondRiesgo?.metodoPlanificacionId == 0
+              ? null
+              : widget.cuidadoSaludCondRiesgo?.metodoPlanificacionId;
+      _conductaSeguirId = widget.cuidadoSaludCondRiesgo?.conductaSeguirId == 0
+          ? null
+          : widget.cuidadoSaludCondRiesgo?.conductaSeguirId;
 
       if (widget.cuidadoSaludCondRiesgo != null &&
           widget.cuidadoSaludCondRiesgo!.lstNombresEnfermedades!.isNotEmpty) {
@@ -91,6 +96,8 @@ class _CuidadoSaludCondRiesgoFormState
         _tieneEnfermedad = 2;
         BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context)
             .add(const NombresEnfermedadesChanged([]));
+        BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context)
+            .add(const SeguimientoEnfermedadChanged(0));
       }
     });
   }
@@ -174,8 +181,6 @@ class _CuidadoSaludCondRiesgoFormState
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Seleccione al menos una opción.';
-                } else if (value.length > 3) {
-                  return 'Máximo tres opciones.';
                 }
                 return null;
               },
@@ -191,31 +196,46 @@ class _CuidadoSaludCondRiesgoFormState
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Checkbox(
-                                value: formState.value?.any((element) =>
-                                        element.servicioSolicitadoId ==
-                                        e.servicioSolicitadoId) ??
-                                    false,
-                                onChanged: (bool? value) {
-                                  var selectedItems =
-                                      List<LstServicioSolicitado>.from(
-                                          formState.value ?? []);
-                                  if (value == true) {
-                                    selectedItems.add(LstServicioSolicitado(
-                                        servicioSolicitadoId:
-                                            e.servicioSolicitadoId));
-                                  } else {
-                                    selectedItems.removeWhere(
-                                      (element) =>
+                                  value: formState.value?.any((element) =>
                                           element.servicioSolicitadoId ==
-                                          e.servicioSolicitadoId,
-                                    );
-                                  }
-                                  formState.didChange(selectedItems);
-                                  cuidadoSaludCondRiesgoBloc.add(
-                                      ServiciosSolicitadosChanged(
-                                          selectedItems));
-                                },
-                              ),
+                                          e.servicioSolicitadoId) ??
+                                      false,
+                                  onChanged: (bool? value) {
+                                    (value! &&
+                                            formState.value != null &&
+                                            formState.value!.length >= 3)
+                                        ? CustomSnackBar.showCustomDialog(
+                                            context,
+                                            'Error',
+                                            'Máximo tres opciones',
+                                            () => Navigator.pop(context),
+                                            false)
+                                        : setState(
+                                            () {
+                                              var selectedItems = List<
+                                                      LstServicioSolicitado>.from(
+                                                  formState.value ?? []);
+                                              if (value == true) {
+                                                selectedItems.add(
+                                                    LstServicioSolicitado(
+                                                        servicioSolicitadoId: e
+                                                            .servicioSolicitadoId));
+                                              } else {
+                                                selectedItems.removeWhere(
+                                                  (element) =>
+                                                      element
+                                                          .servicioSolicitadoId ==
+                                                      e.servicioSolicitadoId,
+                                                );
+                                              }
+                                              formState
+                                                  .didChange(selectedItems);
+                                              cuidadoSaludCondRiesgoBloc.add(
+                                                  ServiciosSolicitadosChanged(
+                                                      selectedItems));
+                                            },
+                                          );
+                                  }),
                               Flexible(
                                 child: Text(
                                   e.descripcion,
@@ -323,8 +343,6 @@ class _CuidadoSaludCondRiesgoFormState
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Seleccione al menos una opción.';
-                      } else if (value.length > 3) {
-                        return 'Máximo tres opciones.';
                       }
                       return null;
                     },
@@ -342,31 +360,45 @@ class _CuidadoSaludCondRiesgoFormState
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Checkbox(
-                                      value: formState.value?.any((element) =>
-                                              element.nombreEnfermedadId ==
-                                              e.nombreEnfermedadId) ??
-                                          false,
-                                      onChanged: (bool? value) {
-                                        var selectedItems =
-                                            List<LstNombreEnfermedad>.from(
-                                                formState.value ?? []);
-                                        if (value == true) {
-                                          selectedItems.add(LstNombreEnfermedad(
-                                              nombreEnfermedadId:
-                                                  e.nombreEnfermedadId));
-                                        } else {
-                                          selectedItems.removeWhere(
-                                            (element) =>
+                                        value: formState.value?.any((element) =>
                                                 element.nombreEnfermedadId ==
-                                                e.nombreEnfermedadId,
-                                          );
-                                        }
-                                        formState.didChange(selectedItems);
-                                        cuidadoSaludCondRiesgoBloc.add(
-                                            NombresEnfermedadesChanged(
-                                                selectedItems));
-                                      },
-                                    ),
+                                                e.nombreEnfermedadId) ??
+                                            false,
+                                        onChanged: (bool? value) {
+                                          (value! &&
+                                                  formState.value!.length >= 3)
+                                              ? CustomSnackBar.showCustomDialog(
+                                                  context,
+                                                  'Error',
+                                                  'Máximo tres opciones',
+                                                  () => Navigator.pop(context),
+                                                  false)
+                                              : setState(
+                                                  () {
+                                                    var selectedItems = List<
+                                                            LstNombreEnfermedad>.from(
+                                                        formState.value ?? []);
+                                                    if (value == true) {
+                                                      selectedItems.add(
+                                                          LstNombreEnfermedad(
+                                                              nombreEnfermedadId:
+                                                                  e.nombreEnfermedadId));
+                                                    } else {
+                                                      selectedItems.removeWhere(
+                                                        (element) =>
+                                                            element
+                                                                .nombreEnfermedadId ==
+                                                            e.nombreEnfermedadId,
+                                                      );
+                                                    }
+                                                    formState.didChange(
+                                                        selectedItems);
+                                                    cuidadoSaludCondRiesgoBloc.add(
+                                                        NombresEnfermedadesChanged(
+                                                            selectedItems));
+                                                  },
+                                                );
+                                        }),
                                     Flexible(
                                       child: Text(
                                         e.descripcion,
@@ -782,20 +814,36 @@ class _CuidadoSaludCondRiesgoFormState
                   Column(
                       children: state.opcionesSiNoLoaded!
                           .map(
-                            (e) => RadioListTile(
-                              title: Text(e.descripcion),
-                              value: e.opcionId,
-                              groupValue: _utilizaMetodoPlanificacionId,
-                              onChanged: (int? newValue) {
-                                setState(() {
-                                  _utilizaMetodoPlanificacionId = newValue!;
-                                });
-                                cuidadoSaludCondRiesgoBloc.add(
-                                    UtilizaMetodoPlanificacionChanged(
-                                        newValue!));
-                                formstate.didChange(newValue);
-                              },
-                            ),
+                            (e) => widget.currentAfiliado.edad! < 12 &&
+                                    e.opcionId == 1
+                                ? Container()
+                                : RadioListTile(
+                                    title: Text(e.descripcion),
+                                    value: e.opcionId,
+                                    groupValue: _utilizaMetodoPlanificacionId,
+                                    onChanged: (int? newValue) {
+                                      if (newValue == 2 || newValue == 3) {
+                                        setState(() {
+                                          _metodoPlanificacionId = null;
+                                          _conductaSeguirId = null;
+                                        });
+                                        cuidadoSaludCondRiesgoBloc.add(
+                                            const MetodoPlanificacionChanged(
+                                                0));
+                                        cuidadoSaludCondRiesgoBloc.add(
+                                            const ConductaSeguirChanged(0));
+                                      }
+
+                                      setState(() {
+                                        _utilizaMetodoPlanificacionId =
+                                            newValue!;
+                                      });
+                                      cuidadoSaludCondRiesgoBloc.add(
+                                          UtilizaMetodoPlanificacionChanged(
+                                              newValue!));
+                                      formstate.didChange(newValue);
+                                    },
+                                  ),
                           )
                           .toList()),
                   formstate.hasError
@@ -818,90 +866,95 @@ class _CuidadoSaludCondRiesgoFormState
           }
         },
       ),
-      const Divider(),
-      const Text(
-        'Que metodo de planificación utiliza al momento de la consulta',
-        style: TextStyle(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      const Divider(),
-      BlocBuilder<MetodoPlanificacionCubit, MetodosPlanificacionState>(
-        builder: (context, state) {
-          if (state is MetodosPlanificacionLoaded) {
-            return DropdownButtonFormField<int>(
-              value: _metodoPlanificacionId,
-              items: state.metodosPlanificacionLoaded!
-                  .map(
-                    (metodoPlanificacion) => DropdownMenuItem<int>(
-                      value: metodoPlanificacion.metodoPlanificacionId,
-                      child: Text(metodoPlanificacion.descripcion),
-                    ),
-                  )
-                  .toList(),
-              decoration: const InputDecoration(
-                  labelText: 'Seleccione una opción',
-                  border: OutlineInputBorder()),
-              onChanged: (int? newValue) {
-                setState(() {
-                  _metodoPlanificacionId = newValue!;
-                });
-                cuidadoSaludCondRiesgoBloc
-                    .add(MetodoPlanificacionChanged(newValue!));
-              },
-              validator: (value) {
-                if (value == null) {
-                  return 'Campo Requerido';
+      if (_utilizaMetodoPlanificacionId == 1)
+        Column(
+          children: [
+            const Divider(),
+            const Text(
+              'Que metodo de planificación utiliza al momento de la consulta',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const Divider(),
+            BlocBuilder<MetodoPlanificacionCubit, MetodosPlanificacionState>(
+              builder: (context, state) {
+                if (state is MetodosPlanificacionLoaded) {
+                  return DropdownButtonFormField<int>(
+                    value: _metodoPlanificacionId,
+                    items: state.metodosPlanificacionLoaded!
+                        .map(
+                          (metodoPlanificacion) => DropdownMenuItem<int>(
+                            value: metodoPlanificacion.metodoPlanificacionId,
+                            child: Text(metodoPlanificacion.descripcion),
+                          ),
+                        )
+                        .toList(),
+                    decoration: const InputDecoration(
+                        labelText: 'Seleccione una opción',
+                        border: OutlineInputBorder()),
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        _metodoPlanificacionId = newValue!;
+                      });
+                      cuidadoSaludCondRiesgoBloc
+                          .add(MetodoPlanificacionChanged(newValue!));
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Campo Requerido';
+                      }
+                      return null;
+                    },
+                  );
+                } else {
+                  return Container();
                 }
-                return null;
               },
-            );
-          } else {
-            return Container();
-          }
-        },
-      ),
-      const Divider(),
-      const Text(
-        'Conducta a seguir',
-        style: TextStyle(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      const Divider(),
-      BlocBuilder<ConductaSeguirCubit, ConductasSeguirState>(
-        builder: (context, state) {
-          if (state is ConductasSeguirLoaded) {
-            return DropdownButtonFormField<int>(
-              value: _conductaSeguirId,
-              items: state.conductasSeguirLoaded!
-                  .map(
-                    (conductaSeguir) => DropdownMenuItem<int>(
-                      value: conductaSeguir.conductaSeguirId,
-                      child: Text(conductaSeguir.descripcion),
-                    ),
-                  )
-                  .toList(),
-              decoration: const InputDecoration(
-                  labelText: 'Seleccione una opción',
-                  border: OutlineInputBorder()),
-              onChanged: (int? newValue) {
-                setState(() {
-                  _conductaSeguirId = newValue!;
-                });
-                cuidadoSaludCondRiesgoBloc
-                    .add(ConductaSeguirChanged(newValue!));
-              },
-              validator: (value) {
-                if (value == null) {
-                  return 'Campo Requerido';
+            ),
+            const Divider(),
+            const Text(
+              'Conducta a seguir',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const Divider(),
+            BlocBuilder<ConductaSeguirCubit, ConductasSeguirState>(
+              builder: (context, state) {
+                if (state is ConductasSeguirLoaded) {
+                  return DropdownButtonFormField<int>(
+                    value: _conductaSeguirId,
+                    items: state.conductasSeguirLoaded!
+                        .map(
+                          (conductaSeguir) => DropdownMenuItem<int>(
+                            value: conductaSeguir.conductaSeguirId,
+                            child: Text(conductaSeguir.descripcion),
+                          ),
+                        )
+                        .toList(),
+                    decoration: const InputDecoration(
+                        labelText: 'Seleccione una opción',
+                        border: OutlineInputBorder()),
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        _conductaSeguirId = newValue!;
+                      });
+                      cuidadoSaludCondRiesgoBloc
+                          .add(ConductaSeguirChanged(newValue!));
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Campo Requerido';
+                      }
+                      return null;
+                    },
+                  );
+                } else {
+                  return Container();
                 }
-                return null;
               },
-            );
-          } else {
-            return Container();
-          }
-        },
-      ),
+            ),
+          ],
+        ),
     ]);
   }
 }

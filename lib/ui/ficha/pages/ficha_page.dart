@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/usecases/grupo_familiar/grupo_familiar_exports.dart';
 
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
+import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../services/connection_sqlite_service.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
@@ -19,6 +20,7 @@ import '../../cubits/conducta_seguir/conducta_seguir_cubit.dart';
 import '../../cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 import '../../cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import '../../cubits/costumbre_practica/costumbre_practica_cubit.dart';
+import '../../cubits/cuarto_vivienda/cuarto_vivienda_cubit.dart';
 import '../../cubits/curso_vida/curso_vida_cubit.dart';
 import '../../cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import '../../cubits/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_cubit.dart';
@@ -208,6 +210,7 @@ class _FichaPageState extends State<FichaPage> {
     BlocProvider.of<LugarPlantaMedicinalCubit>(context)
         .getLugarPlantaMedicinalDB();
     BlocProvider.of<PlantaMedicinalCubit>(context).getPlantasMedicinalesDB();
+    BlocProvider.of<NroCuartoViviendaCubit>(context).getNroCuartosViviendaDB();
   }
 
   @override
@@ -247,7 +250,7 @@ class _FichaPageState extends State<FichaPage> {
                         Colors.green);
 
                     setState(() {
-                      currentStep += 1;
+                      currentStep = 1;
                     });
                   }
                   if (formStatus is DimUbicacionSubmissionFailed) {
@@ -266,7 +269,7 @@ class _FichaPageState extends State<FichaPage> {
                         Colors.green);
 
                     setState(() {
-                      currentStep += 1;
+                      currentStep = 2;
                     });
                   }
                   if (formStatus is DimViviendaSubmissionFailed) {
@@ -480,28 +483,37 @@ class _FichaPageState extends State<FichaPage> {
                 });
               },
             ),
-            RadioListTile(
-              title: const Text('No'),
-              value: 1,
-              groupValue: registraAfiliados,
-              onChanged: (int? value) {
-                setState(() {
-                  registraAfiliados = value!;
-                });
-
-                final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
-                  context,
-                );
-
-                BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context).add(
-                    EmptyAfiliadosGrupoFamiliar(
-                        afiliadoPrefsBloc.state.afiliado!.familiaId!));
-              },
-            ),
+            FutureBuilder<bool>(
+                future: isGrupoFamiliarEmpty(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final isGrupoFamiliarEmpty = snapshot.data!;
+                    if (isGrupoFamiliarEmpty) {
+                      return RadioListTile(
+                        title: const Text('No'),
+                        value: 1,
+                        groupValue: registraAfiliados,
+                        onChanged: (int? value) {
+                          setState(() {
+                            registraAfiliados = value!;
+                          });
+                        },
+                      );
+                    } else {
+                      return Container();
+                    }
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                }),
             GrupoFamiliarPage(
               registraAfiliados: registraAfiliados,
             ),
           ],
         ));
+  }
+
+  Future<bool> isGrupoFamiliarEmpty() async {
+    return await ConnectionSQLiteService.isTableEmpty('Asp3_GrupoFamiliar');
   }
 }

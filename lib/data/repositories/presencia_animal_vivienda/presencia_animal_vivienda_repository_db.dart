@@ -45,10 +45,10 @@ class PresenciaAnimalViviendaRepositoryDBImpl
 
   @override
   Future<Either<Failure, int>> savePresenciaAnimalesViviendaRepositoryDB(
-      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimales) async {
+      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimal) async {
     try {
       final result = await presenciaAnimalViviendaLocalDataSource
-          .savePresenciaAnimalesVivienda(datoViviendaId, lstPresenciaAnimales);
+          .savePresenciaAnimalesVivienda(datoViviendaId, lstPresenciaAnimal);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

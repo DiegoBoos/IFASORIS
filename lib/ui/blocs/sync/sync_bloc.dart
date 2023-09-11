@@ -13,6 +13,7 @@ import '../../../domain/usecases/conducta_seguir/conducta_seguir_exports.dart';
 import '../../../domain/usecases/consumo_alcohol/consumo_alcohol_exports.dart';
 import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import '../../../domain/usecases/costumbre_practica/costumbre_practica_exports.dart';
+import '../../../domain/usecases/cuarto_vivienda/cuarto_vivienda_exports.dart';
 import '../../../domain/usecases/curso_vida/curso_vida_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_exports.dart';
@@ -222,11 +223,13 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final CostumbrePracticaUsecaseDB costumbrePracticaUsecaseDB;
   final SancionJusticiaUsecase sancionJusticiaUsecase;
   final SancionJusticiaUsecaseDB sancionJusticiaUsecaseDB;
+  final NroCuartoViviendaUsecase nroCuartoViviendaUsecase;
+  final NroCuartoViviendaUsecaseDB nroCuartoViviendaUsecaseDB;
 
   final FichaUsecase fichaUsecase;
   final SyncLogUsecaseDB syncLogDB;
 
-  int totalAccesories = 69;
+  int totalAccesories = 70;
 
   List<AfiliadoEntity> afiliadosTemp = [];
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -299,6 +302,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<EventoCostumbreParticipaEntity> eventosCostumbresParticipaTemp = [];
   List<CostumbrePracticaEntity> costumbresPracticanTemp = [];
   List<SancionJusticiaEntity> sancionesJusticiaTemp = [];
+  List<NroCuartoViviendaEntity> nroCuartosViviendaTemp = [];
 
   SyncBloc({
     required this.afiliadoUsecase,
@@ -441,6 +445,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.costumbrePracticaUsecaseDB,
     required this.sancionJusticiaUsecase,
     required this.sancionJusticiaUsecaseDB,
+    required this.nroCuartoViviendaUsecase,
+    required this.nroCuartoViviendaUsecaseDB,
     required this.fichaUsecase,
     required this.syncLogDB,
   }) : super(SyncInitial()) {
@@ -1352,7 +1358,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= opcionesSiNoTemp.length) {
-        //TODO: TEMP UNTIL FIXING
+        /*  ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
+          resguardosTemp = [];
+          await syncResguardos(event);
+        });
+        return; */
+        //TODO: pendiente
         ConnectionSQLiteService.truncateTable(
                 'TiemposTarda_AccesoMedTradicional')
             .then((value) async {
@@ -1360,12 +1371,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           await syncTiemposTardaMedTradicional(event);
         });
         return;
-        /* ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
-          resguardosTemp = [];
-          await syncResguardos(event);
-        }); 
-        return;
-        */
       }
 
       OpcionSiNoEntity opcionSiNoTemp = opcionesSiNoTemp[data];
@@ -1381,7 +1386,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** Resguardo ****************************
 
-  Future<void> syncResguardos(SyncStarted event) async {
+  /*  Future<void> syncResguardos(SyncStarted event) async {
     final result = await resguardoUsecase
         .getResguardosUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
@@ -1423,7 +1428,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         resguardoTemp,
       );
     });
-  }
+  } */
 
 // ************************** Resguardo ****************************
 
@@ -3856,10 +3861,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= sancionesJusticiaTemp.length) {
-        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-            title: 'Sincronización completada',
-            counter: state.syncProgressModel.counter + 1,
-            total: totalAccesories)));
+        ConnectionSQLiteService.truncateTable(
+                'NroCuartosVivienda_DatosVivienda')
+            .then((value) async {
+          nroCuartosViviendaTemp = [];
+          await syncNroCuartosVivienda(event);
+        });
         return;
       }
       SancionJusticiaEntity sancionJusticiaTemp = sancionesJusticiaTemp[data];
@@ -3872,6 +3879,53 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** SancionesJusticia ****************************
+
+// ************************** NroCuartosVivienda ****************************
+
+  Future<void> syncNroCuartosVivienda(SyncStarted event) async {
+    final result =
+        await nroCuartoViviendaUsecase.getNroCuartosViviendaUsecase();
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      nroCuartosViviendaTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando cuartos vivienda',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      await saveNroCuartoVivienda(
+        event,
+        nroCuartosViviendaTemp[0],
+      );
+    });
+  }
+
+  Future<void> saveNroCuartoVivienda(
+    SyncStarted event,
+    NroCuartoViviendaEntity nroCuartoVivienda,
+  ) async {
+    final result = await nroCuartoViviendaUsecaseDB
+        .saveNroCuartoViviendaUsecaseDB(nroCuartoVivienda);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= nroCuartosViviendaTemp.length) {
+        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: 'Sincronización completada',
+            counter: state.syncProgressModel.counter + 1,
+            total: totalAccesories)));
+        return;
+      }
+      NroCuartoViviendaEntity nroCuartoViviendaTemp =
+          nroCuartosViviendaTemp[data];
+
+      await saveNroCuartoVivienda(
+        event,
+        nroCuartoViviendaTemp,
+      );
+    });
+  }
+
+// ************************** NroCuartosVivienda ****************************
 
   int calculatePercent() {
     final counter = state.syncProgressModel.counter <= 0

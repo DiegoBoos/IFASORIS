@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/dificultad_acceso_ca_model.dart';
+import '../../../data/models/medio_utiliza_ca_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
+import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
+import '../../utils/custom_snack_bar.dart';
 
 class AccesoCAForm extends StatefulWidget {
   const AccesoCAForm({super.key, this.dimUbicacion});
@@ -19,8 +22,8 @@ class AccesoCAForm extends StatefulWidget {
 
 class AccesoCAFormState extends State<AccesoCAForm> {
   int? _tiempoTardaId;
-  int? _medioUtilizaId;
   int? _costoDesplazamientoId;
+  int? _produccionMinera;
 
   @override
   void initState() {
@@ -28,7 +31,6 @@ class AccesoCAFormState extends State<AccesoCAForm> {
 
     setState(() {
       _tiempoTardaId = widget.dimUbicacion?.tiempoTardaId;
-      _medioUtilizaId = widget.dimUbicacion?.medioUtilizaId;
       _costoDesplazamientoId = widget.dimUbicacion?.costoDesplazamientoId;
     });
   }
@@ -91,31 +93,84 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         BlocBuilder<MedioUtilizaCACubit, MediosUtilizaCAState>(
           builder: (context, state) {
             if (state is MediosUtilizaCALoaded) {
-              return DropdownButtonFormField<int>(
-                value: _medioUtilizaId,
-                items: state.mediosUtilizaCALoaded!
-                    .map(
-                      (medioUtiliza) => DropdownMenuItem<int>(
-                        value: medioUtiliza.medioUtilizaId,
-                        child: Text(medioUtiliza.descripcion),
-                      ),
-                    )
-                    .toList(),
-                decoration: const InputDecoration(
-                    labelText:
-                        'Medio que utiliza para ir desde su casa al centro de atención en Salud',
-                    border: OutlineInputBorder()),
-                onChanged: (int? newValue) {
-                  setState(() {
-                    _medioUtilizaId = newValue;
-                  });
-                  dimUbicacionBloc.add(MedioUtilizaCAChanged(newValue!));
-                },
+              return FormField<List<LstMediosUtilizaCA>>(
+                initialValue: dimUbicacionBloc.state.lstMediosUtilizaCA,
                 validator: (value) {
-                  if (value == null) {
-                    return 'Campo Requerido';
+                  if (value == null || value.isEmpty) {
+                    return 'Seleccione al menos una opción.';
                   }
                   return null;
+                },
+                builder: (FormFieldState<List<LstMediosUtilizaCA>> formState) {
+                  return Column(
+                    children: [
+                      Wrap(
+                        children: List<Widget>.generate(
+                          state.mediosUtilizaCALoaded!.length,
+                          (index) {
+                            final e = state.mediosUtilizaCALoaded![index];
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Checkbox(
+                                  value: formState.value?.any((element) =>
+                                          element.medioUtilizaId ==
+                                          e.medioUtilizaId) ??
+                                      false,
+                                  onChanged: (bool? value) {
+                                    (value! &&
+                                            formState.value != null &&
+                                            formState.value!.length >= 3)
+                                        ? CustomSnackBar.showCustomDialog(
+                                            context,
+                                            'Error',
+                                            'Máximo tres opciones',
+                                            () => Navigator.pop(context),
+                                            false)
+                                        : setState(() {
+                                            var selectedItems =
+                                                List<LstMediosUtilizaCA>.from(
+                                                    formState.value ?? []);
+
+                                            if (value == true) {
+                                              selectedItems.add(
+                                                  LstMediosUtilizaCA(
+                                                      medioUtilizaId:
+                                                          e.medioUtilizaId));
+                                            } else {
+                                              selectedItems.removeWhere(
+                                                (element) =>
+                                                    element.medioUtilizaId ==
+                                                    e.medioUtilizaId,
+                                              );
+                                            }
+                                            formState.didChange(selectedItems);
+                                            dimUbicacionBloc.add(
+                                                MediosUtilizaCAChanged(
+                                                    selectedItems));
+                                          });
+                                  },
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    e.descripcion,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (index <
+                                    state.mediosUtilizaCALoaded!.length - 1)
+                                  const VerticalDivider(),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      Text(
+                        formState.errorText ?? '',
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ],
+                  );
                 },
               );
             }
@@ -138,8 +193,6 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Seleccione al menos una opción.';
-                  } else if (value.length > 3) {
-                    return 'Máximo tres opciones.';
                   }
                   return null;
                 },
@@ -161,34 +214,49 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                                           e.dificultaAccesoId) ??
                                       false,
                                   onChanged: (bool? value) {
-                                    var selectedItems =
-                                        List<LstDificultadAccesoAtencion>.from(
-                                            formState.value ?? []);
+                                    (value! &&
+                                            formState.value != null &&
+                                            formState.value!.length >= 3 &&
+                                            e.dificultaAccesoId != 5)
+                                        ? CustomSnackBar.showCustomDialog(
+                                            context,
+                                            'Error',
+                                            'Máximo tres opciones',
+                                            () => Navigator.pop(context),
+                                            false)
+                                        : setState(() {
+                                            var selectedItems = List<
+                                                    LstDificultadAccesoAtencion>.from(
+                                                formState.value ?? []);
 
-                                    if (e.dificultaAccesoId == 5) {
-                                      selectedItems = [
-                                        LstDificultadAccesoAtencion(
-                                            dificultaAccesoId:
-                                                e.dificultaAccesoId)
-                                      ];
-                                    } else if (value == true) {
-                                      selectedItems.removeWhere(((element) =>
-                                          element.dificultaAccesoId == 5));
-                                      selectedItems.add(
-                                          LstDificultadAccesoAtencion(
-                                              dificultaAccesoId:
-                                                  e.dificultaAccesoId));
-                                    } else {
-                                      selectedItems.removeWhere(
-                                        (element) =>
-                                            element.dificultaAccesoId ==
-                                            e.dificultaAccesoId,
-                                      );
-                                    }
-                                    formState.didChange(selectedItems);
-                                    dimUbicacionBloc.add(
-                                        DificultadesAccesoCAChanged(
-                                            selectedItems));
+                                            if (e.dificultaAccesoId == 5) {
+                                              selectedItems = [
+                                                LstDificultadAccesoAtencion(
+                                                    dificultaAccesoId:
+                                                        e.dificultaAccesoId)
+                                              ];
+                                            } else if (value == true) {
+                                              selectedItems.removeWhere(
+                                                  ((element) =>
+                                                      element
+                                                          .dificultaAccesoId ==
+                                                      5));
+                                              selectedItems.add(
+                                                  LstDificultadAccesoAtencion(
+                                                      dificultaAccesoId:
+                                                          e.dificultaAccesoId));
+                                            } else {
+                                              selectedItems.removeWhere(
+                                                (element) =>
+                                                    element.dificultaAccesoId ==
+                                                    e.dificultaAccesoId,
+                                              );
+                                            }
+                                            formState.didChange(selectedItems);
+                                            dimUbicacionBloc.add(
+                                                DificultadesAccesoCAChanged(
+                                                    selectedItems));
+                                          });
                                   },
                                 ),
                                 Flexible(
@@ -252,7 +320,62 @@ class AccesoCAFormState extends State<AccesoCAForm> {
             return Container();
           },
         ),
-        const SizedBox(height: 20),
+        const Divider(),
+        const Text(
+          'Realiza producción minera',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const Divider(),
+        BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
+          builder: (context, state) {
+            if (state is OpcionesSiNoLoaded) {
+              return FormField(
+                initialValue: _produccionMinera,
+                builder: (FormFieldState<int> formstate) => Column(
+                  children: [
+                    Column(
+                        children: state.opcionesSiNoLoaded!
+                            .map(
+                              (e) => e.opcionId == 3
+                                  ? Container()
+                                  : RadioListTile(
+                                      title: Text(e.descripcion),
+                                      value: e.opcionId,
+                                      groupValue: _produccionMinera,
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          _produccionMinera = newValue!;
+                                        });
+
+                                        dimUbicacionBloc.add(
+                                            ProduccionMineraChanged(newValue!));
+
+                                        formstate.didChange(newValue);
+                                      },
+                                    ),
+                            )
+                            .toList()),
+                    formstate.hasError
+                        ? const Text(
+                            'Seleccione una opción',
+                            style: TextStyle(color: Colors.red),
+                          )
+                        : Container(),
+                  ],
+                ),
+                validator: (value) {
+                  if (value == null) {
+                    return 'Campo requerido';
+                  }
+                  return null;
+                },
+              );
+            } else {
+              return Container();
+            }
+          },
+        ),
       ],
     );
   }

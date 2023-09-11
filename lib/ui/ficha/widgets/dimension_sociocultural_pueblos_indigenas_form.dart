@@ -349,8 +349,6 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Seleccione al menos una opción.';
-                            } else if (value.length > 4) {
-                              return 'Máximo cuatro opciones.';
                             }
                             return null;
                           },
@@ -598,7 +596,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
           children: [
             const Divider(),
             const Text(
-              'Su territorio cuenta con  sitios sagrados',
+              'Cuáles sitios sagrados',
               style: TextStyle(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),

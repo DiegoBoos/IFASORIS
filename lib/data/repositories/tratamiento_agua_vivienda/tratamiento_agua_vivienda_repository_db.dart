@@ -45,10 +45,10 @@ class TratamientoAguaViviendaRepositoryDBImpl
 
   @override
   Future<Either<Failure, int>> saveTmtoAguasViviendaRepositoryDB(
-      int datoViviendaId, List<LstTmtoAgua> lstTmtoAguas) async {
+      int datoViviendaId, List<LstTmtoAgua> lstTmtoAgua) async {
     try {
       final result = await tratamientoAguaViviendaLocalDataSource
-          .saveTmtoAguasVivienda(datoViviendaId, lstTmtoAguas);
+          .saveTmtoAguasVivienda(datoViviendaId, lstTmtoAgua);
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));

@@ -15,5 +15,5 @@ abstract class PresenciaAnimalViviendaRepositoryDB {
       getPresenciaAnimalesViviendaRepositoryDB(int? datoViviendaId);
 
   Future<Either<Failure, int>> savePresenciaAnimalesViviendaRepositoryDB(
-      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimales);
+      int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimal);
 }

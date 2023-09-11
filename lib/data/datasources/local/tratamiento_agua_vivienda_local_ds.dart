@@ -10,7 +10,7 @@ abstract class TratamientoAguaViviendaLocalDataSource {
       TratamientoAguaViviendaEntity tratamientoAguaVivienda);
 
   Future<int> saveTmtoAguasVivienda(
-      int datoViviendaId, List<LstTmtoAgua> lstTmtoAguas);
+      int datoViviendaId, List<LstTmtoAgua> lstTmtoAgua);
 
   Future<List<LstTmtoAgua>> getTratamientosAguaVivienda(int? datoViviendaId);
 }
@@ -40,14 +40,14 @@ class TratamientoAguaViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveTmtoAguasVivienda(
-      int datoViviendaId, List<LstTmtoAgua> lstTmtoAguas) async {
+      int datoViviendaId, List<LstTmtoAgua> lstTmtoAgua) async {
     final db = await ConnectionSQLiteService.db;
 
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaTratamientosAgua',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
 
-    final viviendaTratamientosAgua = lstTmtoAguas
+    final viviendaTratamientosAgua = lstTmtoAgua
         .map((item) => ViviendaTratamientosAgua(
             tratamientoAguaViviendaId: item.tratamientoAguaViviendaId,
             datoViviendaId: datoViviendaId))
