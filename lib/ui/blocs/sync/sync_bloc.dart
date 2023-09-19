@@ -458,13 +458,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           title: 'Descargando afiliados',
         )));
 
-        /* ConnectionSQLiteService.truncateTable('Afiliado').then((value) async {
+        ConnectionSQLiteService.truncateTable('Afiliado').then((value) async {
           await syncAfiliados(event, 1, 10000);
-        }); */
-        await ConnectionSQLiteService.truncateTable(
-            'DificultadesAcceso_CentroAtencion');
-        dificultadesAccesoCATemp = [];
-        await syncDificultadesAccesoCA(event);
+        });
       } else if (event.type == 'P') {
         await syncFicha(event);
       }
@@ -579,7 +575,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       dificultadesAccesoCATemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando dificultades acceso',
-          counter: state.syncProgressModel.counter + 1,
+          counter: 1,
           total: totalAccesories)));
 
       await saveDificultadAccesoCA(
