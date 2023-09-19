@@ -142,6 +142,18 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
             formStatus: DimViviendaSubmissionFailed(failure.properties.first)));
       }, (data) {
         emit(state.copyWith(lstFactorRiesgo: data));
+        add(GetPisosVivienda(event.datoViviendaId));
+      });
+    });
+
+    on<GetPisosVivienda>((event, emit) async {
+      final result = await pisoViviendaUsecaseDB
+          .getPisosViviendaViviendaUsecaseDB(event.datoViviendaId);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus: DimViviendaSubmissionFailed(failure.properties.first)));
+      }, (data) {
+        emit(state.copyWith(lstPiso: data));
         add(GetPresenciaAnimales(event.datoViviendaId));
       });
     });

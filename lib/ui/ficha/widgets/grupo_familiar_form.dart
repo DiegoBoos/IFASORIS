@@ -103,9 +103,11 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
         } else if (_codRegimenAfiliado == "U") {
           _tipoRegimenId = 3;
         }
-        BlocProvider.of<GrupoFamiliarBloc>(context)
-            .add(TipoRegimenChanged(_tipoRegimenId!));
+      } else {
+        _tipoRegimenId = widget.afiliadoGrupoFamiliar?.tipoRegimenId;
       }
+      BlocProvider.of<GrupoFamiliarBloc>(context)
+          .add(TipoRegimenChanged(_tipoRegimenId!));
 
       _parentescoId = widget.afiliadoGrupoFamiliar?.parentescoId;
       _nivelEducativoId = widget.afiliadoGrupoFamiliar?.nivelEducativoId;
@@ -653,6 +655,14 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               labelText: 'Lengua que maneja',
                               border: OutlineInputBorder()),
                           onChanged: (int? newValue) {
+                            if (newValue == 2) {
+                              setState(() {
+                                _lenguaMaternaId = null;
+                              });
+
+                              grupoFamiliarBloc
+                                  .add(const LenguaMaternaChanged(0));
+                            }
                             setState(() {
                               _lenguaManejaId = newValue;
                             });
@@ -670,48 +680,53 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                       return Container();
                     },
                   ),
-                  const Divider(),
-                  const Text(
-                    'LENGUA MATERNA',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  const Divider(),
-                  BlocBuilder<NombreLenguaMaternaCubit,
-                      NombresLenguasMaternaState>(
-                    builder: (context, state) {
-                      if (state is NombresLenguasMaternaLoaded) {
-                        return DropdownButtonFormField<int>(
-                          value: _lenguaMaternaId,
-                          items: state.nombresLenguasMaternaLoaded!
-                              .map(
-                                (lenguaMaterna) => DropdownMenuItem<int>(
-                                  value: lenguaMaterna.lenguaMaternaId,
-                                  child: Text(lenguaMaterna.descripcion),
-                                ),
-                              )
-                              .toList(),
-                          decoration: const InputDecoration(
-                              labelText: 'Lengua materna',
-                              border: OutlineInputBorder()),
-                          onChanged: (int? newValue) {
-                            setState(() {
-                              _lenguaMaternaId = newValue;
-                            });
-                            grupoFamiliarBloc
-                                .add(LenguaMaternaChanged(newValue!));
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return 'Campo Requerido';
+                  if (_lenguaManejaId != 2)
+                    Column(
+                      children: [
+                        const Divider(),
+                        const Text(
+                          'LENGUA MATERNA',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        const Divider(),
+                        BlocBuilder<NombreLenguaMaternaCubit,
+                            NombresLenguasMaternaState>(
+                          builder: (context, state) {
+                            if (state is NombresLenguasMaternaLoaded) {
+                              return DropdownButtonFormField<int>(
+                                value: _lenguaMaternaId,
+                                items: state.nombresLenguasMaternaLoaded!
+                                    .map(
+                                      (lenguaMaterna) => DropdownMenuItem<int>(
+                                        value: lenguaMaterna.lenguaMaternaId,
+                                        child: Text(lenguaMaterna.descripcion),
+                                      ),
+                                    )
+                                    .toList(),
+                                decoration: const InputDecoration(
+                                    labelText: 'Lengua materna',
+                                    border: OutlineInputBorder()),
+                                onChanged: (int? newValue) {
+                                  setState(() {
+                                    _lenguaMaternaId = newValue;
+                                  });
+                                  grupoFamiliarBloc
+                                      .add(LenguaMaternaChanged(newValue!));
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Campo Requerido';
+                                  }
+                                  return null;
+                                },
+                              );
                             }
-                            return null;
+                            return Container();
                           },
-                        );
-                      }
-                      return Container();
-                    },
-                  ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             const SizedBox(height: 20),
@@ -750,12 +765,11 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                           .add(SaveAfiliadosGrupoFamiliar([newEditAfiliado]));
                       BlocProvider.of<EncuestaBloc>(context)
                           .add(SaveAfiliadosEncuesta([newEditAfiliado]));
-                      Navigator.pushReplacementNamed(
-                          context, 'estilo-vida-saludable');
                     } else {
                       afiliadosGrupoFamiliarBloc.add(
                           CreateOrUpdateAfiliadoGrupoFamiliar(newEditAfiliado));
                     }
+                    Navigator.popUntil(context, ModalRoute.withName('ficha'));
                   }
                 },
                 child: Container(

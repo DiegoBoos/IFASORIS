@@ -6,7 +6,6 @@ import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dar
 import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/cuidado_salud_cond_riesgo_form.dart';
-import '../widgets/progress_bar.dart';
 
 class CuidadoSaludCondRiesgoPage extends StatefulWidget {
   const CuidadoSaludCondRiesgoPage({super.key});

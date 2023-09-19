@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/models/afiliado_response_model.dart';
+import '../../../data/models/sync_progress_model.dart';
 import '../../../domain/entities/usuario_entity.dart';
 import '../../../domain/usecases/actividad_fisica/actividad_fisica_exports.dart';
 import '../../../domain/usecases/afiliado/afiliado_exports.dart';
@@ -229,9 +231,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final FichaUsecase fichaUsecase;
   final SyncLogUsecaseDB syncLogDB;
 
-  int totalAccesories = 70;
+  int totalAccesories = 71;
 
-  List<AfiliadoEntity> afiliadosTemp = [];
+  int successfulAfiliadoInserts = 0;
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
   List<EstadoViaEntity> estadosViasTemp = [];
   List<MedioComunicacionEntity> mediosComunicacionTemp = [];
@@ -456,10 +458,13 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           title: 'Descargando afiliados',
         )));
 
-        ConnectionSQLiteService.truncateTable('Afiliado').then((value) async {
-          afiliadosTemp = [];
+        /* ConnectionSQLiteService.truncateTable('Afiliado').then((value) async {
           await syncAfiliados(event, 1, 10000);
-        });
+        }); */
+        await ConnectionSQLiteService.truncateTable(
+            'DificultadesAcceso_CentroAtencion');
+        dificultadesAccesoCATemp = [];
+        await syncDificultadesAccesoCA(event);
       } else if (event.type == 'P') {
         await syncFicha(event);
       }
@@ -500,59 +505,68 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     int registrosPorPagina,
   ) async {
     final result = await afiliadoUsecase.getAfiliadosUsecase(
-        event.usuario.departamentoId!, pagina, registrosPorPagina);
-    return result.fold((failure) => add(SyncError(failure.properties.first)),
-        (data) async {
-      afiliadosTemp.addAll(data.resultado);
-      add(Downloading(state.syncProgressModel.copyWith(
+      event.usuario.departamentoId!,
+      pagina,
+      registrosPorPagina,
+    );
+
+    result.fold(
+      (failure) => add(SyncError(failure.properties.first)),
+      (data) async {
+        final syncProgressModel = state.syncProgressModel.copyWith(
           title: 'Descargando afiliados',
-          counter: afiliadosTemp.length,
+          counter: data.resultado.length,
           total: data.totalRegistros,
-          percent: calculatePercent())));
+          percent: calculatePercent(),
+        );
 
-      if (afiliadosTemp.length < data.totalRegistros &&
-          pagina < data.totalPaginas) {
+        add(Downloading(syncProgressModel));
+
         pagina++;
-        await syncAfiliados(event, pagina, registrosPorPagina);
-      }
+        // Continue fetching more records in the background while saving in parallel.
+        final fetchFuture = syncAfiliados(event, pagina, registrosPorPagina);
+        final saveFuture = saveAfiliados(event, data);
 
-      for (int i = 0; i < afiliadosTemp.length; i++) {
-        await saveAfiliado(event, afiliadosTemp[i]);
-      }
-    });
+        await Future.wait([saveFuture, fetchFuture]);
+      },
+    );
   }
 
-  Future<void> saveAfiliado(
-    SyncStarted event,
-    AfiliadoEntity afiliado,
-  ) async {
-    final result = await afiliadoUsecaseDB.saveAfiliadoUsecaseDB(afiliado);
-    return result.fold((failure) => add(SyncError(failure.properties.first)),
-        (data) async {
-      add(SyncPercentageChanged(state.syncProgressModel.copyWith(
-          title: 'Sincronizando afiliados',
-          counter: data,
-          total: afiliadosTemp.length,
-          percent: calculatePercent())));
+  Future<void> saveAfiliados(
+      SyncStarted event, AfiliadoResponseModel data) async {
+    final db = await ConnectionSQLiteService.db;
 
-      if (data >= afiliadosTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'DificultadesAcceso_CentroAtencion')
-            .then((value) async {
-          dificultadesAccesoCATemp = [];
-          await syncDificultadesAccesoCA(event);
-        });
-        return;
+    await db.transaction((txn) async {
+      for (int i = 0; i < data.resultado.length; i++) {
+        final afiliado = data.resultado[i];
+        final res = await txn.insert('Afiliado', afiliado.toJson());
+
+        if (res != -1) {
+          successfulAfiliadoInserts++;
+          final syncProgressModel = state.syncProgressModel.copyWith(
+            title: 'Sincronizando afiliados',
+            counter: successfulAfiliadoInserts,
+            total: data.resultado.length * data.totalPaginas,
+            percent: calculatePercent(),
+          );
+
+          add(SyncPercentageChanged(syncProgressModel));
+        }
       }
-
-      AfiliadoEntity afiliadoTemp = afiliadosTemp[data];
-
-      await saveAfiliado(
-        event,
-        afiliadoTemp,
-      );
     });
+
+    if (successfulAfiliadoInserts >= data.totalRegistros) {
+      await truncateDificultadesAccesoCA(event);
+    }
   }
+
+  Future<void> truncateDificultadesAccesoCA(SyncStarted event) async {
+    await ConnectionSQLiteService.truncateTable(
+        'DificultadesAcceso_CentroAtencion');
+    dificultadesAccesoCATemp = [];
+    await syncDificultadesAccesoCA(event);
+  }
+
 // ************************** Afiliados ****************************
 
 // ************************** Dificultades acceso CA ****************************
@@ -1358,17 +1372,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= opcionesSiNoTemp.length) {
-        /*  ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
+        ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
           resguardosTemp = [];
           await syncResguardos(event);
-        });
-        return; */
-        //TODO: pendiente
-        ConnectionSQLiteService.truncateTable(
-                'TiemposTarda_AccesoMedTradicional')
-            .then((value) async {
-          tiemposTardaMedTradicionalTemp = [];
-          await syncTiemposTardaMedTradicional(event);
         });
         return;
       }
@@ -1386,7 +1392,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** Resguardo ****************************
 
-  /*  Future<void> syncResguardos(SyncStarted event) async {
+  Future<void> syncResguardos(SyncStarted event) async {
     final result = await resguardoUsecase
         .getResguardosUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
@@ -1428,7 +1434,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         resguardoTemp,
       );
     });
-  } */
+  }
 
 // ************************** Resguardo ****************************
 

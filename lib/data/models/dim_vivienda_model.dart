@@ -21,6 +21,7 @@ class DimViviendaModel extends DimViviendaEntity {
     int? tenenciaViviendaId,
     int? ventilacionViviendaId,
     int? iluminacionViviendaId,
+    int? nroCuartosViviendaId,
     List<LstPiso>? lstPiso,
     List<LstTecho>? lstTecho,
     List<LstServPublico>? lstServPublico,
@@ -36,6 +37,7 @@ class DimViviendaModel extends DimViviendaEntity {
           tenenciaViviendaId: tenenciaViviendaId,
           ventilacionViviendaId: ventilacionViviendaId,
           iluminacionViviendaId: iluminacionViviendaId,
+          nroCuartosViviendaId: nroCuartosViviendaId,
           lstPiso: lstPiso,
           lstTecho: lstTecho,
           lstServPublico: lstServPublico,
@@ -54,6 +56,7 @@ class DimViviendaModel extends DimViviendaEntity {
         tenenciaViviendaId: json["TenenciaVivienda_id"],
         ventilacionViviendaId: json["VentilacionVivienda_id"],
         iluminacionViviendaId: json["IluminacionVivienda_id"],
+        nroCuartosViviendaId: json["NroCuartosVivienda_id"],
         lstPiso: json["LstPiso"] == null
             ? []
             : List<LstPiso>.from(

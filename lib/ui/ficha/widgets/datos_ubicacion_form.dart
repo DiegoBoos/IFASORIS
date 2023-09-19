@@ -14,6 +14,7 @@ import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
+import '../../cubits/resguardo/resguardo_cubit.dart';
 
 class DatosUbicacionForm extends StatefulWidget {
   const DatosUbicacionForm({super.key, this.dimUbicacion});
@@ -40,7 +41,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   final _telefonocel1Ctrl = TextEditingController();
   final _telefonocel2Ctrl = TextEditingController();
   int? _perteneceResguardo;
-  final _nombreResguardoIndigenaCtrl = TextEditingController();
+  int? _resguardoId;
   int? _autoridadIndigena;
   int? _viaAcceso;
   int? _estadoVia;
@@ -77,6 +78,9 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
       _documentoRecibeVisitaCtrl.text =
           widget.dimUbicacion?.documentoRecibeVisita ?? '';
       _perteneceResguardo = widget.dimUbicacion?.perteneceResguardo;
+      _resguardoId = widget.dimUbicacion?.resguardoId == 0
+          ? null
+          : widget.dimUbicacion?.resguardoId;
       _autoridadIndigena = widget.dimUbicacion?.autoridadIndigenaId;
       _viaAcceso = widget.dimUbicacion?.viaAccesoId;
       _estadoVia = widget.dimUbicacion?.estadoViaId;
@@ -282,6 +286,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                                       value: e.opcionId,
                                       groupValue: _perteneceResguardo,
                                       onChanged: (int? newValue) {
+                                        if (newValue == 2) {
+                                          _resguardoId = null;
+                                          dimUbicacionBloc
+                                              .add(const ResguardoChanged(0));
+                                        }
                                         setState(() {
                                           _perteneceResguardo = newValue!;
                                         });
@@ -313,15 +322,40 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             }
           },
         ),
-        /*  const SizedBox(height: 20),
-        TextFormField(
-            controller: _nombreResguardoIndigenaCtrl,
-            decoration: const InputDecoration(
-                labelText: 'Nombre del resguardo indígena',
-                border: OutlineInputBorder()),
-            onSaved: (String? newValue) {
-              //TODO: dimUbicacionBloc.add(NombreResguardoChanged(newValue!));
-            }), */
+        if (_perteneceResguardo == 1)
+          BlocBuilder<ResguardoCubit, ResguardosState>(
+            builder: (context, state) {
+              if (state is ResguardosLoaded) {
+                return DropdownButtonFormField<int>(
+                  isExpanded: true,
+                  value: _resguardoId,
+                  items: state.resguardos!
+                      .map(
+                        (resguardo) => DropdownMenuItem<int>(
+                          value: resguardo.resguardoId,
+                          child: Text(resguardo.nombreResguardo),
+                        ),
+                      )
+                      .toList(),
+                  decoration: const InputDecoration(
+                      labelText: 'Resguardo', border: OutlineInputBorder()),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      _resguardoId = newValue;
+                    });
+                    dimUbicacionBloc.add(ResguardoChanged(newValue!));
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Campo Requerido';
+                    }
+                    return null;
+                  },
+                );
+              }
+              return Container();
+            },
+          ),
         const SizedBox(height: 20),
         BlocBuilder<AutoridadIndigenaCubit, AutoridadesIndigenasState>(
           builder: (context, state) {

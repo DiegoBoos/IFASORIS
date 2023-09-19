@@ -60,6 +60,7 @@ import '../../cubits/presencia_animal_vivienda/presencia_animal_vivienda_cubit.d
 import '../../cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
 import '../../cubits/regimen/regimen_cubit.dart';
 import '../../cubits/religion_profesa/religion_profesa_cubit.dart';
+import '../../cubits/resguardo/resguardo_cubit.dart';
 import '../../cubits/sancion_justicia/sancion_justicia_cubit.dart';
 import '../../cubits/seguimiento_enfermedad/seguimiento_enfermedad_cubit.dart';
 import '../../cubits/servicio_publico_vivienda/servicio_publico_vivienda_cubit.dart';
@@ -211,6 +212,7 @@ class _FichaPageState extends State<FichaPage> {
         .getLugarPlantaMedicinalDB();
     BlocProvider.of<PlantaMedicinalCubit>(context).getPlantasMedicinalesDB();
     BlocProvider.of<NroCuartoViviendaCubit>(context).getNroCuartosViviendaDB();
+    BlocProvider.of<ResguardoCubit>(context).getResguardosDB();
   }
 
   @override

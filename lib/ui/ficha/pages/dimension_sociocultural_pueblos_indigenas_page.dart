@@ -6,7 +6,6 @@ import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocul
 import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/dimension_sociocultural_pueblos_indigenas_form.dart';
-import '../widgets/progress_bar.dart';
 
 class DimensionSocioCulturalPueblosIndigenasPage extends StatefulWidget {
   const DimensionSocioCulturalPueblosIndigenasPage({super.key});

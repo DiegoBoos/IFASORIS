@@ -32,6 +32,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
     setState(() {
       _tiempoTardaId = widget.dimUbicacion?.tiempoTardaId;
       _costoDesplazamientoId = widget.dimUbicacion?.costoDesplazamientoId;
+      _produccionMinera = widget.dimUbicacion?.produccionMinera;
     });
   }
 

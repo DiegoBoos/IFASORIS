@@ -779,11 +779,8 @@ class ConnectionSQL {
   CREATE TABLE [Resguardos] (
 	[Resguardo_id]	integer NOT NULL,
 	[Departamento_Ide]	integer NOT NULL,
-	[Municipio_ide]	integer NOT NULL,
 	[CodaneResguardo]	varchar(9) COLLATE NOCASE,
-	[NombreResguardo]	varchar NOT NULL COLLATE NOCASE,
-	[Tipoorganizacion_id]	integer NOT NULL,
-	[PuebloIndigena_id]	integer
+	[NombreResguardo]	varchar NOT NULL COLLATE NOCASE
   )''';
 
   static const CREATE_SANCIONES_JUSTICIA = '''

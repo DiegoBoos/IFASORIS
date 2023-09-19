@@ -6,7 +6,6 @@ import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
 import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/atenciones_en_salud_form.dart';
-import '../widgets/progress_bar.dart';
 
 class AtencionSaludPage extends StatefulWidget {
   const AtencionSaludPage({super.key});

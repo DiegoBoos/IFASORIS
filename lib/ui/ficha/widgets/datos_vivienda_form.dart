@@ -59,6 +59,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
       _tenenciaVivienda = widget.dimVivienda?.tenenciaViviendaId;
       _ventilacionViviendaId = widget.dimVivienda?.ventilacionViviendaId;
       _iluminacionViviendaId = widget.dimVivienda?.iluminacionViviendaId;
+      _nroCuartoViviendaId = widget.dimVivienda?.nroCuartosViviendaId;
 
       if (widget.dimVivienda != null &&
           widget.dimVivienda!.lstTecho!.isNotEmpty &&
@@ -284,8 +285,6 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Seleccione al menos una opción.';
-                  } else if (value.length > 3) {
-                    return 'Máximo tres opciones.';
                   }
                   return null;
                 },
@@ -309,35 +308,49 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     var selectedItems = List<LstPiso>.from(
                                         formState.value ?? []);
 
-                                    setState(() {
-                                      if (e.pisoViviendaId == 7) {
-                                        selectedItems = [
-                                          LstPiso(
-                                              pisoViviendaId: e.pisoViviendaId)
-                                        ];
-                                        _showOtroPisoVivienda = true;
-                                      } else if (value == true) {
-                                        selectedItems.removeWhere((element) =>
-                                            element.pisoViviendaId == 7);
-                                        selectedItems.add(LstPiso(
-                                            pisoViviendaId: e.pisoViviendaId));
-                                        _showOtroPisoVivienda = false;
-                                        _otroTipoPiso = null;
-                                      } else {
-                                        selectedItems.removeWhere(
-                                          (element) =>
-                                              element.pisoViviendaId ==
-                                              e.pisoViviendaId,
-                                        );
-                                      }
-                                      formState.didChange(selectedItems);
+                                    (value! &&
+                                            formState.value != null &&
+                                            formState.value!.length >= 3 &&
+                                            e.pisoViviendaId != 6)
+                                        ? CustomSnackBar.showCustomDialog(
+                                            context,
+                                            'Error',
+                                            'Máximo tres opciones',
+                                            () => Navigator.pop(context),
+                                            false)
+                                        : setState(() {
+                                            if (e.pisoViviendaId == 6) {
+                                              selectedItems = [
+                                                LstPiso(
+                                                    pisoViviendaId:
+                                                        e.pisoViviendaId)
+                                              ];
+                                              _showOtroPisoVivienda = true;
+                                            } else if (value == true) {
+                                              selectedItems.removeWhere(
+                                                  (element) =>
+                                                      element.pisoViviendaId ==
+                                                      6);
+                                              selectedItems.add(LstPiso(
+                                                  pisoViviendaId:
+                                                      e.pisoViviendaId));
+                                              _showOtroPisoVivienda = false;
+                                              _otroTipoPiso = null;
+                                            } else {
+                                              selectedItems.removeWhere(
+                                                (element) =>
+                                                    element.pisoViviendaId ==
+                                                    e.pisoViviendaId,
+                                              );
+                                            }
+                                            formState.didChange(selectedItems);
 
-                                      if (!_showOtroPisoVivienda) {
-                                        dimViviendaBloc.add(
-                                            PisosViviendaChanged(
-                                                selectedItems));
-                                      }
-                                    });
+                                            if (!_showOtroPisoVivienda) {
+                                              dimViviendaBloc.add(
+                                                  PisosViviendaChanged(
+                                                      selectedItems));
+                                            }
+                                          });
                                   },
                                 ),
                                 Flexible(

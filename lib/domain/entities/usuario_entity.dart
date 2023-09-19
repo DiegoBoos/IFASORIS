@@ -15,9 +15,9 @@ class UsuarioEntity {
 
   Map<String, dynamic> toJson() => {
         "Id": id,
-        "Username": userName,
+        "UserName": userName,
+        "Municipio_id": municipioId,
+        "Departamento_id": departamentoId,
         "Password": password,
-        "Municipio_Id": municipioId,
-        "Departamento_Id": departamentoId,
       };
 }

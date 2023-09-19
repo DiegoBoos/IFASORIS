@@ -10,10 +10,8 @@ import 'package:ifasoris/ui/utils/custom_snack_bar.dart';
 
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
-import '../../blocs/sync/sync_bloc.dart';
 import '../../cubits/familia/familia_cubit.dart';
 import '../../cubits/ficha/ficha_cubit.dart';
-import '../../sync/sync_pages.dart';
 import '../widgets/buttons.dart';
 import '../widgets/headers.dart';
 import '../widgets/mobile_appbar.dart';
@@ -89,96 +87,67 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
-        child: BlocConsumer<SyncBloc, SyncState>(
-          listener: (context, state) {
-            if (state is SyncFailure) {
-              CustomSnackBar.showSnackBar(context, state.message, Colors.red);
-            }
-            if (state is SyncSuccess) {
-              CustomSnackBar.showSnackBar(
-                  context, 'Sincronización completada', Colors.green);
-            }
-          },
-          builder: (context, state) {
-            if (state is SyncDownloading || state is SyncPercentageInProgress) {
-              return LoadingPage(
-                  text:
-                      '${state.syncProgressModel.title} ${state.syncProgressModel.percent}%');
-            }
-            if (state is SyncIncrementInProgress) {
-              return LoadingPage(
-                  text:
-                      '${state.syncProgressModel.title} ${state.syncProgressModel.counter} / ${state.syncProgressModel.total}');
-            } else {
-              return Scaffold(
-                  appBar: size.width > 500
-                      ? PreferredSize(
-                          preferredSize: size,
-                          child: const NavBar(),
-                        )
-                      : PreferredSize(
-                          preferredSize: Size.fromHeight(size.height * 0.08),
-                          child: const MobileAppBar()),
-                  body: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BlocBuilder<AfiliadoPrefsBloc, AfiliadoPrefsState>(
-                          builder: (context, state) {
-                        if (state is AfiliadoLoaded) {
-                          return Column(
-                            children: [
-                              _Header(
-                                afiliado: state.afiliado,
-                              ),
-                              FadeInLeft(
-                                  child: CustomButton(
-                                      icon: FontAwesomeIcons.dochub,
-                                      texto: state.afiliado!.familiaId == null
-                                          ? 'Crear ficha'
-                                          : 'Diligenciar ficha',
-                                      color1:
-                                          Theme.of(context).colorScheme.primary,
-                                      color2: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onPress: () {
-                                        if (state.afiliado!.familiaId == null) {
-                                          final fichaCubit =
-                                              BlocProvider.of<FichaCubit>(
-                                                  context);
-                                          final newFicha = FichaEntity(
-                                              fechaCreacion: DateTime.now(),
-                                              //TODO: ???
-                                              numFicha: '1',
-                                              userName: authBloc
-                                                  .state.usuario!.userName,
-                                              ultimaActualizacion:
-                                                  DateTime.now());
-                                          fichaCubit.createFichaDB(newFicha);
-                                        } else {
-                                          Navigator.pushNamed(context, 'ficha');
-                                        }
-                                      })),
-                            ],
-                          );
-                        }
-                        return _EmptyHeader();
-                      }),
-                      Expanded(child: Container()),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Column(
-                          children: const [
-                            Text('IFASORIS'),
-                            Text('MALLAMAS EPS INDIGENA')
-                          ],
+        child: Scaffold(
+            appBar: size.width > 500
+                ? PreferredSize(
+                    preferredSize: size,
+                    child: const NavBar(),
+                  )
+                : PreferredSize(
+                    preferredSize: Size.fromHeight(size.height * 0.08),
+                    child: const MobileAppBar()),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BlocBuilder<AfiliadoPrefsBloc, AfiliadoPrefsState>(
+                    builder: (context, state) {
+                  if (state is AfiliadoLoaded) {
+                    return Column(
+                      children: [
+                        _Header(
+                          afiliado: state.afiliado,
                         ),
-                      )
+                        FadeInLeft(
+                            child: CustomButton(
+                                icon: FontAwesomeIcons.dochub,
+                                texto: state.afiliado!.familiaId == null
+                                    ? 'Crear ficha'
+                                    : 'Diligenciar ficha',
+                                color1: Theme.of(context).colorScheme.primary,
+                                color2: Theme.of(context).colorScheme.secondary,
+                                onPress: () {
+                                  if (state.afiliado!.familiaId == null) {
+                                    final fichaCubit =
+                                        BlocProvider.of<FichaCubit>(context);
+                                    final newFicha = FichaEntity(
+                                        fechaCreacion: DateTime.now(),
+                                        //TODO: ???
+                                        numFicha: '1',
+                                        userName:
+                                            authBloc.state.usuario!.userName,
+                                        ultimaActualizacion: DateTime.now());
+                                    fichaCubit.createFichaDB(newFicha);
+                                  } else {
+                                    Navigator.pushNamed(context, 'ficha');
+                                  }
+                                })),
+                      ],
+                    );
+                  }
+                  return _EmptyHeader();
+                }),
+                Expanded(child: Container()),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Column(
+                    children: const [
+                      Text('IFASORIS'),
+                      Text('MALLAMAS EPS INDIGENA')
                     ],
-                  ));
-            }
-          },
-        ));
+                  ),
+                )
+              ],
+            )));
   }
 }
 

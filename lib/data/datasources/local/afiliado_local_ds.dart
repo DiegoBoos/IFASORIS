@@ -1,12 +1,10 @@
 import 'package:ifasoris/data/models/afiliado_response_model.dart';
 
-import '../../../domain/entities/afiliado_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
 
 abstract class AfiliadoLocalDataSource {
   Future<List<AfiliadoModel>> getAfiliados(String query);
   Future<AfiliadoModel?> afiliadoTieneFicha(int afiliadoId);
-  Future<int> saveAfiliado(AfiliadoEntity afiliado);
 }
 
 class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
@@ -35,14 +33,5 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
     final resultMap = {for (var e in res[0].entries) e.key: e.value};
     final result = AfiliadoModel.fromJson(resultMap);
     return result;
-  }
-
-  @override
-  Future<int> saveAfiliado(AfiliadoEntity afiliado) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('Afiliado', afiliado.toJson());
-
-    return res;
   }
 }

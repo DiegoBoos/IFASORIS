@@ -6,7 +6,6 @@ import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/estilos_vida_saludable_form.dart';
-import '../widgets/progress_bar.dart';
 
 class EstilosVidaSaludablePage extends StatefulWidget {
   const EstilosVidaSaludablePage({super.key});

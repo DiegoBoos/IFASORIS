@@ -113,6 +113,12 @@ class GetFactoresRiesgoVivienda extends DimViviendaEvent {
   const GetFactoresRiesgoVivienda(this.datoViviendaId);
 }
 
+class GetPisosVivienda extends DimViviendaEvent {
+  final int? datoViviendaId;
+
+  const GetPisosVivienda(this.datoViviendaId);
+}
+
 class GetPresenciaAnimales extends DimViviendaEvent {
   final int? datoViviendaId;
 
