@@ -20,6 +20,7 @@ class MobileAppBar extends StatelessWidget {
     final usuario = authBloc.state.usuario!;
     final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
     final internetCubit = BlocProvider.of<InternetCubit>(context);
+    final syncBloc = BlocProvider.of<SyncBloc>(context);
 
     return MultiBlocListener(
       listeners: [
@@ -61,6 +62,7 @@ class MobileAppBar extends StatelessWidget {
             icon: const Icon(Icons.cloud_download),
             onPressed: () {
               if (internetCubit.state is InternetConnected) {
+                syncBloc.add(InitSync());
                 showModalBottomSheet(
                     isDismissible: false,
                     enableDrag: false,
@@ -78,6 +80,7 @@ class MobileAppBar extends StatelessWidget {
             icon: const Icon(Icons.cloud_upload),
             onPressed: () {
               if (internetCubit.state is InternetConnected) {
+                syncBloc.add(InitSync());
                 showModalBottomSheet(
                     isDismissible: false,
                     enableDrag: false,

@@ -49,9 +49,9 @@ class FactorRiesgoViviendaLocalDataSourceImpl
 
     final factoresRiesgoVivienda = lstFactorRiesgo
         .map((item) => ViviendaFactoresRiesgo(
-              factorRiesgoViviendaId: item.factorRiesgoViviendaId,
-              datoViviendaId: datoViviendaId,
-            ))
+            factorRiesgoViviendaId: item.factorRiesgoViviendaId,
+            datoViviendaId: datoViviendaId,
+            otroFactorRiesgo: item.otroFactorRiesgo))
         .toList();
 
     for (final factorRiesgoVivienda in factoresRiesgoVivienda) {

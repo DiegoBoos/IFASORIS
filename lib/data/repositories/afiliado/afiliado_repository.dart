@@ -15,10 +15,9 @@ class AfiliadoRepositoryImpl implements AfiliadoRepository {
 
   @override
   Future<Either<Failure, AfiliadoResponseModel>> getAfiliadosRepository(
-      int dtoId, int pagina, int registrosPorPagina) async {
+      int dtoId) async {
     try {
-      final result = await afiliadoRemoteDataSource.getAfiliados(
-          dtoId, pagina, registrosPorPagina);
+      final result = await afiliadoRemoteDataSource.getAfiliados(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

@@ -10,7 +10,7 @@ class AfiliadoUsecase {
   AfiliadoUsecase(this.repository);
 
   Future<Either<Failure, AfiliadoResponseModel>> getAfiliadosUsecase(
-      int dtoId, int pagina, int registrosPorPagina) {
-    return repository.getAfiliadosRepository(dtoId, pagina, registrosPorPagina);
+      int dtoId) {
+    return repository.getAfiliadosRepository(dtoId);
   }
 }

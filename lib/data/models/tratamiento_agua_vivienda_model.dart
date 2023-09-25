@@ -28,17 +28,21 @@ class TratamientoAguaViviendaModel extends TratamientoAguaViviendaEntity {
 
 class LstTmtoAgua {
   int? tratamientoAguaViviendaId;
+  String? otroTratamientoAgua;
 
   LstTmtoAgua({
     this.tratamientoAguaViviendaId,
+    this.otroTratamientoAgua,
   });
 
   factory LstTmtoAgua.fromJson(Map<String, dynamic> json) => LstTmtoAgua(
         tratamientoAguaViviendaId: json["TratamientoAguaVivienda_id"],
+        otroTratamientoAgua: json["OtroTratamientoAgua"],
       );
 
   Map<String, dynamic> toJson() => {
         "TratamientoAguaVivienda_id": tratamientoAguaViviendaId,
+        "OtroTratamientoAgua": otroTratamientoAgua,
       };
 }
 
@@ -50,11 +54,13 @@ class ViviendaTratamientosAgua {
   int? viviendaTmtoAguaId;
   int? datoViviendaId;
   int? tratamientoAguaViviendaId;
+  String? otroTratamientoAgua;
 
   ViviendaTratamientosAgua({
     this.viviendaTmtoAguaId,
     this.datoViviendaId,
     this.tratamientoAguaViviendaId,
+    this.otroTratamientoAgua,
   });
 
   factory ViviendaTratamientosAgua.fromJson(Map<String, dynamic> json) =>
@@ -62,10 +68,12 @@ class ViviendaTratamientosAgua {
         viviendaTmtoAguaId: json["ViviendaTmtoAgua_id"],
         datoViviendaId: json["DatoVivienda_id"],
         tratamientoAguaViviendaId: json["TratamientoAguaVivienda_id"],
+        otroTratamientoAgua: json["OtroTratamientoAgua"],
       );
 
   Map<String, dynamic> toJson() => {
         "DatoVivienda_id": datoViviendaId,
         "TratamientoAguaVivienda_id": tratamientoAguaViviendaId,
+        "OtroTratamientoAgua": otroTratamientoAgua,
       };
 }

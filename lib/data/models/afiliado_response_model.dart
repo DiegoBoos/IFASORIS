@@ -6,36 +6,19 @@ AfiliadoResponseModel afiliadoResponseFromJson(String str) =>
 
 class AfiliadoResponseModel {
   AfiliadoResponseModel({
-    required this.paginaActual,
-    required this.registrosPorPagina,
     required this.totalRegistros,
-    required this.totalPaginas,
     required this.resultado,
   });
 
-  int paginaActual;
-  int registrosPorPagina;
   int totalRegistros;
-  int totalPaginas;
   List<AfiliadoModel> resultado;
 
   factory AfiliadoResponseModel.fromJson(Map<String, dynamic> json) =>
       AfiliadoResponseModel(
-        paginaActual: json["PaginaActual"],
-        registrosPorPagina: json["RegistrosPorPagina"],
-        totalRegistros: json["TotalRegistros"],
-        totalPaginas: json["TotalPaginas"],
+        totalRegistros: json["totalRecords"],
         resultado: List<AfiliadoModel>.from(
-            json["Resultado"].map((x) => AfiliadoModel.fromJson(x))),
+            json["afiliados"].map((x) => AfiliadoModel.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "PaginaActuals": paginaActual,
-        "RegistrosPorPaginas": registrosPorPagina,
-        "TotalRegistros": totalRegistros,
-        "TotalPaginass": totalPaginas,
-        "Resultado": List<dynamic>.from(resultado.map((x) => x.toJson())),
-      };
 }
 
 class AfiliadoModel extends AfiliadoEntity {

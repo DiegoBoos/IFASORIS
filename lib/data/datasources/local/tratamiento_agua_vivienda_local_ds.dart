@@ -50,7 +50,8 @@ class TratamientoAguaViviendaLocalDataSourceImpl
     final viviendaTratamientosAgua = lstTmtoAgua
         .map((item) => ViviendaTratamientosAgua(
             tratamientoAguaViviendaId: item.tratamientoAguaViviendaId,
-            datoViviendaId: datoViviendaId))
+            datoViviendaId: datoViviendaId,
+            otroTratamientoAgua: item.otroTratamientoAgua))
         .toList();
 
     for (final viviendaTratamientoAgua in viviendaTratamientosAgua) {

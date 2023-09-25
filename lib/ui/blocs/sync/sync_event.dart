@@ -7,6 +7,8 @@ abstract class SyncEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class InitSync extends SyncEvent {}
+
 class SyncStarted extends SyncEvent {
   final UsuarioEntity usuario;
   final String type;

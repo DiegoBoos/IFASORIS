@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 import '../../../core/error/failure.dart';
 import '../../../constants.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/ficha_model.dart';
+import '../../../services/shared_preferences_service.dart';
 
 abstract class FichaRemoteDataSource {
   Future<String> createFicha();
@@ -13,6 +14,7 @@ abstract class FichaRemoteDataSource {
 
 class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
   final http.Client client;
+  final prefs = SharedPreferencesService();
 
   FichaRemoteDataSourceImpl({required this.client});
 
@@ -20,190 +22,844 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
   Future<String> createFicha() async {
     try {
       final db = await ConnectionSQLiteService.db;
-      final res = await db.rawQuery('''
-    SELECT
-      F.Ficha_id,
-      F.FechaCreacion,
-      F.NumFicha,
-      F.UserName,
-      F.UltimaActualizacion,
-	    Fa.Familia_id,
-      Fa.Ficha_id,
-      Fa.ApellidosFlia,
-      Fa.Afiliado_id,
-	    V.Familia_id,
-	    V.TipoVivienda_id,
-	    V.TenenciaVivienda_id,
-	    V.VentilacionVivienda_id,
-	    V.PisoVivienda_id,
-	    V.OtroTipoPiso,
-	    TE.TechoVivienda_id,
-	    TE.OtroTipoTecho,
-	    SP.ServicioPublicoVivienda_id,
-	    TA.TratamientoAguaVivienda_id,
-	    FR.FactorRiesgoVivienda_id,
-	    TS.TipoSanitarioVivienda_id,
-	    TS.OtroTipoSanitario,
-	    TC.TipoCombustibleVivienda_id,
-	    TC.OtroTipoCombustible,
-	    PA.PresenciaAnimalVivienda_id,
-	    PA.OtroPresenciaAnimal,
-	    U.Familia_id,
-	    U.NombreRecibeVisita,
-	    U.TipoDoc_RecibeVisita,
-	    U.Documento_RecibeVisita,
-	    U.PerteneceResguardo,
-	    U.ViaAcceso_id,
-	    U.Resguardo_id,
-	    U.AutoridadIndigena_id,
-	    U.EstadoVia_id,
-	    U.TiempoTarda_id,
-	    U.MedioUtiliza_id,
-	    U.CostoDesplazamiento_id,
-	    U.ExisteMedTradicionalComunidad,
-	    U.TiempoTardaMedTrad_id,
-	    U.CostoDesplazamiento_MedTradicional,
-	    U.PoseeChagra,
-	    U.ProduccionMinera,
-	    U.TipoCalendario_id,
-	    AMT.DificultadAccesoMedTrad_id,
-	    UC.Cereal_id,
-	    DA.DificultaAcceso_id,
-	    EMT.EspecialidadMedTrad_id,
-	    EAC.EspecieAnimalCria_id,
-	    FRU.Fruto_id,
-	    H.Hortaliza_id,
-	    L.Leguminosa_id,
-	    MC.MedioComunicacion_id,
-	    MMT.MedioUtilizaMedTrad_id,
-	    NMT.NombreMedTradicional,
-	    TP.TuberculoPlatano_id,
-	    VE.Verdura_id,
-	    GF.Familia_id,
-      GF.Afiliado_id,
-      GF.TipoDocumento_id,
-      GF.Documento,
-      GF.Genero_id,
-      GF.FechaNacimiento,
-      GF.Edad,
-      GF.TipoRegimen_id,
-      GF.Parentesco_id,
-      GF.Etnia_id,
-      GF.CursoVida_id,
-      GF.NivelEducativo_id,
-      GF.Ocupacion_id,
-      GF.GrupoRiesgo_id,
-      GF.OrigenEtnico5602_id,
-      GF.PuebloIndigena_id,
-      GF.LenguaManeja_id,
-      GF.LenguaMaterna_id,
-      EVS.Afiliado_id,
-      EVS.Familia_id,
-      EVS.ActividadFisica_id,
-      EVS.Alimentacion_id,
-      EVS.ConsumoAlcohol_id,
-      EVS.ConsumeCigarrillo,
-      EVS.NumeroCigarrilloDia_id,
-      EVS.ConsumoSustanciasPsicoactivas,
-	    CSCR.CuidadoSaludCondRiesgo_id,
-      CSCR.Afiliado_id,
-      CSCR.Familia_id,
-      CSCR.UltimaVezInstSalud_id,
-      CSCR.SeguimientoEnfermedad_id,
-      CSCR.CondicionNutricional_id,
-      CSCR.TosFlema_id,
-      CSCR.ManchasPiel_id,
-      CSCR.CarnetVacunacion_id,
-      CSCR.EsquemaVacunacion_id,
-      CSCR.LugarVacunacion_id,
-      CSCR.UtilizaMetodoPlanificacion_id,
-      CSCR.MetodoPlanificacion_id,
-      CSCR.ConductaSeguir_id,
-	    CSCRS.CuidadoSaludCondRiesgo_id,
-	    CSCRS.ServicioSolicitado_id,
-	    CSCRNE.CuidadoSaludCondRiesgo_id,
-	    CSCRNE.NombreEnfermedad_id,
-	    SCPI.Familia_id,
-      SCPI.Afiliado_id,
-      SCPI.ReligionProfesa_id,
-      SCPI.ConoceUsosCostumbres_id,
-      SCPI.Cuales_UsosCostumbres,
-      SCPI.ParticipaCostumbres_id,
-      SCPI.CostumbrePractica_id,
-      SCPI.SancionJusticia_id,
-      SCPI.SitiosSagrados_id,
-      SCPI.Cuales_SitiosSagrados,
-	    SCECP.EventoCostumbreParticipo_id,
-	    ASA.Afiliado_id,
-      ASA.Familia_id,
-      ASA.EnfermedadAcude_id,
-      ASA.RecibioAtencionMedTradicional_id,
-      ASA.EnfermedadTratamiento_id,
-      ASA.UtilizaPlantasMed_id,
-      ASA.LugarPlantaMedicinal_id,
-	    ET.EnfermedadTradicional_id,
-	    EMTAS.EspecialidadMedTrad_id,
-	    LA.LugarAtencionMedico_id,
-	    PM.PlantaMedicinal_id
-    FROM Ficha AS F
-    JOIN Familia AS Fa ON F.Ficha_id = Fa.Ficha_id
-    JOIN Asp2_DatosVivienda AS V ON Fa.Familia_id = V.Familia_id
-    JOIN Asp2_DatosViviendaTechos AS Te ON V.DatoVivienda_id = Te.DatoVivienda_id
-    JOIN Asp2_DatosViviendaServiciosPublicos AS SP ON V.DatoVivienda_id = SP.DatoVivienda_id
-    JOIN Asp2_DatosViviendaTratamientosAgua AS TA ON V.DatoVivienda_id = TA.DatoVivienda_id
-    JOIN Asp2_DatosViviendaFactoresRiesgo AS FR ON V.DatoVivienda_id = FR.DatoVivienda_id
-    JOIN Asp2_DatosViviendaTiposSanitario AS TS ON V.DatoVivienda_id = TS.DatoVivienda_id
-    JOIN Asp2_DatosViviendaTiposCombustible AS TC ON V.DatoVivienda_id = TC.DatoVivienda_id
-    JOIN Asp2_DatosViviendaPresenciaAnimales AS PA ON V.DatoVivienda_id = PA.DatoVivienda_id
-    JOIN Asp1_Ubicacion AS U ON Fa.Familia_id = U.Familia_id
-    JOIN Asp1_UbicacionAccesoMedTradicional AS AMT ON U.Ubicacion_id = AMT.Ubicacion_id
-    JOIN Asp1_UbicacionCereales AS UC ON U.Ubicacion_id = UC.Ubicacion_id
-    JOIN Asp1_UbicacionDificultadAcceso AS DA ON U.Ubicacion_id = DA.Ubicacion_id
-    JOIN Asp1_UbicacionEspecialidadMedTradicional AS EMT ON U.Ubicacion_id = EMT.Ubicacion_id
-    JOIN Asp1_UbicacionEspecieAnimalesCria AS EAC ON U.Ubicacion_id = EAC.Ubicacion_id
-    JOIN Asp1_UbicacionFrutos AS FRU ON U.Ubicacion_id = FRU.Ubicacion_id
-    JOIN Asp1_UbicacionHortalizas AS H ON U.Ubicacion_id = H.Ubicacion_id
-    JOIN Asp1_UbicacionLeguminosas AS L ON U.Ubicacion_id = L.Ubicacion_id
-    JOIN Asp1_UbicacionMediosComunicacion AS MC ON U.Ubicacion_id = MC.Ubicacion_id
-    JOIN Asp1_UbicacionMediosMedTradicional AS MMT ON U.Ubicacion_id = MMT.Ubicacion_id
-    JOIN Asp1_UbicacionNombresMedTradicional AS NMT ON U.Ubicacion_id = NMT.Ubicacion_id
-    JOIN Asp1_UbicacionTuberculosPlatanos AS TP ON U.Ubicacion_id = TP.Ubicacion_id
-    JOIN Asp1_UbicacionVerduras AS VE ON U.Ubicacion_id = VE.Ubicacion_id
-    JOIN Asp3_GrupoFamiliar AS GF ON Fa.Familia_id = GF.Familia_id
-    JOIN Asp4_EstilosVidaSaludable AS EVS ON Fa.Familia_id = EVS.Familia_id
-    JOIN Asp5_CuidadoSaludCondRiesgo AS CSCR ON Fa.Familia_id = CSCR.Familia_id
-    JOIN Asp5_CuidadoSaludCondRiesgoServiciosSolicita AS CSCRS ON CSCR.CuidadoSaludCondRiesgo_id = CSCRS.CuidadoSaludCondRiesgo_id
-    JOIN Asp5_CuidadoSaludCondRiesgoNombresEnfermedad AS CSCRNE ON CSCR.CuidadoSaludCondRiesgo_id = CSCRNE.CuidadoSaludCondRiesgo_id
-    JOIN Asp6_DimSocioCulturalPueblosIndigenas AS SCPI ON Fa.Familia_id = SCPI.Familia_id
-    JOIN Asp6_DimSocioCulturalEventosCostumbresParticipo AS SCECP ON SCPI.DimSocioCulturalPueblosIndigenas_id = SCECP.DimSocioCulturalPueblosIndigenas_id
-    JOIN Asp7_AtencionSalud AS ASA ON Fa.Familia_id = ASA.Familia_id
-    JOIN Asp7_EnfermedadesTradicionales_AtencionSalud AS ET ON ASA.AtencionSalud_id = ET.AtencionSalud_id
-    JOIN Asp7_EspecialidadesMedTradAtencionSalud AS EMTAS ON ASA.AtencionSalud_id = EMTAS.AtencionSalud_id
-    JOIN Asp7_LugaresAtencionAtencionSalud AS LA ON ASA.AtencionSalud_id = LA.AtencionSalud_id
-    JOIN Asp7_PlantasMedicinales_AtencionSalud AS PM ON ASA.AtencionSalud_id = PM.AtencionSalud_id''');
 
-      if (res.isEmpty) {
+      // Fichas
+      final resFichas = await db.rawQuery('''
+      SELECT
+      Ficha_id,
+      FechaCreacion as fechaCreacion,
+      NumFicha as numFicha,
+      UserName as userNameCreacion,
+      ultimaActualizacion
+	    FROM Ficha
+      ''');
+
+      if (resFichas.isEmpty) {
         throw const ServerFailure(
             ['Error al subir ficha, datos insuficientes']);
       }
 
-      final resultMap = {for (var e in res[0].entries) e.key: e.value};
-      final result = FichaModel.fromJson(resultMap);
+      // Almacena un array de objetos de fichas
+      var lstFichas = [];
+
+      for (final ficha in resFichas) {
+        final resultMapFicha = {for (var e in ficha.entries) e.key: e.value};
+        final fichaId = resultMapFicha['Ficha_id'];
+
+        // Familia
+        final resFamilia = await db.rawQuery('''
+          SELECT
+          Familia_id AS Familia_id,
+          Ficha_id AS fichaId,
+          ApellidosFlia AS apellidosFlia,
+          Afiliado_id AS afiliadoId
+          FROM Familia
+          WHERE Ficha_id = $fichaId
+          ''');
+
+        if (resFamilia.isEmpty) {
+          throw const ServerFailure(
+              ['Error al subir ficha, datos insuficientes']);
+        }
+
+        final resultMapFamilia = {
+          for (var e in resFamilia[0].entries) e.key: e.value
+        };
+        final familiaId = resultMapFamilia['Familia_id'];
+
+        // Vivienda
+        final resVivienda = await db.rawQuery('''
+          SELECT
+          DatoVivienda_id AS datoViviendaId,
+          Familia_id AS familiaId,
+          TipoVivienda_id AS tipoViviendaId,
+          TenenciaVivienda_id AS tenenciaViviendaId,
+          VentilacionVivienda_id AS ventilacionViviendaId,
+          IluminacionVivienda_id AS iluminacionViviendaId,
+          NroCuartosVivienda_id AS nroCuartosViviendaId
+          FROM Asp2_DatosVivienda
+          WHERE Familia_id = $familiaId
+          ''');
+
+        if (resVivienda.isEmpty) {
+          throw const ServerFailure(
+              ['Error al subir ficha, datos insuficientes']);
+        }
+
+        final resultMapVivienda = {
+          for (var e in resVivienda[0].entries) e.key: e.value
+        };
+        final datoViviendaId = resultMapVivienda['datoViviendaId'];
+
+        // Techos
+        final resTechos = await db.rawQuery('''
+          SELECT
+          ViviendaTecho_id AS viviendaTechoId,
+          DatoVivienda_id AS datoViviendaId,
+          TechoVivienda_id AS techoViviendaId,
+          OtroTipoTecho AS otroTipoTecho
+          FROM Asp2_DatosViviendaTechos
+          WHERE DatoVivienda_id = $datoViviendaId
+          ''');
+
+        var ltTechos = [];
+        for (final techo in resTechos) {
+          final resultMapTechos = {for (var e in techo.entries) e.key: e.value};
+          ltTechos.add(resultMapTechos);
+        }
+
+        // ServPublicos
+        final resServiciosPublicos = await db.rawQuery('''
+          SELECT
+          ViviendaServicioPublico_id AS viviendaServicioPublicoId,
+          DatoVivienda_id AS datoViviendaId,
+          ServicioPublicoVivienda_id AS servicioPublicoViviendaId
+          FROM Asp2_DatosViviendaServiciosPublicos
+          WHERE DatoVivienda_id = $datoViviendaId
+          ''');
+
+        var ltServiciosPublicos = [];
+        for (final servicio in resServiciosPublicos) {
+          final resultMapServiciosPublicos = {
+            for (var e in servicio.entries) e.key: e.value
+          };
+          ltServiciosPublicos.add(resultMapServiciosPublicos);
+        }
+
+        // TratamientosAgua
+        final resTratamientosAgua = await db.rawQuery('''
+          SELECT
+          ViviendaTmtoAgua_id AS viviendaTmtoAguaId,
+          DatoVivienda_id AS datoViviendaId,
+          TratamientoAguaVivienda_id AS tratamientoAguaViviendaId
+          FROM Asp2_DatosViviendaTratamientosAgua
+          WHERE DatoVivienda_id = $datoViviendaId
+          ''');
+
+        var ltTratamientosAgua = [];
+        for (final servicio in resTratamientosAgua) {
+          final resultMapTratamientosAgua = {
+            for (var e in servicio.entries) e.key: e.value
+          };
+          ltTratamientosAgua.add(resultMapTratamientosAgua);
+        }
+
+        // FactoresRieso
+        final resFactoresRiesgo = await db.rawQuery('''
+          SELECT
+          ViviendaFactorRiesgo_id AS viviendaFactorRiesgoId,
+          DatoVivienda_id AS datoViviendaId,
+          FactorRiesgoVivienda_id AS factorRiesgoViviendaId
+          FROM Asp2_DatosViviendaFactoresRiesgo
+          WHERE DatoVivienda_id = $datoViviendaId
+          ''');
+
+        var ltFactoresRiesgo = [];
+        for (final riesgo in resFactoresRiesgo) {
+          final resultMapFactoresRiesgo = {
+            for (var e in riesgo.entries) e.key: e.value
+          };
+          ltFactoresRiesgo.add(resultMapFactoresRiesgo);
+        }
+
+        // TiposSanitario
+        final resTiposSanitario = await db.rawQuery('''
+          SELECT
+          ViviendaTipoSanitario_id AS viviendaTipoSanitarioId,
+          DatoVivienda_id AS datoViviendaId,
+          TipoSanitarioVivienda_id AS tipoSanitarioViviendaId,
+          OtroTipoSanitario AS otroTipoSanitario
+          FROM Asp2_DatosViviendaTiposSanitario
+          WHERE DatoVivienda_id = $datoViviendaId
+          ''');
+
+        var ltTiposSanitario = [];
+        for (final sanitario in resTiposSanitario) {
+          final resultMapTiposSanitario = {
+            for (var e in sanitario.entries) e.key: e.value
+          };
+          ltTiposSanitario.add(resultMapTiposSanitario);
+        }
+
+        // TiposCombustible
+        final resTiposCombustible = await db.rawQuery('''
+          SELECT
+          ViviendaTipoCombustible_id AS viviendaTipoCombustibleId,
+          DatoVivienda_id AS datoViviendaId,
+          TipoCombustibleVivienda_id AS tipoCombustibleViviendaId,
+          OtroTipoCombustible AS otroTipoCombustible
+          FROM Asp2_DatosViviendaTiposCombustible
+          WHERE DatoVivienda_id = $datoViviendaId
+          ''');
+
+        var ltTiposCombustible = [];
+        for (final combustible in resTiposCombustible) {
+          final resultMapTiposCombustible = {
+            for (var e in combustible.entries) e.key: e.value
+          };
+          ltTiposCombustible.add(resultMapTiposCombustible);
+        }
+
+        // PresenciaAnimales
+        final resPresenciaAnimales = await db.rawQuery('''
+          SELECT
+          ViviendaPresenciaAnimal_id AS viviendaPresenciaAnimalId,
+          DatoVivienda_id AS datoViviendaId,
+          PresenciaAnimalVivienda_id AS presenciaAnimalViviendaId,
+          OtroPresenciaAnimal AS otroPresenciaAnimal
+          FROM Asp2_DatosViviendaPresenciaAnimales
+          WHERE DatoVivienda_id = $datoViviendaId
+          ''');
+
+        var ltPresenciaAnimales = [];
+        for (final animal in resPresenciaAnimales) {
+          final resultMapPresenciaAnimales = {
+            for (var e in animal.entries) e.key: e.value
+          };
+          ltPresenciaAnimales.add(resultMapPresenciaAnimales);
+        }
+
+        // Pisos
+        final resPisos = await db.rawQuery('''
+          SELECT
+          ViviendaPisos_id AS viviendaPisosId,
+          DatoVivienda_id AS datoViviendaId,
+          PisoVivienda_id AS pisoViviendaId,
+          OtroTipoPiso AS otroTipoPiso
+          FROM Asp2_DatosViviendaPisos AS TC
+          WHERE DatoVivienda_id = $datoViviendaId
+          ''');
+
+        var ltPisos = [];
+        for (final piso in resPisos) {
+          final resultMapPisos = {for (var e in piso.entries) e.key: e.value};
+          ltPisos.add(resultMapPisos);
+        }
+
+        Map<String, dynamic> resultVivienda = {
+          ...resultMapVivienda,
+          "lstTechos": ltTechos,
+          "lstServPublicos": ltServiciosPublicos,
+          "lstTmtoAguas": ltTratamientosAgua,
+          "lstFactoresRiesgo": ltFactoresRiesgo,
+          "lstTiposSanitario": ltTiposSanitario,
+          "lstTiposCombustible": ltTiposCombustible,
+          "lstPresenciaAnimales": ltPresenciaAnimales,
+          "lstPisos": ltPisos
+        };
+
+        // Ubicacion
+
+        final resUbicacion = await db.rawQuery('''
+            SELECT
+            Ubicacion_id AS ubicacionId,
+            Familia_id AS familiaId,
+            NombreRecibeVisita AS nombreRecibeVisita,
+            TipoDoc_RecibeVisita AS tipoDocRecibeVisita,
+            Documento_RecibeVisita AS documentoRecibeVisita,
+            PerteneceResguardo AS perteneceResguardo,
+            ViaAcceso_id AS viaAccesoId,
+            Resguardo_id AS resguardoId,
+            AutoridadIndigena_id AS autoridadIndigenaId,
+            EstadoVia_id AS estadoViaId,
+            TiempoTarda_id AS tiempoTardaId,
+            CostoDesplazamiento_id AS costoDesplazamientoId,
+            ExisteMedTradicionalComunidad AS existeMedTradicionalComunidad,
+            TiempoTardaMedTrad_id AS tiempoTardaMedTradId,
+            CostoDesplazamiento_MedTradicional AS costoDesplazamientoMedTradicional,
+            PoseeChagra AS poseeChagra,
+            ProduccionMinera AS produccionMinera,
+            TipoCalendario_id AS tipoCalendarioId
+            FROM Asp1_Ubicacion
+            WHERE Familia_id = $familiaId
+            ''');
+
+        if (resUbicacion.isEmpty) {
+          throw const ServerFailure(
+              ['Error al subir ficha, datos insuficientes']);
+        }
+
+        final resultMapUbicacion = {
+          for (var e in resUbicacion[0].entries) e.key: e.value
+        };
+        final ubicacionId = resultMapUbicacion['ubicacionId'];
+
+        // DificultadAccesoMedTradicional
+        final resDificultadAccesoMedTradicional = await db.rawQuery('''
+          SELECT
+          DificultadAccesoMedTrad_id AS dificultadAccesoMedTradId
+          FROM Asp1_UbicacionAccesoMedTradicional AS AMT
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltDificultadAccesoMedTradicional = [];
+
+        for (final acceso in resDificultadAccesoMedTradicional) {
+          final resultMapDificultadAccesoMedTradicional = {
+            for (var e in acceso.entries) e.key: e.value
+          };
+          ltDificultadAccesoMedTradicional
+              .add(resultMapDificultadAccesoMedTradicional);
+        }
+
+        // Cereales
+        final resCereales = await db.rawQuery('''
+          SELECT
+          Cereal_id AS cerealId
+          FROM Asp1_UbicacionCereales
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltCereales = [];
+        for (final acceso in resCereales) {
+          final resultMapCereales = {
+            for (var e in acceso.entries) e.key: e.value
+          };
+          ltCereales.add(resultMapCereales);
+        }
+
+        // DificultadAcceso
+        final resDificultadAcceso = await db.rawQuery('''
+          SELECT
+          DificultaAcceso_id AS dificultaAccesoId
+          FROM Asp1_UbicacionDificultadAcceso
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltDificultadAcceso = [];
+        for (final dificultad in resDificultadAcceso) {
+          final resultMapDificultadAcceso = {
+            for (var e in dificultad.entries) e.key: e.value
+          };
+          ltDificultadAcceso.add(resultMapDificultadAcceso);
+        }
+
+        // EspecialidadMedTradicional
+        final resEspecialidadMedTradicional = await db.rawQuery('''
+          SELECT
+          EspecialidadMedTrad_id AS especialidadMedTradId
+          FROM Asp1_UbicacionEspecialidadMedTradicional
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltEspecialidadMedTradicional = [];
+        for (final especialidad in resEspecialidadMedTradicional) {
+          final resultMapEspecialidadMedTradicional = {
+            for (var e in especialidad.entries) e.key: e.value
+          };
+          ltEspecialidadMedTradicional.add(resultMapEspecialidadMedTradicional);
+        }
+
+        // EspecieAnimalesCria
+        final resEspecieAnimalesCria = await db.rawQuery('''
+          SELECT
+          EspecieAnimalCria_id AS especieAnimalCriaId
+          FROM Asp1_UbicacionEspecieAnimalesCria
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltEspecieAnimalesCria = [];
+        for (final animales in resEspecieAnimalesCria) {
+          final resultMapEspecieAnimalesCria = {
+            for (var e in animales.entries) e.key: e.value
+          };
+          ltEspecieAnimalesCria.add(resultMapEspecieAnimalesCria);
+        }
+
+        // Frutos
+        final resFrutos = await db.rawQuery('''
+          SELECT
+          Fruto_id AS frutoId
+          FROM Asp1_UbicacionFrutos
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltFrutos = [];
+        for (final fruto in resFrutos) {
+          final resultMapFrutos = {for (var e in fruto.entries) e.key: e.value};
+          ltFrutos.add(resultMapFrutos);
+        }
+
+        // Hortalizas
+        final resHortalizas = await db.rawQuery('''
+          SELECT
+          Hortaliza_id AS hortalizaId
+          FROM Asp1_UbicacionHortalizas
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltHortalizas = [];
+        for (final hortaliza in resHortalizas) {
+          final resultMapHortalizas = {
+            for (var e in hortaliza.entries) e.key: e.value
+          };
+          ltHortalizas.add(resultMapHortalizas);
+        }
+
+        // Leguminosas
+        final resLeguminosas = await db.rawQuery('''
+          SELECT
+          Leguminosa_id AS leguminosaId
+          FROM Asp1_UbicacionLeguminosas
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltLeguminosas = [];
+        for (final leguminosa in resLeguminosas) {
+          final resultMapLeguminosas = {
+            for (var e in leguminosa.entries) e.key: e.value
+          };
+          ltLeguminosas.add(resultMapLeguminosas);
+        }
+
+        // MediosComunicacion
+        final resMediosComunicacion = await db.rawQuery('''
+          SELECT
+          MedioComunicacion_id AS medioComunicacionId
+          FROM Asp1_UbicacionMediosComunicacion
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltMediosComunicacion = [];
+        for (final medio in resMediosComunicacion) {
+          final resultMapMediosComunicacion = {
+            for (var e in medio.entries) e.key: e.value
+          };
+          ltMediosComunicacion.add(resultMapMediosComunicacion);
+        }
+
+        // MediosMedTradicional
+        final resMediosMedTradicional = await db.rawQuery('''
+          SELECT
+          MedioUtilizaMedTrad_id AS medioUtilizaMedTradId
+          FROM Asp1_UbicacionMediosMedTradicional
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltMediosMedTradicional = [];
+        for (final medio in resMediosMedTradicional) {
+          final resultMapMediosMedTradicional = {
+            for (var e in medio.entries) e.key: e.value
+          };
+          ltMediosMedTradicional.add(resultMapMediosMedTradicional);
+        }
+
+        // NombresMedTradicional
+        final resNombresMedTradicional = await db.rawQuery('''
+          SELECT
+          NombreMedTradicional AS nombreMedTradicional
+          FROM Asp1_UbicacionNombresMedTradicional
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltNombresMedTradicional = [];
+        for (final nombre in resNombresMedTradicional) {
+          final resultMapNombresMedTradicional = {
+            for (var e in nombre.entries) e.key: e.value
+          };
+          ltNombresMedTradicional.add(resultMapNombresMedTradicional);
+        }
+
+        // TuberculosPlatanos
+        final resTuberculosPlatanos = await db.rawQuery('''
+          SELECT
+          TuberculoPlatano_id AS tuberculoPlatanoId
+          FROM Asp1_UbicacionTuberculosPlatanos
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltTuberculosPlatanos = [];
+        for (final tuberculo in resTuberculosPlatanos) {
+          final resultMapTuberculosPlatanos = {
+            for (var e in tuberculo.entries) e.key: e.value
+          };
+          ltTuberculosPlatanos.add(resultMapTuberculosPlatanos);
+        }
+
+        // Verduras
+        final resVerduras = await db.rawQuery('''
+          SELECT
+          Verdura_id AS verduraId
+          FROM Asp1_UbicacionVerduras
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltVerduras = [];
+        for (final verdura in resVerduras) {
+          final resultMapVerduras = {
+            for (var e in verdura.entries) e.key: e.value
+          };
+          ltVerduras.add(resultMapVerduras);
+        }
+
+        // MediosCentroAtencion
+        final resMediosCentroAtencion = await db.rawQuery('''
+          SELECT
+          MedioUtiliza_id AS medioUtilizaId
+          FROM Asp1_UbicacionMediosCentroAtencion
+          WHERE Ubicacion_id = $ubicacionId
+          ''');
+
+        var ltMediosCentroAtencion = [];
+        for (final medio in resMediosCentroAtencion) {
+          final resultMapMediosCentroAtencion = {
+            for (var e in medio.entries) e.key: e.value
+          };
+          ltMediosCentroAtencion.add(resultMapMediosCentroAtencion);
+        }
+
+        Map<String, dynamic> resultUbicacion = {
+          ...resultMapUbicacion,
+          "lstDificultadAccesoMedTradicional": ltDificultadAccesoMedTradicional,
+          "lstCereales": ltCereales,
+          "lstDificultadAccesoAtencion": ltDificultadAcceso,
+          "lstEspMedTradicional": ltEspecialidadMedTradicional,
+          "lstAnimalCria": ltEspecieAnimalesCria,
+          "lstFrutos": ltFrutos,
+          "lstHortalizas": ltHortalizas,
+          "lstLeguminosas": ltLeguminosas,
+          "lstMediosComunica": ltMediosComunicacion,
+          "lstMediosMedTradicional": ltMediosMedTradicional,
+          "lstNombreMedtradicional": ltNombresMedTradicional,
+          "lstTuberculos": ltTuberculosPlatanos,
+          "lstVerduras": ltVerduras,
+          "lstMediosCentroAtencion": ltMediosCentroAtencion,
+        };
+
+        // GrupoFamiliar
+        final resGrupoFamiliar = await db.rawQuery('''
+          SELECT
+          Familia_id AS familiaId,
+          Afiliado_id AS afiliadoId,
+          TipoDocumento_id AS tipoDocumentoId,
+          Documento AS documento,
+          Genero_id AS generoId,
+          FechaNacimiento AS fechaNacimiento,
+          Edad AS edad,
+          TipoRegimen_id AS tipoRegimenId,
+          Parentesco_id AS parentescoId,
+          Etnia_id AS etniaId,
+          CursoVida_id AS cursoVidaId,
+          NivelEducativo_id AS nivelEducativoId,
+          Ocupacion_id AS ocupacionId,
+          GrupoRiesgo_id AS grupoRiesgoId,
+          OrigenEtnico5602_id AS origenEtnico5602Id,
+          PuebloIndigena_id AS puebloIndigenaId,
+          LenguaManeja_id AS lenguaManejaId,
+          LenguaMaterna_id AS lenguaMaternaId
+          FROM Asp3_GrupoFamiliar
+          WHERE Familia_id = $familiaId
+          ''');
+
+        var ltGrupoFamiliar = [];
+        for (final familia in resGrupoFamiliar) {
+          final resultMapGrupoFamiliar = {
+            for (var e in familia.entries) e.key: e.value
+          };
+          ltGrupoFamiliar.add(resultMapGrupoFamiliar);
+        }
+
+        // EstilosVidaSaludable
+        final resEstilosVidaSaludable = await db.rawQuery('''
+          SELECT
+          Afiliado_id AS afiliadoId,
+          Familia_id AS familiaId,
+          ActividadFisica_id AS actividadFisicaId,
+          Alimentacion_id AS alimentacionId,
+          ConsumoAlcohol_id AS consumoAlcoholId,
+          ConsumeCigarrillo AS consumeCigarrillo,
+          NumeroCigarrilloDia_id AS numeroCigarrilloDiaId,
+          ConsumoSustanciasPsicoactivas AS consumoSustanciasPsicoactivas
+          FROM Asp4_EstilosVidaSaludable
+          WHERE Familia_id = $familiaId
+          ''');
+
+        var ltEstilosVidaSaludable = [];
+        for (final estilo in resEstilosVidaSaludable) {
+          final resultMapEstilosVidaSaludable = {
+            for (var e in estilo.entries) e.key: e.value
+          };
+          ltEstilosVidaSaludable.add(resultMapEstilosVidaSaludable);
+        }
+
+        // CuidadoSaludCondRiesgo
+        final resCuidadoSaludCondRiesgo = await db.rawQuery('''
+          SELECT
+          CuidadoSaludCondRiesgo_id AS cuidadoSaludCondRiesgoId,
+          Afiliado_id AS afiliadoId,
+          Familia_id AS familiaId,
+          UltimaVezInstSalud_id AS ultimaVezInstSaludId,
+          SeguimientoEnfermedad_id AS seguimientoEnfermedadId,
+          CondicionNutricional_id AS condicionNutricionalId,
+          TosFlema_id AS tosFlemaId,
+          ManchasPiel_id AS manchasPielId,
+          CarnetVacunacion_id AS carnetVacunacionId,
+          EsquemaVacunacion_id AS esquemaVacunacionId,
+          LugarVacunacion_id AS lugarVacunacionId,
+          UtilizaMetodoPlanificacion_id AS utilizaMetodoPlanificacionId,
+          MetodoPlanificacion_id AS metodoPlanificacionId,
+          ConductaSeguir_id AS conductaSeguirId
+          FROM Asp5_CuidadoSaludCondRiesgo
+          WHERE Familia_id = $familiaId
+          ''');
+
+        var ltCuidadoSaludCondRiesgo = [];
+        for (final cuidado in resCuidadoSaludCondRiesgo) {
+          final resultMapCuidadoSaludCondRiesgo = {
+            for (var e in cuidado.entries) e.key: e.value
+          };
+          final cuidadoSaludConRiesgoId =
+              resultMapCuidadoSaludCondRiesgo['cuidadoSaludCondRiesgoId'];
+
+          // ServiciosSolicita
+          final resServiciosSolicita = await db.rawQuery('''
+            SELECT
+            CuidadoSaludCondRiesgo_id AS cuidadoSaludCondRiesgoId,
+            ServicioSolicitado_id AS servicioSolicitadoId
+            FROM Asp5_CuidadoSaludCondRiesgoServiciosSolicita
+            WHERE CuidadoSaludCondRiesgo_id = $cuidadoSaludConRiesgoId
+            ''');
+
+          var ltServiciosSolicita = [];
+          for (final servicio in resServiciosSolicita) {
+            final resultMapServiciosSolicita = {
+              for (var e in servicio.entries) e.key: e.value
+            };
+            ltServiciosSolicita.add(resultMapServiciosSolicita);
+          }
+
+          // NombresEnfermedad
+          final resNombresEnfermedad = await db.rawQuery('''
+            SELECT
+            CuidadoSaludCondRiesgo_id AS cuidadoSaludCondRiesgoId,
+            NombreEnfermedad_id AS nombreEnfermedadId
+            FROM Asp5_CuidadoSaludCondRiesgoNombresEnfermedad
+            WHERE CuidadoSaludCondRiesgo_id = $cuidadoSaludConRiesgoId
+            ''');
+
+          var ltNombresEnfermedad = [];
+          for (final enfermedad in resNombresEnfermedad) {
+            final resultMapNombresEnfermedad = {
+              for (var e in enfermedad.entries) e.key: e.value
+            };
+            ltNombresEnfermedad.add(resultMapNombresEnfermedad);
+          }
+
+          Map<String, dynamic> resultCuidadoSaludCondRiesgo = {
+            ...resultMapCuidadoSaludCondRiesgo,
+            "lstServiciosSolicita": ltServiciosSolicita,
+            "lstNombreEnfermedad": ltNombresEnfermedad,
+          };
+
+          ltCuidadoSaludCondRiesgo.add(resultCuidadoSaludCondRiesgo);
+        }
+
+        // SocioCulturalPueblosIndigenas
+        final resSocioCulturalPueblosIndigenas = await db.rawQuery('''
+          SELECT
+          DimSocioCulturalPueblosIndigenas_id AS dimSocioCulturalPueblosIndigenasId,
+          Familia_id AS afiliadoId,
+          Afiliado_id AS familiaId,
+          ReligionProfesa_id AS religionProfesaId,
+          ConoceUsosCostumbres_id AS conoceUsosCostumbresId,
+          Cuales_UsosCostumbres AS cualesUsosCostumbres,
+          ParticipaCostumbres_id AS participaCostumbresId,
+          CostumbrePractica_id AS costumbrePracticaId,
+          SancionJusticia_id AS sancionJusticiaId,
+          SitiosSagrados_id AS sitiosSagradosId,
+          Cuales_SitiosSagrados AS cualesSitiosSagrados
+          FROM Asp6_DimSocioCulturalPueblosIndigenas
+          WHERE Familia_id = $familiaId
+          ''');
+
+        var ltSocioCulturalPueblosIndigenas = [];
+        for (final pueblo in resSocioCulturalPueblosIndigenas) {
+          final resultMapSocioCulturalPueblosIndigenas = {
+            for (var e in pueblo.entries) e.key: e.value
+          };
+          final dimSocioCulturalPueblosIndigenasId =
+              resultMapSocioCulturalPueblosIndigenas[
+                  'dimSocioCulturalPueblosIndigenasId'];
+
+          // EventosCostumbresParticipa
+          final resEventosCostumbresParticipa = await db.rawQuery('''
+            SELECT
+            DimSocioCulturalPueblosIndigenas_id AS dimSocioCulturalPueblosIndigenasId,
+            EventoCostumbreParticipo_id AS eventoCostumbreParticipoId
+            FROM Asp6_DimSocioCulturalEventosCostumbresParticipo
+            WHERE DimSocioCulturalPueblosIndigenas_id = $dimSocioCulturalPueblosIndigenasId
+            ''');
+
+          var ltEventosCostumbresParticipa = [];
+          for (final servicio in resEventosCostumbresParticipa) {
+            final resultMapEventosCostumbresParticipa = {
+              for (var e in servicio.entries) e.key: e.value
+            };
+            ltEventosCostumbresParticipa
+                .add(resultMapEventosCostumbresParticipa);
+          }
+
+          Map<String, dynamic> resultSocioCulturalPueblosIndigenas = {
+            ...resultMapSocioCulturalPueblosIndigenas,
+            "lstEventosCostumbresParticipa": ltEventosCostumbresParticipa,
+          };
+
+          ltSocioCulturalPueblosIndigenas
+              .add(resultSocioCulturalPueblosIndigenas);
+        }
+
+        // AtencionSalud
+        final resAtencionSalud = await db.rawQuery('''
+          SELECT
+          AtencionSalud_id AS atencionSaludId,
+          Afiliado_id AS afiliadoId,
+          Familia_id AS familiaId,
+          EnfermedadAcude_id AS enfermedadAcudeId,
+          RecibioAtencionMedTradicional_id AS recibioAtencionMedTradicionalId,
+          EnfermedadTratamiento_id AS enfermedadTratamientoId,
+          UtilizaPlantasMed_id AS utilizaPlantasMedId,
+          LugarPlantaMedicinal_id AS lugarPlantaMedicinalId
+          FROM Asp7_AtencionSalud
+          WHERE Familia_id = $familiaId
+          ''');
+
+        var ltAtencionSalud = [];
+        for (final atencion in resAtencionSalud) {
+          final resultMapAtencionSalud = {
+            for (var e in atencion.entries) e.key: e.value
+          };
+          final atencionSaludId = resultMapAtencionSalud['AtencionSalud_id'];
+
+          // EnfermedadesTRadicionales
+          final resEnfermedadesTradicionales = await db.rawQuery('''
+            SELECT
+            AtencionSalud_id, AS atencionSaludId
+            EnfermedadTradicional_id AS enfermedadTradicionalId
+            FROM Asp7_EnfermedadesTradicionales_AtencionSalud
+            WHERE AtencionSalud_id = $atencionSaludId
+            ''');
+
+          var ltEnfermedadesTradicionales = [];
+          for (final enfermedad in resEnfermedadesTradicionales) {
+            final resultMapEnfermedadesTradicionales = {
+              for (var e in enfermedad.entries) e.key: e.value
+            };
+            ltEnfermedadesTradicionales.add(resultMapEnfermedadesTradicionales);
+          }
+
+          // EnfermedadesTRadicionales
+          final resEspecialidadesMedTradAtencionSalud = await db.rawQuery('''
+            SELECT
+            AtencionSalud_id, AS atencionSaludId
+            EspecialidadMedTrad_id AS especialidadMedTradId
+            FROM Asp7_EspecialidadesMedTradAtencionSalud
+            WHERE AtencionSalud_id = $atencionSaludId
+            ''');
+
+          var ltEspecialidadesMedTradAtencionSalud = [];
+          for (final especialidad in resEspecialidadesMedTradAtencionSalud) {
+            final resultMapEspecialidadesMedTradAtencionSalud = {
+              for (var e in especialidad.entries) e.key: e.value
+            };
+            ltEspecialidadesMedTradAtencionSalud
+                .add(resultMapEspecialidadesMedTradAtencionSalud);
+          }
+
+          // Lugaresatencion
+          final resLugaresAtencionSalud = await db.rawQuery('''
+            SELECT
+            AtencionSalud_id, AS atencionSaludId
+            LugarAtencionMedico_id AS lugarAtencionMedicoId
+            FROM Asp7_LugaresAtencionAtencionSalud
+            WHERE AtencionSalud_id = $atencionSaludId
+            ''');
+
+          var ltLugaresAtencionSalud = [];
+          for (final lugar in resLugaresAtencionSalud) {
+            final resultMapLugaresAtencionSalud = {
+              for (var e in lugar.entries) e.key: e.value
+            };
+            ltLugaresAtencionSalud.add(resultMapLugaresAtencionSalud);
+          }
+
+          // PlantasMedicinales
+          final resPlantasMedicinales = await db.rawQuery('''
+            SELECT
+            AtencionSalud_id, AS atencionSaludId
+            PlantaMedicinal_id AS plantaMedicinalId
+            FROM Asp7_PlantasMedicinales_AtencionSalud
+            WHERE AtencionSalud_id = $atencionSaludId
+            ''');
+
+          var ltPlantasMedicinales = [];
+          for (final lugar in resPlantasMedicinales) {
+            final resultMapPlantasMedicinales = {
+              for (var e in lugar.entries) e.key: e.value
+            };
+            ltPlantasMedicinales.add(resultMapPlantasMedicinales);
+          }
+
+          Map<String, dynamic> resultAtencionSalud = {
+            ...resultMapAtencionSalud,
+            "lstEnfermedadesTRadicionales": ltEnfermedadesTradicionales,
+            "lstEpecialidadesMedTradicional":
+                ltEspecialidadesMedTradAtencionSalud,
+            "lstLugaresatencion": ltLugaresAtencionSalud,
+            "lstPlantasMedicinales": ltPlantasMedicinales,
+          };
+
+          ltAtencionSalud.add(resultAtencionSalud);
+        }
+
+        Map<String, dynamic> resultFamilia = {
+          ...resultMapFamilia,
+          "vivienda": resultVivienda,
+          "ubicacion": resultUbicacion,
+          "grupoFamiliar": ltGrupoFamiliar,
+          "estilosVidaSaludable": ltEstilosVidaSaludable,
+          "cuidadoSaludCondRiesgo": ltCuidadoSaludCondRiesgo,
+          "socioCulturalPueblosIndigenas": ltSocioCulturalPueblosIndigenas,
+          "atencionSalud": ltAtencionSalud
+        };
+
+        // Crear Objeto
+        Map<String, dynamic> result = {
+          ...resultMapFicha,
+          "familia": resultFamilia,
+        };
+
+        lstFichas.add(result);
+      }
 
       final uri = Uri.parse('${Constants.ifasorisBaseUrl}/registrarficha');
 
-      final resp = await client.post(uri,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: result.toJsonRemote());
+      dynamic decodedResp;
+      for (final ficha in lstFichas) {
+        final directory = await getApplicationDocumentsDirectory();
+        final file = File('${directory.path}/data.json');
 
-      final decodedResp = jsonDecode(resp.body);
-      if (resp.statusCode == 200) {
-        return decodedResp['Description'];
-      } else {
-        throw const ServerFailure(['Excepción no controlada']);
+        // Escribe la cadena JSON en el archivo
+        await file.writeAsString(jsonEncode(ficha));
+
+        print(file.path);
+
+        final resp = await client.post(uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ${prefs.token}',
+            },
+            body: jsonEncode(ficha));
+
+        decodedResp = jsonDecode(resp.body);
+        if (resp.statusCode == 200) {
+          return decodedResp['Description'];
+        } else {
+          throw const ServerFailure(['Excepción no controlada']);
+        }
       }
+
+      return decodedResp['Description'];
     } on SocketException catch (e) {
       throw SocketException(e.toString());
     }

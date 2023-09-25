@@ -49,6 +49,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   String? _otroTipoCombustible;
   bool _showOtroPisoVivienda = false;
   String? _otroTipoPiso;
+  bool _showOtroTratamientoAgua = false;
+  String? _otroTratamientoAgua;
+  bool _showOtroFactorRiesgo = false;
+  String? _otroFactorRiesgo;
+  bool _showOtroPresenciaAnimal = false;
+  String? _otroPresenciaAnimal;
 
   @override
   void initState() {
@@ -714,48 +720,36 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                           e.servicioPublicoViviendaId) ??
                                       false,
                                   onChanged: (bool? value) {
-                                    (value! &&
-                                            formState.value != null &&
-                                            formState.value!.length >= 3 &&
-                                            e.servicioPublicoViviendaId != 7)
-                                        ? CustomSnackBar.showCustomDialog(
-                                            context,
-                                            'Error',
-                                            'Máximo tres opciones',
-                                            () => Navigator.pop(context),
-                                            false)
-                                        : setState(() {
-                                            var selectedItems =
-                                                List<LstServPublico>.from(
-                                                    formState.value ?? []);
-                                            if (e.servicioPublicoViviendaId ==
-                                                7) {
-                                              selectedItems = [
-                                                LstServPublico(
-                                                    servicioPublicoViviendaId: e
-                                                        .servicioPublicoViviendaId)
-                                              ];
-                                            } else if (value == true) {
-                                              selectedItems.removeWhere((element) =>
-                                                  element
-                                                      .servicioPublicoViviendaId ==
-                                                  7);
-                                              selectedItems.add(LstServPublico(
-                                                  servicioPublicoViviendaId: e
-                                                      .servicioPublicoViviendaId));
-                                            } else {
-                                              selectedItems.removeWhere(
-                                                (element) =>
-                                                    element
-                                                        .servicioPublicoViviendaId ==
-                                                    e.servicioPublicoViviendaId,
-                                              );
-                                            }
-                                            formState.didChange(selectedItems);
-                                            dimViviendaBloc.add(
-                                                ServiciosPublicosViviendaChanged(
-                                                    selectedItems));
-                                          });
+                                    setState(() {
+                                      var selectedItems =
+                                          List<LstServPublico>.from(
+                                              formState.value ?? []);
+                                      if (e.servicioPublicoViviendaId == 7) {
+                                        selectedItems = [
+                                          LstServPublico(
+                                              servicioPublicoViviendaId:
+                                                  e.servicioPublicoViviendaId)
+                                        ];
+                                      } else if (value == true) {
+                                        selectedItems.removeWhere((element) =>
+                                            element.servicioPublicoViviendaId ==
+                                            7);
+                                        selectedItems.add(LstServPublico(
+                                            servicioPublicoViviendaId:
+                                                e.servicioPublicoViviendaId));
+                                      } else {
+                                        selectedItems.removeWhere(
+                                          (element) =>
+                                              element
+                                                  .servicioPublicoViviendaId ==
+                                              e.servicioPublicoViviendaId,
+                                        );
+                                      }
+                                      formState.didChange(selectedItems);
+                                      dimViviendaBloc.add(
+                                          ServiciosPublicosViviendaChanged(
+                                              selectedItems));
+                                    });
                                   },
                                 ),
                                 Flexible(
@@ -814,80 +808,78 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                           (index) {
                             final e =
                                 state.tratamientosAguaViviendaLoaded![index];
-                            return e.tratamientoAguaViviendaId == 5
-                                ? Container()
-                                : Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element
-                                                    .tratamientoAguaViviendaId ==
-                                                e.tratamientoAguaViviendaId) ??
-                                            false,
-                                        onChanged: (bool? value) {
-                                          (value! &&
-                                                  formState.value != null &&
-                                                  formState.value!.length >=
-                                                      3 &&
-                                                  e.tratamientoAguaViviendaId !=
-                                                      5)
-                                              ? CustomSnackBar.showCustomDialog(
-                                                  context,
-                                                  'Error',
-                                                  'Máximo tres opciones',
-                                                  () => Navigator.pop(context),
-                                                  false)
-                                              : setState(() {
-                                                  var selectedItems =
-                                                      List<LstTmtoAgua>.from(
-                                                          formState.value ??
-                                                              []);
-                                                  if (e.tratamientoAguaViviendaId ==
-                                                      5) {
-                                                    selectedItems = [
-                                                      LstTmtoAgua(
-                                                          tratamientoAguaViviendaId:
-                                                              e.tratamientoAguaViviendaId)
-                                                    ];
-                                                  } else if (value == true) {
-                                                    selectedItems.removeWhere(
-                                                        (element) =>
-                                                            element
-                                                                .tratamientoAguaViviendaId ==
-                                                            5);
-                                                    selectedItems.add(LstTmtoAgua(
-                                                        tratamientoAguaViviendaId:
-                                                            e.tratamientoAguaViviendaId));
-                                                  } else {
-                                                    selectedItems.removeWhere(
-                                                      (element) =>
-                                                          element
-                                                              .tratamientoAguaViviendaId ==
-                                                          e.tratamientoAguaViviendaId,
-                                                    );
-                                                  }
-                                                  formState
-                                                      .didChange(selectedItems);
-                                                  dimViviendaBloc.add(
-                                                      TratamientosAguaViviendaChanged(
-                                                          selectedItems));
-                                                });
-                                        },
-                                      ),
-                                      Flexible(
-                                        child: Text(
-                                          e.descripcion,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      if (index <
-                                          state.tratamientosAguaViviendaLoaded!
-                                                  .length -
-                                              1)
-                                        const VerticalDivider(),
-                                    ],
-                                  );
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Checkbox(
+                                  value: formState.value?.any((element) =>
+                                          element.tratamientoAguaViviendaId ==
+                                          e.tratamientoAguaViviendaId) ??
+                                      false,
+                                  onChanged: (bool? value) {
+                                    (value! &&
+                                            formState.value != null &&
+                                            formState.value!.length >= 3 &&
+                                            e.tratamientoAguaViviendaId != 5)
+                                        ? CustomSnackBar.showCustomDialog(
+                                            context,
+                                            'Error',
+                                            'Máximo tres opciones',
+                                            () => Navigator.pop(context),
+                                            false)
+                                        : setState(() {
+                                            var selectedItems =
+                                                List<LstTmtoAgua>.from(
+                                                    formState.value ?? []);
+                                            if (e.tratamientoAguaViviendaId ==
+                                                5) {
+                                              selectedItems = [
+                                                LstTmtoAgua(
+                                                    tratamientoAguaViviendaId: e
+                                                        .tratamientoAguaViviendaId)
+                                              ];
+                                              _showOtroTratamientoAgua = true;
+                                            } else if (value == true) {
+                                              selectedItems.removeWhere((element) =>
+                                                  element
+                                                      .tratamientoAguaViviendaId ==
+                                                  5);
+                                              selectedItems.add(LstTmtoAgua(
+                                                  tratamientoAguaViviendaId: e
+                                                      .tratamientoAguaViviendaId));
+                                              _showOtroTratamientoAgua = false;
+                                              _otroTratamientoAgua = null;
+                                            } else {
+                                              selectedItems.removeWhere(
+                                                (element) =>
+                                                    element
+                                                        .tratamientoAguaViviendaId ==
+                                                    e.tratamientoAguaViviendaId,
+                                              );
+                                            }
+                                            formState.didChange(selectedItems);
+
+                                            if (!_showOtroTratamientoAgua) {
+                                              dimViviendaBloc.add(
+                                                  TratamientosAguaViviendaChanged(
+                                                      selectedItems));
+                                            }
+                                          });
+                                  },
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    e.descripcion,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (index <
+                                    state.tratamientosAguaViviendaLoaded!
+                                            .length -
+                                        1)
+                                  const VerticalDivider(),
+                              ],
+                            );
                           },
                         ),
                       ),
@@ -895,6 +887,34 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         formState.errorText ?? '',
                         style: const TextStyle(color: Colors.red),
                       ),
+                      if (_showOtroTratamientoAgua)
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            initialValue: dimViviendaBloc
+                                .state.lstTmtoAgua?[0].otroTratamientoAgua,
+                            decoration: CustomInputDecoration.inputDecoration(
+                                hintText: 'Otro', labelText: 'Cuál'),
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Campo requerido';
+                              }
+                              return null;
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _otroTratamientoAgua = value;
+                              });
+
+                              dimViviendaBloc
+                                  .add(TratamientosAguaViviendaChanged([
+                                LstTmtoAgua(
+                                    tratamientoAguaViviendaId: 5,
+                                    otroTratamientoAgua: _otroTratamientoAgua)
+                              ]));
+                            },
+                          ),
+                        ),
                     ],
                   );
                 },
@@ -1258,6 +1278,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                         factorRiesgoViviendaId:
                                                             e.factorRiesgoViviendaId)
                                                   ];
+                                                  _showOtroFactorRiesgo = true;
                                                 } else if (value == true) {
                                                   selectedItems.removeWhere(
                                                       (element) =>
@@ -1267,6 +1288,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                   selectedItems.add(LstFactorRiesgo(
                                                       factorRiesgoViviendaId: e
                                                           .factorRiesgoViviendaId));
+                                                  _showOtroFactorRiesgo = false;
+                                                  _otroFactorRiesgo = null;
                                                 } else {
                                                   selectedItems.removeWhere(
                                                     (element) =>
@@ -1277,9 +1300,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 }
                                                 formState
                                                     .didChange(selectedItems);
-                                                dimViviendaBloc.add(
-                                                    FactoresRiesgoViviendaChanged(
-                                                        selectedItems));
+
+                                                if (!_showOtroFactorRiesgo) {
+                                                  dimViviendaBloc.add(
+                                                      FactoresRiesgoViviendaChanged(
+                                                          selectedItems));
+                                                }
                                               },
                                             );
                                     }),
@@ -1302,6 +1328,34 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         formState.errorText ?? '',
                         style: const TextStyle(color: Colors.red),
                       ),
+                      if (_showOtroFactorRiesgo)
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            initialValue: dimViviendaBloc
+                                .state.lstFactorRiesgo?[0].otroFactorRiesgo,
+                            decoration: CustomInputDecoration.inputDecoration(
+                                hintText: 'Otro', labelText: 'Cuál'),
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Campo requerido';
+                              }
+                              return null;
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _otroFactorRiesgo = value;
+                              });
+
+                              dimViviendaBloc.add(
+                                  FactoresRiesgoViviendaChanged([
+                                LstFactorRiesgo(
+                                    factorRiesgoViviendaId: 5,
+                                    otroFactorRiesgo: _otroFactorRiesgo)
+                              ]));
+                            },
+                          ),
+                        ),
                     ],
                   );
                 },
@@ -1369,6 +1423,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                         presenciaAnimalViviendaId:
                                                             e.presenciaAnimalViviendaId)
                                                   ];
+                                                  _showOtroPresenciaAnimal =
+                                                      true;
                                                 }
 
                                                 if (value == true) {
@@ -1380,6 +1436,9 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                   selectedItems.add(LstPresenciaAnimal(
                                                       presenciaAnimalViviendaId:
                                                           e.presenciaAnimalViviendaId));
+                                                  _showOtroPresenciaAnimal =
+                                                      false;
+                                                  _otroPresenciaAnimal = null;
                                                 } else {
                                                   selectedItems.removeWhere(
                                                     (element) =>
@@ -1390,9 +1449,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 }
                                                 formState
                                                     .didChange(selectedItems);
-                                                dimViviendaBloc.add(
-                                                    PresenciaAnimalesViviendaChanged(
-                                                        selectedItems));
+
+                                                if (!_showOtroPresenciaAnimal) {
+                                                  dimViviendaBloc.add(
+                                                      PresenciaAnimalesViviendaChanged(
+                                                          selectedItems));
+                                                }
                                               },
                                             );
                                     }),
@@ -1416,6 +1478,34 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         formState.errorText ?? '',
                         style: const TextStyle(color: Colors.red),
                       ),
+                      if (_showOtroPresenciaAnimal)
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            initialValue: dimViviendaBloc.state
+                                .lstPresenciaAnimal?[0].otroPresenciaAnimal,
+                            decoration: CustomInputDecoration.inputDecoration(
+                                hintText: 'Otro', labelText: 'Cuál'),
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Campo requerido';
+                              }
+                              return null;
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _otroPresenciaAnimal = value;
+                              });
+
+                              dimViviendaBloc
+                                  .add(PresenciaAnimalesViviendaChanged([
+                                LstPresenciaAnimal(
+                                    presenciaAnimalViviendaId: 5,
+                                    otroPresenciaAnimal: _otroPresenciaAnimal)
+                              ]));
+                            },
+                          ),
+                        ),
                     ],
                   );
                 },

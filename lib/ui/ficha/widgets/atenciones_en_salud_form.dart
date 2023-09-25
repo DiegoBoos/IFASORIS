@@ -350,12 +350,12 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                             (value! &&
                                                     formState.value != null &&
                                                     formState.value!.length >=
-                                                        3)
+                                                        5)
                                                 ? CustomSnackBar
                                                     .showCustomDialog(
                                                         context,
                                                         'Error',
-                                                        'Máximo tres opciones',
+                                                        'Máximo cinco opciones',
                                                         () => Navigator.pop(
                                                             context),
                                                         false)
@@ -722,12 +722,12 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                             (value! &&
                                                     formState.value != null &&
                                                     formState.value!.length >=
-                                                        3)
+                                                        5)
                                                 ? CustomSnackBar
                                                     .showCustomDialog(
                                                         context,
                                                         'Error',
-                                                        'Máximo tres opciones',
+                                                        'Máximo cinco opciones',
                                                         () => Navigator.pop(
                                                             context),
                                                         false)

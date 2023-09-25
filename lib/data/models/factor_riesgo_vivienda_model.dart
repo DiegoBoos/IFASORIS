@@ -27,18 +27,22 @@ class FactorRiesgoViviendaModel extends FactorRiesgoViviendaEntity {
 
 class LstFactorRiesgo {
   int? factorRiesgoViviendaId;
+  String? otroFactorRiesgo;
 
   LstFactorRiesgo({
     this.factorRiesgoViviendaId,
+    this.otroFactorRiesgo,
   });
 
   factory LstFactorRiesgo.fromJson(Map<String, dynamic> json) =>
       LstFactorRiesgo(
         factorRiesgoViviendaId: json["FactorRiesgoVivienda_id"],
+        otroFactorRiesgo: json["OtroFactorRiesgo"],
       );
 
   Map<String, dynamic> toJson() => {
         "FactorRiesgoVivienda_id": factorRiesgoViviendaId,
+        "OtroFactorRiesgo": otroFactorRiesgo,
       };
 }
 
@@ -50,11 +54,13 @@ class ViviendaFactoresRiesgo {
   int? viviendaFactorRiesgoId;
   int? datoViviendaId;
   int? factorRiesgoViviendaId;
+  String? otroFactorRiesgo;
 
   ViviendaFactoresRiesgo({
     this.viviendaFactorRiesgoId,
     this.datoViviendaId,
     this.factorRiesgoViviendaId,
+    this.otroFactorRiesgo,
   });
 
   factory ViviendaFactoresRiesgo.fromJson(Map<String, dynamic> json) =>
@@ -62,10 +68,12 @@ class ViviendaFactoresRiesgo {
         viviendaFactorRiesgoId: json["ViviendaFactorRiesgo_id"],
         datoViviendaId: json["DatoVivienda_id"],
         factorRiesgoViviendaId: json["FactorRiesgoVivienda_id"],
+        otroFactorRiesgo: json["OtroFactorRiesgo"],
       );
 
   Map<String, dynamic> toJson() => {
         "DatoVivienda_id": datoViviendaId,
         "FactorRiesgoVivienda_id": factorRiesgoViviendaId,
+        "OtroFactorRiesgo": otroFactorRiesgo,
       };
 }

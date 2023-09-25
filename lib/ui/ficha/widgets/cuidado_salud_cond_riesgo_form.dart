@@ -911,50 +911,50 @@ class _CuidadoSaludCondRiesgoFormState
                 }
               },
             ),
-            const Divider(),
-            const Text(
-              'Conducta a seguir',
-              style: TextStyle(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const Divider(),
-            BlocBuilder<ConductaSeguirCubit, ConductasSeguirState>(
-              builder: (context, state) {
-                if (state is ConductasSeguirLoaded) {
-                  return DropdownButtonFormField<int>(
-                    value: _conductaSeguirId,
-                    items: state.conductasSeguirLoaded!
-                        .map(
-                          (conductaSeguir) => DropdownMenuItem<int>(
-                            value: conductaSeguir.conductaSeguirId,
-                            child: Text(conductaSeguir.descripcion),
-                          ),
-                        )
-                        .toList(),
-                    decoration: const InputDecoration(
-                        labelText: 'Seleccione una opción',
-                        border: OutlineInputBorder()),
-                    onChanged: (int? newValue) {
-                      setState(() {
-                        _conductaSeguirId = newValue!;
-                      });
-                      cuidadoSaludCondRiesgoBloc
-                          .add(ConductaSeguirChanged(newValue!));
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Campo Requerido';
-                      }
-                      return null;
-                    },
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
           ],
         ),
+      const Divider(),
+      const Text(
+        'Conducta a seguir',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      const Divider(),
+      BlocBuilder<ConductaSeguirCubit, ConductasSeguirState>(
+        builder: (context, state) {
+          if (state is ConductasSeguirLoaded) {
+            return DropdownButtonFormField<int>(
+              value: _conductaSeguirId,
+              items: state.conductasSeguirLoaded!
+                  .map(
+                    (conductaSeguir) => DropdownMenuItem<int>(
+                      value: conductaSeguir.conductaSeguirId,
+                      child: Text(conductaSeguir.descripcion),
+                    ),
+                  )
+                  .toList(),
+              decoration: const InputDecoration(
+                  labelText: 'Seleccione una opción',
+                  border: OutlineInputBorder()),
+              onChanged: (int? newValue) {
+                setState(() {
+                  _conductaSeguirId = newValue!;
+                });
+                cuidadoSaludCondRiesgoBloc
+                    .add(ConductaSeguirChanged(newValue!));
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo Requerido';
+                }
+                return null;
+              },
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
     ]);
   }
 }

@@ -213,9 +213,10 @@ class ConnectionSQL {
 
   static const CREATE_DATOS_VIVIENDA_FACTORES_RIESGO = '''
   CREATE TABLE [Asp2_DatosViviendaFactoresRiesgo] (
-	[ViviendaFactorRiesgo_id]	integer PRIMARY KEY AUTOINCREMENT,
+	[ViviendaFactorRiesgo_id]	integer NOT NULL,
 	[DatoVivienda_id]	integer NOT NULL,
-	[FactorRiesgoVivienda_id]	integer NOT NULL
+	[FactorRiesgoVivienda_id]	integer NOT NULL,
+	[OtroFactorRiesgo]	varchar(150) COLLATE NOCASE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_PISOS = '''
@@ -259,9 +260,10 @@ class ConnectionSQL {
 
   static const CREATE_DATOS_VIVIENDA_TRATAMIENTOS_AGUA = '''
   CREATE TABLE [Asp2_DatosViviendaTratamientosAgua] (
-	[ViviendaTmtoAgua_id]	integer PRIMARY KEY AUTOINCREMENT,
+	[ViviendaTmtoAgua_id]	integer NOT NULL,
 	[DatoVivienda_id]	integer NOT NULL,
-	[TratamientoAguaVivienda_id]	integer NOT NULL
+	[TratamientoAguaVivienda_id]	integer NOT NULL,
+	[OtroTratamientoAgua]	varchar(150) COLLATE NOCASE
   )''';
 
   static const CREATE_GRUPO_FAMILIAR = '''
