@@ -510,28 +510,63 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async => await saveAfiliados(event, data));
   }
 
+  // Future<void> saveAfiliados(
+  //     SyncStarted event, AfiliadoResponseModel afiliadosRes) async {
+  //   final db = await ConnectionSQLiteService.db;
+
+  //   try {
+  //     await db.transaction((txn) async {
+  //       for (int i = 0; i < afiliadosRes.resultado.length; i++) {
+  //         final afiliado = afiliadosRes.resultado[i];
+  //         final res = await txn.insert('Afiliado', afiliado.toJson());
+
+  //         if (res != -1) {
+  //           successfulAfiliadoInserts++;
+  //           final syncProgressModel = state.syncProgressModel.copyWith(
+  //             title: 'Sincronizando afiliados',
+  //             counter: successfulAfiliadoInserts,
+  //             total: afiliadosRes.totalRegistros,
+  //             percent: calculatePercent(),
+  //           );
+
+  //           add(SyncPercentageChanged(syncProgressModel));
+  //         }
+  //       }
+  //     });
+
+  //     if (successfulAfiliadoInserts >= afiliadosRes.totalRegistros) {
+  //       add(Downloading(state.syncProgressModel.copyWith(
+  //         title: 'Descargando accesorias',
+  //       )));
+  //       await truncateDificultadesAccesoCA(event);
+  //     }
+  //   } catch (e) {
+  //     print('Error: $e');
+  //   }
+  // }
   Future<void> saveAfiliados(
       SyncStarted event, AfiliadoResponseModel afiliadosRes) async {
     final db = await ConnectionSQLiteService.db;
 
     try {
       await db.transaction((txn) async {
+        final batch = txn.batch();
         for (int i = 0; i < afiliadosRes.resultado.length; i++) {
           final afiliado = afiliadosRes.resultado[i];
-          final res = await txn.insert('Afiliado', afiliado.toJson());
+          batch.insert('Afiliado', afiliado.toJson());
+          successfulAfiliadoInserts += i;
 
-          if (res != -1) {
-            successfulAfiliadoInserts++;
-            final syncProgressModel = state.syncProgressModel.copyWith(
-              title: 'Sincronizando afiliados',
-              counter: successfulAfiliadoInserts,
-              total: afiliadosRes.totalRegistros,
-              percent: calculatePercent(),
-            );
+          final syncProgressModel = state.syncProgressModel.copyWith(
+            title: 'Sincronizando afiliados',
+            counter: successfulAfiliadoInserts,
+            total: afiliadosRes.totalRegistros,
+            percent: calculatePercent(),
+          );
 
-            add(SyncPercentageChanged(syncProgressModel));
-          }
+          add(SyncPercentageChanged(syncProgressModel));
         }
+
+        await batch.commit();
       });
 
       if (successfulAfiliadoInserts >= afiliadosRes.totalRegistros) {

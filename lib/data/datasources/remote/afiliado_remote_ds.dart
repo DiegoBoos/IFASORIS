@@ -34,19 +34,33 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
         final int totalRecords = decodedReq['totalRecords'];
         final int loopValue = decodedReq['loopValue'];
 
-        for (var i = 0; i < loopValue + 1; i++) {
-          final base64Url = Uri.parse(
+        for (var i = 0; i < loopValue; i++) {
+          final afiliadosUrl = Uri.parse(
               'https://kg4btst7-8000.use2.devtunnels.ms/api/afiliados/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
-          final base64Res = await http.get(base64Url);
-
-          if (base64Res.statusCode == 200) {
-            final afiliadosContent = await saveBase64AsJson(base64Res.body, 1);
-            if (afiliadosContent.isNotEmpty) {
-              afiliadosMap.addAll(afiliadosContent);
-            }
+          final afiliadosRes = await http.get(afiliadosUrl);
+          if (afiliadosRes.statusCode == 200) {
+            final decodeReq = json.decode(afiliadosRes.body);
+            afiliadosMap.addAll(decodeReq);
+            // final afiliadosContent =
+            //     await saveBase64AsJson(afiliadosRes.body, 1);
+            // if (afiliadosContent.isNotEmpty) {
+            //   afiliadosMap.addAll(afiliadosContent);
+            // }
           } else {
             throw const ServerFailure(['Excepción no controlada']);
           }
+          // final base64Url = Uri.parse(
+          //     'https://kg4btst7-8000.use2.devtunnels.ms/api/afiliados/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
+          // final base64Res = await http.get(base64Url);
+
+          // if (base64Res.statusCode == 200) {
+          //   final afiliadosContent = await saveBase64AsJson(base64Res.body, 1);
+          //   if (afiliadosContent.isNotEmpty) {
+          //     afiliadosMap.addAll(afiliadosContent);
+          //   }
+          // } else {
+          //   throw const ServerFailure(['Excepción no controlada']);
+          // }
         }
         List<Map<String, dynamic>> combinedList =
             afiliadosMap.map((e) => e as Map<String, dynamic>).toList();

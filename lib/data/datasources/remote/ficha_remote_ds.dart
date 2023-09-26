@@ -46,6 +46,9 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         final resultMapFicha = {for (var e in ficha.entries) e.key: e.value};
         final fichaId = resultMapFicha['Ficha_id'];
 
+        // Inicializar id en 0 para nuevas fichas en sincronizacion
+        resultMapFicha['Ficha_id'] = 0;
+
         // Familia
         final resFamilia = await db.rawQuery('''
           SELECT
@@ -94,7 +97,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // Techos
         final resTechos = await db.rawQuery('''
           SELECT
-          ViviendaTecho_id AS viviendaTechoId,
+          -- ViviendaTecho_id AS viviendaTechoId,
           DatoVivienda_id AS datoViviendaId,
           TechoVivienda_id AS techoViviendaId,
           OtroTipoTecho AS otroTipoTecho
@@ -111,7 +114,8 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // ServPublicos
         final resServiciosPublicos = await db.rawQuery('''
           SELECT
-          ViviendaServicioPublico_id AS viviendaServicioPublicoId,
+          -- ViviendaServicioPublico_id AS viviendaServicioPublicoId,
+          ServicioPublicoVivienda_id AS servicioPublicoViviendaId,
           DatoVivienda_id AS datoViviendaId,
           ServicioPublicoVivienda_id AS servicioPublicoViviendaId
           FROM Asp2_DatosViviendaServiciosPublicos
@@ -127,9 +131,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // TratamientosAgua
+        // TODO:Falta columna otroTratamientoAgua
         final resTratamientosAgua = await db.rawQuery('''
           SELECT
-          ViviendaTmtoAgua_id AS viviendaTmtoAguaId,
+          -- ViviendaTmtoAgua_id AS viviendaTmtoAguaId,
           DatoVivienda_id AS datoViviendaId,
           TratamientoAguaVivienda_id AS tratamientoAguaViviendaId
           FROM Asp2_DatosViviendaTratamientosAgua
@@ -145,9 +150,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // FactoresRieso
+        // TODO:Falta columna otroFactorRiesgo
         final resFactoresRiesgo = await db.rawQuery('''
           SELECT
-          ViviendaFactorRiesgo_id AS viviendaFactorRiesgoId,
+          -- ViviendaFactorRiesgo_id AS viviendaFactorRiesgoId,
           DatoVivienda_id AS datoViviendaId,
           FactorRiesgoVivienda_id AS factorRiesgoViviendaId
           FROM Asp2_DatosViviendaFactoresRiesgo
@@ -165,7 +171,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // TiposSanitario
         final resTiposSanitario = await db.rawQuery('''
           SELECT
-          ViviendaTipoSanitario_id AS viviendaTipoSanitarioId,
+          -- ViviendaTipoSanitario_id AS viviendaTipoSanitarioId,
           DatoVivienda_id AS datoViviendaId,
           TipoSanitarioVivienda_id AS tipoSanitarioViviendaId,
           OtroTipoSanitario AS otroTipoSanitario
@@ -184,7 +190,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // TiposCombustible
         final resTiposCombustible = await db.rawQuery('''
           SELECT
-          ViviendaTipoCombustible_id AS viviendaTipoCombustibleId,
+          -- ViviendaTipoCombustible_id AS viviendaTipoCombustibleId,
           DatoVivienda_id AS datoViviendaId,
           TipoCombustibleVivienda_id AS tipoCombustibleViviendaId,
           OtroTipoCombustible AS otroTipoCombustible
@@ -203,7 +209,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // PresenciaAnimales
         final resPresenciaAnimales = await db.rawQuery('''
           SELECT
-          ViviendaPresenciaAnimal_id AS viviendaPresenciaAnimalId,
+          -- ViviendaPresenciaAnimal_id AS viviendaPresenciaAnimalId,
           DatoVivienda_id AS datoViviendaId,
           PresenciaAnimalVivienda_id AS presenciaAnimalViviendaId,
           OtroPresenciaAnimal AS otroPresenciaAnimal
@@ -222,7 +228,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // Pisos
         final resPisos = await db.rawQuery('''
           SELECT
-          ViviendaPisos_id AS viviendaPisosId,
+          -- ViviendaPisos_id AS viviendaPisosId,
           DatoVivienda_id AS datoViviendaId,
           PisoVivienda_id AS pisoViviendaId,
           OtroTipoPiso AS otroTipoPiso
@@ -546,7 +552,11 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OrigenEtnico5602_id AS origenEtnico5602Id,
           PuebloIndigena_id AS puebloIndigenaId,
           LenguaManeja_id AS lenguaManejaId,
-          LenguaMaterna_id AS lenguaMaternaId
+          (CASE WHEN LenguaMaterna_id == 0 THEN 
+          null 
+          ELSE 
+            LenguaMaterna_id 
+          END) as lenguaMaternaId
           FROM Asp3_GrupoFamiliar
           WHERE Familia_id = $familiaId
           ''');
@@ -568,7 +578,11 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           Alimentacion_id AS alimentacionId,
           ConsumoAlcohol_id AS consumoAlcoholId,
           ConsumeCigarrillo AS consumeCigarrillo,
-          NumeroCigarrilloDia_id AS numeroCigarrilloDiaId,
+          (CASE WHEN NumeroCigarrilloDia_id == 0 THEN 
+          null 
+          ELSE 
+            NumeroCigarrilloDia_id 
+          END) as numeroCigarrilloDiaId,
           ConsumoSustanciasPsicoactivas AS consumoSustanciasPsicoactivas
           FROM Asp4_EstilosVidaSaludable
           WHERE Familia_id = $familiaId
@@ -589,16 +603,44 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           Afiliado_id AS afiliadoId,
           Familia_id AS familiaId,
           UltimaVezInstSalud_id AS ultimaVezInstSaludId,
-          SeguimientoEnfermedad_id AS seguimientoEnfermedadId,
+
+          (CASE WHEN SeguimientoEnfermedad_id == 0 THEN 
+              null 
+          ELSE 
+            SeguimientoEnfermedad_id 
+          END) as seguimientoEnfermedadId,
+
           CondicionNutricional_id AS condicionNutricionalId,
           TosFlema_id AS tosFlemaId,
           ManchasPiel_id AS manchasPielId,
           CarnetVacunacion_id AS carnetVacunacionId,
-          EsquemaVacunacion_id AS esquemaVacunacionId,
-          LugarVacunacion_id AS lugarVacunacionId,
+
+          (CASE WHEN EsquemaVacunacion_id == 0 THEN 
+              null 
+          ELSE 
+            EsquemaVacunacion_id 
+          END) as esquemaVacunacionId,
+          
+          (CASE WHEN LugarVacunacion_id == 0 THEN 
+              null 
+          ELSE 
+            LugarVacunacion_id 
+          END) as lugarVacunacionId,
+
           UtilizaMetodoPlanificacion_id AS utilizaMetodoPlanificacionId,
-          MetodoPlanificacion_id AS metodoPlanificacionId,
-          ConductaSeguir_id AS conductaSeguirId
+
+          (CASE WHEN MetodoPlanificacion_id == 0 THEN 
+              null 
+          ELSE 
+            MetodoPlanificacion_id 
+          END) as metodoPlanificacionId,
+
+          (CASE WHEN ConductaSeguir_id == 0 THEN 
+              null 
+          ELSE 
+            ConductaSeguir_id 
+          END) as conductaSeguirId
+
           FROM Asp5_CuidadoSaludCondRiesgo
           WHERE Familia_id = $familiaId
           ''');
@@ -663,9 +705,25 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           ReligionProfesa_id AS religionProfesaId,
           ConoceUsosCostumbres_id AS conoceUsosCostumbresId,
           Cuales_UsosCostumbres AS cualesUsosCostumbres,
-          ParticipaCostumbres_id AS participaCostumbresId,
-          CostumbrePractica_id AS costumbrePracticaId,
-          SancionJusticia_id AS sancionJusticiaId,
+
+          (CASE WHEN ParticipaCostumbres_id == 0 THEN 
+              null 
+          ELSE 
+            ParticipaCostumbres_id 
+          END) as participaCostumbresId,
+
+          (CASE WHEN CostumbrePractica_id == 0 THEN 
+              null 
+          ELSE 
+            CostumbrePractica_id 
+          END) as costumbrePracticaId,
+
+          (CASE WHEN SancionJusticia_id == 0 THEN 
+              null 
+          ELSE 
+            SancionJusticia_id 
+          END) as sancionJusticiaId,
+
           SitiosSagrados_id AS sitiosSagradosId,
           Cuales_SitiosSagrados AS cualesSitiosSagrados
           FROM Asp6_DimSocioCulturalPueblosIndigenas
@@ -728,12 +786,12 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           final resultMapAtencionSalud = {
             for (var e in atencion.entries) e.key: e.value
           };
-          final atencionSaludId = resultMapAtencionSalud['AtencionSalud_id'];
+          final atencionSaludId = resultMapAtencionSalud['atencionSaludId'];
 
           // EnfermedadesTRadicionales
           final resEnfermedadesTradicionales = await db.rawQuery('''
             SELECT
-            AtencionSalud_id, AS atencionSaludId
+            AtencionSalud_id AS atencionSaludId,
             EnfermedadTradicional_id AS enfermedadTradicionalId
             FROM Asp7_EnfermedadesTradicionales_AtencionSalud
             WHERE AtencionSalud_id = $atencionSaludId
@@ -750,7 +808,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           // EnfermedadesTRadicionales
           final resEspecialidadesMedTradAtencionSalud = await db.rawQuery('''
             SELECT
-            AtencionSalud_id, AS atencionSaludId
+            AtencionSalud_id AS atencionSaludId,
             EspecialidadMedTrad_id AS especialidadMedTradId
             FROM Asp7_EspecialidadesMedTradAtencionSalud
             WHERE AtencionSalud_id = $atencionSaludId
@@ -768,7 +826,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           // Lugaresatencion
           final resLugaresAtencionSalud = await db.rawQuery('''
             SELECT
-            AtencionSalud_id, AS atencionSaludId
+            AtencionSalud_id AS atencionSaludId,
             LugarAtencionMedico_id AS lugarAtencionMedicoId
             FROM Asp7_LugaresAtencionAtencionSalud
             WHERE AtencionSalud_id = $atencionSaludId
@@ -785,7 +843,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           // PlantasMedicinales
           final resPlantasMedicinales = await db.rawQuery('''
             SELECT
-            AtencionSalud_id, AS atencionSaludId
+            AtencionSalud_id AS atencionSaludId,
             PlantaMedicinal_id AS plantaMedicinalId
             FROM Asp7_PlantasMedicinales_AtencionSalud
             WHERE AtencionSalud_id = $atencionSaludId
