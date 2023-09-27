@@ -11,11 +11,7 @@ class SyncProgressModel {
       required this.percent});
 
   SyncProgressModel copyWith(
-          {String? title,
-          String? mode,
-          int? counter,
-          int? total,
-          int? percent}) =>
+          {String? title, int? counter, int? total, int? percent}) =>
       SyncProgressModel(
           title: title ?? this.title,
           total: total ?? this.total,

@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../constants.dart';
 import '../../../data/models/afiliado_response_model.dart';
 import '../../../data/models/sync_progress_model.dart';
 import '../../../domain/entities/usuario_entity.dart';
@@ -502,12 +507,57 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** Afiliados ****************************
   Future<void> syncAfiliados(SyncStarted event) async {
-    final result = await afiliadoUsecase.getAfiliadosUsecase(
-      event.usuario.departamentoId!,
-    );
+    int dtoId = event.usuario.departamentoId!;
+    int limit = 40000;
+    List<dynamic> afiliadosMap = [];
+    List<Map<String, dynamic>> combinedList = [];
 
-    result.fold((failure) => add(SyncError(failure.properties.first)),
-        (data) async => await saveAfiliados(event, data));
+    final requestUrl = Uri.parse('${Constants.syncUrl}/$dtoId/$limit');
+
+    try {
+      final reqRes = await http.get(requestUrl);
+
+      if (reqRes.statusCode == 200) {
+        final decodedReq = json.decode(reqRes.body);
+        final int totalRecords = decodedReq['totalRecords'];
+        final int loopValue = decodedReq['loopValue'];
+
+        for (var i = 0; i < loopValue; i++) {
+          final syncProgressModel = state.syncProgressModel.copyWith(
+            title: 'Descargando afiliados',
+            counter: combinedList.length,
+            total: totalRecords,
+            percent: calculatePercent(),
+          );
+
+          add(Downloading(syncProgressModel));
+
+          final afiliadosUrl = Uri.parse(
+              '${Constants.syncUrl}/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
+          final afiliadosRes = await http.get(afiliadosUrl);
+          if (afiliadosRes.statusCode == 200) {
+            final decodeReq = json.decode(afiliadosRes.body);
+            afiliadosMap.addAll(decodeReq);
+          } else {
+            add(const SyncError('Excepción no controlada'));
+          }
+        }
+        combinedList =
+            afiliadosMap.map((e) => e as Map<String, dynamic>).toList();
+
+        final afiliadoResp = {
+          "totalRecords": totalRecords,
+          "afiliados": combinedList
+        };
+
+        final result = AfiliadoResponseModel.fromJson(afiliadoResp);
+        saveAfiliados(event, result);
+      } else {
+        add(const SyncError('Excepción no controlada'));
+      }
+    } on SocketException catch (e) {
+      add(SyncError(e.toString()));
+    }
   }
 
   // Future<void> saveAfiliados(
