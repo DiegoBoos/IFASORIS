@@ -523,17 +523,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         final int loopValue = decodedReq['loopValue'];
 
         for (var i = 0; i < loopValue; i++) {
-          final syncProgressModel = state.syncProgressModel.copyWith(
-            title: 'Descargando afiliados',
-            counter: combinedList.length,
-            total: totalRecords,
-            percent: calculatePercent(),
-          );
-
-          add(Downloading(syncProgressModel));
-
           final afiliadosUrl = Uri.parse(
-              '${Constants.syncUrl}/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
+              '${Constants.syncUrl}/afiliadosbydpto?limit=$limit&page=$i&dptoId=$dtoId');
           final afiliadosRes = await http.get(afiliadosUrl);
           if (afiliadosRes.statusCode == 200) {
             final decodeReq = json.decode(afiliadosRes.body);
@@ -541,7 +532,19 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           } else {
             add(const SyncError('Excepción no controlada'));
           }
+
+          final syncProgressModel = state.syncProgressModel.copyWith(
+            title: 'Sincronizando afiliados',
+            // counter: combinedList.length,
+            // total: totalRecords,
+            counter: i,
+            total: loopValue,
+            percent: calculatePercent(i + 1, loopValue),
+          );
+
+          add(Downloading(syncProgressModel));
         }
+
         combinedList =
             afiliadosMap.map((e) => e as Map<String, dynamic>).toList();
 
@@ -606,25 +609,42 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           batch.insert('Afiliado', afiliado.toJson());
           successfulAfiliadoInserts += i;
 
-          final syncProgressModel = state.syncProgressModel.copyWith(
-            title: 'Sincronizando afiliados',
-            counter: successfulAfiliadoInserts,
-            total: afiliadosRes.totalRegistros,
-            percent: calculatePercent(),
-          );
+          // final syncProgressModel = state.syncProgressModel.copyWith(
+          //   title: 'Sincronizando afiliados',
+          //   counter: i,
+          //   total: afiliadosRes.totalRegistros,
+          //   // counter: successfulAfiliadoInserts,
+          //   // total: afiliadosRes.totalRegistros,
+          //   percent: calculatePercent(i, afiliadosRes.totalRegistros),
+          // );
 
-          add(SyncPercentageChanged(syncProgressModel));
+          // add(SyncPercentageChanged(syncProgressModel));
         }
 
         await batch.commit();
+        // Termina de sincronizar
+        final syncProgressModel = state.syncProgressModel.copyWith(
+          title: 'Sincronizando afiliados',
+          // counter: combinedList.length,
+          // total: totalRecords,
+          counter: 1,
+          // total: 100,
+          percent: calculatePercent(100, 100),
+        );
+
+        add(Downloading(syncProgressModel));
       });
 
-      if (successfulAfiliadoInserts >= afiliadosRes.totalRegistros) {
-        add(Downloading(state.syncProgressModel.copyWith(
-          title: 'Descargando accesorias',
-        )));
-        await truncateDificultadesAccesoCA(event);
-      }
+      add(Downloading(state.syncProgressModel.copyWith(
+        title: 'Descargando accesorias',
+      )));
+      await truncateDificultadesAccesoCA(event);
+      // if (successfulAfiliadoInserts >= afiliadosRes.totalRegistros) {
+      //   add(Downloading(state.syncProgressModel.copyWith(
+      //     title: 'Descargando accesorias',
+      //   )));
+      //   await truncateDificultadesAccesoCA(event);
+      // }
     } catch (e) {
       print('Error: $e');
     }
@@ -3987,7 +4007,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       if (data >= nroCuartosViviendaTemp.length) {
         add(SyncIncrementChanged(state.syncProgressModel.copyWith(
             title: 'Sincronización completada',
-            counter: state.syncProgressModel.counter + 1,
+            counter: totalAccesories,
             total: totalAccesories)));
         return;
       }
@@ -4003,14 +4023,19 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** NroCuartosVivienda ****************************
 
-  int calculatePercent() {
-    final counter = state.syncProgressModel.counter <= 0
-        ? 0.01
-        : state.syncProgressModel.counter;
-    final total =
-        state.syncProgressModel.total <= 0 ? 1 : state.syncProgressModel.total;
+  int calculatePercent(int counter, int total) {
     final percent = ((counter / total) * 100).toInt();
 
     return percent;
   }
+  // int calculatePercent() {
+  //   final counter = state.syncProgressModel.counter <= 0
+  //       ? 1
+  //       : state.syncProgressModel.counter;
+  //   final total =
+  //       state.syncProgressModel.total <= 0 ? 1 : state.syncProgressModel.total;
+  //   final percent = ((counter / total) * 100).toInt();
+
+  //   return percent;
+  // }
 }
