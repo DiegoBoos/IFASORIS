@@ -507,12 +507,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** Afiliados ****************************
   Future<void> syncAfiliados(SyncStarted event) async {
-    int dtoId = event.usuario.departamentoId!;
+    int mpioId = event.usuario.municipioId!;
     int limit = 40000;
     List<dynamic> afiliadosMap = [];
     List<Map<String, dynamic>> combinedList = [];
 
-    final requestUrl = Uri.parse('${Constants.syncUrl}/$dtoId/$limit');
+    final requestUrl = Uri.parse('${Constants.syncUrl}/$mpioId/$limit');
 
     try {
       final reqRes = await http.get(requestUrl);
@@ -524,7 +524,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
         for (var i = 0; i < loopValue; i++) {
           final afiliadosUrl = Uri.parse(
-              '${Constants.syncUrl}/afiliadosbydpto?limit=$limit&page=$i&dptoId=$dtoId');
+              '${Constants.syncUrl}/afiliadosbympio?limit=$limit&page=$i&mpioId=$mpioId');
           final afiliadosRes = await http.get(afiliadosUrl);
           if (afiliadosRes.statusCode == 200) {
             final decodeReq = json.decode(afiliadosRes.body);
