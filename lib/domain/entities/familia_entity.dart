@@ -3,31 +3,31 @@ class FamiliaEntity {
     this.familiaId,
     this.fichaId,
     this.apellidosFlia,
-    this.afiliadoId,
+    this.fkAfiliadoId,
   });
 
   int? familiaId;
   int? fichaId;
   String? apellidosFlia;
-  int? afiliadoId;
+  int? fkAfiliadoId;
 
   FamiliaEntity copyWith({
     int? familiaId,
     int? fichaId,
     String? apellidosFlia,
-    int? afiliadoId,
+    int? fkAfiliadoId,
   }) =>
       FamiliaEntity(
         familiaId: familiaId ?? this.familiaId,
         fichaId: fichaId ?? this.fichaId,
         apellidosFlia: apellidosFlia ?? this.apellidosFlia,
-        afiliadoId: afiliadoId ?? this.afiliadoId,
+        fkAfiliadoId: fkAfiliadoId ?? this.fkAfiliadoId,
       );
 
   Map<String, dynamic> toJson() => {
         "Familia_id": familiaId,
         "Ficha_id": fichaId,
         "ApellidosFlia": apellidosFlia,
-        "Afiliado_id": afiliadoId,
+        "FK_Afiliado_id": fkAfiliadoId,
       };
 }

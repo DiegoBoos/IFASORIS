@@ -8,4 +8,7 @@ abstract class FamiliaRepositoryDB {
       FamiliaEntity familia);
 
   Future<Either<Failure, List<FamiliaEntity>>> loadFamiliasRepositoryDB();
+
+  Future<Either<Failure, int>> deleteAfiliadoFamiliaRepositoryDB(
+      int? fkAfiliadoId);
 }

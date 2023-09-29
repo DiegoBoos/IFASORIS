@@ -10,5 +10,9 @@ abstract class GrupoFamiliarRepositoryDB {
   Future<Either<Failure, List<GrupoFamiliarEntity>>>
       getGrupoFamiliarRepositoryDB(int familiaId);
 
-  Future<Either<Failure, int>> emptyGrupoFamiliarRepositoryDB(int familiaId);
+  Future<Either<Failure, int>> deleteAfiliadoGrupoFamiliarRepositoryDB(
+      int afiliadoId);
+
+  Future<Either<Failure, int>> existeAfiliadoGrupoFamiliarRepositoryDB(
+      int afiliadoId);
 }

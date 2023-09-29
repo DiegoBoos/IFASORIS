@@ -10,18 +10,18 @@ class FamiliaModel extends FamiliaEntity {
     required int familiaId,
     required int fichaId,
     required String apellidosFlia,
-    required int afiliadoId,
+    required int fkAfiliadoId,
   }) : super(
           familiaId: familiaId,
           fichaId: fichaId,
           apellidosFlia: apellidosFlia,
-          afiliadoId: afiliadoId,
+          fkAfiliadoId: fkAfiliadoId,
         );
 
   factory FamiliaModel.fromJson(Map<String, dynamic> json) => FamiliaModel(
         familiaId: json["Familia_id"],
         fichaId: json["Ficha_id"],
         apellidosFlia: json["ApellidosFlia"],
-        afiliadoId: json["Afiliado_id"],
+        fkAfiliadoId: json["FK_Afiliado_id"],
       );
 }

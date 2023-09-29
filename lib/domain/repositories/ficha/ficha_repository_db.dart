@@ -7,4 +7,6 @@ abstract class FichaRepositoryDB {
   Future<Either<Failure, FichaEntity>> createFichaRepositoryDB(
       FichaEntity ficha);
   Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB();
+
+  Future<Either<Failure, int>> deleteFichaRepositoryDB(int fichaId);
 }

@@ -13,16 +13,6 @@ class AfiliadosGrupoFamiliarBloc
 
   AfiliadosGrupoFamiliarBloc({required this.grupoFamiliarUsecaseDB})
       : super(AfiliadosGrupoFamiliarInitial()) {
-    on<EmptyAfiliadosGrupoFamiliar>((event, emit) async {
-      final result = await grupoFamiliarUsecaseDB
-          .emptyGrupoFamiliarUsecaseDB(event.familiaId);
-      result.fold((failure) {
-        emit(const AfiliadosGrupoFamiliarError(
-          'Excepción no controlada',
-        ));
-      }, (data) => emit(AfiliadosGrupoFamiliarEmptied()));
-    });
-
     on<GetAfiliadosGrupoFamiliar>((event, emit) async {
       final result = await grupoFamiliarUsecaseDB
           .getGrupoFamiliarUsecaseDB(event.familiaId);
@@ -82,5 +72,17 @@ class AfiliadosGrupoFamiliarBloc
     on<ErrorMessage>((event, emit) {
       emit(AfiliadosGrupoFamiliarError(event.message));
     });
+  }
+
+  Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId) async {
+    final result = await grupoFamiliarUsecaseDB
+        .deleteAfiliadoGrupoFamiliarUsecaseDB(afiliadoId);
+    return result.fold((failure) => 0, (data) => data);
+  }
+
+  Future<int> existeAfiliadoGrupoFamiliar(int afiliadoId) async {
+    final result = await grupoFamiliarUsecaseDB
+        .existeAfiliadoGrupoFamiliarUsecaseDB(afiliadoId);
+    return result.fold((failure) => 0, (data) => data);
   }
 }

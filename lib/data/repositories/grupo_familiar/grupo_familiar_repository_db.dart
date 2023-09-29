@@ -42,11 +42,26 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
   }
 
   @override
-  Future<Either<Failure, int>> emptyGrupoFamiliarRepositoryDB(
-      int familiaId) async {
+  Future<Either<Failure, int>> deleteAfiliadoGrupoFamiliarRepositoryDB(
+      int afiliadoId) async {
     try {
-      final result =
-          await grupoFamiliarLocalDataSource.emptyGrupoFamiliar(familiaId);
+      final result = await grupoFamiliarLocalDataSource
+          .deleteAfiliadoGrupoFamiliar(afiliadoId);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> existeAfiliadoGrupoFamiliarRepositoryDB(
+      int afiliadoId) async {
+    try {
+      final result = await grupoFamiliarLocalDataSource
+          .existeAfiliadoGrupoFamiliar(afiliadoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

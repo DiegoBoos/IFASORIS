@@ -19,7 +19,13 @@ class GrupoFamiliarUsecaseDB {
     return repositoryDB.getGrupoFamiliarRepositoryDB(familiaId);
   }
 
-  Future<Either<Failure, int>> emptyGrupoFamiliarUsecaseDB(int familiaId) {
-    return repositoryDB.emptyGrupoFamiliarRepositoryDB(familiaId);
+  Future<Either<Failure, int>> deleteAfiliadoGrupoFamiliarUsecaseDB(
+      int afiliadoId) {
+    return repositoryDB.deleteAfiliadoGrupoFamiliarRepositoryDB(afiliadoId);
+  }
+
+  Future<Either<Failure, int>> existeAfiliadoGrupoFamiliarUsecaseDB(
+      int afiliadoId) {
+    return repositoryDB.existeAfiliadoGrupoFamiliarRepositoryDB(afiliadoId);
   }
 }

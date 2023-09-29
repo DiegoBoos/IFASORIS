@@ -25,7 +25,7 @@ class AfiliadoRepositoryDBImpl implements AfiliadoRepositoryDB {
   }
 
   @override
-  Future<Either<Failure, AfiliadoEntity?>> afiliadoTieneFichaRepositoryDB(
+  Future<Either<Failure, int>> afiliadoTieneFichaRepositoryDB(
       int afiliadoId) async {
     try {
       final result =

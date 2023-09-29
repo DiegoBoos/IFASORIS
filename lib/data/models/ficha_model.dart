@@ -9,13 +9,15 @@ class FichaModel extends FichaEntity {
     required int fichaId,
     DateTime? fechaCreacion,
     required String numFicha,
-    required String userName,
+    required String userNameCreacion,
+    required String userNameActualizacion,
     DateTime? ultimaActualizacion,
   }) : super(
           fichaId: fichaId,
           fechaCreacion: fechaCreacion,
           numFicha: numFicha,
-          userName: userName,
+          userNameCreacion: userNameCreacion,
+          userNameActualizacion: userNameActualizacion,
           ultimaActualizacion: ultimaActualizacion,
         );
 
@@ -23,7 +25,8 @@ class FichaModel extends FichaEntity {
         fichaId: json["Ficha_id"],
         fechaCreacion: DateTime.parse(json["FechaCreacion"]),
         numFicha: json["NumFicha"],
-        userName: json["UserName"],
+        userNameCreacion: json["UserName_Creacion"],
+        userNameActualizacion: json["UserName_Actualizacion"],
         ultimaActualizacion: DateTime.parse(json["UltimaActualizacion"]),
       );
 }

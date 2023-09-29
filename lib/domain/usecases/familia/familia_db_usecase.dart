@@ -17,4 +17,9 @@ class FamiliaUsecaseDB {
   Future<Either<Failure, List<FamiliaEntity>>> loadFamiliasUsecaseDB() {
     return repositoryDB.loadFamiliasRepositoryDB();
   }
+
+  Future<Either<Failure, int>> deleteAfiliadoFamiliaUsecaseDB(
+      int? fkAfiliadoId) {
+    return repositoryDB.deleteAfiliadoFamiliaRepositoryDB(fkAfiliadoId);
+  }
 }

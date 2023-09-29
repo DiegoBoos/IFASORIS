@@ -16,4 +16,8 @@ class FichaUsecaseDB {
   Future<Either<Failure, List<FichaEntity>>> loadFichasUsecaseDB() {
     return repositoryDB.loadFichasRepositoryDB();
   }
+
+  Future<Either<Failure, int>> deleteFichaUsecaseDB(int fichaId) {
+    return repositoryDB.deleteFichaRepositoryDB(fichaId);
+  }
 }

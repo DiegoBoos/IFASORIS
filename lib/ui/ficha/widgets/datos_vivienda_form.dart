@@ -1425,9 +1425,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                   ];
                                                   _showOtroPresenciaAnimal =
                                                       true;
-                                                }
-
-                                                if (value == true) {
+                                                } else if (value == true) {
                                                   selectedItems.removeWhere(
                                                       (element) =>
                                                           element

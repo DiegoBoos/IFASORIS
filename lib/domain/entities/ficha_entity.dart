@@ -11,7 +11,8 @@ class FichaEntity {
   int? fichaId;
   DateTime? fechaCreacion;
   String? numFicha;
-  String? userName;
+  String? userNameCreacion;
+  String? userNameActualizacion;
   DateTime? ultimaActualizacion;
   // List<FamiliaEntity>? familia;
   // List<DimViviendaEntity>? vivienda;
@@ -27,7 +28,8 @@ class FichaEntity {
     this.fichaId,
     this.fechaCreacion,
     this.numFicha,
-    this.userName,
+    this.userNameCreacion,
+    this.userNameActualizacion,
     this.ultimaActualizacion,
     // this.familia,
     // this.vivienda,
@@ -43,7 +45,8 @@ class FichaEntity {
         "Ficha_id": fichaId,
         "FechaCreacion": fechaCreacion?.toIso8601String(),
         "NumFicha": numFicha,
-        "UserName": userName,
+        "UserName_Creacion": userNameCreacion,
+        "UserName_Actualizacion": userNameActualizacion,
         "UltimaActualizacion": ultimaActualizacion?.toIso8601String(),
       };
 
@@ -51,7 +54,8 @@ class FichaEntity {
         "Ficha_id": fichaId,
         "FechaCreacion": fechaCreacion?.toIso8601String(),
         "NumFicha": numFicha,
-        "UserName": userName,
+        "UserName_Creacion": userNameCreacion,
+        "UserName_Actualizacion": userNameActualizacion,
         "UltimaActualizacion": ultimaActualizacion?.toIso8601String(),
         // "Familia": familia == null
         //     ? []

@@ -6,6 +6,8 @@ import '../../../services/connection_sqlite_service.dart';
 abstract class FichaLocalDataSource {
   Future<FichaEntity> createFicha(FichaEntity ficha);
   Future<List<FichaModel>> loadFichas();
+
+  Future<int> deleteFicha(int fichaId);
 }
 
 class FichaLocalDataSourceImpl implements FichaLocalDataSource {
@@ -28,5 +30,15 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
         List<FichaModel>.from(res.map((m) => FichaModel.fromJson(m))).toList();
 
     return result;
+  }
+
+  @override
+  Future<int> deleteFicha(int fichaId) async {
+    final db = await ConnectionSQLiteService.db;
+
+    final res =
+        await db.delete('Ficha', where: 'Ficha_id = ?', whereArgs: [fichaId]);
+
+    return res;
   }
 }

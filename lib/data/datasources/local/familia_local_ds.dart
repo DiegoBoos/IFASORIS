@@ -5,6 +5,8 @@ import '../../models/familia_model.dart';
 abstract class FamiliaLocalDataSource {
   Future<FamiliaEntity> createFamilia(FamiliaEntity familia);
   Future<List<FamiliaModel>> loadFamilias();
+
+  Future<int> deleteAfiliadoFamilia(int? fkAfiliadoId);
 }
 
 class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
@@ -28,5 +30,15 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
             .toList();
 
     return result;
+  }
+
+  @override
+  Future<int> deleteAfiliadoFamilia(int? fkAfiliadoId) async {
+    final db = await ConnectionSQLiteService.db;
+
+    final res = await db.delete('Familia',
+        where: 'FK_Afiliado_id = ?', whereArgs: [fkAfiliadoId]);
+
+    return res;
   }
 }

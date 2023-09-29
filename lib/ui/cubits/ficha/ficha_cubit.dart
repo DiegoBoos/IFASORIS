@@ -12,9 +12,13 @@ class FichaCubit extends Cubit<FichaState> {
 
   void initState() => emit(FichaInitial());
 
-  void createFichaDB(FichaEntity ficha) async {
+  Future<FichaEntity?> createFichaDB(FichaEntity ficha) async {
     final result = await fichaUsecaseDB.createFichaUsecaseDB(ficha);
-    result.fold((failure) => emit(FichaError(failure.properties.first)),
-        (data) => emit(FichaCreated(ficha)));
+    return result.fold((failure) => null, (data) => ficha);
+  }
+
+  Future<int> deleteFicha(int fichaId) async {
+    final result = await fichaUsecaseDB.deleteFichaUsecaseDB(fichaId);
+    return result.fold((failure) => 0, (data) => data);
   }
 }

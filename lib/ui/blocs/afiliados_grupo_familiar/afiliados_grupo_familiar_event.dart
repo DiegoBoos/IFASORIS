@@ -25,12 +25,6 @@ class CreateOrUpdateAfiliadoGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   const CreateOrUpdateAfiliadoGrupoFamiliar(this.newAfiliado);
 }
 
-class EmptyAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
-  final int familiaId;
-
-  const EmptyAfiliadosGrupoFamiliar(this.familiaId);
-}
-
 class ErrorMessage extends AfiliadosGrupoFamiliarEvent {
   final String message;
 

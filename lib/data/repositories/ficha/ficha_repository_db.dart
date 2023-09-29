@@ -37,4 +37,17 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
       return const Left(ServerFailure(['Excepción no controlada']));
     }
   }
+
+  @override
+  Future<Either<Failure, int>> deleteFichaRepositoryDB(int fichaId) async {
+    try {
+      final result = await fichaLocalDataSource.deleteFicha(fichaId);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
 }

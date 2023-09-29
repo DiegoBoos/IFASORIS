@@ -2,16 +2,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ifasoris/domain/entities/familia_entity.dart';
-import 'package:ifasoris/domain/entities/ficha_entity.dart';
-import 'package:ifasoris/domain/usecases/afiliado/afiliado_exports.dart';
-import 'package:ifasoris/ui/blocs/auth/auth_bloc.dart';
-import 'package:ifasoris/ui/utils/custom_snack_bar.dart';
 
+import '../../../domain/entities/afiliado_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
-import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
-import '../../cubits/familia/familia_cubit.dart';
-import '../../cubits/ficha/ficha_cubit.dart';
+import '../../utils/custom_snack_bar.dart';
 import '../widgets/buttons.dart';
 import '../widgets/headers.dart';
 import '../widgets/mobile_appbar.dart';
@@ -34,9 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
-
-    final authBloc = BlocProvider.of<AuthBloc>(context);
     final size = MediaQuery.of(context).size;
     return MultiBlocListener(
         listeners: [
@@ -45,44 +36,6 @@ class _HomePageState extends State<HomePage> {
               if (state is AfiliadoError) {
                 CustomSnackBar.showSnackBar(
                     context, 'Error al cargar el afiliado', Colors.red);
-              }
-            },
-          ),
-          BlocListener<FichaCubit, FichaState>(
-            listener: (context, state) {
-              if (state is FichaError) {
-                CustomSnackBar.showSnackBar(
-                    context, 'Error al crear ficha', Colors.red);
-              }
-              if (state is FichaCreated) {
-                final afiliadoPrefsBloc =
-                    BlocProvider.of<AfiliadoPrefsBloc>(context);
-                final familiaCubit = BlocProvider.of<FamiliaCubit>(context);
-                final afiliado = afiliadoPrefsBloc.state.afiliado!;
-
-                final newFamilia = FamiliaEntity(
-                    fichaId: state.fichaCreated!.fichaId!,
-                    apellidosFlia:
-                        '${afiliado.apellido1}  ${afiliado.apellido2}',
-                    afiliadoId: afiliado.afiliadoId!);
-
-                familiaCubit.createFamiliaDB(newFamilia);
-              }
-            },
-          ),
-          BlocListener<FamiliaCubit, FamiliaState>(
-            listener: (context, state) {
-              if (state is FamiliaCreated) {
-                CustomSnackBar.showSnackBar(
-                    context, 'Ficha creada correctamente', Colors.green);
-
-                final updateAfiliado = afiliadoPrefsBloc.state.afiliado!
-                    .copyWith(familiaId: state.familiaCreated.familiaId);
-
-                afiliadoPrefsBloc.add(SaveAfiliado(updateAfiliado));
-
-                BlocProvider.of<DimUbicacionBloc>(context)
-                    .add(DimUbicacionInit());
               }
             },
           ),
@@ -110,26 +63,11 @@ class _HomePageState extends State<HomePage> {
                         FadeInLeft(
                             child: CustomButton(
                                 icon: FontAwesomeIcons.dochub,
-                                texto: state.afiliado!.familiaId == null
-                                    ? 'Crear ficha'
-                                    : 'Diligenciar ficha',
+                                texto: 'Diligenciar ficha',
                                 color1: Theme.of(context).colorScheme.primary,
                                 color2: Theme.of(context).colorScheme.secondary,
                                 onPress: () {
-                                  if (state.afiliado!.familiaId == null) {
-                                    final fichaCubit =
-                                        BlocProvider.of<FichaCubit>(context);
-                                    final newFicha = FichaEntity(
-                                        fechaCreacion: DateTime.now(),
-                                        //TODO: ???
-                                        numFicha: '1',
-                                        userName:
-                                            authBloc.state.usuario!.userName,
-                                        ultimaActualizacion: DateTime.now());
-                                    fichaCubit.createFichaDB(newFicha);
-                                  } else {
-                                    Navigator.pushNamed(context, 'ficha');
-                                  }
+                                  Navigator.pushNamed(context, 'ficha');
                                 })),
                       ],
                     );

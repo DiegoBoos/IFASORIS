@@ -11,7 +11,9 @@ abstract class GrupoFamiliarLocalDataSource {
 
   Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId);
 
-  Future<int> emptyGrupoFamiliar(int familiaId);
+  Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId);
+
+  Future<int> existeAfiliadoGrupoFamiliar(int afiliadoId);
 }
 
 class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
@@ -64,12 +66,24 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   }
 
   @override
-  Future<int> emptyGrupoFamiliar(int familiaId) async {
+  Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId) async {
     final db = await ConnectionSQLiteService.db;
 
     final result = await db.delete('Asp3_GrupoFamiliar',
-        where: 'Familia_id = ?', whereArgs: [familiaId]);
+        where: 'Afiliado_id = ?', whereArgs: [afiliadoId]);
 
     return result;
+  }
+
+  @override
+  Future<int> existeAfiliadoGrupoFamiliar(int afiliadoId) async {
+    final db = await ConnectionSQLiteService.db;
+    final res = await db.rawQuery('''SELECT Afiliado_id FROM Asp3_GrupoFamiliar 
+           WHERE Asp3_GrupoFamiliar.Afiliado_id = $afiliadoId''');
+
+    if (res.isEmpty) return 0;
+
+    final existeAfiliadoId = res[0].entries.first.value as int;
+    return existeAfiliadoId;
   }
 }

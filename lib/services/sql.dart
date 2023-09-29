@@ -213,7 +213,7 @@ class ConnectionSQL {
 
   static const CREATE_DATOS_VIVIENDA_FACTORES_RIESGO = '''
   CREATE TABLE [Asp2_DatosViviendaFactoresRiesgo] (
-	[ViviendaFactorRiesgo_id]	integer NOT NULL,
+	[ViviendaFactorRiesgo_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[FactorRiesgoVivienda_id]	integer NOT NULL,
 	[OtroFactorRiesgo]	varchar(150) COLLATE NOCASE
@@ -221,7 +221,7 @@ class ConnectionSQL {
 
   static const CREATE_DATOS_VIVIENDA_PISOS = '''
   CREATE TABLE [Asp2_DatosViviendaPisos] (
-	[ViviendaPisos_id]	integer PRIMARY KEY AUTOINCREMENT,
+	[ViviendaPisos_id]  integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[PisoVivienda_id]	integer NOT NULL,
 	[OtroTipoPiso]	varchar(250) COLLATE NOCASE
@@ -260,7 +260,7 @@ class ConnectionSQL {
 
   static const CREATE_DATOS_VIVIENDA_TRATAMIENTOS_AGUA = '''
   CREATE TABLE [Asp2_DatosViviendaTratamientosAgua] (
-	[ViviendaTmtoAgua_id]	integer NOT NULL,
+	[ViviendaTmtoAgua_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[TratamientoAguaVivienda_id]	integer NOT NULL,
 	[OtroTratamientoAgua]	varchar(150) COLLATE NOCASE
@@ -592,7 +592,7 @@ class ConnectionSQL {
 	[Familia_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ficha_id]	integer NOT NULL,
 	[ApellidosFlia]	varchar(150) NOT NULL COLLATE NOCASE,
-	[Afiliado_id]	integer NOT NULL
+	[FK_Afiliado_id]	integer NOT NULL
   )''';
 
   static const CREATE_FICHA = '''
@@ -600,8 +600,9 @@ class ConnectionSQL {
 	[Ficha_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[FechaCreacion]	datetime NOT NULL,
 	[NumFicha]	varchar(30) NOT NULL COLLATE NOCASE,
-	[UserName]	varchar(20) NOT NULL COLLATE NOCASE,
-	[UltimaActualizacion]	datetime NOT NULL
+	[UserName_Creacion]	varchar(20) NOT NULL COLLATE NOCASE,
+	[UserName_Actualizacion]	varchar(20) COLLATE NOCASE,
+	[UltimaActualizacion]	datetime
   )''';
 
   static const CREATE_FRUTOS = '''

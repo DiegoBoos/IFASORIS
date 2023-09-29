@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/usecases/afiliado/afiliado_exports.dart';
+import 'package:ifasoris/domain/entities/afiliado_entity.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
-import 'package:ifasoris/ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 
+import '../../domain/entities/familia_entity.dart';
+import '../../domain/entities/ficha_entity.dart';
 import '../../domain/entities/grupo_familiar_entity.dart';
+import '../blocs/afiliado/afiliado_bloc.dart';
+import '../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
+import '../blocs/auth/auth_bloc.dart';
+import '../cubits/familia/familia_cubit.dart';
+import '../cubits/ficha/ficha_cubit.dart';
 import '../ficha/widgets/grupo_familiar_form.dart';
+import '../utils/custom_snack_bar.dart';
 
 class SearchAfiliados extends SearchDelegate {
   final AfiliadoBloc afiliadoBloc;
@@ -71,30 +79,44 @@ class SearchAfiliados extends SearchDelegate {
                             title: Text('${afiliado.documento}'),
                             subtitle: Text(
                                 '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
-                            onTap: () {
-                              final newGrupoFamiliar = GrupoFamiliarEntity(
-                                afiliadoId: afiliado.afiliadoId,
-                                documento: afiliado.documento,
-                                edad: afiliado.edad,
-                                fechaNacimiento: afiliado.fecnac,
-                                nombre1: afiliado.nombre1,
-                                nombre2: afiliado.nombre2,
-                                apellido1: afiliado.apellido1,
-                                apellido2: afiliado.apellido2,
-                                tipoDocAfiliado: afiliado.tipoDocAfiliado,
-                                codGeneroAfiliado: afiliado.codGeneroAfiliado,
-                                codRegimenAfiliado: afiliado.codRegimenAfiliado,
-                              );
+                            onTap: () async {
+                              await afiliadoBloc
+                                  .afiliadoTieneFicha(afiliado.afiliadoId!)
+                                  .then((afiliadoFicha) async {
+                                if (afiliadoFicha != null) {
+                                  CustomSnackBar.showCustomDialog(
+                                      context,
+                                      "Error al agregar al grupo familiar",
+                                      "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
+                                      () => Navigator.pop(context),
+                                      false);
+                                } else {
+                                  final newGrupoFamiliar = GrupoFamiliarEntity(
+                                    afiliadoId: afiliado.afiliadoId,
+                                    documento: afiliado.documento,
+                                    edad: afiliado.edad,
+                                    fechaNacimiento: afiliado.fecnac,
+                                    nombre1: afiliado.nombre1,
+                                    nombre2: afiliado.nombre2,
+                                    apellido1: afiliado.apellido1,
+                                    apellido2: afiliado.apellido2,
+                                    tipoDocAfiliado: afiliado.tipoDocAfiliado,
+                                    codGeneroAfiliado:
+                                        afiliado.codGeneroAfiliado,
+                                    codRegimenAfiliado:
+                                        afiliado.codRegimenAfiliado,
+                                  );
 
-                              Navigator.push<void>(
-                                context,
-                                MaterialPageRoute<void>(
-                                  builder: (BuildContext context) =>
-                                      GrupoFamiliarForm(
-                                          afiliadoGrupoFamiliar:
-                                              newGrupoFamiliar),
-                                ),
-                              );
+                                  Navigator.push<void>(
+                                      context,
+                                      MaterialPageRoute<void>(
+                                        builder: (BuildContext context) =>
+                                            GrupoFamiliarForm(
+                                                afiliadoGrupoFamiliar:
+                                                    newGrupoFamiliar),
+                                      ));
+                                }
+                              });
                             }),
                         const Divider()
                       ],
@@ -127,17 +149,85 @@ class SearchAfiliados extends SearchDelegate {
                       subtitle: Text(
                           '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
                       onTap: () async {
-                        final afiliadoPrefsBloc =
-                            BlocProvider.of<AfiliadoPrefsBloc>(context);
+                        final afiliadosGrupoFamiliarBloc =
+                            BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
+                                context);
 
-                        final afiliadoTieneFicha = await afiliadoBloc
-                            .afiliadoTieneFicha(afiliado.afiliadoId!)
-                            .whenComplete(() => close(context, null));
-                        if (afiliadoTieneFicha != null) {
-                          afiliadoPrefsBloc
-                              .add(SaveAfiliado(afiliadoTieneFicha));
-                        } else {
-                          afiliadoPrefsBloc.add(SaveAfiliado(afiliado));
+                        // Valida si hay una ficha con el afiliado
+                        final afiliadoTieneFicha = afiliadoBloc
+                            .afiliadoTieneFicha(afiliado.afiliadoId!);
+
+                        // Valida si hay un afiliado en el grupo familiar
+                        final afiliadoEnGrupoFamiliar =
+                            afiliadosGrupoFamiliarBloc
+                                .existeAfiliadoGrupoFamiliar(
+                                    afiliado.afiliadoId!);
+
+                        try {
+                          await Future.wait(
+                                  [afiliadoTieneFicha, afiliadoEnGrupoFamiliar])
+                              .then((results) {
+                            int fichaId = results[0];
+                            int afiliadoId = results[1];
+
+                            if (fichaId != 0 || afiliadoId != 0) {
+                              CustomSnackBar.showCustomDialog(
+                                  context,
+                                  "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
+                                  "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
+                                  () async {
+                                final familiaCubit =
+                                    BlocProvider.of<FamiliaCubit>(context);
+                                final fichaCubit =
+                                    BlocProvider.of<FichaCubit>(context);
+                                final afiliadosGrupoFamiliarBloc =
+                                    BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
+                                        context);
+
+                                //Elimina el afiliado de la familia
+                                await familiaCubit
+                                    .deleteAfiliadoFamilia(afiliado.afiliadoId);
+
+                                //Elimina la ficha
+                                final fichaResp =
+                                    await fichaCubit.deleteFicha(fichaId);
+
+                                if (fichaResp != 0) {
+                                  //Elimina el afiliado del grupo familiar
+                                  await afiliadosGrupoFamiliarBloc
+                                      .deleteAfiliadoGrupoFamiliar(
+                                          afiliado.afiliadoId!)
+                                      .then((_) {
+                                    if (afiliado.edad! >= 14) {
+                                      createFicha(context, afiliado);
+                                    } else {
+                                      CustomSnackBar.showCustomDialog(
+                                          context,
+                                          "Error al crear ficha",
+                                          "Este afiliado es menor de 14 años",
+                                          () => Navigator.pop(context),
+                                          false);
+                                    }
+
+                                    close(context, null);
+                                  });
+                                }
+                              });
+                            } else {
+                              if (afiliado.edad! >= 14) {
+                                createFicha(context, afiliado);
+                              } else {
+                                CustomSnackBar.showCustomDialog(
+                                    context,
+                                    "Error al crear ficha",
+                                    "Este afiliado es menor de 14 años",
+                                    () => Navigator.pop(context),
+                                    false);
+                              }
+                            }
+                          });
+                        } catch (error) {
+                          print("Error: $error");
                         }
                       },
                     ),
@@ -150,6 +240,39 @@ class SearchAfiliados extends SearchDelegate {
           return Container();
         },
       );
+    }
+  }
+
+  Future<void> createFicha(
+      BuildContext context, AfiliadoEntity afiliado) async {
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    final familiaCubit = BlocProvider.of<FamiliaCubit>(context);
+    final fichaCubit = BlocProvider.of<FichaCubit>(context);
+
+    final newFicha = FichaEntity(
+        fechaCreacion: DateTime.now(),
+        numFicha: '',
+        userNameCreacion: authBloc.state.usuario!.userName,
+        ultimaActualizacion: DateTime.now());
+
+    final respFicha = await fichaCubit.createFichaDB(newFicha);
+
+    if (respFicha != null) {
+      final newFamilia = FamiliaEntity(
+          fichaId: respFicha.fichaId!,
+          apellidosFlia: '${afiliado.apellido1}  ${afiliado.apellido2}',
+          fkAfiliadoId: afiliado.afiliadoId!);
+
+      await familiaCubit.createFamiliaDB(newFamilia).then((value) {
+        if (value != null) {
+          afiliadoPrefsBloc
+              .add(SaveAfiliado(afiliado.copyWith(familiaId: value.familiaId)));
+        } else {
+          afiliadoPrefsBloc
+              .add(const AfiliadoPrefsError("Error al crear ficha"));
+        }
+      });
     }
   }
 
