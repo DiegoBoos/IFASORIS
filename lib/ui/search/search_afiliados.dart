@@ -83,7 +83,7 @@ class SearchAfiliados extends SearchDelegate {
                               await afiliadoBloc
                                   .afiliadoTieneFicha(afiliado.afiliadoId!)
                                   .then((afiliadoFicha) async {
-                                if (afiliadoFicha != null) {
+                                if (afiliadoFicha != 0) {
                                   CustomSnackBar.showCustomDialog(
                                       context,
                                       "Error al agregar al grupo familiar",
@@ -176,42 +176,44 @@ class SearchAfiliados extends SearchDelegate {
                                   "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
                                   "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
                                   () async {
-                                final familiaCubit =
-                                    BlocProvider.of<FamiliaCubit>(context);
-                                final fichaCubit =
-                                    BlocProvider.of<FichaCubit>(context);
-                                final afiliadosGrupoFamiliarBloc =
-                                    BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
-                                        context);
+                                createFicha(context, afiliado);
+                                close(context, null);
+                                // final familiaCubit =
+                                //     BlocProvider.of<FamiliaCubit>(context);
+                                // final fichaCubit =
+                                //     BlocProvider.of<FichaCubit>(context);
+                                // final afiliadosGrupoFamiliarBloc =
+                                //     BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
+                                //         context);
 
                                 //Elimina el afiliado de la familia
-                                await familiaCubit
-                                    .deleteAfiliadoFamilia(afiliado.afiliadoId);
+                                // await familiaCubit
+                                //     .deleteAfiliadoFamilia(afiliado.afiliadoId);
 
                                 //Elimina la ficha
-                                final fichaResp =
-                                    await fichaCubit.deleteFicha(fichaId);
+                                // final fichaResp =
+                                //     await fichaCubit.deleteFicha(fichaId);
 
-                                if (fichaResp != 0) {
-                                  //Elimina el afiliado del grupo familiar
-                                  await afiliadosGrupoFamiliarBloc
-                                      .deleteAfiliadoGrupoFamiliar(
-                                          afiliado.afiliadoId!)
-                                      .then((_) {
-                                    if (afiliado.edad! >= 14) {
-                                      createFicha(context, afiliado);
-                                    } else {
-                                      CustomSnackBar.showCustomDialog(
-                                          context,
-                                          "Error al crear ficha",
-                                          "Este afiliado es menor de 14 años",
-                                          () => Navigator.pop(context),
-                                          false);
-                                    }
+                                // if (fichaResp != 0) {
+                                //   //Elimina el afiliado del grupo familiar
+                                //   await afiliadosGrupoFamiliarBloc
+                                //       .deleteAfiliadoGrupoFamiliar(
+                                //           afiliado.afiliadoId!)
+                                //       .then((_) {
+                                //     if (afiliado.edad! >= 14) {
+                                //       createFicha(context, afiliado);
+                                //     } else {
+                                //       CustomSnackBar.showCustomDialog(
+                                //           context,
+                                //           "Error al crear ficha",
+                                //           "Este afiliado es menor de 14 años",
+                                //           () => Navigator.pop(context),
+                                //           false);
+                                //     }
 
-                                    close(context, null);
-                                  });
-                                }
+                                //     close(context, null);
+                                //   });
+                                // }
                               });
                             } else {
                               if (afiliado.edad! >= 14) {
