@@ -344,48 +344,32 @@ class _FichaPageState extends State<FichaPage> {
                         encuestaBloc
                             .add(SaveAfiliadosEncuesta(afiliadosGrupoFamiliar));
                       } else if (registraAfiliados == 1) {
-                        final grupoFamiliarBloc =
-                            BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
-                                context);
+                        final afiliadoGrupoFamiliar = GrupoFamiliarEntity(
+                            afiliadoId: afiliado.afiliadoId,
+                            documento: afiliado.documento,
+                            edad: afiliado.edad,
+                            fechaNacimiento: afiliado.fecnac,
+                            nombre1: afiliado.nombre1,
+                            nombre2: afiliado.nombre2,
+                            apellido1: afiliado.apellido1,
+                            apellido2: afiliado.apellido2,
+                            tipoDocAfiliado: afiliado.tipoDocAfiliado,
+                            codGeneroAfiliado: afiliado.codGeneroAfiliado,
+                            codRegimenAfiliado: afiliado.codRegimenAfiliado,
+                            isCompleted: true);
 
-                        final afiliadoPrefsBloc =
-                            BlocProvider.of<AfiliadoPrefsBloc>(
+                        Navigator.push<void>(
                           context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                GrupoFamiliarForm(
+                                    afiliadoGrupoFamiliar:
+                                        afiliadoGrupoFamiliar),
+                          ),
                         );
-
-                        await grupoFamiliarBloc
-                            .deleteAfiliadosGrupoFamiliar(
-                                afiliadoPrefsBloc.state.afiliado!.familiaId!)
-                            .then((value) {
-                          if (value != 0) {
-                            final afiliadoGrupoFamiliar = GrupoFamiliarEntity(
-                                afiliadoId: afiliado.afiliadoId,
-                                documento: afiliado.documento,
-                                edad: afiliado.edad,
-                                fechaNacimiento: afiliado.fecnac,
-                                nombre1: afiliado.nombre1,
-                                nombre2: afiliado.nombre2,
-                                apellido1: afiliado.apellido1,
-                                apellido2: afiliado.apellido2,
-                                tipoDocAfiliado: afiliado.tipoDocAfiliado,
-                                codGeneroAfiliado: afiliado.codGeneroAfiliado,
-                                codRegimenAfiliado: afiliado.codRegimenAfiliado,
-                                isCompleted: true);
-
-                            Navigator.push<void>(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (BuildContext context) =>
-                                    GrupoFamiliarForm(
-                                        afiliadoGrupoFamiliar:
-                                            afiliadoGrupoFamiliar),
-                              ),
-                            );
-                          } else {
-                            afiliadosGrupoFamiliarBloc.add(const ErrorMessage(
-                                'No hay afiliados en el grupo familiar'));
-                          }
-                        });
+                      } else {
+                        afiliadosGrupoFamiliarBloc.add(const ErrorMessage(
+                            'No hay afiliados en el grupo familiar'));
                       }
                     }
                   },
