@@ -562,13 +562,26 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           Ocupacion_id AS ocupacionId,
           GrupoRiesgo_id AS grupoRiesgoId,
           OrigenEtnico5602_id AS origenEtnico5602Id,
-          PuebloIndigena_id AS puebloIndigenaId,
-          LenguaManeja_id AS lenguaManejaId,
+
+
+          (CASE WHEN PuebloIndigena_id == 0 THEN 
+              null 
+          ELSE 
+            PuebloIndigena_id 
+          END) as puebloIndigenaId,
+
+          (CASE WHEN LenguaManeja_id == 0 THEN 
+              null 
+          ELSE 
+            LenguaManeja_id 
+          END) as lenguaManejaId,
+
           (CASE WHEN LenguaMaterna_id == 0 THEN 
           null 
           ELSE 
             LenguaMaterna_id 
           END) as lenguaMaternaId
+
           FROM Asp3_GrupoFamiliar
           WHERE Familia_id = $familiaId
           ''');
