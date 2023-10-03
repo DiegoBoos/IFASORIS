@@ -50,7 +50,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
       _nombresMedTrad = widget.dimUbicacion?.lstNombreMedTradicional ?? [];
 
       if (_nombresMedTrad.isEmpty) {
-        _nombresMedTrad.add(LstNombreMedTradicional(nombreMedTradicional: ''));
+        _nombresMedTrad = [LstNombreMedTradicional(nombreMedTradicional: '')];
       }
     });
   }

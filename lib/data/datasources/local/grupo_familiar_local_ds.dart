@@ -11,9 +11,7 @@ abstract class GrupoFamiliarLocalDataSource {
 
   Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId);
 
-  Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId);
-
-  Future<int> existeAfiliadoGrupoFamiliar(int afiliadoId);
+  Future<int> deleteAfiliadosGrupoFamiliar(int familiaId);
 }
 
 class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
@@ -66,24 +64,57 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   }
 
   @override
-  Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId) async {
+  Future<int> deleteAfiliadosGrupoFamiliar(int familiaId) async {
     final db = await ConnectionSQLiteService.db;
 
-    final result = await db.delete('Asp3_GrupoFamiliar',
-        where: 'Afiliado_id = ?', whereArgs: [afiliadoId]);
+    try {
+      return await db.transaction((txn) async {
+        await txn.execute(
+            'DELETE FROM Asp4_EstilosVidaSaludable WHERE Familia_id = ?',
+            [familiaId]);
 
-    return result;
-  }
+        //TODO: Asp5_CuidadoSaludCondRiesgo
+        await txn.execute(
+            'DELETE FROM Asp5_CuidadoSaludCondRiesgoNombresEnfermedad WHERE CuidadoSaludCondRiesgo_id = ?',
+            []);
+        await txn.execute(
+            'DELETE FROM Asp5_CuidadoSaludCondRiesgoServiciosSolicita WHERE CuidadoSaludCondRiesgo_id = ?',
+            []);
+        await txn.execute(
+            'DELETE FROM Asp5_CuidadoSaludCondRiesgo WHERE Familia_id = ?',
+            [familiaId]);
 
-  @override
-  Future<int> existeAfiliadoGrupoFamiliar(int afiliadoId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.rawQuery('''SELECT Afiliado_id FROM Asp3_GrupoFamiliar 
-           WHERE Asp3_GrupoFamiliar.Afiliado_id = $afiliadoId''');
+        //TODO: Asp6_DimSocioCulturalPueblosIndigenas
+        await txn.execute(
+            'DELETE FROM Asp6_DimSocioCulturalEventosCostumbresParticipo WHERE DimSocioCulturalPueblosIndigenas_id = ?',
+            []);
+        await txn.execute(
+            'DELETE FROM Asp6_DimSocioCulturalPueblosIndigenas WHERE Familia_id = ?',
+            [familiaId]);
 
-    if (res.isEmpty) return 0;
+        //TODO: Asp7_AtencionSalud
+        await txn.execute(
+            'DELETE FROM Asp7_EnfermedadesTradicionales_AtencionSalud WHERE AtencionSalud_id = ?',
+            []);
+        await txn.execute(
+            'DELETE FROM Asp7_EspecialidadesMedTradAtencionSalud WHERE AtencionSalud_id = ?',
+            []);
+        await txn.execute(
+            'DELETE FROM Asp7_LugaresAtencionAtencionSalud WHERE AtencionSalud_id = ?',
+            []);
+        await txn.execute(
+            'DELETE FROM Asp7_PlantasMedicinales_AtencionSalud WHERE AtencionSalud_id = ?',
+            []);
+        await txn.execute(
+            'DELETE FROM Asp7_AtencionSalud WHERE Familia_id = ?', [familiaId]);
 
-    final existeAfiliadoId = res[0].entries.first.value as int;
-    return existeAfiliadoId;
+        final result = await db.delete('Asp3_GrupoFamiliar',
+            where: 'Familia_id = ?', whereArgs: [familiaId]);
+
+        return result;
+      });
+    } catch (e) {
+      return 0;
+    }
   }
 }

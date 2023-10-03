@@ -41,7 +41,7 @@ class FamiliaRepositoryDBImpl implements FamiliaRepositoryDB {
 
   @override
   Future<Either<Failure, int>> deleteAfiliadoFamiliaRepositoryDB(
-      int? fkAfiliadoId) async {
+      int fkAfiliadoId) async {
     try {
       final result =
           await familiaLocalDataSource.deleteAfiliadoFamilia(fkAfiliadoId);

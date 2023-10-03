@@ -6,7 +6,7 @@ abstract class FamiliaLocalDataSource {
   Future<FamiliaEntity> createFamilia(FamiliaEntity familia);
   Future<List<FamiliaModel>> loadFamilias();
 
-  Future<int> deleteAfiliadoFamilia(int? fkAfiliadoId);
+  Future<int> deleteAfiliadoFamilia(int fkAfiliadoId);
 }
 
 class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
@@ -69,7 +69,7 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   }
 
   @override
-  Future<int> deleteAfiliadoFamilia(int? fkAfiliadoId) async {
+  Future<int> deleteAfiliadoFamilia(int fkAfiliadoId) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.delete('Familia',

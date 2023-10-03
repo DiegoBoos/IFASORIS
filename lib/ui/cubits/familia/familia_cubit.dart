@@ -16,7 +16,7 @@ class FamiliaCubit extends Cubit<FamiliaState> {
     return result.fold((failure) => null, (data) => familia);
   }
 
-  Future<int> deleteAfiliadoFamilia(int? fkAfiliadoId) async {
+  Future<int> deleteAfiliadoFamilia(int fkAfiliadoId) async {
     final result =
         await familiaUsecaseDB.deleteAfiliadoFamiliaUsecaseDB(fkAfiliadoId);
     return result.fold((failure) => 0, (data) => data);

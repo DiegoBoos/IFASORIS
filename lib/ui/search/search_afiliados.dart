@@ -8,7 +8,6 @@ import '../../domain/entities/ficha_entity.dart';
 import '../../domain/entities/grupo_familiar_entity.dart';
 import '../blocs/afiliado/afiliado_bloc.dart';
 import '../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
-import '../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../blocs/auth/auth_bloc.dart';
 import '../cubits/familia/familia_cubit.dart';
 import '../cubits/ficha/ficha_cubit.dart';
@@ -145,94 +144,63 @@ class SearchAfiliados extends SearchDelegate {
                 return Column(
                   children: [
                     ListTile(
-                      title: Text('${afiliado.documento}'),
-                      subtitle: Text(
-                          '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
-                      onTap: () async {
-                        final afiliadosGrupoFamiliarBloc =
+                        title: Text('${afiliado.documento}'),
+                        subtitle: Text(
+                            '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
+                        onTap: () async {
+                          /* final afiliadosGrupoFamiliarBloc =
                             BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
-                                context);
+                                context); */
 
-                        // Valida si hay una ficha con el afiliado
-                        final afiliadoTieneFicha = afiliadoBloc
-                            .afiliadoTieneFicha(afiliado.afiliadoId!);
-
-                        // Valida si hay un afiliado en el grupo familiar
-                        final afiliadoEnGrupoFamiliar =
+                          // Valida si hay un afiliado en el grupo familiar
+                          /* final afiliadoEnGrupoFamiliar =
                             afiliadosGrupoFamiliarBloc
                                 .existeAfiliadoGrupoFamiliar(
-                                    afiliado.afiliadoId!);
+                                    afiliado.afiliadoId!); */
 
-                        try {
-                          await Future.wait(
-                                  [afiliadoTieneFicha, afiliadoEnGrupoFamiliar])
-                              .then((results) {
-                            int fichaId = results[0];
-                            int afiliadoId = results[1];
-
-                            if (fichaId != 0 || afiliadoId != 0) {
-                              CustomSnackBar.showCustomDialog(
-                                  context,
-                                  "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
-                                  "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
-                                  () async {
-                                createFicha(context, afiliado);
-                                close(context, null);
-                                // final familiaCubit =
-                                //     BlocProvider.of<FamiliaCubit>(context);
-                                // final fichaCubit =
-                                //     BlocProvider.of<FichaCubit>(context);
-                                // final afiliadosGrupoFamiliarBloc =
-                                //     BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
-                                //         context);
-
-                                //Elimina el afiliado de la familia
-                                // await familiaCubit
-                                //     .deleteAfiliadoFamilia(afiliado.afiliadoId);
-
-                                //Elimina la ficha
-                                // final fichaResp =
-                                //     await fichaCubit.deleteFicha(fichaId);
-
-                                // if (fichaResp != 0) {
-                                //   //Elimina el afiliado del grupo familiar
-                                //   await afiliadosGrupoFamiliarBloc
-                                //       .deleteAfiliadoGrupoFamiliar(
-                                //           afiliado.afiliadoId!)
-                                //       .then((_) {
-                                //     if (afiliado.edad! >= 14) {
-                                //       createFicha(context, afiliado);
-                                //     } else {
-                                //       CustomSnackBar.showCustomDialog(
-                                //           context,
-                                //           "Error al crear ficha",
-                                //           "Este afiliado es menor de 14 años",
-                                //           () => Navigator.pop(context),
-                                //           false);
-                                //     }
-
-                                //     close(context, null);
-                                //   });
-                                // }
-                              });
-                            } else {
-                              if (afiliado.edad! >= 14) {
-                                createFicha(context, afiliado);
-                              } else {
+                          if (afiliado.edad! >= 14) {
+                            // Valida si hay una ficha con el afiliado
+                            await afiliadoBloc
+                                .afiliadoTieneFicha(afiliado.afiliadoId!)
+                                .then((fichaId) {
+                              if (fichaId != 0) {
                                 CustomSnackBar.showCustomDialog(
                                     context,
-                                    "Error al crear ficha",
-                                    "Este afiliado es menor de 14 años",
-                                    () => Navigator.pop(context),
-                                    false);
+                                    "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
+                                    "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
+                                    () async {
+                                  final familiaCubit =
+                                      BlocProvider.of<FamiliaCubit>(context);
+                                  final fichaCubit =
+                                      BlocProvider.of<FichaCubit>(context);
+
+                                  //Elimina el afiliado de la familia
+
+                                  await familiaCubit.deleteAfiliadoFamilia(
+                                      afiliado.afiliadoId!);
+
+                                  //Elimina la ficha
+                                  await fichaCubit
+                                      .deleteFicha(fichaId)
+                                      .then((value) {
+                                    if (value != 0) {
+                                      createFicha(context, afiliado);
+                                    }
+                                  });
+                                });
+                              } else {
+                                createFicha(context, afiliado);
                               }
-                            }
-                          });
-                        } catch (error) {
-                          print("Error: $error");
-                        }
-                      },
-                    ),
+                            });
+                          } else {
+                            CustomSnackBar.showCustomDialog(
+                                context,
+                                "Error al crear ficha",
+                                "Este afiliado es menor de 14 años",
+                                () => Navigator.pop(context),
+                                false);
+                          }
+                        }),
                     const Divider()
                   ],
                 );
@@ -270,9 +238,11 @@ class SearchAfiliados extends SearchDelegate {
         if (value != null) {
           afiliadoPrefsBloc
               .add(SaveAfiliado(afiliado.copyWith(familiaId: value.familiaId)));
+          close(context, null);
         } else {
           afiliadoPrefsBloc
               .add(const AfiliadoPrefsError("Error al crear ficha"));
+          close(context, null);
         }
       });
     }

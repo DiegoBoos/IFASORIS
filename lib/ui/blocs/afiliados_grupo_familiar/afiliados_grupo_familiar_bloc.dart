@@ -74,15 +74,11 @@ class AfiliadosGrupoFamiliarBloc
     });
   }
 
-  Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId) async {
+  Future<int> deleteAfiliadosGrupoFamiliar(
+    int familiaId,
+  ) async {
     final result = await grupoFamiliarUsecaseDB
-        .deleteAfiliadoGrupoFamiliarUsecaseDB(afiliadoId);
-    return result.fold((failure) => 0, (data) => data);
-  }
-
-  Future<int> existeAfiliadoGrupoFamiliar(int afiliadoId) async {
-    final result = await grupoFamiliarUsecaseDB
-        .existeAfiliadoGrupoFamiliarUsecaseDB(afiliadoId);
+        .deleteAfiliadosGrupoFamiliarUsecaseDB(familiaId);
     return result.fold((failure) => 0, (data) => data);
   }
 }

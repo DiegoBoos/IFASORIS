@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
 import '../../../domain/entities/grupo_familiar_entity.dart';
-import '../../../services/connection_sqlite_service.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
@@ -344,34 +343,49 @@ class _FichaPageState extends State<FichaPage> {
 
                         encuestaBloc
                             .add(SaveAfiliadosEncuesta(afiliadosGrupoFamiliar));
-                      } else if (afiliadosGrupoFamiliar == null &&
-                          registraAfiliados == 1) {
-                        final afiliadoGrupoFamiliar = GrupoFamiliarEntity(
-                            afiliadoId: afiliado.afiliadoId,
-                            documento: afiliado.documento,
-                            edad: afiliado.edad,
-                            fechaNacimiento: afiliado.fecnac,
-                            nombre1: afiliado.nombre1,
-                            nombre2: afiliado.nombre2,
-                            apellido1: afiliado.apellido1,
-                            apellido2: afiliado.apellido2,
-                            tipoDocAfiliado: afiliado.tipoDocAfiliado,
-                            codGeneroAfiliado: afiliado.codGeneroAfiliado,
-                            codRegimenAfiliado: afiliado.codRegimenAfiliado,
-                            isCompleted: true);
+                      } else if (registraAfiliados == 1) {
+                        final grupoFamiliarBloc =
+                            BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
+                                context);
 
-                        Navigator.push<void>(
+                        final afiliadoPrefsBloc =
+                            BlocProvider.of<AfiliadoPrefsBloc>(
                           context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                GrupoFamiliarForm(
-                                    afiliadoGrupoFamiliar:
-                                        afiliadoGrupoFamiliar),
-                          ),
                         );
-                      } else {
-                        afiliadosGrupoFamiliarBloc.add(const ErrorMessage(
-                            'No hay afiliados en el grupo familiar'));
+
+                        await grupoFamiliarBloc
+                            .deleteAfiliadosGrupoFamiliar(
+                                afiliadoPrefsBloc.state.afiliado!.familiaId!)
+                            .then((value) {
+                          if (value != 0) {
+                            final afiliadoGrupoFamiliar = GrupoFamiliarEntity(
+                                afiliadoId: afiliado.afiliadoId,
+                                documento: afiliado.documento,
+                                edad: afiliado.edad,
+                                fechaNacimiento: afiliado.fecnac,
+                                nombre1: afiliado.nombre1,
+                                nombre2: afiliado.nombre2,
+                                apellido1: afiliado.apellido1,
+                                apellido2: afiliado.apellido2,
+                                tipoDocAfiliado: afiliado.tipoDocAfiliado,
+                                codGeneroAfiliado: afiliado.codGeneroAfiliado,
+                                codRegimenAfiliado: afiliado.codRegimenAfiliado,
+                                isCompleted: true);
+
+                            Navigator.push<void>(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    GrupoFamiliarForm(
+                                        afiliadoGrupoFamiliar:
+                                            afiliadoGrupoFamiliar),
+                              ),
+                            );
+                          } else {
+                            afiliadosGrupoFamiliarBloc.add(const ErrorMessage(
+                                'No hay afiliados en el grupo familiar'));
+                          }
+                        });
                       }
                     }
                   },
@@ -485,37 +499,20 @@ class _FichaPageState extends State<FichaPage> {
                 });
               },
             ),
-            FutureBuilder<bool>(
-                future: isGrupoFamiliarEmpty(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final isGrupoFamiliarEmpty = snapshot.data!;
-                    if (isGrupoFamiliarEmpty) {
-                      return RadioListTile(
-                        title: const Text('No'),
-                        value: 1,
-                        groupValue: registraAfiliados,
-                        onChanged: (int? value) {
-                          setState(() {
-                            registraAfiliados = value!;
-                          });
-                        },
-                      );
-                    } else {
-                      return Container();
-                    }
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                }),
+            RadioListTile(
+              title: const Text('No'),
+              value: 1,
+              groupValue: registraAfiliados,
+              onChanged: (int? value) async {
+                setState(() {
+                  registraAfiliados = value!;
+                });
+              },
+            ),
             GrupoFamiliarPage(
               registraAfiliados: registraAfiliados,
             ),
           ],
         ));
-  }
-
-  Future<bool> isGrupoFamiliarEmpty() async {
-    return await ConnectionSQLiteService.isTableEmpty('Asp3_GrupoFamiliar');
   }
 }
