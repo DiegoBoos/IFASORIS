@@ -768,8 +768,8 @@ class ConnectionSQL {
   static const CREATE_PUEBLOS_INDIGENAS = '''
   CREATE TABLE [PueblosIndigenas_GrupoFamiliar] (
 	[Pueblo_ide]	integer NOT NULL,
-	[TPS_CMD_IND_RSG_ID]	varchar(10) NOT NULL COLLATE NOCASE,
-	[TPS_CMD_IND_RSG_NOMBRE]	varchar(150) NOT NULL COLLATE NOCASE
+	[Departamento_Ide] integer NOT NULL,
+	[Descripcion]	varchar(150) NOT NULL COLLATE NOCASE
   )''';
 
   static const CREATE_RELIGIONES_PROFESA = '''

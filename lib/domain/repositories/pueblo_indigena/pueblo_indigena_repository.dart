@@ -5,5 +5,5 @@ import '../../entities/pueblo_indigena_entity.dart';
 
 abstract class PuebloIndigenaRepository {
   Future<Either<Failure, List<PuebloIndigenaEntity>>>
-      getPueblosIndigenasRepository();
+      getPueblosIndigenasRepository(int dtoId);
 }

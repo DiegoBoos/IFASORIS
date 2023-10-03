@@ -15,9 +15,10 @@ class PuebloIndigenaRepositoryImpl implements PuebloIndigenaRepository {
 
   @override
   Future<Either<Failure, List<PuebloIndigenaEntity>>>
-      getPueblosIndigenasRepository() async {
+      getPueblosIndigenasRepository(int dtoId) async {
     try {
-      final result = await puebloIndigenaRemoteDataSource.getPueblosIndigenas();
+      final result =
+          await puebloIndigenaRemoteDataSource.getPueblosIndigenas(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

@@ -24,7 +24,8 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
     int limit = 40000;
     List<dynamic> afiliadosMap = [];
 
-    final requestUrl = Uri.parse('${Constants.syncUrl}/$dtoId/$limit');
+    final requestUrl =
+        Uri.parse('${Constants.syncUrl}/afiliados/$dtoId/$limit');
 
     try {
       final reqRes = await http.get(requestUrl);
@@ -36,7 +37,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
 
         for (var i = 0; i < loopValue; i++) {
           final afiliadosUrl = Uri.parse(
-              '${Constants.syncUrl}/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
+              '${Constants.syncUrl}/afiliados/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
           final afiliadosRes = await http.get(afiliadosUrl);
           if (afiliadosRes.statusCode == 200) {
             final decodeReq = json.decode(afiliadosRes.body);

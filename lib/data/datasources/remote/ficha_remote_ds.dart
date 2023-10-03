@@ -29,8 +29,8 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
       Ficha_id,
       FechaCreacion as fechaCreacion,
       NumFicha as numFicha,
-      UserName as userNameCreacion,
-      ultimaActualizacion
+      UserName_Creacion as userNameCreacion,
+      UserName_Actualizacion as ultimaActualizacion
 	    FROM Ficha
       ''');
 
@@ -55,7 +55,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           Familia_id AS Familia_id,
           Ficha_id AS fichaId,
           ApellidosFlia AS apellidosFlia,
-          Afiliado_id AS afiliadoId
+          FK_Afiliado_id AS afiliadoId
           FROM Familia
           WHERE Ficha_id = $fichaId
           ''');
@@ -268,10 +268,22 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             Resguardo_id AS resguardoId,
             AutoridadIndigena_id AS autoridadIndigenaId,
             EstadoVia_id AS estadoViaId,
-            TiempoTarda_id AS tiempoTardaId,
+          
+            (CASE WHEN TiempoTarda_id == 0 THEN 
+            null 
+            ELSE 
+              TiempoTarda_id 
+            END) as tiempoTardaId,
+
             CostoDesplazamiento_id AS costoDesplazamientoId,
             ExisteMedTradicionalComunidad AS existeMedTradicionalComunidad,
-            TiempoTardaMedTrad_id AS tiempoTardaMedTradId,
+
+            (CASE WHEN TiempoTardaMedTrad_id == 0 THEN 
+            null 
+            ELSE 
+              TiempoTardaMedTrad_id 
+            END) as tiempoTardaMedTradId,
+
             CostoDesplazamiento_MedTradicional AS costoDesplazamientoMedTradicional,
             PoseeChagra AS poseeChagra,
             ProduccionMinera AS produccionMinera,
@@ -889,7 +901,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         lstFichas.add(result);
       }
 
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/registrarficha');
+      final uri = Uri.parse('${Constants.syncUrl}/ficha');
 
       dynamic decodedResp;
       for (final ficha in lstFichas) {
@@ -910,8 +922,8 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             body: jsonEncode(ficha));
 
         decodedResp = jsonDecode(resp.body);
-        if (resp.statusCode == 200) {
-          return decodedResp['Description'];
+        if (resp.statusCode == 200 || resp.statusCode == 201) {
+          // return decodedResp['Description'];
         } else {
           throw const ServerFailure(['Excepción no controlada']);
         }

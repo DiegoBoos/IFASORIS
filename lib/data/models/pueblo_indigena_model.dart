@@ -11,18 +11,18 @@ List<PuebloIndigenaModel> pueblosIndigenasFromJson(String str) =>
 class PuebloIndigenaModel extends PuebloIndigenaEntity {
   PuebloIndigenaModel({
     required int puebloIde,
-    required String TPS_CMD_IND_RSG_ID,
-    required String TPS_CMD_IND_RSG_NOMBRE,
+    required int Departamento_Ide,
+    required String Descripcion,
   }) : super(
           puebloIde: puebloIde,
-          TPS_CMD_IND_RSG_ID: TPS_CMD_IND_RSG_ID,
-          TPS_CMD_IND_RSG_NOMBRE: TPS_CMD_IND_RSG_NOMBRE,
+          Departamento_Ide: Departamento_Ide,
+          Descripcion: Descripcion,
         );
 
   factory PuebloIndigenaModel.fromJson(Map<String, dynamic> json) =>
       PuebloIndigenaModel(
         puebloIde: json["Pueblo_ide"],
-        TPS_CMD_IND_RSG_ID: json["TPS_CMD_IND_RSG_ID"],
-        TPS_CMD_IND_RSG_NOMBRE: json["TPS_CMD_IND_RSG_NOMBRE"],
+        Departamento_Ide: json["Departamento_Ide"],
+        Descripcion: json["Descripcion"],
       );
 }

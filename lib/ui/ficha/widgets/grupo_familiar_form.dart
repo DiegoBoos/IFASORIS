@@ -605,8 +605,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (puebloIndigena) => DropdownMenuItem<int>(
                                   value: puebloIndigena.puebloIde,
-                                  child: Text(
-                                      puebloIndigena.TPS_CMD_IND_RSG_NOMBRE),
+                                  child: Text(puebloIndigena.Descripcion),
                                 ),
                               )
                               .toList(),

@@ -2,18 +2,18 @@
 
 class PuebloIndigenaEntity {
   int puebloIde;
-  String TPS_CMD_IND_RSG_ID;
-  String TPS_CMD_IND_RSG_NOMBRE;
+  int Departamento_Ide;
+  String Descripcion;
 
   PuebloIndigenaEntity({
     required this.puebloIde,
-    required this.TPS_CMD_IND_RSG_ID,
-    required this.TPS_CMD_IND_RSG_NOMBRE,
+    required this.Departamento_Ide,
+    required this.Descripcion,
   });
 
   Map<String, dynamic> toJson() => {
         "Pueblo_ide": puebloIde,
-        "TPS_CMD_IND_RSG_ID": TPS_CMD_IND_RSG_ID,
-        "TPS_CMD_IND_RSG_NOMBRE": TPS_CMD_IND_RSG_NOMBRE,
+        "Departamento_Ide": Departamento_Ide,
+        "Descripcion": Descripcion,
       };
 }

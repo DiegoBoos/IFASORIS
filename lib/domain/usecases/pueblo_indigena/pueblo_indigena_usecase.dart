@@ -10,7 +10,7 @@ class PuebloIndigenaUsecase {
   PuebloIndigenaUsecase(this.repository);
 
   Future<Either<Failure, List<PuebloIndigenaEntity>>>
-      getPueblosIndigenasUsecase() {
-    return repository.getPueblosIndigenasRepository();
+      getPueblosIndigenasUsecase(int dtoId) {
+    return repository.getPueblosIndigenasRepository(dtoId);
   }
 }
