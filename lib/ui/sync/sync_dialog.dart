@@ -20,6 +20,33 @@ class _SyncDialogState extends State<SyncDialog> {
     final syncBloc = BlocProvider.of<SyncBloc>(context);
     final usuario = authBloc.state.usuario!;
     return BlocBuilder<SyncBloc, SyncState>(builder: (context, state) {
+      if (state is SyncFailure) {
+        return Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  state.message,
+                  style: const TextStyle(
+                    color: Colors.red,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: const Text('Aceptar',
+                        style:
+                            TextStyle(color: Color(0xff01579B), fontSize: 18),
+                        textAlign: TextAlign.center),
+                  ),
+                )
+              ],
+            ));
+      }
       if (state is SyncSuccess) {
         return Padding(
             padding: const EdgeInsets.all(15.0),

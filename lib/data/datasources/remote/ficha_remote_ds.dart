@@ -1,25 +1,20 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../../services/shared_preferences_service.dart';
 
 abstract class FichaRemoteDataSource {
-  Future<String> createFicha();
+  Future<List<dynamic>> createFicha();
 }
 
 class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
   final http.Client client;
-  final prefs = SharedPreferencesService();
 
   FichaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<String> createFicha() async {
+  Future<List<dynamic>> createFicha() async {
     try {
       final db = await ConnectionSQLiteService.db;
 
@@ -914,35 +909,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         lstFichas.add(result);
       }
 
-      final uri = Uri.parse('${Constants.syncUrl}/ficha');
-
-      dynamic decodedResp;
-      for (final ficha in lstFichas) {
-        final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/data.json');
-
-        // Escribe la cadena JSON en el archivo
-        await file.writeAsString(jsonEncode(ficha));
-
-        print(file.path);
-
-        final resp = await client.post(uri,
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              'Authorization': 'Bearer ${prefs.token}',
-            },
-            body: jsonEncode(ficha));
-
-        decodedResp = jsonDecode(resp.body);
-        if (resp.statusCode == 200 || resp.statusCode == 201) {
-          // return decodedResp['Description'];
-        } else {
-          throw const ServerFailure(['Excepción no controlada']);
-        }
-      }
-
-      return decodedResp['Description'];
+      return lstFichas;
     } on SocketException catch (e) {
       throw SocketException(e.toString());
     }

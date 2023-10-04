@@ -8,7 +8,7 @@ class FichaUsecase {
 
   FichaUsecase(this.repository);
 
-  Future<Either<Failure, String>> createFichaUsecase() {
+  Future<Either<Failure, List<dynamic>>> createFichaUsecase() {
     return repository.createFichaRepository();
   }
 }

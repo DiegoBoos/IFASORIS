@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 import '../../../constants.dart';
 import '../../../data/models/afiliado_response_model.dart';
@@ -83,6 +84,7 @@ import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_expor
 import '../../../domain/usecases/verdura/verdura_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
 import '../../../services/connection_sqlite_service.dart';
+import '../../../services/shared_preferences_service.dart';
 
 part 'sync_event.dart';
 part 'sync_state.dart';
@@ -235,6 +237,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   final FichaUsecase fichaUsecase;
   final SyncLogUsecaseDB syncLogDB;
+
+  final prefs = SharedPreferencesService();
 
   int totalAccesories = 71;
 
@@ -497,10 +501,46 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   ) async {
     final result = await fichaUsecase.createFichaUsecase();
     return result.fold((failure) => add(SyncError(failure.properties.first)),
-        (data) {
-      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-        title: 'Sincronización ficha completada',
-      )));
+        (data) async {
+      final uri = Uri.parse('${Constants.syncUrl}/ficha');
+
+      for (var i = 0; i < data.length; i++) {
+        final ficha = data[i];
+        final directory = await getApplicationDocumentsDirectory();
+        final file = File('${directory.path}/data.json');
+
+        // Escribe la cadena JSON en el archivo
+        await file.writeAsString(jsonEncode(ficha));
+
+        print(file.path);
+
+        final resp = await http.post(uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ${prefs.token}',
+            },
+            body: jsonEncode(ficha));
+
+        final syncProgressModel = state.syncProgressModel.copyWith(
+          title: 'Sincronizando Ficha',
+          counter: ficha,
+          total: data.length,
+          percent: calculatePercent(i + 1, data.length),
+        );
+
+        add(Downloading(syncProgressModel));
+
+        final Map<String, dynamic> decodedResp = jsonDecode(resp.body);
+
+        if (resp.statusCode == 200 || resp.statusCode == 201) {
+          add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: decodedResp['Description'],
+          )));
+        } else {
+          add(const SyncError('Excepción no controlada'));
+        }
+      }
     });
   }
 // ************************** Ficha ****************************

@@ -13,7 +13,7 @@ class FichaRepositoryImpl implements FichaRepository {
   FichaRepositoryImpl({required this.fichaRemoteDataSource});
 
   @override
-  Future<Either<Failure, String>> createFichaRepository() async {
+  Future<Either<Failure, List<dynamic>>> createFichaRepository() async {
     try {
       final result = await fichaRemoteDataSource.createFicha();
 
