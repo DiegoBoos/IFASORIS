@@ -32,4 +32,11 @@ class AfiliadoBloc extends Bloc<AfiliadosEvent, AfiliadosState> {
 
     return result.fold((failure) => 0, (data) => data);
   }
+
+  Future<String> afiliadoTieneFichaReportada(int afiliadoId) async {
+    final result = await afiliadoUsecaseDB
+        .afiliadoTieneFichaReportadaRepositoryDB(afiliadoId);
+
+    return result.fold((failure) => '0', (data) => data);
+  }
 }

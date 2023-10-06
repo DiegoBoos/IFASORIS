@@ -26,12 +26,12 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
       NumFicha as numFicha,
       UserName_Creacion as userNameCreacion,
       UserName_Actualizacion as ultimaActualizacion
-	    FROM Ficha
+	    FROM Ficha WHERE NumFicha = ''
       ''');
 
       if (resFichas.isEmpty) {
         throw const ServerFailure(
-            ['Error al subir ficha, datos insuficientes']);
+            ['No existen nuevas fichas para sincronizar']);
       }
 
       // Almacena un array de objetos de fichas
@@ -42,7 +42,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         final fichaId = resultMapFicha['Ficha_id'];
 
         // Inicializar id en 0 para nuevas fichas en sincronizacion
-        resultMapFicha['Ficha_id'] = 0;
+        // resultMapFicha['Ficha_id'] = 0;
 
         // Familia
         final resFamilia = await db.rawQuery('''
@@ -56,8 +56,9 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           ''');
 
         if (resFamilia.isEmpty) {
-          throw const ServerFailure(
-              ['Error al subir ficha, datos insuficientes']);
+          // throw const ServerFailure(
+          //     ['Error al subir ficha, datos insuficientes']);
+          continue;
         }
 
         final resultMapFamilia = {
@@ -80,8 +81,9 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           ''');
 
         if (resVivienda.isEmpty) {
-          throw const ServerFailure(
-              ['Error al subir ficha, datos insuficientes']);
+          continue;
+          // throw const ServerFailure(
+          //     ['Error al subir ficha, datos insuficientes']);
         }
 
         final resultMapVivienda = {
@@ -908,7 +910,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
 
         lstFichas.add(result);
       }
-
+      if (lstFichas.isEmpty) {
+        throw const ServerFailure(
+            ['No existen nuevas fichas completas para sincronizar']);
+      }
       return lstFichas;
     } on SocketException catch (e) {
       throw SocketException(e.toString());

@@ -37,4 +37,19 @@ class AfiliadoRepositoryDBImpl implements AfiliadoRepositoryDB {
       return const Left(ServerFailure(['Excepción no controlada']));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> afiliadoTieneFichaReportadaRepositoryDB(
+      int afiliadoId) async {
+    // TODO: implement afiliadoTieneFichaReportadaRepositoryDB
+    try {
+      final result =
+          await afiliadoLocalDataSource.afiliadoTieneFichaReportada(afiliadoId);
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
 }

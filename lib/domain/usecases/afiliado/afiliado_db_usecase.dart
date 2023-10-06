@@ -17,4 +17,9 @@ class AfiliadoUsecaseDB {
   Future<Either<Failure, int>> afiliadoTieneFichaRepositoryDB(int afiliadoId) {
     return repositoryDB.afiliadoTieneFichaRepositoryDB(afiliadoId);
   }
+
+  Future<Either<Failure, String>> afiliadoTieneFichaReportadaRepositoryDB(
+      int afiliadoId) {
+    return repositoryDB.afiliadoTieneFichaReportadaRepositoryDB(afiliadoId);
+  }
 }

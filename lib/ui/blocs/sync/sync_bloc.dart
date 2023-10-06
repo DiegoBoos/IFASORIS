@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:ifasoris/data/models/ficha_model.dart';
+import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../constants.dart';
@@ -503,9 +505,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       final uri = Uri.parse('${Constants.syncUrl}/ficha');
+      final fichasSync = [];
 
       for (var i = 0; i < data.length; i++) {
+        final fichaIdLocal = data[i]['Ficha_id'];
         final ficha = data[i];
+
         final directory = await getApplicationDocumentsDirectory();
         final file = File('${directory.path}/data.json');
 
@@ -514,6 +519,15 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
         print(file.path);
 
+        final syncProgressModel = state.syncProgressModel.copyWith(
+          title: 'Sincronizando Ficha',
+          counter: i + 1,
+          total: data.length,
+          percent: calculatePercent(i, data.length),
+        );
+
+        add(Downloading(syncProgressModel));
+        ficha['Ficha_id'] = 0; // Para nueva Ficha se envia id 0
         final resp = await http.post(uri,
             headers: {
               'Content-Type': 'application/json',
@@ -522,25 +536,28 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
             },
             body: jsonEncode(ficha));
 
-        final syncProgressModel = state.syncProgressModel.copyWith(
-          title: 'Sincronizando Ficha',
-          counter: ficha,
-          total: data.length,
-          percent: calculatePercent(i + 1, data.length),
-        );
-
-        add(Downloading(syncProgressModel));
-
         final Map<String, dynamic> decodedResp = jsonDecode(resp.body);
-
         if (resp.statusCode == 200 || resp.statusCode == 201) {
-          add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-            title: decodedResp['Description'],
-          )));
-        } else {
-          add(const SyncError('Excepción no controlada'));
+          final fichaRemote = decodedResp['ficha'];
+          // ficha.numFicha = fichaRemote['NumFicha'];
+          fichasSync.add(ficha);
+          final db = await ConnectionSQLiteService.db;
+
+          await db.update('Ficha', {'NumFicha': fichaRemote['numFicha']},
+              where: 'Ficha_id = ?', whereArgs: [fichaIdLocal]);
         }
+        // if (resp.statusCode == 200 || resp.statusCode == 201) {
+        //   add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+        //     title: decodedResp['Description'],
+        //   )));
+        // } else {
+        //   add(const SyncError('Excepción no controlada'));
+        // }
       }
+
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+        title: 'Se sincronizaron: ${fichasSync.length} fichas',
+      )));
     });
   }
 // ************************** Ficha ****************************

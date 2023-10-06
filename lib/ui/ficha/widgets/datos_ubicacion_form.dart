@@ -50,8 +50,8 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   void initState() {
     super.initState();
 
-    final authBloc = BlocProvider.of<AuthBloc>(context);
-    final usuario = authBloc.state.usuario!;
+    // final authBloc = BlocProvider.of<AuthBloc>(context);
+    // final usuario = authBloc.state.usuario!;
 
     final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
       context,
@@ -73,7 +73,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
       _telefonocel2Ctrl.text = afiliado.telefonocel2 ?? '';
 
       _nombreRecibeVisitaCtrl.text =
-          widget.dimUbicacion?.nombreRecibeVisita ?? usuario.userName;
+          widget.dimUbicacion?.nombreRecibeVisita ?? '';
       _tipoDocumentoRecibeVisita = widget.dimUbicacion?.tipoDocRecibeVisita;
       _documentoRecibeVisitaCtrl.text =
           widget.dimUbicacion?.documentoRecibeVisita ?? '';

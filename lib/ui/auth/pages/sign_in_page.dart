@@ -18,6 +18,8 @@ class _SignInPageState extends State<SignInPage> {
   final formKey = GlobalKey<FormState>();
   final configFormKey = GlobalKey<FormState>();
 
+  // final userNameCtrl = TextEditingController(text: '');
+  // final passwordCtrl = TextEditingController(text: '');
   final userNameCtrl = TextEditingController(text: 'jpalomino');
   final passwordCtrl = TextEditingController(text: 'Jpalomino*2022');
 
