@@ -804,7 +804,13 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           RecibioAtencionMedTradicional_id AS recibioAtencionMedTradicionalId,
           EnfermedadTratamiento_id AS enfermedadTratamientoId,
           UtilizaPlantasMed_id AS utilizaPlantasMedId,
-          LugarPlantaMedicinal_id AS lugarPlantaMedicinalId
+
+          (CASE WHEN LugarPlantaMedicinal_id == 0 THEN 
+              null 
+          ELSE 
+            LugarPlantaMedicinal_id 
+          END) as lugarPlantaMedicinalId,
+          
           FROM Asp7_AtencionSalud
           WHERE Familia_id = $familiaId
           ''');
