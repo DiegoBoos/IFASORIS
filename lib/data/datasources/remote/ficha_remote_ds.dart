@@ -809,7 +809,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
               null 
           ELSE 
             LugarPlantaMedicinal_id 
-          END) as lugarPlantaMedicinalId,
+          END) as lugarPlantaMedicinalId
           
           FROM Asp7_AtencionSalud
           WHERE Familia_id = $familiaId
