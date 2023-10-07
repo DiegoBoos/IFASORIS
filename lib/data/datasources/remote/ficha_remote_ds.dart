@@ -262,7 +262,13 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             Documento_RecibeVisita AS documentoRecibeVisita,
             PerteneceResguardo AS perteneceResguardo,
             ViaAcceso_id AS viaAccesoId,
-            Resguardo_id AS resguardoId,
+
+            (CASE WHEN Resguardo_id == 0 THEN 
+            null 
+            ELSE 
+              Resguardo_id 
+            END) as resguardoId,
+
             AutoridadIndigena_id AS autoridadIndigenaId,
             EstadoVia_id AS estadoViaId,
           
