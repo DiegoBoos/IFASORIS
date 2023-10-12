@@ -6,7 +6,11 @@ import '../../../core/error/failure.dart';
 abstract class FichaRepositoryDB {
   Future<Either<Failure, FichaEntity>> createFichaRepositoryDB(
       FichaEntity ficha);
-  Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB();
+  Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB(
+      int familiaId);
 
   Future<Either<Failure, int>> deleteFichaRepositoryDB(int fichaId);
+
+  Future<Either<Failure, List<FichaEntity>>>
+      loadFichasDiligenciadasRepositoryDB(int familiaId);
 }

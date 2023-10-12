@@ -545,6 +545,14 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
           await db.update('Ficha', {'NumFicha': fichaRemote['numFicha']},
               where: 'Ficha_id = ?', whereArgs: [fichaIdLocal]);
+
+          add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: 'Se sincronizaron: ${fichasSync.length} fichas',
+          )));
+        } else {
+          add(SyncError(
+            decodedResp['message'],
+          ));
         }
         // if (resp.statusCode == 200 || resp.statusCode == 201) {
         //   add(SyncIncrementChanged(state.syncProgressModel.copyWith(
@@ -554,10 +562,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         //   add(const SyncError('Excepción no controlada'));
         // }
       }
-
-      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-        title: 'Se sincronizaron: ${fichasSync.length} fichas',
-      )));
     });
   }
 // ************************** Ficha ****************************

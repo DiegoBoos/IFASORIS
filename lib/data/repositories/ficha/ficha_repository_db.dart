@@ -26,9 +26,10 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
   }
 
   @override
-  Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB() async {
+  Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB(
+      int familiaId) async {
     try {
-      final result = await fichaLocalDataSource.loadFichas();
+      final result = await fichaLocalDataSource.loadFichas(familiaId);
 
       return Right(result);
     } on ServerFailure catch (e) {
@@ -42,6 +43,21 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
   Future<Either<Failure, int>> deleteFichaRepositoryDB(int fichaId) async {
     try {
       final result = await fichaLocalDataSource.deleteFicha(fichaId);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<FichaEntity>>>
+      loadFichasDiligenciadasRepositoryDB(int familiaId) async {
+    try {
+      final result =
+          await fichaLocalDataSource.loadFichasDiligenciadas(familiaId);
 
       return Right(result);
     } on ServerFailure catch (e) {

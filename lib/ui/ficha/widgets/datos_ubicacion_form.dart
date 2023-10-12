@@ -9,7 +9,6 @@ import '../../../domain/usecases/estado_via/estado_via_exports.dart';
 import '../../../domain/usecases/tipo_documento/tipo_documento_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
-import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';

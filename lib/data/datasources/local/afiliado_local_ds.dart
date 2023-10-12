@@ -33,8 +33,7 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
       JOIN Asp3_GrupoFamiliar ON Familia.Familia_id = Asp3_GrupoFamiliar.GrupoFamiliar_id
       JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
       WHERE Asp3_GrupoFamiliar.Afiliado_id  = $afiliadoId
-           
-           ''');
+      ''');
 
     if (res.isEmpty) return 0;
 

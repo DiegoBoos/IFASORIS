@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
+import 'package:ifasoris/ui/home/pages/graficas_page.dart';
 
 import '../../../domain/usecases/auth/auth_exports.dart';
 import '../../../services/connection_sqlite_service.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
+import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
 import '../../cubits/internet/internet_cubit.dart';
 import '../../sync/sync_dialog.dart';
@@ -11,9 +14,14 @@ import '../../search/search_afiliados.dart';
 import '../../utils/custom_circular_progress.dart';
 import '../../utils/custom_snack_bar.dart';
 
-class MobileAppBar extends StatelessWidget {
+class MobileAppBar extends StatefulWidget {
   const MobileAppBar({super.key});
 
+  @override
+  State<MobileAppBar> createState() => _MobileAppBarState();
+}
+
+class _MobileAppBarState extends State<MobileAppBar> {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
@@ -21,6 +29,8 @@ class MobileAppBar extends StatelessWidget {
     final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
     final internetCubit = BlocProvider.of<InternetCubit>(context);
     final syncBloc = BlocProvider.of<SyncBloc>(context);
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
+    final fichaBloc = BlocProvider.of<FichaBloc>(context);
 
     return MultiBlocListener(
       listeners: [
@@ -92,6 +102,52 @@ class MobileAppBar extends StatelessWidget {
                     'No es posible sincronizar, revise su conexión a internet',
                     Colors.red);
               }
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.pie_chart),
+            onPressed: () async {
+              List<FichaEntity> fichasCompletas = [];
+              List<FichaEntity> fichasInCompletas = [];
+              List<FichaEntity> fichasSincronizadas = [];
+              List<FichaEntity> fichasPendientes = [];
+              final afiliado = afiliadoPrefsBloc.state.afiliado!;
+
+              final future1 = fichaBloc.loadFichas(afiliado.familiaId!);
+              final future2 =
+                  fichaBloc.loadFichasDiligenciadas(afiliado.familiaId!);
+
+              Future.wait([future1, future2]).then((values) {
+                final fichas = values[0];
+                final fichasDiligenciadas = values[1];
+
+                for (var ficha in fichas) {
+                  for (var fichaDiligenciada in fichasDiligenciadas) {
+                    if (fichaDiligenciada.fichaId == ficha.fichaId) {
+                      fichasCompletas.add(fichaDiligenciada);
+                    } else {
+                      fichasInCompletas.add(fichaDiligenciada);
+                    }
+                  }
+
+                  if (ficha.numFicha != '') {
+                    fichasSincronizadas.add(ficha);
+                  } else {
+                    fichasPendientes.add(ficha);
+                  }
+                }
+
+                Navigator.push<void>(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => GraficasPage(
+                        countCompletas: fichasCompletas.length,
+                        countInCompletas: fichasInCompletas.length,
+                        countSincronizadas: fichasSincronizadas.length,
+                        countPendientes: fichasPendientes.length),
+                  ),
+                );
+              });
             },
           ),
         ],

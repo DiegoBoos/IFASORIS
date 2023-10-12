@@ -10,7 +10,7 @@ class FichaModel extends FichaEntity {
     DateTime? fechaCreacion,
     required String numFicha,
     required String userNameCreacion,
-    required String userNameActualizacion,
+    String? userNameActualizacion,
     DateTime? ultimaActualizacion,
   }) : super(
           fichaId: fichaId,

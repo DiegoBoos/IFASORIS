@@ -13,11 +13,17 @@ class FichaUsecaseDB {
     return repositoryDB.createFichaRepositoryDB(ficha);
   }
 
-  Future<Either<Failure, List<FichaEntity>>> loadFichasUsecaseDB() {
-    return repositoryDB.loadFichasRepositoryDB();
+  Future<Either<Failure, List<FichaEntity>>> loadFichasUsecaseDB(
+      int familiaId) {
+    return repositoryDB.loadFichasRepositoryDB(familiaId);
   }
 
   Future<Either<Failure, int>> deleteFichaUsecaseDB(int fichaId) {
     return repositoryDB.deleteFichaRepositoryDB(fichaId);
+  }
+
+  Future<Either<Failure, List<FichaEntity>>> loadFichasDiligenciadasUsecaseDB(
+      int familiaId) {
+    return repositoryDB.loadFichasDiligenciadasRepositoryDB(familiaId);
   }
 }
