@@ -6,6 +6,8 @@ import '../../../core/error/failure.dart';
 abstract class FichaRepositoryDB {
   Future<Either<Failure, FichaEntity>> createFichaRepositoryDB(
       FichaEntity ficha);
+  Future<Either<Failure, int>> createFichaCompletaRepositoryDB(
+      FichaEntity ficha);
   Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB(
       int familiaId);
 

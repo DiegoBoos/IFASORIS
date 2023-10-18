@@ -5,6 +5,7 @@ import '../../../services/connection_sqlite_service.dart';
 
 abstract class FichaLocalDataSource {
   Future<FichaEntity> createFicha(FichaEntity ficha);
+  Future<FichaEntity> createFichaCompleta(FichaEntity ficha);
   Future<List<FichaModel>> loadFichas(int familiaId);
 
   Future<int> deleteFicha(int fichaId);
@@ -67,5 +68,16 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
         List<FichaModel>.from(res.map((m) => FichaModel.fromJson(m))).toList();
 
     return result;
+  }
+
+  @override
+  Future<FichaEntity> createFichaCompleta(FichaEntity ficha) async {
+    final db = await ConnectionSQLiteService.db;
+
+    final res = await db.insert('Ficha', ficha.toJsonLocal());
+
+    ficha.fichaId = res;
+
+    return ficha;
   }
 }

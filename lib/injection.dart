@@ -375,7 +375,8 @@ void syncInit() {
       sancionJusticiaUsecaseDB: locator(),
       nroCuartoViviendaUsecase: locator(),
       nroCuartoViviendaUsecaseDB: locator(),
-      fichaUsecase: locator()));
+      fichaUsecase: locator(),
+      fichaUsecaseDB: locator()));
 }
 
 void syncLogInit() {

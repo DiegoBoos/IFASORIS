@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:ifasoris/data/models/ficha_model.dart';
 import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -238,6 +237,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final NroCuartoViviendaUsecaseDB nroCuartoViviendaUsecaseDB;
 
   final FichaUsecase fichaUsecase;
+  final FichaUsecaseDB fichaUsecaseDB;
   final SyncLogUsecaseDB syncLogDB;
 
   final prefs = SharedPreferencesService();
@@ -316,6 +316,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<CostumbrePracticaEntity> costumbresPracticanTemp = [];
   List<SancionJusticiaEntity> sancionesJusticiaTemp = [];
   List<NroCuartoViviendaEntity> nroCuartosViviendaTemp = [];
+
+  List<FichaEntity> fichasTemp = [];
 
   SyncBloc({
     required this.afiliadoUsecase,
@@ -461,6 +463,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.nroCuartoViviendaUsecase,
     required this.nroCuartoViviendaUsecaseDB,
     required this.fichaUsecase,
+    required this.fichaUsecaseDB,
     required this.syncLogDB,
   }) : super(SyncInitial()) {
     on<InitSync>((event, emit) => emit(SyncInitial()));
@@ -625,40 +628,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     }
   }
 
-  // Future<void> saveAfiliados(
-  //     SyncStarted event, AfiliadoResponseModel afiliadosRes) async {
-  //   final db = await ConnectionSQLiteService.db;
-
-  //   try {
-  //     await db.transaction((txn) async {
-  //       for (int i = 0; i < afiliadosRes.resultado.length; i++) {
-  //         final afiliado = afiliadosRes.resultado[i];
-  //         final res = await txn.insert('Afiliado', afiliado.toJson());
-
-  //         if (res != -1) {
-  //           successfulAfiliadoInserts++;
-  //           final syncProgressModel = state.syncProgressModel.copyWith(
-  //             title: 'Sincronizando afiliados',
-  //             counter: successfulAfiliadoInserts,
-  //             total: afiliadosRes.totalRegistros,
-  //             percent: calculatePercent(),
-  //           );
-
-  //           add(SyncPercentageChanged(syncProgressModel));
-  //         }
-  //       }
-  //     });
-
-  //     if (successfulAfiliadoInserts >= afiliadosRes.totalRegistros) {
-  //       add(Downloading(state.syncProgressModel.copyWith(
-  //         title: 'Descargando accesorias',
-  //       )));
-  //       await truncateDificultadesAccesoCA(event);
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  // }
   Future<void> saveAfiliados(
       SyncStarted event, AfiliadoResponseModel afiliadosRes) async {
     final db = await ConnectionSQLiteService.db;
@@ -4068,10 +4037,14 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       if (data >= nroCuartosViviendaTemp.length) {
-        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-            title: 'Sincronización completada',
-            counter: totalAccesories,
-            total: totalAccesories)));
+        // add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+        //     title: 'Sincronización completada',
+        //     counter: totalAccesories,
+        //     total: totalAccesories)));
+        ConnectionSQLiteService.truncateTable('Ficha').then((value) async {
+          fichasTemp = [];
+          await syncFichas(event);
+        });
         return;
       }
       NroCuartoViviendaEntity nroCuartoViviendaTemp =
@@ -4085,6 +4058,53 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** NroCuartosVivienda ****************************
+
+// ************************** Fichas ****************************
+
+  Future<void> syncFichas(SyncStarted event) async {
+    String userName = event.usuario.userName;
+    final result = await fichaUsecase.getFichasUsecase(userName);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      fichasTemp.addAll(data);
+      add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+          title: 'Sincronizando fichas',
+          counter: state.syncProgressModel.counter + 1,
+          total: totalAccesories)));
+
+      // add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+      //     title: 'Sincronización completada',
+      //     counter: totalAccesories,
+      //     total: totalAccesories)));
+      await saveFichas(
+        event,
+        data[0],
+      );
+    });
+  }
+
+  Future<void> saveFichas(
+    SyncStarted event,
+    FichaEntity ficha,
+  ) async {
+    final result = await fichaUsecaseDB.createFichaCompletaUsecaseDB(ficha);
+    return result.fold((failure) => add(SyncError(failure.properties.first)),
+        (data) async {
+      if (data >= fichasTemp.length) {
+        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: 'Sincronización completada',
+            counter: totalAccesories,
+            total: totalAccesories)));
+        return;
+      }
+      FichaEntity fichaTemp = fichasTemp[data];
+
+      // await saveFicha(
+      //   event,
+      //   fichaTemp,
+      // );
+    });
+  }
 
   int calculatePercent(int counter, int total) {
     final percent = ((counter / total) * 100).toInt();

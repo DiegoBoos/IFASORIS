@@ -13,6 +13,10 @@ class FichaUsecaseDB {
     return repositoryDB.createFichaRepositoryDB(ficha);
   }
 
+  Future<Either<Failure, int>> createFichaCompletaUsecaseDB(FichaEntity ficha) {
+    return repositoryDB.createFichaCompletaRepositoryDB(ficha);
+  }
+
   Future<Either<Failure, List<FichaEntity>>> loadFichasUsecaseDB(
       int familiaId) {
     return repositoryDB.loadFichasRepositoryDB(familiaId);

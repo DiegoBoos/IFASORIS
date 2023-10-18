@@ -26,6 +26,22 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
   }
 
   @override
+  Future<Either<Failure, int>> createFichaCompletaRepositoryDB(
+      FichaEntity ficha) async {
+    try {
+      // final result = await fichaLocalDataSource.createFichaCompleta(ficha);
+      await fichaLocalDataSource.createFichaCompleta(ficha);
+
+      // return Right(result);
+      return const Right(1);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<FichaEntity>>> loadFichasRepositoryDB(
       int familiaId) async {
     try {

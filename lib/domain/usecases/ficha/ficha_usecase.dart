@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
+import '../../entities/ficha_entity.dart';
 import '../../repositories/ficha/ficha_repository.dart';
 
 class FichaUsecase {
@@ -10,5 +11,9 @@ class FichaUsecase {
 
   Future<Either<Failure, List<dynamic>>> createFichaUsecase() {
     return repository.createFichaRepository();
+  }
+
+  Future<Either<Failure, List<FichaEntity>>> getFichasUsecase(String userName) {
+    return repository.getFichasRepository(userName);
   }
 }

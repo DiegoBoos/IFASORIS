@@ -14,6 +14,7 @@ class FichaEntity {
   String? userNameCreacion;
   String? userNameActualizacion;
   DateTime? ultimaActualizacion;
+  FamiliaEntity? familia;
   // List<FamiliaEntity>? familia;
   // List<DimViviendaEntity>? vivienda;
   // List<DimUbicacionEntity>? ubicacion;
@@ -31,7 +32,7 @@ class FichaEntity {
     this.userNameCreacion,
     this.userNameActualizacion,
     this.ultimaActualizacion,
-    // this.familia,
+    this.familia,
     // this.vivienda,
     // this.ubicacion,
     // this.grupoFamiliar,

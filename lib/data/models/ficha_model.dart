@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:ifasoris/domain/entities/familia_entity.dart';
 import 'package:ifasoris/domain/entities/ficha_entity.dart';
 
 FichaModel fichaFromJson(String str) => FichaModel.fromJson(json.decode(str));
+List<FichaModel> fichasFromJson(String str) =>
+    List<FichaModel>.from(json.decode(str).map((x) => FichaModel.fromJson(x)));
 
 class FichaModel extends FichaEntity {
   FichaModel({
@@ -12,14 +15,15 @@ class FichaModel extends FichaEntity {
     required String userNameCreacion,
     String? userNameActualizacion,
     DateTime? ultimaActualizacion,
+    FamiliaEntity? familia,
   }) : super(
-          fichaId: fichaId,
-          fechaCreacion: fechaCreacion,
-          numFicha: numFicha,
-          userNameCreacion: userNameCreacion,
-          userNameActualizacion: userNameActualizacion,
-          ultimaActualizacion: ultimaActualizacion,
-        );
+            fichaId: fichaId,
+            fechaCreacion: fechaCreacion,
+            numFicha: numFicha,
+            userNameCreacion: userNameCreacion,
+            userNameActualizacion: userNameActualizacion,
+            ultimaActualizacion: ultimaActualizacion,
+            familia: familia);
 
   factory FichaModel.fromJson(Map<String, dynamic> json) => FichaModel(
         fichaId: json["Ficha_id"],
@@ -27,6 +31,11 @@ class FichaModel extends FichaEntity {
         numFicha: json["NumFicha"],
         userNameCreacion: json["UserName_Creacion"],
         userNameActualizacion: json["UserName_Actualizacion"],
-        ultimaActualizacion: DateTime.parse(json["UltimaActualizacion"]),
+        ultimaActualizacion: json["UltimaActualizacion"] != null
+            ? DateTime.parse(json["UltimaActualizacion"])
+            : null,
+        familia: (json["familia"] != null)
+            ? FamiliaEntity.fromJson(json["familia"])
+            : null,
       );
 }
