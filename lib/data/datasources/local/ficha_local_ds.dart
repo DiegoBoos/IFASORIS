@@ -74,9 +74,22 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   Future<FichaEntity> createFichaCompleta(FichaEntity ficha) async {
     final db = await ConnectionSQLiteService.db;
 
-    final res = await db.insert('Ficha', ficha.toJsonLocal());
+    final familia = ficha.familia;
+    familia!.familiaId = null;
 
-    ficha.fichaId = res;
+    ficha.fichaIdRemote = ficha.fichaId;
+    ficha.fichaId = null;
+    await db.transaction((txn) async {
+      // final batch = txn.batch();
+
+      final newFichaId = await txn.insert('Ficha', ficha.toJsonLocal());
+      // ficha.fichaId = newFicha;
+      familia.fichaId = newFichaId;
+
+      txn.insert('Familia', familia.toJson());
+
+      // await batch.commit();
+    });
 
     return ficha;
   }

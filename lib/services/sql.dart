@@ -602,7 +602,8 @@ class ConnectionSQL {
 	[NumFicha]	varchar(30) NOT NULL COLLATE NOCASE,
 	[UserName_Creacion]	varchar(20) NOT NULL COLLATE NOCASE,
 	[UserName_Actualizacion]	varchar(20) COLLATE NOCASE,
-	[UltimaActualizacion]	datetime
+	[UltimaActualizacion]	datetime,
+  [Ficha_id_remote] integer
   )''';
 
   static const CREATE_FRUTOS = '''

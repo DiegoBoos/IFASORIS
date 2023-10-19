@@ -15,6 +15,7 @@ class FichaEntity {
   String? userNameActualizacion;
   DateTime? ultimaActualizacion;
   FamiliaEntity? familia;
+  int? fichaIdRemote;
   // List<FamiliaEntity>? familia;
   // List<DimViviendaEntity>? vivienda;
   // List<DimUbicacionEntity>? ubicacion;
@@ -33,6 +34,7 @@ class FichaEntity {
     this.userNameActualizacion,
     this.ultimaActualizacion,
     this.familia,
+    this.fichaIdRemote,
     // this.vivienda,
     // this.ubicacion,
     // this.grupoFamiliar,
@@ -42,6 +44,16 @@ class FichaEntity {
     // this.atencionSalud,
   });
 
+  Map<String, dynamic> toJsonLocalCompleta() => {
+        "Ficha_id_remote": fichaId,
+        "FechaCreacion": fechaCreacion?.toIso8601String(),
+        "NumFicha": numFicha,
+        "UserName_Creacion": userNameCreacion,
+        "UserName_Actualizacion": userNameActualizacion,
+        "UltimaActualizacion": ultimaActualizacion?.toIso8601String(),
+        "familia": familia,
+      };
+
   Map<String, dynamic> toJsonLocal() => {
         "Ficha_id": fichaId,
         "FechaCreacion": fechaCreacion?.toIso8601String(),
@@ -49,6 +61,7 @@ class FichaEntity {
         "UserName_Creacion": userNameCreacion,
         "UserName_Actualizacion": userNameActualizacion,
         "UltimaActualizacion": ultimaActualizacion?.toIso8601String(),
+        "Ficha_id_remote": fichaIdRemote,
       };
 
   Map<String, dynamic> toJsonRemote() => {
