@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/ui/search/search_afiliados.dart';
+import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
@@ -75,22 +76,8 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                       shrinkWrap: true,
                       itemCount: afiliadosGrupoFamiliar.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final afiliadoGrupoFamiliar =
-                            afiliadosGrupoFamiliar[index];
-                        return ListTile(
-                            title: Text(
-                                '${afiliadoGrupoFamiliar.nombre1 ?? ''} ${afiliadoGrupoFamiliar.nombre2 ?? ''} ${afiliadoGrupoFamiliar.apellido1 ?? ''} ${afiliadoGrupoFamiliar.apellido2 ?? ''}'),
-                            onTap: () {
-                              Navigator.push<void>(
-                                context,
-                                MaterialPageRoute<void>(
-                                  builder: (BuildContext context) =>
-                                      GrupoFamiliarForm(
-                                          afiliadoGrupoFamiliar:
-                                              afiliadoGrupoFamiliar),
-                                ),
-                              );
-                            });
+                        return buildDismissibleListTile(
+                            context, afiliadosGrupoFamiliar, index);
                       },
                     );
                   } else {
@@ -101,6 +88,77 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
             ],
           ),
       ],
+    );
+  }
+
+  Widget buildDismissibleListTile(BuildContext context,
+      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar, int index) {
+    final afiliadoGrupoFamiliar = afiliadosGrupoFamiliar[index];
+
+    final nombreCompleto =
+        '${afiliadoGrupoFamiliar.nombre1 ?? ''} ${afiliadoGrupoFamiliar.nombre2 ?? ''} ${afiliadoGrupoFamiliar.apellido1 ?? ''} ${afiliadoGrupoFamiliar.apellido2 ?? ''}';
+
+    return Dismissible(
+      direction: DismissDirection.endToStart,
+      key: Key(afiliadoGrupoFamiliar.afiliadoId.toString()),
+      confirmDismiss: (DismissDirection direction) {
+        return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Advertencia"),
+              content: Text(
+                  "¿Está seguro que desea eliminar el afiliado $nombreCompleto?"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancelar"),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final afiliadoGrupoFamiliarBloc =
+                        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
+
+                    await afiliadoGrupoFamiliarBloc
+                        .deleteAfiliadoGrupoFamiliar(
+                            afiliadoGrupoFamiliar.afiliadoId!)
+                        .then((value) {
+                      if (value != 0) {
+                        setState(() {
+                          afiliadosGrupoFamiliar.removeAt(index);
+                        });
+
+                        Navigator.of(context).pop();
+
+                        CustomSnackBar.showSnackBar(context,
+                            'Afiliado eliminado correctamente', Colors.red);
+                      }
+                    });
+                  },
+                  child: const Text("Eliminar"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      background: Container(
+        color: Colors.red, // Background color when swiping
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      child: ListTile(
+          title: Text(nombreCompleto),
+          onTap: () {
+            Navigator.push<void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => GrupoFamiliarForm(
+                    afiliadoGrupoFamiliar: afiliadoGrupoFamiliar),
+              ),
+            );
+          }),
     );
   }
 }
