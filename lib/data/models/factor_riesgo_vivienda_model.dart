@@ -26,10 +26,12 @@ class FactorRiesgoViviendaModel extends FactorRiesgoViviendaEntity {
 }
 
 class LstFactorRiesgo {
+  int? viviendaId;
   int? factorRiesgoViviendaId;
   String? otroFactorRiesgo;
 
   LstFactorRiesgo({
+    this.viviendaId,
     this.factorRiesgoViviendaId,
     this.otroFactorRiesgo,
   });
@@ -41,6 +43,7 @@ class LstFactorRiesgo {
       );
 
   Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": viviendaId,
         "FactorRiesgoVivienda_id": factorRiesgoViviendaId,
         "OtroFactorRiesgo": otroFactorRiesgo,
       };

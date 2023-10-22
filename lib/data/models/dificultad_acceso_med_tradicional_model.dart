@@ -30,9 +30,11 @@ class DificultadAccesoMedTradicionalModel
 }
 
 class LstDificultadAccesoMedTradicional {
+  int? ubicacionId;
   int? dificultadAccesoMedTradId;
 
   LstDificultadAccesoMedTradicional({
+    this.ubicacionId,
     this.dificultadAccesoMedTradId,
   });
 
@@ -43,6 +45,7 @@ class LstDificultadAccesoMedTradicional {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "DificultadAccesoMedTrad_id": dificultadAccesoMedTradId,
       };
 }

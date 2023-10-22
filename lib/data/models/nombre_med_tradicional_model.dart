@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 class LstNombreMedTradicional {
+  int? ubicacionId;
   String? nombreMedTradicional;
 
   LstNombreMedTradicional({
+    this.ubicacionId,
     this.nombreMedTradicional,
   });
 
@@ -13,6 +15,7 @@ class LstNombreMedTradicional {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "NombreMedTradicional": nombreMedTradicional,
       };
 }

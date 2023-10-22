@@ -1,7 +1,29 @@
+import 'package:ifasoris/data/models/especialidad_med_tradicional_model.dart';
+import 'package:ifasoris/data/models/especie_animal_model.dart';
+import 'package:ifasoris/data/models/factor_riesgo_vivienda_model.dart';
 import 'package:ifasoris/data/models/ficha_model.dart';
+import 'package:ifasoris/data/models/fruto_model.dart';
+import 'package:ifasoris/data/models/hortaliza_model.dart';
+import 'package:ifasoris/data/models/leguminosa_model.dart';
+import 'package:ifasoris/data/models/medio_comunicacion_model.dart';
+import 'package:ifasoris/data/models/medio_utiliza_ca_model.dart';
+import 'package:ifasoris/data/models/medio_utiliza_med_tradicional_model.dart';
+import 'package:ifasoris/data/models/nombre_med_tradicional_model.dart';
+import 'package:ifasoris/data/models/piso_vivienda_model.dart';
+import 'package:ifasoris/data/models/presencia_animal_vivienda_model.dart';
+import 'package:ifasoris/data/models/servicio_publico_vivienda_model.dart';
+import 'package:ifasoris/data/models/tipo_combustible_vivienda_model.dart';
+import 'package:ifasoris/data/models/tipo_sanitario_vivienda_model.dart';
+import 'package:ifasoris/data/models/tratamiento_agua_vivienda_model.dart';
+import 'package:ifasoris/data/models/tuberculo_platano_model.dart';
+import 'package:ifasoris/data/models/verdura_model.dart';
+import 'package:ifasoris/domain/entities/estilo_vida_saludable_entity.dart';
+import 'package:ifasoris/domain/entities/grupo_familiar_entity.dart';
 
 import '../../../domain/entities/ficha_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
+import '../../models/dificultad_acceso_med_tradicional_model.dart';
+import '../../models/techo_vivienda_model.dart';
 
 abstract class FichaLocalDataSource {
   Future<FichaEntity> createFicha(FichaEntity ficha);
@@ -74,21 +96,338 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   Future<FichaEntity> createFichaCompleta(FichaEntity ficha) async {
     final db = await ConnectionSQLiteService.db;
 
+    // Ficha
+    ficha.fichaIdRemote = ficha.fichaId;
+    ficha.fichaId = null;
+
+    // Familia
     final familia = ficha.familia;
     familia!.familiaId = null;
 
-    ficha.fichaIdRemote = ficha.fichaId;
-    ficha.fichaId = null;
+    // Vivienda
+    final vivienda = ficha.familia!.vivienda;
+    final lstTechos = vivienda!.lstTecho;
+    final lstServPublicos = vivienda.lstServPublico;
+    final lstTmtoAgua = vivienda.lstTmtoAgua;
+    final lstFactorRiesgo = vivienda.lstFactorRiesgo;
+    final lstTipoSanitario = vivienda.lstTipoSanitario;
+    final lstTipoCombustible = vivienda.lstTipoCombustible;
+    final lstPresenciaAnimal = vivienda.lstPresenciaAnimal;
+    final lstPiso = vivienda.lstPiso;
+
+    // Ubicacion
+    final ubicacion = ficha.familia!.ubicacion;
+    final lstDificultadAccesoMedTradicional =
+        ubicacion!.lstDificultadAccesoMedTradicional;
+    final lstEspMedTradicional = ubicacion.lstEspMedTradicional;
+    final lstAnimalCria = ubicacion.lstAnimalCria;
+    final lstFrutos = ubicacion.lstFrutos;
+    final lstHortalizas = ubicacion.lstHortalizas;
+    final lstLeguminosas = ubicacion.lstLeguminosas;
+    final lstMediosComunica = ubicacion.lstMediosComunica;
+    final lstMediosMedTradicional = ubicacion.lstMediosMedTradicional;
+    final lstNombreMedTradicional = ubicacion.lstNombreMedTradicional;
+    final lstTuberculos = ubicacion.lstTuberculos;
+    final lstVerduras = ubicacion.lstVerduras;
+    final lstMediosUtilizaCA = ubicacion.lstMediosUtilizaCA;
+
+    // GrupoFamiliar
+    final grupoFamiliar = ficha.familia!.grupoFamiliar;
+
+    // EstilosVidaSaludable
+    final estilosVidaSaludable = ficha.familia!.estiloVidaSaludable;
+
     await db.transaction((txn) async {
-      // final batch = txn.batch();
-
+      // Ficha
       final newFichaId = await txn.insert('Ficha', ficha.toJsonLocal());
-      // ficha.fichaId = newFicha;
+
+      // Familia
       familia.fichaId = newFichaId;
+      final newFamilia = await txn.insert('Familia', familia.toJson());
 
-      txn.insert('Familia', familia.toJson());
+      // Vivienda
+      vivienda.familiaId = newFamilia;
+      vivienda.datoViviendaId = null;
+      final newVivienda =
+          await txn.insert('Asp2_DatosVivienda', vivienda.toJson());
+      // Techos
+      List<LstTecho> lstTechosDat = lstTechos!.map((techo) {
+        return LstTecho(
+          viviendaId: newVivienda,
+          techoViviendaId: techo.techoViviendaId,
+          otroTipoTecho: techo.otroTipoTecho,
+        );
+      }).toList();
+      for (var e in lstTechosDat) {
+        await txn.insert('Asp2_DatosViviendaTechos', e.toJson());
+      }
+      // LstServPublico
+      List<LstServPublico> lstServPublicosDat =
+          lstServPublicos!.map((servPublico) {
+        return LstServPublico(
+          viviendaId: newVivienda,
+          servicioPublicoViviendaId: servPublico.servicioPublicoViviendaId,
+        );
+      }).toList();
+      for (var e in lstServPublicosDat) {
+        await txn.insert('Asp2_DatosViviendaServiciosPublicos', e.toJson());
+      }
+      // lstTmtoAgua
+      List<LstTmtoAgua> lstTmtoAguaDat = lstTmtoAgua!.map((tmtoAgua) {
+        return LstTmtoAgua(
+            viviendaId: newVivienda,
+            tratamientoAguaViviendaId: tmtoAgua.tratamientoAguaViviendaId,
+            otroTratamientoAgua: tmtoAgua.otroTratamientoAgua);
+      }).toList();
+      for (var e in lstTmtoAguaDat) {
+        await txn.insert('Asp2_DatosViviendaTratamientosAgua', e.toJson());
+      }
+      // lstFactorRiesgo
+      List<LstFactorRiesgo> lstFactorRiesgoDat =
+          lstFactorRiesgo!.map((factorRiesgo) {
+        return LstFactorRiesgo(
+            viviendaId: newVivienda,
+            factorRiesgoViviendaId: factorRiesgo.factorRiesgoViviendaId,
+            otroFactorRiesgo: factorRiesgo.otroFactorRiesgo);
+      }).toList();
+      for (var e in lstFactorRiesgoDat) {
+        await txn.insert('Asp2_DatosViviendaFactoresRiesgo', e.toJson());
+      }
+      // lstTipoSanitario
+      List<LstTipoSanitario> lstTipoSanitarioDat =
+          lstTipoSanitario!.map((tipoSanitario) {
+        return LstTipoSanitario(
+            viviendaId: newVivienda,
+            tipoSanitarioViviendaId: tipoSanitario.tipoSanitarioViviendaId,
+            otroTipoSanitario: tipoSanitario.otroTipoSanitario);
+      }).toList();
+      for (var e in lstTipoSanitarioDat) {
+        await txn.insert('Asp2_DatosViviendaTiposSanitario', e.toJson());
+      }
+      // lstTipoCombustible
+      List<LstTipoCombustible> lstTipoCombustibleDat =
+          lstTipoCombustible!.map((tipoCombustible) {
+        return LstTipoCombustible(
+            viviendaId: newVivienda,
+            tipoCombustibleViviendaId:
+                tipoCombustible.tipoCombustibleViviendaId,
+            otroTipoCombustible: tipoCombustible.otroTipoCombustible);
+      }).toList();
+      for (var e in lstTipoCombustibleDat) {
+        await txn.insert('Asp2_DatosViviendaTiposCombustible', e.toJson());
+      }
+      // lstPresenciaAnimal
+      List<LstPresenciaAnimal> lstPresenciaAnimalDat =
+          lstPresenciaAnimal!.map((presenciaAnimal) {
+        return LstPresenciaAnimal(
+            viviendaId: newVivienda,
+            presenciaAnimalViviendaId:
+                presenciaAnimal.presenciaAnimalViviendaId,
+            otroPresenciaAnimal: presenciaAnimal.otroPresenciaAnimal);
+      }).toList();
+      for (var e in lstPresenciaAnimalDat) {
+        await txn.insert('Asp2_DatosViviendaPresenciaAnimales', e.toJson());
+      }
+      // lstPiso
+      List<LstPiso> lstPisoDat = lstPiso!.map((piso) {
+        return LstPiso(
+            viviendaId: newVivienda,
+            pisoViviendaId: piso.pisoViviendaId,
+            otroTipoPiso: piso.otroTipoPiso);
+      }).toList();
+      for (var e in lstPisoDat) {
+        await txn.insert('Asp2_DatosViviendaPisos', e.toJson());
+      }
 
-      // await batch.commit();
+      // Ubicacion
+      ubicacion.familiaId = newFamilia;
+      ubicacion.ubicacionId = null;
+      final newUbicacion =
+          await txn.insert('Asp1_Ubicacion', ubicacion.toJson());
+      // lstDificultadAccesoMedTradicional
+      List<LstDificultadAccesoMedTradicional>
+          lstDificultadAccesoMedTradicionalDat =
+          lstDificultadAccesoMedTradicional!
+              .map((dificultadAccesoMedTradicional) {
+        return LstDificultadAccesoMedTradicional(
+          ubicacionId: newUbicacion,
+          dificultadAccesoMedTradId:
+              dificultadAccesoMedTradicional.dificultadAccesoMedTradId,
+        );
+      }).toList();
+      for (var e in lstDificultadAccesoMedTradicionalDat) {
+        await txn.insert('Asp1_UbicacionAccesoMedTradicional', e.toJson());
+      }
+      // lstEspMedTradicional
+      List<LstEspMedTradicional> lstEspMedTradicionalDat =
+          lstEspMedTradicional!.map((espMedTradicional) {
+        return LstEspMedTradicional(
+          ubicacionId: newUbicacion,
+          especialidadMedTradId: espMedTradicional.especialidadMedTradId,
+        );
+      }).toList();
+      for (var e in lstEspMedTradicionalDat) {
+        await txn.insert(
+            'Asp1_UbicacionEspecialidadMedTradicional', e.toJson());
+      }
+      // lstAnimalCria
+      List<LstAnimalCria> lstAnimalCriaDat = lstAnimalCria!.map((animalCria) {
+        return LstAnimalCria(
+          ubicacionId: newUbicacion,
+          especieAnimalCriaId: animalCria.especieAnimalCriaId,
+        );
+      }).toList();
+      for (var e in lstAnimalCriaDat) {
+        await txn.insert('Asp1_UbicacionEspecieAnimalesCria', e.toJson());
+      }
+      // lstFrutos
+      List<LstFruto> lstFrutosDat = lstFrutos!.map((fruto) {
+        return LstFruto(
+          ubicacionId: newUbicacion,
+          frutoId: fruto.frutoId,
+        );
+      }).toList();
+      for (var e in lstFrutosDat) {
+        await txn.insert('Asp1_UbicacionFrutos', e.toJson());
+      }
+      // lstHortalizas
+      List<LstHortaliza> lstHortalizasDat = lstHortalizas!.map((hortaliza) {
+        return LstHortaliza(
+          ubicacionId: newUbicacion,
+          hortalizaId: hortaliza.hortalizaId,
+        );
+      }).toList();
+      for (var e in lstHortalizasDat) {
+        await txn.insert('Asp1_UbicacionHortalizas', e.toJson());
+      }
+      // lstLeguminosas
+      List<LstLeguminosa> lstLeguminosasDat = lstLeguminosas!.map((leguminosa) {
+        return LstLeguminosa(
+          ubicacionId: newUbicacion,
+          leguminosaId: leguminosa.leguminosaId,
+        );
+      }).toList();
+      for (var e in lstLeguminosasDat) {
+        await txn.insert('Asp1_UbicacionLeguminosas', e.toJson());
+      }
+      // lstMediosComunica
+      List<LstMediosComunica> lstMediosComunicaDat =
+          lstMediosComunica!.map((medioComunica) {
+        return LstMediosComunica(
+          ubicacionId: newUbicacion,
+          medioComunicacionId: medioComunica.medioComunicacionId,
+        );
+      }).toList();
+      for (var e in lstMediosComunicaDat) {
+        await txn.insert('Asp1_UbicacionMediosComunicacion', e.toJson());
+      }
+      // lstMediosMedTradicional
+      List<LstMediosMedTradicional> lstMediosMedTradicionalDat =
+          lstMediosMedTradicional!.map((medioMedicinaTradicional) {
+        return LstMediosMedTradicional(
+          ubicacionId: newUbicacion,
+          medioUtilizaMedTradId: medioMedicinaTradicional.medioUtilizaMedTradId,
+        );
+      }).toList();
+      for (var e in lstMediosMedTradicionalDat) {
+        await txn.insert('Asp1_UbicacionMediosMedTradicional', e.toJson());
+      }
+      // lstNombreMedTradicional
+      List<LstNombreMedTradicional> lstNombreMedTradicionalDat =
+          lstNombreMedTradicional!.map((nombreMedTradicional) {
+        return LstNombreMedTradicional(
+          ubicacionId: newUbicacion,
+          nombreMedTradicional: nombreMedTradicional.nombreMedTradicional,
+        );
+      }).toList();
+      for (var e in lstNombreMedTradicionalDat) {
+        await txn.insert('Asp1_UbicacionNombresMedTradicional', e.toJson());
+      }
+      // lstTuberculos
+      List<LstTuberculo> lstTuberculosDat = lstTuberculos!.map((tuberculo) {
+        return LstTuberculo(
+          ubicacionId: newUbicacion,
+          tuberculoPlatanoId: tuberculo.tuberculoPlatanoId,
+        );
+      }).toList();
+      for (var e in lstTuberculosDat) {
+        await txn.insert('Asp1_UbicacionTuberculosPlatanos', e.toJson());
+      }
+      // lstVerduras
+      List<LstVerdura> lstVerdurasDat = lstVerduras!.map((verdura) {
+        return LstVerdura(
+          ubicacionId: newUbicacion,
+          verduraId: verdura.verduraId,
+        );
+      }).toList();
+      for (var e in lstVerdurasDat) {
+        await txn.insert('Asp1_UbicacionVerduras', e.toJson());
+      }
+      // lstMediosUtilizaCA
+      List<LstMediosUtilizaCA> lstMediosUtilizaCADat =
+          lstMediosUtilizaCA!.map((medioUtilizaCA) {
+        return LstMediosUtilizaCA(
+          ubicacionId: newUbicacion,
+          medioUtilizaId: medioUtilizaCA.medioUtilizaId,
+        );
+      }).toList();
+      for (var e in lstMediosUtilizaCADat) {
+        await txn.insert('Asp1_UbicacionMediosCentroAtencion', e.toJson());
+      }
+
+      // grupoFamiliar
+      List<GrupoFamiliarEntity> grupoFamiliarDat =
+          grupoFamiliar!.map((integrante) {
+        return GrupoFamiliarEntity(
+          familiaId: newFamilia,
+          afiliadoId: integrante.afiliadoId,
+          tipoDocumentoId: integrante.tipoDocumentoId,
+          documento: integrante.documento,
+          generoId: integrante.generoId,
+          fechaNacimiento: integrante.fechaNacimiento,
+          edad: integrante.edad,
+          nombre1: integrante.nombre1,
+          nombre2: integrante.nombre2,
+          apellido1: integrante.apellido1,
+          apellido2: integrante.apellido2,
+          tipoDocAfiliado: integrante.tipoDocAfiliado,
+          codGeneroAfiliado: integrante.codGeneroAfiliado,
+          codRegimenAfiliado: integrante.codRegimenAfiliado,
+          tipoRegimenId: integrante.tipoRegimenId,
+          parentescoId: integrante.parentescoId,
+          etniaId: integrante.etniaId,
+          cursoVidaId: integrante.cursoVidaId,
+          nivelEducativoId: integrante.nivelEducativoId,
+          ocupacionId: integrante.ocupacionId,
+          grupoRiesgoId: integrante.grupoRiesgoId,
+          origenEtnico5602Id: integrante.origenEtnico5602Id,
+          puebloIndigenaId: integrante.puebloIndigenaId,
+          lenguaManejaId: integrante.lenguaManejaId,
+          lenguaMaternaId: integrante.lenguaMaternaId,
+        );
+      }).toList();
+      for (var e in grupoFamiliarDat) {
+        await txn.insert('Asp3_GrupoFamiliar', e.toJson());
+      }
+
+      // estilosVidaSaludable
+      List<EstiloVidaSaludableEntity> estilosVidaSaludableDat =
+          estilosVidaSaludable!.map((integrante) {
+        return EstiloVidaSaludableEntity(
+          familiaId: newFamilia,
+          afiliadoId: integrante.afiliadoId,
+          actividadFisicaId: integrante.actividadFisicaId,
+          alimentacionId: integrante.alimentacionId,
+          consumoAlcoholId: integrante.consumoAlcoholId,
+          consumeCigarrillo: integrante.consumeCigarrillo,
+          numeroCigarrilloDiaId: integrante.numeroCigarrilloDiaId,
+          consumoSustanciasPsicoactivas:
+              integrante.consumoSustanciasPsicoactivas,
+        );
+      }).toList();
+      for (var e in estilosVidaSaludableDat) {
+        await txn.insert('Asp4_EstilosVidaSaludable', e.toJson());
+      }
     });
 
     return ficha;

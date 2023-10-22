@@ -25,9 +25,11 @@ class HortalizaModel extends HortalizaEntity {
 }
 
 class LstHortaliza {
+  int? ubicacionId;
   int? hortalizaId;
 
   LstHortaliza({
+    this.ubicacionId,
     this.hortalizaId,
   });
 
@@ -36,6 +38,7 @@ class LstHortaliza {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "Hortaliza_id": hortalizaId,
       };
 }

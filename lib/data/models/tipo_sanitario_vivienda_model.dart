@@ -26,10 +26,12 @@ class TipoSanitarioViviendaModel extends TipoSanitarioViviendaEntity {
 }
 
 class LstTipoSanitario {
+  int? viviendaId;
   int? tipoSanitarioViviendaId;
   String? otroTipoSanitario;
 
   LstTipoSanitario({
+    this.viviendaId,
     this.tipoSanitarioViviendaId,
     this.otroTipoSanitario,
   });
@@ -41,6 +43,7 @@ class LstTipoSanitario {
       );
 
   Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": viviendaId,
         "TipoSanitarioVivienda_id": tipoSanitarioViviendaId,
         "OtroTipoSanitario": otroTipoSanitario,
       };

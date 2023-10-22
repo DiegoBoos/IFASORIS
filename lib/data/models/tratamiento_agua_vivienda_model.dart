@@ -27,10 +27,12 @@ class TratamientoAguaViviendaModel extends TratamientoAguaViviendaEntity {
 }
 
 class LstTmtoAgua {
+  int? viviendaId;
   int? tratamientoAguaViviendaId;
   String? otroTratamientoAgua;
 
   LstTmtoAgua({
+    this.viviendaId,
     this.tratamientoAguaViviendaId,
     this.otroTratamientoAgua,
   });
@@ -41,6 +43,7 @@ class LstTmtoAgua {
       );
 
   Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": viviendaId,
         "TratamientoAguaVivienda_id": tratamientoAguaViviendaId,
         "OtroTratamientoAgua": otroTratamientoAgua,
       };

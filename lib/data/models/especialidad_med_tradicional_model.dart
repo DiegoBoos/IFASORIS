@@ -28,9 +28,11 @@ class EspecialidadMedTradicionalModel extends EspecialidadMedTradicionalEntity {
 }
 
 class LstEspMedTradicional {
+  int? ubicacionId;
   int? especialidadMedTradId;
 
   LstEspMedTradicional({
+    this.ubicacionId,
     this.especialidadMedTradId,
   });
 
@@ -40,6 +42,7 @@ class LstEspMedTradicional {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "EspecialidadMedTrad_id": especialidadMedTradId,
       };
 }

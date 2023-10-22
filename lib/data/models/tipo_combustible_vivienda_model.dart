@@ -27,10 +27,12 @@ class TipoCombustibleViviendaModel extends TipoCombustibleViviendaEntity {
 }
 
 class LstTipoCombustible {
+  int? viviendaId;
   int? tipoCombustibleViviendaId;
   String? otroTipoCombustible;
 
   LstTipoCombustible({
+    this.viviendaId,
     this.tipoCombustibleViviendaId,
     this.otroTipoCombustible,
   });
@@ -42,6 +44,7 @@ class LstTipoCombustible {
       );
 
   Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": viviendaId,
         "TipoCombustibleVivienda_id": tipoCombustibleViviendaId,
         "OtroTipoCombustible": otroTipoCombustible,
       };

@@ -27,19 +27,23 @@ class TechoViviendaModel extends TechoViviendaEntity {
 
 class LstTecho {
   int? techoViviendaId;
+  int? viviendaId;
   String? otroTipoTecho;
 
   LstTecho({
     this.techoViviendaId,
+    this.viviendaId,
     this.otroTipoTecho,
   });
 
   factory LstTecho.fromJson(Map<String, dynamic> json) => LstTecho(
+        viviendaId: json["DatoVivienda_id"],
         techoViviendaId: json["TechoVivienda_id"],
         otroTipoTecho: json["OtroTipoTecho"],
       );
 
   Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": viviendaId,
         "TechoVivienda_id": techoViviendaId,
         "OtroTipoTecho": otroTipoTecho,
       };

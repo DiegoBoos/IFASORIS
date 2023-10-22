@@ -28,9 +28,11 @@ class MedioUtilizaMedTradicionalModel extends MedioUtilizaMedTradicionalEntity {
 }
 
 class LstMediosMedTradicional {
+  int? ubicacionId;
   int? medioUtilizaMedTradId;
 
   LstMediosMedTradicional({
+    this.ubicacionId,
     this.medioUtilizaMedTradId,
   });
 
@@ -40,6 +42,7 @@ class LstMediosMedTradicional {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "MedioUtilizaMedTrad_id": medioUtilizaMedTradId,
       };
 }

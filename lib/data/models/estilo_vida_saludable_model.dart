@@ -2,6 +2,10 @@ import 'dart:convert';
 
 import '../../domain/entities/estilo_vida_saludable_entity.dart';
 
+List<EstiloVidaSaludableModel> listEstiloVidaSaludableFromJson(String str) =>
+    List<EstiloVidaSaludableModel>.from(
+        json.decode(str).map((x) => EstiloVidaSaludableModel.fromJson(x)));
+
 EstiloVidaSaludableModel estiloVidaSaludableFromJson(String str) =>
     EstiloVidaSaludableModel.fromJson(json.decode(str));
 

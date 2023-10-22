@@ -21,9 +21,11 @@ class MedioComunicacionModel extends MedioComunicacionEntity {
 }
 
 class LstMediosComunica {
+  int? ubicacionId;
   int? medioComunicacionId;
 
   LstMediosComunica({
+    this.ubicacionId,
     this.medioComunicacionId,
   });
 
@@ -33,6 +35,7 @@ class LstMediosComunica {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "MedioComunicacion_id": medioComunicacionId,
       };
 }

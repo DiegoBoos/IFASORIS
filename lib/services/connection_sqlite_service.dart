@@ -55,6 +55,7 @@ class ConnectionSQLiteService {
           ));
     }
 
+    _db?.execute("PRAGMA foreign_keys=ON");
     return _db!;
   }
 
@@ -188,5 +189,11 @@ class ConnectionSQLiteService {
     int? count = Sqflite.firstIntValue(
         await dbClient.rawQuery('SELECT COUNT(*) FROM $tableName'));
     return count == 0;
+  }
+
+  static Future<int> truncateFicha() async {
+    var dbClient = await db;
+    await dbClient.delete('Asp3_GrupoFamiliar');
+    return await dbClient.delete('Ficha', where: 'Ficha_id_remote IS NOT NULL');
   }
 }

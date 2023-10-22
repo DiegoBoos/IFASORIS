@@ -169,5 +169,9 @@ class DimUbicacionModel extends DimUbicacionEntity {
             ? []
             : List<LstVerdura>.from(
                 json["lstVerduras"]!.map((x) => LstVerdura.fromJson(x))),
+        lstMediosUtilizaCA: json["lstMediosUtilizaCA"] == null
+            ? []
+            : List<LstMediosUtilizaCA>.from(json["lstMediosUtilizaCA"]!
+                .map((x) => LstMediosUtilizaCA.fromJson(x))),
       );
 }

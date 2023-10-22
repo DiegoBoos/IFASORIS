@@ -26,10 +26,12 @@ class PisoViviendaModel extends PisoViviendaEntity {
 }
 
 class LstPiso {
+  int? viviendaId;
   int? pisoViviendaId;
   String? otroTipoPiso;
 
   LstPiso({
+    this.viviendaId,
     this.pisoViviendaId,
     this.otroTipoPiso,
   });
@@ -40,6 +42,7 @@ class LstPiso {
       );
 
   Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": viviendaId,
         "PisoVivienda_id": pisoViviendaId,
         "OtroTipoPiso": otroTipoPiso,
       };

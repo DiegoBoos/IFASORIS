@@ -26,9 +26,11 @@ class MedioUtilizaCAModel extends MedioUtilizaCAEntity {
 }
 
 class LstMediosUtilizaCA {
+  int? ubicacionId;
   int? medioUtilizaId;
 
   LstMediosUtilizaCA({
+    this.ubicacionId,
     this.medioUtilizaId,
   });
 
@@ -38,6 +40,7 @@ class LstMediosUtilizaCA {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "MedioUtiliza_id": medioUtilizaId,
       };
 }

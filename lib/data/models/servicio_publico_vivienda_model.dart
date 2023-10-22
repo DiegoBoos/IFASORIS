@@ -27,9 +27,11 @@ class ServicioPublicoViviendaModel extends ServicioPublicoViviendaEntity {
 }
 
 class LstServPublico {
+  int? viviendaId;
   int? servicioPublicoViviendaId;
 
   LstServPublico({
+    this.viviendaId,
     this.servicioPublicoViviendaId,
   });
 
@@ -38,6 +40,7 @@ class LstServPublico {
       );
 
   Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": viviendaId,
         "ServicioPublicoVivienda_id": servicioPublicoViviendaId,
       };
 }

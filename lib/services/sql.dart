@@ -63,141 +63,130 @@ class ConnectionSQL {
 	[Documento_RecibeVisita]	varchar(15) NOT NULL COLLATE NOCASE,
 	[PerteneceResguardo]	integer NOT NULL,
 	[ViaAcceso_id]	integer NOT NULL,
-	[Resguardo_id]	integer NOT NULL,
+	[Resguardo_id]	integer,
 	[AutoridadIndigena_id]	integer NOT NULL,
 	[EstadoVia_id]	integer NOT NULL,
 	[TiempoTarda_id]	integer NOT NULL,
 	[CostoDesplazamiento_id]	integer NOT NULL,
 	[ExisteMedTradicionalComunidad]	integer NOT NULL,
-	[TiempoTardaMedTrad_id]	integer NOT NULL,
+	[TiempoTardaMedTrad_id]	integer,
 	[CostoDesplazamiento_MedTradicional]	numeric NOT NULL,
 	[PoseeChagra]	integer NOT NULL,
 	[ProduccionMinera]	integer NOT NULL,
 	[TipoCalendario_id]	integer NOT NULL,
-    FOREIGN KEY ([AutoridadIndigena_id])
-        REFERENCES [AutoridadesIndigenas_DatosVivienda]([AutoridadIndigena_id]),
-    FOREIGN KEY ([CostoDesplazamiento_id])
-        REFERENCES [CostosDesplazamiento_CentroAtencion]([CostoDesplazamiento_id]),
-    FOREIGN KEY ([EstadoVia_id])
-        REFERENCES [EstadoVias]([EstadoVia_id]),
-    FOREIGN KEY ([Familia_id])
-        REFERENCES [Familia]([Familia_id]),
-    FOREIGN KEY ([PerteneceResguardo])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([ExisteMedTradicionalComunidad])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([PoseeChagra])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([ProduccionMinera])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([TiempoTardaMedTrad_id])
-        REFERENCES [TiemposTarda_AccesoMedTradicional]([TiempoTardaMedTrad_id]),
-    FOREIGN KEY ([TiempoTarda_id])
-        REFERENCES [TiemposTarda_CentroAtencion]([TiempoTarda_id]),
-    FOREIGN KEY ([TipoCalendario_id])
-        REFERENCES [TiposCalendarios_AspectosSocioEconomicos]([TipoCalendario_id]),
-    FOREIGN KEY ([Ubicacion_id])
-        REFERENCES [Asp1_Ubicacion]([Ubicacion_id]),
-    FOREIGN KEY ([ViaAcceso_id])
-        REFERENCES [ViasAcceso]([ViaAcceso_id])
+  FOREIGN KEY (Familia_id) REFERENCES Familia(Familia_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_ACCESO_MED_TRADICIONAL = '''
   CREATE TABLE [Asp1_UbicacionAccesoMedTradicional] (
 	[UbicacionAccesoMedTradicional_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[DificultadAccesoMedTrad_id]	integer NOT NULL
+	[DificultadAccesoMedTrad_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_CEREALES = '''
   CREATE TABLE [Asp1_UbicacionCereales] (
 	[UbicacionCereal_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[Cereal_id]	integer NOT NULL
+	[Cereal_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_DIFICULTAD_ACCESO = '''
   CREATE TABLE [Asp1_UbicacionDificultadAcceso] (
 	[UbicacionDificultadAcceso_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[DificultaAcceso_id]	integer NOT NULL
+	[DificultaAcceso_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_ESPECIALIDAD_MED_TRADICIONAL = '''
   CREATE TABLE [Asp1_UbicacionEspecialidadMedTradicional] (
 	[UbicacionEspMedTradicional_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[EspecialidadMedTrad_id]	integer NOT NULL
+	[EspecialidadMedTrad_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_ESPECIE_ANIMALES_CRIA = '''
   CREATE TABLE [Asp1_UbicacionEspecieAnimalesCria] (
 	[UbicacionEspecieAnimal_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[EspecieAnimalCria_id]	integer NOT NULL
+	[EspecieAnimalCria_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_FRUTOS = '''
   CREATE TABLE [Asp1_UbicacionFrutos] (
 	[UbicacionFruto_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[Fruto_id]	integer NOT NULL
+	[Fruto_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_HORTALIZAS = '''
   CREATE TABLE [Asp1_UbicacionHortalizas] (
 	[UbicacionHortaliza_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[Hortaliza_id]	integer NOT NULL
+	[Hortaliza_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_LEGUMINOSAS = '''
   CREATE TABLE [Asp1_UbicacionLeguminosas] (
 	[UbicacionLeguminosa_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[Leguminosa_id]	integer NOT NULL
+	[Leguminosa_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_MEDIOS_COMUNICACION = '''
   CREATE TABLE [Asp1_UbicacionMediosComunicacion] (
 	[UbicacionMedio_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[MedioComunicacion_id]	integer NOT NULL
+	[MedioComunicacion_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_MEDIOS_MED_TRADICIONAL = '''
   CREATE TABLE [Asp1_UbicacionMediosMedTradicional] (
 	[UbicacionMediosMedTradicional_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[MedioUtilizaMedTrad_id]	integer NOT NULL
+	[MedioUtilizaMedTrad_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_NOMBRES_MED_TRADICIONAL = '''
   CREATE TABLE [Asp1_UbicacionNombresMedTradicional] (
 	[UbicacionNombreMedTradicional_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[NombreMedTradicional]	varchar(500) COLLATE NOCASE
+	[NombreMedTradicional]	varchar(500) COLLATE NOCASE,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_TUBERCULOS_PLATANOS = '''
   CREATE TABLE [Asp1_UbicacionTuberculosPlatanos] (
 	[UbicacionTuberculoPlatano_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[TuberculoPlatano_id]	integer NOT NULL
+	[TuberculoPlatano_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_VERDURAS = '''
   CREATE TABLE [Asp1_UbicacionVerduras] (
 	[UbicacionVerdura_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[Verdura_id]	integer NOT NULL
+	[Verdura_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_UBICACION_MEDIOS_CENTRO_ATENCION = '''
   CREATE TABLE [Asp1_UbicacionMediosCentroAtencion] (
 	[UbicacionMediosCentroAtencion_id] integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
-	[MedioUtiliza_id]	integer NOT NULL
+	[MedioUtiliza_id]	integer NOT NULL,
+  FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DATOS_VIVIENDA = '''
@@ -208,7 +197,8 @@ class ConnectionSQL {
 	[TenenciaVivienda_id]	integer NOT NULL,
 	[VentilacionVivienda_id]	integer NOT NULL,
 	[IluminacionVivienda_id]	integer NOT NULL,
-	[NroCuartosVivienda_id]	integer NOT NULL
+	[NroCuartosVivienda_id]	integer NOT NULL,
+  FOREIGN KEY (Familia_id) REFERENCES Familia(Familia_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_FACTORES_RIESGO = '''
@@ -216,7 +206,8 @@ class ConnectionSQL {
 	[ViviendaFactorRiesgo_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[FactorRiesgoVivienda_id]	integer NOT NULL,
-	[OtroFactorRiesgo]	varchar(150) COLLATE NOCASE
+	[OtroFactorRiesgo]	varchar(150) COLLATE NOCASE,
+  FOREIGN KEY (DatoVivienda_id) REFERENCES Asp2_DatosVivienda(DatoVivienda_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_PISOS = '''
@@ -224,14 +215,16 @@ class ConnectionSQL {
 	[ViviendaPisos_id]  integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[PisoVivienda_id]	integer NOT NULL,
-	[OtroTipoPiso]	varchar(250) COLLATE NOCASE
+	[OtroTipoPiso]	varchar(250) COLLATE NOCASE,
+  FOREIGN KEY (DatoVivienda_id) REFERENCES Asp2_DatosVivienda(DatoVivienda_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_SERVICIOS_PUBLICOS = '''
   CREATE TABLE [Asp2_DatosViviendaServiciosPublicos] (
 	[ViviendaServicioPublico_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
-	[ServicioPublicoVivienda_id]	integer NOT NULL
+	[ServicioPublicoVivienda_id]	integer NOT NULL,
+  FOREIGN KEY (DatoVivienda_id) REFERENCES Asp2_DatosVivienda(DatoVivienda_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_TECHOS = '''
@@ -239,7 +232,8 @@ class ConnectionSQL {
 	[ViviendaTecho_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[TechoVivienda_id]	integer,
-	[OtroTipoTecho]	varchar(150) COLLATE NOCASE
+	[OtroTipoTecho]	varchar(150) COLLATE NOCASE,
+  FOREIGN KEY (DatoVivienda_id) REFERENCES Asp2_DatosVivienda(DatoVivienda_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_TIPOS_COMBUSTIBLE = '''
@@ -247,7 +241,8 @@ class ConnectionSQL {
 	[ViviendaTipoCombustible_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[TipoCombustibleVivienda_id]	integer,
-	[OtroTipoCombustible]	varchar(150) COLLATE NOCASE
+	[OtroTipoCombustible]	varchar(150) COLLATE NOCASE,
+  FOREIGN KEY (DatoVivienda_id) REFERENCES Asp2_DatosVivienda(DatoVivienda_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_TIPOS_SANITARIO = '''
@@ -255,7 +250,8 @@ class ConnectionSQL {
 	[ViviendaTipoSanitario_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[TipoSanitarioVivienda_id]	integer,
-	[OtroTipoSanitario]	varchar(150) COLLATE NOCASE
+	[OtroTipoSanitario]	varchar(150) COLLATE NOCASE,
+  FOREIGN KEY (DatoVivienda_id) REFERENCES Asp2_DatosVivienda(DatoVivienda_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DATOS_VIVIENDA_TRATAMIENTOS_AGUA = '''
@@ -263,7 +259,8 @@ class ConnectionSQL {
 	[ViviendaTmtoAgua_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[TratamientoAguaVivienda_id]	integer NOT NULL,
-	[OtroTratamientoAgua]	varchar(150) COLLATE NOCASE
+	[OtroTratamientoAgua]	varchar(150) COLLATE NOCASE,
+  FOREIGN KEY (DatoVivienda_id) REFERENCES Asp2_DatosVivienda(DatoVivienda_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_GRUPO_FAMILIAR = '''
@@ -284,25 +281,11 @@ class ConnectionSQL {
 	[Ocupacion_id]	integer NOT NULL,
 	[GrupoRiesgo_id]	integer NOT NULL,
 	[OrigenEtnico5602_id]	integer NOT NULL,
-	[PuebloIndigena_id]	integer NOT NULL,
-	[LenguaManeja_id]	integer NOT NULL,
-	[LenguaMaterna_id]	integer NOT NULL,
-    FOREIGN KEY ([CursoVida_id])
-        REFERENCES [CursoVida_GrupoFamiliar]([CursoVida_id]),
-    FOREIGN KEY ([Familia_id])
-        REFERENCES [Familia]([Familia_id]),
-    FOREIGN KEY ([GrupoRiesgo_id])
-        REFERENCES [GrupoRiesgo_GrupoFamiliar]([GrupoRiesgo_id]),
-    FOREIGN KEY ([LenguaManeja_id])
-        REFERENCES [LenguaManeja_GrupoFamiliar]([LenguaManeja_id]),
-    FOREIGN KEY ([NivelEducativo_id])
-        REFERENCES [NivelEductativo_GrupoFamiliar]([NivelEducativo_id]),
-    FOREIGN KEY ([LenguaMaterna_id])
-        REFERENCES [NombreLenguaMaterna_GrupoFamiliar]([LenguaMaterna_id]),
-    FOREIGN KEY ([Ocupacion_id])
-        REFERENCES [Ocupacion_GrupoFamiliar]([Ocupacion_id]),
-    FOREIGN KEY ([PuebloIndigena_id])
-        REFERENCES [PueblosIndigenas_GrupoFamiliar]([PuebloIndigena_id])
+	[PuebloIndigena_id]	integer,
+	[LenguaManeja_id]	integer,
+	[LenguaMaterna_id]integer,
+  FOREIGN KEY (Familia_id) REFERENCES Familia(Familia_id) ON DELETE CASCADE,
+  UNIQUE (Familia_id, Afiliado_id)
   )''';
 
   static const CREATE_ESTILOS_VIDA_SALUDABLE = '''
@@ -314,20 +297,9 @@ class ConnectionSQL {
 	[Alimentacion_id]	integer NOT NULL,
 	[ConsumoAlcohol_id]	integer NOT NULL,
 	[ConsumeCigarrillo]	integer NOT NULL,
-	[NumeroCigarrilloDia_id]	integer NOT NULL,
+	[NumeroCigarrilloDia_id] integer,
 	[ConsumoSustanciasPsicoactivas]	integer NOT NULL,
-    FOREIGN KEY ([ActividadFisica_id])
-        REFERENCES [ActividadesFisicas_EstilosVidaSaludable]([ActividadFisica_id]),
-    FOREIGN KEY ([Alimentacion_id])
-        REFERENCES [Alimentacion_EstilosVidaSaludable]([Alimentacion_id]),
-    FOREIGN KEY ([Afiliado_id])
-        REFERENCES [Familia]([Familia_id]),
-    FOREIGN KEY ([NumeroCigarrilloDia_id])
-        REFERENCES [NumeroCigarrilosDia_EstilosVidaSaludable]([NumeroCigarrilloDia_id]),
-    FOREIGN KEY ([ConsumeCigarrillo])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([ConsumoSustanciasPsicoactivas])
-        REFERENCES [OpcionesSi_No]([Opcion_id])
+  FOREIGN KEY (Familia_id, Afiliado_id) REFERENCES Asp3_GrupoFamiliar(Familia_id, Afiliado_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_CUIDADO_SALUD_COND_RIESGO = '''
@@ -345,29 +317,7 @@ class ConnectionSQL {
 	[LugarVacunacion_id]	integer NOT NULL,
 	[UtilizaMetodoPlanificacion_id]	integer NOT NULL,
 	[MetodoPlanificacion_id]	integer NOT NULL,
-	[ConductaSeguir_id]	integer NOT NULL,
-    FOREIGN KEY ([CondicionNutricional_id])
-        REFERENCES [CondicionesNutricionales_CuidadoSaludCondRiesgo]([CondicionNutricional_id]),
-    FOREIGN KEY ([ConductaSeguir_id])
-        REFERENCES [ConductasSeguir_CuidadoSaludCondRiesgo]([ConductaSeguir_id]),
-    FOREIGN KEY ([EsquemaVacunacion_id])
-        REFERENCES [EsquemasVacunacion_CuidadoSaludCondRiesgo]([EsquemaVacunacion_id]),
-    FOREIGN KEY ([LugarVacunacion_id])
-        REFERENCES [LugaresVacunacion_CuidadoSaludCondRiesgo]([LugarVacunacion_id]),
-    FOREIGN KEY ([MetodoPlanificacion_id])
-        REFERENCES [MetodosPlanificacion_CuidadoSaludCondRiesgo]([MetodoPlanificacion_id]),
-    FOREIGN KEY ([TosFlema_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([ManchasPiel_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([CarnetVacunacion_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([UtilizaMetodoPlanificacion_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([SeguimientoEnfermedad_id])
-        REFERENCES [SeguimientoEnfermedades_CuidadoSaludCondRiesgo]([SeguimientoEnfermedad_id]),
-    FOREIGN KEY ([UltimaVezInstSalud_id])
-        REFERENCES [UltimaVezInstSalud_CuidadoSaludCondRiesgo]([UltimaVezInstSalud_id])
+	[ConductaSeguir_id]	integer NOT NULL
   )''';
 
   static const CREATE_CUIDADO_SALUD_COND_RIESGO_NOMBRES_ENFERMEDAD = ''' 
@@ -402,19 +352,7 @@ class ConnectionSQL {
 	[CostumbrePractica_id]	integer NOT NULL,
 	[SancionJusticia_id]	integer NOT NULL,
 	[SitiosSagrados_id]	integer NOT NULL,
-	[Cuales_SitiosSagrados]	varchar(150) COLLATE NOCASE,
-    FOREIGN KEY ([CostumbrePractica_id])
-        REFERENCES [CostumbresPractican_DimSocioCulturalPueblosIndigenas]([CostumbrePractica_id]),
-    FOREIGN KEY ([ConoceUsosCostumbres_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([ParticipaCostumbres_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([SitiosSagrados_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([ReligionProfesa_id])
-        REFERENCES [ReligionesProfesa_DimSocioCulturalPueblosIndigenas]([ReligionProfesa_id]),
-    FOREIGN KEY ([SancionJusticia_id])
-        REFERENCES [SancionesJusticia_DimSocioCulturalPueblosIndigenas]([SancionJusticia_id])
+	[Cuales_SitiosSagrados]	varchar(150) COLLATE NOCASE
   )''';
 
   static const CREATE_DIM_SOCIO_CULTURAL_EVENTOS_COSTUMBRES_PARTICIPO = '''
@@ -433,15 +371,7 @@ class ConnectionSQL {
 	[RecibioAtencionMedTradicional_id]	integer NOT NULL,
 	[EnfermedadTratamiento_id]	integer NOT NULL,
 	[UtilizaPlantasMed_id]	integer NOT NULL,
-	[LugarPlantaMedicinal_id]	integer NOT NULL,
-    FOREIGN KEY ([EnfermedadTratamiento_id])
-        REFERENCES [EnfermedadesTratamientos_AtencionSalud]([EnfermedadTratamiento_id]),
-    FOREIGN KEY ([LugarPlantaMedicinal_id])
-        REFERENCES [LugaresPlantasMedicinales_AtencionSalud]([LugarPlantaMedicinal_id]),
-    FOREIGN KEY ([RecibioAtencionMedTradicional_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id]),
-    FOREIGN KEY ([UtilizaPlantasMed_id])
-        REFERENCES [OpcionesSi_No]([Opcion_id])
+	[LugarPlantaMedicinal_id]	integer NOT NULL
   )''';
 
   static const CREATE_ENFERMEDADES_TRADICIONALES_ATENCION_SALUD = '''
@@ -592,7 +522,8 @@ class ConnectionSQL {
 	[Familia_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ficha_id]	integer NOT NULL,
 	[ApellidosFlia]	varchar(150) NOT NULL COLLATE NOCASE,
-	[FK_Afiliado_id]	integer NOT NULL
+	[FK_Afiliado_id]	integer NOT NULL,
+  FOREIGN KEY (Ficha_id) REFERENCES Ficha(Ficha_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_FICHA = '''
@@ -763,7 +694,8 @@ class ConnectionSQL {
 	[ViviendaPresenciaAnimal_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[DatoVivienda_id]	integer NOT NULL,
 	[PresenciaAnimalVivienda_id]	integer,
-	[OtroPresenciaAnimal]	varchar(150) COLLATE NOCASE
+	[OtroPresenciaAnimal]	varchar(150) COLLATE NOCASE,
+  FOREIGN KEY (DatoVivienda_id) REFERENCES Asp2_DatosVivienda(DatoVivienda_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_PUEBLOS_INDIGENAS = '''

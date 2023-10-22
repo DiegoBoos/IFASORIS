@@ -27,10 +27,12 @@ class PresenciaAnimalViviendaModel extends PresenciaAnimalViviendaEntity {
 }
 
 class LstPresenciaAnimal {
+  int? viviendaId;
   int? presenciaAnimalViviendaId;
   String? otroPresenciaAnimal;
 
   LstPresenciaAnimal({
+    this.viviendaId,
     this.presenciaAnimalViviendaId,
     this.otroPresenciaAnimal,
   });
@@ -42,6 +44,7 @@ class LstPresenciaAnimal {
       );
 
   Map<String, dynamic> toJson() => {
+        "DatoVivienda_id": viviendaId,
         "PresenciaAnimalVivienda_id": presenciaAnimalViviendaId,
         "OtroPresenciaAnimal": otroPresenciaAnimal,
       };

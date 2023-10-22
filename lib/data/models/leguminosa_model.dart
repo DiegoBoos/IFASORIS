@@ -26,9 +26,11 @@ class LeguminosaModel extends LeguminosaEntity {
 }
 
 class LstLeguminosa {
+  int? ubicacionId;
   int? leguminosaId;
 
   LstLeguminosa({
+    this.ubicacionId,
     this.leguminosaId,
   });
 
@@ -37,6 +39,7 @@ class LstLeguminosa {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "Leguminosa_id": leguminosaId,
       };
 }

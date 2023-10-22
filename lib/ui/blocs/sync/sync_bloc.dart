@@ -36,7 +36,6 @@ import '../../../domain/usecases/estado_via/estado_via_exports.dart';
 import '../../../domain/usecases/etnia/etnia_exports.dart';
 import '../../../domain/usecases/evento_costumbre_participa/evento_costumbre_participa_exports.dart';
 import '../../../domain/usecases/factor_riesgo_vivienda/factor_riesgo_vivienda_exports.dart';
-import '../../../domain/usecases/ficha/ficha_usecase.dart';
 import '../../../domain/usecases/fruto/fruto_exports.dart';
 import '../../../domain/usecases/genero/genero_exports.dart';
 import '../../../domain/usecases/grupo_riesgo/grupo_riesgo_exports.dart';
@@ -4041,7 +4040,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         //     title: 'Sincronización completada',
         //     counter: totalAccesories,
         //     total: totalAccesories)));
-        ConnectionSQLiteService.truncateTable('Ficha').then((value) async {
+        ConnectionSQLiteService.truncateFicha().then((value) async {
           fichasTemp = [];
           await syncFichas(event);
         });
@@ -4097,7 +4096,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
             total: totalAccesories)));
         return;
       }
-      FichaEntity fichaTemp = fichasTemp[data];
+      // FichaEntity fichaTemp = fichasTemp[data];
 
       // await saveFicha(
       //   event,

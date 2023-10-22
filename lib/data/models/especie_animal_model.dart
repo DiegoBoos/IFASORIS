@@ -26,9 +26,11 @@ class EspecieAnimalModel extends EspecieAnimalEntity {
 }
 
 class LstAnimalCria {
+  int? ubicacionId;
   int? especieAnimalCriaId;
 
   LstAnimalCria({
+    this.ubicacionId,
     this.especieAnimalCriaId,
   });
 
@@ -37,6 +39,7 @@ class LstAnimalCria {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "EspecieAnimalCria_id": especieAnimalCriaId,
       };
 }

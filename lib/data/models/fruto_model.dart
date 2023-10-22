@@ -24,9 +24,11 @@ class FrutoModel extends FrutoEntity {
 }
 
 class LstFruto {
+  int? ubicacionId;
   int? frutoId;
 
   LstFruto({
+    this.ubicacionId,
     this.frutoId,
   });
 
@@ -35,6 +37,7 @@ class LstFruto {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "Fruto_id": frutoId,
       };
 }

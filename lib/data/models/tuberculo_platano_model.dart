@@ -26,9 +26,11 @@ class TuberculoPlatanoModel extends TuberculoPlatanoEntity {
 }
 
 class LstTuberculo {
+  int? ubicacionId;
   int? tuberculoPlatanoId;
 
   LstTuberculo({
+    this.ubicacionId,
     this.tuberculoPlatanoId,
   });
 
@@ -37,6 +39,7 @@ class LstTuberculo {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "TuberculoPlatano_id": tuberculoPlatanoId,
       };
 }

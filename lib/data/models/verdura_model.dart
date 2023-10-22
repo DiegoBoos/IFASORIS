@@ -24,9 +24,11 @@ class VerduraModel extends VerduraEntity {
 }
 
 class LstVerdura {
+  int? ubicacionId;
   int? verduraId;
 
   LstVerdura({
+    this.ubicacionId,
     this.verduraId,
   });
 
@@ -35,6 +37,7 @@ class LstVerdura {
       );
 
   Map<String, dynamic> toJson() => {
+        "Ubicacion_id": ubicacionId,
         "Verdura_id": verduraId,
       };
 }
