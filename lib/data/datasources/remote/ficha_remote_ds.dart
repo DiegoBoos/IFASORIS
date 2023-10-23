@@ -589,7 +589,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           Edad AS edad,
           TipoRegimen_id AS tipoRegimenId,
           Parentesco_id AS parentescoId,
-          Ficha_id AS etniaId,
+          Etnia_id AS etniaId,
           CursoVida_id AS cursoVidaId,
           NivelEducativo_id AS nivelEducativoId,
           Ocupacion_id AS ocupacionId,
