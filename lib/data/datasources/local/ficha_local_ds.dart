@@ -536,8 +536,8 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
         for (var d in e.lstEspecialidadesMedTradicional!) {
           // d.atencionId = newAtencionSaludId;
           final espAtencion = {
-            "atencionId": newAtencionSaludId,
-            "especialidadMedTradId": d.especialidadMedTradId
+            "AtencionSalud_id": newAtencionSaludId,
+            "EspecialidadMedTrad_id": d.especialidadMedTradId
           };
           await txn.insert(
               'Asp7_EspecialidadesMedTradAtencionSalud', espAtencion);
