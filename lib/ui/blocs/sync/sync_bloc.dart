@@ -4071,14 +4071,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      // add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-      //     title: 'Sincronización completada',
-      //     counter: totalAccesories,
-      //     total: totalAccesories)));
-      await saveFichas(
-        event,
-        data[0],
-      );
+      if (data.isNotEmpty) {
+        await saveFichas(
+          event,
+          data[0],
+        );
+      } else {
+        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: 'Sincronización completada',
+            counter: totalAccesories,
+            total: totalAccesories)));
+      }
     });
   }
 

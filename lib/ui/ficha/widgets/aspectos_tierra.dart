@@ -181,7 +181,9 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                   false)
                                               : setState(() {
                                                   var selectedItems =
-                                                      formState.value ?? [];
+                                                      List<LstTuberculo>.from(
+                                                          formState.value ??
+                                                              []);
 
                                                   if (e.tuberculoPlatanoId ==
                                                       8) {
@@ -291,7 +293,9 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                   false)
                                               : setState(() {
                                                   var selectedItems =
-                                                      formState.value ?? [];
+                                                      List<LstLeguminosa>.from(
+                                                          formState.value ??
+                                                              []);
 
                                                   if (e.leguminosaId == 10) {
                                                     selectedItems = [
@@ -402,8 +406,10 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                         false)
                                                 : setState(
                                                     () {
-                                                      var selectedItems =
-                                                          formState.value ?? [];
+                                                      var selectedItems = List<
+                                                              LstHortaliza>.from(
+                                                          formState.value ??
+                                                              []);
                                                       if (e.hortalizaId == 13) {
                                                         selectedItems = [
                                                           LstHortaliza(
@@ -516,7 +522,9 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                 : setState(
                                                     () {
                                                       var selectedItems =
-                                                          formState.value ?? [];
+                                                          List<LstVerdura>.from(
+                                                              formState.value ??
+                                                                  []);
 
                                                       if (e.verduraId == 7) {
                                                         selectedItems = [
@@ -630,7 +638,9 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                 : setState(
                                                     () {
                                                       var selectedItems =
-                                                          formState.value ?? [];
+                                                          List<LstFruto>.from(
+                                                              formState.value ??
+                                                                  []);
                                                       if (e.frutoId == 16) {
                                                         selectedItems = [
                                                           LstFruto(
@@ -742,7 +752,9 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                 : setState(
                                                     () {
                                                       var selectedItems =
-                                                          formState.value ?? [];
+                                                          List<LstCereal>.from(
+                                                              formState.value ??
+                                                                  []);
                                                       if (e.cerealId == 7) {
                                                         selectedItems = [
                                                           LstCereal(
