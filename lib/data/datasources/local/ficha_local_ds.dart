@@ -17,6 +17,9 @@ import 'package:ifasoris/data/models/tipo_sanitario_vivienda_model.dart';
 import 'package:ifasoris/data/models/tratamiento_agua_vivienda_model.dart';
 import 'package:ifasoris/data/models/tuberculo_platano_model.dart';
 import 'package:ifasoris/data/models/verdura_model.dart';
+import 'package:ifasoris/domain/entities/atencion_salud_entity.dart';
+import 'package:ifasoris/domain/entities/cuidado_salud_cond_riesgo_entity.dart';
+import 'package:ifasoris/domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
 import 'package:ifasoris/domain/entities/estilo_vida_saludable_entity.dart';
 import 'package:ifasoris/domain/entities/grupo_familiar_entity.dart';
 
@@ -136,6 +139,16 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
     // EstilosVidaSaludable
     final estilosVidaSaludable = ficha.familia!.estiloVidaSaludable;
+
+    // CuidadoSaludCondRiesgo
+    final cuidadoSaludCondRiesgo = ficha.familia!.cuidadoSaludCondRiesgo;
+
+    // SocioCulturalPueblosIndigenas
+    final socioCulturalPueblosIndigenas =
+        ficha.familia!.socioCulturalPueblosIndigenas;
+
+    // AtencionSalud
+    final atencionSalud = ficha.familia!.atencionSalud;
 
     await db.transaction((txn) async {
       // Ficha
@@ -427,6 +440,116 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
       }).toList();
       for (var e in estilosVidaSaludableDat) {
         await txn.insert('Asp4_EstilosVidaSaludable', e.toJson());
+      }
+
+      // cuidadoSaludCodRiesgo
+      List<CuidadoSaludCondRiesgoEntity> cuidadoSaludCondRiesgoDat =
+          cuidadoSaludCondRiesgo!.map((cuidado) {
+        return CuidadoSaludCondRiesgoEntity(
+            familiaId: newFamilia,
+            afiliadoId: cuidado.afiliadoId,
+            ultimaVezInstSaludId: cuidado.ultimaVezInstSaludId,
+            seguimientoEnfermedadId: cuidado.seguimientoEnfermedadId,
+            condicionNutricionalId: cuidado.condicionNutricionalId,
+            tosFlemaId: cuidado.tosFlemaId,
+            manchasPielId: cuidado.manchasPielId,
+            carnetVacunacionId: cuidado.carnetVacunacionId,
+            esquemaVacunacionId: cuidado.esquemaVacunacionId,
+            lugarVacunacionId: cuidado.lugarVacunacionId,
+            utilizaMetodoPlanificacionId: cuidado.utilizaMetodoPlanificacionId,
+            metodoPlanificacionId: cuidado.metodoPlanificacionId,
+            conductaSeguirId: cuidado.conductaSeguirId,
+            lstServiciosSolicitados: cuidado.lstServiciosSolicitados,
+            lstNombresEnfermedades: cuidado.lstNombresEnfermedades);
+      }).toList();
+      for (var e in cuidadoSaludCondRiesgoDat) {
+        final newCuidadoSaludCondRiesgoId =
+            await txn.insert('Asp5_CuidadoSaludCondRiesgo', e.toJson());
+        for (var d in e.lstServiciosSolicitados!) {
+          d.cuidadoSaludCondRiesgoId = newCuidadoSaludCondRiesgoId;
+          await txn.insert(
+              'Asp5_CuidadoSaludCondRiesgoServiciosSolicita', d.toJson());
+        }
+        for (var d in e.lstNombresEnfermedades!) {
+          d.cuidadoSaludCondRiesgoId = newCuidadoSaludCondRiesgoId;
+          await txn.insert(
+              'Asp5_CuidadoSaludCondRiesgoNombresEnfermedad', d.toJson());
+        }
+      }
+
+      // socioCulturalPueblosIndigenas
+      List<DimensionSocioCulturalPueblosIndigenasEntity>
+          socioCulturalPueblosIndigenasDat =
+          socioCulturalPueblosIndigenas!.map((pueblo) {
+        return DimensionSocioCulturalPueblosIndigenasEntity(
+          familiaId: newFamilia,
+          afiliadoId: pueblo.afiliadoId,
+          religionProfesaId: pueblo.religionProfesaId,
+          conoceUsosCostumbresId: pueblo.conoceUsosCostumbresId,
+          cualesUsosCostumbres: pueblo.cualesUsosCostumbres,
+          participaCostumbresId: pueblo.participaCostumbresId,
+          costumbrePracticaId: pueblo.costumbrePracticaId,
+          sancionJusticiaId: pueblo.sancionJusticiaId,
+          sitiosSagradosId: pueblo.sitiosSagradosId,
+          cualesSitiosSagrados: pueblo.cualesSitiosSagrados,
+          lstEventoCostumbreParticipa: pueblo.lstEventoCostumbreParticipa,
+        );
+      }).toList();
+      for (var e in socioCulturalPueblosIndigenasDat) {
+        final newSocioCulturalPueblosIndigenasId = await txn.insert(
+            'Asp6_DimSocioCulturalPueblosIndigenas', e.toJson());
+        for (var d in e.lstEventoCostumbreParticipa!) {
+          d.dimSocioCulturalPueblosIndigenasId =
+              newSocioCulturalPueblosIndigenasId;
+          await txn.insert(
+              'Asp6_DimSocioCulturalEventosCostumbresParticipo', d.toJson());
+        }
+      }
+
+      // atencionSalud
+      List<AtencionSaludEntity> atencionSaludDat =
+          atencionSalud!.map((atencion) {
+        return AtencionSaludEntity(
+          familiaId: newFamilia,
+          afiliadoId: atencion.afiliadoId,
+          enfermedadAcudeId: atencion.enfermedadAcudeId,
+          recibioAtencionMedTradicionalId:
+              atencion.recibioAtencionMedTradicionalId,
+          enfermedadTratamientoId: atencion.enfermedadTratamientoId,
+          utilizaPlantasMedId: atencion.utilizaPlantasMedId,
+          lugarPlantaMedicinalId: atencion.lugarPlantaMedicinalId,
+          lstEnfermedadesTradicionales: atencion.lstEnfermedadesTradicionales,
+          lstEspecialidadesMedTradicional:
+              atencion.lstEspecialidadesMedTradicional,
+          lstLugaresAtencionMedico: atencion.lstLugaresAtencionMedico,
+          lstPlantasMedicinales: atencion.lstPlantasMedicinales,
+        );
+      }).toList();
+      for (var e in atencionSaludDat) {
+        final newAtencionSaludId =
+            await txn.insert('Asp7_AtencionSalud', e.toJson());
+        for (var d in e.lstEnfermedadesTradicionales!) {
+          d.atencionSaludId = newAtencionSaludId;
+          await txn.insert(
+              'Asp7_EnfermedadesTradicionales_AtencionSalud', d.toJson());
+        }
+        for (var d in e.lstEspecialidadesMedTradicional!) {
+          // d.atencionId = newAtencionSaludId;
+          final espAtencion = {
+            "atencionId": newAtencionSaludId,
+            "especialidadMedTradId": d.especialidadMedTradId
+          };
+          await txn.insert(
+              'Asp7_EspecialidadesMedTradAtencionSalud', espAtencion);
+        }
+        for (var d in e.lstLugaresAtencionMedico!) {
+          d.atencionSaludId = newAtencionSaludId;
+          await txn.insert('Asp7_LugaresAtencionAtencionSalud', d.toJson());
+        }
+        for (var d in e.lstPlantasMedicinales!) {
+          d.atencionSaludId = newAtencionSaludId;
+          await txn.insert('Asp7_PlantasMedicinales_AtencionSalud', d.toJson());
+        }
       }
     });
 

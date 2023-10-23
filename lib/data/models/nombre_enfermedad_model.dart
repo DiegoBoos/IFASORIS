@@ -20,9 +20,11 @@ class NombreEnfermedadModel extends NombreEnfermedadEntity {
 }
 
 class LstNombreEnfermedad {
+  int? cuidadoSaludCondRiesgoId;
   int? nombreEnfermedadId;
 
   LstNombreEnfermedad({
+    this.cuidadoSaludCondRiesgoId,
     this.nombreEnfermedadId,
   });
 
@@ -32,9 +34,14 @@ class LstNombreEnfermedad {
       );
 
   Map<String, dynamic> toJson() => {
+        "CuidadoSaludCondRiesgo_id": cuidadoSaludCondRiesgoId,
         "NombreEnfermedad_id": nombreEnfermedadId,
       };
 }
+
+List<LstNombreEnfermedad> listNombreEnfermedadFromJson(String str) =>
+    List<LstNombreEnfermedad>.from(
+        json.decode(str).map((x) => LstNombreEnfermedad.fromJson(x)));
 
 List<CuidadoSaludCondRiesgoNombreEnfermedad>
     cuidadoSaludCondRiesgoNombresEnfermedadesFromJson(String str) =>

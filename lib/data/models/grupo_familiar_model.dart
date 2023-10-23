@@ -88,8 +88,4 @@ class GrupoFamiliarModel extends GrupoFamiliarEntity {
         lenguaManejaId: json["LenguaManeja_id"],
         lenguaMaternaId: json["LenguaMaterna_id"],
       );
-
-  // List<GrupoFamiliarModel> listGrupoFamiliarFromJson(String str) =>
-  //     List<GrupoFamiliarModel>.from(
-  //         json.decode(str).map((x) => GrupoFamiliarModel.fromJson(x)));
 }

@@ -83,16 +83,18 @@ class FamiliaEntity {
           ? listEstiloVidaSaludableFromJson(
               jsonEncode(json["EstilosVidaSaludable"]))
           : null,
-      // estiloVidaSaludable: (json["EstilosVidaSaludable"] != null)
-      //     ? json["EstilosVidaSaludable"]
-      //     : null,
-      // cuidadoSaludCondRiesgo: (json["CuidadoSaludCondRiesgo"] != null)
-      //     ? json["CuidadoSaludCondRiesgo"]
-      //     : null,
-      // socioCulturalPueblosIndigenas:
-      //     (json["SocioCulturalPueblosIndigenas"] != null)
-      //         ? json["SocioCulturalPueblosIndigenas"]
-      //         : null,
+      cuidadoSaludCondRiesgo: (json["CuidadoSaludCondRiesgo"] != null)
+          ? listCuidadoSaludCondRiesgoFromJson(
+              jsonEncode(json["CuidadoSaludCondRiesgo"]))
+          : null,
+      socioCulturalPueblosIndigenas:
+          (json["SocioCulturalPueblosIndigenas"] != null)
+              ? listDimensionSocioCulturalPueblosIndigenasFromJson(
+                  jsonEncode(json["SocioCulturalPueblosIndigenas"]))
+              : null,
+      atencionSalud: (json["AtencionSalud"] != null)
+          ? listAtencionSaludFromJson(jsonEncode(json["AtencionSalud"]))
+          : null,
       // atencionSalud:
       //     (json["AtencionSalud"] != null) ? json["AtencionSalud"] : null,
     );

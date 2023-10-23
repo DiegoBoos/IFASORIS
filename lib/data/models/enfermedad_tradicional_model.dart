@@ -23,9 +23,11 @@ class EnfermedadTradicionalModel extends EnfermedadTradicionalEntity {
 }
 
 class LstEnfermedadTradicional {
+  int? atencionSaludId;
   int? enfermedadTradicionalId;
 
   LstEnfermedadTradicional({
+    this.atencionSaludId,
     this.enfermedadTradicionalId,
   });
 
@@ -35,9 +37,14 @@ class LstEnfermedadTradicional {
       );
 
   Map<String, dynamic> toJson() => {
+        "AtencionSalud_id": atencionSaludId,
         "EnfermedadTradicional_id": enfermedadTradicionalId,
       };
 }
+
+List<LstEnfermedadTradicional> listEnfermedadTradicionalFromJson(String str) =>
+    List<LstEnfermedadTradicional>.from(
+        json.decode(str).map((x) => LstEnfermedadTradicional.fromJson(x)));
 
 List<EnfermedadTradicionalAtencionSalud>
     enfermedadesTradicionalesAtencionSaludFromJson(String str) =>

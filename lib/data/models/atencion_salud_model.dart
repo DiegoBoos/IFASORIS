@@ -7,6 +7,10 @@ import 'enfermedad_tradicional_model.dart';
 import 'especialidad_med_tradicional_model.dart';
 import 'lugar_atencion_medico_model.dart';
 
+List<AtencionSaludModel> listAtencionSaludFromJson(String str) =>
+    List<AtencionSaludModel>.from(
+        json.decode(str).map((x) => AtencionSaludModel.fromJson(x)));
+
 AtencionSaludModel atencionSaludFromJson(String str) =>
     AtencionSaludModel.fromJson(json.decode(str));
 
@@ -50,5 +54,22 @@ class AtencionSaludModel extends AtencionSaludEntity {
         enfermedadTratamientoId: json["EnfermedadTratamiento_id"],
         utilizaPlantasMedId: json["UtilizaPlantasMed_id"],
         lugarPlantaMedicinalId: json["LugarPlantaMedicinal_id"],
+        lstEnfermedadesTradicionales:
+            json["LstEnfermedadesTRadicionales"] != null
+                ? listEnfermedadTradicionalFromJson(
+                    jsonEncode(json["LstEnfermedadesTRadicionales"]))
+                : null,
+        lstEspecialidadesMedTradicional:
+            json["LstEpecialidadesMedTradicional"] != null
+                ? listEspMedTradicionalFromJson(
+                    jsonEncode(json["LstEpecialidadesMedTradicional"]))
+                : null,
+        lstLugaresAtencionMedico: json["LstLugaresatencion"] != null
+            ? listLugarAtencionFromJson(jsonEncode(json["LstLugaresatencion"]))
+            : null,
+        lstPlantasMedicinales: json["LstPlantasMedicinales"] != null
+            ? listPlantaMedicinalFromJson(
+                jsonEncode(json["LstPlantasMedicinales"]))
+            : null,
       );
 }

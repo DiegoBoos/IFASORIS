@@ -20,9 +20,11 @@ class PlantaMedicinalModel extends PlantaMedicinalEntity {
 }
 
 class LstPlantaMedicinal {
+  int? atencionSaludId;
   int? plantaMedicinalId;
 
   LstPlantaMedicinal({
+    this.atencionSaludId,
     this.plantaMedicinalId,
   });
 
@@ -32,9 +34,14 @@ class LstPlantaMedicinal {
       );
 
   Map<String, dynamic> toJson() => {
+        "AtencionSalud_id": atencionSaludId,
         "PlantaMedicinal_id": plantaMedicinalId,
       };
 }
+
+List<LstPlantaMedicinal> listPlantaMedicinalFromJson(String str) =>
+    List<LstPlantaMedicinal>.from(
+        json.decode(str).map((x) => LstPlantaMedicinal.fromJson(x)));
 
 List<PlantaMedicinalAtencionSalud> plantasMedicinalesAtencionSaludFromJson(
         String str) =>

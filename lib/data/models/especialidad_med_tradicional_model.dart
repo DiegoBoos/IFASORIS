@@ -47,6 +47,35 @@ class LstEspMedTradicional {
       };
 }
 
+List<LstEspMedTradicional> listEspMedTradicionalFromJson(String str) =>
+    List<LstEspMedTradicional>.from(
+        json.decode(str).map((x) => LstEspMedTradicional.fromJson(x)));
+
+class LstEspMedTradicionalAtencion {
+  int? atencionId;
+  int? especialidadMedTradId;
+
+  LstEspMedTradicionalAtencion({
+    this.atencionId,
+    this.especialidadMedTradId,
+  });
+
+  factory LstEspMedTradicionalAtencion.fromJson(Map<String, dynamic> json) =>
+      LstEspMedTradicionalAtencion(
+        especialidadMedTradId: json["EspecialidadMedTrad_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Atencion_id": atencionId,
+        "EspecialidadMedTrad_id": especialidadMedTradId,
+      };
+}
+
+List<LstEspMedTradicionalAtencion> listEspMedTradicionalAtencionFromJson(
+        String str) =>
+    List<LstEspMedTradicionalAtencion>.from(
+        json.decode(str).map((x) => LstEspMedTradicionalAtencion.fromJson(x)));
+
 List<UbicacionEspecialidadMedTradicional>
     ubicacionesEspecialidadMedTradicionalFromJson(String str) =>
         List<UbicacionEspecialidadMedTradicional>.from(json

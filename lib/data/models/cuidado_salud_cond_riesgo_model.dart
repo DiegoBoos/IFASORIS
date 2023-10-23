@@ -1,6 +1,14 @@
 import 'dart:convert';
 
+import 'package:ifasoris/data/models/servicio_solicitado_model.dart';
+
 import '../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
+import 'nombre_enfermedad_model.dart';
+
+List<CuidadoSaludCondRiesgoModel> listCuidadoSaludCondRiesgoFromJson(
+        String str) =>
+    List<CuidadoSaludCondRiesgoModel>.from(
+        json.decode(str).map((x) => CuidadoSaludCondRiesgoModel.fromJson(x)));
 
 CuidadoSaludCondRiesgoModel cuidadoSaludCondRiesgoFromJson(String str) =>
     CuidadoSaludCondRiesgoModel.fromJson(json.decode(str));
@@ -21,6 +29,8 @@ class CuidadoSaludCondRiesgoModel extends CuidadoSaludCondRiesgoEntity {
     int? utilizaMetodoPlanificacionId,
     int? metodoPlanificacionId,
     int? conductaSeguirId,
+    List<LstServicioSolicitado>? lstServiciosSolicitados,
+    List<LstNombreEnfermedad>? lstNombresEnfermedades,
   }) : super(
           cuidadoSaludCondRiesgoId: cuidadoSaludCondRiesgoId,
           afiliadoId: afiliadoId,
@@ -36,6 +46,8 @@ class CuidadoSaludCondRiesgoModel extends CuidadoSaludCondRiesgoEntity {
           utilizaMetodoPlanificacionId: utilizaMetodoPlanificacionId,
           metodoPlanificacionId: metodoPlanificacionId,
           conductaSeguirId: conductaSeguirId,
+          lstServiciosSolicitados: lstServiciosSolicitados,
+          lstNombresEnfermedades: lstNombresEnfermedades,
         );
 
   factory CuidadoSaludCondRiesgoModel.fromJson(Map<String, dynamic> json) =>
@@ -54,5 +66,15 @@ class CuidadoSaludCondRiesgoModel extends CuidadoSaludCondRiesgoEntity {
         utilizaMetodoPlanificacionId: json["UtilizaMetodoPlanificacion_id"],
         metodoPlanificacionId: json["MetodoPlanificacion_id"],
         conductaSeguirId: json["ConductaSeguir_id"],
+        lstServiciosSolicitados: json["LstServiciosSolicita"] != null
+            ? listServiciosSolicitadosFromJson(
+                jsonEncode(json["LstServiciosSolicita"]))
+            : null,
+        lstNombresEnfermedades: json["LstNombreEnfermedad"] != null
+            ? listNombreEnfermedadFromJson(
+                jsonEncode(json["LstNombreEnfermedad"]))
+            : null,
+        // lstServiciosSolicitados: json["LstServiciosSolicita"],
+        // lstNombresEnfermedades: json["LstNombreEnfermedad"],
       );
 }

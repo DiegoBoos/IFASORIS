@@ -22,9 +22,11 @@ class ServicioSolicitadoModel extends ServicioSolicitadoEntity {
 }
 
 class LstServicioSolicitado {
+  int? cuidadoSaludCondRiesgoId;
   int? servicioSolicitadoId;
 
   LstServicioSolicitado({
+    this.cuidadoSaludCondRiesgoId,
     this.servicioSolicitadoId,
   });
 
@@ -34,9 +36,14 @@ class LstServicioSolicitado {
       );
 
   Map<String, dynamic> toJson() => {
+        "CuidadoSaludCondRiesgo_id": cuidadoSaludCondRiesgoId,
         "ServicioSolicitado_id": servicioSolicitadoId,
       };
 }
+
+List<LstServicioSolicitado> listServiciosSolicitadosFromJson(String str) =>
+    List<LstServicioSolicitado>.from(
+        json.decode(str).map((x) => LstServicioSolicitado.fromJson(x)));
 
 List<CuidadoSaludCondRiesgoServiciosSolicitados>
     cuidadoSaludCondRiesgoServiciosSolicitadosFromJson(String str) =>

@@ -22,9 +22,11 @@ class LugarAtencionMedicoModel extends LugarAtencionMedicoEntity {
 }
 
 class LstLugarAtencionMedico {
+  int? atencionSaludId;
   int? lugarAtencionMedicoId;
 
   LstLugarAtencionMedico({
+    this.atencionSaludId,
     this.lugarAtencionMedicoId,
   });
 
@@ -34,9 +36,14 @@ class LstLugarAtencionMedico {
       );
 
   Map<String, dynamic> toJson() => {
+        "AtencionSalud_id": atencionSaludId,
         "LugarAtencionMedico_id": lugarAtencionMedicoId,
       };
 }
+
+List<LstLugarAtencionMedico> listLugarAtencionFromJson(String str) =>
+    List<LstLugarAtencionMedico>.from(
+        json.decode(str).map((x) => LstLugarAtencionMedico.fromJson(x)));
 
 List<LugarAtencionMedicoAtencionSalud> lugarAtencionMedicoAtencionSaludFromJson(
         String str) =>

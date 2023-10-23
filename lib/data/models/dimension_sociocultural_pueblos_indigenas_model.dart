@@ -1,6 +1,15 @@
 import 'dart:convert';
 
+import 'package:ifasoris/data/models/evento_costumbre_participa_model.dart';
+
 import '../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
+
+List<DimensionSocioCulturalPueblosIndigenasModel>
+    listDimensionSocioCulturalPueblosIndigenasFromJson(String str) =>
+        List<DimensionSocioCulturalPueblosIndigenasModel>.from(json
+            .decode(str)
+            .map((x) =>
+                DimensionSocioCulturalPueblosIndigenasModel.fromJson(x)));
 
 DimensionSocioCulturalPueblosIndigenasModel
     dimensionSocioCulturalPueblosIndigenasFromJson(String str) =>
@@ -20,6 +29,7 @@ class DimensionSocioCulturalPueblosIndigenasModel
     int? sancionJusticiaId,
     int? sitiosSagradosId,
     String? cualesSitiosSagrados,
+    List<LstEventoCostumbreParticipa>? lstEventoCostumbreParticipa,
   }) : super(
           dimSocioCulturalPueblosIndigenasId:
               dimSocioCulturalPueblosIndigenasId,
@@ -33,6 +43,7 @@ class DimensionSocioCulturalPueblosIndigenasModel
           sancionJusticiaId: sancionJusticiaId,
           sitiosSagradosId: sitiosSagradosId,
           cualesSitiosSagrados: cualesSitiosSagrados,
+          lstEventoCostumbreParticipa: lstEventoCostumbreParticipa,
         );
 
   factory DimensionSocioCulturalPueblosIndigenasModel.fromJson(
@@ -50,5 +61,10 @@ class DimensionSocioCulturalPueblosIndigenasModel
         sancionJusticiaId: json["SancionJusticia_id"],
         sitiosSagradosId: json["SitiosSagrados_id"],
         cualesSitiosSagrados: json["Cuales_SitiosSagrados"],
+        lstEventoCostumbreParticipa:
+            json["LstEventosCostumbresParticipa"] != null
+                ? listEventoCostumbreParticipaFromJson(
+                    jsonEncode(json["LstEventosCostumbresParticipa"]))
+                : null,
       );
 }

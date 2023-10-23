@@ -308,23 +308,25 @@ class ConnectionSQL {
 	[Afiliado_id]	integer NOT NULL,
 	[Familia_id]	integer NOT NULL,
 	[UltimaVezInstSalud_id]	integer NOT NULL,
-	[SeguimientoEnfermedad_id]	integer NOT NULL,
+	[SeguimientoEnfermedad_id]	integer,
 	[CondicionNutricional_id]	integer NOT NULL,
 	[TosFlema_id]	integer NOT NULL,
 	[ManchasPiel_id]	integer NOT NULL,
 	[CarnetVacunacion_id]	integer NOT NULL,
-	[EsquemaVacunacion_id]	integer NOT NULL,
-	[LugarVacunacion_id]	integer NOT NULL,
+	[EsquemaVacunacion_id]	integer,
+	[LugarVacunacion_id]	integer,
 	[UtilizaMetodoPlanificacion_id]	integer NOT NULL,
-	[MetodoPlanificacion_id]	integer NOT NULL,
-	[ConductaSeguir_id]	integer NOT NULL
+	[MetodoPlanificacion_id]	integer,
+	[ConductaSeguir_id]	integer NOT NULL,
+  FOREIGN KEY (Familia_id, Afiliado_id) REFERENCES Asp3_GrupoFamiliar(Familia_id, Afiliado_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_CUIDADO_SALUD_COND_RIESGO_NOMBRES_ENFERMEDAD = ''' 
   CREATE TABLE [Asp5_CuidadoSaludCondRiesgoNombresEnfermedad] (
 	[CuidadoSaludCondRiesgoNombresEnfermedad_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[CuidadoSaludCondRiesgo_id]	integer NOT NULL,
-	[NombreEnfermedad_id]	integer NOT NULL
+	[NombreEnfermedad_id]	integer NOT NULL,
+  FOREIGN KEY (CuidadoSaludCondRiesgo_id) REFERENCES Asp5_CuidadoSaludCondRiesgo(CuidadoSaludCondRiesgo_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_NRO_CUARTOS_VIVIENDA = ''' 
@@ -337,7 +339,8 @@ class ConnectionSQL {
   CREATE TABLE [Asp5_CuidadoSaludCondRiesgoServiciosSolicita] (
 	[CuidadoSaludCondRiesgoServiciosSolicita_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[CuidadoSaludCondRiesgo_id]	integer NOT NULL,
-	[ServicioSolicitado_id]	integer NOT NULL
+	[ServicioSolicitado_id]	integer NOT NULL,
+  FOREIGN KEY (CuidadoSaludCondRiesgo_id) REFERENCES Asp5_CuidadoSaludCondRiesgo(CuidadoSaludCondRiesgo_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DIM_SOCIO_CULTURAL_PUEBLOS_INDIGENAS = ''' 
@@ -348,18 +351,20 @@ class ConnectionSQL {
 	[ReligionProfesa_id]	integer NOT NULL,
 	[ConoceUsosCostumbres_id]	integer NOT NULL,
 	[Cuales_UsosCostumbres]	varchar(150) COLLATE NOCASE,
-	[ParticipaCostumbres_id]	integer NOT NULL,
-	[CostumbrePractica_id]	integer NOT NULL,
-	[SancionJusticia_id]	integer NOT NULL,
+	[ParticipaCostumbres_id]	integer,
+	[CostumbrePractica_id]	integer,
+	[SancionJusticia_id]	integer,
 	[SitiosSagrados_id]	integer NOT NULL,
-	[Cuales_SitiosSagrados]	varchar(150) COLLATE NOCASE
+	[Cuales_SitiosSagrados]	varchar(150) COLLATE NOCASE,
+  FOREIGN KEY (Familia_id, Afiliado_id) REFERENCES Asp3_GrupoFamiliar(Familia_id, Afiliado_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_DIM_SOCIO_CULTURAL_EVENTOS_COSTUMBRES_PARTICIPO = '''
   CREATE TABLE [Asp6_DimSocioCulturalEventosCostumbresParticipo] (
   [DimSocioCulturalEventosCostumbresParticipo_id]	integer PRIMARY KEY AUTOINCREMENT,
   [DimSocioCulturalPueblosIndigenas_id]	integer NOT NULL,
-  [EventoCostumbreParticipo_id]	integer NOT NULL
+  [EventoCostumbreParticipo_id]	integer NOT NULL,
+  FOREIGN KEY (DimSocioCulturalPueblosIndigenas_id) REFERENCES Asp6_DimSocioCulturalPueblosIndigenas(DimSocioCulturalPueblosIndigenas_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_ATENCION_SALUD = '''
@@ -371,35 +376,40 @@ class ConnectionSQL {
 	[RecibioAtencionMedTradicional_id]	integer NOT NULL,
 	[EnfermedadTratamiento_id]	integer NOT NULL,
 	[UtilizaPlantasMed_id]	integer NOT NULL,
-	[LugarPlantaMedicinal_id]	integer NOT NULL
+	[LugarPlantaMedicinal_id]	integer,
+  FOREIGN KEY (Familia_id, Afiliado_id) REFERENCES Asp3_GrupoFamiliar(Familia_id, Afiliado_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_ENFERMEDADES_TRADICIONALES_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_EnfermedadesTradicionales_AtencionSalud] (
 	[EnfermedadesTradicionales_AtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[AtencionSalud_id]	integer NOT NULL,
-	[EnfermedadTradicional_id]	integer NOT NULL
+	[EnfermedadTradicional_id]	integer NOT NULL,
+  FOREIGN KEY (AtencionSalud_id) REFERENCES Asp7_AtencionSalud(AtencionSalud_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_ESPECIALIDADES_MED_TRAD_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_EspecialidadesMedTradAtencionSalud] (
 	[EspecialidadesMedTradAtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[AtencionSalud_id]	integer NOT NULL,
-	[EspecialidadMedTrad_id]	integer NOT NULL
+	[EspecialidadMedTrad_id]	integer NOT NULL,
+  FOREIGN KEY (AtencionSalud_id) REFERENCES Asp7_AtencionSalud(AtencionSalud_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_LUGARES_ATENCION_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_LugaresAtencionAtencionSalud] (
 	[LugaresAtencionAtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[AtencionSalud_id]	integer NOT NULL,
-	[LugarAtencionMedico_id]	integer NOT NULL
+	[LugarAtencionMedico_id]	integer NOT NULL,
+  FOREIGN KEY (AtencionSalud_id) REFERENCES Asp7_AtencionSalud(AtencionSalud_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_PLANTAS_MEDICINALES_ATENCION_SALUD = '''
   CREATE TABLE [Asp7_PlantasMedicinales_AtencionSalud] (
 	[PlantasMedicinales_AtencionSalud_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[AtencionSalud_id]	integer NOT NULL,
-	[PlantaMedicinal_id]	integer NOT NULL
+	[PlantaMedicinal_id]	integer NOT NULL,
+  FOREIGN KEY (AtencionSalud_id) REFERENCES Asp7_AtencionSalud(AtencionSalud_id) ON DELETE CASCADE
   )''';
 
   static const CREATE_AUTORIDADES_INDIGENAS = '''

@@ -23,9 +23,11 @@ class EventoCostumbreParticipaModel extends EventoCostumbreParticipaEntity {
 }
 
 class LstEventoCostumbreParticipa {
+  int? dimSocioCulturalPueblosIndigenasId;
   int? eventoCostumbreParticipaId;
 
   LstEventoCostumbreParticipa({
+    this.dimSocioCulturalPueblosIndigenasId,
     this.eventoCostumbreParticipaId,
   });
 
@@ -35,9 +37,16 @@ class LstEventoCostumbreParticipa {
       );
 
   Map<String, dynamic> toJson() => {
+        "DimSocioCulturalPueblosIndigenas_id":
+            dimSocioCulturalPueblosIndigenasId,
         "EventoCostumbreParticipo_id": eventoCostumbreParticipaId,
       };
 }
+
+List<LstEventoCostumbreParticipa> listEventoCostumbreParticipaFromJson(
+        String str) =>
+    List<LstEventoCostumbreParticipa>.from(
+        json.decode(str).map((x) => LstEventoCostumbreParticipa.fromJson(x)));
 
 List<Asp6EventoCostumbreParticipa> asp6EventoCostumbreParticipaFromJson(
         String str) =>
