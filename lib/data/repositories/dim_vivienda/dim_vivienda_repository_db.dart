@@ -28,9 +28,10 @@ class DimViviendaRepositoryDBImpl implements DimViviendaRepositoryDB {
 
   @override
   Future<Either<Failure, DimViviendaEntity?>> getDimViviendaRepositoryDB(
-      int familiaId) async {
+      int afiliadoId, int familiaId) async {
     try {
-      final result = await dimViviendaLocalDataSource.getDimVivienda(familiaId);
+      final result = await dimViviendaLocalDataSource.getDimVivienda(
+          afiliadoId, familiaId);
 
       return Right(result);
     } on ServerFailure catch (e) {

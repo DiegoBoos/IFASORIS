@@ -8,5 +8,5 @@ abstract class DimViviendaRepositoryDB {
       DimViviendaEntity dimVivienda);
 
   Future<Either<Failure, DimViviendaEntity?>> getDimViviendaRepositoryDB(
-      int familiaId);
+      int afiliadoId, int familiaId);
 }

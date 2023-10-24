@@ -159,6 +159,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
       final newFamilia = await txn.insert('Familia', familia.toJson());
 
       // Vivienda
+      vivienda.afiliadoId = familia.fkAfiliadoId;
       vivienda.familiaId = newFamilia;
       vivienda.datoViviendaId = null;
       final newVivienda =
@@ -254,6 +255,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
       // Ubicacion
       ubicacion.familiaId = newFamilia;
+      ubicacion.afiliadoId = familia.fkAfiliadoId;
       ubicacion.ubicacionId = null;
       final newUbicacion =
           await txn.insert('Asp1_Ubicacion', ubicacion.toJson());

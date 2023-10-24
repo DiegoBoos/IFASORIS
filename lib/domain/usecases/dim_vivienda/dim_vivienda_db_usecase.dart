@@ -15,7 +15,7 @@ class DimViviendaUsecaseDB {
   }
 
   Future<Either<Failure, DimViviendaEntity?>> getDimViviendaUsecaseDB(
-      int familiaId) {
-    return repositoryDB.getDimViviendaRepositoryDB(familiaId);
+      int afiliadoId, int familiaId) {
+    return repositoryDB.getDimViviendaRepositoryDB(afiliadoId, familiaId);
   }
 }

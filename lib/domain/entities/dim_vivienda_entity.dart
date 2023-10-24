@@ -10,6 +10,7 @@ import '../../ui/blocs/dim_vivienda/dim_vivienda_bloc.dart';
 
 class DimViviendaEntity {
   int? datoViviendaId;
+  int? afiliadoId;
   int? familiaId;
   int? tipoViviendaId;
   int? tenenciaViviendaId;
@@ -28,6 +29,7 @@ class DimViviendaEntity {
 
   DimViviendaEntity({
     this.datoViviendaId,
+    this.afiliadoId,
     this.familiaId,
     this.tipoViviendaId,
     this.tenenciaViviendaId,
@@ -47,6 +49,7 @@ class DimViviendaEntity {
 
   DimViviendaEntity copyWith(
           {int? datoViviendaId,
+          int? afiliadoId,
           int? familiaId,
           int? tipoViviendaId,
           int? tenenciaViviendaId,
@@ -64,6 +67,7 @@ class DimViviendaEntity {
           DimViviendaState? formStatus}) =>
       DimViviendaEntity(
         datoViviendaId: datoViviendaId ?? this.datoViviendaId,
+        afiliadoId: afiliadoId ?? this.afiliadoId,
         familiaId: familiaId ?? this.familiaId,
         tipoViviendaId: tipoViviendaId ?? this.tipoViviendaId,
         tenenciaViviendaId: tenenciaViviendaId ?? this.tenenciaViviendaId,
@@ -85,6 +89,7 @@ class DimViviendaEntity {
 
   Map<String, dynamic> toJson() => {
         "DatoVivienda_id": datoViviendaId,
+        "Afiliado_id": afiliadoId,
         "Familia_id": familiaId,
         "TipoVivienda_id": tipoViviendaId,
         "TenenciaVivienda_id": tenenciaViviendaId,

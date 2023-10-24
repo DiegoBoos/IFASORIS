@@ -58,6 +58,7 @@ class ConnectionSQL {
   CREATE TABLE [Asp1_Ubicacion] (
 	[Ubicacion_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Familia_id]	integer NOT NULL,
+	[Afiliado_id]	integer NOT NULL,
 	[NombreRecibeVisita]	varchar(150) NOT NULL COLLATE NOCASE,
 	[TipoDoc_RecibeVisita]	varchar(2) NOT NULL COLLATE NOCASE,
 	[Documento_RecibeVisita]	varchar(15) NOT NULL COLLATE NOCASE,
@@ -75,6 +76,7 @@ class ConnectionSQL {
 	[ProduccionMinera]	integer NOT NULL,
 	[TipoCalendario_id]	integer NOT NULL,
   FOREIGN KEY (Familia_id) REFERENCES Familia(Familia_id) ON DELETE CASCADE
+  UNIQUE (Familia_id, Afiliado_id)
   )''';
 
   static const CREATE_UBICACION_ACCESO_MED_TRADICIONAL = '''
@@ -193,12 +195,14 @@ class ConnectionSQL {
   CREATE TABLE [Asp2_DatosVivienda] (
 	[DatoVivienda_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Familia_id]	integer NOT NULL,
+	[Afiliado_id]	integer NOT NULL,
 	[TipoVivienda_id]	integer NOT NULL,
 	[TenenciaVivienda_id]	integer NOT NULL,
 	[VentilacionVivienda_id]	integer NOT NULL,
 	[IluminacionVivienda_id]	integer NOT NULL,
 	[NroCuartosVivienda_id]	integer NOT NULL,
   FOREIGN KEY (Familia_id) REFERENCES Familia(Familia_id) ON DELETE CASCADE
+  UNIQUE (Familia_id, Afiliado_id)
   )''';
 
   static const CREATE_DATOS_VIVIENDA_FACTORES_RIESGO = '''

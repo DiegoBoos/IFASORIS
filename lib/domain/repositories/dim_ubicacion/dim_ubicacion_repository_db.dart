@@ -8,5 +8,5 @@ abstract class DimUbicacionRepositoryDB {
       DimUbicacionEntity dimUbicacion);
 
   Future<Either<Failure, DimUbicacionEntity?>> getDimUbicacionRepositoryDB(
-      int familiaId);
+      int afiliadoId, int familiaId);
 }

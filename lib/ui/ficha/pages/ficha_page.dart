@@ -112,10 +112,10 @@ class _FichaPageState extends State<FichaPage> {
     final afiliado = afiliadoPrefsBloc.state.afiliado!;
 
     BlocProvider.of<DimUbicacionBloc>(context)
-        .add(GetDimUbicacion(afiliado.familiaId!));
+        .add(GetDimUbicacion(afiliado.afiliadoId!, afiliado.familiaId!));
 
     BlocProvider.of<DimViviendaBloc>(context)
-        .add(GetDimVivienda(afiliado.familiaId!));
+        .add(GetDimVivienda(afiliado.afiliadoId!, afiliado.familiaId!));
 
     getAccesories();
   }
@@ -322,12 +322,16 @@ class _FichaPageState extends State<FichaPage> {
                         _formKeyUbicacion.currentState!.save();
 
                         dimUbicacionBloc.add(
+                            DimUbicacionAfiliadoChanged(afiliado.afiliadoId!));
+                        dimUbicacionBloc.add(
                             DimUbicacionFamiliaChanged(afiliado.familiaId!));
                         dimUbicacionBloc.add(DimUbicacionSubmitted());
                       }
                     } else if (currentStep == 1) {
                       if (_formKeyVivienda.currentState!.validate()) {
                         _formKeyVivienda.currentState!.save();
+                        dimViviendaBloc.add(
+                            DimViviendaAfiliadoChanged(afiliado.afiliadoId!));
                         dimViviendaBloc.add(
                             DimViviendaFamiliaChanged(afiliado.familiaId!));
                         dimViviendaBloc.add(DimViviendaSubmitted());
