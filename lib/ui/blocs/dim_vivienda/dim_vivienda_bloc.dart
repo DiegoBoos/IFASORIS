@@ -58,8 +58,8 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetDimVivienda>((event, emit) async {
-      final result =
-          await dimViviendaUsecaseDB.getDimViviendaUsecaseDB(event.familiaId);
+      final result = await dimViviendaUsecaseDB.getDimViviendaUsecaseDB(
+          event.afiliadoId, event.familiaId);
       result.fold(
           (failure) => emit(state.copyWith(
               formStatus:
@@ -174,6 +174,9 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
       emit(state.copyWith(
           datoViviendaId: event.datoViviendaId,
           formStatus: DimViviendaSubmissionSuccess()));
+    });
+    on<DimViviendaAfiliadoChanged>((event, emit) {
+      emit(state.copyWith(afiliadoId: event.afiliadoId));
     });
     on<DimViviendaFamiliaChanged>((event, emit) {
       emit(state.copyWith(familiaId: event.familiaId));

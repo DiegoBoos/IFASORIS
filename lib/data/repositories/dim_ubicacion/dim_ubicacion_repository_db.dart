@@ -28,10 +28,10 @@ class DimUbicacionRepositoryDBImpl implements DimUbicacionRepositoryDB {
 
   @override
   Future<Either<Failure, DimUbicacionEntity?>> getDimUbicacionRepositoryDB(
-      int familiaId) async {
+      int afiliadoId, int familiaId) async {
     try {
-      final result =
-          await dimUbicacionLocalDataSource.getDimUbicacion(familiaId);
+      final result = await dimUbicacionLocalDataSource.getDimUbicacion(
+          afiliadoId, familiaId);
 
       return Right(result);
     } on ServerFailure catch (e) {

@@ -8,7 +8,7 @@ import '../../../services/connection_sqlite_service.dart';
 abstract class DimUbicacionLocalDataSource {
   Future<int> saveDimUbicacion(DimUbicacionEntity dimUbicacion);
 
-  Future<DimUbicacionEntity?> getDimUbicacion(int familiaId);
+  Future<DimUbicacionEntity?> getDimUbicacion(int afiliadoId, int familiaId);
 }
 
 class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
@@ -29,10 +29,12 @@ class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
   }
 
   @override
-  Future<DimUbicacionEntity?> getDimUbicacion(int familiaId) async {
+  Future<DimUbicacionEntity?> getDimUbicacion(
+      int afiliadoId, int familiaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp1_Ubicacion',
-        where: 'Familia_id = ?', whereArgs: [familiaId]);
+        where: 'Afiliado_id = ? AND Familia_id = ?',
+        whereArgs: [afiliadoId, familiaId]);
 
     if (res.isEmpty) return null;
 

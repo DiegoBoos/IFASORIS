@@ -81,8 +81,8 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetDimUbicacion>((event, emit) async {
-      final result =
-          await dimUbicacionUsecaseDB.getDimUbicacionUsecaseDB(event.familiaId);
+      final result = await dimUbicacionUsecaseDB.getDimUbicacionUsecaseDB(
+          event.afiliadoId, event.familiaId);
       result.fold(
           (failure) => emit(state.copyWith(
               formStatus:
@@ -287,6 +287,9 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
       ));
     });
 
+    on<DimUbicacionAfiliadoChanged>((event, emit) {
+      emit(state.copyWith(afiliadoId: event.afiliadoId));
+    });
     on<DimUbicacionFamiliaChanged>((event, emit) {
       emit(state.copyWith(familiaId: event.familiaId));
     });

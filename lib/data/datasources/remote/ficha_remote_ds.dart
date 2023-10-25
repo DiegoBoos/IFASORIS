@@ -94,6 +94,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         final resultMapFamilia = {
           for (var e in resFamilia[0].entries) e.key: e.value
         };
+        final afiliadoId = resultMapFamilia['Afiliado_id'];
         final familiaId = resultMapFamilia['Familia_id'];
 
         // Vivienda
@@ -107,7 +108,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           IluminacionVivienda_id AS iluminacionViviendaId,
           NroCuartosVivienda_id AS nroCuartosViviendaId
           FROM Asp2_DatosVivienda
-          WHERE Familia_id = $familiaId
+          WHERE Afiliado_id = $afiliadoId AND Familia_id = $familiaId
           ''');
 
         if (resVivienda.isEmpty) {

@@ -12,9 +12,10 @@ class DimViviendaInit extends DimViviendaEvent {}
 class DimViviendaSubmitted extends DimViviendaEvent {}
 
 class GetDimVivienda extends DimViviendaEvent {
+  final int afiliadoId;
   final int familiaId;
 
-  const GetDimVivienda(this.familiaId);
+  const GetDimVivienda(this.afiliadoId, this.familiaId);
 }
 
 class DimViviendaFormSubmissionSuccess extends DimViviendaEvent {
@@ -27,6 +28,12 @@ class DimViviendaFormSubmissionFailed extends DimViviendaEvent {
   final String message;
 
   const DimViviendaFormSubmissionFailed(this.message);
+}
+
+class DimViviendaAfiliadoChanged extends DimViviendaEvent {
+  final int afiliadoId;
+
+  const DimViviendaAfiliadoChanged(this.afiliadoId);
 }
 
 class DimViviendaFamiliaChanged extends DimViviendaEvent {

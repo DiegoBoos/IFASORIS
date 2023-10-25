@@ -12,9 +12,10 @@ class DimUbicacionInit extends DimUbicacionEvent {}
 class DimUbicacionSubmitted extends DimUbicacionEvent {}
 
 class GetDimUbicacion extends DimUbicacionEvent {
+  final int afiliadoId;
   final int familiaId;
 
-  const GetDimUbicacion(this.familiaId);
+  const GetDimUbicacion(this.afiliadoId, this.familiaId);
 }
 
 class GetDificultadesAcceso extends DimUbicacionEvent {
@@ -117,6 +118,12 @@ class UbicacionChanged extends DimUbicacionEvent {
   final int ubicacionId;
 
   const UbicacionChanged(this.ubicacionId);
+}
+
+class DimUbicacionAfiliadoChanged extends DimUbicacionEvent {
+  final int afiliadoId;
+
+  const DimUbicacionAfiliadoChanged(this.afiliadoId);
 }
 
 class DimUbicacionFamiliaChanged extends DimUbicacionEvent {

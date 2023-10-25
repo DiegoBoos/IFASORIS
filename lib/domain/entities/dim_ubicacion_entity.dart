@@ -17,6 +17,7 @@ import '../../ui/blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 
 class DimUbicacionEntity {
   int? ubicacionId;
+  int? afiliadoId;
   int? familiaId;
   String? nombreRecibeVisita;
   String? tipoDocRecibeVisita;
@@ -52,6 +53,7 @@ class DimUbicacionEntity {
 
   DimUbicacionEntity({
     this.ubicacionId,
+    this.afiliadoId,
     this.familiaId,
     this.nombreRecibeVisita,
     this.tipoDocRecibeVisita,
@@ -88,6 +90,7 @@ class DimUbicacionEntity {
 
   DimUbicacionEntity copyWith(
           {int? ubicacionId,
+          int? afiliadoId,
           int? familiaId,
           String? nombreRecibeVisita,
           String? tipoDocRecibeVisita,
@@ -124,6 +127,7 @@ class DimUbicacionEntity {
           DimUbicacionState? formStatus}) =>
       DimUbicacionEntity(
         ubicacionId: ubicacionId ?? this.ubicacionId,
+        afiliadoId: afiliadoId ?? this.afiliadoId,
         familiaId: familiaId ?? this.familiaId,
         nombreRecibeVisita: nombreRecibeVisita ?? this.nombreRecibeVisita,
         tipoDocRecibeVisita: tipoDocRecibeVisita ?? this.tipoDocRecibeVisita,
@@ -168,6 +172,7 @@ class DimUbicacionEntity {
 
   Map<String, dynamic> toJson() => {
         "Ubicacion_id": ubicacionId,
+        "Afiliado_id": afiliadoId,
         "Familia_id": familiaId,
         "NombreRecibeVisita": nombreRecibeVisita,
         "TipoDoc_RecibeVisita": tipoDocRecibeVisita,

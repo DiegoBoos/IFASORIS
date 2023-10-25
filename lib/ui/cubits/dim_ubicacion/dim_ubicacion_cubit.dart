@@ -15,9 +15,9 @@ class DimUbicacionCubit extends Cubit<DimUbicacionState> {
         (data) => emit(DimUbicacionSaved(dimUbicacion: dimUbicacion)));
   }
 
-  void getDimUbicacion(int familiaId) async {
-    final result =
-        await dimUbicacionUsecaseDB.getDimUbicacionUsecaseDB(familiaId);
+  void getDimUbicacion(int afiliadoId, int familiaId) async {
+    final result = await dimUbicacionUsecaseDB.getDimUbicacionUsecaseDB(
+        afiliadoId, familiaId);
     result.fold(
         (failure) => emit(DimUbicacionError(failure.properties.first)),
         (data) => data != null

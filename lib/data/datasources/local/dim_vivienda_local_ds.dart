@@ -8,7 +8,7 @@ import '../../../services/connection_sqlite_service.dart';
 abstract class DimViviendaLocalDataSource {
   Future<int> saveDimVivienda(DimViviendaEntity dimVivienda);
 
-  Future<DimViviendaEntity?> getDimVivienda(int familiaId);
+  Future<DimViviendaEntity?> getDimVivienda(int afiliadoId, int familiaId);
 }
 
 class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
@@ -29,10 +29,12 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   }
 
   @override
-  Future<DimViviendaEntity?> getDimVivienda(int familiaId) async {
+  Future<DimViviendaEntity?> getDimVivienda(
+      int afiliadoId, int familiaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosVivienda',
-        where: 'Familia_id = ?', whereArgs: [familiaId]);
+        where: 'Afiliado_id = ? AND Familia_id = ?',
+        whereArgs: [afiliadoId, familiaId]);
 
     if (res.isEmpty) return null;
 
