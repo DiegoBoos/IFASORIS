@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/afiliado/afiliado_db_usecase.dart';
 
 import '../../../domain/entities/afiliado_entity.dart';
+import '../../../domain/entities/ficha_entity.dart';
 
 part 'afiliado_event.dart';
 part 'afiliado_state.dart';
@@ -26,11 +27,11 @@ class AfiliadoBloc extends Bloc<AfiliadosEvent, AfiliadosState> {
         (data) => emit(AfiliadosLoaded(afiliadosLoaded: data)));
   }
 
-  Future<int> afiliadoTieneFicha(int afiliadoId) async {
+  Future<FichaEntity?> afiliadoTieneFicha(int afiliadoId) async {
     final result =
         await afiliadoUsecaseDB.afiliadoTieneFichaRepositoryDB(afiliadoId);
 
-    return result.fold((failure) => 0, (data) => data);
+    return result.fold((failure) => null, (data) => data);
   }
 
   Future<String> afiliadoTieneFichaReportada(int afiliadoId) async {

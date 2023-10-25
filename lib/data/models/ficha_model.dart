@@ -15,6 +15,7 @@ class FichaModel extends FichaEntity {
     required String userNameCreacion,
     String? userNameActualizacion,
     DateTime? ultimaActualizacion,
+    int? fichaIdRemote,
     FamiliaEntity? familia,
   }) : super(
             fichaId: fichaId,
@@ -23,6 +24,7 @@ class FichaModel extends FichaEntity {
             userNameCreacion: userNameCreacion,
             userNameActualizacion: userNameActualizacion,
             ultimaActualizacion: ultimaActualizacion,
+            fichaIdRemote: fichaIdRemote,
             familia: familia);
 
   factory FichaModel.fromJson(Map<String, dynamic> json) => FichaModel(
@@ -31,6 +33,7 @@ class FichaModel extends FichaEntity {
         numFicha: json["NumFicha"],
         userNameCreacion: json["UserName_Creacion"],
         userNameActualizacion: json["UserName_Actualizacion"],
+        fichaIdRemote: json["Ficha_id_remote"],
         ultimaActualizacion: json["UltimaActualizacion"] != null
             ? DateTime.parse(json["UltimaActualizacion"])
             : null,

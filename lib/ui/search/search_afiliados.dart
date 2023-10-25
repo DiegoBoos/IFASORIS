@@ -151,32 +151,42 @@ class SearchAfiliados extends SearchDelegate {
                           if (afiliado.edad! >= 14) {
                             await afiliadoBloc
                                 .afiliadoTieneFicha(afiliado.afiliadoId!)
-                                .then((fichaId) {
-                              if (fichaId != 0) {
-                                CustomSnackBar.showCustomDialog(
-                                    context,
-                                    "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
-                                    "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
-                                    () async {
-                                  final familiaCubit =
-                                      BlocProvider.of<FamiliaCubit>(context);
-                                  final fichaCubit =
-                                      BlocProvider.of<FichaCubit>(context);
+                                .then((ficha) {
+                              if (ficha != null) {
+                                if (ficha.numFicha == null ||
+                                    ficha.numFicha == '') {
+                                  CustomSnackBar.showCustomDialog(
+                                      context,
+                                      "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
+                                      "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
+                                      () async {
+                                    final familiaCubit =
+                                        BlocProvider.of<FamiliaCubit>(context);
+                                    final fichaCubit =
+                                        BlocProvider.of<FichaCubit>(context);
 
-                                  //Elimina el afiliado de la familia
+                                    //Elimina el afiliado de la familia
 
-                                  await familiaCubit.deleteAfiliadoFamilia(
-                                      afiliado.afiliadoId!);
+                                    await familiaCubit.deleteAfiliadoFamilia(
+                                        afiliado.afiliadoId!);
 
-                                  //Elimina la ficha
-                                  await fichaCubit
-                                      .deleteFicha(fichaId)
-                                      .then((value) {
-                                    if (value != 0) {
-                                      createFicha(context, afiliado);
-                                    }
+                                    //Elimina la ficha
+                                    await fichaCubit
+                                        .deleteFicha(ficha.fichaId!)
+                                        .then((value) {
+                                      if (value != 0) {
+                                        createFicha(context, afiliado);
+                                      }
+                                    });
                                   });
-                                });
+                                } else {
+                                  CustomSnackBar.showCustomDialog(
+                                      context,
+                                      "Usuario ya registrado",
+                                      "El usuario se encuentra registrado en la ficha No. ${ficha.numFicha}",
+                                      () => Navigator.pop(context),
+                                      false);
+                                }
                               } else {
                                 createFicha(context, afiliado);
                               }
