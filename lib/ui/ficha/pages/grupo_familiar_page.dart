@@ -121,7 +121,8 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
 
                     await afiliadoGrupoFamiliarBloc
                         .deleteAfiliadoGrupoFamiliar(
-                            afiliadoGrupoFamiliar.afiliadoId!)
+                            afiliadoGrupoFamiliar.afiliadoId!,
+                            afiliadoGrupoFamiliar.familiaId!)
                         .then((value) {
                       if (value != 0) {
                         setState(() {

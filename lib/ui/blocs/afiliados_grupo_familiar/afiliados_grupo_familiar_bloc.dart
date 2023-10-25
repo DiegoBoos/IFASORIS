@@ -76,9 +76,10 @@ class AfiliadosGrupoFamiliarBloc
 
   Future<int> deleteAfiliadoGrupoFamiliar(
     int afiliadoId,
+    int familiaId,
   ) async {
     final result = await grupoFamiliarUsecaseDB
-        .deleteAfiliadoGrupoFamiliarUsecaseDB(afiliadoId);
+        .deleteAfiliadoGrupoFamiliarUsecaseDB(afiliadoId, familiaId);
     return result.fold((failure) => 0, (data) => data);
   }
 }

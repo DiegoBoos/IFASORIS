@@ -43,10 +43,10 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
 
   @override
   Future<Either<Failure, int>> deleteAfiliadoGrupoFamiliarRepositoryDB(
-      int familiaId) async {
+      int afiliadoId, int familiaId) async {
     try {
       final result = await grupoFamiliarLocalDataSource
-          .deleteAfiliadoGrupoFamiliar(familiaId);
+          .deleteAfiliadoGrupoFamiliar(afiliadoId, familiaId);
 
       return Right(result);
     } on ServerFailure catch (e) {

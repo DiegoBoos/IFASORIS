@@ -8,7 +8,7 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/estado_via_model.dart';
 
 abstract class EstadoViaRemoteDataSource {
-  Future<List<EstadoViaModel>> getEstadosVias();
+  Future<List<EstadoViaModel>> getEstadoVias();
 }
 
 class EstadoViaRemoteDataSourceImpl implements EstadoViaRemoteDataSource {
@@ -18,7 +18,7 @@ class EstadoViaRemoteDataSourceImpl implements EstadoViaRemoteDataSource {
   EstadoViaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<EstadoViaModel>> getEstadosVias() async {
+  Future<List<EstadoViaModel>> getEstadoVias() async {
     try {
       final uri = Uri.parse('${Constants.ifasorisBaseUrl}/estadovias');
 

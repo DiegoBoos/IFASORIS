@@ -9,7 +9,7 @@ class EstadoViaUsecase {
 
   EstadoViaUsecase(this.repository);
 
-  Future<Either<Failure, List<EstadoViaEntity>>> getEstadosViasUsecase() {
-    return repository.getEstadosViasRepository();
+  Future<Either<Failure, List<EstadoViaEntity>>> getEstadoViasUsecase() {
+    return repository.getEstadoViasRepository();
   }
 }

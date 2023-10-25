@@ -2,9 +2,16 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ifasoris/ui/blocs/atencion_salud/atencion_salud_bloc.dart';
+import 'package:ifasoris/ui/blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
+import 'package:ifasoris/ui/blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 
 import '../../../domain/entities/afiliado_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
+import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
+import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
+import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/buttons.dart';
 import '../widgets/headers.dart';
@@ -29,13 +36,37 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
+    final dimViviendaBloc = BlocProvider.of<DimViviendaBloc>(context);
+    final grupoFamiliarBloc = BlocProvider.of<GrupoFamiliarBloc>(context);
+    final estiloVidaSaludableBloc =
+        BlocProvider.of<EstiloVidaSaludableBloc>(context);
+    final cuidadoSaludCondRiesgoBloc =
+        BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context);
+    final dimensionSocioCulturalPueblosIndigenasBloc =
+        BlocProvider.of<DimensionSocioCulturalPueblosIndigenasBloc>(context);
+    final atencionSaludBloc = BlocProvider.of<AtencionSaludBloc>(context);
+
     return MultiBlocListener(
         listeners: [
           BlocListener<AfiliadoPrefsBloc, AfiliadoPrefsState>(
             listener: (context, state) {
+              if (state is AfiliadoLoaded) {
+                dimUbicacionBloc.add(DimUbicacionInit());
+                dimViviendaBloc.add(DimViviendaInit());
+                grupoFamiliarBloc.add(GrupoFamiliarInit());
+                estiloVidaSaludableBloc.add(EstiloVidaSaludableInit());
+                cuidadoSaludCondRiesgoBloc.add(CuidadoSaludCondRiesgoInit());
+                dimensionSocioCulturalPueblosIndigenasBloc
+                    .add(DimensionSocioCulturalPueblosIndigenasInit());
+                atencionSaludBloc.add(AtencionSaludInit());
+                CustomSnackBar.showSnackBar(
+                    context, 'Afiliado guardado correctamente', Colors.green);
+              }
               if (state is AfiliadoError) {
                 CustomSnackBar.showSnackBar(
-                    context, 'Error al cargar el afiliado', Colors.red);
+                    context, 'Error al guardar el afiliado', Colors.red);
               }
             },
           ),

@@ -241,11 +241,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   final prefs = SharedPreferencesService();
 
-  int totalAccesories = 71;
+  int totalAccesories = 73;
 
   int successfulAfiliadoInserts = 0;
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
-  List<EstadoViaEntity> estadosViasTemp = [];
+  List<EstadoViaEntity> estadoViasTemp = [];
   List<MedioComunicacionEntity> mediosComunicacionTemp = [];
   List<MedioUtilizaCAEntity> mediosUtilizaCATemp = [];
   List<TiempoTardaCAEntity> tiemposTardaCATemp = [];
@@ -315,6 +315,77 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   List<CostumbrePracticaEntity> costumbresPracticanTemp = [];
   List<SancionJusticiaEntity> sancionesJusticiaTemp = [];
   List<NroCuartoViviendaEntity> nroCuartosViviendaTemp = [];
+  int countRecordsDificultadAccesoTemp = 0;
+  int countRecordsEstadoViasTemp = 0;
+  int countRecordsMediosComunicacionTemp = 0;
+  int countRecordsMediosUtilizaTemp = 0;
+  int countRecordsTiemposTardaTemp = 0;
+  int countRecordsViasAccesoTemp = 0;
+  int countRecordsAutoridadesIndigenasTemp = 0;
+  int countRecordsCerealesTemp = 0;
+  int countRecordsCostosDesplazamientoTemp = 0;
+  int countRecordsDificultadesAccesoMedTradicionalTemp = 0;
+  int countRecordsEspecialidadesMedTradicionalTemp = 0;
+  int countRecordsEspeciesAnimalesTemp = 0;
+  int countRecordsFrutosTemp = 0;
+  int countRecordsHortalizasTemp = 0;
+  int countRecordsLeguminosasTemp = 0;
+  int countRecordsMediosUtilizaMedTradicionalTemp = 0;
+  int countRecordsOpcionesSiNoTemp = 0;
+  int countRecordsResguardosTemp = 0;
+  int countRecordsTiemposTardaMedTradicionalTemp = 0;
+  int countRecordsTuberculosPlatanosTemp = 0;
+  int countRecordsVerdurasTemp = 0;
+  int countRecordsFactoresRiesgoViviendaTemp = 0;
+  int countRecordsIluminacionesViviendaTemp = 0;
+  int countRecordsPisosViviendaTemp = 0;
+  int countRecordsPresenciaAnimalesViviendaTemp = 0;
+  int countRecordsServiciosPublicosViviendaTemp = 0;
+  int countRecordsTechosViviendaTemp = 0;
+  int countRecordsTenenciasViviendaTemp = 0;
+  int countRecordsTiposCombustibleViviendaTemp = 0;
+  int countRecordsTiposSanitarioViviendaTemp = 0;
+  int countRecordsTratamientosAguaViviendaTemp = 0;
+  int countRecordsVentilacionesViviendaTemp = 0;
+  int countRecordsTiposViviendaTemp = 0;
+  int countRecordsTiposCalendarioTemp = 0;
+  int countRecordsCursosVidaTemp = 0;
+  int countRecordsEtniasTemp = 0;
+  int countRecordsGenerosTemp = 0;
+  int countRecordsGruposRiesgoTemp = 0;
+  int countRecordsLenguasManejaTemp = 0;
+  int countRecordsNivelesEducativosTemp = 0;
+  int countRecordsNombresLenguasMaternaTemp = 0;
+  int countRecordsOcupacionesTemp = 0;
+  int countRecordsParentescosTemp = 0;
+  int countRecordsPueblosIndigenasTemp = 0;
+  int countRecordsRegimenesTemp = 0;
+  int countRecordsTiposDocumentoTemp = 0;
+  int countRecordsActividadesFisicasTemp = 0;
+  int countRecordsAlimentacionesTemp = 0;
+  int countRecordsCigarrillosDiaTemp = 0;
+  int countRecordsConsumosAlcoholTemp = 0;
+  int countRecordsCondicionesNutricionalesTemp = 0;
+  int countRecordsConductasSeguirTemp = 0;
+  int countRecordsEsquemasVacunacionTemp = 0;
+  int countRecordsLugaresVacunacionTemp = 0;
+  int countRecordsMetodosPlanificacionTemp = 0;
+  int countRecordsNombresEnfermedadesTemp = 0;
+  int countRecordsSeguimientoEnfermedadesTemp = 0;
+  int countRecordsServiciosSolicitadosTemp = 0;
+  int countRecordsUltimasVecesInstSaludTemp = 0;
+  int countRecordsEnfermedadesAcudeTemp = 0;
+  int countRecordsEnfermedadesTratamientoTemp = 0;
+  int countRecordsEnfermedadesTradicionalesTemp = 0;
+  int countRecordsLugaresAtencionMedicoTemp = 0;
+  int countRecordsLugaresPlantasMedicinalesTemp = 0;
+  int countRecordsPlantasMedicinalesTemp = 0;
+  int countRecordsReligionesProfesaTemp = 0;
+  int countRecordsEventosCostumbresParticipaTemp = 0;
+  int countRecordsCostumbresPracticanTemp = 0;
+  int countRecordsSancionesJusticiaTemp = 0;
+  int countRecordsNroCuartosViviendaTemp = 0;
+  int countRecordsFichasTemp = 0;
 
   List<FichaEntity> fichasTemp = [];
 
@@ -571,7 +642,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** Afiliados ****************************
   Future<void> syncAfiliados(SyncStarted event) async {
     int mpioId = event.usuario.municipioId!;
-    int limit = 40000;
+    int limit = 5000;
     List<dynamic> afiliadosMap = [];
     List<Map<String, dynamic>> combinedList = [];
 
@@ -702,6 +773,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsDificultadAccesoTemp = 0;
+
       await saveDificultadAccesoCA(
         event,
         dificultadesAccesoCATemp[0],
@@ -717,16 +790,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveDificultadAccesoCAUsecase(dificultadAccesoCA);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= dificultadesAccesoCATemp.length) {
+      countRecordsDificultadAccesoTemp++;
+      if (countRecordsDificultadAccesoTemp >= dificultadesAccesoCATemp.length) {
         ConnectionSQLiteService.truncateTable('EstadoVias').then((value) async {
-          estadosViasTemp = [];
-          await syncEstadosVias(event);
+          estadoViasTemp = [];
+          await syncEstadoVias(event);
         });
         return;
       }
 
       DificultadAccesoCAEntity dificultadAccesoCATemp =
-          dificultadesAccesoCATemp[data];
+          dificultadesAccesoCATemp[countRecordsDificultadAccesoTemp];
 
       await saveDificultadAccesoCA(
         event,
@@ -739,19 +813,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
 // ************************** Estado Vias ****************************
 
-  Future<void> syncEstadosVias(SyncStarted event) async {
-    final result = await estadoViaUsecase.getEstadosViasUsecase();
+  Future<void> syncEstadoVias(SyncStarted event) async {
+    final result = await estadoViaUsecase.getEstadoViasUsecase();
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      estadosViasTemp.addAll(data);
+      estadoViasTemp.addAll(data);
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando estados vías',
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEstadoViasTemp = 0;
+
       await saveEstadoVia(
         event,
-        estadosViasTemp[0],
+        estadoViasTemp[0],
       );
     });
   }
@@ -763,7 +839,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await estadoViaUsecaseDB.saveEstadoViaUsecase(estadoVia);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= estadosViasTemp.length) {
+      countRecordsEstadoViasTemp++;
+      if (countRecordsEstadoViasTemp >= estadoViasTemp.length) {
         ConnectionSQLiteService.truncateTable('MediosComunicacion')
             .then((value) async {
           mediosComunicacionTemp = [];
@@ -772,7 +849,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      EstadoViaEntity estadoViaTemp = estadosViasTemp[data];
+      EstadoViaEntity estadoViaTemp =
+          estadoViasTemp[countRecordsEstadoViasTemp];
 
       await saveEstadoVia(
         event,
@@ -796,6 +874,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsMediosComunicacionTemp = 0;
+
       await saveMedioComunicacion(
         event,
         mediosComunicacionTemp[0],
@@ -811,7 +891,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveMedioComunicacionUsecase(medioComunicacion);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= mediosComunicacionTemp.length) {
+      countRecordsMediosComunicacionTemp++;
+      if (countRecordsMediosComunicacionTemp >= mediosComunicacionTemp.length) {
         ConnectionSQLiteService.truncateTable('MediosUtiliza_CentroAtencion')
             .then((value) async {
           mediosUtilizaCATemp = [];
@@ -821,7 +902,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       MedioComunicacionEntity medioComunicacionTemp =
-          mediosComunicacionTemp[data];
+          mediosComunicacionTemp[countRecordsMediosComunicacionTemp];
 
       await saveMedioComunicacion(
         event,
@@ -844,6 +925,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsMediosUtilizaTemp = 0;
+
       await saveMedioUtilizaCA(
         event,
         mediosUtilizaCATemp[0],
@@ -859,7 +942,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await medioUtilizaCAUsecaseDB.saveMedioUtilizaCAUsecase(medioUtilizaCA);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= mediosUtilizaCATemp.length) {
+      countRecordsMediosUtilizaTemp++;
+      if (countRecordsMediosUtilizaTemp >= mediosUtilizaCATemp.length) {
         ConnectionSQLiteService.truncateTable('TiemposTarda_CentroAtencion')
             .then((value) async {
           tiemposTardaCATemp = [];
@@ -868,7 +952,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      MedioUtilizaCAEntity medioUtilizaCATemp = mediosUtilizaCATemp[data];
+      MedioUtilizaCAEntity medioUtilizaCATemp =
+          mediosUtilizaCATemp[countRecordsMediosUtilizaTemp];
 
       await saveMedioUtilizaCA(
         event,
@@ -891,6 +976,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTiemposTardaTemp = 0;
+
       await saveTiemposTardaCA(
         event,
         tiemposTardaCATemp[0],
@@ -906,7 +993,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await tiempoTardaCAUsecaseDB.saveTiempoTardaCAUsecase(tiempoTardaCA);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiemposTardaCATemp.length) {
+      countRecordsTiemposTardaTemp++;
+      if (countRecordsTiemposTardaTemp >= tiemposTardaCATemp.length) {
         ConnectionSQLiteService.truncateTable('ViasAcceso').then((value) async {
           viasAccesoTemp = [];
           await syncViasAcceso(event);
@@ -914,7 +1002,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TiempoTardaCAEntity tiempoTardaCATemp = tiemposTardaCATemp[data];
+      TiempoTardaCAEntity tiempoTardaCATemp =
+          tiemposTardaCATemp[countRecordsTiemposTardaTemp];
 
       await saveTiemposTardaCA(
         event,
@@ -937,6 +1026,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsViasAccesoTemp = 0;
+
       await saveViaAcceso(
         event,
         viasAccesoTemp[0],
@@ -951,7 +1042,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await viaAccesoUsecaseDB.saveViaAccesoUsecaseDB(viaAcceso);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= viasAccesoTemp.length) {
+      countRecordsViasAccesoTemp++;
+      if (countRecordsViasAccesoTemp >= viasAccesoTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'AutoridadesIndigenas_DatosVivienda')
             .then((value) async {
@@ -961,7 +1053,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      ViaAccesoEntity viaAccesoTemp = viasAccesoTemp[data];
+      ViaAccesoEntity viaAccesoTemp =
+          viasAccesoTemp[countRecordsViasAccesoTemp];
 
       await saveViaAcceso(
         event,
@@ -985,6 +1078,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsAutoridadesIndigenasTemp = 0;
+
       await saveAutoridadIndigena(
         event,
         autoridadesIndigenasTemp[0],
@@ -1000,7 +1095,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveAutoridadIndigenaUsecaseDB(autoridadIndigena);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= autoridadesIndigenasTemp.length) {
+      countRecordsAutoridadesIndigenasTemp++;
+      if (countRecordsAutoridadesIndigenasTemp >=
+          autoridadesIndigenasTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'Cereales_AspectosSocioEconomicos')
             .then((value) async {
@@ -1011,7 +1108,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       AutoridadIndigenaEntity autoridadIndigenaTemp =
-          autoridadesIndigenasTemp[data];
+          autoridadesIndigenasTemp[countRecordsAutoridadesIndigenasTemp];
 
       await saveAutoridadIndigena(
         event,
@@ -1035,6 +1132,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsCerealesTemp = 0;
+
       await saveCereal(
         event,
         cerealesTemp[0],
@@ -1049,7 +1148,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await cerealUsecaseDB.saveCerealUsecaseDB(cereal);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= cerealesTemp.length) {
+      countRecordsCerealesTemp++;
+      if (countRecordsCerealesTemp >= cerealesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'CostosDesplazamiento_CentroAtencion')
             .then((value) async {
@@ -1059,7 +1159,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      CerealEntity cerealTemp = cerealesTemp[data];
+      CerealEntity cerealTemp = cerealesTemp[countRecordsCerealesTemp];
 
       await saveCereal(
         event,
@@ -1083,6 +1183,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsCostosDesplazamientoTemp = 0;
+
       await saveCostoDesplazamiento(
         event,
         costosDesplazamientoTemp[0],
@@ -1098,7 +1200,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveCostoDesplazamientoUsecaseDB(costoDesplazamiento);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= costosDesplazamientoTemp.length) {
+      countRecordsCostosDesplazamientoTemp++;
+      if (countRecordsCostosDesplazamientoTemp >=
+          costosDesplazamientoTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'DificultadesAcceso_AccesoMedTradicional')
             .then((value) async {
@@ -1109,7 +1213,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       CostoDesplazamientoEntity costoDesplazamientoTemp =
-          costosDesplazamientoTemp[data];
+          costosDesplazamientoTemp[countRecordsCostosDesplazamientoTemp];
 
       await saveCostoDesplazamiento(
         event,
@@ -1134,6 +1238,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsDificultadesAccesoMedTradicionalTemp = 0;
+
       await saveDificultadAccesoMedTradicional(
         event,
         dificultadesAccesoMedTradicionalTemp[0],
@@ -1150,7 +1256,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
             dificultadAccesoMedTradicional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= dificultadesAccesoMedTradicionalTemp.length) {
+      countRecordsDificultadesAccesoMedTradicionalTemp++;
+      if (countRecordsDificultadesAccesoMedTradicionalTemp >=
+          dificultadesAccesoMedTradicionalTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'EspecialidadesMedTrad_AccesoMedTradicional')
             .then((value) async {
@@ -1161,7 +1269,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       DificultadAccesoMedTradicionalEntity dificultadAccesoMedTradicionalTemp =
-          dificultadesAccesoMedTradicionalTemp[data];
+          dificultadesAccesoMedTradicionalTemp[
+              countRecordsDificultadesAccesoMedTradicionalTemp];
 
       await saveDificultadAccesoMedTradicional(
         event,
@@ -1185,6 +1294,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEspecialidadesMedTradicionalTemp = 0;
+
       await saveEspecialidadMedTradicional(
         event,
         especialidadesMedTradicionalTemp[0],
@@ -1200,7 +1311,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveEspecialidadMedTradicionalUsecaseDB(especialidadMedTradicional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= especialidadesMedTradicionalTemp.length) {
+      countRecordsEspecialidadesMedTradicionalTemp++;
+      if (countRecordsEspecialidadesMedTradicionalTemp >=
+          especialidadesMedTradicionalTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'EspecieAnimalesCria_AspectosSocioEconomicos')
             .then((value) async {
@@ -1210,8 +1323,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      EspecialidadMedTradicionalEntity e =
-          especialidadesMedTradicionalTemp[data];
+      EspecialidadMedTradicionalEntity e = especialidadesMedTradicionalTemp[
+          countRecordsEspecialidadesMedTradicionalTemp];
 
       await saveEspecialidadMedTradicional(
         event,
@@ -1235,6 +1348,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEspeciesAnimalesTemp = 0;
+
       await saveEspecieAnimal(
         event,
         especiesAnimalesTemp[0],
@@ -1250,7 +1365,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await especieAnimalUsecaseDB.saveEspecieAnimalUsecaseDB(especieAnimal);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= especiesAnimalesTemp.length) {
+      countRecordsEspeciesAnimalesTemp++;
+      if (countRecordsEspeciesAnimalesTemp >= especiesAnimalesTemp.length) {
         ConnectionSQLiteService.truncateTable('Frutos_AspectosSocioEconomicos')
             .then((value) async {
           frutosTemp = [];
@@ -1259,7 +1375,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      EspecieAnimalEntity especieAnimalTemp = especiesAnimalesTemp[data];
+      EspecieAnimalEntity especieAnimalTemp =
+          especiesAnimalesTemp[countRecordsEspeciesAnimalesTemp];
 
       await saveEspecieAnimal(
         event,
@@ -1283,6 +1400,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsFrutosTemp = 0;
+
       await saveFruto(
         event,
         frutosTemp[0],
@@ -1297,7 +1416,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await frutoUsecaseDB.saveFrutoUsecaseDB(fruto);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= frutosTemp.length) {
+      countRecordsFrutosTemp++;
+      if (countRecordsFrutosTemp >= frutosTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'Hortalizas_AspectosSocioEconomicos')
             .then((value) async {
@@ -1307,7 +1427,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      FrutoEntity frutoTemp = frutosTemp[data];
+      FrutoEntity frutoTemp = frutosTemp[countRecordsFrutosTemp];
 
       await saveFruto(
         event,
@@ -1331,6 +1451,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsHortalizasTemp = 0;
+
       await saveHortaliza(
         event,
         hortalizasTemp[0],
@@ -1345,7 +1467,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await hortalizaUsecaseDB.saveHortalizaUsecaseDB(hortaliza);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= hortalizasTemp.length) {
+      countRecordsHortalizasTemp++;
+      if (countRecordsHortalizasTemp >= hortalizasTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'Leguminosas_AspectosSocioEconomicos')
             .then((value) async {
@@ -1355,7 +1478,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      HortalizaEntity hortalizaTemp = hortalizasTemp[data];
+      HortalizaEntity hortalizaTemp =
+          hortalizasTemp[countRecordsHortalizasTemp];
 
       await saveHortaliza(
         event,
@@ -1379,6 +1503,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsLeguminosasTemp = 0;
+
       await saveLeguminosa(
         event,
         leguminosasTemp[0],
@@ -1394,7 +1520,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await leguminosaUsecaseDB.saveLeguminosaUsecaseDB(leguminosa);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= leguminosasTemp.length) {
+      countRecordsLeguminosasTemp++;
+      if (countRecordsLeguminosasTemp >= leguminosasTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'MediosUtiliza_AccesoMedTradicional')
             .then((value) async {
@@ -1404,7 +1531,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      LeguminosaEntity leguminosaTemp = leguminosasTemp[data];
+      LeguminosaEntity leguminosaTemp =
+          leguminosasTemp[countRecordsLeguminosasTemp];
 
       await saveLeguminosa(
         event,
@@ -1428,6 +1556,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsMediosUtilizaMedTradicionalTemp = 0;
+
       await saveMedioUtilizaMedTradicional(
         event,
         mediosUtilizaMedTradicionalTemp[0],
@@ -1443,7 +1573,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveMedioUtilizaMedTradicionalUsecaseDB(medioUtilizaMedTradicional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= mediosUtilizaMedTradicionalTemp.length) {
+      countRecordsMediosUtilizaMedTradicionalTemp++;
+      if (countRecordsMediosUtilizaMedTradicionalTemp >=
+          mediosUtilizaMedTradicionalTemp.length) {
         ConnectionSQLiteService.truncateTable('OpcionesSi_No')
             .then((value) async {
           opcionesSiNoTemp = [];
@@ -1453,7 +1585,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicionalTemp =
-          mediosUtilizaMedTradicionalTemp[data];
+          mediosUtilizaMedTradicionalTemp[
+              countRecordsMediosUtilizaMedTradicionalTemp];
 
       await saveMedioUtilizaMedTradicional(
         event,
@@ -1476,6 +1609,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsOpcionesSiNoTemp = 0;
+
       await saveOpcionSiNo(
         event,
         opcionesSiNoTemp[0],
@@ -1491,7 +1626,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await opcionSiNoUsecaseDB.saveOpcionSiNoUsecaseDB(opcionSiNo);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= opcionesSiNoTemp.length) {
+      countRecordsOpcionesSiNoTemp++;
+      if (countRecordsOpcionesSiNoTemp >= opcionesSiNoTemp.length) {
         ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
           resguardosTemp = [];
           await syncResguardos(event);
@@ -1499,7 +1635,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      OpcionSiNoEntity opcionSiNoTemp = opcionesSiNoTemp[data];
+      OpcionSiNoEntity opcionSiNoTemp =
+          opcionesSiNoTemp[countRecordsOpcionesSiNoTemp];
 
       await saveOpcionSiNo(
         event,
@@ -1523,6 +1660,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsResguardosTemp = 0;
+
       await saveResguardo(
         event,
         resguardosTemp[0],
@@ -1537,7 +1676,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await resguardoUsecaseDB.saveResguardoUsecaseDB(resguardo);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= resguardosTemp.length) {
+      countRecordsResguardosTemp++;
+      if (countRecordsResguardosTemp >= resguardosTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TiemposTarda_AccesoMedTradicional')
             .then((value) async {
@@ -1547,7 +1687,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      ResguardoEntity resguardoTemp = resguardosTemp[data];
+      ResguardoEntity resguardoTemp =
+          resguardosTemp[countRecordsResguardosTemp];
 
       await saveResguardo(
         event,
@@ -1571,6 +1712,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTiemposTardaMedTradicionalTemp = 0;
+
       await saveTiempoTardaMedTradicional(
         event,
         tiemposTardaMedTradicionalTemp[0],
@@ -1586,7 +1729,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveTiempoTardaMedTradicionalUsecaseDB(tiempoTardaMedTradicional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiemposTardaMedTradicionalTemp.length) {
+      countRecordsTiemposTardaMedTradicionalTemp++;
+      if (countRecordsTiemposTardaMedTradicionalTemp >=
+          tiemposTardaMedTradicionalTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TuberculosPlatanos_AspectosSocioEconomicos')
             .then((value) async {
@@ -1597,7 +1742,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       TiempoTardaMedTradicionalEntity tiempoTardaMedTradicionalTemp =
-          tiemposTardaMedTradicionalTemp[data];
+          tiemposTardaMedTradicionalTemp[
+              countRecordsTiemposTardaMedTradicionalTemp];
 
       await saveTiempoTardaMedTradicional(
         event,
@@ -1621,6 +1767,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTuberculosPlatanosTemp = 0;
+
       await saveTuberculoPlatano(
         event,
         tuberculosPlatanosTemp[0],
@@ -1636,7 +1784,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveTuberculoPlatanoUsecaseDB(tuberculoPlatano);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tuberculosPlatanosTemp.length) {
+      countRecordsTuberculosPlatanosTemp++;
+      if (countRecordsTuberculosPlatanosTemp >= tuberculosPlatanosTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'Verduras_AspectosSocioEconomicos')
             .then((value) async {
@@ -1647,7 +1796,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       TuberculoPlatanoEntity tuberculoPlatanoTemp =
-          tuberculosPlatanosTemp[data];
+          tuberculosPlatanosTemp[countRecordsTuberculosPlatanosTemp];
 
       await saveTuberculoPlatano(
         event,
@@ -1671,6 +1820,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsVerdurasTemp = 0;
+
       await saveVerdura(
         event,
         verdurasTemp[0],
@@ -1685,7 +1836,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await verduraUsecaseDB.saveVerduraUsecaseDB(verdura);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= verdurasTemp.length) {
+      countRecordsVerdurasTemp++;
+      if (countRecordsVerdurasTemp >= verdurasTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'FactoresRiesgoVivienda_DatosVivienda')
             .then((value) async {
@@ -1695,7 +1847,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      VerduraEntity verduraTemp = verdurasTemp[data];
+      VerduraEntity verduraTemp = verdurasTemp[countRecordsVerdurasTemp];
 
       await saveVerdura(
         event,
@@ -1719,6 +1871,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsFactoresRiesgoViviendaTemp = 0;
+
       await saveFactorRiesgoVivienda(
         event,
         factoresRiesgoViviendaTemp[0],
@@ -1734,7 +1888,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveFactorRiesgoViviendaUsecaseDB(factorRiesgoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= factoresRiesgoViviendaTemp.length) {
+      countRecordsFactoresRiesgoViviendaTemp++;
+      if (countRecordsFactoresRiesgoViviendaTemp >=
+          factoresRiesgoViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'IluminacionVivienda_DatosVivienda')
             .then((value) async {
@@ -1745,7 +1901,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       FactorRiesgoViviendaEntity factorRiesgoViviendaTemp =
-          factoresRiesgoViviendaTemp[data];
+          factoresRiesgoViviendaTemp[countRecordsFactoresRiesgoViviendaTemp];
 
       await saveFactorRiesgoVivienda(
         event,
@@ -1769,6 +1925,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsIluminacionesViviendaTemp = 0;
+
       await saveIluminacionVivienda(
         event,
         iluminacionesViviendaTemp[0],
@@ -1784,7 +1942,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveIluminacionViviendaUsecaseDB(iluminacionVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= iluminacionesViviendaTemp.length) {
+      countRecordsIluminacionesViviendaTemp++;
+      if (countRecordsIluminacionesViviendaTemp >=
+          iluminacionesViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable('PisosVivienda_DatosVivienda')
             .then((value) async {
           pisosViviendaTemp = [];
@@ -1794,7 +1954,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       IluminacionViviendaEntity iluminacionViviendaTemp =
-          iluminacionesViviendaTemp[data];
+          iluminacionesViviendaTemp[countRecordsIluminacionesViviendaTemp];
 
       await saveIluminacionVivienda(
         event,
@@ -1818,6 +1978,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsPisosViviendaTemp = 0;
+
       await savePisoVivienda(
         event,
         pisosViviendaTemp[0],
@@ -1833,7 +1995,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await pisoViviendaUsecaseDB.savePisoViviendaUsecaseDB(pisoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= pisosViviendaTemp.length) {
+      countRecordsPisosViviendaTemp++;
+      if (countRecordsPisosViviendaTemp >= pisosViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'PresenciaAnimalesVivienda_DatosVivienda')
             .then((value) async {
@@ -1843,7 +2006,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      PisoViviendaEntity pisoViviendaTemp = pisosViviendaTemp[data];
+      PisoViviendaEntity pisoViviendaTemp =
+          pisosViviendaTemp[countRecordsPisosViviendaTemp];
 
       await savePisoVivienda(
         event,
@@ -1867,6 +2031,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsPresenciaAnimalesViviendaTemp = 0;
+
       await savePresenciaAnimalVivienda(
         event,
         presenciaAnimalesViviendaTemp[0],
@@ -1882,7 +2048,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .savePresenciaAnimalViviendaUsecaseDB(presenciaAnimalVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= presenciaAnimalesViviendaTemp.length) {
+      countRecordsPresenciaAnimalesViviendaTemp++;
+      if (countRecordsPresenciaAnimalesViviendaTemp >=
+          presenciaAnimalesViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'ServiciosPublicosVivienda_DatosVivienda')
             .then((value) async {
@@ -1893,7 +2061,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       PresenciaAnimalViviendaEntity presenciaAnimalViviendaTemp =
-          presenciaAnimalesViviendaTemp[data];
+          presenciaAnimalesViviendaTemp[
+              countRecordsPresenciaAnimalesViviendaTemp];
 
       await savePresenciaAnimalVivienda(
         event,
@@ -1917,6 +2086,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsServiciosPublicosViviendaTemp = 0;
+
       await saveServicioPublicoVivienda(
         event,
         serviciosPublicosViviendaTemp[0],
@@ -1932,7 +2103,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveServicioPublicoViviendaUsecaseDB(servicioPublicoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= serviciosPublicosViviendaTemp.length) {
+      countRecordsServiciosPublicosViviendaTemp++;
+      if (countRecordsServiciosPublicosViviendaTemp >=
+          serviciosPublicosViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable('TechosVivienda_DatosVivienda')
             .then((value) async {
           techosViviendaTemp = [];
@@ -1942,7 +2115,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       ServicioPublicoViviendaEntity servicioPublicoViviendaTemp =
-          serviciosPublicosViviendaTemp[data];
+          serviciosPublicosViviendaTemp[
+              countRecordsServiciosPublicosViviendaTemp];
 
       await saveServicioPublicoVivienda(
         event,
@@ -1966,6 +2140,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTechosViviendaTemp = 0;
+
       await saveTechoVivienda(
         event,
         techosViviendaTemp[0],
@@ -1981,7 +2157,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await techoViviendaUsecaseDB.saveTechoViviendaUsecaseDB(techoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= techosViviendaTemp.length) {
+      countRecordsTechosViviendaTemp++;
+      if (countRecordsTechosViviendaTemp >= techosViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable('TenenciasVivienda_DatosVivienda')
             .then((value) async {
           tenenciasViviendaTemp = [];
@@ -1990,7 +2167,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TechoViviendaEntity techoViviendaTemp = techosViviendaTemp[data];
+      TechoViviendaEntity techoViviendaTemp =
+          techosViviendaTemp[countRecordsTechosViviendaTemp];
 
       await saveTechoVivienda(
         event,
@@ -2014,6 +2192,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTenenciasViviendaTemp = 0;
+
       await saveTenenciaVivienda(
         event,
         tenenciasViviendaTemp[0],
@@ -2029,7 +2209,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveTenenciaViviendaUsecaseDB(tenenciaVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tenenciasViviendaTemp.length) {
+      countRecordsTenenciasViviendaTemp++;
+      if (countRecordsTenenciasViviendaTemp >= tenenciasViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TiposCombustibleVivienda_DatosVivienda')
             .then((value) async {
@@ -2039,7 +2220,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TenenciaViviendaEntity tenenciaViviendaTemp = tenenciasViviendaTemp[data];
+      TenenciaViviendaEntity tenenciaViviendaTemp =
+          tenenciasViviendaTemp[countRecordsTenenciasViviendaTemp];
 
       await saveTenenciaVivienda(
         event,
@@ -2063,6 +2245,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTiposCombustibleViviendaTemp = 0;
+
       await saveTipoCombustibleVivienda(
         event,
         tiposCombustibleViviendaTemp[0],
@@ -2078,7 +2262,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveTipoCombustibleViviendaUsecaseDB(tipoCombustibleVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiposCombustibleViviendaTemp.length) {
+      countRecordsTiposCombustibleViviendaTemp++;
+      if (countRecordsTiposCombustibleViviendaTemp >=
+          tiposCombustibleViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TiposSanitarioVivienda_DatosVivienda')
             .then((value) async {
@@ -2089,7 +2275,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       TipoCombustibleViviendaEntity tipoCombustibleViviendaTemp =
-          tiposCombustibleViviendaTemp[data];
+          tiposCombustibleViviendaTemp[
+              countRecordsTiposCombustibleViviendaTemp];
 
       await saveTipoCombustibleVivienda(
         event,
@@ -2113,6 +2300,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTiposSanitarioViviendaTemp = 0;
+
       await saveTipoSanitarioVivienda(
         event,
         tiposSanitarioViviendaTemp[0],
@@ -2128,7 +2317,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveTipoSanitarioViviendaUsecaseDB(tipoSanitarioVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiposSanitarioViviendaTemp.length) {
+      countRecordsTiposSanitarioViviendaTemp++;
+      if (countRecordsTiposSanitarioViviendaTemp >=
+          tiposSanitarioViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TratamientoAguaVivienda_DatosVivienda')
             .then((value) async {
@@ -2139,7 +2330,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       TipoSanitarioViviendaEntity tipoSanitarioViviendaTemp =
-          tiposSanitarioViviendaTemp[data];
+          tiposSanitarioViviendaTemp[countRecordsTiposSanitarioViviendaTemp];
 
       await saveTipoSanitarioVivienda(
         event,
@@ -2163,6 +2354,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTratamientosAguaViviendaTemp = 0;
+
       await saveTratamientoAguaVivienda(
         event,
         tratamientosAguaViviendaTemp[0],
@@ -2178,7 +2371,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveTratamientoAguaViviendaUsecaseDB(tratamientoAguaVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tratamientosAguaViviendaTemp.length) {
+      countRecordsTratamientosAguaViviendaTemp++;
+      if (countRecordsTratamientosAguaViviendaTemp >=
+          tratamientosAguaViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'VentilacionVivienda_DatosVivienda')
             .then((value) async {
@@ -2189,7 +2384,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       TratamientoAguaViviendaEntity tratamientoAguaViviendaTemp =
-          tratamientosAguaViviendaTemp[data];
+          tratamientosAguaViviendaTemp[
+              countRecordsTratamientosAguaViviendaTemp];
 
       await saveTratamientoAguaVivienda(
         event,
@@ -2213,6 +2409,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsVentilacionesViviendaTemp = 0;
+
       await saveVentilacionVivienda(
         event,
         ventilacionesViviendaTemp[0],
@@ -2228,7 +2426,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveVentilacionViviendaUsecaseDB(ventilacionVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= ventilacionesViviendaTemp.length) {
+      countRecordsVentilacionesViviendaTemp++;
+      if (countRecordsVentilacionesViviendaTemp >=
+          ventilacionesViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable('TiposVivienda_DatosVivienda')
             .then((value) async {
           tiposViviendaTemp = [];
@@ -2238,7 +2438,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       }
 
       VentilacionViviendaEntity ventilacionViviendaTemp =
-          ventilacionesViviendaTemp[data];
+          ventilacionesViviendaTemp[countRecordsVentilacionesViviendaTemp];
 
       await saveVentilacionVivienda(
         event,
@@ -2262,6 +2462,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTiposViviendaTemp = 0;
+
       await saveTipoVivienda(
         event,
         tiposViviendaTemp[0],
@@ -2277,7 +2479,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await tipoViviendaUsecaseDB.saveTipoViviendaUsecaseDB(tipoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiposViviendaTemp.length) {
+      countRecordsTiposViviendaTemp++;
+      if (countRecordsTiposViviendaTemp >= tiposViviendaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'TiposCalendarios_AspectosSocioEconomicos')
             .then((value) async {
@@ -2287,7 +2490,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TipoViviendaEntity tipoViviendaTemp = tiposViviendaTemp[data];
+      TipoViviendaEntity tipoViviendaTemp =
+          tiposViviendaTemp[countRecordsTiposViviendaTemp];
 
       await saveTipoVivienda(
         event,
@@ -2310,6 +2514,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTiposCalendarioTemp = 0;
+
       await saveTipoCalendario(
         event,
         tiposCalendarioTemp[0],
@@ -2325,7 +2531,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveTipoCalendarioUsecaseDB(tipoCalendario);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiposCalendarioTemp.length) {
+      countRecordsTiposCalendarioTemp++;
+      if (countRecordsTiposCalendarioTemp >= tiposCalendarioTemp.length) {
         ConnectionSQLiteService.truncateTable('CursoVida_GrupoFamiliar')
             .then((value) async {
           cursosVidaTemp = [];
@@ -2334,7 +2541,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      TipoCalendarioEntity tipoCalendarioTemp = tiposCalendarioTemp[data];
+      TipoCalendarioEntity tipoCalendarioTemp =
+          tiposCalendarioTemp[countRecordsTiposCalendarioTemp];
 
       await saveTipoCalendario(
         event,
@@ -2357,6 +2565,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsCursosVidaTemp = 0;
+
       await saveCursoVida(
         event,
         cursosVidaTemp[0],
@@ -2371,7 +2581,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await cursoVidaUsecaseDB.saveCursoVidaUsecaseDB(cursoVida);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= cursosVidaTemp.length) {
+      countRecordsCursosVidaTemp++;
+      if (countRecordsCursosVidaTemp >= cursosVidaTemp.length) {
         ConnectionSQLiteService.truncateTable('Etnia_GrupoFamiliar')
             .then((value) async {
           etniasTemp = [];
@@ -2380,7 +2591,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      CursoVidaEntity cursoVidaTemp = cursosVidaTemp[data];
+      CursoVidaEntity cursoVidaTemp =
+          cursosVidaTemp[countRecordsCursosVidaTemp];
 
       await saveCursoVida(
         event,
@@ -2403,6 +2615,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEtniasTemp = 0;
+
       await saveEtnia(
         event,
         etniasTemp[0],
@@ -2417,7 +2631,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await etniaUsecaseDB.saveEtniaUsecaseDB(etnia);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= etniasTemp.length) {
+      countRecordsEtniasTemp++;
+      if (countRecordsEtniasTemp >= etniasTemp.length) {
         ConnectionSQLiteService.truncateTable('Genero_GrupoFamiliar')
             .then((value) async {
           generosTemp = [];
@@ -2426,7 +2641,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      EtniaEntity etniaTemp = etniasTemp[data];
+      EtniaEntity etniaTemp = etniasTemp[countRecordsEtniasTemp];
 
       await saveEtnia(
         event,
@@ -2449,6 +2664,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsGenerosTemp = 0;
+
       await saveGenero(
         event,
         generosTemp[0],
@@ -2463,7 +2680,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await generoUsecaseDB.saveGeneroUsecaseDB(genero);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= generosTemp.length) {
+      countRecordsGenerosTemp++;
+      if (countRecordsGenerosTemp >= generosTemp.length) {
         ConnectionSQLiteService.truncateTable('GrupoRiesgo_GrupoFamiliar')
             .then((value) async {
           gruposRiesgoTemp = [];
@@ -2472,7 +2690,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      GeneroEntity generoTemp = generosTemp[data];
+      GeneroEntity generoTemp = generosTemp[countRecordsGenerosTemp];
 
       await saveGenero(
         event,
@@ -2495,6 +2713,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsGruposRiesgoTemp = 0;
+
       await saveGrupoRiesgo(
         event,
         gruposRiesgoTemp[0],
@@ -2510,7 +2730,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await grupoRiesgoUsecaseDB.saveGrupoRiesgoUsecaseDB(grupoRiesgo);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= gruposRiesgoTemp.length) {
+      countRecordsGruposRiesgoTemp++;
+      if (countRecordsGruposRiesgoTemp >= gruposRiesgoTemp.length) {
         ConnectionSQLiteService.truncateTable('LenguaManeja_GrupoFamiliar')
             .then((value) async {
           lenguasManejaTemp = [];
@@ -2519,7 +2740,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         return;
       }
 
-      GrupoRiesgoEntity grupoRiesgoTemp = gruposRiesgoTemp[data];
+      GrupoRiesgoEntity grupoRiesgoTemp =
+          gruposRiesgoTemp[countRecordsGruposRiesgoTemp];
 
       await saveGrupoRiesgo(
         event,
@@ -2542,6 +2764,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsLenguasManejaTemp = 0;
+
       await saveLenguaManeja(
         event,
         lenguasManejaTemp[0],
@@ -2557,7 +2781,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await lenguaManejaUsecaseDB.saveLenguaManejaUsecaseDB(lenguaManeja);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= lenguasManejaTemp.length) {
+      countRecordsLenguasManejaTemp++;
+      if (countRecordsLenguasManejaTemp >= lenguasManejaTemp.length) {
         ConnectionSQLiteService.truncateTable('NivelEducativo_GrupoFamiliar')
             .then((value) async {
           nivelesEducativosTemp = [];
@@ -2565,7 +2790,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      LenguaManejaEntity lenguaManejaTemp = lenguasManejaTemp[data];
+
+      LenguaManejaEntity lenguaManejaTemp =
+          lenguasManejaTemp[countRecordsLenguasManejaTemp];
 
       await saveLenguaManeja(
         event,
@@ -2588,6 +2815,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsNivelesEducativosTemp = 0;
+
       await saveNivelEducativo(
         event,
         nivelesEducativosTemp[0],
@@ -2603,7 +2832,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveNivelEducativoUsecaseDB(nivelEducativo);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= nivelesEducativosTemp.length) {
+      countRecordsNivelesEducativosTemp++;
+      if (countRecordsNivelesEducativosTemp >= nivelesEducativosTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'NombreLenguaMaterna_GrupoFamiliar')
             .then((value) async {
@@ -2612,7 +2842,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      NivelEducativoEntity nivelEducativoTemp = nivelesEducativosTemp[data];
+
+      NivelEducativoEntity nivelEducativoTemp =
+          nivelesEducativosTemp[countRecordsNivelesEducativosTemp];
 
       await saveNivelEducativo(
         event,
@@ -2636,6 +2868,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsNombresLenguasMaternaTemp = 0;
+
       await saveNombreLenguaMaterna(
         event,
         nombresLenguasMaternaTemp[0],
@@ -2651,7 +2885,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveNombreLenguaMaternaUsecaseDB(nombreLenguaMaterna);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= nombresLenguasMaternaTemp.length) {
+      countRecordsNombresLenguasMaternaTemp++;
+      if (countRecordsNombresLenguasMaternaTemp >=
+          nombresLenguasMaternaTemp.length) {
         ConnectionSQLiteService.truncateTable('Ocupacion_GrupoFamiliar')
             .then((value) async {
           ocupacionesTemp = [];
@@ -2659,8 +2895,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       NombreLenguaMaternaEntity nombreLenguaMaternaTemp =
-          nombresLenguasMaternaTemp[data];
+          nombresLenguasMaternaTemp[countRecordsNombresLenguasMaternaTemp];
 
       await saveNombreLenguaMaterna(
         event,
@@ -2683,6 +2920,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsOcupacionesTemp = 0;
+
       await saveOcupacion(
         event,
         ocupacionesTemp[0],
@@ -2697,7 +2936,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await ocupacionUsecaseDB.saveOcupacionUsecaseDB(ocupacion);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= ocupacionesTemp.length) {
+      countRecordsOcupacionesTemp++;
+
+      if (countRecordsOcupacionesTemp >= ocupacionesTemp.length) {
         ConnectionSQLiteService.truncateTable('Parentesco_GrupoFamiliar')
             .then((value) async {
           parentescosTemp = [];
@@ -2705,7 +2946,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      OcupacionEntity ocupacionTemp = ocupacionesTemp[data];
+
+      OcupacionEntity ocupacionTemp =
+          ocupacionesTemp[countRecordsOcupacionesTemp];
 
       await saveOcupacion(
         event,
@@ -2728,6 +2971,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsParentescosTemp = 0;
+
       await saveParentesco(
         event,
         parentescosTemp[0],
@@ -2743,7 +2988,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await parentescoUsecaseDB.saveParentescoUsecaseDB(parentesco);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= parentescosTemp.length) {
+      countRecordsParentescosTemp++;
+      if (countRecordsParentescosTemp >= parentescosTemp.length) {
         ConnectionSQLiteService.truncateTable('PueblosIndigenas_GrupoFamiliar')
             .then((value) async {
           pueblosIndigenasTemp = [];
@@ -2751,7 +2997,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      ParentescoEntity parentescoTemp = parentescosTemp[data];
+
+      ParentescoEntity parentescoTemp =
+          parentescosTemp[countRecordsParentescosTemp];
 
       await saveParentesco(
         event,
@@ -2775,6 +3023,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsPueblosIndigenasTemp = 0;
+
       await savePuebloIndigena(
         event,
         pueblosIndigenasTemp[0],
@@ -2790,7 +3040,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .savePuebloIndigenaUsecaseDB(puebloIndigena);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= pueblosIndigenasTemp.length) {
+      countRecordsPueblosIndigenasTemp++;
+      if (countRecordsPueblosIndigenasTemp >= pueblosIndigenasTemp.length) {
         ConnectionSQLiteService.truncateTable('Regimenes_GrupoFamiliar')
             .then((value) async {
           regimenesTemp = [];
@@ -2798,7 +3049,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      PuebloIndigenaEntity puebloIndigenaTemp = pueblosIndigenasTemp[data];
+
+      PuebloIndigenaEntity puebloIndigenaTemp =
+          pueblosIndigenasTemp[countRecordsPueblosIndigenasTemp];
 
       await savePuebloIndigena(
         event,
@@ -2821,6 +3074,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsRegimenesTemp = 0;
+
       await saveRegimen(
         event,
         regimenesTemp[0],
@@ -2835,7 +3090,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await regimenUsecaseDB.saveRegimenUsecaseDB(regimen);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= regimenesTemp.length) {
+      countRecordsRegimenesTemp++;
+      if (countRecordsRegimenesTemp >= regimenesTemp.length) {
         ConnectionSQLiteService.truncateTable('TiposDocumento_GrupoFamiliar')
             .then((value) async {
           tiposDocumentoTemp = [];
@@ -2843,7 +3099,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      RegimenEntity regimenTemp = regimenesTemp[data];
+
+      RegimenEntity regimenTemp = regimenesTemp[countRecordsRegimenesTemp];
 
       await saveRegimen(
         event,
@@ -2866,6 +3123,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsTiposDocumentoTemp = 0;
+
       await saveTipoDocumento(
         event,
         tiposDocumentoTemp[0],
@@ -2881,7 +3140,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await tipoDocumentoUsecaseDB.saveTipoDocumentoUsecaseDB(tipoDocumento);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= tiposDocumentoTemp.length) {
+      countRecordsTiposDocumentoTemp++;
+      if (countRecordsTiposDocumentoTemp >= tiposDocumentoTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'ActividadesFisicas_EstilosVidaSaludable')
             .then((value) async {
@@ -2890,7 +3150,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      TipoDocumentoEntity tipoDocumentoTemp = tiposDocumentoTemp[data];
+
+      TipoDocumentoEntity tipoDocumentoTemp =
+          tiposDocumentoTemp[countRecordsTiposDocumentoTemp];
 
       await saveTipoDocumento(
         event,
@@ -2913,6 +3175,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsActividadesFisicasTemp = 0;
+
       await saveActividadFisica(
         event,
         actividadesFisicasTemp[0],
@@ -2928,7 +3192,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveActividadFisicaUsecaseDB(actividadFisica);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= actividadesFisicasTemp.length) {
+      countRecordsActividadesFisicasTemp++;
+      if (countRecordsActividadesFisicasTemp >= actividadesFisicasTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'Alimentacion_EstilosVidaSaludable')
             .then((value) async {
@@ -2937,7 +3202,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      ActividadFisicaEntity actividadFisicaTemp = actividadesFisicasTemp[data];
+
+      ActividadFisicaEntity actividadFisicaTemp =
+          actividadesFisicasTemp[countRecordsActividadesFisicasTemp];
 
       await saveActividadFisica(
         event,
@@ -2960,6 +3227,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsAlimentacionesTemp = 0;
+
       await saveAlimentacion(
         event,
         alimentacionesTemp[0],
@@ -2975,7 +3244,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await alimentacionUsecaseDB.saveAlimentacionUsecaseDB(alimentacion);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= alimentacionesTemp.length) {
+      countRecordsAlimentacionesTemp++;
+      if (countRecordsAlimentacionesTemp >= alimentacionesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'NumeroCigarrilosDia_EstilosVidaSaludable')
             .then((value) async {
@@ -2984,7 +3254,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      AlimentacionEntity alimentacionTemp = alimentacionesTemp[data];
+
+      AlimentacionEntity alimentacionTemp =
+          alimentacionesTemp[countRecordsAlimentacionesTemp];
 
       await saveAlimentacion(
         event,
@@ -3007,6 +3279,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsCigarrillosDiaTemp = 0;
+
       await saveCigarrilloDia(
         event,
         cigarrillosDiaTemp[0],
@@ -3022,7 +3296,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         await cigarrilloDiaUsecaseDB.saveCigarrilloDiaUsecaseDB(cigarrilloDia);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= cigarrillosDiaTemp.length) {
+      countRecordsCigarrillosDiaTemp++;
+      if (countRecordsCigarrillosDiaTemp >= cigarrillosDiaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'ConsumoAlcohol_EstilosVidaSaludable')
             .then((value) async {
@@ -3031,7 +3306,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      CigarrilloDiaEntity cigarrilloDiaTemp = cigarrillosDiaTemp[data];
+
+      CigarrilloDiaEntity cigarrilloDiaTemp =
+          cigarrillosDiaTemp[countRecordsCigarrillosDiaTemp];
 
       await saveCigarrilloDia(
         event,
@@ -3054,6 +3331,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsConsumosAlcoholTemp = 0;
+
       await saveConsumoAlcohol(
         event,
         consumosAlcoholTemp[0],
@@ -3069,7 +3348,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveConsumoAlcoholUsecaseDB(consumoAlcohol);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= consumosAlcoholTemp.length) {
+      countRecordsConsumosAlcoholTemp++;
+      if (countRecordsConsumosAlcoholTemp >= consumosAlcoholTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'CondicionesNutricionales_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3078,7 +3358,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      ConsumoAlcoholEntity consumoAlcoholTemp = consumosAlcoholTemp[data];
+
+      ConsumoAlcoholEntity consumoAlcoholTemp =
+          consumosAlcoholTemp[countRecordsConsumosAlcoholTemp];
 
       await saveConsumoAlcohol(
         event,
@@ -3102,6 +3384,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsCondicionesNutricionalesTemp = 0;
+
       await saveCondicionNutricional(
         event,
         condicionesNutricionalesTemp[0],
@@ -3117,7 +3401,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveCondicionNutricionalUsecaseDB(condicionNutricional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= condicionesNutricionalesTemp.length) {
+      countRecordsCondicionesNutricionalesTemp++;
+      if (countRecordsCondicionesNutricionalesTemp >=
+          condicionesNutricionalesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'ConductasSeguir_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3126,8 +3412,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       CondicionNutricionalEntity condicionNutricionalTemp =
-          condicionesNutricionalesTemp[data];
+          condicionesNutricionalesTemp[
+              countRecordsCondicionesNutricionalesTemp];
 
       await saveCondicionNutricional(
         event,
@@ -3150,6 +3438,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsConductasSeguirTemp = 0;
+
       await saveConductaSeguir(
         event,
         conductasSeguirTemp[0],
@@ -3165,7 +3455,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveConductaSeguirUsecaseDB(conductaSeguir);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= conductasSeguirTemp.length) {
+      countRecordsConductasSeguirTemp++;
+      if (countRecordsConductasSeguirTemp >= conductasSeguirTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'EsquemasVacunacion_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3174,7 +3465,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      ConductaSeguirEntity conductaSeguirTemp = conductasSeguirTemp[data];
+
+      ConductaSeguirEntity conductaSeguirTemp =
+          conductasSeguirTemp[countRecordsConductasSeguirTemp];
 
       await saveConductaSeguir(
         event,
@@ -3198,6 +3491,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEsquemasVacunacionTemp = 0;
+
       await saveEsquemaVacunacion(
         event,
         esquemasVacunacionTemp[0],
@@ -3213,7 +3508,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveEsquemaVacunacionUsecaseDB(esquemaVacunacion);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= esquemasVacunacionTemp.length) {
+      countRecordsEsquemasVacunacionTemp++;
+      if (countRecordsEsquemasVacunacionTemp >= esquemasVacunacionTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'LugaresVacunacion_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3222,8 +3518,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       EsquemaVacunacionEntity esquemaVacunacionTemp =
-          esquemasVacunacionTemp[data];
+          esquemasVacunacionTemp[countRecordsEsquemasVacunacionTemp];
 
       await saveEsquemaVacunacion(
         event,
@@ -3246,6 +3543,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsLugaresVacunacionTemp = 0;
+
       await saveLugarVacunacion(
         event,
         lugaresVacunacionTemp[0],
@@ -3261,7 +3560,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveLugarVacunacionUsecaseDB(lugarVacunacion);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= lugaresVacunacionTemp.length) {
+      countRecordsLugaresVacunacionTemp++;
+      if (countRecordsLugaresVacunacionTemp >= lugaresVacunacionTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'MetodosPlanificacion_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3270,7 +3570,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      LugarVacunacionEntity lugarVacunacionTemp = lugaresVacunacionTemp[data];
+
+      LugarVacunacionEntity lugarVacunacionTemp =
+          lugaresVacunacionTemp[countRecordsLugaresVacunacionTemp];
 
       await saveLugarVacunacion(
         event,
@@ -3294,6 +3596,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsMetodosPlanificacionTemp = 0;
+
       await saveMetodoPlanificacion(
         event,
         metodosPlanificacionTemp[0],
@@ -3309,7 +3613,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveMetodoPlanificacionUsecaseDB(metodoPlanificacion);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= metodosPlanificacionTemp.length) {
+      countRecordsMetodosPlanificacionTemp++;
+      if (countRecordsMetodosPlanificacionTemp >=
+          metodosPlanificacionTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'NombresEnfermedad_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3318,8 +3624,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       MetodoPlanificacionEntity metodoPlanificacionTemp =
-          metodosPlanificacionTemp[data];
+          metodosPlanificacionTemp[countRecordsMetodosPlanificacionTemp];
 
       await saveMetodoPlanificacion(
         event,
@@ -3343,6 +3650,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsNombresEnfermedadesTemp = 0;
+
       await saveNombreEnfermedad(
         event,
         nombresEnfermedadesTemp[0],
@@ -3358,7 +3667,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveNombreEnfermedadUsecaseDB(nombreEnfermedad);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= nombresEnfermedadesTemp.length) {
+      countRecordsNombresEnfermedadesTemp++;
+      if (countRecordsNombresEnfermedadesTemp >=
+          nombresEnfermedadesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3367,8 +3678,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       NombreEnfermedadEntity nombreEnfermedadTemp =
-          nombresEnfermedadesTemp[data];
+          nombresEnfermedadesTemp[countRecordsNombresEnfermedadesTemp];
 
       await saveNombreEnfermedad(
         event,
@@ -3392,6 +3704,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsSeguimientoEnfermedadesTemp = 0;
+
       await saveSeguimientoEnfermedad(
         event,
         seguimientoEnfermedadesTemp[0],
@@ -3407,7 +3721,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveSeguimientoEnfermedadUsecaseDB(seguimientoEnfermedad);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= seguimientoEnfermedadesTemp.length) {
+      countRecordsSeguimientoEnfermedadesTemp++;
+      if (countRecordsSeguimientoEnfermedadesTemp >=
+          seguimientoEnfermedadesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'ServiciosSolicitados_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3416,8 +3732,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       SeguimientoEnfermedadEntity seguimientoEnfermedadTemp =
-          seguimientoEnfermedadesTemp[data];
+          seguimientoEnfermedadesTemp[countRecordsSeguimientoEnfermedadesTemp];
 
       await saveSeguimientoEnfermedad(
         event,
@@ -3441,6 +3758,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsServiciosSolicitadosTemp = 0;
+
       await saveServicioSolicitado(
         event,
         serviciosSolicitadosTemp[0],
@@ -3456,7 +3775,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveServicioSolicitadoUsecaseDB(servicioSolicitado);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= serviciosSolicitadosTemp.length) {
+      countRecordsServiciosSolicitadosTemp++;
+      if (countRecordsServiciosSolicitadosTemp >=
+          serviciosSolicitadosTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'UltimaVezInstSalud_CuidadoSaludCondRiesgo')
             .then((value) async {
@@ -3465,8 +3786,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       ServicioSolicitadoEntity servicioSolicitadoTemp =
-          serviciosSolicitadosTemp[data];
+          serviciosSolicitadosTemp[countRecordsServiciosSolicitadosTemp];
 
       await saveServicioSolicitado(
         event,
@@ -3490,6 +3812,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsUltimasVecesInstSaludTemp = 0;
+
       await saveUltimaVezInstSalud(
         event,
         ultimasVecesInstSaludTemp[0],
@@ -3505,7 +3829,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveUltimaVezInstSaludUsecaseDB(ultimaVezInstSalud);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= ultimasVecesInstSaludTemp.length) {
+      countRecordsUltimasVecesInstSaludTemp++;
+      if (countRecordsUltimasVecesInstSaludTemp >=
+          ultimasVecesInstSaludTemp.length) {
         ConnectionSQLiteService.truncateTable('EnfermedadesAcude_AtencionSalud')
             .then((value) async {
           enfermedadesAcudeTemp = [];
@@ -3513,8 +3839,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       UltimaVezInstSaludEntity ultimaVezInstSaludTemp =
-          ultimasVecesInstSaludTemp[data];
+          ultimasVecesInstSaludTemp[countRecordsUltimasVecesInstSaludTemp];
 
       await saveUltimaVezInstSalud(
         event,
@@ -3537,6 +3864,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEnfermedadesAcudeTemp = 0;
+
       await saveEnfermedadAcude(
         event,
         enfermedadesAcudeTemp[0],
@@ -3552,7 +3881,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveEnfermedadAcudeUsecaseDB(enfermedadAcude);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= enfermedadesAcudeTemp.length) {
+      countRecordsEnfermedadesAcudeTemp++;
+      if (countRecordsEnfermedadesAcudeTemp >= enfermedadesAcudeTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'EnfermedadesTratamientos_AtencionSalud')
             .then((value) async {
@@ -3561,7 +3891,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      EnfermedadAcudeEntity enfermedadAcudeTemp = enfermedadesAcudeTemp[data];
+
+      EnfermedadAcudeEntity enfermedadAcudeTemp =
+          enfermedadesAcudeTemp[countRecordsEnfermedadesAcudeTemp];
 
       await saveEnfermedadAcude(
         event,
@@ -3585,6 +3917,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEnfermedadesTratamientoTemp = 0;
+
       await saveEnfermedadTratamiento(
         event,
         enfermedadesTratamientoTemp[0],
@@ -3600,7 +3934,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveEnfermedadTratamientoUsecaseDB(enfermedadTratamiento);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= enfermedadesTratamientoTemp.length) {
+      countRecordsEnfermedadesTratamientoTemp++;
+      if (countRecordsEnfermedadesTratamientoTemp >=
+          enfermedadesTratamientoTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'EnfermedadesTradicionales_AtencionSalud')
             .then((value) async {
@@ -3609,8 +3945,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       EnfermedadTratamientoEntity enfermedadTratamientoTemp =
-          enfermedadesTratamientoTemp[data];
+          enfermedadesTratamientoTemp[countRecordsEnfermedadesTratamientoTemp];
 
       await saveEnfermedadTratamiento(
         event,
@@ -3634,6 +3971,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEnfermedadesTradicionalesTemp = 0;
+
       await saveEnfermedadTradicional(
         event,
         enfermedadesTradicionalesTemp[0],
@@ -3649,7 +3988,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveEnfermedadTradicionalUsecaseDB(enfermedadTradicional);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= enfermedadesTradicionalesTemp.length) {
+      countRecordsEnfermedadesTradicionalesTemp++;
+      if (countRecordsEnfermedadesTradicionalesTemp >=
+          enfermedadesTradicionalesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'LugaresAtencionMedico_AtencionSalud')
             .then((value) async {
@@ -3658,8 +3999,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       EnfermedadTradicionalEntity enfermedadTradicionalTemp =
-          enfermedadesTradicionalesTemp[data];
+          enfermedadesTradicionalesTemp[
+              countRecordsEnfermedadesTradicionalesTemp];
 
       await saveEnfermedadTradicional(
         event,
@@ -3683,6 +4026,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsLugaresAtencionMedicoTemp = 0;
+
       await saveLugarAtencionMedico(
         event,
         lugaresAtencionMedicoTemp[0],
@@ -3698,7 +4043,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveLugarAtencionMedicoUsecaseDB(lugarAtencionMedico);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= lugaresAtencionMedicoTemp.length) {
+      countRecordsLugaresAtencionMedicoTemp++;
+      if (countRecordsLugaresAtencionMedicoTemp >=
+          lugaresAtencionMedicoTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'LugaresPlantasMedicinales_AtencionSalud')
             .then((value) async {
@@ -3707,8 +4054,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       LugarAtencionMedicoEntity lugarAtencionMedicoTemp =
-          lugaresAtencionMedicoTemp[data];
+          lugaresAtencionMedicoTemp[countRecordsLugaresAtencionMedicoTemp];
 
       await saveLugarAtencionMedico(
         event,
@@ -3732,6 +4080,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsLugaresPlantasMedicinalesTemp = 0;
+
       await saveLugarPlantaMedicinal(
         event,
         lugaresPlantasMedicinalesTemp[0],
@@ -3747,7 +4097,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveLugarPlantaMedicinalUsecaseDB(lugarPlantaMedicinal);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= lugaresPlantasMedicinalesTemp.length) {
+      countRecordsLugaresPlantasMedicinalesTemp++;
+      if (countRecordsLugaresPlantasMedicinalesTemp >=
+          lugaresPlantasMedicinalesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'PlantasMedicinales_AtencionSalud')
             .then((value) async {
@@ -3756,8 +4108,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       LugarPlantaMedicinalEntity lugarPlantaMedicinalTemp =
-          lugaresPlantasMedicinalesTemp[data];
+          lugaresPlantasMedicinalesTemp[
+              countRecordsLugaresPlantasMedicinalesTemp];
 
       await saveLugarPlantaMedicinal(
         event,
@@ -3780,6 +4134,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsPlantasMedicinalesTemp = 0;
+
       await savePlantaMedicinal(
         event,
         plantasMedicinalesTemp[0],
@@ -3795,7 +4151,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .savePlantaMedicinalUsecaseDB(plantaMedicinal);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= plantasMedicinalesTemp.length) {
+      countRecordsPlantasMedicinalesTemp++;
+      if (countRecordsPlantasMedicinalesTemp >= plantasMedicinalesTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
             .then((value) async {
@@ -3804,7 +4161,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      PlantaMedicinalEntity plantaMedicinalTemp = plantasMedicinalesTemp[data];
+
+      PlantaMedicinalEntity plantaMedicinalTemp =
+          plantasMedicinalesTemp[countRecordsPlantasMedicinalesTemp];
 
       await savePlantaMedicinal(
         event,
@@ -3827,6 +4186,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsReligionesProfesaTemp = 0;
+
       await saveReligionProfesa(
         event,
         religionesProfesaTemp[0],
@@ -3842,7 +4203,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveReligionProfesaUsecaseDB(religionProfesa);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= religionesProfesaTemp.length) {
+      countRecordsReligionesProfesaTemp++;
+      if (countRecordsReligionesProfesaTemp >= religionesProfesaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
             .then((value) async {
@@ -3851,7 +4213,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      ReligionProfesaEntity religionProfesaTemp = religionesProfesaTemp[data];
+
+      ReligionProfesaEntity religionProfesaTemp =
+          religionesProfesaTemp[countRecordsReligionesProfesaTemp];
 
       await saveReligionProfesa(
         event,
@@ -3875,6 +4239,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsEventosCostumbresParticipaTemp = 0;
+
       await saveEventoCostumbreParticipa(
         event,
         eventosCostumbresParticipaTemp[0],
@@ -3890,7 +4256,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveEventoCostumbreParticipaUsecaseDB(eventoCostumbreParticipa);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= eventosCostumbresParticipaTemp.length) {
+      countRecordsEventosCostumbresParticipaTemp++;
+      if (countRecordsEventosCostumbresParticipaTemp >=
+          eventosCostumbresParticipaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'CostumbresPractican_DimSocioCulturalPueblosIndigenas')
             .then((value) async {
@@ -3899,8 +4267,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       EventoCostumbreParticipaEntity eventoCostumbreParticipaTemp =
-          eventosCostumbresParticipaTemp[data];
+          eventosCostumbresParticipaTemp[
+              countRecordsEventosCostumbresParticipaTemp];
 
       await saveEventoCostumbreParticipa(
         event,
@@ -3924,6 +4294,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsCostumbresPracticanTemp = 0;
+
       await saveCostumbrePractica(
         event,
         costumbresPracticanTemp[0],
@@ -3939,7 +4311,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveCostumbrePracticaUsecaseDB(costumbrePractica);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= costumbresPracticanTemp.length) {
+      countRecordsCostumbresPracticanTemp++;
+      if (countRecordsCostumbresPracticanTemp >=
+          costumbresPracticanTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'SancionesJusticia_DimSocioCulturalPueblosIndigenas')
             .then((value) async {
@@ -3948,8 +4322,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
+
       CostumbrePracticaEntity costumbrePracticaTemp =
-          costumbresPracticanTemp[data];
+          costumbresPracticanTemp[countRecordsCostumbresPracticanTemp];
 
       await saveCostumbrePractica(
         event,
@@ -3972,6 +4347,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsSancionesJusticiaTemp = 0;
+
       await saveSancionJusticia(
         event,
         sancionesJusticiaTemp[0],
@@ -3987,7 +4364,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveSancionJusticiaUsecaseDB(sancionJusticia);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= sancionesJusticiaTemp.length) {
+      countRecordsSancionesJusticiaTemp++;
+      if (countRecordsSancionesJusticiaTemp >= sancionesJusticiaTemp.length) {
         ConnectionSQLiteService.truncateTable(
                 'NroCuartosVivienda_DatosVivienda')
             .then((value) async {
@@ -3996,7 +4374,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         });
         return;
       }
-      SancionJusticiaEntity sancionJusticiaTemp = sancionesJusticiaTemp[data];
+
+      SancionJusticiaEntity sancionJusticiaTemp =
+          sancionesJusticiaTemp[countRecordsSancionesJusticiaTemp];
 
       await saveSancionJusticia(
         event,
@@ -4020,6 +4400,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
+      countRecordsNroCuartosViviendaTemp = 0;
+
       await saveNroCuartoVivienda(
         event,
         nroCuartosViviendaTemp[0],
@@ -4035,19 +4417,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         .saveNroCuartoViviendaUsecaseDB(nroCuartoVivienda);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= nroCuartosViviendaTemp.length) {
-        // add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-        //     title: 'Sincronización completada',
-        //     counter: totalAccesories,
-        //     total: totalAccesories)));
+      countRecordsNroCuartosViviendaTemp++;
+      if (countRecordsNroCuartosViviendaTemp >= nroCuartosViviendaTemp.length) {
         ConnectionSQLiteService.truncateFicha().then((value) async {
           fichasTemp = [];
           await syncFichas(event);
         });
         return;
       }
+
       NroCuartoViviendaEntity nroCuartoViviendaTemp =
-          nroCuartosViviendaTemp[data];
+          nroCuartosViviendaTemp[countRecordsNroCuartosViviendaTemp];
 
       await saveNroCuartoVivienda(
         event,
@@ -4071,17 +4451,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           counter: state.syncProgressModel.counter + 1,
           total: totalAccesories)));
 
-      if (data.isNotEmpty) {
-        await saveFichas(
-          event,
-          data[0],
-        );
-      } else {
-        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-            title: 'Sincronización completada',
-            counter: totalAccesories,
-            total: totalAccesories)));
-      }
+      countRecordsFichasTemp = 0;
+
+      await saveFichas(
+        event,
+        fichasTemp[countRecordsFichasTemp],
+      );
     });
   }
 
@@ -4092,19 +4467,20 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await fichaUsecaseDB.createFichaCompletaUsecaseDB(ficha);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      if (data >= fichasTemp.length) {
+      countRecordsFichasTemp++;
+      if (countRecordsFichasTemp >= fichasTemp.length) {
         add(SyncIncrementChanged(state.syncProgressModel.copyWith(
             title: 'Sincronización completada',
-            counter: totalAccesories,
+            counter: state.syncProgressModel.counter + 1,
             total: totalAccesories)));
         return;
       }
-      // FichaEntity fichaTemp = fichasTemp[data];
 
-      // await saveFicha(
-      //   event,
-      //   fichaTemp,
-      // );
+      FichaEntity fichaTemp = fichasTemp[countRecordsFichasTemp];
+      await saveFichas(
+        event,
+        fichaTemp,
+      );
     });
   }
 
@@ -4113,14 +4489,4 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
     return percent;
   }
-  // int calculatePercent() {
-  //   final counter = state.syncProgressModel.counter <= 0
-  //       ? 1
-  //       : state.syncProgressModel.counter;
-  //   final total =
-  //       state.syncProgressModel.total <= 0 ? 1 : state.syncProgressModel.total;
-  //   final percent = ((counter / total) * 100).toInt();
-
-  //   return percent;
-  // }
 }

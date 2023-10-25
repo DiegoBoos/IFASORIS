@@ -17,14 +17,11 @@ class GraficasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ItemList> sync = [
-      ItemList('Sincronizadas', countSincronizadas.toDouble()),
-      ItemList('Pendientes', countPendientes.toDouble()),
-    ];
-
-    List<ItemList> local = [
-      ItemList('Completas', countCompletas.toDouble()),
-      ItemList('Incompletas', countInCompletas.toDouble()),
+    List<_PieData> syncedPendingCounts = [
+      _PieData('Sincronizadas: $countSincronizadas',
+          countSincronizadas.toDouble(), 'Sincronizadas'),
+      _PieData('Pendientes: $countPendientes', countPendientes.toDouble(),
+          'Pendientes'),
     ];
 
     return Scaffold(
@@ -32,29 +29,17 @@ class GraficasPage extends StatelessWidget {
       body: Column(
         children: [
           SfCircularChart(
-            series: <RadialBarSeries>[
-              RadialBarSeries<ItemList, String>(
-                dataSource: sync,
-                xValueMapper: (ItemList data, _) => data.name,
-                yValueMapper: (ItemList data, _) => data.value,
-                cornerStyle: CornerStyle.bothCurve,
-                innerRadius: '40%',
-                maximumValue: sync.fold(
-                    0, (max, item) => item.value > max! ? item.value : max),
-              ),
-            ],
-          ),
-          SfCircularChart(
-            series: <RadialBarSeries>[
-              RadialBarSeries<ItemList, String>(
-                dataSource: local,
-                xValueMapper: (ItemList data, _) => data.name,
-                yValueMapper: (ItemList data, _) => data.value,
-                cornerStyle: CornerStyle.bothCurve,
-                innerRadius: '40%',
-                maximumValue: local.fold(
-                    0, (max, item) => item.value > max! ? item.value : max),
-              ),
+            title: ChartTitle(text: 'Fichas sincronizadas y diligenciadas'),
+            legend: Legend(isVisible: true),
+            series: <PieSeries<_PieData, String>>[
+              PieSeries<_PieData, String>(
+                  explode: true,
+                  explodeIndex: 0,
+                  dataSource: syncedPendingCounts,
+                  xValueMapper: (_PieData data, _) => data.xData,
+                  yValueMapper: (_PieData data, _) => data.yData,
+                  dataLabelMapper: (_PieData data, _) => data.text,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true)),
             ],
           ),
         ],
@@ -63,8 +48,9 @@ class GraficasPage extends StatelessWidget {
   }
 }
 
-class ItemList {
-  ItemList(this.name, this.value);
-  final String name;
-  final double value;
+class _PieData {
+  _PieData(this.xData, this.yData, [this.text = '']);
+  final String xData;
+  final num yData;
+  final String text;
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/entities/afiliado_entity.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
 
+import '../../domain/entities/afiliado_entity.dart';
 import '../../domain/entities/familia_entity.dart';
 import '../../domain/entities/ficha_entity.dart';
 import '../../domain/entities/grupo_familiar_entity.dart';
@@ -148,18 +148,7 @@ class SearchAfiliados extends SearchDelegate {
                         subtitle: Text(
                             '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
                         onTap: () async {
-                          /* final afiliadosGrupoFamiliarBloc =
-                            BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
-                                context); */
-
-                          // Valida si hay un afiliado en el grupo familiar
-                          /* final afiliadoEnGrupoFamiliar =
-                            afiliadosGrupoFamiliarBloc
-                                .existeAfiliadoGrupoFamiliar(
-                                    afiliado.afiliadoId!); */
-
                           if (afiliado.edad! >= 14) {
-                            // Valida si hay una ficha con el afiliado
                             await afiliadoBloc
                                 .afiliadoTieneFicha(afiliado.afiliadoId!)
                                 .then((fichaId) {
@@ -238,6 +227,7 @@ class SearchAfiliados extends SearchDelegate {
         if (value != null) {
           afiliadoPrefsBloc
               .add(SaveAfiliado(afiliado.copyWith(familiaId: value.familiaId)));
+
           close(context, null);
         } else {
           afiliadoPrefsBloc

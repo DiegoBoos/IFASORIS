@@ -15,9 +15,9 @@ class EstadoViaRepositoryImpl implements EstadoViaRepository {
 
   @override
   Future<Either<Failure, List<EstadoViaEntity>>>
-      getEstadosViasRepository() async {
+      getEstadoViasRepository() async {
     try {
-      final result = await estadoViaRemoteDataSource.getEstadosVias();
+      final result = await estadoViaRemoteDataSource.getEstadoVias();
 
       return Right(result);
     } on ServerFailure catch (e) {

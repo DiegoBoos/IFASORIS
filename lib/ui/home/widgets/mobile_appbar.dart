@@ -111,43 +111,47 @@ class _MobileAppBarState extends State<MobileAppBar> {
               List<FichaEntity> fichasInCompletas = [];
               List<FichaEntity> fichasSincronizadas = [];
               List<FichaEntity> fichasPendientes = [];
-              final afiliado = afiliadoPrefsBloc.state.afiliado!;
+              final afiliado = afiliadoPrefsBloc.state.afiliado;
+              if (afiliado != null) {
+                final future1 = fichaBloc.loadFichas(afiliado.familiaId!);
+                final future2 =
+                    fichaBloc.loadFichasDiligenciadas(afiliado.familiaId!);
 
-              final future1 = fichaBloc.loadFichas(afiliado.familiaId!);
-              final future2 =
-                  fichaBloc.loadFichasDiligenciadas(afiliado.familiaId!);
+                Future.wait([future1, future2]).then((values) {
+                  final fichas = values[0];
+                  final fichasDiligenciadas = values[1];
 
-              Future.wait([future1, future2]).then((values) {
-                final fichas = values[0];
-                final fichasDiligenciadas = values[1];
+                  for (var ficha in fichas) {
+                    for (var fichaDiligenciada in fichasDiligenciadas) {
+                      if (fichaDiligenciada.fichaId == ficha.fichaId) {
+                        fichasCompletas.add(fichaDiligenciada);
+                      } else {
+                        fichasInCompletas.add(fichaDiligenciada);
+                      }
+                    }
 
-                for (var ficha in fichas) {
-                  for (var fichaDiligenciada in fichasDiligenciadas) {
-                    if (fichaDiligenciada.fichaId == ficha.fichaId) {
-                      fichasCompletas.add(fichaDiligenciada);
+                    if (ficha.numFicha != '') {
+                      fichasSincronizadas.add(ficha);
                     } else {
-                      fichasInCompletas.add(fichaDiligenciada);
+                      fichasPendientes.add(ficha);
                     }
                   }
 
-                  if (ficha.numFicha != '') {
-                    fichasSincronizadas.add(ficha);
-                  } else {
-                    fichasPendientes.add(ficha);
-                  }
-                }
-
-                Navigator.push<void>(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => GraficasPage(
-                        countCompletas: fichasCompletas.length,
-                        countInCompletas: fichasInCompletas.length,
-                        countSincronizadas: fichasSincronizadas.length,
-                        countPendientes: fichasPendientes.length),
-                  ),
-                );
-              });
+                  Navigator.push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => GraficasPage(
+                          countCompletas: fichasCompletas.length,
+                          countInCompletas: fichasInCompletas.length,
+                          countSincronizadas: fichasSincronizadas.length,
+                          countPendientes: fichasPendientes.length),
+                    ),
+                  );
+                });
+              } else {
+                CustomSnackBar.showSnackBar(
+                    context, 'No hay afiliado seleccionado', Colors.red);
+              }
             },
           ),
         ],

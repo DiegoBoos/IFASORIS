@@ -5,6 +5,7 @@ import 'package:ifasoris/services/shared_preferences_service.dart';
 import '../../../domain/entities/usuario_entity.dart';
 import '../../../domain/usecases/auth/auth_db_usecase.dart';
 import '../../../domain/usecases/auth/auth_usecase.dart';
+import '../../utils/device_info.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -20,17 +21,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.authDB,
   }) : super(AuthInitial()) {
     on<LogIn>((event, emit) async {
-      emit(AuthLoading());
-      await _logIn(event, emit);
+      final datosEquipo = await DeviceInfo.infoDispositivo();
+      if (datosEquipo != null && datosEquipo.idEquipo != null) {
+        emit(AuthLoading());
+        await _logIn(event, emit);
+      }
     });
 
     on<LogInDB>((event, emit) async {
       emit(AuthLoading());
-      await _logInDB(event, emit);
+      final datosEquipo = await DeviceInfo.infoDispositivo();
+      if (datosEquipo != null && datosEquipo.idEquipo != null) {
+        emit(AuthLoading());
+        await _logInDB(event, emit);
+      }
     });
 
     on<LogOut>((_, emit) async {
-      emit(AuthInitial());
       await _logOut(emit);
     });
   }

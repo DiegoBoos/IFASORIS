@@ -20,7 +20,8 @@ class GrupoFamiliarUsecaseDB {
   }
 
   Future<Either<Failure, int>> deleteAfiliadoGrupoFamiliarUsecaseDB(
-      int afiliadoId) {
-    return repositoryDB.deleteAfiliadoGrupoFamiliarRepositoryDB(afiliadoId);
+      int afiliadoId, int familiaId) {
+    return repositoryDB.deleteAfiliadoGrupoFamiliarRepositoryDB(
+        afiliadoId, familiaId);
   }
 }

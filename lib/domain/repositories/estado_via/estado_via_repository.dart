@@ -4,5 +4,5 @@ import '../../../core/error/failure.dart';
 import '../../entities/estado_via_entity.dart';
 
 abstract class EstadoViaRepository {
-  Future<Either<Failure, List<EstadoViaEntity>>> getEstadosViasRepository();
+  Future<Either<Failure, List<EstadoViaEntity>>> getEstadoViasRepository();
 }

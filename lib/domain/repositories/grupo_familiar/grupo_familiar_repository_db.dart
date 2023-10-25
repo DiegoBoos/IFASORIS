@@ -11,5 +11,5 @@ abstract class GrupoFamiliarRepositoryDB {
       getGrupoFamiliarRepositoryDB(int familiaId);
 
   Future<Either<Failure, int>> deleteAfiliadoGrupoFamiliarRepositoryDB(
-      int afiliadoId);
+      int afiliadoId, int familiaId);
 }
