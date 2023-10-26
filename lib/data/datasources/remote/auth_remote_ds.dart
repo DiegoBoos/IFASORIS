@@ -24,7 +24,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final formData = {
         "UserName": usuario.userName,
-        "Password": usuario.password
+        "Password": usuario.password,
+        "Device_Id": usuario.deviceId
       };
 
       final uri = Uri.parse('${Constants.ifasorisBaseUrl}/usuarios/login');

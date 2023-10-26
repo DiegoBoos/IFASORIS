@@ -21,20 +21,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.authDB,
   }) : super(AuthInitial()) {
     on<LogIn>((event, emit) async {
-      final datosEquipo = await DeviceInfo.infoDispositivo();
-      if (datosEquipo != null && datosEquipo.idEquipo != null) {
-        emit(AuthLoading());
-        await _logIn(event, emit);
-      }
+      emit(AuthLoading());
+      await _logIn(event, emit);
     });
 
     on<LogInDB>((event, emit) async {
       emit(AuthLoading());
-      final datosEquipo = await DeviceInfo.infoDispositivo();
-      if (datosEquipo != null && datosEquipo.idEquipo != null) {
-        emit(AuthLoading());
-        await _logInDB(event, emit);
-      }
+      await _logInDB(event, emit);
     });
 
     on<LogOut>((_, emit) async {

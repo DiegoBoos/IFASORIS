@@ -5,9 +5,10 @@ class ConnectionSQL {
   CREATE TABLE Usuario (
   Id TEXT NOT NULL,
   UserName TEXT,
+  Password TEXT,
+  Device_Id TEXT,
   Municipio_id INTEGER,
-  Departamento_id INTEGER,
-  Password TEXT
+  Departamento_id INTEGER
   )''';
 
   static const CREATE_ACTIVIDADES_FISICAS = '''

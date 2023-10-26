@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/utils/custom_snack_bar.dart';
 
 import '../../../domain/entities/usuario_entity.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../cubits/internet/internet_cubit.dart';
+import '../../utils/device_info.dart';
 import '../../utils/network_icon.dart';
 import '../widgets/sign_in_form.dart';
 
@@ -80,23 +82,38 @@ class _SignInPageState extends State<SignInPage> {
                               color: Theme.of(context).colorScheme.primary,
                               onPressed: authBloc.state is AuthLoading
                                   ? null
-                                  : () {
+                                  : () async {
                                       if (!formKey.currentState!.validate()) {
                                         return;
                                       }
 
-                                      final usuario = UsuarioEntity(
-                                        userName: userNameCtrl.text,
-                                        password: passwordCtrl.text,
-                                      );
+                                      await DeviceInfo.infoDispositivo()
+                                          .then((datosEquipo) {
+                                        if (datosEquipo != null &&
+                                            datosEquipo.idEquipo != null) {
+                                          print(datosEquipo.idEquipo);
+                                          final usuario = UsuarioEntity(
+                                            userName: userNameCtrl.text,
+                                            password: passwordCtrl.text,
+                                            deviceId: datosEquipo.idEquipo,
+                                          );
 
-                                      if (internetCubit.state
-                                          is InternetConnected) {
-                                        authBloc.add(LogIn(usuario: usuario));
-                                      } else if (internetCubit.state
-                                          is InternetDisconnected) {
-                                        authBloc.add(LogInDB(usuario: usuario));
-                                      }
+                                          if (internetCubit.state
+                                              is InternetConnected) {
+                                            authBloc
+                                                .add(LogIn(usuario: usuario));
+                                          } else if (internetCubit.state
+                                              is InternetDisconnected) {
+                                            authBloc
+                                                .add(LogInDB(usuario: usuario));
+                                          }
+                                        } else {
+                                          CustomSnackBar.showSnackBar(
+                                              context,
+                                              'No se pudo obtener el id del dispositivo',
+                                              Colors.red);
+                                        }
+                                      });
                                     },
                               child: Container(
                                 alignment: Alignment.center,
