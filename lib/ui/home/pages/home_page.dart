@@ -2,16 +2,19 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ifasoris/ui/blocs/atencion_salud/atencion_salud_bloc.dart';
-import 'package:ifasoris/ui/blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
-import 'package:ifasoris/ui/blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 
 import '../../../domain/entities/afiliado_entity.dart';
+import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
+import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
+import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
+import '../../cubits/familia/familia_cubit.dart';
+import '../../cubits/ficha/ficha_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/buttons.dart';
 import '../widgets/headers.dart';
@@ -61,8 +64,6 @@ class _HomePageState extends State<HomePage> {
                 dimensionSocioCulturalPueblosIndigenasBloc
                     .add(DimensionSocioCulturalPueblosIndigenasInit());
                 atencionSaludBloc.add(AtencionSaludInit());
-                CustomSnackBar.showSnackBar(
-                    context, 'Afiliado guardado correctamente', Colors.green);
               }
               if (state is AfiliadoError) {
                 CustomSnackBar.showSnackBar(
@@ -99,6 +100,58 @@ class _HomePageState extends State<HomePage> {
                                 color2: Theme.of(context).colorScheme.secondary,
                                 onPress: () {
                                   Navigator.pushNamed(context, 'ficha');
+                                })),
+                        FadeInRight(
+                            child: CustomButton(
+                                icon: FontAwesomeIcons.dochub,
+                                texto: 'Eliminar ficha',
+                                color1: Colors.red,
+                                color2: Theme.of(context).colorScheme.error,
+                                onPress: () async {
+                                  final afiliadoBloc =
+                                      BlocProvider.of<AfiliadoBloc>(context);
+                                  final afiliadoPrefsBloc =
+                                      BlocProvider.of<AfiliadoPrefsBloc>(
+                                          context);
+
+                                  await afiliadoBloc
+                                      .afiliadoTieneFicha(
+                                          state.afiliado!.afiliadoId!)
+                                      .then((ficha) async {
+                                    if (ficha != null) {
+                                      final familiaCubit =
+                                          BlocProvider.of<FamiliaCubit>(
+                                              context);
+                                      final fichaCubit =
+                                          BlocProvider.of<FichaCubit>(context);
+
+                                      //Elimina el afiliado de la familia
+                                      final familiaFuture =
+                                          familiaCubit.deleteAfiliadoFamilia(
+                                              state.afiliado!.afiliadoId!);
+
+                                      //Elimina la ficha
+                                      final fichaFuture = fichaCubit
+                                          .deleteFicha(ficha.fichaId!);
+
+                                      final futures = Future.wait(
+                                          [familiaFuture, fichaFuture]);
+
+                                      futures.then((value) {
+                                        int familiaId = value[0];
+                                        int fichaId = value[1];
+
+                                        if (familiaId != 0 && fichaId != 0) {
+                                          afiliadoPrefsBloc.add(
+                                              const DeleteAfiliado(
+                                                  'Ficha eliminada correctamente'));
+                                        }
+                                      });
+                                    } else {
+                                      afiliadoBloc.add(const ErrorMessage(
+                                          'No se puede eliminar una ficha incompleta'));
+                                    }
+                                  });
                                 })),
                       ],
                     );

@@ -27,7 +27,8 @@ class GrupoFamiliarEntity {
   int? puebloIndigenaId;
   int? lenguaManejaId;
   int? lenguaMaternaId;
-  bool? isCompleted;
+  bool? isAfiliadosCompleted;
+  int? isComplete;
   GrupoFamiliarState formStatus;
 
   GrupoFamiliarEntity(
@@ -57,7 +58,8 @@ class GrupoFamiliarEntity {
       this.puebloIndigenaId,
       this.lenguaManejaId,
       this.lenguaMaternaId,
-      this.isCompleted = false,
+      this.isAfiliadosCompleted,
+      this.isComplete,
       this.formStatus = const GrupoFamiliarFormInitial()});
 
   GrupoFamiliarEntity copyWith({
@@ -87,7 +89,8 @@ class GrupoFamiliarEntity {
     int? puebloIndigenaId,
     int? lenguaManejaId,
     int? lenguaMaternaId,
-    bool? isCompleted,
+    bool? isAfiliadosCompleted,
+    int? isComplete,
     GrupoFamiliarState? formStatus,
   }) =>
       GrupoFamiliarEntity(
@@ -117,7 +120,8 @@ class GrupoFamiliarEntity {
         puebloIndigenaId: puebloIndigenaId ?? this.puebloIndigenaId,
         lenguaManejaId: lenguaManejaId ?? this.lenguaManejaId,
         lenguaMaternaId: lenguaMaternaId ?? this.lenguaMaternaId,
-        isCompleted: isCompleted ?? this.isCompleted,
+        isAfiliadosCompleted: isAfiliadosCompleted ?? this.isAfiliadosCompleted,
+        isComplete: isComplete ?? this.isComplete,
         formStatus: formStatus ?? this.formStatus,
       );
 
@@ -140,6 +144,7 @@ class GrupoFamiliarEntity {
         "OrigenEtnico5602_id": origenEtnico5602Id,
         "PuebloIndigena_id": puebloIndigenaId,
         "LenguaManeja_id": lenguaManejaId,
-        "LenguaMaterna_id": lenguaMaternaId
+        "LenguaMaterna_id": lenguaMaternaId,
+        "isComplete": isComplete,
       };
 }

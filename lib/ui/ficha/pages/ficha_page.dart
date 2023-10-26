@@ -360,7 +360,7 @@ class _FichaPageState extends State<FichaPage> {
                             tipoDocAfiliado: afiliado.tipoDocAfiliado,
                             codGeneroAfiliado: afiliado.codGeneroAfiliado,
                             codRegimenAfiliado: afiliado.codRegimenAfiliado,
-                            isCompleted: true);
+                            isAfiliadosCompleted: true);
 
                         Navigator.push<void>(
                           context,

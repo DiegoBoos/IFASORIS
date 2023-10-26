@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 
 import '../../../domain/entities/atencion_salud_entity.dart';
+import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
 import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
@@ -98,7 +101,7 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
                   atencionSaludBloc.add(AtencionSaludInit());
                 }
               },
-            )
+            ),
           ],
           child: Scaffold(
             appBar: AppBar(title: const Text('Atención en salud')),
@@ -179,7 +182,19 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
       content: const Text('Registro completado.'),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
+          onPressed: () async {
+            final afiliadosGrupoFamiliarBloc =
+                BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
+            final afiliadoPrefsBloc =
+                BlocProvider.of<AfiliadoPrefsBloc>(context);
+            final afiliado = afiliadoPrefsBloc.state.afiliado!;
+
+            await afiliadosGrupoFamiliarBloc
+                .completeGrupoFamiliar(afiliado.familiaId!)
+                .then((value) {
+              Navigator.pushReplacementNamed(context, 'home');
+            });
+          },
           child: const Text('Aceptar'),
         ),
       ],

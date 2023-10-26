@@ -757,9 +757,10 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                             widget.afiliadoGrupoFamiliar!.codGeneroAfiliado,
                         codRegimenAfiliado:
                             widget.afiliadoGrupoFamiliar!.codRegimenAfiliado,
-                        isCompleted: widget.afiliadoGrupoFamiliar!.isCompleted);
+                        isAfiliadosCompleted:
+                            widget.afiliadoGrupoFamiliar!.isAfiliadosCompleted);
 
-                    if (newEditAfiliado.isCompleted!) {
+                    if (newEditAfiliado.isAfiliadosCompleted!) {
                       afiliadosGrupoFamiliarBloc
                           .add(SaveAfiliadosGrupoFamiliar([newEditAfiliado]));
                       BlocProvider.of<EncuestaBloc>(context)

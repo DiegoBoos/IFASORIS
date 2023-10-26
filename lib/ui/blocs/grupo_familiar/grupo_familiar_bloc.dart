@@ -20,7 +20,7 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
       emit(state.copyWith(familiaId: event.familiaId));
     });
     on<IsCompletedChanged>((event, emit) {
-      emit(state.copyWith(isCompleted: event.isCompleted));
+      emit(state.copyWith(isAfiliadosCompleted: event.isAfiliadosCompleted));
     });
     on<CursoVidaChanged>((event, emit) {
       emit(state.copyWith(cursoVidaId: event.cursoVidaId));

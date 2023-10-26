@@ -34,6 +34,7 @@ class GrupoFamiliarModel extends GrupoFamiliarEntity {
     int? puebloIndigenaId,
     int? lenguaManejaId,
     int? lenguaMaternaId,
+    int? isComplete,
   }) : super(
           grupoFamiliarId: grupoFamiliarId,
           familiaId: familiaId,
@@ -58,6 +59,7 @@ class GrupoFamiliarModel extends GrupoFamiliarEntity {
           puebloIndigenaId: puebloIndigenaId,
           lenguaManejaId: lenguaManejaId,
           lenguaMaternaId: lenguaMaternaId,
+          isComplete: isComplete,
         );
 
   factory GrupoFamiliarModel.fromJson(Map<String, dynamic> json) =>
@@ -87,5 +89,6 @@ class GrupoFamiliarModel extends GrupoFamiliarEntity {
         puebloIndigenaId: json["PuebloIndigena_id"],
         lenguaManejaId: json["LenguaManeja_id"],
         lenguaMaternaId: json["LenguaMaterna_id"],
+        isComplete: json["isComplete"],
       );
 }

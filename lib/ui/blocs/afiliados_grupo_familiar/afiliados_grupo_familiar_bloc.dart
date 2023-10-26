@@ -82,4 +82,11 @@ class AfiliadosGrupoFamiliarBloc
         .deleteAfiliadoGrupoFamiliarUsecaseDB(afiliadoId, familiaId);
     return result.fold((failure) => 0, (data) => data);
   }
+
+  Future<int> completeGrupoFamiliar(int familiaId) async {
+    final result =
+        await grupoFamiliarUsecaseDB.completeGrupoFamiliarUsecaseDB(familiaId);
+
+    return result.fold((failure) => 0, (data) => data);
+  }
 }

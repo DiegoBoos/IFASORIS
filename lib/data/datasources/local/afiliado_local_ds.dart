@@ -1,12 +1,10 @@
-import 'package:ifasoris/data/models/afiliado_response_model.dart';
-import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
-
 import '../../../services/connection_sqlite_service.dart';
+import '../../models/afiliado_response_model.dart';
 import '../../models/ficha_model.dart';
 
 abstract class AfiliadoLocalDataSource {
   Future<List<AfiliadoModel>> getAfiliados(String query);
-  Future<FichaEntity?> afiliadoTieneFicha(int afiliadoId);
+  Future<FichaModel?> afiliadoTieneFicha(int afiliadoId);
   Future<String> afiliadoTieneFichaReportada(int afiliadoId);
 }
 
@@ -24,7 +22,7 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
   }
 
   @override
-  Future<FichaEntity?> afiliadoTieneFicha(int afiliadoId) async {
+  Future<FichaModel?> afiliadoTieneFicha(int afiliadoId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.rawQuery('''
       SELECT Ficha.* FROM Familia 

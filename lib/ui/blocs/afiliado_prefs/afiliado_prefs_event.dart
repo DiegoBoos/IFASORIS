@@ -15,7 +15,11 @@ class SaveAfiliado extends AfiliadoPrefsEvent {
 
 class LoadAfiliado extends AfiliadoPrefsEvent {}
 
-class DeleteAfiliado extends AfiliadoPrefsEvent {}
+class DeleteAfiliado extends AfiliadoPrefsEvent {
+  final String message;
+
+  const DeleteAfiliado(this.message);
+}
 
 class AfiliadoPrefsError extends AfiliadoPrefsEvent {
   final String message;

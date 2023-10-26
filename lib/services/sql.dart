@@ -288,6 +288,7 @@ class ConnectionSQL {
 	[PuebloIndigena_id]	integer,
 	[LenguaManeja_id]	integer,
 	[LenguaMaterna_id]integer,
+  [isComplete] integer DEFAULT 0,
   FOREIGN KEY (Familia_id) REFERENCES Familia(Familia_id) ON DELETE CASCADE,
   UNIQUE (Familia_id, Afiliado_id)
   )''';

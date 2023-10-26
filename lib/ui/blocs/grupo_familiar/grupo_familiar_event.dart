@@ -16,9 +16,9 @@ class FamiliaChanged extends GrupoFamiliarEvent {
 }
 
 class IsCompletedChanged extends GrupoFamiliarEvent {
-  final bool isCompleted;
+  final bool isAfiliadosCompleted;
 
-  const IsCompletedChanged(this.isCompleted);
+  const IsCompletedChanged(this.isAfiliadosCompleted);
 }
 
 class CursoVidaChanged extends GrupoFamiliarEvent {

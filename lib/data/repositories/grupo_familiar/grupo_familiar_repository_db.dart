@@ -55,4 +55,19 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
       return const Left(ServerFailure(['Excepción no controlada']));
     }
   }
+
+  @override
+  Future<Either<Failure, int>> completeGrupoFamiliarRepositoryDB(
+      int familiaId) async {
+    try {
+      final result =
+          await grupoFamiliarLocalDataSource.completeGrupoFamiliar(familiaId);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
 }

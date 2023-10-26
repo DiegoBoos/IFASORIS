@@ -82,7 +82,7 @@ class SearchAfiliados extends SearchDelegate {
                               await afiliadoBloc
                                   .afiliadoTieneFicha(afiliado.afiliadoId!)
                                   .then((afiliadoFicha) async {
-                                if (afiliadoFicha != 0) {
+                                if (afiliadoFicha != null) {
                                   CustomSnackBar.showCustomDialog(
                                       context,
                                       "Error al agregar al grupo familiar",
@@ -166,15 +166,22 @@ class SearchAfiliados extends SearchDelegate {
                                         BlocProvider.of<FichaCubit>(context);
 
                                     //Elimina el afiliado de la familia
-
-                                    await familiaCubit.deleteAfiliadoFamilia(
-                                        afiliado.afiliadoId!);
+                                    final familiaFuture =
+                                        familiaCubit.deleteAfiliadoFamilia(
+                                            afiliado.afiliadoId!);
 
                                     //Elimina la ficha
-                                    await fichaCubit
-                                        .deleteFicha(ficha.fichaId!)
-                                        .then((value) {
-                                      if (value != 0) {
+                                    final fichaFuture =
+                                        fichaCubit.deleteFicha(ficha.fichaId!);
+
+                                    final futures = Future.wait(
+                                        [familiaFuture, fichaFuture]);
+
+                                    futures.then((value) {
+                                      int familiaId = value[0];
+                                      int fichaId = value[1];
+
+                                      if (familiaId != 0 && fichaId != 0) {
                                         createFicha(context, afiliado);
                                       }
                                     });
