@@ -375,8 +375,9 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                                     e.eventoCostumbreParticipaId) ??
                                                 false,
                                             onChanged: (bool? value) {
-                                              var selectedItems =
-                                                  formState.value ?? [];
+                                              var selectedItems = List<
+                                                      LstEventoCostumbreParticipa>.from(
+                                                  formState.value ?? []);
                                               if (e.eventoCostumbreParticipaId ==
                                                   5) {
                                                 selectedItems = [

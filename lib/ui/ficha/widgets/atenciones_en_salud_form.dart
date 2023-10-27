@@ -255,8 +255,10 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                                         false)
                                                 : setState(
                                                     () {
-                                                      var selectedItems =
-                                                          formState.value ?? [];
+                                                      var selectedItems = List<
+                                                              LstEspMedTradicional>.from(
+                                                          formState.value ??
+                                                              []);
                                                       if (value == true) {
                                                         selectedItems.add(
                                                             LstEspMedTradicional(
@@ -361,8 +363,10 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                                         false)
                                                 : setState(
                                                     () {
-                                                      var selectedItems =
-                                                          formState.value ?? [];
+                                                      var selectedItems = List<
+                                                              LstEnfermedadTradicional>.from(
+                                                          formState.value ??
+                                                              []);
                                                       if (value == true) {
                                                         selectedItems.add(
                                                             LstEnfermedadTradicional(
@@ -466,8 +470,10 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                                         false)
                                                 : setState(
                                                     () {
-                                                      var selectedItems =
-                                                          formState.value ?? [];
+                                                      var selectedItems = List<
+                                                              LstLugarAtencionMedico>.from(
+                                                          formState.value ??
+                                                              []);
                                                       if (value == true) {
                                                         selectedItems.add(
                                                             LstLugarAtencionMedico(
