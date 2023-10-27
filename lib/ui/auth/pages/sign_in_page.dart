@@ -20,10 +20,10 @@ class _SignInPageState extends State<SignInPage> {
   final formKey = GlobalKey<FormState>();
   final configFormKey = GlobalKey<FormState>();
 
-  // final userNameCtrl = TextEditingController(text: '');
-  // final passwordCtrl = TextEditingController(text: '');
-  final userNameCtrl = TextEditingController(text: 'jpalomino');
-  final passwordCtrl = TextEditingController(text: 'Jpalomino*2022');
+  final userNameCtrl = TextEditingController(text: 'dbolanos');
+  final passwordCtrl = TextEditingController(text: 'Dbolanos*2023');
+  // final userNameCtrl = TextEditingController(text: 'oabolanos');
+  // final passwordCtrl = TextEditingController(text: 'Oabolanos*2023');
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,6 @@ class _SignInPageState extends State<SignInPage> {
                                           .then((datosEquipo) {
                                         if (datosEquipo != null &&
                                             datosEquipo.idEquipo != null) {
-                                          print(datosEquipo.idEquipo);
                                           final usuario = UsuarioEntity(
                                             userName: userNameCtrl.text,
                                             password: passwordCtrl.text,

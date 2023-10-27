@@ -5,7 +5,6 @@ import 'package:ifasoris/services/shared_preferences_service.dart';
 import '../../../domain/entities/usuario_entity.dart';
 import '../../../domain/usecases/auth/auth_db_usecase.dart';
 import '../../../domain/usecases/auth/auth_usecase.dart';
-import '../../utils/device_info.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -74,5 +73,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }, (data) {
       emit(AuthInitial());
     });
+  }
+
+  Future<String> cambioDispositivo(String userName, String idEquipo) async {
+    final result = await auth.cambioDispositivoUsecaseDB(userName, idEquipo);
+    return result.fold((failure) => '', (data) => data);
   }
 }

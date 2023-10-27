@@ -12,4 +12,9 @@ class AuthUsecase {
   Future<Either<Failure, UsuarioEntity>> logInUsecase(UsuarioEntity usuario) {
     return repository.logInRepository(usuario);
   }
+
+  Future<Either<Failure, String>> cambioDispositivoUsecaseDB(
+      String userName, String idEquipo) {
+    return repository.cambioDispositivoRepositoryDB(userName, idEquipo);
+  }
 }

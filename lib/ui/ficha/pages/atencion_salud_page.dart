@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 
 import '../../../domain/entities/atencion_salud_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
 import '../../blocs/encuesta/encuesta_bloc.dart';

@@ -28,4 +28,21 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ConnectionFailure([e.message]));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> cambioDispositivoRepositoryDB(
+      String userName, String idEquipo) async {
+    try {
+      final result =
+          await authRemoteDataSource.cambioDispositivo(userName, idEquipo);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    } on SocketException catch (e) {
+      return Left(ConnectionFailure([e.message]));
+    }
+  }
 }

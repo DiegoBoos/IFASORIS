@@ -42,7 +42,6 @@ class AfiliadoRepositoryDBImpl implements AfiliadoRepositoryDB {
   @override
   Future<Either<Failure, String>> afiliadoTieneFichaReportadaRepositoryDB(
       int afiliadoId) async {
-    // TODO: implement afiliadoTieneFichaReportadaRepositoryDB
     try {
       final result =
           await afiliadoLocalDataSource.afiliadoTieneFichaReportada(afiliadoId);

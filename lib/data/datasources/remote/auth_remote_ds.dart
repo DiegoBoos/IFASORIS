@@ -11,6 +11,8 @@ import '../local/auth_local_ds.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UsuarioModel> logIn(UsuarioEntity usuario);
+
+  Future<String> cambioDispositivo(String userName, String idEquipo);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -58,6 +60,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         } else {
           throw const ServerFailure(['Excepción no controlada']);
         }
+      }
+    } on SocketException catch (e) {
+      throw SocketException(e.toString());
+    }
+  }
+
+  @override
+  Future<String> cambioDispositivo(String userName, String idEquipo) async {
+    try {
+      final formData = {"UserName": userName, "Device_Id": idEquipo};
+
+      final uri =
+          Uri.parse('${Constants.ifasorisBaseUrl}/usuarios/cambiodispositivo');
+
+      final resp = await client.put(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${prefs.token}',
+          },
+          body: jsonEncode(formData));
+
+      final decodedResp = jsonDecode(resp.body);
+      if (decodedResp['StatusCode'] == 200) {
+        return decodedResp['ErrorMessages'][0];
+      } else {
+        throw const ServerFailure(['Excepción no controlada']);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

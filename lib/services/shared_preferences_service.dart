@@ -34,9 +34,9 @@ class SharedPreferencesService {
     return jsonMap;
   }
 
-  setJson(String key, value) {
+  Future<bool> setJson(String key, value) {
     String jsonString = jsonEncode(value);
-    _prefs.setString(key, jsonString);
+    return _prefs.setString(key, jsonString);
   }
 
   void saveAfiliadoToSharedPreferences(AfiliadoEntity afiliado) {
@@ -44,11 +44,11 @@ class SharedPreferencesService {
     _prefs.setString('afiliado', jsonEncode(jsonData));
   }
 
-  delete(String key) {
-    _prefs.remove(key);
+  Future<bool> delete(String key) async {
+    return await _prefs.remove(key);
   }
 
-  clearStorage() {
-    _prefs.clear();
+  Future<bool> clearStorage() async {
+    return await _prefs.clear();
   }
 }

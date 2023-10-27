@@ -1,5 +1,6 @@
 import '../../../domain/entities/usuario_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
+import '../../../services/shared_preferences_service.dart';
 import '../../models/usuario_model.dart';
 
 abstract class AuthLocalDataSource {
@@ -26,9 +27,16 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<int> logOut() async {
     final db = await ConnectionSQLiteService.db;
+    final prefs = SharedPreferencesService();
+    final clearStorage = await prefs.clearStorage();
 
     final res = await db.delete('Usuario');
-    return res;
+
+    if (clearStorage && res == 1) {
+      return res;
+    } else {
+      return 0;
+    }
   }
 
   static Future<int> saveUsuario(UsuarioEntity usuarioEntity) async {

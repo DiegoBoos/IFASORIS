@@ -3,12 +3,14 @@ class SyncProgressModel {
   final int counter;
   final int total;
   final int percent;
+  final int totalAccesorias;
 
   SyncProgressModel(
       {required this.title,
       this.total = 0,
       required this.counter,
-      required this.percent});
+      required this.percent,
+      this.totalAccesorias = 72});
 
   SyncProgressModel copyWith(
           {String? title, int? counter, int? total, int? percent}) =>

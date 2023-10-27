@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../constants.dart';
@@ -36,6 +35,7 @@ import '../../../domain/usecases/estado_via/estado_via_exports.dart';
 import '../../../domain/usecases/etnia/etnia_exports.dart';
 import '../../../domain/usecases/evento_costumbre_participa/evento_costumbre_participa_exports.dart';
 import '../../../domain/usecases/factor_riesgo_vivienda/factor_riesgo_vivienda_exports.dart';
+import '../../../domain/usecases/ficha/ficha_exports.dart';
 import '../../../domain/usecases/fruto/fruto_exports.dart';
 import '../../../domain/usecases/genero/genero_exports.dart';
 import '../../../domain/usecases/grupo_riesgo/grupo_riesgo_exports.dart';
@@ -240,8 +240,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   final SyncLogUsecaseDB syncLogDB;
 
   final prefs = SharedPreferencesService();
-
-  int totalAccesories = 73;
 
   int successfulAfiliadoInserts = 0;
   List<DificultadAccesoCAEntity> dificultadesAccesoCATemp = [];
@@ -751,6 +749,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     }
   }
 
+  int calculatePercent(int counter, int total) {
+    final percent = ((counter / total) * 100).toInt();
+
+    return percent;
+  }
+
 // ************************** Afiliados ****************************
 
 // ************************** Dificultades acceso CA ****************************
@@ -771,14 +775,20 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando dificultades acceso',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsDificultadAccesoTemp = 0;
-
-      await saveDificultadAccesoCA(
-        event,
-        dificultadesAccesoCATemp[0],
-      );
+      if (dificultadesAccesoCATemp.isNotEmpty) {
+        countRecordsDificultadAccesoTemp = 0;
+        await saveDificultadAccesoCA(
+          event,
+          dificultadesAccesoCATemp[countRecordsDificultadAccesoTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('EstadoVias').then((value) async {
+          estadoViasTemp = [];
+          await syncEstadoVias(event);
+        });
+      }
     });
   }
 
@@ -821,14 +831,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando estados vías',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEstadoViasTemp = 0;
-
-      await saveEstadoVia(
-        event,
-        estadoViasTemp[0],
-      );
+      if (estadoViasTemp.isNotEmpty) {
+        countRecordsEstadoViasTemp = 0;
+        await saveEstadoVia(
+          event,
+          estadoViasTemp[countRecordsEstadoViasTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('MediosComunicacion')
+            .then((value) async {
+          mediosComunicacionTemp = [];
+          await syncMediosComunicacion(event);
+        });
+      }
     });
   }
 
@@ -872,14 +889,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando medios comunicación',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsMediosComunicacionTemp = 0;
-
-      await saveMedioComunicacion(
-        event,
-        mediosComunicacionTemp[0],
-      );
+      if (mediosComunicacionTemp.isNotEmpty) {
+        countRecordsMediosComunicacionTemp = 0;
+        await saveMedioComunicacion(
+          event,
+          mediosComunicacionTemp[countRecordsMediosComunicacionTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('MediosUtiliza_CentroAtencion')
+            .then((value) async {
+          mediosUtilizaCATemp = [];
+          await syncMediosUtilizaCA(event);
+        });
+      }
     });
   }
 
@@ -923,14 +947,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando medios utiliza centro atención',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsMediosUtilizaTemp = 0;
-
-      await saveMedioUtilizaCA(
-        event,
-        mediosUtilizaCATemp[0],
-      );
+      if (mediosUtilizaCATemp.isNotEmpty) {
+        countRecordsMediosUtilizaTemp = 0;
+        await saveMedioUtilizaCA(
+          event,
+          mediosUtilizaCATemp[countRecordsMediosUtilizaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('TiemposTarda_CentroAtencion')
+            .then((value) async {
+          tiemposTardaCATemp = [];
+          await syncTiemposTardaCA(event);
+        });
+      }
     });
   }
 
@@ -974,14 +1005,20 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tiempos tarda centro atención',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTiemposTardaTemp = 0;
-
-      await saveTiemposTardaCA(
-        event,
-        tiemposTardaCATemp[0],
-      );
+      if (tiemposTardaCATemp.isNotEmpty) {
+        countRecordsTiemposTardaTemp = 0;
+        await saveTiemposTardaCA(
+          event,
+          tiemposTardaCATemp[countRecordsTiemposTardaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('ViasAcceso').then((value) async {
+          viasAccesoTemp = [];
+          await syncViasAcceso(event);
+        });
+      }
     });
   }
 
@@ -1024,14 +1061,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando vias acceso',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsViasAccesoTemp = 0;
-
-      await saveViaAcceso(
-        event,
-        viasAccesoTemp[0],
-      );
+      if (viasAccesoTemp.isNotEmpty) {
+        countRecordsViasAccesoTemp = 0;
+        await saveViaAcceso(
+          event,
+          viasAccesoTemp[countRecordsViasAccesoTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'AutoridadesIndigenas_DatosVivienda')
+            .then((value) async {
+          autoridadesIndigenasTemp = [];
+          await syncAutoridadesIndigenas(event);
+        });
+      }
     });
   }
 
@@ -1076,14 +1121,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando autoridades indígenas',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsAutoridadesIndigenasTemp = 0;
-
-      await saveAutoridadIndigena(
-        event,
-        autoridadesIndigenasTemp[0],
-      );
+      if (autoridadesIndigenasTemp.isNotEmpty) {
+        countRecordsAutoridadesIndigenasTemp = 0;
+        await saveAutoridadIndigena(
+          event,
+          autoridadesIndigenasTemp[countRecordsAutoridadesIndigenasTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'Cereales_AspectosSocioEconomicos')
+            .then((value) async {
+          cerealesTemp = [];
+          await syncCereales(event);
+        });
+      }
     });
   }
 
@@ -1130,14 +1183,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando cereales',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsCerealesTemp = 0;
-
-      await saveCereal(
-        event,
-        cerealesTemp[0],
-      );
+      if (cerealesTemp.isNotEmpty) {
+        countRecordsCerealesTemp = 0;
+        await saveCereal(
+          event,
+          cerealesTemp[countRecordsCerealesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'CostosDesplazamiento_CentroAtencion')
+            .then((value) async {
+          costosDesplazamientoTemp = [];
+          await syncCostosDesplazamiento(event);
+        });
+      }
     });
   }
 
@@ -1181,14 +1242,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando costos desplazamiento',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsCostosDesplazamientoTemp = 0;
-
-      await saveCostoDesplazamiento(
-        event,
-        costosDesplazamientoTemp[0],
-      );
+      if (costosDesplazamientoTemp.isNotEmpty) {
+        countRecordsCostosDesplazamientoTemp = 0;
+        await saveCostoDesplazamiento(
+          event,
+          costosDesplazamientoTemp[countRecordsCostosDesplazamientoTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'DificultadesAcceso_AccesoMedTradicional')
+            .then((value) async {
+          dificultadesAccesoMedTradicionalTemp = [];
+          await syncDificultadesAccesoMedTradicional(event);
+        });
+      }
     });
   }
 
@@ -1236,14 +1305,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando dificultades acceso médico tradicional',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsDificultadesAccesoMedTradicionalTemp = 0;
-
-      await saveDificultadAccesoMedTradicional(
-        event,
-        dificultadesAccesoMedTradicionalTemp[0],
-      );
+      if (dificultadesAccesoMedTradicionalTemp.isNotEmpty) {
+        countRecordsDificultadesAccesoMedTradicionalTemp = 0;
+        await saveDificultadAccesoMedTradicional(
+          event,
+          dificultadesAccesoMedTradicionalTemp[
+              countRecordsDificultadesAccesoMedTradicionalTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'EspecialidadesMedTrad_AccesoMedTradicional')
+            .then((value) async {
+          especialidadesMedTradicionalTemp = [];
+          await syncEspecialidadesMedTradicional(event);
+        });
+      }
     });
   }
 
@@ -1292,14 +1370,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando especialidades médico tradicional',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEspecialidadesMedTradicionalTemp = 0;
-
-      await saveEspecialidadMedTradicional(
-        event,
-        especialidadesMedTradicionalTemp[0],
-      );
+      if (especialidadesMedTradicionalTemp.isNotEmpty) {
+        countRecordsEspecialidadesMedTradicionalTemp = 0;
+        await saveEspecialidadMedTradicional(
+          event,
+          especialidadesMedTradicionalTemp[
+              countRecordsEspecialidadesMedTradicionalTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('EspecieAnimalesCria')
+            .then((value) async {
+          especiesAnimalesTemp = [];
+          await syncEspeciesAnimales(event);
+        });
+      }
     });
   }
 
@@ -1346,14 +1432,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando especies animales',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEspeciesAnimalesTemp = 0;
-
-      await saveEspecieAnimal(
-        event,
-        especiesAnimalesTemp[0],
-      );
+      if (especiesAnimalesTemp.isNotEmpty) {
+        countRecordsEspeciesAnimalesTemp = 0;
+        await saveEspecieAnimal(
+          event,
+          especiesAnimalesTemp[countRecordsEspeciesAnimalesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('Frutos_AspectosSocioEconomicos')
+            .then((value) async {
+          frutosTemp = [];
+          await syncFrutos(event);
+        });
+      }
     });
   }
 
@@ -1398,14 +1491,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando frutos',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsFrutosTemp = 0;
-
-      await saveFruto(
-        event,
-        frutosTemp[0],
-      );
+      if (frutosTemp.isNotEmpty) {
+        countRecordsFrutosTemp = 0;
+        await saveFruto(
+          event,
+          frutosTemp[countRecordsFrutosTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'Hortalizas_AspectosSocioEconomicos')
+            .then((value) async {
+          hortalizasTemp = [];
+          await syncHortalizas(event);
+        });
+      }
     });
   }
 
@@ -1449,14 +1550,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando hortalizas',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsHortalizasTemp = 0;
-
-      await saveHortaliza(
-        event,
-        hortalizasTemp[0],
-      );
+      if (hortalizasTemp.isNotEmpty) {
+        countRecordsHortalizasTemp = 0;
+        await saveHortaliza(
+          event,
+          hortalizasTemp[countRecordsHortalizasTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'Leguminosas_AspectosSocioEconomicos')
+            .then((value) async {
+          leguminosasTemp = [];
+          await syncLeguminosas(event);
+        });
+      }
     });
   }
 
@@ -1501,14 +1610,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando leguminosas',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsLeguminosasTemp = 0;
-
-      await saveLeguminosa(
-        event,
-        leguminosasTemp[0],
-      );
+      if (leguminosasTemp.isNotEmpty) {
+        countRecordsLeguminosasTemp = 0;
+        await saveLeguminosa(
+          event,
+          leguminosasTemp[countRecordsLeguminosasTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'MediosUtiliza_AccesoMedTradicional')
+            .then((value) async {
+          mediosUtilizaMedTradicionalTemp = [];
+          await syncMediosUtilizaMedTradicional(event);
+        });
+      }
     });
   }
 
@@ -1554,14 +1671,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando medios utiliza médico tradicional',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsMediosUtilizaMedTradicionalTemp = 0;
-
-      await saveMedioUtilizaMedTradicional(
-        event,
-        mediosUtilizaMedTradicionalTemp[0],
-      );
+      if (mediosUtilizaMedTradicionalTemp.isNotEmpty) {
+        countRecordsMediosUtilizaMedTradicionalTemp = 0;
+        await saveMedioUtilizaMedTradicional(
+          event,
+          mediosUtilizaMedTradicionalTemp[
+              countRecordsMediosUtilizaMedTradicionalTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('OpcionesSi_No')
+            .then((value) async {
+          opcionesSiNoTemp = [];
+          await syncOpcionesSiNo(event);
+        });
+      }
     });
   }
 
@@ -1607,14 +1732,20 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando opciones',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsOpcionesSiNoTemp = 0;
-
-      await saveOpcionSiNo(
-        event,
-        opcionesSiNoTemp[0],
-      );
+      if (opcionesSiNoTemp.isNotEmpty) {
+        countRecordsOpcionesSiNoTemp = 0;
+        await saveOpcionSiNo(
+          event,
+          opcionesSiNoTemp[countRecordsOpcionesSiNoTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
+          resguardosTemp = [];
+          await syncResguardos(event);
+        });
+      }
     });
   }
 
@@ -1658,14 +1789,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando resguardos',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsResguardosTemp = 0;
-
-      await saveResguardo(
-        event,
-        resguardosTemp[0],
-      );
+      if (resguardosTemp.isNotEmpty) {
+        countRecordsResguardosTemp = 0;
+        await saveResguardo(
+          event,
+          resguardosTemp[countRecordsResguardosTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'TiemposTarda_AccesoMedTradicional')
+            .then((value) async {
+          tiemposTardaMedTradicionalTemp = [];
+          await syncTiemposTardaMedTradicional(event);
+        });
+      }
     });
   }
 
@@ -1710,14 +1849,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tiempos tarda médico tradicional',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTiemposTardaMedTradicionalTemp = 0;
-
-      await saveTiempoTardaMedTradicional(
-        event,
-        tiemposTardaMedTradicionalTemp[0],
-      );
+      if (tiemposTardaMedTradicionalTemp.isNotEmpty) {
+        countRecordsTiemposTardaMedTradicionalTemp = 0;
+        await saveTiempoTardaMedTradicional(
+          event,
+          tiemposTardaMedTradicionalTemp[
+              countRecordsTiemposTardaMedTradicionalTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'TuberculosPlatanos_AspectosSocioEconomicos')
+            .then((value) async {
+          tuberculosPlatanosTemp = [];
+          await syncTuberculosPlatanos(event);
+        });
+      }
     });
   }
 
@@ -1765,14 +1913,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tubérculos plátanos',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTuberculosPlatanosTemp = 0;
-
-      await saveTuberculoPlatano(
-        event,
-        tuberculosPlatanosTemp[0],
-      );
+      if (tuberculosPlatanosTemp.isNotEmpty) {
+        countRecordsTuberculosPlatanosTemp = 0;
+        await saveTuberculoPlatano(
+          event,
+          tuberculosPlatanosTemp[countRecordsTuberculosPlatanosTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'Verduras_AspectosSocioEconomicos')
+            .then((value) async {
+          verdurasTemp = [];
+          await syncVerduras(event);
+        });
+      }
     });
   }
 
@@ -1818,14 +1974,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando verduras',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsVerdurasTemp = 0;
-
-      await saveVerdura(
-        event,
-        verdurasTemp[0],
-      );
+      if (verdurasTemp.isNotEmpty) {
+        countRecordsVerdurasTemp = 0;
+        await saveVerdura(
+          event,
+          verdurasTemp[countRecordsVerdurasTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'FactoresRiesgoVivienda_DatosVivienda')
+            .then((value) async {
+          factoresRiesgoViviendaTemp = [];
+          await syncFactoresRiesgoVivienda(event);
+        });
+      }
     });
   }
 
@@ -1869,14 +2033,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando factores riesgo vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsFactoresRiesgoViviendaTemp = 0;
-
-      await saveFactorRiesgoVivienda(
-        event,
-        factoresRiesgoViviendaTemp[0],
-      );
+      if (factoresRiesgoViviendaTemp.isNotEmpty) {
+        countRecordsFactoresRiesgoViviendaTemp = 0;
+        await saveFactorRiesgoVivienda(
+          event,
+          factoresRiesgoViviendaTemp[countRecordsFactoresRiesgoViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'IluminacionVivienda_DatosVivienda')
+            .then((value) async {
+          iluminacionesViviendaTemp = [];
+          await syncIluminacionesVivienda(event);
+        });
+      }
     });
   }
 
@@ -1923,14 +2095,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando iluminaciones vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsIluminacionesViviendaTemp = 0;
-
-      await saveIluminacionVivienda(
-        event,
-        iluminacionesViviendaTemp[0],
-      );
+      if (iluminacionesViviendaTemp.isNotEmpty) {
+        countRecordsIluminacionesViviendaTemp = 0;
+        await saveIluminacionVivienda(
+          event,
+          iluminacionesViviendaTemp[countRecordsIluminacionesViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('PisosVivienda_DatosVivienda')
+            .then((value) async {
+          pisosViviendaTemp = [];
+          await syncPisosVivienda(event);
+        });
+      }
     });
   }
 
@@ -1976,14 +2155,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando pisos vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsPisosViviendaTemp = 0;
-
-      await savePisoVivienda(
-        event,
-        pisosViviendaTemp[0],
-      );
+      if (pisosViviendaTemp.isNotEmpty) {
+        countRecordsPisosViviendaTemp = 0;
+        await savePisoVivienda(
+          event,
+          pisosViviendaTemp[countRecordsPisosViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'PresenciaAnimalesVivienda_DatosVivienda')
+            .then((value) async {
+          presenciaAnimalesViviendaTemp = [];
+          await syncPresenciaAnimalesVivienda(event);
+        });
+      }
     });
   }
 
@@ -2029,14 +2216,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando presencia animales',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsPresenciaAnimalesViviendaTemp = 0;
-
-      await savePresenciaAnimalVivienda(
-        event,
-        presenciaAnimalesViviendaTemp[0],
-      );
+      if (presenciaAnimalesViviendaTemp.isNotEmpty) {
+        countRecordsPresenciaAnimalesViviendaTemp = 0;
+        await savePresenciaAnimalVivienda(
+          event,
+          presenciaAnimalesViviendaTemp[
+              countRecordsPresenciaAnimalesViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'ServiciosPublicosVivienda_DatosVivienda')
+            .then((value) async {
+          serviciosPublicosViviendaTemp = [];
+          await syncServiciosPublicosVivienda(event);
+        });
+      }
     });
   }
 
@@ -2084,14 +2280,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando servicios públicos',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsServiciosPublicosViviendaTemp = 0;
-
-      await saveServicioPublicoVivienda(
-        event,
-        serviciosPublicosViviendaTemp[0],
-      );
+      if (serviciosPublicosViviendaTemp.isNotEmpty) {
+        countRecordsServiciosPublicosViviendaTemp = 0;
+        await saveServicioPublicoVivienda(
+          event,
+          serviciosPublicosViviendaTemp[
+              countRecordsServiciosPublicosViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('TechosVivienda_DatosVivienda')
+            .then((value) async {
+          techosViviendaTemp = [];
+          await syncTechosVivienda(event);
+        });
+      }
     });
   }
 
@@ -2138,14 +2342,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando techos vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTechosViviendaTemp = 0;
-
-      await saveTechoVivienda(
-        event,
-        techosViviendaTemp[0],
-      );
+      if (techosViviendaTemp.isNotEmpty) {
+        countRecordsTechosViviendaTemp = 0;
+        await saveTechoVivienda(
+          event,
+          techosViviendaTemp[countRecordsTechosViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('TenenciasVivienda_DatosVivienda')
+            .then((value) async {
+          tenenciasViviendaTemp = [];
+          await syncTenenciasVivienda(event);
+        });
+      }
     });
   }
 
@@ -2190,14 +2401,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tenencias vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTenenciasViviendaTemp = 0;
-
-      await saveTenenciaVivienda(
-        event,
-        tenenciasViviendaTemp[0],
-      );
+      if (tenenciasViviendaTemp.isNotEmpty) {
+        countRecordsTenenciasViviendaTemp = 0;
+        await saveTenenciaVivienda(
+          event,
+          tenenciasViviendaTemp[countRecordsTenenciasViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'TiposCombustibleVivienda_DatosVivienda')
+            .then((value) async {
+          tiposCombustibleViviendaTemp = [];
+          await syncTiposCombustibleVivienda(event);
+        });
+      }
     });
   }
 
@@ -2243,14 +2462,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tipos combustible vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTiposCombustibleViviendaTemp = 0;
-
-      await saveTipoCombustibleVivienda(
-        event,
-        tiposCombustibleViviendaTemp[0],
-      );
+      if (tiposCombustibleViviendaTemp.isNotEmpty) {
+        countRecordsTiposCombustibleViviendaTemp = 0;
+        await saveTipoCombustibleVivienda(
+          event,
+          tiposCombustibleViviendaTemp[
+              countRecordsTiposCombustibleViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'TiposSanitarioVivienda_DatosVivienda')
+            .then((value) async {
+          tiposSanitarioViviendaTemp = [];
+          await syncTiposSanitarioVivienda(event);
+        });
+      }
     });
   }
 
@@ -2298,14 +2526,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tipos sanitario vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTiposSanitarioViviendaTemp = 0;
-
-      await saveTipoSanitarioVivienda(
-        event,
-        tiposSanitarioViviendaTemp[0],
-      );
+      if (tiposSanitarioViviendaTemp.isNotEmpty) {
+        countRecordsTiposSanitarioViviendaTemp = 0;
+        await saveTipoSanitarioVivienda(
+          event,
+          tiposSanitarioViviendaTemp[countRecordsTiposSanitarioViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'TratamientoAguaVivienda_DatosVivienda')
+            .then((value) async {
+          tratamientosAguaViviendaTemp = [];
+          await syncTratamientosAguaVivienda(event);
+        });
+      }
     });
   }
 
@@ -2352,14 +2588,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tratamientos agua vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTratamientosAguaViviendaTemp = 0;
-
-      await saveTratamientoAguaVivienda(
-        event,
-        tratamientosAguaViviendaTemp[0],
-      );
+      if (tratamientosAguaViviendaTemp.isNotEmpty) {
+        countRecordsTratamientosAguaViviendaTemp = 0;
+        await saveTratamientoAguaVivienda(
+          event,
+          tratamientosAguaViviendaTemp[
+              countRecordsTratamientosAguaViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'VentilacionVivienda_DatosVivienda')
+            .then((value) async {
+          ventilacionesViviendaTemp = [];
+          await syncVentilacionesVivienda(event);
+        });
+      }
     });
   }
 
@@ -2407,14 +2652,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando ventilaciones vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsVentilacionesViviendaTemp = 0;
-
-      await saveVentilacionVivienda(
-        event,
-        ventilacionesViviendaTemp[0],
-      );
+      if (ventilacionesViviendaTemp.isNotEmpty) {
+        countRecordsVentilacionesViviendaTemp = 0;
+        await saveVentilacionVivienda(
+          event,
+          ventilacionesViviendaTemp[countRecordsVentilacionesViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('TiposVivienda_DatosVivienda')
+            .then((value) async {
+          tiposViviendaTemp = [];
+          await syncTiposVivienda(event);
+        });
+      }
     });
   }
 
@@ -2460,14 +2712,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tipos vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTiposViviendaTemp = 0;
-
-      await saveTipoVivienda(
-        event,
-        tiposViviendaTemp[0],
-      );
+      if (tiposViviendaTemp.isNotEmpty) {
+        countRecordsTiposViviendaTemp = 0;
+        await saveTipoVivienda(
+          event,
+          tiposViviendaTemp[countRecordsTiposViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'TiposCalendarios_AspectosSocioEconomicos')
+            .then((value) async {
+          tiposCalendarioTemp = [];
+          await syncTiposCalendario(event);
+        });
+      }
     });
   }
 
@@ -2512,14 +2772,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tipos calendario',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTiposCalendarioTemp = 0;
-
-      await saveTipoCalendario(
-        event,
-        tiposCalendarioTemp[0],
-      );
+      if (tiposCalendarioTemp.isNotEmpty) {
+        countRecordsTiposCalendarioTemp = 0;
+        await saveTipoCalendario(
+          event,
+          tiposCalendarioTemp[countRecordsTiposCalendarioTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('CursosVida_GrupoFamiliar')
+            .then((value) async {
+          cursosVidaTemp = [];
+          await syncCursosVida(event);
+        });
+      }
     });
   }
 
@@ -2563,14 +2830,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando cursos vida',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsCursosVidaTemp = 0;
-
-      await saveCursoVida(
-        event,
-        cursosVidaTemp[0],
-      );
+      if (cursosVidaTemp.isNotEmpty) {
+        countRecordsCursosVidaTemp = 0;
+        await saveCursoVida(
+          event,
+          cursosVidaTemp[countRecordsCursosVidaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('Etnia_GrupoFamiliar')
+            .then((value) async {
+          etniasTemp = [];
+          await syncEtnias(event);
+        });
+      }
     });
   }
 
@@ -2613,14 +2887,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando etnias',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEtniasTemp = 0;
-
-      await saveEtnia(
-        event,
-        etniasTemp[0],
-      );
+      if (etniasTemp.isNotEmpty) {
+        countRecordsEtniasTemp = 0;
+        await saveEtnia(
+          event,
+          etniasTemp[countRecordsEtniasTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('Genero_GrupoFamiliar')
+            .then((value) async {
+          generosTemp = [];
+          await syncGeneros(event);
+        });
+      }
     });
   }
 
@@ -2662,14 +2943,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando generos',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsGenerosTemp = 0;
-
-      await saveGenero(
-        event,
-        generosTemp[0],
-      );
+      if (generosTemp.isNotEmpty) {
+        countRecordsGenerosTemp = 0;
+        await saveGenero(
+          event,
+          generosTemp[countRecordsGenerosTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('GrupoRiesgo_GrupoFamiliar')
+            .then((value) async {
+          gruposRiesgoTemp = [];
+          await syncGruposRiesgo(event);
+        });
+      }
     });
   }
 
@@ -2711,14 +2999,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando grupos riesgo',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsGruposRiesgoTemp = 0;
-
-      await saveGrupoRiesgo(
-        event,
-        gruposRiesgoTemp[0],
-      );
+      if (gruposRiesgoTemp.isNotEmpty) {
+        countRecordsGruposRiesgoTemp = 0;
+        await saveGrupoRiesgo(
+          event,
+          gruposRiesgoTemp[countRecordsGruposRiesgoTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('LenguaManeja_GrupoFamiliar')
+            .then((value) async {
+          lenguasManejaTemp = [];
+          await syncLenguasManeja(event);
+        });
+      }
     });
   }
 
@@ -2762,14 +3057,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando lenguas maneja',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsLenguasManejaTemp = 0;
-
-      await saveLenguaManeja(
-        event,
-        lenguasManejaTemp[0],
-      );
+      if (lenguasManejaTemp.isNotEmpty) {
+        countRecordsLenguasManejaTemp = 0;
+        await saveLenguaManeja(
+          event,
+          lenguasManejaTemp[countRecordsLenguasManejaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('NivelEducativo_GrupoFamiliar')
+            .then((value) async {
+          nivelesEducativosTemp = [];
+          await syncNivelesEducativos(event);
+        });
+      }
     });
   }
 
@@ -2813,14 +3115,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando niveles educativos',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsNivelesEducativosTemp = 0;
-
-      await saveNivelEducativo(
-        event,
-        nivelesEducativosTemp[0],
-      );
+      if (nivelesEducativosTemp.isNotEmpty) {
+        countRecordsNivelesEducativosTemp = 0;
+        await saveNivelEducativo(
+          event,
+          nivelesEducativosTemp[countRecordsNivelesEducativosTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'NombreLenguaMaterna_GrupoFamiliar')
+            .then((value) async {
+          nombresLenguasMaternaTemp = [];
+          await syncNombresLenguasMaterna(event);
+        });
+      }
     });
   }
 
@@ -2866,14 +3176,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando nombres lenguas maternas',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsNombresLenguasMaternaTemp = 0;
-
-      await saveNombreLenguaMaterna(
-        event,
-        nombresLenguasMaternaTemp[0],
-      );
+      if (nombresLenguasMaternaTemp.isNotEmpty) {
+        countRecordsNombresLenguasMaternaTemp = 0;
+        await saveNombreLenguaMaterna(
+          event,
+          nombresLenguasMaternaTemp[countRecordsNombresLenguasMaternaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('Ocupacion_GrupoFamiliar')
+            .then((value) async {
+          ocupacionesTemp = [];
+          await syncOcupaciones(event);
+        });
+      }
     });
   }
 
@@ -2918,14 +3235,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando ocupaciones',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsOcupacionesTemp = 0;
-
-      await saveOcupacion(
-        event,
-        ocupacionesTemp[0],
-      );
+      if (ocupacionesTemp.isNotEmpty) {
+        countRecordsOcupacionesTemp = 0;
+        await saveOcupacion(
+          event,
+          ocupacionesTemp[countRecordsOcupacionesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('Parentesco_GrupoFamiliar')
+            .then((value) async {
+          parentescosTemp = [];
+          await syncParentescos(event);
+        });
+      }
     });
   }
 
@@ -2969,14 +3293,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando parentescos',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsParentescosTemp = 0;
-
-      await saveParentesco(
-        event,
-        parentescosTemp[0],
-      );
+      if (parentescosTemp.isNotEmpty) {
+        countRecordsParentescosTemp = 0;
+        await saveParentesco(
+          event,
+          parentescosTemp[countRecordsParentescosTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('PueblosIndigenas_GrupoFamiliar')
+            .then((value) async {
+          pueblosIndigenasTemp = [];
+          await syncPueblosIndigenas(event);
+        });
+      }
     });
   }
 
@@ -3021,14 +3352,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando pueblos indigenas',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsPueblosIndigenasTemp = 0;
-
-      await savePuebloIndigena(
-        event,
-        pueblosIndigenasTemp[0],
-      );
+      if (pueblosIndigenasTemp.isNotEmpty) {
+        countRecordsPueblosIndigenasTemp = 0;
+        await savePuebloIndigena(
+          event,
+          pueblosIndigenasTemp[countRecordsPueblosIndigenasTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('Regimenes_GrupoFamiliar')
+            .then((value) async {
+          regimenesTemp = [];
+          await syncRegimenes(event);
+        });
+      }
     });
   }
 
@@ -3072,14 +3410,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando regimenes',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsRegimenesTemp = 0;
-
-      await saveRegimen(
-        event,
-        regimenesTemp[0],
-      );
+      if (regimenesTemp.isNotEmpty) {
+        countRecordsRegimenesTemp = 0;
+        await saveRegimen(
+          event,
+          regimenesTemp[countRecordsRegimenesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('TiposDocumento_GrupoFamiliar')
+            .then((value) async {
+          tiposDocumentoTemp = [];
+          await syncTiposDocumento(event);
+        });
+      }
     });
   }
 
@@ -3121,14 +3466,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando tipos documento',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsTiposDocumentoTemp = 0;
-
-      await saveTipoDocumento(
-        event,
-        tiposDocumentoTemp[0],
-      );
+      if (tiposDocumentoTemp.isNotEmpty) {
+        countRecordsTiposDocumentoTemp = 0;
+        await saveTipoDocumento(
+          event,
+          tiposDocumentoTemp[countRecordsTiposDocumentoTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'ActividadesFisicas_EstilosVidaSaludable')
+            .then((value) async {
+          actividadesFisicasTemp = [];
+          await syncActividadesFisicas(event);
+        });
+      }
     });
   }
 
@@ -3173,14 +3526,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando actividades físicas',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsActividadesFisicasTemp = 0;
-
-      await saveActividadFisica(
-        event,
-        actividadesFisicasTemp[0],
-      );
+      if (actividadesFisicasTemp.isNotEmpty) {
+        countRecordsActividadesFisicasTemp = 0;
+        await saveActividadFisica(
+          event,
+          actividadesFisicasTemp[countRecordsActividadesFisicasTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'Alimentacion_EstilosVidaSaludable')
+            .then((value) async {
+          alimentacionesTemp = [];
+          await syncAlimentaciones(event);
+        });
+      }
     });
   }
 
@@ -3225,14 +3586,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando alimentación',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsAlimentacionesTemp = 0;
-
-      await saveAlimentacion(
-        event,
-        alimentacionesTemp[0],
-      );
+      if (alimentacionesTemp.isNotEmpty) {
+        countRecordsAlimentacionesTemp = 0;
+        await saveAlimentacion(
+          event,
+          alimentacionesTemp[countRecordsAlimentacionesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'NumeroCigarrilosDia_EstilosVidaSaludable')
+            .then((value) async {
+          cigarrillosDiaTemp = [];
+          await syncCigarrillosDia(event);
+        });
+      }
     });
   }
 
@@ -3277,14 +3646,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando cigarrillos día',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsCigarrillosDiaTemp = 0;
-
-      await saveCigarrilloDia(
-        event,
-        cigarrillosDiaTemp[0],
-      );
+      if (cigarrillosDiaTemp.isNotEmpty) {
+        countRecordsCigarrillosDiaTemp = 0;
+        await saveCigarrilloDia(
+          event,
+          cigarrillosDiaTemp[countRecordsCigarrillosDiaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'ConsumoAlcohol_EstilosVidaSaludable')
+            .then((value) async {
+          consumosAlcoholTemp = [];
+          await syncConsumosAlcohol(event);
+        });
+      }
     });
   }
 
@@ -3329,14 +3706,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando consumo alcohol',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsConsumosAlcoholTemp = 0;
-
-      await saveConsumoAlcohol(
-        event,
-        consumosAlcoholTemp[0],
-      );
+      if (consumosAlcoholTemp.isNotEmpty) {
+        countRecordsConsumosAlcoholTemp = 0;
+        await saveConsumoAlcohol(
+          event,
+          consumosAlcoholTemp[countRecordsConsumosAlcoholTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'CondicionesNutricionales_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          condicionesNutricionalesTemp = [];
+          await syncCondicionesNutricionales(event);
+        });
+      }
     });
   }
 
@@ -3382,14 +3767,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando condiciones nutricionales',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsCondicionesNutricionalesTemp = 0;
-
-      await saveCondicionNutricional(
-        event,
-        condicionesNutricionalesTemp[0],
-      );
+      if (condicionesNutricionalesTemp.isNotEmpty) {
+        countRecordsCondicionesNutricionalesTemp = 0;
+        await saveCondicionNutricional(
+          event,
+          condicionesNutricionalesTemp[
+              countRecordsCondicionesNutricionalesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'ConductasSeguir_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          conductasSeguirTemp = [];
+          await syncConductasSeguir(event);
+        });
+      }
     });
   }
 
@@ -3436,14 +3830,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando conductas seguir',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsConductasSeguirTemp = 0;
-
-      await saveConductaSeguir(
-        event,
-        conductasSeguirTemp[0],
-      );
+      if (conductasSeguirTemp.isNotEmpty) {
+        countRecordsConductasSeguirTemp = 0;
+        await saveConductaSeguir(
+          event,
+          conductasSeguirTemp[countRecordsConductasSeguirTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'EsquemasVacunacion_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          esquemasVacunacionTemp = [];
+          await syncEsquemasVacunacion(event);
+        });
+      }
     });
   }
 
@@ -3489,14 +3891,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando esquemas vacunacion',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEsquemasVacunacionTemp = 0;
-
-      await saveEsquemaVacunacion(
-        event,
-        esquemasVacunacionTemp[0],
-      );
+      if (esquemasVacunacionTemp.isNotEmpty) {
+        countRecordsEsquemasVacunacionTemp = 0;
+        await saveEsquemaVacunacion(
+          event,
+          esquemasVacunacionTemp[countRecordsEsquemasVacunacionTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'LugaresVacunacion_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          lugaresVacunacionTemp = [];
+          await syncLugaresVacunacion(event);
+        });
+      }
     });
   }
 
@@ -3541,14 +3951,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando lugares vacunacion',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsLugaresVacunacionTemp = 0;
-
-      await saveLugarVacunacion(
-        event,
-        lugaresVacunacionTemp[0],
-      );
+      if (lugaresVacunacionTemp.isNotEmpty) {
+        countRecordsLugaresVacunacionTemp = 0;
+        await saveLugarVacunacion(
+          event,
+          lugaresVacunacionTemp[countRecordsLugaresVacunacionTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'MetodosPlanificacion_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          metodosPlanificacionTemp = [];
+          await syncMetodosPlanificacion(event);
+        });
+      }
     });
   }
 
@@ -3594,14 +4012,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando metodos planificacion',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsMetodosPlanificacionTemp = 0;
-
-      await saveMetodoPlanificacion(
-        event,
-        metodosPlanificacionTemp[0],
-      );
+      if (metodosPlanificacionTemp.isNotEmpty) {
+        countRecordsMetodosPlanificacionTemp = 0;
+        await saveMetodoPlanificacion(
+          event,
+          metodosPlanificacionTemp[countRecordsMetodosPlanificacionTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'NombresEnfermedad_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          nombresEnfermedadesTemp = [];
+          await syncNombresEnfermedades(event);
+        });
+      }
     });
   }
 
@@ -3648,14 +4074,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando nombres enfermedades',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsNombresEnfermedadesTemp = 0;
-
-      await saveNombreEnfermedad(
-        event,
-        nombresEnfermedadesTemp[0],
-      );
+      if (nombresEnfermedadesTemp.isNotEmpty) {
+        countRecordsNombresEnfermedadesTemp = 0;
+        await saveNombreEnfermedad(
+          event,
+          nombresEnfermedadesTemp[countRecordsNombresEnfermedadesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          seguimientoEnfermedadesTemp = [];
+          await syncSeguimientoEnfermedades(event);
+        });
+      }
     });
   }
 
@@ -3702,14 +4136,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando seguimiento enfermedades',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsSeguimientoEnfermedadesTemp = 0;
-
-      await saveSeguimientoEnfermedad(
-        event,
-        seguimientoEnfermedadesTemp[0],
-      );
+      if (seguimientoEnfermedadesTemp.isNotEmpty) {
+        countRecordsSeguimientoEnfermedadesTemp = 0;
+        await saveSeguimientoEnfermedad(
+          event,
+          seguimientoEnfermedadesTemp[countRecordsSeguimientoEnfermedadesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'ServiciosSolicitados_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          serviciosSolicitadosTemp = [];
+          await syncServiciosSolicitados(event);
+        });
+      }
     });
   }
 
@@ -3756,14 +4198,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando servicios solicitados',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsServiciosSolicitadosTemp = 0;
-
-      await saveServicioSolicitado(
-        event,
-        serviciosSolicitadosTemp[0],
-      );
+      if (serviciosSolicitadosTemp.isNotEmpty) {
+        countRecordsServiciosSolicitadosTemp = 0;
+        await saveServicioSolicitado(
+          event,
+          serviciosSolicitadosTemp[countRecordsServiciosSolicitadosTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'UltimaVezInstSalud_CuidadoSaludCondRiesgo')
+            .then((value) async {
+          ultimasVecesInstSaludTemp = [];
+          await syncUltimasVecesInstSalud(event);
+        });
+      }
     });
   }
 
@@ -3810,14 +4260,21 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando ultima vez inst salud',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsUltimasVecesInstSaludTemp = 0;
-
-      await saveUltimaVezInstSalud(
-        event,
-        ultimasVecesInstSaludTemp[0],
-      );
+      if (ultimasVecesInstSaludTemp.isNotEmpty) {
+        countRecordsUltimasVecesInstSaludTemp = 0;
+        await saveUltimaVezInstSalud(
+          event,
+          ultimasVecesInstSaludTemp[countRecordsUltimasVecesInstSaludTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable('EnfermedadesAcude_AtencionSalud')
+            .then((value) async {
+          enfermedadesAcudeTemp = [];
+          await syncEnfermedadesAcude(event);
+        });
+      }
     });
   }
 
@@ -3862,14 +4319,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando enfermedades acude',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEnfermedadesAcudeTemp = 0;
-
-      await saveEnfermedadAcude(
-        event,
-        enfermedadesAcudeTemp[0],
-      );
+      if (enfermedadesAcudeTemp.isNotEmpty) {
+        countRecordsEnfermedadesAcudeTemp = 0;
+        await saveEnfermedadAcude(
+          event,
+          enfermedadesAcudeTemp[countRecordsEnfermedadesAcudeTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'EnfermedadesTratamientos_AtencionSalud')
+            .then((value) async {
+          enfermedadesTratamientoTemp = [];
+          await syncEnfermedadesTratamiento(event);
+        });
+      }
     });
   }
 
@@ -3915,14 +4380,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando enfermedades tratamiento',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEnfermedadesTratamientoTemp = 0;
-
-      await saveEnfermedadTratamiento(
-        event,
-        enfermedadesTratamientoTemp[0],
-      );
+      if (enfermedadesTratamientoTemp.isNotEmpty) {
+        countRecordsEnfermedadesTratamientoTemp = 0;
+        await saveEnfermedadTratamiento(
+          event,
+          enfermedadesTratamientoTemp[countRecordsEnfermedadesTratamientoTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'EnfermedadesTradicionales_AtencionSalud')
+            .then((value) async {
+          enfermedadesTradicionalesTemp = [];
+          await syncEnfermedadesTradicionales(event);
+        });
+      }
     });
   }
 
@@ -3969,14 +4442,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando enfermedades tradicionales',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEnfermedadesTradicionalesTemp = 0;
-
-      await saveEnfermedadTradicional(
-        event,
-        enfermedadesTradicionalesTemp[0],
-      );
+      if (enfermedadesTradicionalesTemp.isNotEmpty) {
+        countRecordsEnfermedadesTradicionalesTemp = 0;
+        await saveEnfermedadTradicional(
+          event,
+          enfermedadesTradicionalesTemp[
+              countRecordsEnfermedadesTradicionalesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'LugaresAtencionMedico_AtencionSalud')
+            .then((value) async {
+          lugaresAtencionMedicoTemp = [];
+          await syncLugaresAtencionMedico(event);
+        });
+      }
     });
   }
 
@@ -4024,14 +4506,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando lugares atención médico',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsLugaresAtencionMedicoTemp = 0;
-
-      await saveLugarAtencionMedico(
-        event,
-        lugaresAtencionMedicoTemp[0],
-      );
+      if (lugaresAtencionMedicoTemp.isNotEmpty) {
+        countRecordsLugaresAtencionMedicoTemp = 0;
+        await saveLugarAtencionMedico(
+          event,
+          lugaresAtencionMedicoTemp[countRecordsLugaresAtencionMedicoTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'LugaresPlantasMedicinales_AtencionSalud')
+            .then((value) async {
+          lugaresPlantasMedicinalesTemp = [];
+          await syncLugaresPlantasMedicinales(event);
+        });
+      }
     });
   }
 
@@ -4078,14 +4568,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando lugares plantas medicinales',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsLugaresPlantasMedicinalesTemp = 0;
-
-      await saveLugarPlantaMedicinal(
-        event,
-        lugaresPlantasMedicinalesTemp[0],
-      );
+      if (lugaresPlantasMedicinalesTemp.isNotEmpty) {
+        countRecordsLugaresPlantasMedicinalesTemp = 0;
+        await saveLugarPlantaMedicinal(
+          event,
+          lugaresPlantasMedicinalesTemp[
+              countRecordsLugaresPlantasMedicinalesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'PlantasMedicinales_AtencionSalud')
+            .then((value) async {
+          plantasMedicinalesTemp = [];
+          await syncPlantasMedicinales(event);
+        });
+      }
     });
   }
 
@@ -4132,14 +4631,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando plantas medicinales',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsPlantasMedicinalesTemp = 0;
-
-      await savePlantaMedicinal(
-        event,
-        plantasMedicinalesTemp[0],
-      );
+      if (plantasMedicinalesTemp.isNotEmpty) {
+        countRecordsPlantasMedicinalesTemp = 0;
+        await savePlantaMedicinal(
+          event,
+          plantasMedicinalesTemp[countRecordsPlantasMedicinalesTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
+            .then((value) async {
+          religionesProfesaTemp = [];
+          await syncReligionesProfesa(event);
+        });
+      }
     });
   }
 
@@ -4184,14 +4691,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando religiones profesa',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsReligionesProfesaTemp = 0;
-
-      await saveReligionProfesa(
-        event,
-        religionesProfesaTemp[0],
-      );
+      if (religionesProfesaTemp.isNotEmpty) {
+        countRecordsReligionesProfesaTemp = 0;
+        await saveReligionProfesa(
+          event,
+          religionesProfesaTemp[countRecordsReligionesProfesaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
+            .then((value) async {
+          eventosCostumbresParticipaTemp = [];
+          await syncEventosCostumbresParticipa(event);
+        });
+      }
     });
   }
 
@@ -4237,14 +4752,23 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando eventos costumbres participa',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsEventosCostumbresParticipaTemp = 0;
-
-      await saveEventoCostumbreParticipa(
-        event,
-        eventosCostumbresParticipaTemp[0],
-      );
+      if (eventosCostumbresParticipaTemp.isNotEmpty) {
+        countRecordsEventosCostumbresParticipaTemp = 0;
+        await saveEventoCostumbreParticipa(
+          event,
+          eventosCostumbresParticipaTemp[
+              countRecordsEventosCostumbresParticipaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'CostumbresPractican_DimSocioCulturalPueblosIndigenas')
+            .then((value) async {
+          costumbresPracticanTemp = [];
+          await syncCostumbresPractican(event);
+        });
+      }
     });
   }
 
@@ -4292,14 +4816,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando eventos costumbres participa',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsCostumbresPracticanTemp = 0;
-
-      await saveCostumbrePractica(
-        event,
-        costumbresPracticanTemp[0],
-      );
+      if (costumbresPracticanTemp.isNotEmpty) {
+        countRecordsCostumbresPracticanTemp = 0;
+        await saveCostumbrePractica(
+          event,
+          costumbresPracticanTemp[countRecordsCostumbresPracticanTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'SancionesJusticia_DimSocioCulturalPueblosIndigenas')
+            .then((value) async {
+          sancionesJusticiaTemp = [];
+          await syncSancionesJusticia(event);
+        });
+      }
     });
   }
 
@@ -4345,14 +4877,22 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando eventos costumbres participa',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsSancionesJusticiaTemp = 0;
-
-      await saveSancionJusticia(
-        event,
-        sancionesJusticiaTemp[0],
-      );
+      if (sancionesJusticiaTemp.isNotEmpty) {
+        countRecordsSancionesJusticiaTemp = 0;
+        await saveSancionJusticia(
+          event,
+          sancionesJusticiaTemp[countRecordsSancionesJusticiaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateTable(
+                'NroCuartosVivienda_DatosVivienda')
+            .then((value) async {
+          nroCuartosViviendaTemp = [];
+          await syncNroCuartosVivienda(event);
+        });
+      }
     });
   }
 
@@ -4398,14 +4938,20 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando cuartos vivienda',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsNroCuartosViviendaTemp = 0;
-
-      await saveNroCuartoVivienda(
-        event,
-        nroCuartosViviendaTemp[0],
-      );
+      if (nroCuartosViviendaTemp.isNotEmpty) {
+        countRecordsNroCuartosViviendaTemp = 0;
+        await saveNroCuartoVivienda(
+          event,
+          nroCuartosViviendaTemp[countRecordsNroCuartosViviendaTemp],
+        );
+      } else {
+        ConnectionSQLiteService.truncateFicha().then((value) async {
+          fichasTemp = [];
+          await syncFichas(event);
+        });
+      }
     });
   }
 
@@ -4449,14 +4995,20 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       add(SyncIncrementChanged(state.syncProgressModel.copyWith(
           title: 'Sincronizando fichas',
           counter: state.syncProgressModel.counter + 1,
-          total: totalAccesories)));
+          total: state.syncProgressModel.totalAccesorias)));
 
-      countRecordsFichasTemp = 0;
-
-      await saveFichas(
-        event,
-        fichasTemp[countRecordsFichasTemp],
-      );
+      if (fichasTemp.isNotEmpty) {
+        countRecordsFichasTemp = 0;
+        await saveFichas(
+          event,
+          fichasTemp[countRecordsFichasTemp],
+        );
+      } else {
+        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+            title: 'Sincronización completada',
+            counter: state.syncProgressModel.counter + 1,
+            total: state.syncProgressModel.totalAccesorias)));
+      }
     });
   }
 
@@ -4472,7 +5024,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         add(SyncIncrementChanged(state.syncProgressModel.copyWith(
             title: 'Sincronización completada',
             counter: state.syncProgressModel.counter + 1,
-            total: totalAccesories)));
+            total: state.syncProgressModel.totalAccesorias)));
         return;
       }
 
@@ -4482,11 +5034,5 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         fichaTemp,
       );
     });
-  }
-
-  int calculatePercent(int counter, int total) {
-    final percent = ((counter / total) * 100).toInt();
-
-    return percent;
   }
 }

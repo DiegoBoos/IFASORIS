@@ -16,10 +16,10 @@ import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../cubits/familia/familia_cubit.dart';
 import '../../cubits/ficha/ficha_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/buttons.dart';
 import '../widgets/headers.dart';
-import '../widgets/mobile_appbar.dart';
-import '../widgets/navbar.dart';
+import '../widgets/custom_appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -73,14 +73,10 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         child: Scaffold(
-            appBar: size.width > 500
-                ? PreferredSize(
-                    preferredSize: size,
-                    child: const NavBar(),
-                  )
-                : PreferredSize(
-                    preferredSize: Size.fromHeight(size.height * 0.08),
-                    child: const MobileAppBar()),
+            appBar: PreferredSize(
+                preferredSize: Size.fromHeight(size.height * 0.08),
+                child: const CustomAppBar()),
+            drawer: const AppDrawer(),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -108,50 +104,7 @@ class _HomePageState extends State<HomePage> {
                                 color1: Colors.red,
                                 color2: Theme.of(context).colorScheme.error,
                                 onPress: () async {
-                                  final afiliadoBloc =
-                                      BlocProvider.of<AfiliadoBloc>(context);
-                                  final afiliadoPrefsBloc =
-                                      BlocProvider.of<AfiliadoPrefsBloc>(
-                                          context);
-
-                                  await afiliadoBloc
-                                      .afiliadoTieneFicha(
-                                          state.afiliado!.afiliadoId!)
-                                      .then((ficha) async {
-                                    if (ficha != null) {
-                                      final familiaCubit =
-                                          BlocProvider.of<FamiliaCubit>(
-                                              context);
-                                      final fichaCubit =
-                                          BlocProvider.of<FichaCubit>(context);
-
-                                      //Elimina el afiliado de la familia
-                                      final familiaFuture =
-                                          familiaCubit.deleteAfiliadoFamilia(
-                                              state.afiliado!.afiliadoId!);
-
-                                      //Elimina la ficha
-                                      final fichaFuture = fichaCubit
-                                          .deleteFicha(ficha.fichaId!);
-
-                                      final futures = Future.wait(
-                                          [familiaFuture, fichaFuture]);
-
-                                      futures.then((value) {
-                                        int familiaId = value[0];
-                                        int fichaId = value[1];
-
-                                        if (familiaId != 0 && fichaId != 0) {
-                                          afiliadoPrefsBloc.add(
-                                              const DeleteAfiliado(
-                                                  'Ficha eliminada correctamente'));
-                                        }
-                                      });
-                                    } else {
-                                      afiliadoBloc.add(const ErrorMessage(
-                                          'No se puede eliminar una ficha incompleta'));
-                                    }
-                                  });
+                                  await eliminarFicha(context, state);
                                 })),
                       ],
                     );
@@ -170,6 +123,42 @@ class _HomePageState extends State<HomePage> {
                 )
               ],
             )));
+  }
+
+  Future<void> eliminarFicha(BuildContext context, AfiliadoLoaded state) async {
+    final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
+
+    await afiliadoBloc
+        .afiliadoTieneFicha(state.afiliado!.afiliadoId!)
+        .then((ficha) async {
+      if (ficha != null) {
+        final familiaCubit = BlocProvider.of<FamiliaCubit>(context);
+        final fichaCubit = BlocProvider.of<FichaCubit>(context);
+
+        //Elimina el afiliado de la familia
+        final familiaFuture =
+            familiaCubit.deleteAfiliadoFamilia(state.afiliado!.afiliadoId!);
+
+        //Elimina la ficha
+        final fichaFuture = fichaCubit.deleteFicha(ficha.fichaId!);
+
+        final futures = Future.wait([familiaFuture, fichaFuture]);
+
+        futures.then((value) {
+          int familiaId = value[0];
+          int fichaId = value[1];
+
+          if (familiaId != 0 && fichaId != 0) {
+            afiliadoPrefsBloc
+                .add(const DeleteAfiliado('Ficha eliminada correctamente'));
+          }
+        });
+      } else {
+        afiliadoBloc.add(
+            const ErrorMessage('No se puede eliminar una ficha incompleta'));
+      }
+    });
   }
 }
 

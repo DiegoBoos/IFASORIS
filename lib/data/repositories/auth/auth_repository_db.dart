@@ -28,9 +28,9 @@ class AuthRepositoryDBImpl implements AuthRepositoryDB {
   @override
   Future<Either<Failure, int>> logOutUsecaseDB() async {
     try {
-      final loggedOut = await authLocalDataSource.logOut();
+      final result = await authLocalDataSource.logOut();
 
-      return Right(loggedOut);
+      return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
     } on ServerException {
