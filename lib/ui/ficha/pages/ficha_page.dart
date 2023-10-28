@@ -340,7 +340,8 @@ class _FichaPageState extends State<FichaPage> {
                         afiliadosGrupoFamiliarBloc.add(
                             SaveAfiliadosGrupoFamiliar(afiliadosGrupoFamiliar));
                       } else if (registraAfiliados == 1) {
-                        final afiliadoGrupoFamiliar = GrupoFamiliarEntity(
+                        GrupoFamiliarEntity afiliadoGrupoFamiliar =
+                            GrupoFamiliarEntity(
                           afiliadoId: afiliado.afiliadoId,
                           documento: afiliado.documento,
                           edad: afiliado.edad,
@@ -353,6 +354,18 @@ class _FichaPageState extends State<FichaPage> {
                           codGeneroAfiliado: afiliado.codGeneroAfiliado,
                           codRegimenAfiliado: afiliado.codRegimenAfiliado,
                         );
+
+                        final afiliadoCabezaFamilia = afiliadosGrupoFamiliar
+                            ?.where(
+                              (afiliadoGrupoFamiliar) =>
+                                  afiliadoGrupoFamiliar.afiliadoId ==
+                                  afiliado.afiliadoId,
+                            )
+                            .toList()[0];
+
+                        if (afiliadoCabezaFamilia != null) {
+                          afiliadoGrupoFamiliar = afiliadoCabezaFamilia;
+                        }
 
                         Navigator.push<void>(
                           context,

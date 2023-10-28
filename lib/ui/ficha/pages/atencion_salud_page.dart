@@ -115,7 +115,6 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        /*  const ProgressBar(), */
                         Expanded(
                           child: PageView.builder(
                             physics: const NeverScrollableScrollPhysics(),

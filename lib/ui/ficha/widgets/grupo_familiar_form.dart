@@ -57,6 +57,8 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
 
     final tipoDocumentoCubit = BlocProvider.of<TipoDocumentoCubit>(context);
     final generoCubit = BlocProvider.of<GeneroCubit>(context);
+    final grupoFamiliarBloc =
+        BlocProvider.of<GrupoFamiliarBloc>(context, listen: false);
 
     setState(() {
       if (widget.afiliadoGrupoFamiliar?.tipoDocumentoId != null) {
@@ -104,24 +106,32 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
       } else {
         _tipoRegimenId = widget.afiliadoGrupoFamiliar?.tipoRegimenId;
       }
-      BlocProvider.of<GrupoFamiliarBloc>(context)
-          .add(TipoRegimenChanged(_tipoRegimenId!));
+      grupoFamiliarBloc.add(TipoRegimenChanged(_tipoRegimenId ?? 0));
 
       _parentescoId = widget.afiliadoGrupoFamiliar?.parentescoId;
+      grupoFamiliarBloc.add(ParentescoChanged(_parentescoId ?? 0));
       _nivelEducativoId = widget.afiliadoGrupoFamiliar?.nivelEducativoId;
+      grupoFamiliarBloc.add(NivelEducativoChanged(_nivelEducativoId ?? 0));
       _ocupacionId = widget.afiliadoGrupoFamiliar?.ocupacionId;
+      grupoFamiliarBloc.add(OcupacionChanged(_ocupacionId ?? 0));
+      grupoFamiliarBloc.add(GrupoRiesgoChanged(_grupoRiesgoId ?? 0));
       _grupoRiesgoId = widget.afiliadoGrupoFamiliar?.grupoRiesgoId;
       _etniaId = widget.afiliadoGrupoFamiliar?.origenEtnico5602Id;
+      grupoFamiliarBloc.add(EtniaChanged(_etniaId ?? 0));
       //TODO: validar puebloIde
       _puebloIde = widget.afiliadoGrupoFamiliar?.puebloIndigenaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar?.puebloIndigenaId;
+      grupoFamiliarBloc.add(PuebloIndigenaChanged(_puebloIde ?? 0));
       _lenguaManejaId = widget.afiliadoGrupoFamiliar?.lenguaManejaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar?.lenguaManejaId;
+      grupoFamiliarBloc.add(LenguaManejaChanged(_lenguaManejaId ?? 0));
+
       _lenguaMaternaId = widget.afiliadoGrupoFamiliar?.lenguaMaternaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar?.lenguaMaternaId;
+      grupoFamiliarBloc.add(LenguaMaternaChanged(_lenguaMaternaId ?? 0));
     });
   }
 
