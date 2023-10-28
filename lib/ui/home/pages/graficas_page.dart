@@ -39,7 +39,9 @@ class GraficasPage extends StatelessWidget {
                   xValueMapper: (_PieData data, _) => data.xData,
                   yValueMapper: (_PieData data, _) => data.yData,
                   dataLabelMapper: (_PieData data, _) => data.text,
-                  dataLabelSettings: const DataLabelSettings(isVisible: true)),
+                  dataLabelSettings: const DataLabelSettings(
+                      isVisible: true,
+                      textStyle: TextStyle(color: Colors.white))),
             ],
           ),
         ],

@@ -106,32 +106,57 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
       } else {
         _tipoRegimenId = widget.afiliadoGrupoFamiliar?.tipoRegimenId;
       }
-      grupoFamiliarBloc.add(TipoRegimenChanged(_tipoRegimenId ?? 0));
+
+      if (_tipoRegimenId != null) {
+        grupoFamiliarBloc.add(TipoRegimenChanged(_tipoRegimenId!));
+      }
 
       _parentescoId = widget.afiliadoGrupoFamiliar?.parentescoId;
-      grupoFamiliarBloc.add(ParentescoChanged(_parentescoId ?? 0));
+      if (_parentescoId != null) {
+        grupoFamiliarBloc.add(ParentescoChanged(_parentescoId!));
+      }
+
       _nivelEducativoId = widget.afiliadoGrupoFamiliar?.nivelEducativoId;
-      grupoFamiliarBloc.add(NivelEducativoChanged(_nivelEducativoId ?? 0));
+      if (_nivelEducativoId != null) {
+        grupoFamiliarBloc.add(NivelEducativoChanged(_nivelEducativoId!));
+      }
+
       _ocupacionId = widget.afiliadoGrupoFamiliar?.ocupacionId;
-      grupoFamiliarBloc.add(OcupacionChanged(_ocupacionId ?? 0));
-      grupoFamiliarBloc.add(GrupoRiesgoChanged(_grupoRiesgoId ?? 0));
+      if (_ocupacionId != null) {
+        grupoFamiliarBloc.add(OcupacionChanged(_ocupacionId!));
+      }
+
       _grupoRiesgoId = widget.afiliadoGrupoFamiliar?.grupoRiesgoId;
+      if (_grupoRiesgoId != null) {
+        grupoFamiliarBloc.add(GrupoRiesgoChanged(_grupoRiesgoId!));
+      }
+
       _etniaId = widget.afiliadoGrupoFamiliar?.origenEtnico5602Id;
-      grupoFamiliarBloc.add(EtniaChanged(_etniaId ?? 0));
+      if (_etniaId != null) {
+        grupoFamiliarBloc.add(EtniaChanged(_etniaId!));
+      }
+
       //TODO: validar puebloIde
       _puebloIde = widget.afiliadoGrupoFamiliar?.puebloIndigenaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar?.puebloIndigenaId;
-      grupoFamiliarBloc.add(PuebloIndigenaChanged(_puebloIde ?? 0));
+      if (_puebloIde != null) {
+        grupoFamiliarBloc.add(PuebloIndigenaChanged(_puebloIde!));
+      }
+
       _lenguaManejaId = widget.afiliadoGrupoFamiliar?.lenguaManejaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar?.lenguaManejaId;
-      grupoFamiliarBloc.add(LenguaManejaChanged(_lenguaManejaId ?? 0));
+      if (_lenguaManejaId != null) {
+        grupoFamiliarBloc.add(LenguaManejaChanged(_lenguaManejaId!));
+      }
 
       _lenguaMaternaId = widget.afiliadoGrupoFamiliar?.lenguaMaternaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar?.lenguaMaternaId;
-      grupoFamiliarBloc.add(LenguaMaternaChanged(_lenguaMaternaId ?? 0));
+      if (_lenguaMaternaId != null) {
+        grupoFamiliarBloc.add(LenguaMaternaChanged(_lenguaMaternaId!));
+      }
     });
   }
 
