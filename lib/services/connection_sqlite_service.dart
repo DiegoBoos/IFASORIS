@@ -195,6 +195,6 @@ class ConnectionSQLiteService {
     var dbClient = await db;
     await dbClient.delete('Asp3_GrupoFamiliar');
     return await dbClient.delete('Ficha',
-        where: 'Ficha_id_remote IS NOT NULL OR NumFicha IS NOT NULL');
+        where: 'Ficha_id_remote IS NOT NULL OR NumFicha <> ""');
   }
 }
