@@ -34,7 +34,7 @@ class GrupoFamiliarModel extends GrupoFamiliarEntity {
     int? puebloIndigenaId,
     int? lenguaManejaId,
     int? lenguaMaternaId,
-    int? isComplete,
+    int isComplete = 0,
   }) : super(
           grupoFamiliarId: grupoFamiliarId,
           familiaId: familiaId,

@@ -14,6 +14,7 @@ class AfiliadosGrupoFamiliarBloc
   AfiliadosGrupoFamiliarBloc({required this.grupoFamiliarUsecaseDB})
       : super(AfiliadosGrupoFamiliarInitial()) {
     on<GetAfiliadosGrupoFamiliar>((event, emit) async {
+      emit(AfiliadosGrupoFamiliarLoading());
       final result = await grupoFamiliarUsecaseDB
           .getGrupoFamiliarUsecaseDB(event.familiaId);
       result.fold((failure) {
@@ -34,7 +35,7 @@ class AfiliadosGrupoFamiliarBloc
       final result = await grupoFamiliarUsecaseDB
           .saveGrupoFamiliarUsecaseDB(event.afiliadosGrupoFamiliar);
       result.fold((failure) {
-        emit(GrupoFamiliarSubmissionFailed(failure.properties.first));
+        emit(AfiliadosGrupoFamiliarError(failure.properties.first));
       }, (data) {
         emit(GrupoFamiliarSubmissionSuccess(
             afiliadosGrupoFamiliarSuccess: event.afiliadosGrupoFamiliar));
@@ -52,8 +53,8 @@ class AfiliadosGrupoFamiliarBloc
       if (!isDuplicate) {
         List<GrupoFamiliarEntity> newAfiliados = List.from(currentAfiliados)
           ..add(newAfiliado);
-        emit(AfiliadosGrupoFamiliarSaved(
-            afiliadosGrupoFamiliarSaved: newAfiliados,
+        emit(AfiliadosGrupoFamiliarLoaded(
+            afiliadosGrupoFamiliarLoaded: newAfiliados,
             message: 'Afiliado agregado correctamente'));
       } else {
         currentAfiliados = currentAfiliados.map((afiliado) {
@@ -63,13 +64,13 @@ class AfiliadosGrupoFamiliarBloc
           return afiliado;
         }).toList();
 
-        emit(AfiliadosGrupoFamiliarSaved(
-            afiliadosGrupoFamiliarSaved: currentAfiliados,
+        emit(AfiliadosGrupoFamiliarLoaded(
+            afiliadosGrupoFamiliarLoaded: currentAfiliados,
             message: 'Afiliado editado correctamente'));
       }
     });
 
-    on<ErrorMessage>((event, emit) {
+    on<ErrorAfiliadosGrupoFamiliar>((event, emit) {
       emit(AfiliadosGrupoFamiliarError(event.message));
     });
   }

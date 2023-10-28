@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/search/search_afiliados.dart';
 import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
+import '../../search/search_afiliados.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/grupo_familiar_form.dart';
 
@@ -58,33 +58,24 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   )),
-              BlocConsumer<AfiliadosGrupoFamiliarBloc,
-                  AfiliadosGrupoFamiliarState>(
-                listener: (context, state) {
-                  if (state is AfiliadosGrupoFamiliarSaved) {
-                    CustomSnackBar.showSnackBar(
-                        context, state.message, Colors.green);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is AfiliadosGrupoFamiliarLoaded ||
-                      state is AfiliadosGrupoFamiliarSaved ||
-                      state is GrupoFamiliarSubmissionSuccess) {
-                    final afiliadosGrupoFamiliar =
-                        state.afiliadosGrupoFamiliar!;
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: afiliadosGrupoFamiliar.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return buildDismissibleListTile(
-                            context, afiliadosGrupoFamiliar, index);
-                      },
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              )
+              BlocBuilder<AfiliadosGrupoFamiliarBloc,
+                  AfiliadosGrupoFamiliarState>(builder: (context, state) {
+                if (state is AfiliadosGrupoFamiliarLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is AfiliadosGrupoFamiliarLoaded) {
+                  final afiliadosGrupoFamiliarLoaded =
+                      state.afiliadosGrupoFamiliarLoaded!;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: afiliadosGrupoFamiliarLoaded.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return buildDismissibleListTile(
+                          context, afiliadosGrupoFamiliarLoaded, index);
+                    },
+                  );
+                }
+                return const Center(child: Text('No hay afiliados'));
+              })
             ],
           ),
       ],
@@ -156,7 +147,8 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
               context,
               MaterialPageRoute<void>(
                 builder: (BuildContext context) => GrupoFamiliarForm(
-                    afiliadoGrupoFamiliar: afiliadoGrupoFamiliar),
+                  afiliadoGrupoFamiliar: afiliadoGrupoFamiliar,
+                ),
               ),
             );
           }),

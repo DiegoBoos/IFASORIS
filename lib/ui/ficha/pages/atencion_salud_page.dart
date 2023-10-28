@@ -5,7 +5,6 @@ import 'package:ifasoris/ui/blocs/afiliados_grupo_familiar/afiliados_grupo_famil
 import '../../../domain/entities/atencion_salud_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
-import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/atenciones_en_salud_form.dart';
 
@@ -25,10 +24,11 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
   @override
   void initState() {
     super.initState();
-    final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
 
     formKeys = List.generate(
-      encuestaBloc.state.afiliados.length,
+      afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar!.length,
       (_) => GlobalKey<FormState>(),
     );
   }
@@ -38,8 +38,10 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
     if (currentForm != null && currentForm.validate()) {
       currentForm.save();
 
-      final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
-      final afiliados = encuestaBloc.state.afiliados;
+      final afiliadosGrupoFamiliarBloc =
+          BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
+      final afiliados =
+          afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar!;
 
       final atencionSaludBloc = BlocProvider.of<AtencionSaludBloc>(context);
 
@@ -53,7 +55,8 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
 
   @override
   Widget build(BuildContext context) {
-    final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
     final atencionSaludBloc = BlocProvider.of<AtencionSaludBloc>(context);
     return WillPopScope(
         onWillPop: () async {
@@ -80,7 +83,9 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
                   atencionSaludBloc.add(AtencionSaludInit());
 
                   if (afiliadoPageIndex <
-                      encuestaBloc.state.afiliados.length - 1) {
+                      afiliadosGrupoFamiliarBloc
+                              .state.afiliadosGrupoFamiliar!.length -
+                          1) {
                     afiliadoPageController.animateToPage(
                       afiliadoPageIndex + 1,
                       duration: const Duration(milliseconds: 250),
@@ -115,15 +120,16 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
                           child: PageView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             controller: afiliadoPageController,
-                            itemCount: encuestaBloc.state.afiliados.length,
+                            itemCount: afiliadosGrupoFamiliarBloc
+                                .state.afiliadosGrupoFamiliar!.length,
                             onPageChanged: (index) {
                               setState(() {
                                 afiliadoPageIndex = index;
                               });
                             },
                             itemBuilder: (context, index) {
-                              final currentAfiliado =
-                                  encuestaBloc.state.afiliados[index];
+                              final currentAfiliado = afiliadosGrupoFamiliarBloc
+                                  .state.afiliadosGrupoFamiliar![index];
 
                               BlocProvider.of<AtencionSaludBloc>(context).add(
                                   GetAtencionSalud(

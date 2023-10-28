@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/estilo_vida_saludable_entity.dart';
-import '../../blocs/encuesta/encuesta_bloc.dart';
+import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/estilos_vida_saludable_form.dart';
@@ -23,10 +23,11 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
   @override
   void initState() {
     super.initState();
-    final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
 
     formKeys = List.generate(
-      encuestaBloc.state.afiliados.length,
+      afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar!.length,
       (_) => GlobalKey<FormState>(),
     );
   }
@@ -36,8 +37,10 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
     if (currentForm != null && currentForm.validate()) {
       currentForm.save();
 
-      final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
-      final afiliados = encuestaBloc.state.afiliados;
+      final afiliadosGrupoFamiliarBloc =
+          BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
+      final afiliados =
+          afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar!;
 
       final estiloVidaSaludableBloc =
           BlocProvider.of<EstiloVidaSaludableBloc>(context);
@@ -52,7 +55,8 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
 
   @override
   Widget build(BuildContext context) {
-    final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
     final estiloVidaSaludableBloc =
         BlocProvider.of<EstiloVidaSaludableBloc>(context);
     return WillPopScope(
@@ -76,7 +80,9 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
                     Colors.green);
 
                 if (afiliadoPageIndex <
-                    encuestaBloc.state.afiliados.length - 1) {
+                    afiliadosGrupoFamiliarBloc
+                            .state.afiliadosGrupoFamiliar!.length -
+                        1) {
                   afiliadoPageController.animateToPage(
                     afiliadoPageIndex + 1,
                     duration: const Duration(milliseconds: 250),
@@ -108,15 +114,16 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
                   child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: afiliadoPageController,
-                    itemCount: encuestaBloc.state.afiliados.length,
+                    itemCount: afiliadosGrupoFamiliarBloc
+                        .state.afiliadosGrupoFamiliar!.length,
                     onPageChanged: (index) {
                       setState(() {
                         afiliadoPageIndex = index;
                       });
                     },
                     itemBuilder: (context, index) {
-                      final currentAfiliado =
-                          encuestaBloc.state.afiliados[index];
+                      final currentAfiliado = afiliadosGrupoFamiliarBloc
+                          .state.afiliadosGrupoFamiliar![index];
 
                       BlocProvider.of<EstiloVidaSaludableBloc>(context).add(
                           GetEstiloVidaSaludable(currentAfiliado.afiliadoId!));

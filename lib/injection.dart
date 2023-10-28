@@ -86,7 +86,6 @@ import 'domain/usecases/via_acceso/via_acceso_exports.dart';
 import 'services/shared_preferences_service.dart';
 import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import 'ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
-import 'ui/blocs/encuesta/encuesta_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
 
@@ -181,7 +180,6 @@ void init() {
   // external
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => SharedPreferencesService());
-  locator.registerFactory(() => EncuestaBloc());
 }
 
 void authInit() {

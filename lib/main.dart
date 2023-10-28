@@ -12,7 +12,6 @@ import 'ui/blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import 'ui/blocs/auth/auth_bloc.dart';
 import 'ui/blocs/dim_vivienda/dim_vivienda_bloc.dart';
 import 'ui/blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
-import 'ui/blocs/encuesta/encuesta_bloc.dart';
 import 'ui/blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 import 'ui/blocs/familia/familia_bloc.dart';
 import 'ui/blocs/ficha/ficha_bloc.dart';
@@ -133,9 +132,6 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<DimViviendaBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<EncuestaBloc>(),
           ),
           BlocProvider(
             create: (_) => di.locator<AfiliadosGrupoFamiliarBloc>(),

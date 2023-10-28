@@ -99,12 +99,33 @@ class _HomePageState extends State<HomePage> {
                                 })),
                         FadeInRight(
                             child: CustomButton(
-                                icon: FontAwesomeIcons.dochub,
+                                icon: FontAwesomeIcons.trash,
                                 texto: 'Eliminar ficha',
                                 color1: Colors.red,
                                 color2: Theme.of(context).colorScheme.error,
                                 onPress: () async {
-                                  await eliminarFicha(context, state);
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Eliminar ficha'),
+                                          content: const Text(
+                                              '¿Está seguro de eliminar la ficha?'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text('Cancelar')),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  Navigator.pop(context);
+                                                  await eliminarFicha(
+                                                      context, state);
+                                                },
+                                                child: const Text('Aceptar'))
+                                          ],
+                                        );
+                                      });
                                 })),
                       ],
                     );

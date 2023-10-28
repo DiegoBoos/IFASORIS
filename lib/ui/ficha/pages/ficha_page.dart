@@ -8,7 +8,6 @@ import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
-import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../cubits/actividad_fisica/actividad_fisica_cubit.dart';
 import '../../cubits/alimentacion/alimentacion_cubit.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
@@ -226,7 +225,6 @@ class _FichaPageState extends State<FichaPage> {
     final dimViviendaBloc = BlocProvider.of<DimViviendaBloc>(context);
     final afiliadosGrupoFamiliarBloc =
         BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
-    final encuestaBloc = BlocProvider.of<EncuestaBloc>(context);
 
     return WillPopScope(
         onWillPop: () async {
@@ -291,10 +289,7 @@ class _FichaPageState extends State<FichaPage> {
                     Navigator.pushReplacementNamed(
                         context, 'estilo-vida-saludable');
                   }
-                  if (state is GrupoFamiliarSubmissionFailed) {
-                    CustomSnackBar.showSnackBar(
-                        context, state.message, Colors.red);
-                  }
+
                   if (state is AfiliadosGrupoFamiliarError) {
                     CustomSnackBar.showSnackBar(
                         context, state.message, Colors.red);
@@ -344,23 +339,20 @@ class _FichaPageState extends State<FichaPage> {
                           registraAfiliados == 0) {
                         afiliadosGrupoFamiliarBloc.add(
                             SaveAfiliadosGrupoFamiliar(afiliadosGrupoFamiliar));
-
-                        encuestaBloc
-                            .add(SaveAfiliadosEncuesta(afiliadosGrupoFamiliar));
                       } else if (registraAfiliados == 1) {
                         final afiliadoGrupoFamiliar = GrupoFamiliarEntity(
-                            afiliadoId: afiliado.afiliadoId,
-                            documento: afiliado.documento,
-                            edad: afiliado.edad,
-                            fechaNacimiento: afiliado.fecnac,
-                            nombre1: afiliado.nombre1,
-                            nombre2: afiliado.nombre2,
-                            apellido1: afiliado.apellido1,
-                            apellido2: afiliado.apellido2,
-                            tipoDocAfiliado: afiliado.tipoDocAfiliado,
-                            codGeneroAfiliado: afiliado.codGeneroAfiliado,
-                            codRegimenAfiliado: afiliado.codRegimenAfiliado,
-                            isAfiliadosCompleted: true);
+                          afiliadoId: afiliado.afiliadoId,
+                          documento: afiliado.documento,
+                          edad: afiliado.edad,
+                          fechaNacimiento: afiliado.fecnac,
+                          nombre1: afiliado.nombre1,
+                          nombre2: afiliado.nombre2,
+                          apellido1: afiliado.apellido1,
+                          apellido2: afiliado.apellido2,
+                          tipoDocAfiliado: afiliado.tipoDocAfiliado,
+                          codGeneroAfiliado: afiliado.codGeneroAfiliado,
+                          codRegimenAfiliado: afiliado.codRegimenAfiliado,
+                        );
 
                         Navigator.push<void>(
                           context,
@@ -368,12 +360,14 @@ class _FichaPageState extends State<FichaPage> {
                             builder: (BuildContext context) =>
                                 GrupoFamiliarForm(
                                     afiliadoGrupoFamiliar:
-                                        afiliadoGrupoFamiliar),
+                                        afiliadoGrupoFamiliar,
+                                    registraAfiliados: registraAfiliados),
                           ),
                         );
                       } else {
-                        afiliadosGrupoFamiliarBloc.add(const ErrorMessage(
-                            'No hay afiliados en el grupo familiar'));
+                        afiliadosGrupoFamiliarBloc.add(
+                            const ErrorAfiliadosGrupoFamiliar(
+                                'No hay afiliados en el grupo familiar'));
                       }
                     }
                   },

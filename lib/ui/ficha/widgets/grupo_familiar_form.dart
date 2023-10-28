@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
-import '../../blocs/encuesta/encuesta_bloc.dart';
 import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../cubits/curso_vida/curso_vida_cubit.dart';
 import '../../cubits/etnia/etnia_cubit.dart';
@@ -21,12 +20,11 @@ import '../../cubits/regimen/regimen_cubit.dart';
 import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 
 class GrupoFamiliarForm extends StatefulWidget {
-  const GrupoFamiliarForm({
-    super.key,
-    this.afiliadoGrupoFamiliar,
-  });
+  const GrupoFamiliarForm(
+      {super.key, this.afiliadoGrupoFamiliar, this.registraAfiliados = 0});
 
   final GrupoFamiliarEntity? afiliadoGrupoFamiliar;
+  final int registraAfiliados;
 
   @override
   State<GrupoFamiliarForm> createState() => _GrupoFamiliarFormState();
@@ -740,36 +738,33 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                         BlocProvider.of<AfiliadoPrefsBloc>(context);
 
                     final newEditAfiliado = grupoFamiliarBloc.state.copyWith(
-                        familiaId: afiliadoPrefsBloc.state.afiliado!.familiaId,
-                        afiliadoId: widget.afiliadoGrupoFamiliar!.afiliadoId,
-                        tipoDocumentoId: _tipoDocumentoId,
-                        documento: _documento,
-                        generoId: _generoId,
-                        fechaNacimiento: _fechaNacimiento,
-                        edad: _edad,
-                        nombre1: widget.afiliadoGrupoFamiliar!.nombre1,
-                        nombre2: widget.afiliadoGrupoFamiliar!.nombre2,
-                        apellido1: widget.afiliadoGrupoFamiliar!.apellido1,
-                        apellido2: widget.afiliadoGrupoFamiliar!.apellido2,
-                        tipoDocAfiliado:
-                            widget.afiliadoGrupoFamiliar!.tipoDocAfiliado,
-                        codGeneroAfiliado:
-                            widget.afiliadoGrupoFamiliar!.codGeneroAfiliado,
-                        codRegimenAfiliado:
-                            widget.afiliadoGrupoFamiliar!.codRegimenAfiliado,
-                        isAfiliadosCompleted:
-                            widget.afiliadoGrupoFamiliar!.isAfiliadosCompleted);
+                      familiaId: afiliadoPrefsBloc.state.afiliado!.familiaId,
+                      afiliadoId: widget.afiliadoGrupoFamiliar!.afiliadoId,
+                      tipoDocumentoId: _tipoDocumentoId,
+                      documento: _documento,
+                      generoId: _generoId,
+                      fechaNacimiento: _fechaNacimiento,
+                      edad: _edad,
+                      nombre1: widget.afiliadoGrupoFamiliar!.nombre1,
+                      nombre2: widget.afiliadoGrupoFamiliar!.nombre2,
+                      apellido1: widget.afiliadoGrupoFamiliar!.apellido1,
+                      apellido2: widget.afiliadoGrupoFamiliar!.apellido2,
+                      tipoDocAfiliado:
+                          widget.afiliadoGrupoFamiliar!.tipoDocAfiliado,
+                      codGeneroAfiliado:
+                          widget.afiliadoGrupoFamiliar!.codGeneroAfiliado,
+                      codRegimenAfiliado:
+                          widget.afiliadoGrupoFamiliar!.codRegimenAfiliado,
+                    );
 
-                    if (newEditAfiliado.isAfiliadosCompleted!) {
+                    if (widget.registraAfiliados == 1) {
                       afiliadosGrupoFamiliarBloc
                           .add(SaveAfiliadosGrupoFamiliar([newEditAfiliado]));
-                      BlocProvider.of<EncuestaBloc>(context)
-                          .add(SaveAfiliadosEncuesta([newEditAfiliado]));
                     } else {
                       afiliadosGrupoFamiliarBloc.add(
                           CreateOrUpdateAfiliadoGrupoFamiliar(newEditAfiliado));
+                      Navigator.popUntil(context, ModalRoute.withName('ficha'));
                     }
-                    Navigator.popUntil(context, ModalRoute.withName('ficha'));
                   }
                 },
                 child: Container(

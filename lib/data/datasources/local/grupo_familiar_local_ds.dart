@@ -24,23 +24,101 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
     final batch = db.batch();
 
     for (var afiliado in afiliadosGrupoFamiliar) {
-      final existingRecords = await db.rawQuery('''
-      SELECT COUNT(*) FROM Asp3_GrupoFamiliar WHERE Afiliado_id = ?
-    ''', [afiliado.afiliadoId]);
+      final existingRecord = await db.rawQuery('''
+    SELECT COUNT(*) FROM Asp3_GrupoFamiliar WHERE Afiliado_id = ?
+  ''', [afiliado.afiliadoId]);
 
-      final recordCount = Sqflite.firstIntValue(existingRecords);
+      final recordCount = Sqflite.firstIntValue(existingRecord);
       if (recordCount == 0) {
-        batch.insert(
-          'Asp3_GrupoFamiliar',
-          afiliado.toJson(),
-        );
+        batch.rawInsert('''
+      INSERT INTO Asp3_GrupoFamiliar (
+        Familia_id,
+        Afiliado_id,
+        TipoDocumento_id,
+        Documento,
+        Genero_id,
+        FechaNacimiento,
+        Edad,
+        TipoRegimen_id,
+        Parentesco_id,
+        Etnia_id,
+        CursoVida_id,
+        NivelEducativo_id,
+        Ocupacion_id,
+        GrupoRiesgo_id,
+        OrigenEtnico5602_id,
+        PuebloIndigena_id,
+        LenguaManeja_id,
+        LenguaMaterna_id,
+        isComplete
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', [
+          afiliado.familiaId,
+          afiliado.afiliadoId,
+          afiliado.tipoDocumentoId,
+          afiliado.documento,
+          afiliado.generoId,
+          afiliado.fechaNacimiento?.toIso8601String(),
+          afiliado.edad,
+          afiliado.tipoRegimenId,
+          afiliado.parentescoId,
+          afiliado.etniaId,
+          afiliado.cursoVidaId,
+          afiliado.nivelEducativoId,
+          afiliado.ocupacionId,
+          afiliado.grupoRiesgoId,
+          afiliado.origenEtnico5602Id,
+          afiliado.puebloIndigenaId,
+          afiliado.lenguaManejaId,
+          afiliado.lenguaMaternaId,
+          afiliado.isComplete
+        ]);
       } else {
-        batch.update(
-          'Asp3_GrupoFamiliar',
-          afiliado.toJson(),
-          where: 'Afiliado_id = ?',
-          whereArgs: [afiliado.afiliadoId],
-        );
+        batch.rawQuery('''
+      UPDATE Asp3_GrupoFamiliar SET
+        Familia_id = ?,
+        Afiliado_id = ?,
+        TipoDocumento_id = ?,
+        Documento = ?,
+        Genero_id = ?,
+        FechaNacimiento = ?,
+        Edad = ?,
+        TipoRegimen_id = ?,
+        Parentesco_id = ?,
+        Etnia_id = ?,
+        CursoVida_id = ?,
+        NivelEducativo_id = ?,
+        Ocupacion_id = ?,
+        GrupoRiesgo_id = ?,
+        OrigenEtnico5602_id = ?,
+        PuebloIndigena_id = ?,
+        LenguaManeja_id = ?,
+        LenguaMaterna_id = ?,
+        isComplete = ?
+      WHERE Afiliado_id = ? AND Familia_id = ?
+    ''', [
+          afiliado.familiaId,
+          afiliado.afiliadoId,
+          afiliado.tipoDocumentoId,
+          afiliado.documento,
+          afiliado.generoId,
+          afiliado.fechaNacimiento?.toIso8601String(),
+          afiliado.edad,
+          afiliado.tipoRegimenId,
+          afiliado.parentescoId,
+          afiliado.etniaId,
+          afiliado.cursoVidaId,
+          afiliado.nivelEducativoId,
+          afiliado.ocupacionId,
+          afiliado.grupoRiesgoId,
+          afiliado.origenEtnico5602Id,
+          afiliado.puebloIndigenaId,
+          afiliado.lenguaManejaId,
+          afiliado.lenguaMaternaId,
+          afiliado.isComplete,
+          afiliado.afiliadoId,
+          afiliado.familiaId,
+        ]);
       }
     }
 
