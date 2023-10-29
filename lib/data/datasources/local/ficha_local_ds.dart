@@ -1,5 +1,6 @@
 import 'package:ifasoris/data/models/especialidad_med_tradicional_model.dart';
 import 'package:ifasoris/data/models/especie_animal_model.dart';
+import 'package:ifasoris/data/models/estadistica_model.dart';
 import 'package:ifasoris/data/models/factor_riesgo_vivienda_model.dart';
 import 'package:ifasoris/data/models/ficha_model.dart';
 import 'package:ifasoris/data/models/fruto_model.dart';
@@ -32,6 +33,7 @@ abstract class FichaLocalDataSource {
   Future<FichaEntity> createFicha(FichaEntity ficha);
   Future<FichaEntity> createFichaCompleta(FichaEntity ficha);
   Future<List<FichaModel>> loadFichas(int familiaId);
+  Future<List<EstadisticaModel>> loadEstadisticas();
 
   Future<int> deleteFicha(int fichaId);
 
@@ -61,6 +63,41 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
     final result =
         List<FichaModel>.from(res.map((m) => FichaModel.fromJson(m))).toList();
 
+    return result;
+  }
+
+  @override
+  Future<List<EstadisticaModel>> loadEstadisticas() async {
+    final db = await ConnectionSQLiteService.db;
+    final resFichasReportadas = await db.rawQuery('''
+      SELECT  'FichasReportadas' as Estadistica,  count(*) as Cantidad FROM Ficha
+      WHERE NumFicha <> "" or Ficha_id_remote IS NOT NULL
+      UNION ALL 
+      SELECT  'FichasRegistradas' as Estadistica, count(*)  as Cantidad FROM Ficha
+        WHERE NumFicha = "" or Ficha_id_remote IS NULL
+      UNION ALL
+      SELECT  'FichasRegistradasIncompletas' as Estadistica,  count(*) as Cantidad FROM Ficha
+      inner join Familia ON (Familia.Ficha_id  =  Ficha.Ficha_id)
+      inner join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
+      WHERE Asp3_GrupoFamiliar.isComplete=0
+    	UNION ALL
+      SELECT  'FichasRegistradasCompletas' as Estadistica,  count(*) as Cantidad FROM Ficha
+      inner join Familia ON (Familia.Ficha_id  =  Ficha.Ficha_id)
+      inner join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
+      WHERE Asp3_GrupoFamiliar.isComplete=1
+     	UNION ALL 
+    	SELECT  'AfiliadosReportados' as Estadistica,  count(*) as Cantidad FROM Asp3_GrupoFamiliar
+    	inner join Familia ON (Familia.Familia_id  =  Asp3_GrupoFamiliar.Familia_id)
+    	inner join Ficha on Ficha.Ficha_id=Familia.Ficha_id
+      WHERE NumFicha <> "" or Ficha_id_remote IS NOT NULL
+    	UNION ALL 
+    	SELECT  'AfiliadosRegistrados' as Estadistica,  count(*) as Cantidad FROM Asp3_GrupoFamiliar
+    	inner join Familia ON (Familia.Familia_id  =  Asp3_GrupoFamiliar.Familia_id)
+    	inner join Ficha on Ficha.Ficha_id=Familia.Ficha_id
+          WHERE NumFicha = "" or Ficha_id_remote IS NULL
+      ''');
+    final result = List<EstadisticaModel>.from(
+        resFichasReportadas.map((m) => EstadisticaModel.fromJson(m))).toList();
     return result;
   }
 
