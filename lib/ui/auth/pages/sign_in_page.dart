@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/utils/custom_snack_bar.dart';
 
 import '../../../domain/entities/usuario_entity.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../cubits/internet/internet_cubit.dart';
+import '../../utils/custom_snack_bar.dart';
 import '../../utils/device_info.dart';
 import '../../utils/network_icon.dart';
 import '../widgets/sign_in_form.dart';
@@ -20,10 +20,10 @@ class _SignInPageState extends State<SignInPage> {
   final formKey = GlobalKey<FormState>();
   final configFormKey = GlobalKey<FormState>();
 
-  // final userNameCtrl = TextEditingController(text: 'dbolanos');
-  // final passwordCtrl = TextEditingController(text: 'Dbolanos*2023');
-  final userNameCtrl = TextEditingController(text: 'oabolanos');
-  final passwordCtrl = TextEditingController(text: 'Oabolanos*2023');
+  final userNameCtrl = TextEditingController(text: 'dbolanos');
+  final passwordCtrl = TextEditingController(text: 'Dbolanos*2023');
+  // final userNameCtrl = TextEditingController(text: 'oabolanos');
+  // final passwordCtrl = TextEditingController(text: 'Oabolanos*2023');
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +91,7 @@ class _SignInPageState extends State<SignInPage> {
                                           .then((datosEquipo) {
                                         if (datosEquipo != null &&
                                             datosEquipo.idEquipo != null) {
+                                          print(datosEquipo.idEquipo);
                                           final usuario = UsuarioEntity(
                                             userName: userNameCtrl.text,
                                             password: passwordCtrl.text,

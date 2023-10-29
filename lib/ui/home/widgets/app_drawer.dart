@@ -72,6 +72,7 @@ class AppDrawer extends StatelessWidget {
                 comenzarSincronizacion(context, usuario, 'P');
               },
             ),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.pie_chart),
               title: const Text('Estadísticas'),

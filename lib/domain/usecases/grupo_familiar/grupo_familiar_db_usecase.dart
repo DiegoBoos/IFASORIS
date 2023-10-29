@@ -9,9 +9,11 @@ class GrupoFamiliarUsecaseDB {
 
   GrupoFamiliarUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, int>> saveGrupoFamiliarUsecaseDB(
-      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar) {
-    return repositoryDB.saveGrupoFamiliarRepositoryDB(afiliadosGrupoFamiliar);
+  Future<Either<Failure, Map<String, dynamic>>>
+      saveAfiliadoGrupoFamiliarUsecaseDB(
+          GrupoFamiliarEntity afiliadoGrupoFamiliar) {
+    return repositoryDB
+        .saveAfiliadoGrupoFamiliarRepositoryDB(afiliadoGrupoFamiliar);
   }
 
   Future<Either<Failure, List<GrupoFamiliarEntity>>> getGrupoFamiliarUsecaseDB(

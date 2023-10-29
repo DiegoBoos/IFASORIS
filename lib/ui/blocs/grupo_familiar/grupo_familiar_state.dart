@@ -8,6 +8,18 @@ class GrupoFamiliarFormInitial extends GrupoFamiliarState {
   const GrupoFamiliarFormInitial();
 }
 
+class GrupoFamiliarFormLoaded extends GrupoFamiliarState {}
+
+class GrupoFamiliarFormEmpty extends GrupoFamiliarState {}
+
+class GrupoFamiliarSubmissionSuccess extends GrupoFamiliarState {}
+
+class GrupoFamiliarSubmissionFailed extends GrupoFamiliarState {
+  final String message;
+
+  GrupoFamiliarSubmissionFailed(this.message);
+}
+
 GrupoFamiliarEntity initObject() {
   return GrupoFamiliarEntity(formStatus: const GrupoFamiliarFormInitial());
 }

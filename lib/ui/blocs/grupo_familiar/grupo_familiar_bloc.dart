@@ -16,6 +16,18 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
       emit(initObject());
     });
 
+    on<SaveAfiliadoGrupoFamiliar>((event, emit) async {
+      final result = await grupoFamiliarUsecaseDB
+          .saveAfiliadoGrupoFamiliarUsecaseDB(event.grupoFamiliar);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                GrupoFamiliarSubmissionFailed((failure.properties.first))));
+      }, (data) {
+        emit(state.copyWith(formStatus: GrupoFamiliarSubmissionSuccess()));
+      });
+    });
+
     on<FamiliaChanged>((event, emit) {
       emit(state.copyWith(familiaId: event.familiaId));
     });
@@ -52,5 +64,21 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
     on<LenguaMaternaChanged>((event, emit) {
       emit(state.copyWith(lenguaMaternaId: event.lenguaMaternaId));
     });
+  }
+
+  Future<int> deleteAfiliadoGrupoFamiliar(
+    int afiliadoId,
+    int familiaId,
+  ) async {
+    final result = await grupoFamiliarUsecaseDB
+        .deleteAfiliadoGrupoFamiliarUsecaseDB(afiliadoId, familiaId);
+    return result.fold((failure) => 0, (data) => data);
+  }
+
+  Future<int> completeGrupoFamiliar(int familiaId) async {
+    final result =
+        await grupoFamiliarUsecaseDB.completeGrupoFamiliarUsecaseDB(familiaId);
+
+    return result.fold((failure) => 0, (data) => data);
   }
 }

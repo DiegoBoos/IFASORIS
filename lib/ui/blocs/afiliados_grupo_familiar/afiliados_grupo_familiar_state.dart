@@ -29,28 +29,3 @@ class AfiliadosGrupoFamiliarError extends AfiliadosGrupoFamiliarState {
     this.message,
   );
 }
-
-class GrupoFamiliarSubmissionSuccess extends AfiliadosGrupoFamiliarState {
-  final List<GrupoFamiliarEntity>? afiliadosGrupoFamiliarSuccess;
-
-  const GrupoFamiliarSubmissionSuccess({this.afiliadosGrupoFamiliarSuccess})
-      : super(afiliadosGrupoFamiliar: afiliadosGrupoFamiliarSuccess);
-}
-
-
-/* class AfiliadosGrupoFamiliarSaved extends AfiliadosGrupoFamiliarState {
-  final List<GrupoFamiliarEntity>? afiliadosGrupoFamiliarSaved;
-  final String message;
-
-  const AfiliadosGrupoFamiliarSaved(
-      {this.afiliadosGrupoFamiliarSaved, this.message = ''})
-      : super(afiliadosGrupoFamiliar: afiliadosGrupoFamiliarSaved);
-}
- */
-
-/* class GrupoFamiliarSubmissionFailed extends AfiliadosGrupoFamiliarState {
-  final String message;
-
-  const GrupoFamiliarSubmissionFailed(this.message);
-}
- */

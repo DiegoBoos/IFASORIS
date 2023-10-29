@@ -4,6 +4,7 @@ import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
+import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../search/search_afiliados.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/grupo_familiar_form.dart';
@@ -58,6 +59,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   )),
+              const SizedBox(height: 10),
               BlocBuilder<AfiliadosGrupoFamiliarBloc,
                   AfiliadosGrupoFamiliarState>(builder: (context, state) {
                 if (state is AfiliadosGrupoFamiliarLoading) {
@@ -107,25 +109,40 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    final afiliadoGrupoFamiliarBloc =
-                        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
+                    final grupoFamiliarBloc =
+                        BlocProvider.of<GrupoFamiliarBloc>(context);
+                    final afiliadoPrefsBloc =
+                        BlocProvider.of<AfiliadoPrefsBloc>(
+                      context,
+                    );
 
-                    await afiliadoGrupoFamiliarBloc
-                        .deleteAfiliadoGrupoFamiliar(
-                            afiliadoGrupoFamiliar.afiliadoId!,
-                            afiliadoGrupoFamiliar.familiaId!)
-                        .then((value) {
-                      if (value != 0) {
-                        setState(() {
-                          afiliadosGrupoFamiliar.removeAt(index);
-                        });
+                    final afiliado = afiliadoPrefsBloc.state.afiliado!;
 
-                        Navigator.of(context).pop();
+                    if (afiliadoGrupoFamiliar.afiliadoId ==
+                        afiliado.afiliadoId) {
+                      Navigator.of(context).pop();
+                      CustomSnackBar.showSnackBar(
+                          context,
+                          'No se puede eliminar el afiliado cabeza de familia',
+                          Colors.red);
+                    } else {
+                      await grupoFamiliarBloc
+                          .deleteAfiliadoGrupoFamiliar(
+                              afiliadoGrupoFamiliar.afiliadoId!,
+                              afiliadoGrupoFamiliar.familiaId!)
+                          .then((value) {
+                        if (value != 0) {
+                          setState(() {
+                            afiliadosGrupoFamiliar.removeAt(index);
+                          });
 
-                        CustomSnackBar.showSnackBar(context,
-                            'Afiliado eliminado correctamente', Colors.red);
-                      }
-                    });
+                          Navigator.of(context).pop();
+
+                          CustomSnackBar.showSnackBar(context,
+                              'Afiliado eliminado correctamente', Colors.red);
+                        }
+                      });
+                    }
                   },
                   child: const Text("Eliminar"),
                 ),

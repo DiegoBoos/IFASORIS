@@ -13,16 +13,10 @@ class GetAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   const GetAfiliadosGrupoFamiliar(this.familiaId);
 }
 
-class SaveAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
-  final List<GrupoFamiliarEntity> afiliadosGrupoFamiliar;
-
-  const SaveAfiliadosGrupoFamiliar(this.afiliadosGrupoFamiliar);
-}
-
-class CreateOrUpdateAfiliadoGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
+class AddOrEditAfiliadoGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   final GrupoFamiliarEntity newAfiliado;
 
-  const CreateOrUpdateAfiliadoGrupoFamiliar(this.newAfiliado);
+  const AddOrEditAfiliadoGrupoFamiliar(this.newAfiliado);
 }
 
 class ErrorAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {

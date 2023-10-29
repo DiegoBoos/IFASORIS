@@ -12,11 +12,12 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
   GrupoFamiliarRepositoryDBImpl({required this.grupoFamiliarLocalDataSource});
 
   @override
-  Future<Either<Failure, int>> saveGrupoFamiliarRepositoryDB(
-      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar) async {
+  Future<Either<Failure, Map<String, dynamic>>>
+      saveAfiliadoGrupoFamiliarRepositoryDB(
+          GrupoFamiliarEntity afiliadoGrupoFamiliar) async {
     try {
       final result = await grupoFamiliarLocalDataSource
-          .saveGrupoFamiliar(afiliadosGrupoFamiliar);
+          .saveGrupoFamiliar(afiliadoGrupoFamiliar);
 
       return Right(result);
     } on ServerFailure catch (e) {

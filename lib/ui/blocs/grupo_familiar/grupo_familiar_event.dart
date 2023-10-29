@@ -9,6 +9,12 @@ abstract class GrupoFamiliarEvent extends Equatable {
 
 class GrupoFamiliarInit extends GrupoFamiliarEvent {}
 
+class SaveAfiliadoGrupoFamiliar extends GrupoFamiliarEvent {
+  final GrupoFamiliarEntity grupoFamiliar;
+
+  const SaveAfiliadoGrupoFamiliar(this.grupoFamiliar);
+}
+
 class FamiliaChanged extends GrupoFamiliarEvent {
   final int familiaId;
 

@@ -280,22 +280,28 @@ class _FichaPageState extends State<FichaPage> {
               BlocListener<AfiliadosGrupoFamiliarBloc,
                   AfiliadosGrupoFamiliarState>(
                 listener: (context, state) {
-                  if (state is GrupoFamiliarSubmissionSuccess) {
-                    CustomSnackBar.showSnackBar(
-                        context,
-                        'Datos del grupo familiar guardados correctamente',
-                        Colors.green);
-
-                    Navigator.pushReplacementNamed(
-                        context, 'estilo-vida-saludable');
-                  }
-
                   if (state is AfiliadosGrupoFamiliarError) {
                     CustomSnackBar.showSnackBar(
                         context, state.message, Colors.red);
                   }
                 },
               ),
+              /*  BlocListener<GrupoFamiliarBloc, GrupoFamiliarEntity>(
+                listener: (context, state) {
+                  final formStatus = state.formStatus;
+                  if (formStatus is GrupoFamiliarSubmissionSuccess) {
+                    CustomSnackBar.showSnackBar(
+                        context,
+                        'Datos del grupo familiar guardados correctamente',
+                        Colors.green);
+                  }
+
+                  if (formStatus is GrupoFamiliarSubmissionFailed) {
+                    CustomSnackBar.showSnackBar(
+                        context, formStatus.message, Colors.red);
+                  }
+                },
+              ), */
             ],
             child: Scaffold(
               appBar: AppBar(
@@ -335,11 +341,7 @@ class _FichaPageState extends State<FichaPage> {
                       final afiliadosGrupoFamiliar = afiliadosGrupoFamiliarBloc
                           .state.afiliadosGrupoFamiliar;
 
-                      if (afiliadosGrupoFamiliar != null &&
-                          registraAfiliados == 0) {
-                        afiliadosGrupoFamiliarBloc.add(
-                            SaveAfiliadosGrupoFamiliar(afiliadosGrupoFamiliar));
-                      } else if (registraAfiliados == 1) {
+                      if (registraAfiliados == 1) {
                         GrupoFamiliarEntity afiliadoGrupoFamiliar =
                             GrupoFamiliarEntity(
                           afiliadoId: afiliado.afiliadoId,
@@ -355,13 +357,12 @@ class _FichaPageState extends State<FichaPage> {
                           codRegimenAfiliado: afiliado.codRegimenAfiliado,
                         );
 
-                        final afiliadoCabezaFamilia = afiliadosGrupoFamiliar
-                            ?.where(
-                              (afiliadoGrupoFamiliar) =>
-                                  afiliadoGrupoFamiliar.afiliadoId ==
-                                  afiliado.afiliadoId,
-                            )
-                            .toList()[0];
+                        final afiliadoCabezaFamilia =
+                            afiliadosGrupoFamiliar?.firstWhere(
+                          (afiliadoGrupoFamiliar) =>
+                              afiliadoGrupoFamiliar.afiliadoId ==
+                              afiliado.afiliadoId,
+                        );
 
                         if (afiliadoCabezaFamilia != null) {
                           afiliadoGrupoFamiliar = afiliadoCabezaFamilia;
@@ -377,6 +378,10 @@ class _FichaPageState extends State<FichaPage> {
                                     registraAfiliados: registraAfiliados),
                           ),
                         );
+                      } else if (registraAfiliados == 0 &&
+                          afiliadosGrupoFamiliar != null) {
+                        Navigator.pushReplacementNamed(
+                            context, 'estilo-vida-saludable');
                       } else {
                         afiliadosGrupoFamiliarBloc.add(
                             const ErrorAfiliadosGrupoFamiliar(

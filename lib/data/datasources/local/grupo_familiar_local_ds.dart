@@ -1,13 +1,13 @@
-import 'package:ifasoris/core/error/failure.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../../core/error/failure.dart';
 import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
 import '../../models/grupo_familiar_model.dart';
 
 abstract class GrupoFamiliarLocalDataSource {
-  Future<int> saveGrupoFamiliar(
-      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar);
+  Future<Map<String, dynamic>> saveGrupoFamiliar(
+      GrupoFamiliarEntity afiliadoGrupoFamiliar);
 
   Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId);
 
@@ -18,113 +18,29 @@ abstract class GrupoFamiliarLocalDataSource {
 
 class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   @override
-  Future<int> saveGrupoFamiliar(
-      List<GrupoFamiliarEntity> afiliadosGrupoFamiliar) async {
-    final db = await ConnectionSQLiteService.db;
-    final batch = db.batch();
-
-    for (var afiliado in afiliadosGrupoFamiliar) {
-      final existingRecord = await db.rawQuery('''
-    SELECT COUNT(*) FROM Asp3_GrupoFamiliar WHERE Afiliado_id = ?
-  ''', [afiliado.afiliadoId]);
-
-      final recordCount = Sqflite.firstIntValue(existingRecord);
-      if (recordCount == 0) {
-        batch.rawInsert('''
-      INSERT INTO Asp3_GrupoFamiliar (
-        Familia_id,
-        Afiliado_id,
-        TipoDocumento_id,
-        Documento,
-        Genero_id,
-        FechaNacimiento,
-        Edad,
-        TipoRegimen_id,
-        Parentesco_id,
-        Etnia_id,
-        CursoVida_id,
-        NivelEducativo_id,
-        Ocupacion_id,
-        GrupoRiesgo_id,
-        OrigenEtnico5602_id,
-        PuebloIndigena_id,
-        LenguaManeja_id,
-        LenguaMaterna_id,
-        isComplete
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', [
-          afiliado.familiaId,
-          afiliado.afiliadoId,
-          afiliado.tipoDocumentoId,
-          afiliado.documento,
-          afiliado.generoId,
-          afiliado.fechaNacimiento?.toIso8601String(),
-          afiliado.edad,
-          afiliado.tipoRegimenId,
-          afiliado.parentescoId,
-          afiliado.etniaId,
-          afiliado.cursoVidaId,
-          afiliado.nivelEducativoId,
-          afiliado.ocupacionId,
-          afiliado.grupoRiesgoId,
-          afiliado.origenEtnico5602Id,
-          afiliado.puebloIndigenaId,
-          afiliado.lenguaManejaId,
-          afiliado.lenguaMaternaId,
-          afiliado.isComplete
-        ]);
-      } else {
-        batch.rawQuery('''
-      UPDATE Asp3_GrupoFamiliar SET
-        Familia_id = ?,
-        Afiliado_id = ?,
-        TipoDocumento_id = ?,
-        Documento = ?,
-        Genero_id = ?,
-        FechaNacimiento = ?,
-        Edad = ?,
-        TipoRegimen_id = ?,
-        Parentesco_id = ?,
-        Etnia_id = ?,
-        CursoVida_id = ?,
-        NivelEducativo_id = ?,
-        Ocupacion_id = ?,
-        GrupoRiesgo_id = ?,
-        OrigenEtnico5602_id = ?,
-        PuebloIndigena_id = ?,
-        LenguaManeja_id = ?,
-        LenguaMaterna_id = ?,
-        isComplete = ?
-      WHERE Afiliado_id = ? AND Familia_id = ?
-    ''', [
-          afiliado.familiaId,
-          afiliado.afiliadoId,
-          afiliado.tipoDocumentoId,
-          afiliado.documento,
-          afiliado.generoId,
-          afiliado.fechaNacimiento?.toIso8601String(),
-          afiliado.edad,
-          afiliado.tipoRegimenId,
-          afiliado.parentescoId,
-          afiliado.etniaId,
-          afiliado.cursoVidaId,
-          afiliado.nivelEducativoId,
-          afiliado.ocupacionId,
-          afiliado.grupoRiesgoId,
-          afiliado.origenEtnico5602Id,
-          afiliado.puebloIndigenaId,
-          afiliado.lenguaManejaId,
-          afiliado.lenguaMaternaId,
-          afiliado.isComplete,
-          afiliado.afiliadoId,
-          afiliado.familiaId,
-        ]);
-      }
-    }
-
+  Future<Map<String, dynamic>> saveGrupoFamiliar(
+      GrupoFamiliarEntity afiliadoGrupoFamiliar) async {
     try {
-      final results = await batch.commit();
-      return results.length;
+      final db = await ConnectionSQLiteService.db;
+      final resUpdate = await db.update(
+        'Asp3_GrupoFamiliar',
+        afiliadoGrupoFamiliar.toJson(),
+        where: 'Afiliado_id = ? AND Familia_id = ?',
+        whereArgs: [
+          afiliadoGrupoFamiliar.afiliadoId,
+          afiliadoGrupoFamiliar.familiaId
+        ],
+      );
+      if (resUpdate > 0) {
+        return {'res': resUpdate, 'existeRegistro': true};
+      } else {
+        final resInsert = await db.insert(
+          'Asp3_GrupoFamiliar',
+          afiliadoGrupoFamiliar.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.ignore,
+        );
+        return {'res': resInsert, 'existeRegistro': false};
+      }
     } catch (e) {
       throw const DatabaseFailure(['Error al guardar el grupo familiar']);
     }
