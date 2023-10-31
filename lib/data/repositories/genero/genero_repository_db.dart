@@ -16,10 +16,10 @@ class GeneroRepositoryDBImpl implements GeneroRepositoryDB {
     try {
       final result = await generoLocalDataSource.getGeneros();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -29,10 +29,10 @@ class GeneroRepositoryDBImpl implements GeneroRepositoryDB {
     try {
       final result = await generoLocalDataSource.saveGenero(genero);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

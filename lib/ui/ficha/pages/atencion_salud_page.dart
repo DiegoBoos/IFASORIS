@@ -76,11 +76,6 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
               listener: (context, state) {
                 final formStatus = state.formStatus;
                 if (formStatus is AtencionSaludSubmissionSuccess) {
-                  CustomSnackBar.showSnackBar(
-                      context,
-                      'Datos de atenciones en salud guardados correctamente',
-                      Colors.green);
-
                   atencionSaludBloc.add(AtencionSaludInit());
 
                   if (afiliadoPageIndex <

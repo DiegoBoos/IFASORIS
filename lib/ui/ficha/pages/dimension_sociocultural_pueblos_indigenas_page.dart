@@ -80,11 +80,6 @@ class _DimensionSocioCulturalPueblosIndigenasPageState
                 final formStatus = state.formStatus;
                 if (formStatus
                     is DimensionSocioCulturalPueblosIndigenasSubmissionSuccess) {
-                  CustomSnackBar.showSnackBar(
-                      context,
-                      'Datos de dimensión sociocultural pueblos indígenas guardados correctamente',
-                      Colors.green);
-
                   dimensionSocioCulturalPueblosIndigenasBloc
                       .add(DimensionSocioCulturalPueblosIndigenasInit());
 

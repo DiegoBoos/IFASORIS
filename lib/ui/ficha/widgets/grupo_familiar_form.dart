@@ -21,11 +21,9 @@ import '../../cubits/regimen/regimen_cubit.dart';
 import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 
 class GrupoFamiliarForm extends StatefulWidget {
-  const GrupoFamiliarForm(
-      {super.key, this.afiliadoGrupoFamiliar, this.registraAfiliados = 0});
+  const GrupoFamiliarForm({super.key, this.afiliadoGrupoFamiliar});
 
   final GrupoFamiliarEntity? afiliadoGrupoFamiliar;
-  final int registraAfiliados;
 
   @override
   State<GrupoFamiliarForm> createState() => _GrupoFamiliarFormState();
@@ -191,11 +189,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
         AfiliadosGrupoFamiliarState>(
       listener: (context, state) {
         if (state is AfiliadosGrupoFamiliarLoaded) {
-          if (widget.registraAfiliados == 0) {
-            Navigator.popUntil(context, ModalRoute.withName('ficha'));
-          } else {
-            Navigator.pushReplacementNamed(context, 'estilo-vida-saludable');
-          }
+          Navigator.popUntil(context, ModalRoute.withName('ficha'));
         } else if (state is AfiliadosGrupoFamiliarError) {
           CustomSnackBar.showSnackBar(context, state.message, Colors.red);
         }

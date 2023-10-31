@@ -17,10 +17,10 @@ class ConsumoAlcoholRepositoryDBImpl implements ConsumoAlcoholRepositoryDB {
     try {
       final result = await consumoAlcoholLocalDataSource.getConsumosAlcohol();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -31,10 +31,10 @@ class ConsumoAlcoholRepositoryDBImpl implements ConsumoAlcoholRepositoryDB {
       final result = await consumoAlcoholLocalDataSource
           .saveConsumoAlcohol(consumoAlcohol);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

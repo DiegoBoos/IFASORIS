@@ -19,10 +19,10 @@ class TenenciaViviendaRepositoryDBImpl implements TenenciaViviendaRepositoryDB {
       final result =
           await tenenciaViviendaLocalDataSource.getTenenciasVivienda();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -33,10 +33,10 @@ class TenenciaViviendaRepositoryDBImpl implements TenenciaViviendaRepositoryDB {
       final result = await tenenciaViviendaLocalDataSource
           .saveTenenciaVivienda(tenenciaVivienda);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

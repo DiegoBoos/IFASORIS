@@ -19,10 +19,10 @@ class AtencionSaludRepositoryDBImpl implements AtencionSaludRepositoryDB {
           await atencionSaludLocalDataSource.saveAtencionSalud(atencionSalud);
 
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -34,10 +34,10 @@ class AtencionSaludRepositoryDBImpl implements AtencionSaludRepositoryDB {
           await atencionSaludLocalDataSource.getAtencionSalud(afiliadoId);
 
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

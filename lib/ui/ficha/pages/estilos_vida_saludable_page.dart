@@ -74,11 +74,6 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
             listener: (context, state) {
               final formStatus = state.formStatus;
               if (formStatus is EstiloVidaSaludableSubmissionSuccess) {
-                CustomSnackBar.showSnackBar(
-                    context,
-                    'Datos de estilo de vida saludable guardados correctamente',
-                    Colors.green);
-
                 if (afiliadoPageIndex <
                     afiliadosGrupoFamiliarBloc
                             .state.afiliadosGrupoFamiliar!.length -

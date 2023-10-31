@@ -10,12 +10,7 @@ import '../../utils/custom_snack_bar.dart';
 import '../widgets/grupo_familiar_form.dart';
 
 class GrupoFamiliarPage extends StatefulWidget {
-  const GrupoFamiliarPage({
-    required this.registraAfiliados,
-    super.key,
-  });
-
-  final int registraAfiliados;
+  const GrupoFamiliarPage({super.key});
 
   @override
   State<GrupoFamiliarPage> createState() => _GrupoFamiliarState();
@@ -38,48 +33,97 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
   @override
   Widget build(BuildContext context) {
     final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
+      context,
+    );
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
+
+    final afiliado = afiliadoPrefsBloc.state.afiliado!;
 
     return Column(
       children: [
-        if (widget.registraAfiliados == 0)
-          Column(
-            children: [
-              MaterialButton(
-                  elevation: 0,
-                  color: Theme.of(context).colorScheme.primary,
-                  onPressed: () => showSearch(
-                      context: context,
-                      delegate: SearchAfiliados(
-                          afiliadoBloc: afiliadoBloc, isGrupoFamiliar: true)),
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: const Text(
-                      'Agregar afiliado',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )),
-              const SizedBox(height: 10),
-              BlocBuilder<AfiliadosGrupoFamiliarBloc,
-                  AfiliadosGrupoFamiliarState>(builder: (context, state) {
-                if (state is AfiliadosGrupoFamiliarLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is AfiliadosGrupoFamiliarLoaded) {
-                  final afiliadosGrupoFamiliarLoaded =
-                      state.afiliadosGrupoFamiliarLoaded!;
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: afiliadosGrupoFamiliarLoaded.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return buildDismissibleListTile(
-                          context, afiliadosGrupoFamiliarLoaded, index);
-                    },
-                  );
-                }
-                return const Center(child: Text('No hay afiliados'));
-              })
-            ],
-          ),
+        MaterialButton(
+            elevation: 0,
+            color: Theme.of(context).colorScheme.primary,
+            onPressed: () => showSearch(
+                context: context,
+                delegate: SearchAfiliados(
+                    afiliadoBloc: afiliadoBloc, isGrupoFamiliar: true)),
+            child: Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              child: const Text(
+                'Agregar afiliado al grupo familiar',
+                style: TextStyle(color: Colors.white),
+              ),
+            )),
+        MaterialButton(
+            elevation: 0,
+            color: Theme.of(context).colorScheme.primary,
+            onPressed: () {
+              GrupoFamiliarEntity afiliadoGrupoFamiliar = GrupoFamiliarEntity(
+                afiliadoId: afiliado.afiliadoId,
+                documento: afiliado.documento,
+                edad: afiliado.edad,
+                fechaNacimiento: afiliado.fecnac,
+                nombre1: afiliado.nombre1,
+                nombre2: afiliado.nombre2,
+                apellido1: afiliado.apellido1,
+                apellido2: afiliado.apellido2,
+                tipoDocAfiliado: afiliado.tipoDocAfiliado,
+                codGeneroAfiliado: afiliado.codGeneroAfiliado,
+                codRegimenAfiliado: afiliado.codRegimenAfiliado,
+              );
+
+              final afiliadosGrupoFamiliar =
+                  afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar;
+
+              if (afiliadosGrupoFamiliar != null) {
+                final afiliadoCabezaFamilia = afiliadosGrupoFamiliar.firstWhere(
+                  (afiliadoGrupoFamiliar) =>
+                      afiliadoGrupoFamiliar.afiliadoId == afiliado.afiliadoId,
+                );
+
+                afiliadoGrupoFamiliar = afiliadoCabezaFamilia;
+              }
+
+              Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => GrupoFamiliarForm(
+                    afiliadoGrupoFamiliar: afiliadoGrupoFamiliar,
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              child: const Text(
+                'Continuar como cabeza de familia',
+                style: TextStyle(color: Colors.white),
+              ),
+            )),
+        const SizedBox(height: 10),
+        BlocBuilder<AfiliadosGrupoFamiliarBloc, AfiliadosGrupoFamiliarState>(
+            builder: (context, state) {
+          if (state is AfiliadosGrupoFamiliarLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is AfiliadosGrupoFamiliarLoaded) {
+            final afiliadosGrupoFamiliarLoaded =
+                state.afiliadosGrupoFamiliarLoaded!;
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: afiliadosGrupoFamiliarLoaded.length,
+              itemBuilder: (BuildContext context, int index) {
+                return buildDismissibleListTile(
+                    context, afiliadosGrupoFamiliarLoaded, index);
+              },
+            );
+          }
+          return const Center(child: Text('No hay afiliados'));
+        })
       ],
     );
   }
@@ -158,17 +202,20 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
         child: const Icon(Icons.delete, color: Colors.white),
       ),
       child: ListTile(
-          title: Text(nombreCompleto),
-          onTap: () {
-            Navigator.push<void>(
-              context,
-              MaterialPageRoute<void>(
-                builder: (BuildContext context) => GrupoFamiliarForm(
-                  afiliadoGrupoFamiliar: afiliadoGrupoFamiliar,
+        title: Text(nombreCompleto),
+        trailing: IconButton(
+            onPressed: () {
+              Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => GrupoFamiliarForm(
+                    afiliadoGrupoFamiliar: afiliadoGrupoFamiliar,
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+            icon: const Icon(Icons.edit)),
+      ),
     );
   }
 }

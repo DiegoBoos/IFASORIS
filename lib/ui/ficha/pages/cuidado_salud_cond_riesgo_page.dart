@@ -80,11 +80,6 @@ class _CuidadoSaludCondRiesgoPageState
               listener: (context, state) {
                 final formStatus = state.formStatus;
                 if (formStatus is CuidadoSaludCondRiesgoSubmissionSuccess) {
-                  CustomSnackBar.showSnackBar(
-                      context,
-                      'Datos de cuidado salud condiciones riesgo guardados correctamente',
-                      Colors.green);
-
                   cuidadoSaludCondRiesgoBloc.add(CuidadoSaludCondRiesgoInit());
 
                   if (afiliadoPageIndex <

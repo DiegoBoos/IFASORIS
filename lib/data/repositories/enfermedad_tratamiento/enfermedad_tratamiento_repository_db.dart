@@ -21,10 +21,10 @@ class EnfermedadTratamientoRepositoryDBImpl
       final result = await enfermedadTratamientoLocalDataSource
           .getEnfermedadesTratamiento();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -35,10 +35,10 @@ class EnfermedadTratamientoRepositoryDBImpl
       final result = await enfermedadTratamientoLocalDataSource
           .saveEnfermedadTratamiento(enfermedadTratamiento);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

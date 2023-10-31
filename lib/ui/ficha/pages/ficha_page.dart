@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/dim_ubicacion_entity.dart';
 import '../../../domain/entities/dim_vivienda_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
@@ -243,11 +242,6 @@ class _FichaPageState extends State<FichaPage> {
                 listener: (context, state) {
                   final formStatus = state.formStatus;
                   if (formStatus is DimUbicacionSubmissionSuccess) {
-                    CustomSnackBar.showSnackBar(
-                        context,
-                        'Datos de ubicación guardados correctamente',
-                        Colors.green);
-
                     setState(() {
                       currentStep = 1;
                     });
@@ -262,11 +256,6 @@ class _FichaPageState extends State<FichaPage> {
                 listener: (context, state) {
                   final formStatus = state.formStatus;
                   if (formStatus is DimViviendaSubmissionSuccess) {
-                    CustomSnackBar.showSnackBar(
-                        context,
-                        'Datos de vivienda guardados correctamente',
-                        Colors.green);
-
                     setState(() {
                       currentStep = 2;
                     });
@@ -286,22 +275,6 @@ class _FichaPageState extends State<FichaPage> {
                   }
                 },
               ),
-              /*  BlocListener<GrupoFamiliarBloc, GrupoFamiliarEntity>(
-                listener: (context, state) {
-                  final formStatus = state.formStatus;
-                  if (formStatus is GrupoFamiliarSubmissionSuccess) {
-                    CustomSnackBar.showSnackBar(
-                        context,
-                        'Datos del grupo familiar guardados correctamente',
-                        Colors.green);
-                  }
-
-                  if (formStatus is GrupoFamiliarSubmissionFailed) {
-                    CustomSnackBar.showSnackBar(
-                        context, formStatus.message, Colors.red);
-                  }
-                },
-              ), */
             ],
             child: Scaffold(
               appBar: AppBar(
@@ -341,45 +314,7 @@ class _FichaPageState extends State<FichaPage> {
                       final afiliadosGrupoFamiliar = afiliadosGrupoFamiliarBloc
                           .state.afiliadosGrupoFamiliar;
 
-                      if (registraAfiliados == 1) {
-                        GrupoFamiliarEntity afiliadoGrupoFamiliar =
-                            GrupoFamiliarEntity(
-                          afiliadoId: afiliado.afiliadoId,
-                          documento: afiliado.documento,
-                          edad: afiliado.edad,
-                          fechaNacimiento: afiliado.fecnac,
-                          nombre1: afiliado.nombre1,
-                          nombre2: afiliado.nombre2,
-                          apellido1: afiliado.apellido1,
-                          apellido2: afiliado.apellido2,
-                          tipoDocAfiliado: afiliado.tipoDocAfiliado,
-                          codGeneroAfiliado: afiliado.codGeneroAfiliado,
-                          codRegimenAfiliado: afiliado.codRegimenAfiliado,
-                        );
-
-                        final afiliadoCabezaFamilia =
-                            afiliadosGrupoFamiliar?.firstWhere(
-                          (afiliadoGrupoFamiliar) =>
-                              afiliadoGrupoFamiliar.afiliadoId ==
-                              afiliado.afiliadoId,
-                        );
-
-                        if (afiliadoCabezaFamilia != null) {
-                          afiliadoGrupoFamiliar = afiliadoCabezaFamilia;
-                        }
-
-                        Navigator.push<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                GrupoFamiliarForm(
-                                    afiliadoGrupoFamiliar:
-                                        afiliadoGrupoFamiliar,
-                                    registraAfiliados: registraAfiliados),
-                          ),
-                        );
-                      } else if (registraAfiliados == 0 &&
-                          afiliadosGrupoFamiliar != null) {
+                      if (afiliadosGrupoFamiliar != null) {
                         Navigator.pushReplacementNamed(
                             context, 'estilo-vida-saludable');
                       } else {
@@ -486,33 +421,6 @@ class _FichaPageState extends State<FichaPage> {
     return Step(
         isActive: currentStep >= 2,
         title: const Text('Grupo Familiar'),
-        content: Column(
-          children: [
-            const Text('Tiene miembros en la familia para registrar'),
-            RadioListTile(
-              title: const Text('Si'),
-              value: 0,
-              groupValue: registraAfiliados,
-              onChanged: (int? value) {
-                setState(() {
-                  registraAfiliados = value!;
-                });
-              },
-            ),
-            RadioListTile(
-              title: const Text('No'),
-              value: 1,
-              groupValue: registraAfiliados,
-              onChanged: (int? value) async {
-                setState(() {
-                  registraAfiliados = value!;
-                });
-              },
-            ),
-            GrupoFamiliarPage(
-              registraAfiliados: registraAfiliados,
-            ),
-          ],
-        ));
+        content: const GrupoFamiliarPage());
   }
 }
