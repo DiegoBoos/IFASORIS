@@ -2,13 +2,13 @@ import '../../domain/entities/estadistica_entity.dart';
 
 class EstadisticaModel extends EstadisticaEntity {
   EstadisticaModel({
-    required String descripcion,
+    required String estadistica,
     required int cantidad,
-  }) : super(descripcion: descripcion, cantidad: cantidad);
+  }) : super(estadistica: estadistica, cantidad: cantidad);
 
   factory EstadisticaModel.fromJson(Map<String, dynamic> json) =>
       EstadisticaModel(
-        descripcion: json["Descripcion"],
+        estadistica: json["Estadistica"],
         cantidad: json["Cantidad"],
       );
 }

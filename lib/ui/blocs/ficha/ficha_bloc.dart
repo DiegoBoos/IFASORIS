@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/domain/entities/estadistica_entity.dart';
 import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
 
 part 'ficha_event.dart';
@@ -21,6 +22,11 @@ class FichaBloc extends Bloc<FichaEvent, FichasState> {
   Future<List<FichaEntity>> loadFichasDiligenciadas(int familiaId) async {
     final result =
         await fichaUsecaseDB.loadFichasDiligenciadasUsecaseDB(familiaId);
+    return result.fold((failure) => [], (data) => data);
+  }
+
+  Future<List<EstadisticaEntity>> loadEstadisticas() async {
+    final result = await fichaUsecaseDB.loadEstadisticasUsecaseDB();
     return result.fold((failure) => [], (data) => data);
   }
 }

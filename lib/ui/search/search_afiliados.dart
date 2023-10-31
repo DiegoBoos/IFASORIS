@@ -155,42 +155,50 @@ class SearchAfiliados extends SearchDelegate {
                               if (ficha != null) {
                                 if (ficha.numFicha == null ||
                                     ficha.numFicha == '') {
-                                  CustomSnackBar.showCustomDialog(
-                                      context,
-                                      "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
-                                      "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
-                                      () async {
-                                    final familiaCubit =
-                                        BlocProvider.of<FamiliaCubit>(context);
-                                    final fichaCubit =
-                                        BlocProvider.of<FichaCubit>(context);
+                                  cargarFicha(context, ficha, afiliado);
+                                  //   final futures = Future.wait(
+                                  //       [familiaFuture, fichaFuture]);
 
-                                    //Elimina el afiliado de la familia
-                                    final familiaFuture =
-                                        familiaCubit.deleteAfiliadoFamilia(
-                                            afiliado.afiliadoId!);
+                                  //   futures.then((value) {
+                                  //     int familiaId = value[0];
+                                  //     int fichaId = value[1];
 
-                                    //Elimina la ficha
-                                    final fichaFuture =
-                                        fichaCubit.deleteFicha(ficha.fichaId!);
+                                  // CustomSnackBar.showCustomDialog(
+                                  //     context,
+                                  //     "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
+                                  //     "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
+                                  //     () async {
+                                  //   final familiaCubit =
+                                  //       BlocProvider.of<FamiliaCubit>(context);
+                                  //   final fichaCubit =
+                                  //       BlocProvider.of<FichaCubit>(context);
 
-                                    final futures = Future.wait(
-                                        [familiaFuture, fichaFuture]);
+                                  //   //Elimina el afiliado de la familia
+                                  //   final familiaFuture =
+                                  //       familiaCubit.deleteAfiliadoFamilia(
+                                  //           afiliado.afiliadoId!);
 
-                                    futures.then((value) {
-                                      int familiaId = value[0];
-                                      int fichaId = value[1];
+                                  //   //Elimina la ficha
+                                  //   final fichaFuture =
+                                  //       fichaCubit.deleteFicha(ficha.fichaId!);
 
-                                      if (familiaId != 0 && fichaId != 0) {
-                                        createFicha(context, afiliado);
-                                      }
-                                    });
-                                  });
+                                  //   final futures = Future.wait(
+                                  //       [familiaFuture, fichaFuture]);
+
+                                  //   futures.then((value) {
+                                  //     int familiaId = value[0];
+                                  //     int fichaId = value[1];
+
+                                  //     if (familiaId != 0 && fichaId != 0) {
+                                  //       createFicha(context, afiliado);
+                                  //     }
+                                  //   });
+                                  // });
                                 } else {
                                   CustomSnackBar.showCustomDialog(
                                       context,
-                                      "Usuario ya registrado",
-                                      "El usuario se encuentra registrado en la ficha No. ${ficha.numFicha}",
+                                      "Afiliado ya registrado",
+                                      "El afiliado se encuentra registrado en la ficha No. ${ficha.numFicha}",
                                       () => Navigator.pop(context),
                                       false);
                                 }
@@ -253,6 +261,15 @@ class SearchAfiliados extends SearchDelegate {
         }
       });
     }
+  }
+
+  Future<void> cargarFicha(
+      BuildContext context, FichaEntity ficha, AfiliadoEntity afiliado) async {
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
+
+    afiliadoPrefsBloc.add(
+        SaveAfiliado(afiliado.copyWith(familiaId: ficha.familia!.familiaId)));
+    close(context, null);
   }
 
   @override

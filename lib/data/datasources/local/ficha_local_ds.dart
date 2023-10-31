@@ -71,30 +71,30 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
     final db = await ConnectionSQLiteService.db;
     final resFichasReportadas = await db.rawQuery('''
       SELECT  'FichasReportadas' as Estadistica,  count(*) as Cantidad FROM Ficha
-      WHERE NumFicha <> "" or Ficha_id_remote IS NOT NULL
+      WHERE NumFicha <> '' or Ficha_id_remote IS NOT NULL
       UNION ALL 
       SELECT  'FichasRegistradas' as Estadistica, count(*)  as Cantidad FROM Ficha
-        WHERE NumFicha = "" or Ficha_id_remote IS NULL
+        WHERE NumFicha = '' AND Ficha_id_remote IS NULL
       UNION ALL
       SELECT  'FichasRegistradasIncompletas' as Estadistica,  count(*) as Cantidad FROM Ficha
       inner join Familia ON (Familia.Ficha_id  =  Ficha.Ficha_id)
-      inner join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
-      WHERE Asp3_GrupoFamiliar.isComplete=0
+      left join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
+      WHERE (Asp3_GrupoFamiliar.isComplete=0 OR Asp3_GrupoFamiliar.isComplete IS NULL) AND NumFicha = '' AND Ficha_id_remote IS NULL
     	UNION ALL
       SELECT  'FichasRegistradasCompletas' as Estadistica,  count(*) as Cantidad FROM Ficha
       inner join Familia ON (Familia.Ficha_id  =  Ficha.Ficha_id)
       inner join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
-      WHERE Asp3_GrupoFamiliar.isComplete=1
+      WHERE Asp3_GrupoFamiliar.isComplete=1 AND NumFicha = '' AND Ficha_id_remote IS NULL
      	UNION ALL 
     	SELECT  'AfiliadosReportados' as Estadistica,  count(*) as Cantidad FROM Asp3_GrupoFamiliar
     	inner join Familia ON (Familia.Familia_id  =  Asp3_GrupoFamiliar.Familia_id)
     	inner join Ficha on Ficha.Ficha_id=Familia.Ficha_id
-      WHERE NumFicha <> "" or Ficha_id_remote IS NOT NULL
+      WHERE NumFicha <> '' or Ficha_id_remote IS NOT NULL
     	UNION ALL 
     	SELECT  'AfiliadosRegistrados' as Estadistica,  count(*) as Cantidad FROM Asp3_GrupoFamiliar
     	inner join Familia ON (Familia.Familia_id  =  Asp3_GrupoFamiliar.Familia_id)
     	inner join Ficha on Ficha.Ficha_id=Familia.Ficha_id
-          WHERE NumFicha = "" or Ficha_id_remote IS NULL
+          WHERE NumFicha = '' AND Ficha_id_remote IS NULL
       ''');
     final result = List<EstadisticaModel>.from(
         resFichasReportadas.map((m) => EstadisticaModel.fromJson(m))).toList();

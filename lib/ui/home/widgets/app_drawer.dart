@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/domain/entities/estadistica_entity.dart';
 
 import '../../../domain/entities/ficha_entity.dart';
 import '../../../domain/entities/usuario_entity.dart';
@@ -77,17 +78,57 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.pie_chart),
               title: const Text('Estadísticas'),
               onTap: () {
-                List<FichaEntity> fichasCompletas = [];
-                List<FichaEntity> fichasInCompletas = [];
-                List<FichaEntity> fichasSincronizadas = [];
-                List<FichaEntity> fichasPendientes = [];
-                final afiliado = afiliadoPrefsBloc.state.afiliado;
-                if (afiliado != null) {
-                  final future1 = fichaBloc.loadFichas(afiliado.familiaId!);
-                  final future2 =
-                      fichaBloc.loadFichasDiligenciadas(afiliado.familiaId!);
+                // List<FichaEntity> fichasCompletas = [];
+                // List<FichaEntity> fichasInCompletas = [];
+                // List<FichaEntity> fichasSincronizadas = [];
+                // List<FichaEntity> fichasPendientes = [];
+                // List<EstadisticaEntity> estadisticas = [];
+                // final afiliado = afiliadoPrefsBloc.state.afiliado;
+                // if (afiliado != null) {
+                // final future1 = fichaBloc.loadFichas(afiliado.familiaId!);
+                // final future2 =
+                //     fichaBloc.loadFichasDiligenciadas(afiliado.familiaId!);
+                final future3 = fichaBloc.loadEstadisticas();
 
-                  Future.wait([future1, future2]).then((values) {
+                Future.wait([future3]).then((values) {
+                  final estadisticas = values[0];
+                  final registradas = estadisticas
+                      .where((i) => i.estadistica == 'FichasRegistradas')
+                      .first;
+                  final reportadas = estadisticas
+                      .where((i) => i.estadistica == 'FichasReportadas')
+                      .first;
+                  final incompletas = estadisticas
+                      .where((i) =>
+                          i.estadistica == 'FichasRegistradasIncompletas')
+                      .first;
+                  final completas = estadisticas
+                      .where(
+                          (i) => i.estadistica == 'FichasRegistradasCompletas')
+                      .first;
+                  final afiliadosReportados = estadisticas
+                      .where((i) => i.estadistica == 'AfiliadosReportados')
+                      .first;
+                  final afiliadosRegistrados = estadisticas
+                      .where((i) => i.estadistica == 'AfiliadosRegistrados')
+                      .first;
+                  Navigator.push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => GraficasPage(
+                        countCompletas: completas.cantidad,
+                        countInCompletas: incompletas.cantidad,
+                        countSincronizadas: reportadas.cantidad,
+                        countPendientes: registradas.cantidad,
+                        countAfiliadosRegistrados:
+                            afiliadosRegistrados.cantidad,
+                        countAfiliadosReportados: afiliadosReportados.cantidad,
+                      ),
+                    ),
+                  );
+                });
+
+                /* Future.wait([future1, future2]).then((values) {
                     final fichas = values[0];
                     final fichasDiligenciadas = values[1];
 
@@ -117,11 +158,11 @@ class AppDrawer extends StatelessWidget {
                             countPendientes: fichasPendientes.length),
                       ),
                     );
-                  });
-                } else {
-                  CustomSnackBar.showSnackBar(
-                      context, 'No hay afiliado seleccionado', Colors.red);
-                }
+                  }); */
+                // } else {
+                //   CustomSnackBar.showSnackBar(
+                //       context, 'No hay datos', Colors.red);
+                // }
               },
             ),
             const Divider(),

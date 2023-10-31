@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/domain/entities/estadistica_entity.dart';
 
 import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
@@ -74,6 +75,20 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
     try {
       final result =
           await fichaLocalDataSource.loadFichasDiligenciadas(familiaId);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on ServerException {
+      return const Left(ServerFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<EstadisticaEntity>>>
+      loadEstadisticasRepositoryDB() async {
+    try {
+      final result = await fichaLocalDataSource.loadEstadisticas();
 
       return Right(result);
     } on ServerFailure catch (e) {

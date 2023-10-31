@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/domain/entities/estadistica_entity.dart';
 import 'package:ifasoris/domain/entities/ficha_entity.dart';
 
 import '../../../core/error/failure.dart';
@@ -15,4 +16,7 @@ abstract class FichaRepositoryDB {
 
   Future<Either<Failure, List<FichaEntity>>>
       loadFichasDiligenciadasRepositoryDB(int familiaId);
+
+  Future<Either<Failure, List<EstadisticaEntity>>>
+      loadEstadisticasRepositoryDB();
 }
