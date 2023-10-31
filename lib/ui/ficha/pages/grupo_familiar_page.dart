@@ -62,6 +62,9 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
             elevation: 0,
             color: Theme.of(context).colorScheme.primary,
             onPressed: () {
+              //Para Continuar como cabeza de familia consultar el afiliado ficha.familia.FK_Afiliado_id en Tabla GrupoFamiliar
+              //Si no existe mandarlo a la pantalla de crear el registro en GrupoFamiliar
+
               GrupoFamiliarEntity afiliadoGrupoFamiliar = GrupoFamiliarEntity(
                 afiliadoId: afiliado.afiliadoId,
                 documento: afiliado.documento,

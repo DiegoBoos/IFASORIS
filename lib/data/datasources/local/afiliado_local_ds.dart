@@ -35,7 +35,7 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
       UNION ALL
 
       SELECT Ficha.*, Familia.* FROM Familia 
-      JOIN Asp3_GrupoFamiliar ON Familia.Familia_id = Asp3_GrupoFamiliar.GrupoFamiliar_id
+      JOIN Asp3_GrupoFamiliar ON Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id
       JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
       WHERE Asp3_GrupoFamiliar.Afiliado_id  = $afiliadoId
       ''');

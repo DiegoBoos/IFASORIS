@@ -155,6 +155,9 @@ class SearchAfiliados extends SearchDelegate {
                               if (ficha != null) {
                                 if (ficha.numFicha == null ||
                                     ficha.numFicha == '') {
+                                  afiliado.afiliadoId =
+                                      ficha.familia!.fkAfiliadoId;
+
                                   cargarFicha(context, ficha, afiliado);
                                   //   final futures = Future.wait(
                                   //       [familiaFuture, fichaFuture]);
