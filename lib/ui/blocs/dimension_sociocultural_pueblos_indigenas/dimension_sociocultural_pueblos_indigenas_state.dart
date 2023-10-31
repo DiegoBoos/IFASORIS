@@ -9,10 +9,10 @@ class DimensionSocioCulturalPueblosIndigenasFormInitial
   const DimensionSocioCulturalPueblosIndigenasFormInitial();
 }
 
-class DimensionSocioCulturalPueblosIndigenasFormLoaded
+class DimensionSocioCulturalPueblosIndigenasFormLoading
     extends DimensionSocioCulturalPueblosIndigenasState {}
 
-class DimensionSocioCulturalPueblosIndigenasFormEmpty
+class DimensionSocioCulturalPueblosIndigenasFormLoaded
     extends DimensionSocioCulturalPueblosIndigenasState {}
 
 class DimensionSocioCulturalPueblosIndigenasSubmissionSuccess

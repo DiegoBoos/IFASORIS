@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
 import '../../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
+import '../../cubits/condicion_nutricional/condicion_nutricional_cubit.dart';
+import '../../cubits/conducta_seguir/conducta_seguir_cubit.dart';
+import '../../cubits/esquema_vacunacion/esquema_vacunacion_cubit.dart';
+import '../../cubits/lugar_vacunacion/lugar_vacunacion_cubit.dart';
+import '../../cubits/metodo_planificacion/metodo_planificacion_cubit.dart';
+import '../../cubits/nombre_enfermedad/nombre_enfermedad_cubit.dart';
+import '../../cubits/seguimiento_enfermedad/seguimiento_enfermedad_cubit.dart';
+import '../../cubits/servicio_solicitado/servicio_solicitado_cubit.dart';
+import '../../cubits/ultima_vez_inst_salud/ultima_vez_inst_salud_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/cuidado_salud_cond_riesgo_form.dart';
 
@@ -31,6 +41,24 @@ class _CuidadoSaludCondRiesgoPageState
       afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar!.length,
       (_) => GlobalKey<FormState>(),
     );
+
+    getAccesoriasCuidadoSaludCondRiesgo();
+  }
+
+  getAccesoriasCuidadoSaludCondRiesgo() {
+    BlocProvider.of<UltimaVezInstSaludCubit>(context).getUltimaVezInstSaludDB();
+    BlocProvider.of<ServicioSolicitadoCubit>(context).getServicioSolicitadoDB();
+    BlocProvider.of<OpcionSiNoCubit>(context).getOpcionesSiNoDB();
+    BlocProvider.of<NombreEnfermedadCubit>(context).getNombreEnfermedadDB();
+    BlocProvider.of<SeguimientoEnfermedadCubit>(context)
+        .getSeguimientoEnfermedadDB();
+    BlocProvider.of<CondicionNutricionalCubit>(context)
+        .getCondicionNutricionalDB();
+    BlocProvider.of<EsquemaVacunacionCubit>(context).getEsquemaVacunacionDB();
+    BlocProvider.of<LugarVacunacionCubit>(context).getLugarVacunacionDB();
+    BlocProvider.of<MetodoPlanificacionCubit>(context)
+        .getMetodoPlanificacionDB();
+    BlocProvider.of<ConductaSeguirCubit>(context).getConductaSeguirDB();
   }
 
   void _submitForm() {
@@ -145,19 +173,9 @@ class _CuidadoSaludCondRiesgoPageState
                             CuidadoSaludCondRiesgoEntity>(
                           builder: (context, state) {
                             if (state.formStatus
-                                is CuidadoSaludCondRiesgoFormEmpty) {
-                              return Form(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                key: formKeys[index],
-                                child: CuidadoSaludCondRiesgoForm(
-                                  currentAfiliado: currentAfiliado,
-                                ),
-                              );
-                            } else if (state.formStatus
-                                    is CuidadoSaludCondRiesgoFormLoaded ||
+                                    is CuidadoSaludCondRiesgoFormInitial ||
                                 state.formStatus
-                                    is CuidadoSaludCondRiesgoSubmissionSuccess) {
+                                    is CuidadoSaludCondRiesgoFormLoaded) {
                               return Form(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
@@ -174,12 +192,19 @@ class _CuidadoSaludCondRiesgoPageState
                       },
                     ),
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _submitForm,
-                      child: const Text('Guardar'),
-                    ),
+                  BlocBuilder<CuidadoSaludCondRiesgoBloc,
+                      CuidadoSaludCondRiesgoEntity>(
+                    builder: (context, state) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: state is CuidadoSaludCondRiesgoFormLoading
+                              ? null
+                              : _submitForm,
+                          child: const Text('Siguiente'),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

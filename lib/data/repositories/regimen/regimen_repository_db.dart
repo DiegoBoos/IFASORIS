@@ -17,10 +17,10 @@ class RegimenRepositoryDBImpl implements RegimenRepositoryDB {
     try {
       final result = await regimenLocalDataSource.getRegimenes();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -30,10 +30,10 @@ class RegimenRepositoryDBImpl implements RegimenRepositoryDB {
     try {
       final result = await regimenLocalDataSource.saveRegimen(regimen);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

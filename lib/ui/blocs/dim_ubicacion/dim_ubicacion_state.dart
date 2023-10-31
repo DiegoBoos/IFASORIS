@@ -8,9 +8,11 @@ class DimUbicacionFormInitial extends DimUbicacionState {
   const DimUbicacionFormInitial();
 }
 
-class DimUbicacionFormLoaded extends DimUbicacionState {}
+class DimUbicacionFormLoading extends DimUbicacionState {}
 
 class DimUbicacionFormEmpty extends DimUbicacionState {}
+
+class DimUbicacionFormLoaded extends DimUbicacionState {}
 
 class DimUbicacionSubmissionSuccess extends DimUbicacionState {}
 

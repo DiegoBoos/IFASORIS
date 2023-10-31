@@ -17,10 +17,10 @@ class ResguardoRepositoryDBImpl implements ResguardoRepositoryDB {
     try {
       final result = await resguardoLocalDataSource.getResguardos();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -30,10 +30,10 @@ class ResguardoRepositoryDBImpl implements ResguardoRepositoryDB {
     try {
       final result = await resguardoLocalDataSource.saveResguardo(resguardo);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

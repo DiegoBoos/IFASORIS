@@ -11,10 +11,12 @@ import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
 class EstilosVidaSaludableForm extends StatefulWidget {
   const EstilosVidaSaludableForm(
-      {super.key, required this.currentAfiliado, this.estiloVidaSaludable});
+      {super.key,
+      required this.currentAfiliado,
+      required this.estiloVidaSaludable});
 
   final GrupoFamiliarEntity currentAfiliado;
-  final EstiloVidaSaludableEntity? estiloVidaSaludable;
+  final EstiloVidaSaludableEntity estiloVidaSaludable;
 
   @override
   State<EstilosVidaSaludableForm> createState() =>
@@ -43,16 +45,16 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
         '';
 
     setState(() {
-      _actividadFisicaId = widget.estiloVidaSaludable?.actividadFisicaId;
-      _alimentacionId = widget.estiloVidaSaludable?.alimentacionId;
-      _consumoCigarrillo = widget.estiloVidaSaludable?.consumeCigarrillo;
+      _actividadFisicaId = widget.estiloVidaSaludable.actividadFisicaId;
+      _alimentacionId = widget.estiloVidaSaludable.alimentacionId;
+      _consumoCigarrillo = widget.estiloVidaSaludable.consumeCigarrillo;
       _numeroCigarrillosDiaId =
-          widget.estiloVidaSaludable?.numeroCigarrilloDiaId == 0
+          widget.estiloVidaSaludable.numeroCigarrilloDiaId == 0
               ? null
-              : widget.estiloVidaSaludable?.numeroCigarrilloDiaId;
-      _consumoAlcoholId = widget.estiloVidaSaludable?.consumoAlcoholId;
+              : widget.estiloVidaSaludable.numeroCigarrilloDiaId;
+      _consumoAlcoholId = widget.estiloVidaSaludable.consumoAlcoholId;
       _consumoSustanciaId =
-          widget.estiloVidaSaludable?.consumoSustanciasPsicoactivas;
+          widget.estiloVidaSaludable.consumoSustanciasPsicoactivas;
     });
   }
 

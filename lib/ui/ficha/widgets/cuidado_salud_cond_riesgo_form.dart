@@ -20,10 +20,12 @@ import '../../utils/custom_snack_bar.dart';
 
 class CuidadoSaludCondRiesgoForm extends StatefulWidget {
   const CuidadoSaludCondRiesgoForm(
-      {super.key, required this.currentAfiliado, this.cuidadoSaludCondRiesgo});
+      {super.key,
+      required this.currentAfiliado,
+      required this.cuidadoSaludCondRiesgo});
 
   final GrupoFamiliarEntity currentAfiliado;
-  final CuidadoSaludCondRiesgoEntity? cuidadoSaludCondRiesgo;
+  final CuidadoSaludCondRiesgoEntity cuidadoSaludCondRiesgo;
 
   @override
   State<CuidadoSaludCondRiesgoForm> createState() =>
@@ -60,37 +62,37 @@ class _CuidadoSaludCondRiesgoFormState
 
     setState(() {
       _ultimaVezInstSaludId =
-          widget.cuidadoSaludCondRiesgo?.ultimaVezInstSaludId;
+          widget.cuidadoSaludCondRiesgo.ultimaVezInstSaludId;
       _seguimientoEnfermedadId =
-          widget.cuidadoSaludCondRiesgo?.seguimientoEnfermedadId == 0
+          widget.cuidadoSaludCondRiesgo.seguimientoEnfermedadId == 0
               ? null
-              : widget.cuidadoSaludCondRiesgo?.seguimientoEnfermedadId;
+              : widget.cuidadoSaludCondRiesgo.seguimientoEnfermedadId;
       _condicionNutricionalId =
-          widget.cuidadoSaludCondRiesgo?.condicionNutricionalId;
-      _tosFlemaId = widget.cuidadoSaludCondRiesgo?.tosFlemaId;
-      _manchasPielId = widget.cuidadoSaludCondRiesgo?.manchasPielId;
-      _carnetVacunacionId = widget.cuidadoSaludCondRiesgo?.carnetVacunacionId;
+          widget.cuidadoSaludCondRiesgo.condicionNutricionalId;
+      _tosFlemaId = widget.cuidadoSaludCondRiesgo.tosFlemaId;
+      _manchasPielId = widget.cuidadoSaludCondRiesgo.manchasPielId;
+      _carnetVacunacionId = widget.cuidadoSaludCondRiesgo.carnetVacunacionId;
       _esquemaVacunacionId =
-          widget.cuidadoSaludCondRiesgo?.esquemaVacunacionId == 0
+          widget.cuidadoSaludCondRiesgo.esquemaVacunacionId == 0
               ? null
-              : widget.cuidadoSaludCondRiesgo?.esquemaVacunacionId;
-      _lugarVacunacionId = widget.cuidadoSaludCondRiesgo?.lugarVacunacionId == 0
+              : widget.cuidadoSaludCondRiesgo.esquemaVacunacionId;
+      _lugarVacunacionId = widget.cuidadoSaludCondRiesgo.lugarVacunacionId == 0
           ? null
-          : widget.cuidadoSaludCondRiesgo?.lugarVacunacionId;
+          : widget.cuidadoSaludCondRiesgo.lugarVacunacionId;
       _utilizaMetodoPlanificacionId =
-          widget.cuidadoSaludCondRiesgo?.utilizaMetodoPlanificacionId == 0
+          widget.cuidadoSaludCondRiesgo.utilizaMetodoPlanificacionId == 0
               ? null
-              : widget.cuidadoSaludCondRiesgo?.utilizaMetodoPlanificacionId;
+              : widget.cuidadoSaludCondRiesgo.utilizaMetodoPlanificacionId;
       _metodoPlanificacionId =
-          widget.cuidadoSaludCondRiesgo?.metodoPlanificacionId == 0
+          widget.cuidadoSaludCondRiesgo.metodoPlanificacionId == 0
               ? null
-              : widget.cuidadoSaludCondRiesgo?.metodoPlanificacionId;
-      _conductaSeguirId = widget.cuidadoSaludCondRiesgo?.conductaSeguirId == 0
+              : widget.cuidadoSaludCondRiesgo.metodoPlanificacionId;
+      _conductaSeguirId = widget.cuidadoSaludCondRiesgo.conductaSeguirId == 0
           ? null
-          : widget.cuidadoSaludCondRiesgo?.conductaSeguirId;
+          : widget.cuidadoSaludCondRiesgo.conductaSeguirId;
 
-      if (widget.cuidadoSaludCondRiesgo != null &&
-          widget.cuidadoSaludCondRiesgo!.lstNombresEnfermedades!.isNotEmpty) {
+      if (widget.cuidadoSaludCondRiesgo.lstNombresEnfermedades != null &&
+          widget.cuidadoSaludCondRiesgo.lstNombresEnfermedades!.isNotEmpty) {
         _tieneEnfermedad = 1;
       } else {
         _tieneEnfermedad = 2;

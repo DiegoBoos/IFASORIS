@@ -17,10 +17,10 @@ class OpcionSiNoRepositoryDBImpl implements OpcionSiNoRepositoryDB {
     try {
       final result = await opcionSiNoLocalDataSource.getOpcionesSiNo();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -30,10 +30,10 @@ class OpcionSiNoRepositoryDBImpl implements OpcionSiNoRepositoryDB {
     try {
       final result = await opcionSiNoLocalDataSource.saveOpcionSiNo(opcionSiNo);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

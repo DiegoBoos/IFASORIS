@@ -17,10 +17,10 @@ class NivelEducativoRepositoryDBImpl implements NivelEducativoRepositoryDB {
     try {
       final result = await nivelEducativoLocalDataSource.getNivelesEducativos();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -31,10 +31,10 @@ class NivelEducativoRepositoryDBImpl implements NivelEducativoRepositoryDB {
       final result = await nivelEducativoLocalDataSource
           .saveNivelEducativo(nivelEducativo);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

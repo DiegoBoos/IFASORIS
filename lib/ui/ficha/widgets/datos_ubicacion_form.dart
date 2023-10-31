@@ -16,9 +16,9 @@ import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../cubits/resguardo/resguardo_cubit.dart';
 
 class DatosUbicacionForm extends StatefulWidget {
-  const DatosUbicacionForm({super.key, this.dimUbicacion});
+  const DatosUbicacionForm({super.key, required this.dimUbicacion});
 
-  final DimUbicacionEntity? dimUbicacion;
+  final DimUbicacionEntity dimUbicacion;
 
   @override
   State<DatosUbicacionForm> createState() => DatosUbicacionFormState();
@@ -49,9 +49,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
   void initState() {
     super.initState();
 
-    // final authBloc = BlocProvider.of<AuthBloc>(context);
-    // final usuario = authBloc.state.usuario!;
-
     final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
       context,
     );
@@ -72,17 +69,17 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
       _telefonocel2Ctrl.text = afiliado.telefonocel2 ?? '';
 
       _nombreRecibeVisitaCtrl.text =
-          widget.dimUbicacion?.nombreRecibeVisita ?? '';
-      _tipoDocumentoRecibeVisita = widget.dimUbicacion?.tipoDocRecibeVisita;
+          widget.dimUbicacion.nombreRecibeVisita ?? '';
+      _tipoDocumentoRecibeVisita = widget.dimUbicacion.tipoDocRecibeVisita;
       _documentoRecibeVisitaCtrl.text =
-          widget.dimUbicacion?.documentoRecibeVisita ?? '';
-      _perteneceResguardo = widget.dimUbicacion?.perteneceResguardo;
-      _resguardoId = widget.dimUbicacion?.resguardoId == 0
+          widget.dimUbicacion.documentoRecibeVisita ?? '';
+      _perteneceResguardo = widget.dimUbicacion.perteneceResguardo;
+      _resguardoId = widget.dimUbicacion.resguardoId == 0
           ? null
-          : widget.dimUbicacion?.resguardoId;
-      _autoridadIndigena = widget.dimUbicacion?.autoridadIndigenaId;
-      _viaAcceso = widget.dimUbicacion?.viaAccesoId;
-      _estadoVia = widget.dimUbicacion?.estadoViaId;
+          : widget.dimUbicacion.resguardoId;
+      _autoridadIndigena = widget.dimUbicacion.autoridadIndigenaId;
+      _viaAcceso = widget.dimUbicacion.viaAccesoId;
+      _estadoVia = widget.dimUbicacion.estadoViaId;
     });
   }
 
@@ -113,7 +110,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             }
             return null;
           },
-          onSaved: (String? value) {
+          onChanged: (String? value) {
             dimUbicacionBloc.add(NombreRecibeVisitaChanged(value!));
           },
         ),
@@ -165,7 +162,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             }
             return null;
           },
-          onSaved: (String? value) {
+          onChanged: (String? value) {
             dimUbicacionBloc.add(DocumentoRecibeVisitaChanged(value!));
           },
         ),
@@ -177,7 +174,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             labelText: 'Fecha de Diligenciamiento',
             border: OutlineInputBorder(),
           ),
-          onSaved: (String? value) {
+          onChanged: (String? value) {
             //TODO: dimUbicacionBloc.add(FechaDiligenciamientoChanged(newValue!));
           },
         ),

@@ -20,10 +20,10 @@ class CostumbrePracticaRepositoryDBImpl
       final result =
           await costumbrePracticaLocalDataSource.getCostumbresPractica();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -34,10 +34,10 @@ class CostumbrePracticaRepositoryDBImpl
       final result = await costumbrePracticaLocalDataSource
           .saveCostumbrePractica(costumbrePractica);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

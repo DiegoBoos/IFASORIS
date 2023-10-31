@@ -22,9 +22,11 @@ import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 
 class GrupoFamiliarForm extends StatefulWidget {
   const GrupoFamiliarForm(
-      {super.key, this.afiliadoGrupoFamiliar, this.registraAfiliados = 0});
+      {super.key,
+      required this.afiliadoGrupoFamiliar,
+      this.registraAfiliados = 0});
 
-  final GrupoFamiliarEntity? afiliadoGrupoFamiliar;
+  final GrupoFamiliarEntity afiliadoGrupoFamiliar;
   final int registraAfiliados;
 
   @override
@@ -62,40 +64,40 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
         BlocProvider.of<GrupoFamiliarBloc>(context, listen: false);
 
     setState(() {
-      if (widget.afiliadoGrupoFamiliar?.tipoDocumentoId != null) {
-        _tipoDocumentoId = widget.afiliadoGrupoFamiliar?.tipoDocumentoId;
+      if (widget.afiliadoGrupoFamiliar.tipoDocumentoId != null) {
+        _tipoDocumentoId = widget.afiliadoGrupoFamiliar.tipoDocumentoId;
       } else {
         _tipoDocumentoId = tipoDocumentoCubit.state.tiposDocumento!
             .firstWhere((element) =>
-                element.tipo == widget.afiliadoGrupoFamiliar?.tipoDocAfiliado)
+                element.tipo == widget.afiliadoGrupoFamiliar.tipoDocAfiliado)
             .tipoDocumentoId;
       }
 
-      if (widget.afiliadoGrupoFamiliar?.generoId != null) {
-        _generoId = widget.afiliadoGrupoFamiliar?.generoId;
+      if (widget.afiliadoGrupoFamiliar.generoId != null) {
+        _generoId = widget.afiliadoGrupoFamiliar.generoId;
       } else {
         _generoId = generoCubit.state.generos!
             .firstWhere((element) =>
-                element.tipo == widget.afiliadoGrupoFamiliar?.codGeneroAfiliado)
+                element.tipo == widget.afiliadoGrupoFamiliar.codGeneroAfiliado)
             .generoId;
       }
 
-      _documento = widget.afiliadoGrupoFamiliar?.documento;
+      _documento = widget.afiliadoGrupoFamiliar.documento;
       _nombresApellidos =
-          '${widget.afiliadoGrupoFamiliar?.nombre1 ?? ''} ${widget.afiliadoGrupoFamiliar?.nombre2 ?? ''} ${widget.afiliadoGrupoFamiliar?.apellido1 ?? ''} ${widget.afiliadoGrupoFamiliar?.apellido2 ?? ''}';
-      _fechaNacimiento = widget.afiliadoGrupoFamiliar?.fechaNacimiento;
+          '${widget.afiliadoGrupoFamiliar.nombre1 ?? ''} ${widget.afiliadoGrupoFamiliar.nombre2 ?? ''} ${widget.afiliadoGrupoFamiliar.apellido1 ?? ''} ${widget.afiliadoGrupoFamiliar.apellido2 ?? ''}';
+      _fechaNacimiento = widget.afiliadoGrupoFamiliar.fechaNacimiento;
 
       if (_fechaNacimiento != null) {
         formattedFechaNacimiento =
             DateFormat('dd-MM-yyyy').format(_fechaNacimiento!);
       }
 
-      _edad = widget.afiliadoGrupoFamiliar?.edad;
+      _edad = widget.afiliadoGrupoFamiliar.edad;
       if (_edad != null) {
         calculateCursoVida(_edad!);
       }
 
-      _codRegimenAfiliado = widget.afiliadoGrupoFamiliar?.codRegimenAfiliado;
+      _codRegimenAfiliado = widget.afiliadoGrupoFamiliar.codRegimenAfiliado;
       if (_codRegimenAfiliado != null) {
         if (_codRegimenAfiliado == "S") {
           _tipoRegimenId = 1;
@@ -105,56 +107,56 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
           _tipoRegimenId = 3;
         }
       } else {
-        _tipoRegimenId = widget.afiliadoGrupoFamiliar?.tipoRegimenId;
+        _tipoRegimenId = widget.afiliadoGrupoFamiliar.tipoRegimenId;
       }
 
       if (_tipoRegimenId != null) {
         grupoFamiliarBloc.add(TipoRegimenChanged(_tipoRegimenId!));
       }
 
-      _parentescoId = widget.afiliadoGrupoFamiliar?.parentescoId;
+      _parentescoId = widget.afiliadoGrupoFamiliar.parentescoId;
       if (_parentescoId != null) {
         grupoFamiliarBloc.add(ParentescoChanged(_parentescoId!));
       }
 
-      _nivelEducativoId = widget.afiliadoGrupoFamiliar?.nivelEducativoId;
+      _nivelEducativoId = widget.afiliadoGrupoFamiliar.nivelEducativoId;
       if (_nivelEducativoId != null) {
         grupoFamiliarBloc.add(NivelEducativoChanged(_nivelEducativoId!));
       }
 
-      _ocupacionId = widget.afiliadoGrupoFamiliar?.ocupacionId;
+      _ocupacionId = widget.afiliadoGrupoFamiliar.ocupacionId;
       if (_ocupacionId != null) {
         grupoFamiliarBloc.add(OcupacionChanged(_ocupacionId!));
       }
 
-      _grupoRiesgoId = widget.afiliadoGrupoFamiliar?.grupoRiesgoId;
+      _grupoRiesgoId = widget.afiliadoGrupoFamiliar.grupoRiesgoId;
       if (_grupoRiesgoId != null) {
         grupoFamiliarBloc.add(GrupoRiesgoChanged(_grupoRiesgoId!));
       }
 
-      _etniaId = widget.afiliadoGrupoFamiliar?.origenEtnico5602Id;
+      _etniaId = widget.afiliadoGrupoFamiliar.origenEtnico5602Id;
       if (_etniaId != null) {
         grupoFamiliarBloc.add(EtniaChanged(_etniaId!));
       }
 
       //TODO: validar puebloIde
-      _puebloIde = widget.afiliadoGrupoFamiliar?.puebloIndigenaId == 0
+      _puebloIde = widget.afiliadoGrupoFamiliar.puebloIndigenaId == 0
           ? null
-          : widget.afiliadoGrupoFamiliar?.puebloIndigenaId;
+          : widget.afiliadoGrupoFamiliar.puebloIndigenaId;
       if (_puebloIde != null) {
         grupoFamiliarBloc.add(PuebloIndigenaChanged(_puebloIde!));
       }
 
-      _lenguaManejaId = widget.afiliadoGrupoFamiliar?.lenguaManejaId == 0
+      _lenguaManejaId = widget.afiliadoGrupoFamiliar.lenguaManejaId == 0
           ? null
-          : widget.afiliadoGrupoFamiliar?.lenguaManejaId;
+          : widget.afiliadoGrupoFamiliar.lenguaManejaId;
       if (_lenguaManejaId != null) {
         grupoFamiliarBloc.add(LenguaManejaChanged(_lenguaManejaId!));
       }
 
-      _lenguaMaternaId = widget.afiliadoGrupoFamiliar?.lenguaMaternaId == 0
+      _lenguaMaternaId = widget.afiliadoGrupoFamiliar.lenguaMaternaId == 0
           ? null
-          : widget.afiliadoGrupoFamiliar?.lenguaMaternaId;
+          : widget.afiliadoGrupoFamiliar.lenguaMaternaId;
       if (_lenguaMaternaId != null) {
         grupoFamiliarBloc.add(LenguaMaternaChanged(_lenguaMaternaId!));
       }
@@ -791,24 +793,24 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
 
                       final newEditAfiliado = grupoFamiliarBloc.state.copyWith(
                         grupoFamiliarId:
-                            widget.afiliadoGrupoFamiliar?.grupoFamiliarId,
+                            widget.afiliadoGrupoFamiliar.grupoFamiliarId,
                         familiaId: afiliadoPrefsBloc.state.afiliado?.familiaId,
-                        afiliadoId: widget.afiliadoGrupoFamiliar?.afiliadoId,
+                        afiliadoId: widget.afiliadoGrupoFamiliar.afiliadoId,
                         tipoDocumentoId: _tipoDocumentoId,
                         documento: _documento,
                         generoId: _generoId,
                         fechaNacimiento: _fechaNacimiento,
                         edad: _edad,
-                        nombre1: widget.afiliadoGrupoFamiliar?.nombre1,
-                        nombre2: widget.afiliadoGrupoFamiliar?.nombre2,
-                        apellido1: widget.afiliadoGrupoFamiliar?.apellido1,
-                        apellido2: widget.afiliadoGrupoFamiliar?.apellido2,
+                        nombre1: widget.afiliadoGrupoFamiliar.nombre1,
+                        nombre2: widget.afiliadoGrupoFamiliar.nombre2,
+                        apellido1: widget.afiliadoGrupoFamiliar.apellido1,
+                        apellido2: widget.afiliadoGrupoFamiliar.apellido2,
                         tipoDocAfiliado:
-                            widget.afiliadoGrupoFamiliar?.tipoDocAfiliado,
+                            widget.afiliadoGrupoFamiliar.tipoDocAfiliado,
                         codGeneroAfiliado:
-                            widget.afiliadoGrupoFamiliar?.codGeneroAfiliado,
+                            widget.afiliadoGrupoFamiliar.codGeneroAfiliado,
                         codRegimenAfiliado:
-                            widget.afiliadoGrupoFamiliar?.codRegimenAfiliado,
+                            widget.afiliadoGrupoFamiliar.codRegimenAfiliado,
                       );
 
                       afiliadosGrupoFamiliarBloc

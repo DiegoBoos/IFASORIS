@@ -50,6 +50,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<DimViviendaSubmitted>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await dimViviendaUsecaseDB.saveDimViviendaUsecaseDB(state);
       result.fold((failure) {
         emit(state.copyWith(
@@ -58,6 +59,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetDimVivienda>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await dimViviendaUsecaseDB.getDimViviendaUsecaseDB(
           event.afiliadoId, event.familiaId);
       result.fold(
@@ -69,12 +71,13 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
           emit(data);
           add(GetTechosVivienda(data.datoViviendaId));
         } else {
-          emit(state.copyWith(formStatus: DimViviendaFormEmpty()));
+          emit(state.copyWith(formStatus: const DimViviendaFormInitial()));
         }
       });
     });
 
     on<GetTechosVivienda>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await techoViviendaUsecaseDB
           .getTechosViviendaViviendaUsecaseDB(event.datoViviendaId);
       result.fold((failure) {
@@ -87,6 +90,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetServiciosPublicosVivienda>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await servicioPublicoViviendaUsecaseDB
           .getServiciosPublicosViviendaDB(event.datoViviendaId);
       result.fold((failure) {
@@ -99,6 +103,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetTratamientosAguaVivienda>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await tratamientoAguaViviendaUsecaseDB
           .getTratamientosAguaViviendaUsecaseDB(event.datoViviendaId);
       result.fold((failure) {
@@ -111,6 +116,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetTiposSanitarioVivienda>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await tipoSanitarioViviendaUsecaseDB
           .getTiposSanitarioViviendaUsecaseDB(event.datoViviendaId);
       result.fold((failure) {
@@ -123,6 +129,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetTiposCombustibleVivienda>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await tipoCombustibleViviendaUsecaseDB
           .getTiposCombustibleViviendaUsecaseDB(event.datoViviendaId);
       result.fold((failure) {
@@ -135,6 +142,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetFactoresRiesgoVivienda>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await factorRiesgoViviendaUsecaseDB
           .getFactoresRiesgoViviendaUsecaseDB(event.datoViviendaId);
       result.fold((failure) {
@@ -147,6 +155,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetPisosVivienda>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await pisoViviendaUsecaseDB
           .getPisosViviendaViviendaUsecaseDB(event.datoViviendaId);
       result.fold((failure) {
@@ -159,6 +168,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     });
 
     on<GetPresenciaAnimales>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await presenciaAnimalViviendaUsecaseDB
           .getPresenciaAnimalesViviendaUsecaseDB(event.datoViviendaId);
       result.fold((failure) {

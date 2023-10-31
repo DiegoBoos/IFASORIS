@@ -8,9 +8,9 @@ class CuidadoSaludCondRiesgoFormInitial extends CuidadoSaludCondRiesgoState {
   const CuidadoSaludCondRiesgoFormInitial();
 }
 
-class CuidadoSaludCondRiesgoFormLoaded extends CuidadoSaludCondRiesgoState {}
+class CuidadoSaludCondRiesgoFormLoading extends CuidadoSaludCondRiesgoState {}
 
-class CuidadoSaludCondRiesgoFormEmpty extends CuidadoSaludCondRiesgoState {}
+class CuidadoSaludCondRiesgoFormLoaded extends CuidadoSaludCondRiesgoState {}
 
 class CuidadoSaludCondRiesgoSubmissionSuccess
     extends CuidadoSaludCondRiesgoState {}

@@ -5,23 +5,32 @@ import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
+import '../../cubits/curso_vida/curso_vida_cubit.dart';
+import '../../cubits/etnia/etnia_cubit.dart';
+import '../../cubits/genero/genero_cubit.dart';
+import '../../cubits/grupo_riesgo/grupo_riesgo_cubit.dart';
+import '../../cubits/lengua_maneja/lengua_maneja_cubit.dart';
+import '../../cubits/nivel_educativo/nivel_educativo_cubit.dart';
+import '../../cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
+import '../../cubits/ocupacion/ocupacion_cubit.dart';
+import '../../cubits/parentesco/parentesco_cubit.dart';
+import '../../cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
+import '../../cubits/regimen/regimen_cubit.dart';
+import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 import '../../search/search_afiliados.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/grupo_familiar_form.dart';
 
 class GrupoFamiliarPage extends StatefulWidget {
-  const GrupoFamiliarPage({
-    required this.registraAfiliados,
-    super.key,
-  });
-
-  final int registraAfiliados;
+  const GrupoFamiliarPage(PageController pageViewController, {super.key});
 
   @override
   State<GrupoFamiliarPage> createState() => _GrupoFamiliarState();
 }
 
 class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
+  int registraAfiliados = 0;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +42,79 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
     final afiliado = afiliadoPrefsBloc.state.afiliado!;
     BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context)
         .add(GetAfiliadosGrupoFamiliar(afiliado.familiaId!));
+
+    getAccesoriasGrupoFamiliar();
+  }
+
+  getAccesoriasGrupoFamiliar() {
+    BlocProvider.of<TipoDocumentoCubit>(context).getTiposDocumentoDB();
+    BlocProvider.of<GeneroCubit>(context).getGenerosDB();
+    BlocProvider.of<CursoVidaCubit>(context).getCursosVidaDB();
+    BlocProvider.of<ParentescoCubit>(context).getParentescosDB();
+    BlocProvider.of<RegimenCubit>(context).getRegimenesDB();
+    BlocProvider.of<NivelEducativoCubit>(context).getNivelesEducativosDB();
+    BlocProvider.of<OcupacionCubit>(context).getOcupacionesDB();
+    BlocProvider.of<GrupoRiesgoCubit>(context).getGruposRiesgoDB();
+    BlocProvider.of<EtniaCubit>(context).getEtniasDB();
+    BlocProvider.of<PuebloIndigenaCubit>(context).getPueblosIndigenasDB();
+    BlocProvider.of<LenguaManejaCubit>(context).getLenguasManejaDB();
+    BlocProvider.of<NombreLenguaMaternaCubit>(context)
+        .getNombresLenguasMaternaDB();
+  }
+
+  void submitForm() {
+    final afiliadosGrupoFamiliarBloc =
+        BlocProvider.of<AfiliadosGrupoFamiliarBloc>(
+      context,
+    );
+
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
+      context,
+    );
+
+    final afiliado = afiliadoPrefsBloc.state.afiliado!;
+
+    final afiliadosGrupoFamiliar =
+        afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar;
+
+    if (registraAfiliados == 1) {
+      GrupoFamiliarEntity afiliadoGrupoFamiliar = GrupoFamiliarEntity(
+        afiliadoId: afiliado.afiliadoId,
+        documento: afiliado.documento,
+        edad: afiliado.edad,
+        fechaNacimiento: afiliado.fecnac,
+        nombre1: afiliado.nombre1,
+        nombre2: afiliado.nombre2,
+        apellido1: afiliado.apellido1,
+        apellido2: afiliado.apellido2,
+        tipoDocAfiliado: afiliado.tipoDocAfiliado,
+        codGeneroAfiliado: afiliado.codGeneroAfiliado,
+        codRegimenAfiliado: afiliado.codRegimenAfiliado,
+      );
+
+      final afiliadoCabezaFamilia = afiliadosGrupoFamiliar?.firstWhere(
+        (afiliadoGrupoFamiliar) =>
+            afiliadoGrupoFamiliar.afiliadoId == afiliado.afiliadoId,
+      );
+
+      if (afiliadoCabezaFamilia != null) {
+        afiliadoGrupoFamiliar = afiliadoCabezaFamilia;
+      }
+
+      Navigator.push<void>(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => GrupoFamiliarForm(
+              afiliadoGrupoFamiliar: afiliadoGrupoFamiliar,
+              registraAfiliados: registraAfiliados),
+        ),
+      );
+    } else if (registraAfiliados == 0 && afiliadosGrupoFamiliar != null) {
+      Navigator.pushReplacementNamed(context, 'estilo-vida-saludable');
+    } else {
+      afiliadosGrupoFamiliarBloc.add(const ErrorAfiliadosGrupoFamiliar(
+          'No hay afiliados en el grupo familiar'));
+    }
   }
 
   @override
@@ -41,7 +123,28 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
 
     return Column(
       children: [
-        if (widget.registraAfiliados == 0)
+        const Text('Tiene miembros en la familia para registrar'),
+        RadioListTile(
+          title: const Text('Si'),
+          value: 0,
+          groupValue: registraAfiliados,
+          onChanged: (int? value) {
+            setState(() {
+              registraAfiliados = value!;
+            });
+          },
+        ),
+        RadioListTile(
+          title: const Text('No'),
+          value: 1,
+          groupValue: registraAfiliados,
+          onChanged: (int? value) async {
+            setState(() {
+              registraAfiliados = value!;
+            });
+          },
+        ),
+        if (registraAfiliados == 0)
           Column(
             children: [
               MaterialButton(
@@ -60,8 +163,34 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                     ),
                   )),
               const SizedBox(height: 10),
-              BlocBuilder<AfiliadosGrupoFamiliarBloc,
-                  AfiliadosGrupoFamiliarState>(builder: (context, state) {
+              BlocConsumer<AfiliadosGrupoFamiliarBloc,
+                  AfiliadosGrupoFamiliarState>(listener: (context, state) {
+                BlocListener<AfiliadosGrupoFamiliarBloc,
+                    AfiliadosGrupoFamiliarState>(
+                  listener: (context, state) {
+                    if (state is AfiliadosGrupoFamiliarError) {
+                      CustomSnackBar.showSnackBar(
+                          context, state.message, Colors.red);
+                    }
+                  },
+                );
+                BlocListener<GrupoFamiliarBloc, GrupoFamiliarEntity>(
+                  listener: (context, state) {
+                    final formStatus = state.formStatus;
+                    if (formStatus is GrupoFamiliarSubmissionSuccess) {
+                      CustomSnackBar.showSnackBar(
+                          context,
+                          'Datos del grupo familiar guardados correctamente',
+                          Colors.green);
+                    }
+
+                    if (formStatus is GrupoFamiliarSubmissionFailed) {
+                      CustomSnackBar.showSnackBar(
+                          context, formStatus.message, Colors.red);
+                    }
+                  },
+                );
+              }, builder: (context, state) {
                 if (state is AfiliadosGrupoFamiliarLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is AfiliadosGrupoFamiliarLoaded) {
@@ -77,9 +206,22 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                   );
                 }
                 return const Center(child: Text('No hay afiliados'));
-              })
+              }),
             ],
           ),
+        const SizedBox(height: 20),
+        MaterialButton(
+            elevation: 0,
+            color: Theme.of(context).colorScheme.primary,
+            onPressed: () => submitForm(),
+            child: Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              child: const Text(
+                'Siguiente',
+                style: TextStyle(color: Colors.white),
+              ),
+            )),
       ],
     );
   }

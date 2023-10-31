@@ -1,38 +1,27 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/data/models/slider_model.dart';
 
 part 'slider_state.dart';
 
 class SliderCubit extends Cubit<SliderState> {
-  SliderCubit() : super(const SliderInitial());
+  SliderCubit() : super(SliderInitial());
 
   void updateCurrentPage(double newCurrentPage) {
-    final currentState = state as SliderChanged;
-    final newState = SliderChanged(
-      newCurrentPage,
-      currentState.bulletPrimarioChanged,
-      currentState.bulletSecundarioChanged,
-    );
-    emit(newState);
+    emit(SliderChanged(
+      state.sliderModel.copyWith(currentPage: newCurrentPage),
+    ));
   }
 
-  void updateBulletPrimatio(double bulletPrimario) {
-    final currentState = state as SliderChanged;
-    final newState = SliderChanged(
-      currentState.currentPageChanged,
-      bulletPrimario,
-      currentState.bulletSecundarioChanged,
-    );
-    emit(newState);
+  void updateBulletPrimario(double newBulletPrimario) {
+    emit(SliderChanged(
+      state.sliderModel.copyWith(bulletPrimario: newBulletPrimario),
+    ));
   }
 
-  void updateBulletSecundatio(double bulletSecundario) {
-    final currentState = state as SliderChanged;
-    final newState = SliderChanged(
-      currentState.currentPageChanged,
-      currentState.bulletPrimarioChanged,
-      bulletSecundario,
-    );
-    emit(newState);
+  void updateBulletSecundario(double newBulletSecundario) {
+    emit(SliderChanged(
+      state.sliderModel.copyWith(bulletSecundario: newBulletSecundario),
+    ));
   }
 }

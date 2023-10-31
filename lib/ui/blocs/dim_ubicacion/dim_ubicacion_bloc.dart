@@ -71,6 +71,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<DimUbicacionSubmitted>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result =
           await dimUbicacionUsecaseDB.saveDimUbicacionUsecaseDB(state);
       result.fold((failure) {
@@ -81,13 +82,14 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetDimUbicacion>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await dimUbicacionUsecaseDB.getDimUbicacionUsecaseDB(
           event.afiliadoId, event.familiaId);
-      result.fold(
-          (failure) => emit(state.copyWith(
-              formStatus:
-                  DimUbicacionSubmissionFailed(failure.properties.first))),
-          (data) {
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
         if (data != null) {
           emit(data);
           add(GetDificultadesAcceso(data.ubicacionId));
@@ -98,19 +100,21 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetDificultadesAcceso>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await dificultadAccesoCAUsecaseDB
           .getUbicacionDificultadesAccesoUsecaseDB(event.ubicacionId);
-      result.fold(
-          (failure) => emit(state.copyWith(
-              formStatus:
-                  DimUbicacionSubmissionFailed(failure.properties.first))),
-          (data) {
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) {
         emit(state.copyWith(lstDificultadAccesoAtencion: data));
         add(GetEspecialidadesMedTradicional(event.ubicacionId));
       });
     });
 
     on<GetEspecialidadesMedTradicional>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await especialidadMedTradicionalUsecaseDB
           .getUbicacionEspecialidadesMedTradicionalUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -124,6 +128,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetNombresMedTrad>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await especialidadMedTradicionalUsecaseDB
           .getUbicacionNombresMedTradicionalUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -137,6 +142,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetMediosUtilizaMedTradicional>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await medioUtilizaMedTradicionalUsecaseDB
           .getUbicacionMediosUtilizaMedTradicionalUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -150,6 +156,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetDificultadesAccesoMedTradicional>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await dificultadAccesoMedTradicionalUsecaseDB
           .getUbicacionDificultadesAccesoMedTradicionalUsecaseDB(
               event.ubicacionId);
@@ -164,6 +171,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetTuberculosPlatanos>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await tuberculoPlatanoUsecaseDB
           .getUbicacionTuberculosPlatanosUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -177,6 +185,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetLeguminosas>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await leguminosaUsecaseDB
           .getUbicacionLeguminosasUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -190,6 +199,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetHortalizas>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await hortalizaUsecaseDB
           .getUbicacionHortalizasUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -203,6 +213,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetVerduras>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await verduraUsecaseDB
           .getUbicacionVerdurasUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -216,6 +227,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetFrutos>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result =
           await frutoUsecaseDB.getUbicacionFrutosUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -229,6 +241,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetCereales>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await cerealUsecaseDB
           .getUbicacionCerealesUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -242,6 +255,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetEspeciesAnimales>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await especieAnimalUsecaseDB
           .getUbicacionEspeciesAnimalesUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -255,6 +269,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetMediosComunicacion>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await medioComunicacionUsecaseDB
           .getUbicacionMediosComunicacionUsecaseDB(event.ubicacionId);
       result.fold((failure) {
@@ -268,6 +283,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
     });
 
     on<GetMediosUtilizaCA>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await medioUtilizaCAUsecaseDB
           .getUbicacionMediosUtilizaCAUsecaseDB(event.ubicacionId);
       result.fold((failure) {

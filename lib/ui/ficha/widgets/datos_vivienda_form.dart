@@ -27,9 +27,9 @@ import '../../utils/custom_snack_bar.dart';
 import '../../utils/input_decoration.dart';
 
 class DatosViviendaForm extends StatefulWidget {
-  const DatosViviendaForm({super.key, this.dimVivienda});
+  const DatosViviendaForm({super.key, required this.dimVivienda});
 
-  final DimViviendaEntity? dimVivienda;
+  final DimViviendaEntity dimVivienda;
   @override
   State<DatosViviendaForm> createState() => _DatosViviendaFormState();
 }
@@ -61,34 +61,34 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
     super.initState();
 
     setState(() {
-      _tipoVivienda = widget.dimVivienda?.tipoViviendaId;
-      _tenenciaVivienda = widget.dimVivienda?.tenenciaViviendaId;
-      _ventilacionViviendaId = widget.dimVivienda?.ventilacionViviendaId;
-      _iluminacionViviendaId = widget.dimVivienda?.iluminacionViviendaId;
-      _nroCuartoViviendaId = widget.dimVivienda?.nroCuartosViviendaId;
+      _tipoVivienda = widget.dimVivienda.tipoViviendaId;
+      _tenenciaVivienda = widget.dimVivienda.tenenciaViviendaId;
+      _ventilacionViviendaId = widget.dimVivienda.ventilacionViviendaId;
+      _iluminacionViviendaId = widget.dimVivienda.iluminacionViviendaId;
+      _nroCuartoViviendaId = widget.dimVivienda.nroCuartosViviendaId;
 
-      if (widget.dimVivienda != null &&
-          widget.dimVivienda!.lstTecho!.isNotEmpty &&
-          widget.dimVivienda!.lstTecho![0].otroTipoTecho != null) {
+      if (widget.dimVivienda.lstTecho != null &&
+          widget.dimVivienda.lstTecho!.isNotEmpty &&
+          widget.dimVivienda.lstTecho![0].otroTipoTecho != null) {
         _showOtroTechoVivienda = true;
       }
 
-      if (widget.dimVivienda != null &&
-          widget.dimVivienda!.lstTipoSanitario!.isNotEmpty &&
-          widget.dimVivienda!.lstTipoSanitario![0].otroTipoSanitario != null) {
+      if (widget.dimVivienda.lstTipoSanitario != null &&
+          widget.dimVivienda.lstTipoSanitario!.isNotEmpty &&
+          widget.dimVivienda.lstTipoSanitario![0].otroTipoSanitario != null) {
         _showOtroTipoSanitario = true;
       }
 
-      if (widget.dimVivienda != null &&
-          widget.dimVivienda!.lstTipoCombustible!.isNotEmpty &&
-          widget.dimVivienda!.lstTipoCombustible![0].otroTipoCombustible !=
+      if (widget.dimVivienda.lstTipoCombustible != null &&
+          widget.dimVivienda.lstTipoCombustible!.isNotEmpty &&
+          widget.dimVivienda.lstTipoCombustible![0].otroTipoCombustible !=
               null) {
         _showOtroTipoCombustible = true;
       }
 
-      if (widget.dimVivienda != null &&
-          widget.dimVivienda!.lstPiso!.isNotEmpty &&
-          widget.dimVivienda!.lstPiso![0].otroTipoPiso != null) {
+      if (widget.dimVivienda.lstPiso != null &&
+          widget.dimVivienda.lstPiso!.isNotEmpty &&
+          widget.dimVivienda.lstPiso![0].otroTipoPiso != null) {
         _showOtroPisoVivienda = true;
       }
     });

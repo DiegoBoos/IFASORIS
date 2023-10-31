@@ -8,9 +8,9 @@ class DimViviendaFormInitial extends DimViviendaState {
   const DimViviendaFormInitial();
 }
 
-class DimViviendaFormLoaded extends DimViviendaState {}
+class DimViviendaFormLoading extends DimViviendaState {}
 
-class DimViviendaFormEmpty extends DimViviendaState {}
+class DimViviendaFormLoaded extends DimViviendaState {}
 
 class DimViviendaSubmissionSuccess extends DimViviendaState {}
 

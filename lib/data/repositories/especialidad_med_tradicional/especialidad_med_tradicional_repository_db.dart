@@ -23,10 +23,10 @@ class EspecialidadMedTradicionalRepositoryDBImpl
       final result = await especialidadMedTradicionalLocalDataSource
           .getEspecialidadesMedTradicional();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -37,10 +37,10 @@ class EspecialidadMedTradicionalRepositoryDBImpl
       final result = await especialidadMedTradicionalLocalDataSource
           .saveEspecialidadMedTradicional(especialidadMedTradicional);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -53,10 +53,10 @@ class EspecialidadMedTradicionalRepositoryDBImpl
           .saveUbicacionEspecialidadMedTradicional(
               ubicacionId, lstEspMedTradicional);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -69,10 +69,10 @@ class EspecialidadMedTradicionalRepositoryDBImpl
           .saveUbicacionNombresMedTradicional(
               ubicacionId, lstNombreMedTradicional);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -83,10 +83,10 @@ class EspecialidadMedTradicionalRepositoryDBImpl
       final result = await especialidadMedTradicionalLocalDataSource
           .getUbicacionNombresMedTradicional(ubicacionId);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -98,10 +98,10 @@ class EspecialidadMedTradicionalRepositoryDBImpl
       final result = await especialidadMedTradicionalLocalDataSource
           .getUbicacionEspecialidadesMedTradicional(ubicacionId);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -113,10 +113,10 @@ class EspecialidadMedTradicionalRepositoryDBImpl
       final result = await especialidadMedTradicionalLocalDataSource
           .getEspecialidadesMedTradicionalAtencionSalud(atencionSaludId);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -130,10 +130,10 @@ class EspecialidadMedTradicionalRepositoryDBImpl
           .saveEspecialidadesMedTradicionalAtencionSalud(
               atencionSaludId, lstEspMedTradicional);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

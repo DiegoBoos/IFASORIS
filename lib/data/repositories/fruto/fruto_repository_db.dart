@@ -17,10 +17,10 @@ class FrutoRepositoryDBImpl implements FrutoRepositoryDB {
     try {
       final result = await frutoLocalDataSource.getFrutos();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -29,10 +29,10 @@ class FrutoRepositoryDBImpl implements FrutoRepositoryDB {
     try {
       final result = await frutoLocalDataSource.saveFruto(fruto);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -43,10 +43,10 @@ class FrutoRepositoryDBImpl implements FrutoRepositoryDB {
       final result = await frutoLocalDataSource.saveUbicacionFrutos(
           ubicacionId, lstFrutos);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -56,10 +56,10 @@ class FrutoRepositoryDBImpl implements FrutoRepositoryDB {
     try {
       final result = await frutoLocalDataSource.getUbicacionFrutos(ubicacionId);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

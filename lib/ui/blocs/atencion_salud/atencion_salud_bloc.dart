@@ -34,6 +34,7 @@ class AtencionSaludBloc extends Bloc<AtencionSaludEvent, AtencionSaludEntity> {
     });
 
     on<AtencionSaludSubmitted>((event, emit) async {
+      emit(state.copyWith(formStatus: AtencionSaludFormLoading()));
       final result =
           await atencionSaludUsecaseDB.saveAtencionSaludUsecaseDB(state);
       result.fold((failure) {
@@ -46,6 +47,7 @@ class AtencionSaludBloc extends Bloc<AtencionSaludEvent, AtencionSaludEntity> {
     });
 
     on<GetAtencionSalud>((event, emit) async {
+      emit(state.copyWith(formStatus: AtencionSaludFormLoading()));
       final result = await atencionSaludUsecaseDB
           .getAtencionSaludUsecaseDB(event.afiliadoId);
       result.fold((failure) {
@@ -57,12 +59,13 @@ class AtencionSaludBloc extends Bloc<AtencionSaludEvent, AtencionSaludEntity> {
           emit(data);
           add(GetEspecialidadesMedTradicional(data.atencionSaludId));
         } else {
-          emit(state.copyWith(formStatus: AtencionSaludFormEmpty()));
+          emit(state.copyWith(formStatus: const AtencionSaludFormInitial()));
         }
       });
     });
 
     on<GetEspecialidadesMedTradicional>((event, emit) async {
+      emit(state.copyWith(formStatus: AtencionSaludFormLoading()));
       final result = await especialidadMedTradicionalUsecaseDB
           .getEspecialidadesMedTradicionalAtencionSaludUsecaseDB(
               event.atencionSaludId);
@@ -79,6 +82,7 @@ class AtencionSaludBloc extends Bloc<AtencionSaludEvent, AtencionSaludEntity> {
     });
 
     on<GetEnfermedadesTradicionales>((event, emit) async {
+      emit(state.copyWith(formStatus: AtencionSaludFormLoading()));
       final result = await enfermedadTradicionalUsecaseDB
           .getEnfermedadesTradicionalesAtencionSaludUsecaseDB(
               event.atencionSaludId);
@@ -95,6 +99,7 @@ class AtencionSaludBloc extends Bloc<AtencionSaludEvent, AtencionSaludEntity> {
     });
 
     on<GetLugaresAtencionMedico>((event, emit) async {
+      emit(state.copyWith(formStatus: AtencionSaludFormLoading()));
       final result = await lugarAtencionMedicoUsecaseDB
           .getLugaresAtencionMedicoAtencionSaludUsecaseDB(
               event.atencionSaludId);
@@ -111,6 +116,7 @@ class AtencionSaludBloc extends Bloc<AtencionSaludEvent, AtencionSaludEntity> {
     });
 
     on<GetPlantasMedicinales>((event, emit) async {
+      emit(state.copyWith(formStatus: AtencionSaludFormLoading()));
       final result = await plantaMedicinalUsecaseDB
           .getPlantasMedicinalesAtencionSaludUsecaseDB(event.atencionSaludId);
       result.fold((failure) {

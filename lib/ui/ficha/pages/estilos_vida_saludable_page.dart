@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
 import '../../../domain/entities/estilo_vida_saludable_entity.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
+import '../../cubits/actividad_fisica/actividad_fisica_cubit.dart';
+import '../../cubits/alimentacion/alimentacion_cubit.dart';
+import '../../cubits/cigarrillo_dia/cigarrillo_dia_cubit.dart';
+import '../../cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/estilos_vida_saludable_form.dart';
 
@@ -30,6 +35,16 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
       afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar!.length,
       (_) => GlobalKey<FormState>(),
     );
+
+    getAccesoriasEstilosVidaSaludable();
+  }
+
+  getAccesoriasEstilosVidaSaludable() {
+    BlocProvider.of<ActividadFisicaCubit>(context).getActividadFisicaDB();
+    BlocProvider.of<AlimentacionCubit>(context).getAlimentacionDB();
+    BlocProvider.of<OpcionSiNoCubit>(context).getOpcionesSiNoDB();
+    BlocProvider.of<CigarrilloDiaCubit>(context).getCigarrilloDiaDB();
+    BlocProvider.of<ConsumoAlcoholCubit>(context).getConsumoAlcoholDB();
   }
 
   void _submitForm() {
@@ -131,17 +146,9 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
                           EstiloVidaSaludableEntity>(
                         builder: (context, state) {
                           if (state.formStatus
-                              is EstiloVidaSaludableFormEmpty) {
-                            return Form(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              key: formKeys[index],
-                              child: EstilosVidaSaludableForm(
-                                currentAfiliado: currentAfiliado,
-                              ),
-                            );
-                          } else if (state.formStatus
-                              is EstiloVidaSaludableFormLoaded) {
+                                  is EstiloVidaSaludableFormInitial ||
+                              state.formStatus
+                                  is EstiloVidaSaludableFormLoaded) {
                             return Form(
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
@@ -157,12 +164,18 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
                     },
                   ),
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _submitForm,
-                    child: const Text('Guardar'),
-                  ),
+                BlocBuilder<EstiloVidaSaludableBloc, EstiloVidaSaludableEntity>(
+                  builder: (context, state) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: state is EstiloVidaSaludableFormLoading
+                            ? null
+                            : _submitForm,
+                        child: const Text('Siguiente'),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

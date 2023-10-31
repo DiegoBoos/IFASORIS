@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/cubits/opcion_si_no/opcion_si_no_cubit.dart';
 
 import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
+import '../../cubits/costumbre_practica/costumbre_practica_cubit.dart';
+import '../../cubits/evento_costumbre_participa/evento_costumbre_participa_cubit.dart';
+import '../../cubits/religion_profesa/religion_profesa_cubit.dart';
+import '../../cubits/sancion_justicia/sancion_justicia_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/dimension_sociocultural_pueblos_indigenas_form.dart';
 
@@ -31,6 +36,16 @@ class _DimensionSocioCulturalPueblosIndigenasPageState
       afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar!.length,
       (_) => GlobalKey<FormState>(),
     );
+    getAccesoriasDimensionSocioCulturalPueblosIndigenas();
+  }
+
+  getAccesoriasDimensionSocioCulturalPueblosIndigenas() {
+    BlocProvider.of<ReligionProfesaCubit>(context).getReligionProfesaDB();
+    BlocProvider.of<OpcionSiNoCubit>(context).getOpcionesSiNoDB();
+    BlocProvider.of<EventoCostumbreParticipaCubit>(context)
+        .getEventosCostumbresParticipaDB();
+    BlocProvider.of<CostumbrePracticaCubit>(context).getCostumbrePracticaDB();
+    BlocProvider.of<SancionJusticiaCubit>(context).getSancionJusticiaDB();
   }
 
   void _submitForm() {
@@ -148,20 +163,9 @@ class _DimensionSocioCulturalPueblosIndigenasPageState
                             DimensionSocioCulturalPueblosIndigenasEntity>(
                           builder: (context, state) {
                             if (state.formStatus
-                                is DimensionSocioCulturalPueblosIndigenasFormEmpty) {
-                              return Form(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                key: formKeys[index],
-                                child:
-                                    DimensionSocioCulturalPueblosIndigenasForm(
-                                  currentAfiliado: currentAfiliado,
-                                ),
-                              );
-                            } else if (state.formStatus
-                                    is DimensionSocioCulturalPueblosIndigenasFormLoaded ||
+                                    is DimensionSocioCulturalPueblosIndigenasFormInitial ||
                                 state.formStatus
-                                    is DimensionSocioCulturalPueblosIndigenasSubmissionSuccess) {
+                                    is DimensionSocioCulturalPueblosIndigenasFormLoaded) {
                               return Form(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
@@ -179,12 +183,20 @@ class _DimensionSocioCulturalPueblosIndigenasPageState
                       },
                     ),
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _submitForm,
-                      child: const Text('Guardar'),
-                    ),
+                  BlocBuilder<DimensionSocioCulturalPueblosIndigenasBloc,
+                      DimensionSocioCulturalPueblosIndigenasEntity>(
+                    builder: (context, state) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: state
+                                  is DimensionSocioCulturalPueblosIndigenasFormLoading
+                              ? null
+                              : _submitForm,
+                          child: const Text('Siguiente'),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

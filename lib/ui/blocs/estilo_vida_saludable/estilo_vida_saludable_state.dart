@@ -8,9 +8,9 @@ class EstiloVidaSaludableFormInitial extends EstiloVidaSaludableState {
   const EstiloVidaSaludableFormInitial();
 }
 
-class EstiloVidaSaludableFormLoaded extends EstiloVidaSaludableState {}
+class EstiloVidaSaludableFormLoading extends EstiloVidaSaludableState {}
 
-class EstiloVidaSaludableFormEmpty extends EstiloVidaSaludableState {}
+class EstiloVidaSaludableFormLoaded extends EstiloVidaSaludableState {}
 
 class EstiloVidaSaludableSubmissionSuccess extends EstiloVidaSaludableState {}
 

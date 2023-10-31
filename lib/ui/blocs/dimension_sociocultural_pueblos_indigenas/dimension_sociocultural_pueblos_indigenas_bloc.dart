@@ -25,6 +25,8 @@ class DimensionSocioCulturalPueblosIndigenasBloc extends Bloc<
     });
 
     on<DimensionSocioCulturalPueblosIndigenasSubmitted>((event, emit) async {
+      emit(state.copyWith(
+          formStatus: DimensionSocioCulturalPueblosIndigenasFormLoading()));
       final result = await dimensionSocioCulturalPueblosIndigenasUsecaseDB
           .saveDimensionSocioCulturalPueblosIndigenasUsecaseDB(state);
       result.fold((failure) {
@@ -35,6 +37,8 @@ class DimensionSocioCulturalPueblosIndigenasBloc extends Bloc<
     });
 
     on<GetDimensionSocioCulturalPueblosIndigenas>((event, emit) async {
+      emit(state.copyWith(
+          formStatus: DimensionSocioCulturalPueblosIndigenasFormLoading()));
       final result = await dimensionSocioCulturalPueblosIndigenasUsecaseDB
           .getDimensionSocioCulturalPueblosIndigenasUsecaseDB(event.afiliadoId);
       result.fold((failure) {
@@ -48,12 +52,15 @@ class DimensionSocioCulturalPueblosIndigenasBloc extends Bloc<
               data.dimSocioCulturalPueblosIndigenasId));
         } else {
           emit(state.copyWith(
-              formStatus: DimensionSocioCulturalPueblosIndigenasFormEmpty()));
+              formStatus:
+                  const DimensionSocioCulturalPueblosIndigenasFormInitial()));
         }
       });
     });
 
     on<GetEventosCostumbresParticipa>((event, emit) async {
+      emit(state.copyWith(
+          formStatus: DimensionSocioCulturalPueblosIndigenasFormLoading()));
       final result = await eventoCostumbreParticipaUsecaseDB
           .getAsp6EventosCostumbresParticipaUsecaseDB(
               event.dimSocioCulturalPueblosIndigenasId);

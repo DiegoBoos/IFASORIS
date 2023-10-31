@@ -9,6 +9,8 @@ abstract class DimUbicacionEvent extends Equatable {
 
 class DimUbicacionInit extends DimUbicacionEvent {}
 
+class DimUbicacionLoading extends DimUbicacionEvent {}
+
 class DimUbicacionSubmitted extends DimUbicacionEvent {}
 
 class GetDimUbicacion extends DimUbicacionEvent {

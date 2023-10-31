@@ -8,9 +8,9 @@ class AtencionSaludFormInitial extends AtencionSaludState {
   const AtencionSaludFormInitial();
 }
 
-class AtencionSaludFormLoaded extends AtencionSaludState {}
+class AtencionSaludFormLoading extends AtencionSaludState {}
 
-class AtencionSaludFormEmpty extends AtencionSaludState {}
+class AtencionSaludFormLoaded extends AtencionSaludState {}
 
 class AtencionSaludSubmissionSuccess extends AtencionSaludState {}
 

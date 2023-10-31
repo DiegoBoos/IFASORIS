@@ -1,26 +1,20 @@
 part of 'slider_cubit.dart';
 
 class SliderState extends Equatable {
-  final double currentPage;
-  final double bulletPrimario;
-  final double bulletSecundario;
-  const SliderState(
-      this.currentPage, this.bulletPrimario, this.bulletSecundario);
+  final SliderModel sliderModel;
+  const SliderState(this.sliderModel);
 
   @override
-  List<Object> get props => [currentPage, bulletPrimario, bulletSecundario];
+  List<Object> get props => [sliderModel];
 }
 
 class SliderInitial extends SliderState {
-  const SliderInitial() : super(0, 0, 0);
+  SliderInitial()
+      : super(SliderModel(
+            currentPage: 0.0, bulletPrimario: 0.0, bulletSecundario: 0.0));
 }
 
 class SliderChanged extends SliderState {
-  final double currentPageChanged;
-  final double bulletPrimarioChanged;
-  final double bulletSecundarioChanged;
-  const SliderChanged(this.currentPageChanged, this.bulletPrimarioChanged,
-      this.bulletSecundarioChanged)
-      : super(
-            currentPageChanged, bulletPrimarioChanged, bulletSecundarioChanged);
+  final SliderModel sliderModelLoaded;
+  const SliderChanged(this.sliderModelLoaded) : super(sliderModelLoaded);
 }

@@ -18,10 +18,10 @@ class MedioUtilizaCARepositoryDBImpl implements MedioUtilizaCARepositoryDB {
     try {
       final result = await medioUtilizaCALocalDataSource.getMediosUtilizaCA();
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -32,10 +32,10 @@ class MedioUtilizaCARepositoryDBImpl implements MedioUtilizaCARepositoryDB {
       final result = await medioUtilizaCALocalDataSource
           .saveMedioUtilizaCA(medioUtilizaCA);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -46,10 +46,10 @@ class MedioUtilizaCARepositoryDBImpl implements MedioUtilizaCARepositoryDB {
       final result = await medioUtilizaCALocalDataSource
           .getUbicacionMediosUtilizaCA(ubicacionId);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -60,10 +60,10 @@ class MedioUtilizaCARepositoryDBImpl implements MedioUtilizaCARepositoryDB {
       final result = await medioUtilizaCALocalDataSource
           .saveUbicacionMediosUtilizaCA(ubicacionId, lstMediosUtilizaCA);
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/ui/cubits/slider/slider_cubit.dart';
 
 class Slideshow extends StatelessWidget {
+  final PageController pageViewController;
   final List<Widget> slides;
   final bool puntosArriba;
   final double bulletPrimario;
@@ -10,6 +11,7 @@ class Slideshow extends StatelessWidget {
 
   const Slideshow(
       {super.key,
+      required this.pageViewController,
       required this.slides,
       this.puntosArriba = false,
       this.bulletPrimario = 15,
@@ -18,54 +20,63 @@ class Slideshow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SliderCubit(),
-      child: SafeArea(
-        child: Builder(
-          builder: (context) {
-            final sliderCubit = BlocProvider.of<SliderCubit>(context);
-            sliderCubit.updateBulletPrimatio(bulletPrimario);
-            sliderCubit.updateBulletSecundatio(bulletSecundario);
-
-            return Center(
-              child: Column(
-                children: [
-                  if (puntosArriba) _Dots(slides.length),
-                  Expanded(child: _Slides(slides: slides)),
-                  if (!puntosArriba) _Dots(slides.length),
-                ],
-              ),
+      create: (context) {
+        // Perform initialization here
+        final sliderCubit = SliderCubit();
+        // You can initialize values or perform other setup tasks here
+        sliderCubit.updateBulletPrimario(bulletPrimario);
+        sliderCubit.updateBulletSecundario(bulletSecundario);
+        return sliderCubit;
+      },
+      child: BlocBuilder<SliderCubit, SliderState>(
+        builder: (context, state) {
+          if (state is SliderChanged) {
+            return Column(
+              children: [
+                if (puntosArriba)
+                  Container(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: _Dots(slides.length)),
+                Expanded(
+                    child: _Slides(
+                  slides: slides,
+                  pageViewController: pageViewController,
+                )),
+                if (!puntosArriba) _Dots(slides.length),
+              ],
             );
-          },
-        ),
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
 }
 
 class _Slides extends StatefulWidget {
-  const _Slides({required this.slides});
+  const _Slides({required this.slides, required this.pageViewController});
   final List<Widget> slides;
+  final PageController pageViewController;
 
   @override
   State<_Slides> createState() => _SlidesState();
 }
 
 class _SlidesState extends State<_Slides> {
-  final pageViewController = PageController();
-
   @override
   void initState() {
     final sliderCubit = BlocProvider.of<SliderCubit>(context, listen: false);
 
     super.initState();
-    pageViewController.addListener(() {
-      sliderCubit.updateCurrentPage(pageViewController.page!);
+    widget.pageViewController.addListener(() {
+      sliderCubit.updateCurrentPage(widget.pageViewController.page!);
     });
   }
 
   @override
   void dispose() {
-    pageViewController.dispose();
+    widget.pageViewController.dispose();
     super.dispose();
   }
 
@@ -74,7 +85,8 @@ class _SlidesState extends State<_Slides> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: PageView(
-        controller: pageViewController,
+        physics: const NeverScrollableScrollPhysics(),
+        controller: widget.pageViewController,
         children: widget.slides.map((slide) => _Slide(slide)).toList(),
       ),
     );
@@ -104,10 +116,8 @@ class _Dots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         width: double.infinity,
-        height: 70,
-        color: Colors.red,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(length, (index) => _Dot(index)),
@@ -124,19 +134,19 @@ class _Dot extends StatelessWidget {
   Widget build(BuildContext context) {
     final slideCubit = BlocProvider.of<SliderCubit>(context).state;
 
-    final pageViewIndex = slideCubit.currentPage;
+    final pageViewIndex = slideCubit.sliderModel.currentPage;
     final lowerBound = index - 0.5;
     final upperBound = index + 0.5;
 
     Color color;
     double tamano = 0.0;
 
-    if ((pageViewIndex >= lowerBound && pageViewIndex < upperBound)) {
-      color = Colors.blue;
-      tamano = slideCubit.bulletPrimario;
+    if (pageViewIndex >= lowerBound && pageViewIndex < upperBound) {
+      color = Colors.green;
+      tamano = slideCubit.sliderModel.bulletPrimario;
     } else {
       color = Colors.grey;
-      tamano = slideCubit.bulletSecundario;
+      tamano = slideCubit.sliderModel.bulletSecundario;
     }
 
     return AnimatedContainer(

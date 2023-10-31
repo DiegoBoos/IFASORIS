@@ -18,6 +18,7 @@ class EstiloVidaSaludableBloc
     });
 
     on<EstiloVidaSaludableSubmitted>((event, emit) async {
+      emit(state.copyWith(formStatus: EstiloVidaSaludableFormLoading()));
       final result = await estiloVidaSaludableUsecaseDB
           .saveEstiloVidaSaludableUsecaseDB(state);
       result.fold((failure) {
@@ -31,6 +32,7 @@ class EstiloVidaSaludableBloc
     });
 
     on<GetEstiloVidaSaludable>((event, emit) async {
+      emit(state.copyWith(formStatus: EstiloVidaSaludableFormLoading()));
       final result = await estiloVidaSaludableUsecaseDB
           .getEstiloVidaSaludableUsecaseDB(event.afiliadoId);
       result.fold((failure) {
@@ -41,7 +43,8 @@ class EstiloVidaSaludableBloc
         if (data != null) {
           emit(data.copyWith(formStatus: EstiloVidaSaludableFormLoaded()));
         } else {
-          emit(state.copyWith(formStatus: EstiloVidaSaludableFormEmpty()));
+          emit(state.copyWith(
+              formStatus: const EstiloVidaSaludableFormInitial()));
         }
       });
     });

@@ -15,10 +15,10 @@ class DimensionSocioCulturalPueblosIndigenasForm extends StatefulWidget {
   const DimensionSocioCulturalPueblosIndigenasForm(
       {super.key,
       required this.currentAfiliado,
-      this.dimensionSocioCulturalPueblosIndigenas});
+      required this.dimensionSocioCulturalPueblosIndigenas});
 
   final GrupoFamiliarEntity currentAfiliado;
-  final DimensionSocioCulturalPueblosIndigenasEntity?
+  final DimensionSocioCulturalPueblosIndigenasEntity
       dimensionSocioCulturalPueblosIndigenas;
 
   @override
@@ -52,28 +52,27 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
 
     setState(() {
       _religionProfesaId =
-          widget.dimensionSocioCulturalPueblosIndigenas?.religionProfesaId;
+          widget.dimensionSocioCulturalPueblosIndigenas.religionProfesaId;
       _conoceUsosCostumbresId =
-          widget.dimensionSocioCulturalPueblosIndigenas?.conoceUsosCostumbresId;
+          widget.dimensionSocioCulturalPueblosIndigenas.conoceUsosCostumbresId;
       _cualesUsosCostumbresCtrl.text =
-          widget.dimensionSocioCulturalPueblosIndigenas?.cualesUsosCostumbres ??
+          widget.dimensionSocioCulturalPueblosIndigenas.cualesUsosCostumbres ??
               '';
       _participaCostumbresId =
-          widget.dimensionSocioCulturalPueblosIndigenas?.participaCostumbresId;
-      _costumbrePracticaId = widget.dimensionSocioCulturalPueblosIndigenas
-                  ?.costumbrePracticaId ==
-              0
-          ? null
-          : widget.dimensionSocioCulturalPueblosIndigenas?.costumbrePracticaId;
-      _sancionJusticiaId =
-          widget.dimensionSocioCulturalPueblosIndigenas?.sancionJusticiaId == 0
+          widget.dimensionSocioCulturalPueblosIndigenas.participaCostumbresId;
+      _costumbrePracticaId =
+          widget.dimensionSocioCulturalPueblosIndigenas.costumbrePracticaId == 0
               ? null
               : widget
-                  .dimensionSocioCulturalPueblosIndigenas?.sancionJusticiaId;
+                  .dimensionSocioCulturalPueblosIndigenas.costumbrePracticaId;
+      _sancionJusticiaId =
+          widget.dimensionSocioCulturalPueblosIndigenas.sancionJusticiaId == 0
+              ? null
+              : widget.dimensionSocioCulturalPueblosIndigenas.sancionJusticiaId;
       _sitiosSagradosId =
-          widget.dimensionSocioCulturalPueblosIndigenas?.sitiosSagradosId;
+          widget.dimensionSocioCulturalPueblosIndigenas.sitiosSagradosId;
       _cualesSitiosSagradosCtrl.text =
-          widget.dimensionSocioCulturalPueblosIndigenas?.cualesSitiosSagrados ??
+          widget.dimensionSocioCulturalPueblosIndigenas.cualesSitiosSagrados ??
               '';
     });
   }

@@ -18,10 +18,10 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
       final result = await fichaLocalDataSource.createFicha(ficha);
 
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -34,10 +34,10 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
 
       // return Right(result);
       return const Right(1);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -48,10 +48,10 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
       final result = await fichaLocalDataSource.loadFichas(familiaId);
 
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -61,10 +61,10 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
       final result = await fichaLocalDataSource.deleteFicha(fichaId);
 
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
@@ -76,10 +76,10 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
           await fichaLocalDataSource.loadFichasDiligenciadas(familiaId);
 
       return Right(result);
-    } on ServerFailure catch (e) {
-      return Left(ServerFailure(e.properties));
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
     } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 }

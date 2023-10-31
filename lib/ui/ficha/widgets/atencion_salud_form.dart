@@ -20,10 +20,10 @@ import '../../utils/custom_snack_bar.dart';
 
 class AtencionSaludForm extends StatefulWidget {
   const AtencionSaludForm(
-      {super.key, required this.currentAfiliado, this.atencionSalud});
+      {super.key, required this.currentAfiliado, required this.atencionSalud});
 
   final GrupoFamiliarEntity currentAfiliado;
-  final AtencionSaludEntity? atencionSalud;
+  final AtencionSaludEntity atencionSalud;
 
   @override
   State<AtencionSaludForm> createState() => _AtencionSaludFormState();
@@ -50,17 +50,16 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
         '';
 
     setState(() {
-      _enfermedadAcudeId = widget.atencionSalud?.enfermedadAcudeId;
+      _enfermedadAcudeId = widget.atencionSalud.enfermedadAcudeId;
       _recibioAtencionMedTradicionalId =
-          widget.atencionSalud?.recibioAtencionMedTradicionalId;
-      _enfermedadTratamientoId = widget.atencionSalud?.enfermedadTratamientoId;
-      _utilizaPlantasMedId = widget.atencionSalud?.utilizaPlantasMedId == 0
+          widget.atencionSalud.recibioAtencionMedTradicionalId;
+      _enfermedadTratamientoId = widget.atencionSalud.enfermedadTratamientoId;
+      _utilizaPlantasMedId = widget.atencionSalud.utilizaPlantasMedId == 0
           ? null
-          : widget.atencionSalud?.utilizaPlantasMedId;
-      _lugarPlantaMedicinalId =
-          widget.atencionSalud?.lugarPlantaMedicinalId == 0
-              ? null
-              : widget.atencionSalud?.lugarPlantaMedicinalId;
+          : widget.atencionSalud.utilizaPlantasMedId;
+      _lugarPlantaMedicinalId = widget.atencionSalud.lugarPlantaMedicinalId == 0
+          ? null
+          : widget.atencionSalud.lugarPlantaMedicinalId;
     });
   }
 

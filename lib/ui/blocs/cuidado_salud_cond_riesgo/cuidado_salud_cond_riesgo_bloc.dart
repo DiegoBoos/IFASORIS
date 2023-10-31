@@ -27,6 +27,7 @@ class CuidadoSaludCondRiesgoBloc
     });
 
     on<CuidadoSaludCondRiesgoSubmitted>((event, emit) async {
+      emit(state.copyWith(formStatus: CuidadoSaludCondRiesgoFormLoading()));
       final result = await cuidadoSaludCondRiesgoUsecaseDB
           .saveCuidadoSaludCondRiesgoUsecaseDB(state);
       result.fold((failure) {
@@ -37,6 +38,7 @@ class CuidadoSaludCondRiesgoBloc
     });
 
     on<GetCuidadoSaludCondRiesgo>((event, emit) async {
+      emit(state.copyWith(formStatus: CuidadoSaludCondRiesgoFormLoading()));
       final result = await cuidadoSaludCondRiesgoUsecaseDB
           .getCuidadoSaludCondRiesgoUsecaseDB(event.afiliadoId);
       result.fold((failure) {
@@ -48,12 +50,14 @@ class CuidadoSaludCondRiesgoBloc
           emit(data);
           add(GetServiciosSolicitados(data.cuidadoSaludCondRiesgoId));
         } else {
-          emit(state.copyWith(formStatus: CuidadoSaludCondRiesgoFormEmpty()));
+          emit(state.copyWith(
+              formStatus: const CuidadoSaludCondRiesgoFormInitial()));
         }
       });
     });
 
     on<GetServiciosSolicitados>((event, emit) async {
+      emit(state.copyWith(formStatus: CuidadoSaludCondRiesgoFormLoading()));
       final result = await servicioSolicitadoUsecaseDB
           .getLstServiciosSolicitadosUsecaseDB(event.cuidadoSaludCondRiesgoId);
       result.fold((failure) {
@@ -69,6 +73,7 @@ class CuidadoSaludCondRiesgoBloc
     });
 
     on<GetNombresEnfermedades>((event, emit) async {
+      emit(state.copyWith(formStatus: CuidadoSaludCondRiesgoFormLoading()));
       final result = await nombreEnfermedadUsecaseDB
           .getLstNombresEnfermedadesUsecaseDB(event.cuidadoSaludCondRiesgoId);
       result.fold((failure) {
