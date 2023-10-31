@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/entities/estadistica_entity.dart';
 
-import '../../../domain/entities/ficha_entity.dart';
 import '../../../domain/entities/usuario_entity.dart';
-import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/ficha/ficha_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
@@ -19,7 +16,6 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
     final fichaBloc = BlocProvider.of<FichaBloc>(context);
     final usuario = authBloc.state.usuario ??
         UsuarioEntity(userName: '', deviceId: '', password: '');

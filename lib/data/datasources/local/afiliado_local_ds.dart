@@ -1,5 +1,4 @@
 import 'package:ifasoris/data/models/afiliado_response_model.dart';
-import 'package:ifasoris/domain/entities/familia_entity.dart';
 import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
 
 import '../../../services/connection_sqlite_service.dart';

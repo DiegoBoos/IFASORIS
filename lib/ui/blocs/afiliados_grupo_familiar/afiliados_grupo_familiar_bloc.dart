@@ -13,6 +13,17 @@ class AfiliadosGrupoFamiliarBloc
 
   AfiliadosGrupoFamiliarBloc({required this.grupoFamiliarUsecaseDB})
       : super(AfiliadosGrupoFamiliarInitial()) {
+    on<ExisteAfiliadoCabezaFamilia>((event, emit) async {
+      emit(AfiliadosGrupoFamiliarLoading());
+      final result = await grupoFamiliarUsecaseDB
+          .existeAfiliadoCabezaFamiliaUsecaseDB(event.familiaId);
+      result.fold((failure) {
+        emit(const AfiliadosGrupoFamiliarError(
+          'Excepción no controlada',
+        ));
+      }, (data) => emit(AfiliadoCabezaFamiliaLoaded(data)));
+    });
+
     on<GetAfiliadosGrupoFamiliar>((event, emit) async {
       emit(AfiliadosGrupoFamiliarLoading());
       final result = await grupoFamiliarUsecaseDB

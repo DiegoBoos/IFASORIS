@@ -13,6 +13,12 @@ class AfiliadosGrupoFamiliarInitial extends AfiliadosGrupoFamiliarState {}
 
 class AfiliadosGrupoFamiliarLoading extends AfiliadosGrupoFamiliarState {}
 
+class AfiliadoCabezaFamiliaLoaded extends AfiliadosGrupoFamiliarState {
+  final bool existeAfiliadoCabezaFamilia;
+
+  const AfiliadoCabezaFamiliaLoaded(this.existeAfiliadoCabezaFamilia);
+}
+
 class AfiliadosGrupoFamiliarLoaded extends AfiliadosGrupoFamiliarState {
   final List<GrupoFamiliarEntity>? afiliadosGrupoFamiliarLoaded;
   final String message;

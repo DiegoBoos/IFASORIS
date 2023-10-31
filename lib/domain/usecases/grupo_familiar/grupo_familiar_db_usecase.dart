@@ -30,4 +30,9 @@ class GrupoFamiliarUsecaseDB {
   Future<Either<Failure, int>> completeGrupoFamiliarUsecaseDB(int familiaId) {
     return repositoryDB.completeGrupoFamiliarRepositoryDB(familiaId);
   }
+
+  Future<Either<Failure, bool>> existeAfiliadoCabezaFamiliaUsecaseDB(
+      int afiliadoId) {
+    return repositoryDB.existeAfiliadoCabezaFamiliaRepositoryDB(afiliadoId);
+  }
 }

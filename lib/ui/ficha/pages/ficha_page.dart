@@ -83,7 +83,6 @@ import '../widgets/acceso_medico_form.dart';
 import '../widgets/aspectos_tierra.dart';
 import '../widgets/datos_ubicacion_form.dart';
 import '../widgets/datos_vivienda_form.dart';
-import '../widgets/grupo_familiar_form.dart';
 import 'grupo_familiar_page.dart';
 
 class FichaPage extends StatefulWidget {
@@ -225,124 +224,125 @@ class _FichaPageState extends State<FichaPage> {
     final afiliadosGrupoFamiliarBloc =
         BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context);
 
-    return WillPopScope(
-        onWillPop: () async {
-          CustomSnackBar.showCustomDialog(
-              context,
-              'Está seguro que desea salir',
-              'Se perderán los datos no guardados.', () {
-            Navigator.popUntil(context, ModalRoute.withName('home'));
-            return;
-          });
-          return false;
-        },
-        child: MultiBlocListener(
-            listeners: [
-              BlocListener<DimUbicacionBloc, DimUbicacionEntity>(
-                listener: (context, state) {
-                  final formStatus = state.formStatus;
-                  if (formStatus is DimUbicacionSubmissionSuccess) {
-                    setState(() {
-                      currentStep = 1;
-                    });
-                  }
-                  if (formStatus is DimUbicacionSubmissionFailed) {
-                    CustomSnackBar.showSnackBar(
-                        context, formStatus.message, Colors.red);
-                  }
-                },
-              ),
-              BlocListener<DimViviendaBloc, DimViviendaEntity>(
-                listener: (context, state) {
-                  final formStatus = state.formStatus;
-                  if (formStatus is DimViviendaSubmissionSuccess) {
-                    setState(() {
-                      currentStep = 2;
-                    });
-                  }
-                  if (formStatus is DimViviendaSubmissionFailed) {
-                    CustomSnackBar.showSnackBar(
-                        context, formStatus.message, Colors.red);
-                  }
-                },
-              ),
-              BlocListener<AfiliadosGrupoFamiliarBloc,
-                  AfiliadosGrupoFamiliarState>(
-                listener: (context, state) {
-                  if (state is AfiliadosGrupoFamiliarError) {
-                    CustomSnackBar.showSnackBar(
-                        context, state.message, Colors.red);
-                  }
-                },
-              ),
-            ],
-            child: Scaffold(
-              appBar: AppBar(
-                title: const Text('Ficha'),
-              ),
-              body: Theme(
-                data: Theme.of(context).copyWith(
-                    colorScheme:
-                        const ColorScheme.light(primary: Colors.green)),
-                child: Stepper(
-                  type: StepperType.horizontal,
-                  steps: getSteps(),
-                  currentStep: currentStep,
-                  onStepContinue: () async {
-                    final isLastStep = currentStep == getSteps().length - 1;
+    return MultiBlocListener(
+        listeners: [
+          BlocListener<DimUbicacionBloc, DimUbicacionEntity>(
+            listener: (context, state) {
+              final formStatus = state.formStatus;
+              if (formStatus is DimUbicacionSubmissionSuccess) {
+                setState(() {
+                  currentStep = 1;
+                });
+              }
+              if (formStatus is DimUbicacionSubmissionFailed) {
+                CustomSnackBar.showSnackBar(
+                    context, formStatus.message, Colors.red);
+              }
+            },
+          ),
+          BlocListener<DimViviendaBloc, DimViviendaEntity>(
+            listener: (context, state) {
+              final formStatus = state.formStatus;
+              if (formStatus is DimViviendaSubmissionSuccess) {
+                setState(() {
+                  currentStep = 2;
+                });
 
-                    if (currentStep == 0) {
-                      if (_formKeyUbicacion.currentState!.validate()) {
-                        _formKeyUbicacion.currentState!.save();
+                BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context)
+                    .add(ExisteAfiliadoCabezaFamilia(afiliado.afiliadoId!));
+              }
+              if (formStatus is DimViviendaSubmissionFailed) {
+                CustomSnackBar.showSnackBar(
+                    context, formStatus.message, Colors.red);
+              }
+            },
+          ),
+          BlocListener<AfiliadosGrupoFamiliarBloc, AfiliadosGrupoFamiliarState>(
+            listener: (context, state) {
+              if (state is AfiliadosGrupoFamiliarError) {
+                CustomSnackBar.showSnackBar(context, state.message, Colors.red);
+              }
+            },
+          ),
+        ],
+        child: WillPopScope(
+          onWillPop: () async {
+            CustomSnackBar.showCustomDialog(
+                context,
+                'Está seguro que desea salir',
+                'Se perderán los datos no guardados.', () {
+              Navigator.popUntil(context, ModalRoute.withName('home'));
+              return;
+            });
+            return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Ficha'),
+            ),
+            body: Theme(
+              data: Theme.of(context).copyWith(
+                  colorScheme: const ColorScheme.light(primary: Colors.green)),
+              child: Stepper(
+                type: StepperType.horizontal,
+                steps: getSteps(),
+                currentStep: currentStep,
+                onStepContinue: () async {
+                  final isLastStep = currentStep == getSteps().length - 1;
 
-                        dimUbicacionBloc.add(
-                            DimUbicacionAfiliadoChanged(afiliado.afiliadoId!));
-                        dimUbicacionBloc.add(
-                            DimUbicacionFamiliaChanged(afiliado.familiaId!));
-                        dimUbicacionBloc.add(DimUbicacionSubmitted());
-                      }
-                    } else if (currentStep == 1) {
-                      if (_formKeyVivienda.currentState!.validate()) {
-                        _formKeyVivienda.currentState!.save();
-                        dimViviendaBloc.add(
-                            DimViviendaAfiliadoChanged(afiliado.afiliadoId!));
-                        dimViviendaBloc.add(
-                            DimViviendaFamiliaChanged(afiliado.familiaId!));
-                        dimViviendaBloc.add(DimViviendaSubmitted());
-                      }
-                    } else if (isLastStep) {
-                      final afiliadosGrupoFamiliar = afiliadosGrupoFamiliarBloc
-                          .state.afiliadosGrupoFamiliar;
+                  if (currentStep == 0) {
+                    if (_formKeyUbicacion.currentState!.validate()) {
+                      _formKeyUbicacion.currentState!.save();
 
-                      if (afiliadosGrupoFamiliar != null) {
-                        Navigator.pushReplacementNamed(
-                            context, 'estilo-vida-saludable');
-                      } else {
-                        afiliadosGrupoFamiliarBloc.add(
-                            const ErrorAfiliadosGrupoFamiliar(
-                                'No hay afiliados en el grupo familiar'));
-                      }
+                      dimUbicacionBloc.add(
+                          DimUbicacionAfiliadoChanged(afiliado.afiliadoId!));
+                      dimUbicacionBloc
+                          .add(DimUbicacionFamiliaChanged(afiliado.familiaId!));
+                      dimUbicacionBloc.add(DimUbicacionSubmitted());
                     }
-                  },
-                  controlsBuilder: (context, details) {
-                    return BlocBuilder<AfiliadosGrupoFamiliarBloc,
-                        AfiliadosGrupoFamiliarState>(
-                      builder: (context, state) {
-                        return Container(
-                          margin: const EdgeInsets.only(top: 50),
-                          child: Row(children: [
-                            ElevatedButton(
-                              onPressed: details.onStepContinue,
-                              child: const Text('Continuar'),
-                            ),
-                          ]),
-                        );
-                      },
-                    );
-                  },
-                ),
+                  } else if (currentStep == 1) {
+                    if (_formKeyVivienda.currentState!.validate()) {
+                      _formKeyVivienda.currentState!.save();
+                      dimViviendaBloc.add(
+                          DimViviendaAfiliadoChanged(afiliado.afiliadoId!));
+                      dimViviendaBloc
+                          .add(DimViviendaFamiliaChanged(afiliado.familiaId!));
+                      dimViviendaBloc.add(DimViviendaSubmitted());
+                    }
+                  } else if (isLastStep) {
+                    final afiliadosGrupoFamiliar =
+                        afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar;
+
+                    if (afiliadosGrupoFamiliar != null) {
+                      Navigator.pushReplacementNamed(
+                          context, 'estilo-vida-saludable');
+                    } else {
+                      afiliadosGrupoFamiliarBloc.add(
+                          const ErrorAfiliadosGrupoFamiliar(
+                              'No hay afiliados en el grupo familiar'));
+                    }
+                  }
+                },
+                controlsBuilder: (context, details) {
+                  return BlocBuilder<AfiliadosGrupoFamiliarBloc,
+                      AfiliadosGrupoFamiliarState>(
+                    builder: (context, state) {
+                      return Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        child: Row(children: [
+                          ElevatedButton(
+                            onPressed: details.onStepContinue,
+                            child: const Text('Continuar'),
+                          ),
+                        ]),
+                      );
+                    },
+                  );
+                },
               ),
-            )));
+            ),
+          ),
+        ));
   }
 
   List<Step> getSteps() => [

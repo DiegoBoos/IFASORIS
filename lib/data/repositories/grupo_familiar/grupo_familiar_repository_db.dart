@@ -71,4 +71,19 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> existeAfiliadoCabezaFamiliaRepositoryDB(
+      int afiliadoId) async {
+    try {
+      final result = await grupoFamiliarLocalDataSource
+          .existeAfiliadoCabezaFamilia(afiliadoId);
+
+      return Right(result);
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
+    } on ServerException {
+      return const Left(DatabaseFailure(['Excepción no controlada']));
+    }
+  }
 }
