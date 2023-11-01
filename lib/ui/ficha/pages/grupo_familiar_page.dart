@@ -43,63 +43,6 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                 style: TextStyle(color: Colors.white),
               ),
             )),
-        BlocBuilder<AfiliadosGrupoFamiliarBloc, AfiliadosGrupoFamiliarState>(
-            builder: (context, state) {
-          if (state is AfiliadosGrupoFamiliarLoaded) {
-            final afiliadosGrupoFamiliarLoaded =
-                state.afiliadosGrupoFamiliarLoaded!;
-
-            GrupoFamiliarEntity findGrupoFamiliar(
-                List<GrupoFamiliarEntity> afiliadosGrupoFamiliarLoaded,
-                int afiliadoId) {
-              for (var item in afiliadosGrupoFamiliarLoaded) {
-                if (item.afiliadoId == afiliadoId) {
-                  return item;
-                }
-              }
-              return GrupoFamiliarEntity(
-                afiliadoId: afiliado.afiliadoId,
-                documento: afiliado.documento,
-                edad: afiliado.edad,
-                fechaNacimiento: afiliado.fecnac,
-                nombre1: afiliado.nombre1,
-                nombre2: afiliado.nombre2,
-                apellido1: afiliado.apellido1,
-                apellido2: afiliado.apellido2,
-                tipoDocAfiliado: afiliado.tipoDocAfiliado,
-                codGeneroAfiliado: afiliado.codGeneroAfiliado,
-                codRegimenAfiliado: afiliado.codRegimenAfiliado,
-              );
-            }
-
-            final existeAfiliadoCabezaFamilia = findGrupoFamiliar(
-                afiliadosGrupoFamiliarLoaded, afiliado.afiliadoId!);
-
-            return MaterialButton(
-                elevation: 0,
-                color: Theme.of(context).colorScheme.primary,
-                onPressed: () {
-                  Navigator.push<void>(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => GrupoFamiliarForm(
-                          afiliadoGrupoFamiliar: existeAfiliadoCabezaFamilia),
-                    ),
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  child: const Text(
-                    'Continuar como cabeza de familia',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ));
-          } else {
-            return const SizedBox();
-          }
-        }),
-        const SizedBox(height: 10),
         BlocConsumer<AfiliadosGrupoFamiliarBloc, AfiliadosGrupoFamiliarState>(
             listener: (context, state) {
           if (state is AfiliadoCabezaFamiliaLoaded) {
