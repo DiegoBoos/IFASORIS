@@ -1,26 +1,23 @@
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/services.dart';
+import 'package:device_information/device_information.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../domain/entities/equipo_entity.dart';
 
 class DeviceInfo {
   static Future<EquipoEntity?> infoDispositivo() async {
     EquipoEntity datosEquipo = EquipoEntity();
-    try {
-      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-      if (Platform.isAndroid) {
-        AndroidDeviceInfo data = await deviceInfoPlugin.androidInfo;
-        datosEquipo.idEquipo = data.id;
-        datosEquipo.modeloEquipo = data.model;
-      } else if (Platform.isIOS) {
-        IosDeviceInfo data = await deviceInfoPlugin.iosInfo;
-        datosEquipo.idEquipo = data.identifierForVendor;
-        datosEquipo.modeloEquipo = data.model;
-      }
+    var status = await Permission.phone.status;
+    if (!status.isGranted) {
+      status = await Permission.phone.request();
+    } else {
+      final imei = await DeviceInformation.deviceIMEINumber;
+      final deviceModel = await DeviceInformation.deviceModel;
+
+      datosEquipo.imei = imei;
+      datosEquipo.modeloEquipo = deviceModel;
+
       return datosEquipo;
-    } on PlatformException {
-      return null;
     }
+    return null;
   }
 }

@@ -72,10 +72,10 @@ class _CambioDispositivoPageState extends State<CambioDispositivoPage> {
                             await DeviceInfo.infoDispositivo()
                                 .then((datosEquipo) async {
                               if (datosEquipo != null &&
-                                  datosEquipo.idEquipo != null) {
+                                  datosEquipo.imei != null) {
                                 await authBloc
                                     .cambioDispositivo(
-                                        userName, datosEquipo.idEquipo!)
+                                        userName, datosEquipo.imei!)
                                     .then((value) {
                                   if (value != '') {
                                     Navigator.of(context).pop();
