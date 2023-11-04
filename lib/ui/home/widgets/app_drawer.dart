@@ -73,21 +73,8 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.pie_chart),
               title: const Text('Estadísticas'),
-              onTap: () {
-                // List<FichaEntity> fichasCompletas = [];
-                // List<FichaEntity> fichasInCompletas = [];
-                // List<FichaEntity> fichasSincronizadas = [];
-                // List<FichaEntity> fichasPendientes = [];
-                // List<EstadisticaEntity> estadisticas = [];
-                // final afiliado = afiliadoPrefsBloc.state.afiliado;
-                // if (afiliado != null) {
-                // final future1 = fichaBloc.loadFichas(afiliado.familiaId!);
-                // final future2 =
-                //     fichaBloc.loadFichasDiligenciadas(afiliado.familiaId!);
-                final future3 = fichaBloc.loadEstadisticas();
-
-                Future.wait([future3]).then((values) {
-                  final estadisticas = values[0];
+              onTap: () async {
+                await fichaBloc.loadEstadisticas().then((estadisticas) {
                   final registradas = estadisticas
                       .where((i) => i.estadistica == 'FichasRegistradas')
                       .first;
@@ -123,42 +110,6 @@ class AppDrawer extends StatelessWidget {
                     ),
                   );
                 });
-
-                /* Future.wait([future1, future2]).then((values) {
-                    final fichas = values[0];
-                    final fichasDiligenciadas = values[1];
-
-                    for (var ficha in fichas) {
-                      for (var fichaDiligenciada in fichasDiligenciadas) {
-                        if (fichaDiligenciada.fichaId == ficha.fichaId) {
-                          fichasCompletas.add(fichaDiligenciada);
-                        } else {
-                          fichasInCompletas.add(fichaDiligenciada);
-                        }
-                      }
-
-                      if (ficha.numFicha != '') {
-                        fichasSincronizadas.add(ficha);
-                      } else {
-                        fichasPendientes.add(ficha);
-                      }
-                    }
-
-                    Navigator.push<void>(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => GraficasPage(
-                            countCompletas: fichasCompletas.length,
-                            countInCompletas: fichasInCompletas.length,
-                            countSincronizadas: fichasSincronizadas.length,
-                            countPendientes: fichasPendientes.length),
-                      ),
-                    );
-                  }); */
-                // } else {
-                //   CustomSnackBar.showSnackBar(
-                //       context, 'No hay datos', Colors.red);
-                // }
               },
             ),
             const Divider(),
@@ -168,6 +119,14 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, 'cambio-dispositivo');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.document_scanner),
+              title: const Text('Consultar fichas sincronizadas'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, 'fichas-sincronizadas');
               },
             ),
           ],
