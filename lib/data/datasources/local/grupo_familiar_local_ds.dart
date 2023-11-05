@@ -14,6 +14,8 @@ abstract class GrupoFamiliarLocalDataSource {
   Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId, int familiaId);
 
   Future<int> completeGrupoFamiliar(int familiaId);
+
+  Future<bool> existeAfiliadoCabezaFamilia(int afiliadoId);
 }
 
 class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
@@ -128,5 +130,24 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
         where: 'Familia_id = ?', whereArgs: [familiaId]);
 
     return res;
+  }
+
+  @override
+  Future<bool> existeAfiliadoCabezaFamilia(int afiliadoId) async {
+    final db = await ConnectionSQLiteService.db;
+
+    final res = await db.rawQuery('''
+    SELECT EXISTS (
+      SELECT 1 FROM Asp3_GrupoFamiliar 
+      INNER JOIN Familia ON Asp3_GrupoFamiliar.Afiliado_id = Familia.FK_Afiliado_id
+      WHERE Asp3_GrupoFamiliar.Afiliado_id = ?
+    )
+  ''', [afiliadoId]);
+
+    if (res.isEmpty) return false;
+
+    final result = res.first.values.first as int;
+
+    return result == 1;
   }
 }

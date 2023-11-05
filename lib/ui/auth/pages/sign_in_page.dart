@@ -20,10 +20,8 @@ class _SignInPageState extends State<SignInPage> {
   final formKey = GlobalKey<FormState>();
   final configFormKey = GlobalKey<FormState>();
 
-  final userNameCtrl = TextEditingController(text: 'dbolanos');
-  final passwordCtrl = TextEditingController(text: 'Dbolanos*2023');
-  // final userNameCtrl = TextEditingController(text: 'oabolanos');
-  // final passwordCtrl = TextEditingController(text: 'Oabolanos*2023');
+  final userNameCtrl = TextEditingController();
+  final passwordCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +88,11 @@ class _SignInPageState extends State<SignInPage> {
                                       await DeviceInfo.infoDispositivo()
                                           .then((datosEquipo) {
                                         if (datosEquipo != null &&
-                                            datosEquipo.idEquipo != null) {
-                                          print(datosEquipo.idEquipo);
+                                            datosEquipo.imei != null) {
                                           final usuario = UsuarioEntity(
                                             userName: userNameCtrl.text,
                                             password: passwordCtrl.text,
-                                            deviceId: datosEquipo.idEquipo,
+                                            deviceId: datosEquipo.imei,
                                           );
 
                                           if (internetCubit.state

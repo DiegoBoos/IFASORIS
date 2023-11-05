@@ -5021,10 +5021,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsFichasTemp++;
       if (countRecordsFichasTemp >= fichasTemp.length) {
-        add(SyncIncrementChanged(state.syncProgressModel.copyWith(
-            title: 'Sincronización completada',
-            counter: state.syncProgressModel.counter + 1,
-            total: state.syncProgressModel.totalAccesorias)));
+        // add(SyncIncrementChanged(state.syncProgressModel.copyWith(
+        //     title: 'Sincronización completada',
+        //     counter: state.syncProgressModel.counter + 1,
+        //     total: state.syncProgressModel.totalAccesorias)));
         return;
       }
 

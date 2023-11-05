@@ -15,4 +15,7 @@ abstract class GrupoFamiliarRepositoryDB {
       int afiliadoId, int familiaId);
 
   Future<Either<Failure, int>> completeGrupoFamiliarRepositoryDB(int familiaId);
+
+  Future<Either<Failure, bool>> existeAfiliadoCabezaFamiliaRepositoryDB(
+      int afiliadoId);
 }

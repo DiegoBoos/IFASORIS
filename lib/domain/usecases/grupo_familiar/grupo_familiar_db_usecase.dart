@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
+import '../../entities/estadistica_entity.dart';
 import '../../entities/grupo_familiar_entity.dart';
 import '../../repositories/grupo_familiar/grupo_familiar_repository_db.dart';
 
@@ -29,5 +30,9 @@ class GrupoFamiliarUsecaseDB {
 
   Future<Either<Failure, int>> completeGrupoFamiliarUsecaseDB(int familiaId) {
     return repositoryDB.completeGrupoFamiliarRepositoryDB(familiaId);
+  }
+
+  Future<Either<Failure, List<EstadisticaEntity>>> loadEstadisticasUsecaseDB() {
+    return repositoryDB.loadEstadisticasRepositoryDB();
   }
 }

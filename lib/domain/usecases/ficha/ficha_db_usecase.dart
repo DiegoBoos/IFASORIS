@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
+import '../../entities/estadistica_entity.dart';
 import '../../entities/ficha_entity.dart';
 import '../../repositories/ficha/ficha_repository_db.dart';
 
@@ -29,5 +30,9 @@ class FichaUsecaseDB {
   Future<Either<Failure, List<FichaEntity>>> loadFichasDiligenciadasUsecaseDB(
       int familiaId) {
     return repositoryDB.loadFichasDiligenciadasRepositoryDB(familiaId);
+  }
+
+  Future<Either<Failure, List<EstadisticaEntity>>> loadEstadisticasUsecaseDB() {
+    return repositoryDB.loadEstadisticasRepositoryDB();
   }
 }

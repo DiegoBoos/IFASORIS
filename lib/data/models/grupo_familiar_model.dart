@@ -64,31 +64,30 @@ class GrupoFamiliarModel extends GrupoFamiliarEntity {
 
   factory GrupoFamiliarModel.fromJson(Map<String, dynamic> json) =>
       GrupoFamiliarModel(
-        grupoFamiliarId: json["GrupoFamiliar_id"],
-        familiaId: json["Familia_id"],
-        afiliadoId: json["Afiliado_id"],
-        tipoDocumentoId: json["TipoDocumento_id"],
-        documento: json["Documento"],
-        generoId: json["Genero_id"],
-        fechaNacimiento: json["FechaNacimiento"] == null
-            ? null
-            : DateTime.parse(json["FechaNacimiento"]),
-        edad: json["Edad"],
-        nombre1: json["nombre1"],
-        nombre2: json["nombre2"],
-        apellido1: json["apellido1"],
-        apellido2: json["apellido2"],
-        tipoRegimenId: json["TipoRegimen_id"],
-        parentescoId: json["Parentesco_id"],
-        etniaId: json["Etnia_id"],
-        cursoVidaId: json["CursoVida_id"],
-        nivelEducativoId: json["NivelEducativo_id"],
-        ocupacionId: json["Ocupacion_id"],
-        grupoRiesgoId: json["GrupoRiesgo_id"],
-        origenEtnico5602Id: json["OrigenEtnico5602_id"],
-        puebloIndigenaId: json["PuebloIndigena_id"],
-        lenguaManejaId: json["LenguaManeja_id"],
-        lenguaMaternaId: json["LenguaMaterna_id"],
-        isComplete: json["isComplete"],
-      );
+          grupoFamiliarId: json["GrupoFamiliar_id"],
+          familiaId: json["Familia_id"],
+          afiliadoId: json["Afiliado_id"],
+          tipoDocumentoId: json["TipoDocumento_id"],
+          documento: json["Documento"],
+          generoId: json["Genero_id"],
+          fechaNacimiento: json["FechaNacimiento"] == null
+              ? null
+              : DateTime.parse(json["FechaNacimiento"]),
+          edad: json["Edad"],
+          nombre1: json["nombre1"],
+          nombre2: json["nombre2"] ?? '',
+          apellido1: json["apellido1"],
+          apellido2: json["apellido2"] ?? '',
+          tipoRegimenId: json["TipoRegimen_id"],
+          parentescoId: json["Parentesco_id"],
+          etniaId: json["Etnia_id"],
+          cursoVidaId: json["CursoVida_id"],
+          nivelEducativoId: json["NivelEducativo_id"],
+          ocupacionId: json["Ocupacion_id"],
+          grupoRiesgoId: json["GrupoRiesgo_id"],
+          origenEtnico5602Id: json["OrigenEtnico5602_id"],
+          puebloIndigenaId: json["PuebloIndigena_id"],
+          lenguaManejaId: json["LenguaManeja_id"],
+          lenguaMaternaId: json["LenguaMaterna_id"],
+          isComplete: json["isComplete"] ?? 0);
 }

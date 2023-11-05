@@ -1,9 +1,9 @@
 class EstadisticaEntity {
-  final String descripcion;
+  final String estadistica;
   final int cantidad;
 
   EstadisticaEntity({
-    required this.descripcion,
+    required this.estadistica,
     required this.cantidad,
   });
 }

@@ -11,6 +11,12 @@ class FichaBloc extends Bloc<FichaEvent, FichasState> {
     on<LoadFichas>((event, emit) async {
       emit(FichasLoading());
     });
+    on<LoadFichasDiligenciadas>((event, emit) async {
+      emit(FichasLoading());
+      final result = await fichaUsecaseDB
+          .loadFichasDiligenciadasUsecaseDB(event.familiaId);
+      return result.fold((failure) => [], (data) => data);
+    });
   }
 
   Future<List<FichaEntity>> loadFichas(int familiaId) async {

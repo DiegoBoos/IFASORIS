@@ -7,6 +7,11 @@ abstract class AfiliadosGrupoFamiliarEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ExisteAfiliadoCabezaFamilia extends AfiliadosGrupoFamiliarEvent {
+  final int familiaId;
+  const ExisteAfiliadoCabezaFamilia(this.familiaId);
+}
+
 class GetAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   final int familiaId;
 
