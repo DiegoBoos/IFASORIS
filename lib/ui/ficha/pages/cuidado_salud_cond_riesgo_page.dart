@@ -168,18 +168,9 @@ class _CuidadoSaludCondRiesgoPageState
                             CuidadoSaludCondRiesgoEntity>(
                           builder: (context, state) {
                             if (state.formStatus
-                                is CuidadoSaludCondRiesgoFormEmpty) {
-                              return Form(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                key: formKeys[index],
-                                child: CuidadoSaludCondRiesgoForm(
-                                  currentAfiliado: currentAfiliado,
-                                  cuidadoSaludCondRiesgo: state,
-                                ),
-                              );
-                            } else if (state.formStatus
-                                is CuidadoSaludCondRiesgoFormLoaded) {
+                                    is CuidadoSaludCondRiesgoFormEmpty ||
+                                state.formStatus
+                                    is CuidadoSaludCondRiesgoFormLoaded) {
                               return Form(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,

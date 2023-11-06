@@ -141,18 +141,9 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
                           EstiloVidaSaludableEntity>(
                         builder: (context, state) {
                           if (state.formStatus
-                              is EstiloVidaSaludableFormEmpty) {
-                            return Form(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              key: formKeys[index],
-                              child: EstilosVidaSaludableForm(
-                                currentAfiliado: currentAfiliado,
-                                estiloVidaSaludable: state,
-                              ),
-                            );
-                          } else if (state.formStatus
-                              is EstiloVidaSaludableFormLoaded) {
+                                  is EstiloVidaSaludableFormEmpty ||
+                              state.formStatus
+                                  is EstiloVidaSaludableFormLoaded) {
                             return Form(
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,

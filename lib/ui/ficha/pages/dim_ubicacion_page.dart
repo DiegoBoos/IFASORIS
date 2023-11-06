@@ -107,59 +107,58 @@ class _DimUbicacionPageState extends State<DimUbicacionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      key: _formKey,
-      child: BlocConsumer<DimUbicacionBloc, DimUbicacionEntity>(
-        listener: (context, state) {
-          final formStatus = state.formStatus;
-          if (formStatus is DimUbicacionSubmissionSuccess) {
-            widget.pageViewController.animateToPage(
-              1,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.ease,
-            );
-          }
-          if (formStatus is DimUbicacionSubmissionFailed) {
-            CustomSnackBar.showSnackBar(
-                context, formStatus.message, Colors.red);
-            Navigator.popUntil(context, ModalRoute.withName('home'));
-          }
-        },
-        builder: (context, state) {
-          if (state.formStatus is DimUbicacionFormLoaded) {
-            return ListView(
-              children: [
-                DatosUbicacionForm(dimUbicacion: state),
-                AccesoCAForm(dimUbicacion: state),
-                AccesoMedicoForm(dimUbicacion: state),
-                AspectosTierraForm(dimUbicacion: state),
-                const SizedBox(height: 20),
-                MaterialButton(
-                    disabledColor: Colors.grey,
-                    elevation: 0,
-                    color: Theme.of(context).colorScheme.primary,
-                    onPressed:
-                        state is DimUbicacionFormLoading ? null : submitForm,
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      child: state is DimUbicacionFormLoading
-                          ? const CircularProgressIndicator()
-                          : const Text(
-                              'Siguiente',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                    )),
-              ],
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
+    return BlocConsumer<DimUbicacionBloc, DimUbicacionEntity>(
+      listener: (context, state) {
+        final formStatus = state.formStatus;
+        if (formStatus is DimUbicacionSubmissionSuccess) {
+          widget.pageViewController.animateToPage(
+            1,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.ease,
+          );
+        }
+        if (formStatus is DimUbicacionSubmissionFailed) {
+          CustomSnackBar.showSnackBar(context, formStatus.message, Colors.red);
+          Navigator.popUntil(context, ModalRoute.withName('home'));
+        }
+      },
+      builder: (context, state) {
+        if (state.formStatus is DimUbicacionFormEmpty ||
+            state.formStatus is DimUbicacionFormLoaded) {
+          return Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: _formKey,
+              child: ListView(
+                children: [
+                  DatosUbicacionForm(dimUbicacion: state),
+                  AccesoCAForm(dimUbicacion: state),
+                  AccesoMedicoForm(dimUbicacion: state),
+                  AspectosTierraForm(dimUbicacion: state),
+                  const SizedBox(height: 20),
+                  MaterialButton(
+                      disabledColor: Colors.grey,
+                      elevation: 0,
+                      color: Theme.of(context).colorScheme.primary,
+                      onPressed:
+                          state is DimUbicacionFormLoading ? null : submitForm,
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        child: state is DimUbicacionFormLoading
+                            ? const CircularProgressIndicator()
+                            : const Text(
+                                'Siguiente',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                      )),
+                ],
+              ));
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }

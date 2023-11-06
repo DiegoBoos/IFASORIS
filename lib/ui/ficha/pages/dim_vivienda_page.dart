@@ -98,7 +98,7 @@ class _DimViviendaPageState extends State<DimViviendaPage> {
         }
       },
       builder: (context, state) {
-        if (state.formStatus is DimViviendaFormInitial ||
+        if (state.formStatus is DimViviendaFormEmpty ||
             state.formStatus is DimViviendaFormLoaded) {
           return ListView(
             children: [

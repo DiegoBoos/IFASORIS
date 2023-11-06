@@ -71,7 +71,7 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
           emit(data);
           add(GetTechosVivienda(data.datoViviendaId));
         } else {
-          emit(state.copyWith(formStatus: const DimViviendaFormInitial()));
+          emit(state.copyWith(formStatus: DimViviendaFormEmpty()));
         }
       });
     });

@@ -160,18 +160,9 @@ class _AtencionSaludPageState extends State<AtencionSaludPage> {
                                   AtencionSaludEntity>(
                                 builder: (context, state) {
                                   if (state.formStatus
-                                      is AtencionSaludFormEmpty) {
-                                    return Form(
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      key: formKeys[index],
-                                      child: AtencionSaludForm(
-                                        currentAfiliado: currentAfiliado,
-                                        atencionSalud: state,
-                                      ),
-                                    );
-                                  } else if (state.formStatus
-                                      is AtencionSaludFormLoaded) {
+                                          is AtencionSaludFormEmpty ||
+                                      state.formStatus
+                                          is AtencionSaludFormLoaded) {
                                     return Form(
                                         autovalidateMode:
                                             AutovalidateMode.onUserInteraction,

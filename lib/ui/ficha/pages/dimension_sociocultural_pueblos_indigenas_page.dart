@@ -131,7 +131,6 @@ class _DimensionSocioCulturalPueblosIndigenasPageState
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  /*   const ProgressBar(), */
                   Expanded(
                     child: PageView.builder(
                       physics: const NeverScrollableScrollPhysics(),
@@ -158,19 +157,9 @@ class _DimensionSocioCulturalPueblosIndigenasPageState
                             DimensionSocioCulturalPueblosIndigenasEntity>(
                           builder: (context, state) {
                             if (state.formStatus
-                                is DimensionSocioCulturalPueblosIndigenasFormEmpty) {
-                              return Form(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                key: formKeys[index],
-                                child:
-                                    DimensionSocioCulturalPueblosIndigenasForm(
-                                  currentAfiliado: currentAfiliado,
-                                  dimensionSocioCulturalPueblosIndigenas: state,
-                                ),
-                              );
-                            } else if (state.formStatus
-                                is DimensionSocioCulturalPueblosIndigenasFormLoaded) {
+                                    is DimensionSocioCulturalPueblosIndigenasFormEmpty ||
+                                state.formStatus
+                                    is DimensionSocioCulturalPueblosIndigenasFormLoaded) {
                               return Form(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
