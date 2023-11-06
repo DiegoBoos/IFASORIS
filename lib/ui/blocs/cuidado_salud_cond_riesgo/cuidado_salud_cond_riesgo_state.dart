@@ -10,6 +10,8 @@ class CuidadoSaludCondRiesgoFormInitial extends CuidadoSaludCondRiesgoState {
 
 class CuidadoSaludCondRiesgoFormLoading extends CuidadoSaludCondRiesgoState {}
 
+class CuidadoSaludCondRiesgoFormEmpty extends CuidadoSaludCondRiesgoState {}
+
 class CuidadoSaludCondRiesgoFormLoaded extends CuidadoSaludCondRiesgoState {}
 
 class CuidadoSaludCondRiesgoSubmissionSuccess

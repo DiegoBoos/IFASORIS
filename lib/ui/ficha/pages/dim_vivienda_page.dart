@@ -90,8 +90,6 @@ class _DimViviendaPageState extends State<DimViviendaPage> {
       listener: (context, state) {
         final formStatus = state.formStatus;
         if (formStatus is DimViviendaSubmissionSuccess) {
-          CustomSnackBar.showSnackBar(context,
-              'Datos de vivienda guardados correctamente', Colors.green);
           widget.pageViewController.animateToPage(2,
               duration: const Duration(milliseconds: 500), curve: Curves.ease);
         }

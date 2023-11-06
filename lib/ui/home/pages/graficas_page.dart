@@ -7,6 +7,8 @@ class GraficasPage extends StatelessWidget {
     required this.countInCompletas,
     required this.countSincronizadas,
     required this.countPendientes,
+    required this.countAfiliadosRegistrados,
+    required this.countAfiliadosReportados,
     super.key,
   });
 
@@ -14,22 +16,24 @@ class GraficasPage extends StatelessWidget {
   final int countInCompletas;
   final int countSincronizadas;
   final int countPendientes;
+  final int countAfiliadosRegistrados;
+  final int countAfiliadosReportados;
 
   @override
   Widget build(BuildContext context) {
     List<_PieData> syncedPendingCounts = [
       _PieData('Sincronizadas: $countSincronizadas',
           countSincronizadas.toDouble(), 'Sincronizadas'),
-      _PieData('Pendientes: $countPendientes', countPendientes.toDouble(),
-          'Pendientes'),
+      _PieData('Diligenciadas: $countPendientes', countPendientes.toDouble(),
+          'Diligenciadas'),
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Fichas')),
+      appBar: AppBar(title: const Text('Estadisticas')),
       body: Column(
         children: [
           SfCircularChart(
-            title: ChartTitle(text: 'Fichas sincronizadas y diligenciadas'),
+            title: ChartTitle(text: 'Fichas Diligenciadas vs Sincronizadas'),
             legend: Legend(isVisible: true),
             series: <PieSeries<_PieData, String>>[
               PieSeries<_PieData, String>(
@@ -42,6 +46,50 @@ class GraficasPage extends StatelessWidget {
                   dataLabelSettings: const DataLabelSettings(
                       isVisible: true,
                       textStyle: TextStyle(color: Colors.white))),
+            ],
+          ),
+          DataTable(
+            columns: const [
+              DataColumn(label: Text('Estadistica')),
+              DataColumn(label: Text('Cantidad')),
+            ],
+            rows: [
+              DataRow(
+                cells: [
+                  const DataCell(Text('Fichas Registradas')),
+                  DataCell(Text(countPendientes.toString())),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  const DataCell(Text('Fichas Reportadas')),
+                  DataCell(Text(countSincronizadas.toString())),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  const DataCell(Text('Fichas Registradas Incompletas')),
+                  DataCell(Text(countInCompletas.toString())),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  const DataCell(Text('Fichas Registradas Completas')),
+                  DataCell(Text(countCompletas.toString())),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  const DataCell(Text('Afiliados Registrados')),
+                  DataCell(Text(countAfiliadosRegistrados.toString())),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  const DataCell(Text('Afiliados Reportados')),
+                  DataCell(Text(countAfiliadosReportados.toString())),
+                ],
+              ),
             ],
           ),
         ],

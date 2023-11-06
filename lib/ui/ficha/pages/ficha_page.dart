@@ -43,7 +43,7 @@ class _FichaPageState extends State<FichaPage> {
                   slides: [
                     DimUbicacionPage(pageViewController),
                     DimViviendaPage(pageViewController),
-                    GrupoFamiliarPage(pageViewController)
+                    const GrupoFamiliarPage()
                   ],
                 ))));
   }

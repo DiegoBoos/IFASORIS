@@ -155,56 +155,11 @@ class SearchAfiliados extends SearchDelegate {
                               if (ficha != null) {
                                 if (ficha.numFicha == null ||
                                     ficha.numFicha == '') {
-                                  CustomSnackBar.showCustomDialog(
-                                      context,
-                                      "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
-                                      "¿Desea crear una nueva ficha con esta persona como un nuevo núcleo de familia?",
-                                      () async {
-                                    final familiaCubit =
-                                        BlocProvider.of<FamiliaCubit>(context);
-                                    final fichaCubit =
-                                        BlocProvider.of<FichaCubit>(context);
-
-                                    //Elimina el afiliado de la familia
-                                    final familiaFuture =
-                                        familiaCubit.deleteAfiliadoFamilia(
-                                            afiliado.afiliadoId!);
-
-                                    //Elimina la ficha
-                                    final fichaFuture =
-                                        fichaCubit.deleteFicha(ficha.fichaId!);
-
-                                    final futures = Future.wait(
-                                        [familiaFuture, fichaFuture]);
-
-                                    futures.then((value) {
-                                      int familiaId = value[0];
-                                      int fichaId = value[1];
-
-                                      if (familiaId != 0 && fichaId != 0) {
-                                        createFicha(context, afiliado);
-                                      }
-                                    });
-                                  });
-                                } else {
-                                  CustomSnackBar.showCustomDialog(
-                                      context,
-                                      "Usuario ya registrado",
-                                      "El usuario se encuentra registrado en la ficha No. ${ficha.numFicha}",
-                                      () => Navigator.pop(context),
-                                      false);
+                                  afiliado.afiliadoId =
+                                      ficha.familia!.fkAfiliadoId;
                                 }
-                              } else {
-                                createFicha(context, afiliado);
                               }
                             });
-                          } else {
-                            CustomSnackBar.showCustomDialog(
-                                context,
-                                "Error al crear ficha",
-                                "Este afiliado es menor de 14 años",
-                                () => Navigator.pop(context),
-                                false);
                           }
                         }),
                     const Divider()

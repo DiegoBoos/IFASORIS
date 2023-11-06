@@ -12,6 +12,9 @@ class DimensionSocioCulturalPueblosIndigenasFormInitial
 class DimensionSocioCulturalPueblosIndigenasFormLoading
     extends DimensionSocioCulturalPueblosIndigenasState {}
 
+class DimensionSocioCulturalPueblosIndigenasFormEmpty
+    extends DimensionSocioCulturalPueblosIndigenasState {}
+
 class DimensionSocioCulturalPueblosIndigenasFormLoaded
     extends DimensionSocioCulturalPueblosIndigenasState {}
 

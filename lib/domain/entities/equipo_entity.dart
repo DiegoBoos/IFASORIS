@@ -1,17 +1,17 @@
 class EquipoEntity {
   EquipoEntity({
-    this.imei,
+    this.idEquipo,
     this.modeloEquipo,
   });
-  String? imei;
+  String? idEquipo;
   String? modeloEquipo;
 
   factory EquipoEntity.fromMap(Map<String, dynamic> json) => EquipoEntity(
-        imei: json["imei"],
+        idEquipo: json["idEquipo"],
         modeloEquipo: json["modeloEquipo"],
       );
   Map<String, dynamic> toJson() => {
-        "imei": imei,
+        "idEquipo": idEquipo,
         "modeloEquipo": modeloEquipo,
       };
 }

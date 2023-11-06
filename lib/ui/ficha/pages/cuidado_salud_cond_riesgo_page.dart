@@ -108,11 +108,6 @@ class _CuidadoSaludCondRiesgoPageState
               listener: (context, state) {
                 final formStatus = state.formStatus;
                 if (formStatus is CuidadoSaludCondRiesgoSubmissionSuccess) {
-                  CustomSnackBar.showSnackBar(
-                      context,
-                      'Datos de cuidado salud condiciones riesgo guardados correctamente',
-                      Colors.green);
-
                   cuidadoSaludCondRiesgoBloc.add(CuidadoSaludCondRiesgoInit());
 
                   if (afiliadoPageIndex <
@@ -173,9 +168,18 @@ class _CuidadoSaludCondRiesgoPageState
                             CuidadoSaludCondRiesgoEntity>(
                           builder: (context, state) {
                             if (state.formStatus
-                                    is CuidadoSaludCondRiesgoFormInitial ||
-                                state.formStatus
-                                    is CuidadoSaludCondRiesgoFormLoaded) {
+                                is CuidadoSaludCondRiesgoFormEmpty) {
+                              return Form(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                key: formKeys[index],
+                                child: CuidadoSaludCondRiesgoForm(
+                                  currentAfiliado: currentAfiliado,
+                                  cuidadoSaludCondRiesgo: state,
+                                ),
+                              );
+                            } else if (state.formStatus
+                                is CuidadoSaludCondRiesgoFormLoaded) {
                               return Form(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,

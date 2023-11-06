@@ -10,6 +10,8 @@ class AtencionSaludFormInitial extends AtencionSaludState {
 
 class AtencionSaludFormLoading extends AtencionSaludState {}
 
+class AtencionSaludFormEmpty extends AtencionSaludState {}
+
 class AtencionSaludFormLoaded extends AtencionSaludState {}
 
 class AtencionSaludSubmissionSuccess extends AtencionSaludState {}

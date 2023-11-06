@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
+
+import '../../../domain/entities/estadistica_entity.dart';
+import '../../../domain/entities/ficha_entity.dart';
+import '../../../domain/usecases/ficha/ficha_db_usecase.dart';
 
 part 'ficha_event.dart';
 part 'ficha_state.dart';
@@ -11,11 +14,13 @@ class FichaBloc extends Bloc<FichaEvent, FichasState> {
     on<LoadFichas>((event, emit) async {
       emit(FichasLoading());
     });
-    on<LoadFichasDiligenciadas>((event, emit) async {
+    on<LoadFichasSincronizadas>((event, emit) async {
       emit(FichasLoading());
       final result = await fichaUsecaseDB
-          .loadFichasDiligenciadasUsecaseDB(event.familiaId);
-      return result.fold((failure) => [], (data) => data);
+          .loadFichasSincronizadasUsecaseDB(event.familiaId);
+      result.fold(
+          (failure) => emit(const FichasError('Error al cargar los datos')),
+          (data) => emit(FichasLoaded(data)));
     });
   }
 
@@ -24,9 +29,8 @@ class FichaBloc extends Bloc<FichaEvent, FichasState> {
     return result.fold((failure) => [], (data) => data);
   }
 
-  Future<List<FichaEntity>> loadFichasDiligenciadas(int familiaId) async {
-    final result =
-        await fichaUsecaseDB.loadFichasDiligenciadasUsecaseDB(familiaId);
+  Future<List<EstadisticaEntity>> loadEstadisticas() async {
+    final result = await fichaUsecaseDB.loadEstadisticasUsecaseDB();
     return result.fold((failure) => [], (data) => data);
   }
 }

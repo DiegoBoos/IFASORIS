@@ -89,11 +89,6 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
             listener: (context, state) {
               final formStatus = state.formStatus;
               if (formStatus is EstiloVidaSaludableSubmissionSuccess) {
-                CustomSnackBar.showSnackBar(
-                    context,
-                    'Datos de estilo de vida saludable guardados correctamente',
-                    Colors.green);
-
                 if (afiliadoPageIndex <
                     afiliadosGrupoFamiliarBloc
                             .state.afiliadosGrupoFamiliar!.length -
@@ -146,9 +141,18 @@ class _EstilosVidaSaludablePageState extends State<EstilosVidaSaludablePage> {
                           EstiloVidaSaludableEntity>(
                         builder: (context, state) {
                           if (state.formStatus
-                                  is EstiloVidaSaludableFormInitial ||
-                              state.formStatus
-                                  is EstiloVidaSaludableFormLoaded) {
+                              is EstiloVidaSaludableFormEmpty) {
+                            return Form(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              key: formKeys[index],
+                              child: EstilosVidaSaludableForm(
+                                currentAfiliado: currentAfiliado,
+                                estiloVidaSaludable: state,
+                              ),
+                            );
+                          } else if (state.formStatus
+                              is EstiloVidaSaludableFormLoaded) {
                             return Form(
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,

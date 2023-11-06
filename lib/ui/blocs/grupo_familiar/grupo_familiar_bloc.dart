@@ -17,6 +17,7 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
     });
 
     on<SaveAfiliadoGrupoFamiliar>((event, emit) async {
+      emit(state.copyWith(formStatus: GrupoFamiliarFormLoading()));
       final result = await grupoFamiliarUsecaseDB
           .saveAfiliadoGrupoFamiliarUsecaseDB(event.grupoFamiliar);
       result.fold((failure) {

@@ -95,11 +95,6 @@ class _DimensionSocioCulturalPueblosIndigenasPageState
                 final formStatus = state.formStatus;
                 if (formStatus
                     is DimensionSocioCulturalPueblosIndigenasSubmissionSuccess) {
-                  CustomSnackBar.showSnackBar(
-                      context,
-                      'Datos de dimensión sociocultural pueblos indígenas guardados correctamente',
-                      Colors.green);
-
                   dimensionSocioCulturalPueblosIndigenasBloc
                       .add(DimensionSocioCulturalPueblosIndigenasInit());
 
@@ -163,9 +158,19 @@ class _DimensionSocioCulturalPueblosIndigenasPageState
                             DimensionSocioCulturalPueblosIndigenasEntity>(
                           builder: (context, state) {
                             if (state.formStatus
-                                    is DimensionSocioCulturalPueblosIndigenasFormInitial ||
-                                state.formStatus
-                                    is DimensionSocioCulturalPueblosIndigenasFormLoaded) {
+                                is DimensionSocioCulturalPueblosIndigenasFormEmpty) {
+                              return Form(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                key: formKeys[index],
+                                child:
+                                    DimensionSocioCulturalPueblosIndigenasForm(
+                                  currentAfiliado: currentAfiliado,
+                                  dimensionSocioCulturalPueblosIndigenas: state,
+                                ),
+                              );
+                            } else if (state.formStatus
+                                is DimensionSocioCulturalPueblosIndigenasFormLoaded) {
                               return Form(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,

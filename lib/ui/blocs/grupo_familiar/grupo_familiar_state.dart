@@ -8,6 +8,8 @@ class GrupoFamiliarFormInitial extends GrupoFamiliarState {
   const GrupoFamiliarFormInitial();
 }
 
+class GrupoFamiliarFormLoading extends GrupoFamiliarState {}
+
 class GrupoFamiliarFormLoaded extends GrupoFamiliarState {}
 
 class GrupoFamiliarFormEmpty extends GrupoFamiliarState {}

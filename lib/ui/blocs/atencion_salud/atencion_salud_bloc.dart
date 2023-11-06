@@ -59,7 +59,7 @@ class AtencionSaludBloc extends Bloc<AtencionSaludEvent, AtencionSaludEntity> {
           emit(data);
           add(GetEspecialidadesMedTradicional(data.atencionSaludId));
         } else {
-          emit(state.copyWith(formStatus: const AtencionSaludFormInitial()));
+          emit(state.copyWith(formStatus: AtencionSaludFormEmpty()));
         }
       });
     });

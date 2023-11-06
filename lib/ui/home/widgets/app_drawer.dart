@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/ficha_entity.dart';
 import '../../../domain/entities/usuario_entity.dart';
-import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/ficha/ficha_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
@@ -18,7 +16,6 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
     final fichaBloc = BlocProvider.of<FichaBloc>(context);
     final usuario = authBloc.state.usuario ??
         UsuarioEntity(userName: '', deviceId: '', password: '');
@@ -76,54 +73,54 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.pie_chart),
               title: const Text('Estadísticas'),
-              onTap: () {
-                List<FichaEntity> fichasCompletas = [];
-                List<FichaEntity> fichasInCompletas = [];
-                List<FichaEntity> fichasSincronizadas = [];
-                List<FichaEntity> fichasPendientes = [];
-                final afiliado = afiliadoPrefsBloc.state.afiliado;
-                if (afiliado != null) {
-                  final future1 = fichaBloc.loadFichas(afiliado.familiaId!);
-                  final future2 =
-                      fichaBloc.loadFichasDiligenciadas(afiliado.familiaId!);
+              onTap: () async {
+                await fichaBloc.loadEstadisticas().then((estadisticas) {
+                  final registradas = estadisticas
+                      .where((i) => i.estadistica == 'FichasRegistradas')
+                      .first;
+                  final reportadas = estadisticas
+                      .where((i) => i.estadistica == 'FichasReportadas')
+                      .first;
+                  final incompletas = estadisticas
+                      .where((i) =>
+                          i.estadistica == 'FichasRegistradasIncompletas')
+                      .first;
+                  final completas = estadisticas
+                      .where(
+                          (i) => i.estadistica == 'FichasRegistradasCompletas')
+                      .first;
+                  final afiliadosReportados = estadisticas
+                      .where((i) => i.estadistica == 'AfiliadosReportados')
+                      .first;
+                  final afiliadosRegistrados = estadisticas
+                      .where((i) => i.estadistica == 'AfiliadosRegistrados')
+                      .first;
 
-                  Future.wait([future1, future2]).then((values) {
-                    final fichas = values[0];
-                    final fichasDiligenciadas = values[1];
-
-                    for (var ficha in fichas) {
-                      for (var fichaDiligenciada in fichasDiligenciadas) {
-                        if (fichaDiligenciada.fichaId == ficha.fichaId) {
-                          fichasCompletas.add(fichaDiligenciada);
-                        } else {
-                          fichasInCompletas.add(fichaDiligenciada);
-                        }
-                      }
-
-                      if (ficha.numFicha != '') {
-                        fichasSincronizadas.add(ficha);
-                      } else {
-                        fichasPendientes.add(ficha);
-                      }
-                    }
-
-                    Navigator.push<void>(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => GraficasPage(
-                            countCompletas: fichasCompletas.length,
-                            countInCompletas: fichasInCompletas.length,
-                            countSincronizadas: fichasSincronizadas.length,
-                            countPendientes: fichasPendientes.length),
+                  Navigator.push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => GraficasPage(
+                        countCompletas: completas.cantidad,
+                        countInCompletas: incompletas.cantidad,
+                        countSincronizadas: reportadas.cantidad,
+                        countPendientes: registradas.cantidad,
+                        countAfiliadosRegistrados:
+                            afiliadosRegistrados.cantidad,
+                        countAfiliadosReportados: afiliadosReportados.cantidad,
                       ),
-                    );
-                  });
-                } else {
-                  CustomSnackBar.showSnackBar(
-                      context, 'No hay afiliado seleccionado', Colors.red);
-                }
+                    ),
+                  );
+                });
               },
             ),
+            const Divider(),
+            ListTile(
+                leading: const Icon(Icons.document_scanner),
+                title: const Text('Consultar fichas sincronizadas'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'fichas-sincronizadas');
+                }),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.phonelink_setup_outlined),

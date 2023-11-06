@@ -27,9 +27,9 @@ class FichaUsecaseDB {
     return repositoryDB.deleteFichaRepositoryDB(fichaId);
   }
 
-  Future<Either<Failure, List<FichaEntity>>> loadFichasDiligenciadasUsecaseDB(
+  Future<Either<Failure, List<FichaEntity>>> loadFichasSincronizadasUsecaseDB(
       int familiaId) {
-    return repositoryDB.loadFichasDiligenciadasRepositoryDB(familiaId);
+    return repositoryDB.loadFichasSincronizadasRepositoryDB(familiaId);
   }
 
   Future<Either<Failure, List<EstadisticaEntity>>> loadEstadisticasUsecaseDB() {

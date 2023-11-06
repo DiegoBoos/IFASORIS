@@ -6,6 +6,7 @@ import 'ui/ficha/pages/cuidado_salud_cond_riesgo_page.dart';
 import 'ui/ficha/pages/dimension_sociocultural_pueblos_indigenas_page.dart';
 import 'ui/ficha/pages/estilos_vida_saludable_page.dart';
 import 'ui/home/pages/cambio_dispositivo_page.dart';
+import 'ui/home/pages/fichas_sincronizadas_page.dart';
 import 'ui/home/pages/home_page.dart';
 import 'ui/ficha/pages/ficha_page.dart';
 
@@ -25,5 +26,7 @@ class AppRouter {
     'dimension-sociocultural-pueblos-indigenas': (BuildContext context) =>
         const DimensionSocioCulturalPueblosIndigenasPage(),
     'atenciones-en-salud': (BuildContext context) => const AtencionSaludPage(),
+    'fichas-sincronizadas': (BuildContext context) =>
+        const FichasSincronizadasPage(),
   };
 }

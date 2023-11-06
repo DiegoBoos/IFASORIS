@@ -15,7 +15,7 @@ abstract class FichaRepositoryDB {
   Future<Either<Failure, int>> deleteFichaRepositoryDB(int fichaId);
 
   Future<Either<Failure, List<FichaEntity>>>
-      loadFichasDiligenciadasRepositoryDB(int familiaId);
+      loadFichasSincronizadasRepositoryDB(int familiaId);
 
   Future<Either<Failure, List<EstadisticaEntity>>>
       loadEstadisticasRepositoryDB();

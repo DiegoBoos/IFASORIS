@@ -114,8 +114,6 @@ class _DimUbicacionPageState extends State<DimUbicacionPage> {
         listener: (context, state) {
           final formStatus = state.formStatus;
           if (formStatus is DimUbicacionSubmissionSuccess) {
-            CustomSnackBar.showSnackBar(context,
-                'Datos de ubicación guardados correctamente', Colors.green);
             widget.pageViewController.animateToPage(
               1,
               duration: const Duration(milliseconds: 500),

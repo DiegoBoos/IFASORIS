@@ -88,11 +88,11 @@ class _SignInPageState extends State<SignInPage> {
                                       await DeviceInfo.infoDispositivo()
                                           .then((datosEquipo) {
                                         if (datosEquipo != null &&
-                                            datosEquipo.imei != null) {
+                                            datosEquipo.idEquipo != null) {
                                           final usuario = UsuarioEntity(
                                             userName: userNameCtrl.text,
                                             password: passwordCtrl.text,
-                                            deviceId: datosEquipo.imei,
+                                            deviceId: datosEquipo.idEquipo,
                                           );
 
                                           if (internetCubit.state

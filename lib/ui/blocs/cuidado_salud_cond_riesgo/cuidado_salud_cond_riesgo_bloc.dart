@@ -50,8 +50,7 @@ class CuidadoSaludCondRiesgoBloc
           emit(data);
           add(GetServiciosSolicitados(data.cuidadoSaludCondRiesgoId));
         } else {
-          emit(state.copyWith(
-              formStatus: const CuidadoSaludCondRiesgoFormInitial()));
+          emit(state.copyWith(formStatus: CuidadoSaludCondRiesgoFormEmpty()));
         }
       });
     });

@@ -70,56 +70,6 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
         whereArgs: [afiliadoId, familiaId]);
 
     return result;
-
-    /* try {
-      return await db.transaction((txn) async {
-        await txn.execute(
-            'DELETE FROM Asp4_EstilosVidaSaludable WHERE Familia_id = ?',
-            [familiaId]);
-
-        //TODO: Asp5_CuidadoSaludCondRiesgo
-        await txn.execute(
-            'DELETE FROM Asp5_CuidadoSaludCondRiesgoNombresEnfermedad WHERE CuidadoSaludCondRiesgo_id = ?',
-            []);
-        await txn.execute(
-            'DELETE FROM Asp5_CuidadoSaludCondRiesgoServiciosSolicita WHERE CuidadoSaludCondRiesgo_id = ?',
-            []);
-        await txn.execute(
-            'DELETE FROM Asp5_CuidadoSaludCondRiesgo WHERE Familia_id = ?',
-            [familiaId]);
-
-        //TODO: Asp6_DimSocioCulturalPueblosIndigenas
-        await txn.execute(
-            'DELETE FROM Asp6_DimSocioCulturalEventosCostumbresParticipo WHERE DimSocioCulturalPueblosIndigenas_id = ?',
-            []);
-        await txn.execute(
-            'DELETE FROM Asp6_DimSocioCulturalPueblosIndigenas WHERE Familia_id = ?',
-            [familiaId]);
-
-        //TODO: Asp7_AtencionSalud
-        await txn.execute(
-            'DELETE FROM Asp7_EnfermedadesTradicionales_AtencionSalud WHERE AtencionSalud_id = ?',
-            []);
-        await txn.execute(
-            'DELETE FROM Asp7_EspecialidadesMedTradAtencionSalud WHERE AtencionSalud_id = ?',
-            []);
-        await txn.execute(
-            'DELETE FROM Asp7_LugaresAtencionAtencionSalud WHERE AtencionSalud_id = ?',
-            []);
-        await txn.execute(
-            'DELETE FROM Asp7_PlantasMedicinales_AtencionSalud WHERE AtencionSalud_id = ?',
-            []);
-        await txn.execute(
-            'DELETE FROM Asp7_AtencionSalud WHERE Familia_id = ?', [familiaId]);
-
-        final result = await db.delete('Asp3_GrupoFamiliar',
-            where: 'Familia_id = ?', whereArgs: [familiaId]);
-
-        return result;
-      });
-    } catch (e) {
-      return 0;
-    } */
   }
 
   @override

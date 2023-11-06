@@ -9,7 +9,7 @@ abstract class FichaEvent extends Equatable {
 
 class LoadFichas extends FichaEvent {}
 
-class LoadFichasDiligenciadas extends FichaEvent {
+class LoadFichasSincronizadas extends FichaEvent {
   final int familiaId;
-  const LoadFichasDiligenciadas(this.familiaId);
+  const LoadFichasSincronizadas(this.familiaId);
 }

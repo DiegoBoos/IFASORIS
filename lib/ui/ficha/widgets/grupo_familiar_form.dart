@@ -24,10 +24,12 @@ class GrupoFamiliarForm extends StatefulWidget {
   const GrupoFamiliarForm(
       {super.key,
       required this.afiliadoGrupoFamiliar,
-      this.registraAfiliados = 0});
+      this.registraAfiliados = 0,
+      this.ocultarLeading = false});
 
   final GrupoFamiliarEntity afiliadoGrupoFamiliar;
   final int registraAfiliados;
+  final bool ocultarLeading;
 
   @override
   State<GrupoFamiliarForm> createState() => _GrupoFamiliarFormState();
