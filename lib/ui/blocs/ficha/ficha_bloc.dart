@@ -7,16 +7,20 @@ part 'ficha_event.dart';
 part 'ficha_state.dart';
 
 class FichaBloc extends Bloc<FichaEvent, FichasState> {
+  final FichaUsecase fichaUsecase;
   final FichaUsecaseDB fichaUsecaseDB;
-  FichaBloc({required this.fichaUsecaseDB}) : super(FichasInitial()) {
+  FichaBloc({required this.fichaUsecase, required this.fichaUsecaseDB})
+      : super(FichasInitial()) {
     on<LoadFichas>((event, emit) async {
       emit(FichasLoading());
     });
-    on<LoadFichasDiligenciadas>((event, emit) async {
+    on<LoadFichasSincronizadas>((event, emit) async {
       emit(FichasLoading());
       final result = await fichaUsecaseDB
-          .loadFichasDiligenciadasUsecaseDB(event.familiaId);
-      return result.fold((failure) => [], (data) => data);
+          .loadFichasSincronizadasUsecaseDB(event.familiaId);
+      result.fold(
+          (failure) => emit(const FichasError('Error al cargar los datos')),
+          (data) => emit(FichasLoaded(data)));
     });
   }
 

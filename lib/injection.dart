@@ -1924,6 +1924,7 @@ void ventilacionViviendaInit() {
 void fichaInit() {
   // bloc
   locator.registerFactory(() => FichaBloc(
+        fichaUsecase: locator(),
         fichaUsecaseDB: locator(),
       ));
 
