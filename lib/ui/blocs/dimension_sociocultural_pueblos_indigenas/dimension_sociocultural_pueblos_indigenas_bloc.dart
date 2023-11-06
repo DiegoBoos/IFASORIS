@@ -52,8 +52,7 @@ class DimensionSocioCulturalPueblosIndigenasBloc extends Bloc<
               data.dimSocioCulturalPueblosIndigenasId));
         } else {
           emit(state.copyWith(
-              formStatus:
-                  const DimensionSocioCulturalPueblosIndigenasFormInitial()));
+              formStatus: DimensionSocioCulturalPueblosIndigenasFormEmpty()));
         }
       });
     });

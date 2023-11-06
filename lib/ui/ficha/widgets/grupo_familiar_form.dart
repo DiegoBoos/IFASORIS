@@ -192,645 +192,657 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
         BlocProvider.of<GrupoFamiliarBloc>(context, listen: true);
 
     return BlocListener<AfiliadosGrupoFamiliarBloc,
-        AfiliadosGrupoFamiliarState>(
-      listener: (context, state) {
-        if (state is AfiliadosGrupoFamiliarLoaded) {
-          if (widget.registraAfiliados == 0) {
-            Navigator.popUntil(context, ModalRoute.withName('ficha'));
-          } else {
-            Navigator.pushReplacementNamed(context, 'estilo-vida-saludable');
+            AfiliadosGrupoFamiliarState>(
+        listener: (context, state) {
+          if (state is AfiliadosGrupoFamiliarLoaded) {
+            if (widget.registraAfiliados == 0) {
+              Navigator.popUntil(context, ModalRoute.withName('ficha'));
+            } else {
+              Navigator.pushReplacementNamed(context, 'estilo-vida-saludable');
+            }
+          } else if (state is AfiliadosGrupoFamiliarError) {
+            CustomSnackBar.showSnackBar(context, state.message, Colors.red);
           }
-        } else if (state is AfiliadosGrupoFamiliarError) {
-          CustomSnackBar.showSnackBar(context, state.message, Colors.red);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Ficha'),
-        ),
-        body: Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          key: _formKeyGrupoFamiliar,
-          child: ListView(
-            padding: const EdgeInsets.all(10.0),
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 30,
-                color: Theme.of(context).colorScheme.primary,
-                child: const Text(
-                  'III. GRUPO FAMILIAR',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(height: 20),
-              BlocBuilder<TipoDocumentoCubit, TiposDocumentoState>(
-                builder: (context, state) {
-                  if (state is TiposDocumentoLoaded) {
-                    return DropdownButtonFormField<int>(
-                      value: _tipoDocumentoId,
-                      items: state.tiposDocumento!
-                          .map(
-                            (tipoDocumento) => DropdownMenuItem<int>(
-                              value: tipoDocumento.tipoDocumentoId,
-                              child: Text(tipoDocumento.descripcion),
-                            ),
-                          )
-                          .toList(),
-                      decoration: const InputDecoration(
-                          labelText: 'Tipo documento',
-                          border: OutlineInputBorder()),
-                      onChanged: null,
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                enabled: false,
-                initialValue: _documento,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                    labelText: 'Numero de Documento',
-                    border: OutlineInputBorder()),
-                validator: (value) {
-                  if (value != null && value.isEmpty) {
-                    return 'Campo requerido';
-                  }
-
-                  final number = int.tryParse(value!);
-
-                  if (number == null) {
-                    return 'Sólo números';
-                  }
-
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              const Divider(),
-              const Text(
-                'DATOS DEL USUARIO',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              const SizedBox(height: 20),
-              TextFormField(
-                enabled: false,
-                initialValue: _nombresApellidos,
-                decoration: const InputDecoration(
-                  labelText: 'Integrante Grupo Familiar',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              BlocBuilder<GeneroCubit, GenerosState>(
-                builder: (context, state) {
-                  if (state is GenerosLoaded) {
-                    return Column(
-                      children: [
-                        FormField(
-                          initialValue: _generoId,
-                          builder: (FormFieldState<int> formstate) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text('Género'),
-                                Column(
-                                  children: state.generosLoaded!
-                                      .map(
-                                        (e) => RadioListTile<int>(
-                                            title: Text(
-                                              e.descripcion,
-                                            ),
-                                            value: e.generoId,
-                                            groupValue: _generoId,
-                                            onChanged: null),
-                                      )
-                                      .toList(),
+        },
+        child: WillPopScope(
+          onWillPop: () async => widget.ocultarLeading ? false : true,
+          child: Scaffold(
+            appBar: AppBar(
+              leading: widget.ocultarLeading ? Container() : const BackButton(),
+              title: const Text('Grupo Familiar'),
+            ),
+            body: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: _formKeyGrupoFamiliar,
+              child: ListView(
+                padding: const EdgeInsets.all(10.0),
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    height: 30,
+                    color: Theme.of(context).colorScheme.primary,
+                    child: const Text(
+                      'III. GRUPO FAMILIAR',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  BlocBuilder<TipoDocumentoCubit, TiposDocumentoState>(
+                    builder: (context, state) {
+                      if (state is TiposDocumentoLoaded) {
+                        return DropdownButtonFormField<int>(
+                          value: _tipoDocumentoId,
+                          items: state.tiposDocumento!
+                              .map(
+                                (tipoDocumento) => DropdownMenuItem<int>(
+                                  value: tipoDocumento.tipoDocumentoId,
+                                  child: Text(tipoDocumento.descripcion),
                                 ),
-                                formstate.hasError
-                                    ? const Text(
-                                        'Seleccione una opción',
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                    : Container(),
-                              ],
-                            );
-                          },
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Tipo documento',
+                              border: OutlineInputBorder()),
+                          onChanged: null,
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    enabled: false,
+                    initialValue: _documento,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                        labelText: 'Numero de Documento',
+                        border: OutlineInputBorder()),
+                    validator: (value) {
+                      if (value != null && value.isEmpty) {
+                        return 'Campo requerido';
+                      }
+
+                      final number = int.tryParse(value!);
+
+                      if (number == null) {
+                        return 'Sólo números';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  const Divider(),
+                  const Text(
+                    'DATOS DEL USUARIO',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    enabled: false,
+                    initialValue: _nombresApellidos,
+                    decoration: const InputDecoration(
+                      labelText: 'Integrante Grupo Familiar',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  BlocBuilder<GeneroCubit, GenerosState>(
+                    builder: (context, state) {
+                      if (state is GenerosLoaded) {
+                        return Column(
+                          children: [
+                            FormField(
+                              initialValue: _generoId,
+                              builder: (FormFieldState<int> formstate) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('Género'),
+                                    Column(
+                                      children: state.generosLoaded!
+                                          .map(
+                                            (e) => RadioListTile<int>(
+                                                title: Text(
+                                                  e.descripcion,
+                                                ),
+                                                value: e.generoId,
+                                                groupValue: _generoId,
+                                                onChanged: null),
+                                          )
+                                          .toList(),
+                                    ),
+                                    formstate.hasError
+                                        ? const Text(
+                                            'Seleccione una opción',
+                                            style: TextStyle(color: Colors.red),
+                                          )
+                                        : Container(),
+                                  ],
+                                );
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Seleccione una opción';
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    enabled: false,
+                    initialValue: formattedFechaNacimiento,
+                    decoration: const InputDecoration(
+                      labelText: 'Fecha de Nacimiento',
+                      border: OutlineInputBorder(),
+                    ),
+                    onSaved: (String? value) {
+                      //TODO:  grupoFamiliarBloc.add(FechaNacChanged(newValue!));
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    enabled: false,
+                    initialValue: _edad.toString(),
+                    decoration: const InputDecoration(
+                      labelText: 'Edad',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const Divider(),
+                  const Text(
+                    'CURSO DE VIDA',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<CursoVidaCubit, CursosVidaState>(
+                    builder: (context, state) {
+                      if (state is CursosVidaLoaded) {
+                        return DropdownButtonFormField<int>(
+                          value: _cursoVidaId,
+                          items: state.cursosVidaLoaded!
+                              .map(
+                                (cursoVida) => DropdownMenuItem<int>(
+                                  value: cursoVida.cursoVidaId,
+                                  child: Text(cursoVida.descripcion),
+                                ),
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Curso de vida',
+                              border: OutlineInputBorder()),
+                          onChanged: null,
                           validator: (value) {
                             if (value == null) {
-                              return 'Seleccione una opción';
+                              return 'Campo Requerido';
                             }
                             return null;
                           },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  const Divider(),
+                  const Text(
+                    'PARENTESCO',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<ParentescoCubit, ParentescosState>(
+                    builder: (context, state) {
+                      if (state is ParentescosLoaded) {
+                        return DropdownButtonFormField<int>(
+                          value: _parentescoId,
+                          items: state.parentescosLoaded!
+                              .map(
+                                (parentesco) => DropdownMenuItem<int>(
+                                  value: parentesco.parentescoId,
+                                  child: Text(parentesco.descripcion),
+                                ),
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Parentesco',
+                              border: OutlineInputBorder()),
+                          onChanged: (int? newValue) {
+                            setState(() {
+                              _parentescoId = newValue;
+                            });
+                            grupoFamiliarBloc.add(ParentescoChanged(newValue!));
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Campo Requerido';
+                            }
+                            return null;
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  const Divider(),
+                  const Text(
+                    'TIPO DE RÉGIMEN',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<RegimenCubit, RegimenesState>(
+                    builder: (context, state) {
+                      if (state is RegimenesLoaded) {
+                        return DropdownButtonFormField<int>(
+                          value: _tipoRegimenId,
+                          items: state.regimenesLoaded!
+                              .map(
+                                (regimen) => DropdownMenuItem<int>(
+                                  value: regimen.tipoRegimenId,
+                                  child: Text(regimen.descripcion),
+                                ),
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Tipo régimen',
+                              border: OutlineInputBorder()),
+                          onChanged: null,
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Campo Requerido';
+                            }
+                            return null;
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  const Divider(),
+                  const Text(
+                    'NIVEL EDUCATIVO',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<NivelEducativoCubit, NivelesEducativosState>(
+                    builder: (context, state) {
+                      if (state is NivelesEducativosLoaded) {
+                        return DropdownButtonFormField<int>(
+                          value: _nivelEducativoId,
+                          items: state.nivelesEducativosLoaded!
+                              .map(
+                                (nivelEducativo) => DropdownMenuItem<int>(
+                                  value: nivelEducativo.nivelEducativoId,
+                                  child: Text(nivelEducativo.descripcion),
+                                ),
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Nivel educativo',
+                              border: OutlineInputBorder()),
+                          onChanged: (int? newValue) {
+                            setState(() {
+                              _nivelEducativoId = newValue;
+                            });
+                            grupoFamiliarBloc
+                                .add(NivelEducativoChanged(newValue!));
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Campo Requerido';
+                            }
+                            return null;
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  const Divider(),
+                  const Text(
+                    'OCUPACIÓN',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<OcupacionCubit, OcupacionesState>(
+                    builder: (context, state) {
+                      if (state is OcupacionesLoaded) {
+                        return DropdownButtonFormField<int>(
+                          value: _ocupacionId,
+                          items: state.ocupacionesLoaded!
+                              .map(
+                                (ocupacion) => DropdownMenuItem<int>(
+                                  value: ocupacion.ocupacionId,
+                                  child: Text(ocupacion.descripcion),
+                                ),
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Ocupación',
+                              border: OutlineInputBorder()),
+                          onChanged: (int? newValue) {
+                            setState(() {
+                              _ocupacionId = newValue;
+                            });
+                            grupoFamiliarBloc.add(OcupacionChanged(newValue!));
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Campo Requerido';
+                            }
+                            return null;
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  const Divider(),
+                  const Text(
+                    'GRUPO DE RIESGO',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<GrupoRiesgoCubit, GruposRiesgoState>(
+                    builder: (context, state) {
+                      if (state is GruposRiesgoLoaded) {
+                        return DropdownButtonFormField<int>(
+                          value: _grupoRiesgoId,
+                          items: state.gruposRiesgoLoaded!
+                              .map(
+                                (grupoRiesgo) => DropdownMenuItem<int>(
+                                  value: grupoRiesgo.grupoRiesgoId,
+                                  child: Text(grupoRiesgo.descripcion),
+                                ),
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Grupo de riesgo',
+                              border: OutlineInputBorder()),
+                          onChanged: (int? newValue) {
+                            setState(() {
+                              _grupoRiesgoId = newValue;
+                            });
+                            grupoFamiliarBloc
+                                .add(GrupoRiesgoChanged(newValue!));
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Campo Requerido';
+                            }
+                            return null;
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  const Divider(),
+                  const Text(
+                    'ETNIA',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  BlocBuilder<EtniaCubit, EtniasState>(
+                    builder: (context, state) {
+                      if (state is EtniasLoaded) {
+                        return DropdownButtonFormField<int>(
+                          isExpanded: true,
+                          value: _etniaId,
+                          items: state.etniasLoaded!
+                              .map(
+                                (etnia) => DropdownMenuItem<int>(
+                                  value: etnia.etniaId,
+                                  child: Text(etnia.descripcion),
+                                ),
+                              )
+                              .toList(),
+                          decoration: const InputDecoration(
+                              labelText: 'Etnia', border: OutlineInputBorder()),
+                          onChanged: (int? newValue) {
+                            if (newValue != 2) {
+                              setState(() {
+                                _puebloIde = null;
+                                _lenguaManejaId = null;
+                                _lenguaMaternaId = null;
+                              });
+
+                              grupoFamiliarBloc
+                                  .add(const PuebloIndigenaChanged(0));
+                              grupoFamiliarBloc
+                                  .add(const LenguaManejaChanged(0));
+                              grupoFamiliarBloc
+                                  .add(const LenguaMaternaChanged(0));
+                            }
+
+                            setState(() {
+                              _etniaId = newValue;
+                            });
+
+                            grupoFamiliarBloc.add(EtniaChanged(newValue!));
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Campo Requerido';
+                            }
+                            return null;
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                  if (_etniaId == 2)
+                    Column(
+                      children: [
+                        const Divider(),
+                        const Text(
+                          'PUEBLO INDÍGENA QUE PERTENECE',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
                         ),
-                      ],
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                enabled: false,
-                initialValue: formattedFechaNacimiento,
-                decoration: const InputDecoration(
-                  labelText: 'Fecha de Nacimiento',
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (String? value) {
-                  //TODO:  grupoFamiliarBloc.add(FechaNacChanged(newValue!));
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                enabled: false,
-                initialValue: _edad.toString(),
-                decoration: const InputDecoration(
-                  labelText: 'Edad',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const Divider(),
-              const Text(
-                'CURSO DE VIDA',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              BlocBuilder<CursoVidaCubit, CursosVidaState>(
-                builder: (context, state) {
-                  if (state is CursosVidaLoaded) {
-                    return DropdownButtonFormField<int>(
-                      value: _cursoVidaId,
-                      items: state.cursosVidaLoaded!
-                          .map(
-                            (cursoVida) => DropdownMenuItem<int>(
-                              value: cursoVida.cursoVidaId,
-                              child: Text(cursoVida.descripcion),
-                            ),
-                          )
-                          .toList(),
-                      decoration: const InputDecoration(
-                          labelText: 'Curso de vida',
-                          border: OutlineInputBorder()),
-                      onChanged: null,
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Campo Requerido';
-                        }
-                        return null;
-                      },
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(height: 20),
-              const Divider(),
-              const Text(
-                'PARENTESCO',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              BlocBuilder<ParentescoCubit, ParentescosState>(
-                builder: (context, state) {
-                  if (state is ParentescosLoaded) {
-                    return DropdownButtonFormField<int>(
-                      value: _parentescoId,
-                      items: state.parentescosLoaded!
-                          .map(
-                            (parentesco) => DropdownMenuItem<int>(
-                              value: parentesco.parentescoId,
-                              child: Text(parentesco.descripcion),
-                            ),
-                          )
-                          .toList(),
-                      decoration: const InputDecoration(
-                          labelText: 'Parentesco',
-                          border: OutlineInputBorder()),
-                      onChanged: (int? newValue) {
-                        setState(() {
-                          _parentescoId = newValue;
-                        });
-                        grupoFamiliarBloc.add(ParentescoChanged(newValue!));
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Campo Requerido';
-                        }
-                        return null;
-                      },
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const Divider(),
-              const Text(
-                'TIPO DE RÉGIMEN',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              BlocBuilder<RegimenCubit, RegimenesState>(
-                builder: (context, state) {
-                  if (state is RegimenesLoaded) {
-                    return DropdownButtonFormField<int>(
-                      value: _tipoRegimenId,
-                      items: state.regimenesLoaded!
-                          .map(
-                            (regimen) => DropdownMenuItem<int>(
-                              value: regimen.tipoRegimenId,
-                              child: Text(regimen.descripcion),
-                            ),
-                          )
-                          .toList(),
-                      decoration: const InputDecoration(
-                          labelText: 'Tipo régimen',
-                          border: OutlineInputBorder()),
-                      onChanged: null,
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Campo Requerido';
-                        }
-                        return null;
-                      },
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const Divider(),
-              const Text(
-                'NIVEL EDUCATIVO',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              BlocBuilder<NivelEducativoCubit, NivelesEducativosState>(
-                builder: (context, state) {
-                  if (state is NivelesEducativosLoaded) {
-                    return DropdownButtonFormField<int>(
-                      value: _nivelEducativoId,
-                      items: state.nivelesEducativosLoaded!
-                          .map(
-                            (nivelEducativo) => DropdownMenuItem<int>(
-                              value: nivelEducativo.nivelEducativoId,
-                              child: Text(nivelEducativo.descripcion),
-                            ),
-                          )
-                          .toList(),
-                      decoration: const InputDecoration(
-                          labelText: 'Nivel educativo',
-                          border: OutlineInputBorder()),
-                      onChanged: (int? newValue) {
-                        setState(() {
-                          _nivelEducativoId = newValue;
-                        });
-                        grupoFamiliarBloc.add(NivelEducativoChanged(newValue!));
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Campo Requerido';
-                        }
-                        return null;
-                      },
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const Divider(),
-              const Text(
-                'OCUPACIÓN',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              BlocBuilder<OcupacionCubit, OcupacionesState>(
-                builder: (context, state) {
-                  if (state is OcupacionesLoaded) {
-                    return DropdownButtonFormField<int>(
-                      value: _ocupacionId,
-                      items: state.ocupacionesLoaded!
-                          .map(
-                            (ocupacion) => DropdownMenuItem<int>(
-                              value: ocupacion.ocupacionId,
-                              child: Text(ocupacion.descripcion),
-                            ),
-                          )
-                          .toList(),
-                      decoration: const InputDecoration(
-                          labelText: 'Ocupación', border: OutlineInputBorder()),
-                      onChanged: (int? newValue) {
-                        setState(() {
-                          _ocupacionId = newValue;
-                        });
-                        grupoFamiliarBloc.add(OcupacionChanged(newValue!));
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Campo Requerido';
-                        }
-                        return null;
-                      },
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const Divider(),
-              const Text(
-                'GRUPO DE RIESGO',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              BlocBuilder<GrupoRiesgoCubit, GruposRiesgoState>(
-                builder: (context, state) {
-                  if (state is GruposRiesgoLoaded) {
-                    return DropdownButtonFormField<int>(
-                      value: _grupoRiesgoId,
-                      items: state.gruposRiesgoLoaded!
-                          .map(
-                            (grupoRiesgo) => DropdownMenuItem<int>(
-                              value: grupoRiesgo.grupoRiesgoId,
-                              child: Text(grupoRiesgo.descripcion),
-                            ),
-                          )
-                          .toList(),
-                      decoration: const InputDecoration(
-                          labelText: 'Grupo de riesgo',
-                          border: OutlineInputBorder()),
-                      onChanged: (int? newValue) {
-                        setState(() {
-                          _grupoRiesgoId = newValue;
-                        });
-                        grupoFamiliarBloc.add(GrupoRiesgoChanged(newValue!));
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Campo Requerido';
-                        }
-                        return null;
-                      },
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const Divider(),
-              const Text(
-                'ETNIA',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const Divider(),
-              BlocBuilder<EtniaCubit, EtniasState>(
-                builder: (context, state) {
-                  if (state is EtniasLoaded) {
-                    return DropdownButtonFormField<int>(
-                      isExpanded: true,
-                      value: _etniaId,
-                      items: state.etniasLoaded!
-                          .map(
-                            (etnia) => DropdownMenuItem<int>(
-                              value: etnia.etniaId,
-                              child: Text(etnia.descripcion),
-                            ),
-                          )
-                          .toList(),
-                      decoration: const InputDecoration(
-                          labelText: 'Etnia', border: OutlineInputBorder()),
-                      onChanged: (int? newValue) {
-                        if (newValue != 2) {
-                          setState(() {
-                            _puebloIde = null;
-                            _lenguaManejaId = null;
-                            _lenguaMaternaId = null;
-                          });
-
-                          grupoFamiliarBloc.add(const PuebloIndigenaChanged(0));
-                          grupoFamiliarBloc.add(const LenguaManejaChanged(0));
-                          grupoFamiliarBloc.add(const LenguaMaternaChanged(0));
-                        }
-
-                        setState(() {
-                          _etniaId = newValue;
-                        });
-
-                        grupoFamiliarBloc.add(EtniaChanged(newValue!));
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Campo Requerido';
-                        }
-                        return null;
-                      },
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              if (_etniaId == 2)
-                Column(
-                  children: [
-                    const Divider(),
-                    const Text(
-                      'PUEBLO INDÍGENA QUE PERTENECE',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Divider(),
-                    BlocBuilder<PuebloIndigenaCubit, PueblosIndigenasState>(
-                      builder: (context, state) {
-                        if (state is PueblosIndigenasLoaded) {
-                          return DropdownButtonFormField<int>(
-                            isExpanded: true,
-                            value: _puebloIde,
-                            items: state.pueblosIndigenasLoaded!
-                                .map(
-                                  (puebloIndigena) => DropdownMenuItem<int>(
-                                    value: puebloIndigena.puebloIde,
-                                    child: Text(puebloIndigena.Descripcion),
-                                  ),
-                                )
-                                .toList(),
-                            decoration: const InputDecoration(
-                                labelText: 'Pueblo indígena',
-                                border: OutlineInputBorder()),
-                            onChanged: (int? newValue) {
-                              setState(() {
-                                _puebloIde = newValue;
-                              });
-                              grupoFamiliarBloc
-                                  .add(PuebloIndigenaChanged(newValue!));
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Campo Requerido';
-                              }
-                              return null;
-                            },
-                          );
-                        }
-                        return Container();
-                      },
-                    ),
-                    const Divider(),
-                    const Text(
-                      'LENGUA QUE MANEJA',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Divider(),
-                    BlocBuilder<LenguaManejaCubit, LenguasManejaState>(
-                      builder: (context, state) {
-                        if (state is LenguasManejaLoaded) {
-                          return DropdownButtonFormField<int>(
-                            value: _lenguaManejaId,
-                            items: state.lenguasManejaLoaded!
-                                .map(
-                                  (lenguaManeja) => DropdownMenuItem<int>(
-                                    value: lenguaManeja.lenguaManejaId,
-                                    child: Text(lenguaManeja.descripcion),
-                                  ),
-                                )
-                                .toList(),
-                            decoration: const InputDecoration(
-                                labelText: 'Lengua que maneja',
-                                border: OutlineInputBorder()),
-                            onChanged: (int? newValue) {
-                              if (newValue == 2) {
-                                setState(() {
-                                  _lenguaMaternaId = null;
-                                });
-
-                                grupoFamiliarBloc
-                                    .add(const LenguaMaternaChanged(0));
-                              }
-                              setState(() {
-                                _lenguaManejaId = newValue;
-                              });
-                              grupoFamiliarBloc
-                                  .add(LenguaManejaChanged(newValue!));
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Campo Requerido';
-                              }
-                              return null;
-                            },
-                          );
-                        }
-                        return Container();
-                      },
-                    ),
-                    if (_lenguaManejaId != 2)
-                      Column(
-                        children: [
-                          const Divider(),
-                          const Text(
-                            'LENGUA MATERNA',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                          const Divider(),
-                          BlocBuilder<NombreLenguaMaternaCubit,
-                              NombresLenguasMaternaState>(
-                            builder: (context, state) {
-                              if (state is NombresLenguasMaternaLoaded) {
-                                return DropdownButtonFormField<int>(
-                                  value: _lenguaMaternaId,
-                                  items: state.nombresLenguasMaternaLoaded!
-                                      .map(
-                                        (lenguaMaterna) =>
-                                            DropdownMenuItem<int>(
-                                          value: lenguaMaterna.lenguaMaternaId,
-                                          child:
-                                              Text(lenguaMaterna.descripcion),
-                                        ),
-                                      )
-                                      .toList(),
-                                  decoration: const InputDecoration(
-                                      labelText: 'Lengua materna',
-                                      border: OutlineInputBorder()),
-                                  onChanged: (int? newValue) {
+                        const Divider(),
+                        BlocBuilder<PuebloIndigenaCubit, PueblosIndigenasState>(
+                          builder: (context, state) {
+                            if (state is PueblosIndigenasLoaded) {
+                              return DropdownButtonFormField<int>(
+                                isExpanded: true,
+                                value: _puebloIde,
+                                items: state.pueblosIndigenasLoaded!
+                                    .map(
+                                      (puebloIndigena) => DropdownMenuItem<int>(
+                                        value: puebloIndigena.puebloIde,
+                                        child: Text(puebloIndigena.Descripcion),
+                                      ),
+                                    )
+                                    .toList(),
+                                decoration: const InputDecoration(
+                                    labelText: 'Pueblo indígena',
+                                    border: OutlineInputBorder()),
+                                onChanged: (int? newValue) {
+                                  setState(() {
+                                    _puebloIde = newValue;
+                                  });
+                                  grupoFamiliarBloc
+                                      .add(PuebloIndigenaChanged(newValue!));
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Campo Requerido';
+                                  }
+                                  return null;
+                                },
+                              );
+                            }
+                            return Container();
+                          },
+                        ),
+                        const Divider(),
+                        const Text(
+                          'LENGUA QUE MANEJA',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        const Divider(),
+                        BlocBuilder<LenguaManejaCubit, LenguasManejaState>(
+                          builder: (context, state) {
+                            if (state is LenguasManejaLoaded) {
+                              return DropdownButtonFormField<int>(
+                                value: _lenguaManejaId,
+                                items: state.lenguasManejaLoaded!
+                                    .map(
+                                      (lenguaManeja) => DropdownMenuItem<int>(
+                                        value: lenguaManeja.lenguaManejaId,
+                                        child: Text(lenguaManeja.descripcion),
+                                      ),
+                                    )
+                                    .toList(),
+                                decoration: const InputDecoration(
+                                    labelText: 'Lengua que maneja',
+                                    border: OutlineInputBorder()),
+                                onChanged: (int? newValue) {
+                                  if (newValue == 2) {
                                     setState(() {
-                                      _lenguaMaternaId = newValue;
+                                      _lenguaMaternaId = null;
                                     });
+
                                     grupoFamiliarBloc
-                                        .add(LenguaMaternaChanged(newValue!));
-                                  },
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return 'Campo Requerido';
-                                    }
-                                    return null;
-                                  },
-                                );
-                              }
-                              return Container();
-                            },
+                                        .add(const LenguaMaternaChanged(0));
+                                  }
+                                  setState(() {
+                                    _lenguaManejaId = newValue;
+                                  });
+                                  grupoFamiliarBloc
+                                      .add(LenguaManejaChanged(newValue!));
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Campo Requerido';
+                                  }
+                                  return null;
+                                },
+                              );
+                            }
+                            return Container();
+                          },
+                        ),
+                        if (_lenguaManejaId != 2)
+                          Column(
+                            children: [
+                              const Divider(),
+                              const Text(
+                                'LENGUA MATERNA',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                              const Divider(),
+                              BlocBuilder<NombreLenguaMaternaCubit,
+                                  NombresLenguasMaternaState>(
+                                builder: (context, state) {
+                                  if (state is NombresLenguasMaternaLoaded) {
+                                    return DropdownButtonFormField<int>(
+                                      value: _lenguaMaternaId,
+                                      items: state.nombresLenguasMaternaLoaded!
+                                          .map(
+                                            (lenguaMaterna) =>
+                                                DropdownMenuItem<int>(
+                                              value:
+                                                  lenguaMaterna.lenguaMaternaId,
+                                              child: Text(
+                                                  lenguaMaterna.descripcion),
+                                            ),
+                                          )
+                                          .toList(),
+                                      decoration: const InputDecoration(
+                                          labelText: 'Lengua materna',
+                                          border: OutlineInputBorder()),
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          _lenguaMaternaId = newValue;
+                                        });
+                                        grupoFamiliarBloc.add(
+                                            LenguaMaternaChanged(newValue!));
+                                      },
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Campo Requerido';
+                                        }
+                                        return null;
+                                      },
+                                    );
+                                  }
+                                  return Container();
+                                },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                  ],
-                ),
-              const SizedBox(height: 20),
-              MaterialButton(
-                  elevation: 0,
-                  color: Theme.of(context).colorScheme.primary,
-                  onPressed: () {
-                    if (_formKeyGrupoFamiliar.currentState!.validate()) {
-                      _formKeyGrupoFamiliar.currentState!.save();
-
-                      final afiliadoPrefsBloc =
-                          BlocProvider.of<AfiliadoPrefsBloc>(context);
-
-                      final newEditAfiliado = grupoFamiliarBloc.state.copyWith(
-                        grupoFamiliarId:
-                            widget.afiliadoGrupoFamiliar.grupoFamiliarId,
-                        familiaId: afiliadoPrefsBloc.state.afiliado?.familiaId,
-                        afiliadoId: widget.afiliadoGrupoFamiliar.afiliadoId,
-                        tipoDocumentoId: _tipoDocumentoId,
-                        documento: _documento,
-                        generoId: _generoId,
-                        fechaNacimiento: _fechaNacimiento,
-                        edad: _edad,
-                        nombre1: widget.afiliadoGrupoFamiliar.nombre1,
-                        nombre2: widget.afiliadoGrupoFamiliar.nombre2,
-                        apellido1: widget.afiliadoGrupoFamiliar.apellido1,
-                        apellido2: widget.afiliadoGrupoFamiliar.apellido2,
-                        tipoDocAfiliado:
-                            widget.afiliadoGrupoFamiliar.tipoDocAfiliado,
-                        codGeneroAfiliado:
-                            widget.afiliadoGrupoFamiliar.codGeneroAfiliado,
-                        codRegimenAfiliado:
-                            widget.afiliadoGrupoFamiliar.codRegimenAfiliado,
-                      );
-
-                      afiliadosGrupoFamiliarBloc
-                          .add(AddOrEditAfiliadoGrupoFamiliar(newEditAfiliado));
-                    }
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: const Text(
-                      'Guardar',
-                      style: TextStyle(color: Colors.white),
+                      ],
                     ),
-                  )),
-            ],
+                  const SizedBox(height: 20),
+                  MaterialButton(
+                      elevation: 0,
+                      color: Theme.of(context).colorScheme.primary,
+                      onPressed: () {
+                        if (_formKeyGrupoFamiliar.currentState!.validate()) {
+                          _formKeyGrupoFamiliar.currentState!.save();
+
+                          final afiliadoPrefsBloc =
+                              BlocProvider.of<AfiliadoPrefsBloc>(context);
+
+                          final newEditAfiliado =
+                              grupoFamiliarBloc.state.copyWith(
+                            grupoFamiliarId:
+                                widget.afiliadoGrupoFamiliar.grupoFamiliarId,
+                            familiaId:
+                                afiliadoPrefsBloc.state.afiliado?.familiaId,
+                            afiliadoId: widget.afiliadoGrupoFamiliar.afiliadoId,
+                            tipoDocumentoId: _tipoDocumentoId,
+                            documento: _documento,
+                            generoId: _generoId,
+                            fechaNacimiento: _fechaNacimiento,
+                            edad: _edad,
+                            nombre1: widget.afiliadoGrupoFamiliar.nombre1,
+                            nombre2: widget.afiliadoGrupoFamiliar.nombre2,
+                            apellido1: widget.afiliadoGrupoFamiliar.apellido1,
+                            apellido2: widget.afiliadoGrupoFamiliar.apellido2,
+                            tipoDocAfiliado:
+                                widget.afiliadoGrupoFamiliar.tipoDocAfiliado,
+                            codGeneroAfiliado:
+                                widget.afiliadoGrupoFamiliar.codGeneroAfiliado,
+                            codRegimenAfiliado:
+                                widget.afiliadoGrupoFamiliar.codRegimenAfiliado,
+                          );
+
+                          afiliadosGrupoFamiliarBloc.add(
+                              AddOrEditAfiliadoGrupoFamiliar(newEditAfiliado));
+                        }
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        child: const Text(
+                          'Guardar',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

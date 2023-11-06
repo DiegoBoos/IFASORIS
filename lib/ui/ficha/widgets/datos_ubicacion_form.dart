@@ -120,7 +120,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             if (state is TiposDocumentoLoaded) {
               return DropdownButtonFormField<String>(
                 value: _tipoDocumentoRecibeVisita,
-                items: state.tiposDocumento!
+                items: state.tiposDocumentoLoaded!
                     .map(
                       (tipoDocumento) => DropdownMenuItem<String>(
                         value: tipoDocumento.tipo,

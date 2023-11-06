@@ -29,8 +29,6 @@ class GrupoFamiliarPage extends StatefulWidget {
 }
 
 class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
-  int registraAfiliados = 0;
-
   @override
   void initState() {
     super.initState();
@@ -41,7 +39,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
 
     final afiliado = afiliadoPrefsBloc.state.afiliado!;
     BlocProvider.of<AfiliadosGrupoFamiliarBloc>(context)
-        .add(GetAfiliadosGrupoFamiliar(afiliado.familiaId!));
+        .add(ExisteAfiliadoCabezaFamilia(afiliado.afiliadoId!));
 
     getAccesoriasGrupoFamiliar();
   }
@@ -68,48 +66,10 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
       context,
     );
 
-    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(
-      context,
-    );
-
-    final afiliado = afiliadoPrefsBloc.state.afiliado!;
-
     final afiliadosGrupoFamiliar =
         afiliadosGrupoFamiliarBloc.state.afiliadosGrupoFamiliar;
 
-    if (registraAfiliados == 1) {
-      GrupoFamiliarEntity afiliadoGrupoFamiliar = GrupoFamiliarEntity(
-        afiliadoId: afiliado.afiliadoId,
-        documento: afiliado.documento,
-        edad: afiliado.edad,
-        fechaNacimiento: afiliado.fecnac,
-        nombre1: afiliado.nombre1,
-        nombre2: afiliado.nombre2,
-        apellido1: afiliado.apellido1,
-        apellido2: afiliado.apellido2,
-        tipoDocAfiliado: afiliado.tipoDocAfiliado,
-        codGeneroAfiliado: afiliado.codGeneroAfiliado,
-        codRegimenAfiliado: afiliado.codRegimenAfiliado,
-      );
-
-      final afiliadoCabezaFamilia = afiliadosGrupoFamiliar?.firstWhere(
-        (afiliadoGrupoFamiliar) =>
-            afiliadoGrupoFamiliar.afiliadoId == afiliado.afiliadoId,
-      );
-
-      if (afiliadoCabezaFamilia != null) {
-        afiliadoGrupoFamiliar = afiliadoCabezaFamilia;
-      }
-
-      Navigator.push<void>(
-        context,
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) => GrupoFamiliarForm(
-              afiliadoGrupoFamiliar: afiliadoGrupoFamiliar,
-              registraAfiliados: registraAfiliados),
-        ),
-      );
-    } else if (registraAfiliados == 0 && afiliadosGrupoFamiliar != null) {
+    if (afiliadosGrupoFamiliar != null) {
       Navigator.pushReplacementNamed(context, 'estilo-vida-saludable');
     } else {
       afiliadosGrupoFamiliarBloc.add(const ErrorAfiliadosGrupoFamiliar(

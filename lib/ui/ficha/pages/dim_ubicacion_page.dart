@@ -23,6 +23,7 @@ import '../../cubits/resguardo/resguardo_cubit.dart';
 import '../../cubits/tiempo_tarda_ca/tiempo_tarda_ca_cubit.dart';
 import '../../cubits/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_cubit.dart';
 import '../../cubits/tipo_calendario/tipo_calendario_cubit.dart';
+import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 import '../../cubits/tuberculo_platano/tuberculo_platano_cubit.dart';
 import '../../cubits/verdura/verdura_cubit.dart';
 import '../../cubits/via_acceso/via_acceso_cubit.dart';
@@ -61,6 +62,7 @@ class _DimUbicacionPageState extends State<DimUbicacionPage> {
   }
 
   getAccesoriasUbicacion() {
+    BlocProvider.of<TipoDocumentoCubit>(context).getTiposDocumentoDB();
     BlocProvider.of<OpcionSiNoCubit>(context).getOpcionesSiNoDB();
     BlocProvider.of<ResguardoCubit>(context).getResguardosDB();
     BlocProvider.of<AutoridadIndigenaCubit>(context)
