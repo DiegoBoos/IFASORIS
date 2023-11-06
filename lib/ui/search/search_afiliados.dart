@@ -157,9 +157,27 @@ class SearchAfiliados extends SearchDelegate {
                                     ficha.numFicha == '') {
                                   afiliado.afiliadoId =
                                       ficha.familia!.fkAfiliadoId;
+
+                                  cargarFicha(context, ficha, afiliado);
+                                } else {
+                                  CustomSnackBar.showCustomDialog(
+                                      context,
+                                      "Afiliado ya registrado",
+                                      "El afiliado se encuentra registrado en la ficha No. ${ficha.numFicha}",
+                                      () => Navigator.pop(context),
+                                      false);
                                 }
+                              } else {
+                                createFicha(context, afiliado);
                               }
                             });
+                          } else {
+                            CustomSnackBar.showCustomDialog(
+                                context,
+                                "Error al crear ficha",
+                                "Este afiliado es menor de 14 años",
+                                () => Navigator.pop(context),
+                                false);
                           }
                         }),
                     const Divider()
@@ -208,6 +226,15 @@ class SearchAfiliados extends SearchDelegate {
         }
       });
     }
+  }
+
+  Future<void> cargarFicha(
+      BuildContext context, FichaEntity ficha, AfiliadoEntity afiliado) async {
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
+
+    afiliadoPrefsBloc.add(
+        SaveAfiliado(afiliado.copyWith(familiaId: ficha.familia!.familiaId)));
+    close(context, null);
   }
 
   @override
