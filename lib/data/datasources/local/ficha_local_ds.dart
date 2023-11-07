@@ -1,3 +1,5 @@
+import 'package:ifasoris/data/models/familia_model.dart';
+
 import '../../../domain/entities/ficha_entity.dart';
 import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
@@ -31,7 +33,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   Future<List<FichaModel>> loadFichas(int familiaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.rawQuery('''
-      SELECT Ficha.Ficha_id, Ficha.FechaCreacion,Ficha.NumFicha,Ficha.UserName_Creacion,Ficha.UserName_Actualizacion, Ficha.UltimaActualizacion FROM Familia 
+      SELECT Ficha.* FROM Familia 
       LEFT JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
       WHERE Familia.Familia_id = $familiaId
       ''');
@@ -90,10 +92,17 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   Future<List<FichaModel>> loadFichasSincronizadas(int familiaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.rawQuery('''
-      SELECT Ficha.* FROM Ficha WHERE NumFicha <> '' or Ficha_id_remote IS NOT NULL
+      SELECT Ficha.*, Familia.* FROM Ficha 
+      INNER JOIN Familia ON (Familia.Ficha_id  =  Ficha.Ficha_id)
+      WHERE NumFicha <> '' or Ficha_id_remote IS NOT NULL
     ''');
-    final result =
-        List<FichaModel>.from(res.map((m) => FichaModel.fromJson(m))).toList();
+
+    final result = List<FichaModel>.from(res.map((ficha) {
+      final familia = FamiliaModel.fromJson(ficha);
+
+      final fichaWithFamilia = {...ficha, 'familia': familia.toJson()};
+      return FichaModel.fromJson(fichaWithFamilia);
+    }).toList());
 
     return result;
   }

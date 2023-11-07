@@ -86,7 +86,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
 
       _documento = widget.afiliadoGrupoFamiliar.documento;
       _nombresApellidos =
-          '${widget.afiliadoGrupoFamiliar.nombre1 ?? ''} ${widget.afiliadoGrupoFamiliar.nombre2 ?? ''} ${widget.afiliadoGrupoFamiliar.apellido1 ?? ''} ${widget.afiliadoGrupoFamiliar.apellido2 ?? ''}';
+          '${widget.afiliadoGrupoFamiliar.nombre1} ${widget.afiliadoGrupoFamiliar.nombre2} ${widget.afiliadoGrupoFamiliar.apellido1} ${widget.afiliadoGrupoFamiliar.apellido2}';
       _fechaNacimiento = widget.afiliadoGrupoFamiliar.fechaNacimiento;
 
       if (_fechaNacimiento != null) {

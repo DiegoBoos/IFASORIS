@@ -51,14 +51,10 @@ class _CuidadoSaludCondRiesgoFormState
   @override
   void initState() {
     super.initState();
-    _nombresApellidosCtrl.text = '${widget.currentAfiliado.nombre1 ?? ''}'
-        ' '
-        '${widget.currentAfiliado.nombre2 ?? ''}'
-        ' '
-        '${widget.currentAfiliado.apellido1 ?? ''}'
-        ' '
-        '${widget.currentAfiliado.apellido2 ?? ''}'
-        '';
+    _nombresApellidosCtrl.text = '${widget.currentAfiliado.nombre1} '
+        '${widget.currentAfiliado.nombre2} '
+        '${widget.currentAfiliado.apellido1} '
+        '${widget.currentAfiliado.apellido2}';
 
     setState(() {
       _ultimaVezInstSaludId =

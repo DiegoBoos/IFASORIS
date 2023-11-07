@@ -180,7 +180,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
     final afiliadoGrupoFamiliar = afiliadosGrupoFamiliar[index];
 
     final nombreCompleto =
-        '${afiliadoGrupoFamiliar.nombre1 ?? ''} ${afiliadoGrupoFamiliar.nombre2 ?? ''} ${afiliadoGrupoFamiliar.apellido1 ?? ''} ${afiliadoGrupoFamiliar.apellido2 ?? ''}';
+        '${afiliadoGrupoFamiliar.nombre1} ${afiliadoGrupoFamiliar.nombre2} ${afiliadoGrupoFamiliar.apellido1} ${afiliadoGrupoFamiliar.apellido2}';
 
     return Dismissible(
       direction: DismissDirection.endToStart,

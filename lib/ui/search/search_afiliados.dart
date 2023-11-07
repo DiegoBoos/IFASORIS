@@ -77,7 +77,7 @@ class SearchAfiliados extends SearchDelegate {
                         ListTile(
                             title: Text('${afiliado.documento}'),
                             subtitle: Text(
-                                '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
+                                '${afiliado.nombre1} ${afiliado.nombre2} ${afiliado.apellido1} ${afiliado.apellido2}'),
                             onTap: () async {
                               await afiliadoBloc
                                   .afiliadoTieneFicha(afiliado.afiliadoId!)
@@ -146,7 +146,7 @@ class SearchAfiliados extends SearchDelegate {
                     ListTile(
                         title: Text('${afiliado.documento}'),
                         subtitle: Text(
-                            '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
+                            '${afiliado.nombre1} ${afiliado.nombre2} ${afiliado.apellido1} ${afiliado.apellido2}'),
                         onTap: () async {
                           if (afiliado.edad! >= 14) {
                             await afiliadoBloc

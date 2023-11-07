@@ -130,6 +130,15 @@ class AppDrawer extends StatelessWidget {
                 Navigator.pushNamed(context, 'cambio-dispositivo');
               },
             ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Cerrar sesión'),
+              onTap: () {
+                Navigator.pop(context);
+                authBloc.add(LogOut());
+              },
+            ),
           ],
         ),
       ),

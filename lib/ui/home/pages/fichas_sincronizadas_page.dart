@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/ui/home/pages/pdf_viewer_page.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/ficha/ficha_bloc.dart';
-import '../../utils/pdf_api.dart';
 
 class FichasSincronizadasPage extends StatefulWidget {
   const FichasSincronizadasPage({super.key});
@@ -46,25 +44,16 @@ class _FichasSincronizadasPageState extends State<FichasSincronizadasPage> {
                   itemBuilder: (BuildContext context, int index) {
                     final ficha = fichasSincronizadas[index];
                     return ListTile(
-                      title: Text("Ficha No. ${ficha.numFicha!}"),
-                      trailing: FutureBuilder<File>(
-                        future: PDFApi.loadNetwork(
-                            'https://2m4jlnxx-5005.use2.devtunnels.ms/api/reports/ficha/${ficha.numFicha}'),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<File> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          } else if (snapshot.hasError) {
-                            return const Icon(Icons.error);
-                          } else {
-                            return IconButton(
-                              icon: const Icon(Icons.picture_as_pdf),
-                              onPressed: () {
-                                openPdf(context, snapshot.data!);
-                              },
-                            );
-                          }
+                      leading: Text("Ficha No. ${ficha.numFicha}"),
+                      title: Text(ficha.familia!.apellidosFlia!),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.picture_as_pdf),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => PDFViewerPage(ficha: ficha),
+                            ),
+                          );
                         },
                       ),
                     );
@@ -76,14 +65,6 @@ class _FichasSincronizadasPageState extends State<FichasSincronizadasPage> {
             }
           },
         ),
-      ),
-    );
-  }
-
-  void openPdf(BuildContext context, File file) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => PDFViewerPage(file: file),
       ),
     );
   }
