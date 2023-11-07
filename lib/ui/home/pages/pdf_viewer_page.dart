@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
 import 'package:path/path.dart';
-import 'package:share_extend/share_extend.dart';
 
 import '../../../constants.dart';
 import '../../utils/pdf_api.dart';
@@ -74,10 +73,6 @@ class _PDFViewerPageState extends State<PDFViewerPage> {
                   setState(() => this.controller = controller),
               onPageChanged: (indexPage, _) =>
                   setState(() => this.indexPage = indexPage!),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => ShareExtend.share(file.path, "application/pdf"),
-              child: const Icon(Icons.share),
             ),
           );
         } else {

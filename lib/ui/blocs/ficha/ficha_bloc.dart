@@ -16,8 +16,7 @@ class FichaBloc extends Bloc<FichaEvent, FichasState> {
     });
     on<LoadFichasSincronizadas>((event, emit) async {
       emit(FichasLoading());
-      final result = await fichaUsecaseDB
-          .loadFichasSincronizadasUsecaseDB(event.familiaId);
+      final result = await fichaUsecaseDB.loadFichasSincronizadasUsecaseDB();
       result.fold(
           (failure) => emit(const FichasError('Error al cargar los datos')),
           (data) => emit(FichasLoaded(data)));

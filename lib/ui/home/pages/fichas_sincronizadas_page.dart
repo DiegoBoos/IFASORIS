@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/ui/home/pages/pdf_viewer_page.dart';
-import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/ficha/ficha_bloc.dart';
 
 class FichasSincronizadasPage extends StatefulWidget {
@@ -16,9 +15,7 @@ class _FichasSincronizadasPageState extends State<FichasSincronizadasPage> {
   void initState() {
     super.initState();
     final fichaBloc = BlocProvider.of<FichaBloc>(context);
-    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
-    final afiliado = afiliadoPrefsBloc.state.afiliado!;
-    fichaBloc.add(LoadFichasSincronizadas(afiliado.familiaId!));
+    fichaBloc.add(LoadFichasSincronizadas());
   }
 
   @override

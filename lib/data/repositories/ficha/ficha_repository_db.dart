@@ -71,10 +71,9 @@ class FichaRepositoryDBImpl implements FichaRepositoryDB {
 
   @override
   Future<Either<Failure, List<FichaEntity>>>
-      loadFichasSincronizadasRepositoryDB(int familiaId) async {
+      loadFichasSincronizadasRepositoryDB() async {
     try {
-      final result =
-          await fichaLocalDataSource.loadFichasSincronizadas(familiaId);
+      final result = await fichaLocalDataSource.loadFichasSincronizadas();
 
       return Right(result);
     } on DatabaseFailure catch (e) {

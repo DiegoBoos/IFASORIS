@@ -11,10 +11,8 @@ abstract class FichaLocalDataSource {
   Future<FichaEntity> createFichaCompleta(FichaEntity ficha);
   Future<List<FichaModel>> loadFichas(int familiaId);
   Future<List<EstadisticaModel>> loadEstadisticas();
-
   Future<int> deleteFicha(int fichaId);
-
-  Future<List<FichaModel>> loadFichasSincronizadas(int familiaId);
+  Future<List<FichaModel>> loadFichasSincronizadas();
 }
 
 class FichaLocalDataSourceImpl implements FichaLocalDataSource {
@@ -89,7 +87,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   }
 
   @override
-  Future<List<FichaModel>> loadFichasSincronizadas(int familiaId) async {
+  Future<List<FichaModel>> loadFichasSincronizadas() async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.rawQuery('''
       SELECT Ficha.*, Familia.* FROM Ficha 
@@ -100,8 +98,8 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
     final result = List<FichaModel>.from(res.map((ficha) {
       final familia = FamiliaModel.fromJson(ficha);
 
-      final fichaWithFamilia = {...ficha, 'familia': familia.toJson()};
-      return FichaModel.fromJson(fichaWithFamilia);
+      final fichaConFamilia = {...ficha, 'familia': familia.toJson()};
+      return FichaModel.fromJson(fichaConFamilia);
     }).toList());
 
     return result;
