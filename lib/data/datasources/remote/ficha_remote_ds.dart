@@ -50,14 +50,29 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
 
       // Fichas
       final resFichas = await db.rawQuery('''
-      SELECT
+      	   SELECT
       Ficha_id,
       FechaCreacion as fechaCreacion,
       NumFicha as numFicha,
       UserName_Creacion as userNameCreacion,
       UserName_Actualizacion as ultimaActualizacion
-	    FROM Ficha WHERE NumFicha = ''
+      FROM Ficha 
+	  WHERE NumFicha = '' AND Ficha.Ficha_id Not In(
+	  SELECT FichasIncompletas.Ficha_id FROM Ficha as FichasIncompletas
+      inner join Familia ON (Familia.Ficha_id  =  FichasIncompletas.Ficha_id)
+      left join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
+      WHERE (Asp3_GrupoFamiliar.isComplete=0 OR Asp3_GrupoFamiliar.isComplete IS NULL) AND NumFicha = '' AND Ficha_id_remote IS NULL
+	  )
       ''');
+      // final resFichas = await db.rawQuery('''
+      // SELECT
+      // Ficha_id,
+      // FechaCreacion as fechaCreacion,
+      // NumFicha as numFicha,
+      // UserName_Creacion as userNameCreacion,
+      // UserName_Actualizacion as ultimaActualizacion
+      // FROM Ficha WHERE NumFicha = ''
+      // ''');
 
       if (resFichas.isEmpty) {
         throw const ServerFailure(
