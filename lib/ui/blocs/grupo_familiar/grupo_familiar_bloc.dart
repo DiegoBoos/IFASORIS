@@ -25,7 +25,7 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
             formStatus:
                 GrupoFamiliarSubmissionFailed((failure.properties.first))));
       }, (data) {
-        emit(state.copyWith(formStatus: GrupoFamiliarSubmissionSuccess()));
+        emit(data.copyWith(formStatus: GrupoFamiliarSubmissionSuccess()));
       });
     });
 
@@ -76,9 +76,9 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
     return result.fold((failure) => 0, (data) => data);
   }
 
-  Future<int> completeGrupoFamiliar(int familiaId) async {
+  Future<int> completeGrupoFamiliar(int afiliadoId) async {
     final result =
-        await grupoFamiliarUsecaseDB.completeGrupoFamiliarUsecaseDB(familiaId);
+        await grupoFamiliarUsecaseDB.completeGrupoFamiliarUsecaseDB(afiliadoId);
 
     return result.fold((failure) => 0, (data) => data);
   }

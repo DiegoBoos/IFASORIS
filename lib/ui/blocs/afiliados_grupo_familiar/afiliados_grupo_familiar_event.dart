@@ -18,12 +18,6 @@ class GetAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   const GetAfiliadosGrupoFamiliar(this.familiaId);
 }
 
-class AddOrEditAfiliadoGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
-  final GrupoFamiliarEntity newAfiliado;
-
-  const AddOrEditAfiliadoGrupoFamiliar(this.newAfiliado);
-}
-
 class ErrorAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   final String message;
 

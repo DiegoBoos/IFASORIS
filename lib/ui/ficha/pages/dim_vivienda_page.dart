@@ -17,21 +17,18 @@ import '../../cubits/tipo_sanitario_vivienda/tipo_sanitario_vivienda_cubit.dart'
 import '../../cubits/tipo_vivienda/tipo_vivienda_cubit.dart';
 import '../../cubits/tratamiento_agua_vivienda/tratamiento_agua_vivienda_cubit.dart';
 import '../../cubits/ventilacion_vivienda/ventilacion_vivienda_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
 import '../widgets/datos_vivienda_form.dart';
 
 class DimViviendaPage extends StatefulWidget {
-  const DimViviendaPage(this.pageViewController, {super.key});
+  const DimViviendaPage(this.formKey, {super.key});
 
-  final PageController pageViewController;
+  final GlobalKey<FormState> formKey;
 
   @override
   State<DimViviendaPage> createState() => _DimViviendaPageState();
 }
 
 class _DimViviendaPageState extends State<DimViviendaPage> {
-  final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
@@ -70,63 +67,18 @@ class _DimViviendaPageState extends State<DimViviendaPage> {
         .getPresenciaAnimalesDB();
   }
 
-  void submitForm() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      final dimViviendaBloc = BlocProvider.of<DimViviendaBloc>(context);
-      final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
-      final afiliado = afiliadoPrefsBloc.state.afiliado!;
-
-      dimViviendaBloc.add(DimViviendaAfiliadoChanged(afiliado.afiliadoId!));
-      dimViviendaBloc.add(DimViviendaFamiliaChanged(afiliado.familiaId!));
-      dimViviendaBloc.add(DimViviendaSubmitted());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DimViviendaBloc, DimViviendaEntity>(
-      listener: (context, state) {
-        final formStatus = state.formStatus;
-        if (formStatus is DimViviendaSubmissionSuccess) {
-          widget.pageViewController.animateToPage(2,
-              duration: const Duration(milliseconds: 500), curve: Curves.ease);
-        }
-        if (formStatus is DimViviendaSubmissionFailed) {
-          CustomSnackBar.showSnackBar(context, formStatus.message, Colors.red);
-        }
-      },
+    return BlocBuilder<DimViviendaBloc, DimViviendaEntity>(
       builder: (context, state) {
         if (state.formStatus is DimViviendaFormEmpty ||
             state.formStatus is DimViviendaFormLoaded) {
-          return ListView(
-            children: [
-              Form(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  key: _formKey,
-                  child: DatosViviendaForm(
-                    dimVivienda: state,
-                  )),
-              const SizedBox(height: 20),
-              MaterialButton(
-                  disabledColor: Colors.grey,
-                  elevation: 0,
-                  color: Theme.of(context).colorScheme.primary,
-                  onPressed:
-                      state is DimViviendaFormLoading ? null : submitForm,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: state is DimViviendaFormLoading
-                        ? const CircularProgressIndicator()
-                        : const Text(
-                            'Siguiente',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                  )),
-            ],
-          );
+          return Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: widget.formKey,
+              child: DatosViviendaForm(
+                dimVivienda: state,
+              ));
         }
         return const Center(child: CircularProgressIndicator());
       },

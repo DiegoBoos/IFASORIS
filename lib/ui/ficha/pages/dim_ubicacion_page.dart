@@ -27,24 +27,21 @@ import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 import '../../cubits/tuberculo_platano/tuberculo_platano_cubit.dart';
 import '../../cubits/verdura/verdura_cubit.dart';
 import '../../cubits/via_acceso/via_acceso_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
 import '../widgets/acceso_ca_form.dart';
 import '../widgets/acceso_medico_form.dart';
 import '../widgets/aspectos_tierra.dart';
 import '../widgets/datos_ubicacion_form.dart';
 
 class DimUbicacionPage extends StatefulWidget {
-  const DimUbicacionPage(this.pageViewController, {super.key});
+  const DimUbicacionPage(this.formKey, {super.key});
 
-  final PageController pageViewController;
+  final GlobalKey<FormState> formKey;
 
   @override
   State<DimUbicacionPage> createState() => _DimUbicacionPageState();
 }
 
 class _DimUbicacionPageState extends State<DimUbicacionPage> {
-  final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
@@ -93,66 +90,21 @@ class _DimUbicacionPageState extends State<DimUbicacionPage> {
     BlocProvider.of<TipoCalendarioCubit>(context).getTiposCalendarioDB();
   }
 
-  void submitForm() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
-      final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
-      final afiliado = afiliadoPrefsBloc.state.afiliado!;
-
-      dimUbicacionBloc.add(DimUbicacionAfiliadoChanged(afiliado.afiliadoId!));
-      dimUbicacionBloc.add(DimUbicacionFamiliaChanged(afiliado.familiaId!));
-      dimUbicacionBloc.add(DimUbicacionSubmitted());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DimUbicacionBloc, DimUbicacionEntity>(
-      listener: (context, state) {
-        final formStatus = state.formStatus;
-        if (formStatus is DimUbicacionSubmissionSuccess) {
-          widget.pageViewController.animateToPage(
-            1,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.ease,
-          );
-        }
-        if (formStatus is DimUbicacionSubmissionFailed) {
-          CustomSnackBar.showSnackBar(context, formStatus.message, Colors.red);
-          Navigator.popUntil(context, ModalRoute.withName('home'));
-        }
-      },
+    return BlocBuilder<DimUbicacionBloc, DimUbicacionEntity>(
       builder: (context, state) {
         if (state.formStatus is DimUbicacionFormEmpty ||
             state.formStatus is DimUbicacionFormLoaded) {
           return Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              key: _formKey,
+              key: widget.formKey,
               child: ListView(
                 children: [
                   DatosUbicacionForm(dimUbicacion: state),
                   AccesoCAForm(dimUbicacion: state),
                   AccesoMedicoForm(dimUbicacion: state),
                   AspectosTierraForm(dimUbicacion: state),
-                  const SizedBox(height: 20),
-                  MaterialButton(
-                      disabledColor: Colors.grey,
-                      elevation: 0,
-                      color: Theme.of(context).colorScheme.primary,
-                      onPressed:
-                          state is DimUbicacionFormLoading ? null : submitForm,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        child: state is DimUbicacionFormLoading
-                            ? const CircularProgressIndicator()
-                            : const Text(
-                                'Siguiente',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                      )),
                 ],
               ));
         } else {

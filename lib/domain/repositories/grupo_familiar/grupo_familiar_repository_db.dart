@@ -4,7 +4,7 @@ import '../../../core/error/failure.dart';
 import '../../entities/grupo_familiar_entity.dart';
 
 abstract class GrupoFamiliarRepositoryDB {
-  Future<Either<Failure, Map<String, dynamic>>>
+  Future<Either<Failure, GrupoFamiliarEntity>>
       saveAfiliadoGrupoFamiliarRepositoryDB(
           GrupoFamiliarEntity afiliadoGrupoFamiliar);
 
@@ -14,7 +14,8 @@ abstract class GrupoFamiliarRepositoryDB {
   Future<Either<Failure, int>> deleteAfiliadoGrupoFamiliarRepositoryDB(
       int afiliadoId, int familiaId);
 
-  Future<Either<Failure, int>> completeGrupoFamiliarRepositoryDB(int familiaId);
+  Future<Either<Failure, int>> completeGrupoFamiliarRepositoryDB(
+      int afiliadoId);
 
   Future<Either<Failure, bool>> existeAfiliadoCabezaFamiliaRepositoryDB(
       int afiliadoId);

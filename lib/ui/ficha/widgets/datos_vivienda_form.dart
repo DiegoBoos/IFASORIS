@@ -97,7 +97,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   @override
   Widget build(BuildContext context) {
     final dimViviendaBloc = BlocProvider.of<DimViviendaBloc>(context);
-    return Column(
+    return ListView(
       children: [
         Container(
           alignment: Alignment.center,
@@ -105,7 +105,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           color: Theme.of(context).colorScheme.primary,
           child: const Text(
             'II. DATOS DE LA VIVIENDA',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
         const Divider(),

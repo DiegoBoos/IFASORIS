@@ -922,6 +922,7 @@ class _CuidadoSaludCondRiesgoFormState
         builder: (context, state) {
           if (state is ConductasSeguirLoaded) {
             return DropdownButtonFormField<int>(
+              isExpanded: true,
               value: _conductaSeguirId,
               items: state.conductasSeguirLoaded!
                   .map(

@@ -91,6 +91,7 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
           builder: (context, state) {
             if (state is EnfermedadesAcudeLoaded) {
               return DropdownButtonFormField<int>(
+                isExpanded: true,
                 value: _enfermedadAcudeId,
                 items: state.enfermedadesAcudeLoaded!
                     .map(

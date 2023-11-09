@@ -11,7 +11,11 @@ class SliderState extends Equatable {
 class SliderInitial extends SliderState {
   SliderInitial()
       : super(SliderModel(
-            currentPage: 0.0, bulletPrimario: 0.0, bulletSecundario: 0.0));
+          pageController: PageController(),
+          currentPage: 0,
+          bulletPrimario: 0.0,
+          bulletSecundario: 0.0,
+        ));
 }
 
 class SliderChanged extends SliderState {

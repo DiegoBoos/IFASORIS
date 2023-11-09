@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/entities/afiliado_entity.dart';
+import '../blocs/afiliado/afiliado_bloc.dart';
+import '../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../blocs/auth/auth_bloc.dart';
 import '../blocs/sync/sync_bloc.dart';
+import '../utils/eliminar_ficha.dart';
 
 class SyncDialog extends StatefulWidget {
   const SyncDialog({super.key, required this.type});
@@ -18,8 +22,14 @@ class _SyncDialogState extends State<SyncDialog> {
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     final syncBloc = BlocProvider.of<SyncBloc>(context);
+    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
     final usuario = authBloc.state.usuario!;
-    return BlocBuilder<SyncBloc, SyncState>(builder: (context, state) {
+    return BlocConsumer<SyncBloc, SyncState>(listener: (context, state) {
+      if (state is SyncSuccess) {
+        final afiliado = afiliadoPrefsBloc.state.afiliado!;
+        existeFicha(afiliado, context);
+      }
+    }, builder: (context, state) {
       if (state is SyncFailure) {
         return Padding(
             padding: const EdgeInsets.all(15.0),
@@ -115,6 +125,18 @@ class _SyncDialogState extends State<SyncDialog> {
                     ),
                   )
                 ]));
+      }
+    });
+  }
+
+  Future<void> existeFicha(
+      AfiliadoEntity afiliado, BuildContext context) async {
+    final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
+    await afiliadoBloc
+        .afiliadoTieneFicha(afiliado.afiliadoId!)
+        .then((afiliadoFicha) async {
+      if (afiliadoFicha != null) {
+        eliminarFicha(context, afiliado);
       }
     });
   }
