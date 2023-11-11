@@ -83,6 +83,7 @@ class _SlidesState extends State<_Slides> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: widget.pageController,
         children: widget.slides
             .map(

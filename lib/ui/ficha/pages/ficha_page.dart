@@ -100,20 +100,23 @@ class _FichaPageState extends State<FichaPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _pageController.previousPage(
-                                  duration: const Duration(milliseconds: 400),
-                                  curve: Curves.easeInOut,
-                                );
+                          if (currentPage > 0)
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _pageController.previousPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeInOut,
+                                  );
 
-                                sliderCubit.updateCurrentPage(currentPage - 1);
-                              },
-                              child: const Text('Anterior'),
+                                  sliderCubit
+                                      .updateCurrentPage(currentPage - 1);
+                                },
+                                child: const Text('Anterior'),
+                              ),
                             ),
-                          ),
-                          if (currentPage < 2) const SizedBox(width: 20),
+                          if (currentPage > 0 && currentPage < 2)
+                            const SizedBox(width: 20),
                           if (currentPage < 2)
                             Expanded(
                               child: ElevatedButton(
