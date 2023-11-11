@@ -2,43 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/ui/cubits/slider/slider_cubit.dart';
 
-class Slideshow extends StatelessWidget {
+class Slideshow extends StatefulWidget {
+  final PageController pageController;
   final List<Widget> slides;
-  final bool puntosArriba;
   final double bulletPrimario;
   final double bulletSecundario;
-  final Function()? onSlideChanged;
 
   const Slideshow({
     super.key,
+    required this.pageController,
     required this.slides,
-    this.puntosArriba = false,
     this.bulletPrimario = 15,
     this.bulletSecundario = 12,
-    this.onSlideChanged,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final sliderCubit = BlocProvider.of<SliderCubit>(context);
-    sliderCubit.updateBulletPrimario(bulletPrimario);
-    sliderCubit.updateBulletSecundario(bulletSecundario);
+  State<Slideshow> createState() => _SlideshowState();
+}
 
+class _SlideshowState extends State<Slideshow> {
+  @override
+  void initState() {
+    super.initState();
+    final sliderCubit = BlocProvider.of<SliderCubit>(context);
+    sliderCubit.updateBulletPrimario(widget.bulletPrimario);
+    sliderCubit.updateBulletSecundario(widget.bulletSecundario);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<SliderCubit, SliderState>(
       builder: (context, state) {
         if (state is SliderChanged) {
           return Column(
             children: [
-              if (puntosArriba)
-                Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: _Dots(slides.length)),
+              Container(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: _Dots(widget.slides.length)),
               Expanded(
                   child: _Slides(
-                slides: slides,
-                onSlideChanged: onSlideChanged,
+                pageController: widget.pageController,
+                slides: widget.slides,
               )),
-              if (!puntosArriba) _Dots(slides.length),
             ],
           );
         } else {
@@ -50,23 +55,27 @@ class Slideshow extends StatelessWidget {
 }
 
 class _Slides extends StatefulWidget {
-  const _Slides({required this.slides, required this.onSlideChanged});
+  const _Slides({
+    required this.pageController,
+    required this.slides,
+  });
+
+  final PageController pageController;
   final List<Widget> slides;
-  final Function()? onSlideChanged;
 
   @override
   State<_Slides> createState() => _SlidesState();
 }
 
 class _SlidesState extends State<_Slides> {
-  late final PageController _pageController;
-
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
-    final sliderCubit = BlocProvider.of<SliderCubit>(context);
-    sliderCubit.updatePageController(_pageController);
+
+    widget.pageController.addListener(() {
+      BlocProvider.of<SliderCubit>(context)
+          .updateCurrentPage(widget.pageController.page!.round());
+    });
   }
 
   @override
@@ -74,84 +83,12 @@ class _SlidesState extends State<_Slides> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _pageController,
+        controller: widget.pageController,
         children: widget.slides
             .map(
-              (slide) => Column(
-                children: [
-                  Expanded(flex: 1, child: _Slide(slide)),
-                  Expanded(
-                    flex: 0,
-                    child: SliderActions(
-                      onSlideChanged: widget.onSlideChanged,
-                      slidesLength: widget.slides.length,
-                    ),
-                  ),
-                ],
-              ),
+              (slide) => _Slide(slide),
             )
             .toList(),
-      ),
-    );
-  }
-}
-
-class SliderActions extends StatelessWidget {
-  const SliderActions({
-    required this.onSlideChanged,
-    required this.slidesLength,
-    super.key,
-  });
-
-  final Function()? onSlideChanged;
-  final int slidesLength;
-
-  @override
-  Widget build(BuildContext context) {
-    final sliderCubit = BlocProvider.of<SliderCubit>(context);
-    final currentPage = sliderCubit.state.sliderModel.currentPage;
-    final bool lastPage = currentPage == slidesLength - 1;
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25, bottom: 15),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          if (currentPage > 0)
-            Expanded(
-              child: MaterialButton(
-                  disabledColor: Colors.grey,
-                  elevation: 0,
-                  color: Theme.of(context).colorScheme.primary,
-                  onPressed: () {
-                    sliderCubit.updateCurrentPage(currentPage - 1);
-                  },
-                  child: Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      child: const Text(
-                        'Anterior',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-            ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: MaterialButton(
-                disabledColor: Colors.grey,
-                elevation: 0,
-                color: Theme.of(context).colorScheme.primary,
-                onPressed: onSlideChanged,
-                child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: Text(
-                      lastPage ? 'Finalizar' : 'Siguiente',
-                      style: const TextStyle(color: Colors.white),
-                    ))),
-          ),
-        ],
       ),
     );
   }

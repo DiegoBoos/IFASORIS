@@ -21,33 +21,41 @@ class FichaPage extends StatefulWidget {
 }
 
 class _FichaPageState extends State<FichaPage> {
+  final _pageController = PageController();
   final _formKeyUbicacion = GlobalKey<FormState>();
   final _formKeyVivienda = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    super.initState();
-    final sliderCubit = BlocProvider.of<SliderCubit>(context);
-    sliderCubit.initState();
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final sliderCubit = BlocProvider.of<SliderCubit>(context);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Ficha'),
         ),
-        body: Theme(
-            data: Theme.of(context).copyWith(
-                colorScheme: const ColorScheme.light(primary: Colors.green)),
-            child: MultiBlocListener(
+        body: BlocProvider(
+          create: (context) => SliderCubit(),
+          child: Builder(builder: (context) {
+            final sliderCubit =
+                BlocProvider.of<SliderCubit>(context, listen: true);
+            final currentPage = sliderCubit.state.sliderModel.currentPage;
+
+            return MultiBlocListener(
                 listeners: [
                   BlocListener<DimUbicacionBloc, DimUbicacionEntity>(
                     listener: (context, state) {
                       final formStatus = state.formStatus;
                       if (formStatus is DimUbicacionSubmissionSuccess) {
-                        sliderCubit.updateCurrentPage(1);
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+
+                        sliderCubit.updateCurrentPage(currentPage + 1);
                       }
                       if (formStatus is DimUbicacionSubmissionFailed) {
                         CustomSnackBar.showSnackBar(
@@ -61,7 +69,12 @@ class _FichaPageState extends State<FichaPage> {
                     listener: (context, state) {
                       final formStatus = state.formStatus;
                       if (formStatus is DimViviendaSubmissionSuccess) {
-                        sliderCubit.updateCurrentPage(2);
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+
+                        sliderCubit.updateCurrentPage(currentPage + 1);
                       }
                       if (formStatus is DimViviendaSubmissionFailed) {
                         CustomSnackBar.showSnackBar(
@@ -70,23 +83,59 @@ class _FichaPageState extends State<FichaPage> {
                     },
                   ),
                 ],
-                child: Slideshow(
-                  puntosArriba: true,
-                  onSlideChanged: () {
-                    final page = sliderCubit.state.sliderModel.currentPage;
-                    if (page == 0) {
-                      submitUbicacionForm();
-                    }
-                    if (page == 1) {
-                      submitViviendaForm();
-                    }
-                  },
-                  slides: [
-                    DimUbicacionPage(_formKeyUbicacion),
-                    DimViviendaPage(_formKeyVivienda),
-                    const GrupoFamiliarPage()
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Slideshow(
+                        pageController: _pageController,
+                        slides: [
+                          DimUbicacionPage(_formKeyUbicacion),
+                          DimViviendaPage(_formKeyVivienda),
+                          const GrupoFamiliarPage()
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _pageController.previousPage(
+                                  duration: const Duration(milliseconds: 400),
+                                  curve: Curves.easeInOut,
+                                );
+
+                                sliderCubit.updateCurrentPage(currentPage - 1);
+                              },
+                              child: const Text('Anterior'),
+                            ),
+                          ),
+                          if (currentPage < 2) const SizedBox(width: 20),
+                          if (currentPage < 2)
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (currentPage == 0) {
+                                    submitUbicacionForm();
+                                  }
+
+                                  if (currentPage == 1) {
+                                    submitViviendaForm();
+                                  }
+                                },
+                                child: const Text('Siguiente'),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ],
-                ))));
+                ));
+          }),
+        ));
   }
 
   void submitUbicacionForm() {

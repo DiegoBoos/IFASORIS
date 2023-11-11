@@ -88,7 +88,6 @@ import 'ui/blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import 'ui/blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import 'ui/blocs/sync/sync_bloc.dart';
 import 'ui/cubits/internet/internet_cubit.dart';
-import 'ui/cubits/slider/slider_cubit.dart';
 
 final locator = GetIt.instance;
 
@@ -178,7 +177,6 @@ void init() {
   costumbrePracticaInit();
   sancionJusticiaInit();
   nroCuartoViviendaInit();
-  sliderInit();
   // external
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => SharedPreferencesService());
@@ -227,11 +225,6 @@ void authInit() {
 void internetInit() {
   // cubit
   locator.registerFactory(() => InternetCubit());
-}
-
-void sliderInit() {
-  // cubit
-  locator.registerFactory(() => SliderCubit());
 }
 
 void syncInit() {

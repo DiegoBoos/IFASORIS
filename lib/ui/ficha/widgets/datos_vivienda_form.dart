@@ -138,6 +138,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _tipoVivienda =
                                           value! ? e.tipoViviendaId : null;
                                     });
+                                    dimViviendaBloc.add(
+                                        TipoViviendaChanged(_tipoVivienda!));
                                     formstate.didChange(_tipoVivienda);
                                   },
                                 ),
@@ -164,9 +166,6 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                     return 'Seleccione una opción';
                   }
                   return null;
-                },
-                onSaved: (int? newValue) {
-                  dimViviendaBloc.add(TipoViviendaChanged(newValue!));
                 },
               );
             }
@@ -241,6 +240,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _tenenciaVivienda =
                                           value! ? e.tenenciaViviendaId : null;
                                     });
+                                    dimViviendaBloc.add(TenenciaViviendaChanged(
+                                        _tenenciaVivienda!));
                                     formstate.didChange(_tenenciaVivienda);
                                   },
                                 ),
@@ -267,9 +268,6 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                     return 'Seleccione una opción';
                   }
                   return null;
-                },
-                onSaved: (int? newValue) {
-                  dimViviendaBloc.add(TenenciaViviendaChanged(newValue!));
                 },
               );
             }
@@ -578,6 +576,10 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                           ? e.ventilacionViviendaId
                                           : null;
                                     });
+                                    dimViviendaBloc.add(
+                                        VentilacionViviendaChanged(
+                                            _ventilacionViviendaId!));
+
                                     formstate.didChange(_ventilacionViviendaId);
                                   },
                                 ),
@@ -605,9 +607,6 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                     return 'Seleccione una opción';
                   }
                   return null;
-                },
-                onSaved: (int? newValue) {
-                  dimViviendaBloc.add(VentilacionViviendaChanged(newValue!));
                 },
               );
             }
@@ -645,9 +644,11 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                       _iluminacionViviendaId = value!
                                           ? e.iluminacionViviendaId
                                           : null;
-                                      formstate
-                                          .didChange(_iluminacionViviendaId);
                                     });
+                                    formstate.didChange(_iluminacionViviendaId);
+                                    dimViviendaBloc.add(
+                                        IluminacionViviendaChanged(
+                                            _iluminacionViviendaId!));
                                   },
                                 ),
                                 Text(e.descripcion),
@@ -674,9 +675,6 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                     return 'Seleccione una opción';
                   }
                   return null;
-                },
-                onSaved: (int? newValue) {
-                  dimViviendaBloc.add(IluminacionViviendaChanged(newValue!));
                 },
               );
             }

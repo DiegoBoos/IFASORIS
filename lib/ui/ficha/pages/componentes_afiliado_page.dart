@@ -35,131 +35,189 @@ class ComponentesAfiliado extends StatefulWidget {
 }
 
 class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
-  final formKeyEstilosVidaSaludable = GlobalKey<FormState>();
-  final formKeyCuidadoSaludCondRiesgo = GlobalKey<FormState>();
-  final formKeyDimSocioCulturalPueblosIndigenas = GlobalKey<FormState>();
-  final formKeyAtencionSalud = GlobalKey<FormState>();
+  final _pageController = PageController();
+  final _formKeyEstilosVidaSaludable = GlobalKey<FormState>();
+  final _formKeyCuidadoSaludCondRiesgo = GlobalKey<FormState>();
+  final _formKeyDimSocioCulturalPueblosIndigenas = GlobalKey<FormState>();
+  final _formKeyAtencionSalud = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    super.initState();
-    final sliderCubit = BlocProvider.of<SliderCubit>(context);
-    sliderCubit.initState();
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final sliderCubit = BlocProvider.of<SliderCubit>(context);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Componentes Afiliado'),
         ),
-        body: MultiBlocListener(
-            listeners: [
-              BlocListener<evs.EstiloVidaSaludableBloc,
-                  EstiloVidaSaludableEntity>(
-                listener: (context, state) {
-                  final formStatus = state.formStatus;
-                  if (formStatus is evs.EstiloVidaSaludableSubmissionSuccess) {
-                    sliderCubit.updateCurrentPage(1);
-                  }
+        body: BlocProvider(
+          create: (context) => SliderCubit(),
+          child: Builder(builder: (context) {
+            final sliderCubit =
+                BlocProvider.of<SliderCubit>(context, listen: true);
+            final currentPage = sliderCubit.state.sliderModel.currentPage;
 
-                  if (formStatus is evs.EstiloVidaSaludableSubmissionFailed) {
-                    CustomSnackBar.showSnackBar(
-                        context, formStatus.message, Colors.red);
-                  }
-                },
-              ),
-              BlocListener<cscr.CuidadoSaludCondRiesgoBloc,
-                  CuidadoSaludCondRiesgoEntity>(
-                listener: (context, state) {
-                  final formStatus = state.formStatus;
-                  if (formStatus
-                      is cscr.CuidadoSaludCondRiesgoSubmissionSuccess) {
-                    sliderCubit.updateCurrentPage(2);
-                  }
+            return MultiBlocListener(
+                listeners: [
+                  BlocListener<evs.EstiloVidaSaludableBloc,
+                      EstiloVidaSaludableEntity>(
+                    listener: (context, state) {
+                      final formStatus = state.formStatus;
+                      if (formStatus
+                          is evs.EstiloVidaSaludableSubmissionSuccess) {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
 
-                  if (formStatus
-                      is cscr.CuidadoSaludCondRiesgoSubmissionFailed) {
-                    CustomSnackBar.showSnackBar(
-                        context, formStatus.message, Colors.red);
-                  }
-                },
-              ),
-              BlocListener<dspi.DimensionSocioCulturalPueblosIndigenasBloc,
-                  DimensionSocioCulturalPueblosIndigenasEntity>(
-                listener: (context, state) {
-                  final formStatus = state.formStatus;
-                  if (formStatus is dspi
-                      .DimensionSocioCulturalPueblosIndigenasSubmissionSuccess) {
-                    sliderCubit.updateCurrentPage(3);
-                  }
+                        sliderCubit.updateCurrentPage(currentPage + 1);
+                      }
 
-                  if (formStatus is dspi
-                      .DimensionSocioCulturalPueblosIndigenasSubmissionFailed) {
-                    CustomSnackBar.showSnackBar(
-                        context, formStatus.message, Colors.red);
-                  }
-                },
-              ),
-              BlocListener<ats.AtencionSaludBloc, AtencionSaludEntity>(
-                listener: (context, state) {
-                  final formStatus = state.formStatus;
-                  if (formStatus is ats.AtencionSaludSubmissionSuccess) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return buildCompleted();
-                        });
-                  }
+                      if (formStatus
+                          is evs.EstiloVidaSaludableSubmissionFailed) {
+                        CustomSnackBar.showSnackBar(
+                            context, formStatus.message, Colors.red);
+                      }
+                    },
+                  ),
+                  BlocListener<cscr.CuidadoSaludCondRiesgoBloc,
+                      CuidadoSaludCondRiesgoEntity>(
+                    listener: (context, state) {
+                      final formStatus = state.formStatus;
+                      if (formStatus
+                          is cscr.CuidadoSaludCondRiesgoSubmissionSuccess) {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
 
-                  if (formStatus is ats.AtencionSaludSubmissionFailed) {
-                    CustomSnackBar.showSnackBar(
-                        context, formStatus.message, Colors.red);
-                  }
-                },
-              ),
-            ],
-            child: Slideshow(
-              puntosArriba: true,
-              onSlideChanged: () {
-                final page = sliderCubit.state.sliderModel.currentPage;
-                if (page == 0) {
-                  _submitEstilosVidaSaludableForm();
-                }
-                if (page == 1) {
-                  _submitCuidadoSaludCondRiesgoForm();
-                }
-                if (page == 2) {
-                  _submitDimSocioCulturalPueblosIndigenasForm();
-                }
-                if (page == 3) {
-                  _submitAtencionSaludForm();
-                }
-              },
-              slides: [
-                EstilosVidaSaludablePage(
-                  formKey: formKeyEstilosVidaSaludable,
-                  afiliado: widget.afiliado,
-                ),
-                CuidadoSaludCondRiesgoPage(
-                  formKey: formKeyCuidadoSaludCondRiesgo,
-                  afiliado: widget.afiliado,
-                ),
-                DimensionSocioCulturalPueblosIndigenasPage(
-                  formKey: formKeyDimSocioCulturalPueblosIndigenas,
-                  afiliado: widget.afiliado,
-                ),
-                AtencionSaludPage(
-                  formKey: formKeyAtencionSalud,
-                  afiliado: widget.afiliado,
-                ),
-              ],
-            )));
+                        sliderCubit.updateCurrentPage(currentPage + 1);
+                      }
+
+                      if (formStatus
+                          is cscr.CuidadoSaludCondRiesgoSubmissionFailed) {
+                        CustomSnackBar.showSnackBar(
+                            context, formStatus.message, Colors.red);
+                      }
+                    },
+                  ),
+                  BlocListener<dspi.DimensionSocioCulturalPueblosIndigenasBloc,
+                      DimensionSocioCulturalPueblosIndigenasEntity>(
+                    listener: (context, state) {
+                      final formStatus = state.formStatus;
+                      if (formStatus is dspi
+                          .DimensionSocioCulturalPueblosIndigenasSubmissionSuccess) {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+
+                        sliderCubit.updateCurrentPage(currentPage + 1);
+                      }
+
+                      if (formStatus is dspi
+                          .DimensionSocioCulturalPueblosIndigenasSubmissionFailed) {
+                        CustomSnackBar.showSnackBar(
+                            context, formStatus.message, Colors.red);
+                      }
+                    },
+                  ),
+                  BlocListener<ats.AtencionSaludBloc, AtencionSaludEntity>(
+                    listener: (context, state) {
+                      final formStatus = state.formStatus;
+                      if (formStatus is ats.AtencionSaludSubmissionSuccess) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return buildCompleted();
+                            });
+                      }
+
+                      if (formStatus is ats.AtencionSaludSubmissionFailed) {
+                        CustomSnackBar.showSnackBar(
+                            context, formStatus.message, Colors.red);
+                      }
+                    },
+                  ),
+                ],
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Slideshow(
+                        pageController: _pageController,
+                        slides: [
+                          EstilosVidaSaludablePage(
+                            formKey: _formKeyEstilosVidaSaludable,
+                            afiliado: widget.afiliado,
+                          ),
+                          CuidadoSaludCondRiesgoPage(
+                            formKey: _formKeyCuidadoSaludCondRiesgo,
+                            afiliado: widget.afiliado,
+                          ),
+                          DimensionSocioCulturalPueblosIndigenasPage(
+                            formKey: _formKeyDimSocioCulturalPueblosIndigenas,
+                            afiliado: widget.afiliado,
+                          ),
+                          AtencionSaludPage(
+                            formKey: _formKeyAtencionSalud,
+                            afiliado: widget.afiliado,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _pageController.previousPage(
+                                  duration: const Duration(milliseconds: 400),
+                                  curve: Curves.easeInOut,
+                                );
+
+                                sliderCubit.updateCurrentPage(currentPage - 1);
+                              },
+                              child: const Text('Anterior'),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (currentPage == 0) {
+                                  _submitEstilosVidaSaludableForm();
+                                }
+                                if (currentPage == 1) {
+                                  _submitCuidadoSaludCondRiesgoForm();
+                                }
+                                if (currentPage == 2) {
+                                  _submitDimSocioCulturalPueblosIndigenasForm();
+                                }
+                                if (currentPage == 3) {
+                                  _submitAtencionSaludForm();
+                                }
+                              },
+                              child: Text(
+                                  currentPage < 3 ? 'Siguiente' : 'Finalizar'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ));
+          }),
+        ));
   }
 
   void _submitEstilosVidaSaludableForm() {
-    final formState = formKeyEstilosVidaSaludable.currentState;
+    final formState = _formKeyEstilosVidaSaludable.currentState;
     if (formState != null && formState.validate()) {
       formState.save();
 
@@ -175,7 +233,7 @@ class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
   }
 
   void _submitCuidadoSaludCondRiesgoForm() {
-    final formState = formKeyCuidadoSaludCondRiesgo.currentState;
+    final formState = _formKeyCuidadoSaludCondRiesgo.currentState;
     if (formState != null && formState.validate()) {
       formState.save();
 
@@ -193,7 +251,7 @@ class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
   }
 
   void _submitDimSocioCulturalPueblosIndigenasForm() {
-    final formState = formKeyDimSocioCulturalPueblosIndigenas.currentState;
+    final formState = _formKeyDimSocioCulturalPueblosIndigenas.currentState;
     if (formState != null && formState.validate()) {
       formState.save();
 
@@ -211,7 +269,7 @@ class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
   }
 
   void _submitAtencionSaludForm() {
-    final formState = formKeyAtencionSalud.currentState;
+    final formState = _formKeyAtencionSalud.currentState;
     if (formState != null && formState.validate()) {
       formState.save();
 

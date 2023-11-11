@@ -75,7 +75,6 @@ import 'ui/cubits/sancion_justicia/sancion_justicia_cubit.dart';
 import 'ui/cubits/seguimiento_enfermedad/seguimiento_enfermedad_cubit.dart';
 import 'ui/cubits/servicio_publico_vivienda/servicio_publico_vivienda_cubit.dart';
 import 'ui/cubits/servicio_solicitado/servicio_solicitado_cubit.dart';
-import 'ui/cubits/slider/slider_cubit.dart';
 import 'ui/cubits/sync_log/sync_log_cubit.dart';
 import 'ui/cubits/techo_vivienda/techo_vivienda_cubit.dart';
 import 'ui/cubits/tenencia_vivienda/tenencia_vivienda_cubit.dart';
@@ -374,9 +373,6 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => di.locator<NroCuartoViviendaCubit>(),
-          ),
-          BlocProvider(
-            create: (_) => di.locator<SliderCubit>(),
           ),
         ],
         child: MaterialApp(
