@@ -74,6 +74,7 @@ class AtencionSaludEntity {
       );
 
   Map<String, dynamic> toJson() => {
+        "AtencionSalud_id": atencionSaludId,
         "Afiliado_id": afiliadoId,
         "Familia_id": familiaId,
         "EnfermedadAcude_id": enfermedadAcudeId,

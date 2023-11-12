@@ -56,10 +56,13 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
       left join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
       WHERE (Asp3_GrupoFamiliar.isComplete=0 OR Asp3_GrupoFamiliar.isComplete IS NULL) AND NumFicha = '' AND Ficha_id_remote IS NULL
     	UNION ALL
-      SELECT  'FichasRegistradasCompletas' as Estadistica,  count(*) as Cantidad FROM Ficha
-      inner join Familia ON (Familia.Ficha_id  =  Ficha.Ficha_id)
-      inner join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
-      WHERE Asp3_GrupoFamiliar.isComplete=1 AND NumFicha = '' AND Ficha_id_remote IS NULL
+      SELECT  'FichasRegistradasCompletas' as Estadistica,  count(*) as Cantidad
+      FROM Ficha 
+	    WHERE NumFicha = '' AND Ficha.Ficha_id Not In(
+	    SELECT FichasIncompletas.Ficha_id FROM Ficha as FichasIncompletas
+      inner join Familia ON (Familia.Ficha_id  =  FichasIncompletas.Ficha_id)
+      left join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
+      WHERE (Asp3_GrupoFamiliar.isComplete=0 OR Asp3_GrupoFamiliar.isComplete IS NULL) AND NumFicha = '' AND Ficha_id_remote IS NULL)
      	UNION ALL 
     	SELECT  'AfiliadosReportados' as Estadistica,  count(*) as Cantidad FROM Asp3_GrupoFamiliar
     	inner join Familia ON (Familia.Familia_id  =  Asp3_GrupoFamiliar.Familia_id)
