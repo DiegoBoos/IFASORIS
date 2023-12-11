@@ -10,7 +10,7 @@ class MedioComunicacionUsecase {
   MedioComunicacionUsecase(this.repository);
 
   Future<Either<Failure, List<MedioComunicacionEntity>>>
-      getMediosComunicacionUsecase() {
-    return repository.getMediosComunicacionRepository();
+      getMediosComunicacionUsecase(int dtoId) {
+    return repository.getMediosComunicacionRepository(dtoId);
   }
 }

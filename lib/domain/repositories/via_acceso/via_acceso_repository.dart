@@ -4,5 +4,6 @@ import '../../../core/error/failure.dart';
 import '../../entities/via_acceso_entity.dart';
 
 abstract class ViaAccesoRepository {
-  Future<Either<Failure, List<ViaAccesoEntity>>> getViasAccesoRepository();
+  Future<Either<Failure, List<ViaAccesoEntity>>> getViasAccesoRepository(
+      int dtoId);
 }

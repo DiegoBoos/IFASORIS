@@ -8,7 +8,7 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/nombre_lengua_materna_model.dart';
 
 abstract class NombreLenguaMaternaRemoteDataSource {
-  Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna();
+  Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna(int dtoId);
 }
 
 class NombreLenguaMaternaRemoteDataSourceImpl
@@ -19,9 +19,11 @@ class NombreLenguaMaternaRemoteDataSourceImpl
   NombreLenguaMaternaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna() async {
+  Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna(
+      int dtoId) async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/nombrelenguamaneja');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/nombrelenguamanejaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

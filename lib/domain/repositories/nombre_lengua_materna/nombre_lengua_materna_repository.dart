@@ -5,5 +5,5 @@ import '../../entities/nombre_lengua_materna_entity.dart';
 
 abstract class NombreLenguaMaternaRepository {
   Future<Either<Failure, List<NombreLenguaMaternaEntity>>>
-      getNombresLenguasMaternaRepository();
+      getNombresLenguasMaternaRepository(int dtoId);
 }

@@ -8,7 +8,8 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/evento_costumbre_participa_model.dart';
 
 abstract class EventoCostumbreParticipaRemoteDataSource {
-  Future<List<EventoCostumbreParticipaModel>> getEventosCostumbresParticipa();
+  Future<List<EventoCostumbreParticipaModel>> getEventosCostumbresParticipa(
+      int dtoId);
 }
 
 class EventoCostumbreParticipaRemoteDataSourceImpl
@@ -19,11 +20,11 @@ class EventoCostumbreParticipaRemoteDataSourceImpl
   EventoCostumbreParticipaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<EventoCostumbreParticipaModel>>
-      getEventosCostumbresParticipa() async {
+  Future<List<EventoCostumbreParticipaModel>> getEventosCostumbresParticipa(
+      int dtoId) async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/eventoscostumbresparticipa');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/eventoscostumbresparticipaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

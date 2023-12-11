@@ -10,7 +10,7 @@ class EnfermedadTradicionalUsecase {
   EnfermedadTradicionalUsecase(this.repository);
 
   Future<Either<Failure, List<EnfermedadTradicionalEntity>>>
-      getEnfermedadesTradicionalesUsecase() {
-    return repository.getEnfermedadesTradicionalesRepository();
+      getEnfermedadesTradicionalesUsecase(int dtoId) {
+    return repository.getEnfermedadesTradicionalesRepository(dtoId);
   }
 }

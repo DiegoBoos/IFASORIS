@@ -10,7 +10,7 @@ class AutoridadIndigenaUsecase {
   AutoridadIndigenaUsecase(this.repository);
 
   Future<Either<Failure, List<AutoridadIndigenaEntity>>>
-      getAutoridadesIndigenasUsecase() {
-    return repository.getAutoridadesIndigenasRepository();
+      getAutoridadesIndigenasUsecase(int dtoId) {
+    return repository.getAutoridadesIndigenasRepository(dtoId);
   }
 }

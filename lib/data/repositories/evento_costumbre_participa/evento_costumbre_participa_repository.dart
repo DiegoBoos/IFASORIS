@@ -18,10 +18,10 @@ class EventoCostumbreParticipaRepositoryImpl
 
   @override
   Future<Either<Failure, List<EventoCostumbreParticipaEntity>>>
-      getEventosCostumbresParticipaRepository() async {
+      getEventosCostumbresParticipaRepository(int dtoId) async {
     try {
       final result = await eventoCostumbreParticipaRemoteDataSource
-          .getEventosCostumbresParticipa();
+          .getEventosCostumbresParticipa(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

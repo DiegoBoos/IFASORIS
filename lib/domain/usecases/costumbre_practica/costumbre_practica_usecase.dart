@@ -10,7 +10,7 @@ class CostumbrePracticaUsecase {
   CostumbrePracticaUsecase(this.repository);
 
   Future<Either<Failure, List<CostumbrePracticaEntity>>>
-      getCostumbresPracticanUsecase() {
-    return repository.getCostumbresPracticanRepository();
+      getCostumbresPracticanUsecase(int dtoId) {
+    return repository.getCostumbresPracticanRepository(dtoId);
   }
 }

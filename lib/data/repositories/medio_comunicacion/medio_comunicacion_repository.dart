@@ -16,10 +16,10 @@ class MedioComunicacionRepositoryImpl implements MedioComunicacionRepository {
 
   @override
   Future<Either<Failure, List<MedioComunicacionEntity>>>
-      getMediosComunicacionRepository() async {
+      getMediosComunicacionRepository(int dtoId) async {
     try {
       final result =
-          await medioComunicacionRemoteDataSource.getMediosComunicacion();
+          await medioComunicacionRemoteDataSource.getMediosComunicacion(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

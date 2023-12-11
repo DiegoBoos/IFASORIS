@@ -8,7 +8,7 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/via_acceso_model.dart';
 
 abstract class ViaAccesoRemoteDataSource {
-  Future<List<ViaAccesoModel>> getViasAcceso();
+  Future<List<ViaAccesoModel>> getViasAcceso(int dtoId);
 }
 
 class ViaAccesoRemoteDataSourceImpl implements ViaAccesoRemoteDataSource {
@@ -18,9 +18,10 @@ class ViaAccesoRemoteDataSourceImpl implements ViaAccesoRemoteDataSource {
   ViaAccesoRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<ViaAccesoModel>> getViasAcceso() async {
+  Future<List<ViaAccesoModel>> getViasAcceso(int dtoId) async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/viasacceso');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/viasaccesobyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

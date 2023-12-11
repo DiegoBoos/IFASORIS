@@ -18,10 +18,10 @@ class EnfermedadTradicionalRepositoryImpl
 
   @override
   Future<Either<Failure, List<EnfermedadTradicionalEntity>>>
-      getEnfermedadesTradicionalesRepository() async {
+      getEnfermedadesTradicionalesRepository(int dtoId) async {
     try {
       final result = await enfermedadTradicionalRemoteDataSource
-          .getEnfermedadesTradicionales();
+          .getEnfermedadesTradicionales(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

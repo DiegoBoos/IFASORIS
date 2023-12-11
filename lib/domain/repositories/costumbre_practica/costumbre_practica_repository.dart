@@ -5,5 +5,5 @@ import '../../entities/costumbre_practica_entity.dart';
 
 abstract class CostumbrePracticaRepository {
   Future<Either<Failure, List<CostumbrePracticaEntity>>>
-      getCostumbresPracticanRepository();
+      getCostumbresPracticanRepository(int dtoId);
 }

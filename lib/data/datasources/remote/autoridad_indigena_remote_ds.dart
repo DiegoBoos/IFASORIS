@@ -8,7 +8,7 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/autoridad_indigena_model.dart';
 
 abstract class AutoridadIndigenaRemoteDataSource {
-  Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas();
+  Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas(int dtoId);
 }
 
 class AutoridadIndigenaRemoteDataSourceImpl
@@ -19,9 +19,11 @@ class AutoridadIndigenaRemoteDataSourceImpl
   AutoridadIndigenaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas() async {
+  Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas(
+      int dtoId) async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/AutoridadIndigena');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/AutoridadIndigenaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -16,10 +16,10 @@ class CostumbrePracticaRepositoryImpl implements CostumbrePracticaRepository {
 
   @override
   Future<Either<Failure, List<CostumbrePracticaEntity>>>
-      getCostumbresPracticanRepository() async {
+      getCostumbresPracticanRepository(int dtoId) async {
     try {
       final result =
-          await costumbrePracticaRemoteDataSource.getCostumbresPractican();
+          await costumbrePracticaRemoteDataSource.getCostumbresPractican(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

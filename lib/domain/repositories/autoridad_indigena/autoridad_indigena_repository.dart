@@ -5,5 +5,5 @@ import '../../../core/error/failure.dart';
 
 abstract class AutoridadIndigenaRepository {
   Future<Either<Failure, List<AutoridadIndigenaEntity>>>
-      getAutoridadesIndigenasRepository();
+      getAutoridadesIndigenasRepository(int dtoId);
 }

@@ -8,7 +8,7 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/costumbre_practica_model.dart';
 
 abstract class CostumbrePracticaRemoteDataSource {
-  Future<List<CostumbrePracticaModel>> getCostumbresPractican();
+  Future<List<CostumbrePracticaModel>> getCostumbresPractican(int dtoId);
 }
 
 class CostumbrePracticaRemoteDataSourceImpl
@@ -19,9 +19,10 @@ class CostumbrePracticaRemoteDataSourceImpl
   CostumbrePracticaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<CostumbrePracticaModel>> getCostumbresPractican() async {
+  Future<List<CostumbrePracticaModel>> getCostumbresPractican(int dtoId) async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/costumbrespractican');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/costumbrespracticanByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

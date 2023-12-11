@@ -17,10 +17,10 @@ class NombreLenguaMaternaRepositoryImpl
 
   @override
   Future<Either<Failure, List<NombreLenguaMaternaEntity>>>
-      getNombresLenguasMaternaRepository() async {
+      getNombresLenguasMaternaRepository(int dtoId) async {
     try {
-      final result =
-          await nombreLenguaMaternaRemoteDataSource.getNombresLenguasMaterna();
+      final result = await nombreLenguaMaternaRemoteDataSource
+          .getNombresLenguasMaterna(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

@@ -14,10 +14,10 @@ class ViaAccesoRepositoryImpl implements ViaAccesoRepository {
   ViaAccesoRepositoryImpl({required this.viaAccesoRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<ViaAccesoEntity>>>
-      getViasAccesoRepository() async {
+  Future<Either<Failure, List<ViaAccesoEntity>>> getViasAccesoRepository(
+      int dtoId) async {
     try {
-      final result = await viaAccesoRemoteDataSource.getViasAcceso();
+      final result = await viaAccesoRemoteDataSource.getViasAcceso(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

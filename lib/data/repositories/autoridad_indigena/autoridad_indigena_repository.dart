@@ -16,10 +16,10 @@ class AutoridadIndigenaRepositoryImpl implements AutoridadIndigenaRepository {
 
   @override
   Future<Either<Failure, List<AutoridadIndigenaEntity>>>
-      getAutoridadesIndigenasRepository() async {
+      getAutoridadesIndigenasRepository(int dtoId) async {
     try {
-      final result =
-          await autoridadIndigenaRemoteDataSource.getAutoridadesIndigenas();
+      final result = await autoridadIndigenaRemoteDataSource
+          .getAutoridadesIndigenas(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

@@ -10,7 +10,7 @@ class NombreLenguaMaternaUsecase {
   NombreLenguaMaternaUsecase(this.repository);
 
   Future<Either<Failure, List<NombreLenguaMaternaEntity>>>
-      getNombresLenguasMaternaUsecase() {
-    return repository.getNombresLenguasMaternaRepository();
+      getNombresLenguasMaternaUsecase(int dtoId) {
+    return repository.getNombresLenguasMaternaRepository(dtoId);
   }
 }

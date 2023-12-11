@@ -18,10 +18,10 @@ class LugarPlantaMedicinalRepositoryImpl
 
   @override
   Future<Either<Failure, List<LugarPlantaMedicinalEntity>>>
-      getLugaresPlantasMedicinalesRepository() async {
+      getLugaresPlantasMedicinalesRepository(int dtoId) async {
     try {
       final result = await lugarPlantaMedicinalRemoteDataSource
-          .getLugaresPlantasMedicinales();
+          .getLugaresPlantasMedicinales(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

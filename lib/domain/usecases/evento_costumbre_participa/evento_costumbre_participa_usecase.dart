@@ -10,7 +10,7 @@ class EventoCostumbreParticipaUsecase {
   EventoCostumbreParticipaUsecase(this.repository);
 
   Future<Either<Failure, List<EventoCostumbreParticipaEntity>>>
-      getEventosCostumbresParticipaUsecase() {
-    return repository.getEventosCostumbresParticipaRepository();
+      getEventosCostumbresParticipaUsecase(int dtoId) {
+    return repository.getEventosCostumbresParticipaRepository(dtoId);
   }
 }

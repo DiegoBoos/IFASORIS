@@ -8,7 +8,8 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/enfermedad_tradicional_model.dart';
 
 abstract class EnfermedadTradicionalRemoteDataSource {
-  Future<List<EnfermedadTradicionalModel>> getEnfermedadesTradicionales();
+  Future<List<EnfermedadTradicionalModel>> getEnfermedadesTradicionales(
+      int dtoId);
 }
 
 class EnfermedadTradicionalRemoteDataSourceImpl
@@ -19,11 +20,11 @@ class EnfermedadTradicionalRemoteDataSourceImpl
   EnfermedadTradicionalRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<EnfermedadTradicionalModel>>
-      getEnfermedadesTradicionales() async {
+  Future<List<EnfermedadTradicionalModel>> getEnfermedadesTradicionales(
+      int dtoId) async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/enfermedadestradicionales');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/enfermedadestradicionalesByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

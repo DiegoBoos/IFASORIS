@@ -10,7 +10,7 @@ class LugarPlantaMedicinalUsecase {
   LugarPlantaMedicinalUsecase(this.repository);
 
   Future<Either<Failure, List<LugarPlantaMedicinalEntity>>>
-      getLugaresPlantasMedicinalesUsecase() {
-    return repository.getLugaresPlantasMedicinalesRepository();
+      getLugaresPlantasMedicinalesUsecase(int dtoId) {
+    return repository.getLugaresPlantasMedicinalesRepository(dtoId);
   }
 }

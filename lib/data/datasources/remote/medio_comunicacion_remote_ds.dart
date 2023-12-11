@@ -8,7 +8,7 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/medio_comunicacion_model.dart';
 
 abstract class MedioComunicacionRemoteDataSource {
-  Future<List<MedioComunicacionModel>> getMediosComunicacion();
+  Future<List<MedioComunicacionModel>> getMediosComunicacion(int dtoId);
 }
 
 class MedioComunicacionRemoteDataSourceImpl
@@ -19,9 +19,10 @@ class MedioComunicacionRemoteDataSourceImpl
   MedioComunicacionRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<MedioComunicacionModel>> getMediosComunicacion() async {
+  Future<List<MedioComunicacionModel>> getMediosComunicacion(int dtoId) async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/medioscomunicacion');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/medioscomunicacionByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

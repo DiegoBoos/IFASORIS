@@ -9,7 +9,8 @@ class ViaAccesoUsecase {
 
   ViaAccesoUsecase(this.repository);
 
-  Future<Either<Failure, List<ViaAccesoEntity>>> getViasAccesoUsecase() {
-    return repository.getViasAccesoRepository();
+  Future<Either<Failure, List<ViaAccesoEntity>>> getViasAccesoUsecase(
+      int dtoId) {
+    return repository.getViasAccesoRepository(dtoId);
   }
 }

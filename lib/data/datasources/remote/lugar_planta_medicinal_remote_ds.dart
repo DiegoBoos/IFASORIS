@@ -8,7 +8,8 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/lugar_planta_medicinal_model.dart';
 
 abstract class LugarPlantaMedicinalRemoteDataSource {
-  Future<List<LugarPlantaMedicinalModel>> getLugaresPlantasMedicinales();
+  Future<List<LugarPlantaMedicinalModel>> getLugaresPlantasMedicinales(
+      int dtoId);
 }
 
 class LugarPlantaMedicinalRemoteDataSourceImpl
@@ -19,10 +20,11 @@ class LugarPlantaMedicinalRemoteDataSourceImpl
   LugarPlantaMedicinalRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<LugarPlantaMedicinalModel>> getLugaresPlantasMedicinales() async {
+  Future<List<LugarPlantaMedicinalModel>> getLugaresPlantasMedicinales(
+      int dtoId) async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/lugaresplantasmedicinales');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/lugaresplantasmedicinalesByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

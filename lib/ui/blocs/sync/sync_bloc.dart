@@ -881,8 +881,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** Medios comunicacion ****************************
 
   Future<void> syncMediosComunicacion(SyncStarted event) async {
-    final result =
-        await medioComunicacionUsecase.getMediosComunicacionUsecase();
+    final result = await medioComunicacionUsecase
+        .getMediosComunicacionUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       mediosComunicacionTemp.addAll(data);
@@ -1054,7 +1054,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** Via acceso ****************************
 
   Future<void> syncViasAcceso(SyncStarted event) async {
-    final result = await viaAccesoUsecase.getViasAccesoUsecase();
+    final result = await viaAccesoUsecase
+        .getViasAccesoUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       viasAccesoTemp.addAll(data);
@@ -1113,8 +1114,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** AutoridadIndigena ****************************
 
   Future<void> syncAutoridadesIndigenas(SyncStarted event) async {
-    final result =
-        await autoridadIndigenaUsecase.getAutoridadesIndigenasUsecase();
+    final result = await autoridadIndigenaUsecase
+        .getAutoridadesIndigenasUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       autoridadesIndigenasTemp.addAll(data);
@@ -3168,8 +3169,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** NombresLenguasMaterna ****************************
 
   Future<void> syncNombresLenguasMaterna(SyncStarted event) async {
-    final result =
-        await nombreLenguaMaternaUsecase.getNombresLenguasMaternaUsecase();
+    final result = await nombreLenguaMaternaUsecase
+        .getNombresLenguasMaternaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       nombresLenguasMaternaTemp.addAll(data);
@@ -4435,7 +4436,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   Future<void> syncEnfermedadesTradicionales(SyncStarted event) async {
     final result = await enfermedadTradicionalUsecase
-        .getEnfermedadesTradicionalesUsecase();
+        .getEnfermedadesTradicionalesUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       enfermedadesTradicionalesTemp.addAll(data);
@@ -4560,8 +4561,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** LugaresPlantasMedicinales ****************************
 
   Future<void> syncLugaresPlantasMedicinales(SyncStarted event) async {
-    final result =
-        await lugarPlantaMedicinalUsecase.getLugaresPlantasMedicinalesUsecase();
+    final result = await lugarPlantaMedicinalUsecase
+        .getLugaresPlantasMedicinalesUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       lugaresPlantasMedicinalesTemp.addAll(data);
@@ -4745,7 +4746,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   Future<void> syncEventosCostumbresParticipa(SyncStarted event) async {
     final result = await eventoCostumbreParticipaUsecase
-        .getEventosCostumbresParticipaUsecase();
+        .getEventosCostumbresParticipaUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       eventosCostumbresParticipaTemp.addAll(data);
@@ -4808,8 +4809,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** CostumbresPractican ****************************
 
   Future<void> syncCostumbresPractican(SyncStarted event) async {
-    final result =
-        await costumbrePracticaUsecase.getCostumbresPracticanUsecase();
+    final result = await costumbrePracticaUsecase
+        .getCostumbresPracticanUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       costumbresPracticanTemp.addAll(data);

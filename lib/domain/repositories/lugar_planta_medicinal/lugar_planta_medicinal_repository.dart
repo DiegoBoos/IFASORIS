@@ -5,5 +5,5 @@ import '../../entities/lugar_planta_medicinal_entity.dart';
 
 abstract class LugarPlantaMedicinalRepository {
   Future<Either<Failure, List<LugarPlantaMedicinalEntity>>>
-      getLugaresPlantasMedicinalesRepository();
+      getLugaresPlantasMedicinalesRepository(int dtoId);
 }

@@ -5,5 +5,5 @@ import '../../entities/enfermedad_tradicional_entity.dart';
 
 abstract class EnfermedadTradicionalRepository {
   Future<Either<Failure, List<EnfermedadTradicionalEntity>>>
-      getEnfermedadesTradicionalesRepository();
+      getEnfermedadesTradicionalesRepository(int dtoId);
 }

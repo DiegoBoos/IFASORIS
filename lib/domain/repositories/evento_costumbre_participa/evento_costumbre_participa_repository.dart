@@ -5,5 +5,5 @@ import '../../entities/evento_costumbre_participa_entity.dart';
 
 abstract class EventoCostumbreParticipaRepository {
   Future<Either<Failure, List<EventoCostumbreParticipaEntity>>>
-      getEventosCostumbresParticipaRepository();
+      getEventosCostumbresParticipaRepository(int dtoId);
 }
