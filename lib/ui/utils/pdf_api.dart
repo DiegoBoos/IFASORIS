@@ -5,10 +5,15 @@ import 'package:path_provider/path_provider.dart';
 
 class PDFApi {
   static Future<File> loadNetwork(String url) async {
-    final response = await http.get(Uri.parse(url));
-    final bytes = base64Decode(response.body);
+    try {
+      final response = await http.get(Uri.parse(url));
+      final bytes = base64Decode(response.body);
 
-    return _storeFile(url, bytes);
+      return _storeFile(url, bytes);
+    } on SocketException catch (e) {
+      // TODO: Dispara excepcion cuando no hay conexion al api
+      throw SocketException(e.toString());
+    }
   }
 
   static Future<File> _storeFile(String url, List<int> bytes) async {

@@ -9,6 +9,7 @@ import '../../../data/models/leguminosa_model.dart';
 import '../../../data/models/tuberculo_platano_model.dart';
 import '../../../data/models/verdura_model.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
+import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/especie_animal/especie_animal_cubit.dart';
 import '../../cubits/fruto/fruto_cubit.dart';
@@ -46,6 +47,22 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
   @override
   Widget build(BuildContext context) {
     final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    final usuario = authBloc.state.usuario;
+    String textAspectoSocioeconomico = '';
+    switch (usuario!.departamentoId) {
+      case 6:
+        textAspectoSocioeconomico = 'Posee huerta o chagra';
+        break;
+      case 8:
+        textAspectoSocioeconomico = 'Posee Ya tul o  Nasa tul';
+        break;
+      case 27:
+        textAspectoSocioeconomico = 'Posee Ya tul o  Nasa tul';
+        break;
+      default:
+        textAspectoSocioeconomico = 'Posee Chagra';
+    }
 
     return Column(
       children: [
@@ -58,7 +75,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
         const Divider(),
         Column(
           children: [
-            const Text('Posee chagra'),
+            Text(textAspectoSocioeconomico),
             BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
               builder: (context, state) {
                 if (state is OpcionesSiNoLoaded) {
