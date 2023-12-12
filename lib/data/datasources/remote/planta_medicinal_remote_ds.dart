@@ -8,7 +8,7 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/planta_medicinal_model.dart';
 
 abstract class PlantaMedicinalRemoteDataSource {
-  Future<List<PlantaMedicinalModel>> getPlantasMedicinales();
+  Future<List<PlantaMedicinalModel>> getPlantasMedicinales(int dtoId);
 }
 
 class PlantaMedicinalRemoteDataSourceImpl
@@ -19,9 +19,10 @@ class PlantaMedicinalRemoteDataSourceImpl
   PlantaMedicinalRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<PlantaMedicinalModel>> getPlantasMedicinales() async {
+  Future<List<PlantaMedicinalModel>> getPlantasMedicinales(int dtoId) async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/plantasmedicinales');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/plantasmedicinalesbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

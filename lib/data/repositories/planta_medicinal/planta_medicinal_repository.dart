@@ -16,10 +16,10 @@ class PlantaMedicinalRepositoryImpl implements PlantaMedicinalRepository {
 
   @override
   Future<Either<Failure, List<PlantaMedicinalEntity>>>
-      getPlantasMedicinalesRepository() async {
+      getPlantasMedicinalesRepository(int dtoId) async {
     try {
       final result =
-          await plantaMedicinalRemoteDataSource.getPlantasMedicinales();
+          await plantaMedicinalRemoteDataSource.getPlantasMedicinales(dtoId);
 
       return Right(result);
     } on ServerFailure catch (e) {

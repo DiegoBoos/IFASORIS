@@ -4625,7 +4625,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** PlantasMedicinales ****************************
 
   Future<void> syncPlantasMedicinales(SyncStarted event) async {
-    final result = await plantaMedicinalUsecase.getPlantasMedicinalesUsecase();
+    final result = await plantaMedicinalUsecase
+        .getPlantasMedicinalesUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       plantasMedicinalesTemp.addAll(data);
