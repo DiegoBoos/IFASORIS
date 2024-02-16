@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/utils/custom_snack_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/medio_comunicacion_model.dart';
@@ -14,6 +13,7 @@ import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../cubits/resguardo/resguardo_cubit.dart';
+import '../helpers/medios_comunicacion_helper.dart';
 
 class DatosUbicacionForm extends StatefulWidget {
   const DatosUbicacionForm({super.key, required this.dimUbicacion});
@@ -118,9 +118,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<TipoDocumentoCubit, TiposDocumentoState>(
           builder: (context, state) {
             if (state is TiposDocumentoLoaded) {
+              final tiposDocumentoLoaded = state.tiposDocumentoLoaded!;
+
               return DropdownButtonFormField<String>(
                 value: _tipoDocumentoRecibeVisita,
-                items: state.tiposDocumentoLoaded!
+                items: tiposDocumentoLoaded
                     .map(
                       (tipoDocumento) => DropdownMenuItem<String>(
                         value: tipoDocumento.tipo,
@@ -268,12 +270,14 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
           builder: (context, state) {
             if (state is OpcionesSiNoLoaded) {
+              final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
               return FormField(
                 initialValue: _perteneceResguardo,
                 builder: (FormFieldState<int> formstate) => Column(
                   children: [
                     Column(
-                        children: state.opcionesSiNoLoaded!
+                        children: opcionesSiNoLoaded
                             .map(
                               (e) => e.opcionId == 3
                                   ? Container()
@@ -290,10 +294,10 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                                         setState(() {
                                           _perteneceResguardo = newValue!;
                                         });
+                                        formstate.didChange(newValue);
                                         dimUbicacionBloc.add(
                                             PerteneceResguardoChanged(
                                                 newValue!));
-                                        formstate.didChange(newValue);
                                       },
                                     ),
                             )
@@ -322,10 +326,12 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           BlocBuilder<ResguardoCubit, ResguardosState>(
             builder: (context, state) {
               if (state is ResguardosLoaded) {
+                final resguardosLoaded = state.resguardosLoaded!;
+
                 return DropdownButtonFormField<int>(
                   isExpanded: true,
                   value: _resguardoId,
-                  items: state.resguardos!
+                  items: resguardosLoaded
                       .map(
                         (resguardo) => DropdownMenuItem<int>(
                           value: resguardo.resguardoId,
@@ -356,9 +362,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<AutoridadIndigenaCubit, AutoridadesIndigenasState>(
           builder: (context, state) {
             if (state is AutoridadesIndigenasLoaded) {
+              final autoridadesIndigenasLoaded = state.autoridadesIndigenas!;
+
               return DropdownButtonFormField<int>(
                 value: _autoridadIndigena,
-                items: state.autoridadesIndigenas!
+                items: autoridadesIndigenasLoaded
                     .map(
                       (autoridadIndigena) => DropdownMenuItem<int>(
                         value: autoridadIndigena.autoridadIndigenaId,
@@ -391,9 +399,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<ViaAccesoCubit, ViasAccesoState>(
           builder: (context, state) {
             if (state is ViasAccesoLoaded) {
+              final viasAccesoLoaded = state.viasAccesoLoaded!;
+
               return DropdownButtonFormField<int>(
                 value: _viaAcceso,
-                items: state.viasAccesoLoaded!
+                items: viasAccesoLoaded
                     .map((viaAcceso) => DropdownMenuItem<int>(
                           value: viaAcceso.viaAccesoId,
                           child: Text(viaAcceso.descripcion),
@@ -423,9 +433,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<EstadoViaCubit, EstadosViasState>(
           builder: (context, state) {
             if (state is EstadosViasLoaded) {
+              final estadosViasLoaded = state.estadosViasLoaded!;
+
               return DropdownButtonFormField<int>(
                 value: _estadoVia,
-                items: state.estadosViasLoaded!
+                items: estadosViasLoaded
                     .map(
                       (estadoVia) => DropdownMenuItem<int>(
                         value: estadoVia.estadoViaId,
@@ -463,6 +475,15 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         BlocBuilder<MedioComunicacionCubit, MediosComunicacionState>(
           builder: (context, state) {
             if (state is MediosComunicacionLoaded) {
+              final mediosComunicacionLoaded = state.mediosComunicacionLoaded!;
+              int? ningunoId;
+
+              for (var e in mediosComunicacionLoaded) {
+                if (e.descripcion == 'Ninguno') {
+                  ningunoId = e.medioComunicacionId;
+                }
+              }
+
               return FormField<List<LstMediosComunica>>(
                 initialValue: dimUbicacionBloc.state.lstMediosComunica,
                 validator: (value) {
@@ -476,71 +497,36 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     children: [
                       Wrap(
                         children: List<Widget>.generate(
-                          state.mediosComunicacionLoaded!.length,
+                          mediosComunicacionLoaded.length,
                           (index) {
-                            final e = state.mediosComunicacionLoaded![index];
+                            final medioComunicacion =
+                                mediosComunicacionLoaded[index];
                             return Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Checkbox(
-                                  value: formState.value?.any((element) =>
-                                          element.medioComunicacionId ==
-                                          e.medioComunicacionId) ??
+                                  value: formState.value?.any((e) =>
+                                          e.medioComunicacionId ==
+                                          medioComunicacion
+                                              .medioComunicacionId) ??
                                       false,
                                   onChanged: (bool? value) {
-                                    (value! &&
-                                            formState.value != null &&
-                                            formState.value!.length >= 3 &&
-                                            e.medioComunicacionId != 7)
-                                        ? CustomSnackBar.showCustomDialog(
-                                            context,
-                                            'Error',
-                                            'Máximo tres opciones',
-                                            () => Navigator.pop(context),
-                                            false)
-                                        : setState(() {
-                                            var selectedItems =
-                                                List<LstMediosComunica>.from(
-                                                    formState.value ?? []);
-                                            if (e.medioComunicacionId == 7) {
-                                              selectedItems = [
-                                                LstMediosComunica(
-                                                    medioComunicacionId:
-                                                        e.medioComunicacionId)
-                                              ];
-                                            } else if (value == true) {
-                                              selectedItems.removeWhere(
-                                                  (element) =>
-                                                      element
-                                                          .medioComunicacionId ==
-                                                      7);
-                                              selectedItems.add(
-                                                  LstMediosComunica(
-                                                      medioComunicacionId: e
-                                                          .medioComunicacionId));
-                                            } else {
-                                              selectedItems.removeWhere(
-                                                (element) =>
-                                                    element
-                                                        .medioComunicacionId ==
-                                                    e.medioComunicacionId,
-                                              );
-                                            }
-                                            formState.didChange(selectedItems);
-                                            dimUbicacionBloc.add(
-                                                MediosComunicacionChanged(
-                                                    selectedItems));
-                                          });
+                                    handleMediosComunicacionSelection(
+                                        formState,
+                                        ningunoId,
+                                        context,
+                                        value,
+                                        medioComunicacion.medioComunicacionId,
+                                        dimUbicacionBloc);
                                   },
                                 ),
                                 Flexible(
                                   child: Text(
-                                    e.descripcion,
+                                    medioComunicacion.descripcion,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                if (index <
-                                    state.mediosComunicacionLoaded!.length - 1)
+                                if (index < mediosComunicacionLoaded.length - 1)
                                   const VerticalDivider(),
                               ],
                             );

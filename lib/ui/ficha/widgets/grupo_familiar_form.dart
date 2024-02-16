@@ -211,9 +211,10 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<TipoDocumentoCubit, TiposDocumentoState>(
                 builder: (context, state) {
                   if (state is TiposDocumentoLoaded) {
+                    final tiposDocumentoLoaded = state.tiposDocumentoLoaded!;
                     return DropdownButtonFormField<int>(
                       value: _tipoDocumentoId,
-                      items: state.tiposDocumento!
+                      items: tiposDocumentoLoaded
                           .map(
                             (tipoDocumento) => DropdownMenuItem<int>(
                               value: tipoDocumento.tipoDocumentoId,
@@ -273,6 +274,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<GeneroCubit, GenerosState>(
                 builder: (context, state) {
                   if (state is GenerosLoaded) {
+                    final generosLoaded = state.generosLoaded!;
                     return Column(
                       children: [
                         FormField(
@@ -283,7 +285,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               children: [
                                 const Text('Género'),
                                 Column(
-                                  children: state.generosLoaded!
+                                  children: generosLoaded
                                       .map(
                                         (e) => RadioListTile<int>(
                                             title: Text(
@@ -348,9 +350,10 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<CursoVidaCubit, CursosVidaState>(
                 builder: (context, state) {
                   if (state is CursosVidaLoaded) {
+                    final cursosVidaLoaded = state.cursosVidaLoaded!;
                     return DropdownButtonFormField<int>(
                       value: _cursoVidaId,
-                      items: state.cursosVidaLoaded!
+                      items: cursosVidaLoaded
                           .map(
                             (cursoVida) => DropdownMenuItem<int>(
                               value: cursoVida.cursoVidaId,
@@ -384,9 +387,10 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<ParentescoCubit, ParentescosState>(
                 builder: (context, state) {
                   if (state is ParentescosLoaded) {
+                    final parentescosLoaded = state.parentescosLoaded!;
                     return DropdownButtonFormField<int>(
                       value: _parentescoId,
-                      items: state.parentescosLoaded!
+                      items: parentescosLoaded
                           .map(
                             (parentesco) => DropdownMenuItem<int>(
                               value: parentesco.parentescoId,
@@ -424,9 +428,11 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<RegimenCubit, RegimenesState>(
                 builder: (context, state) {
                   if (state is RegimenesLoaded) {
+                    final regimenesLoaded = state.regimenesLoaded!;
+
                     return DropdownButtonFormField<int>(
                       value: _tipoRegimenId,
-                      items: state.regimenesLoaded!
+                      items: regimenesLoaded
                           .map(
                             (regimen) => DropdownMenuItem<int>(
                               value: regimen.tipoRegimenId,
@@ -459,9 +465,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<NivelEducativoCubit, NivelesEducativosState>(
                 builder: (context, state) {
                   if (state is NivelesEducativosLoaded) {
+                    final nivelesEducativosLoaded =
+                        state.nivelesEducativosLoaded!;
+
                     return DropdownButtonFormField<int>(
                       value: _nivelEducativoId,
-                      items: state.nivelesEducativosLoaded!
+                      items: nivelesEducativosLoaded
                           .map(
                             (nivelEducativo) => DropdownMenuItem<int>(
                               value: nivelEducativo.nivelEducativoId,
@@ -499,9 +508,11 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<OcupacionCubit, OcupacionesState>(
                 builder: (context, state) {
                   if (state is OcupacionesLoaded) {
+                    final ocupacionesLoaded = state.ocupacionesLoaded!;
+
                     return DropdownButtonFormField<int>(
                       value: _ocupacionId,
-                      items: state.ocupacionesLoaded!
+                      items: ocupacionesLoaded
                           .map(
                             (ocupacion) => DropdownMenuItem<int>(
                               value: ocupacion.ocupacionId,
@@ -538,9 +549,11 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<GrupoRiesgoCubit, GruposRiesgoState>(
                 builder: (context, state) {
                   if (state is GruposRiesgoLoaded) {
+                    final gruposRiesgoLoaded = state.gruposRiesgoLoaded!;
+
                     return DropdownButtonFormField<int>(
                       value: _grupoRiesgoId,
-                      items: state.gruposRiesgoLoaded!
+                      items: gruposRiesgoLoaded
                           .map(
                             (grupoRiesgo) => DropdownMenuItem<int>(
                               value: grupoRiesgo.grupoRiesgoId,
@@ -578,10 +591,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               BlocBuilder<EtniaCubit, EtniasState>(
                 builder: (context, state) {
                   if (state is EtniasLoaded) {
+                    final etniasLoaded = state.etniasLoaded!;
+
                     return DropdownButtonFormField<int>(
                       isExpanded: true,
                       value: _etniaId,
-                      items: state.etniasLoaded!
+                      items: etniasLoaded
                           .map(
                             (etnia) => DropdownMenuItem<int>(
                               value: etnia.etniaId,
@@ -634,10 +649,13 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     BlocBuilder<PuebloIndigenaCubit, PueblosIndigenasState>(
                       builder: (context, state) {
                         if (state is PueblosIndigenasLoaded) {
+                          final pueblosIndigenasLoaded =
+                              state.pueblosIndigenasLoaded!;
+
                           return DropdownButtonFormField<int>(
                             isExpanded: true,
                             value: _puebloIde,
-                            items: state.pueblosIndigenasLoaded!
+                            items: pueblosIndigenasLoaded
                                 .map(
                                   (puebloIndigena) => DropdownMenuItem<int>(
                                     value: puebloIndigena.puebloIde,
@@ -676,9 +694,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     BlocBuilder<LenguaManejaCubit, LenguasManejaState>(
                       builder: (context, state) {
                         if (state is LenguasManejaLoaded) {
+                          final lenguasManejaLoaded =
+                              state.lenguasManejaLoaded!;
+
                           return DropdownButtonFormField<int>(
                             value: _lenguaManejaId,
-                            items: state.lenguasManejaLoaded!
+                            items: lenguasManejaLoaded
                                 .map(
                                   (lenguaManeja) => DropdownMenuItem<int>(
                                     value: lenguaManeja.lenguaManejaId,
@@ -729,9 +750,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               NombresLenguasMaternaState>(
                             builder: (context, state) {
                               if (state is NombresLenguasMaternaLoaded) {
+                                final nombresLenguasMaternaLoaded =
+                                    state.nombresLenguasMaternaLoaded!;
+
                                 return DropdownButtonFormField<int>(
                                   value: _lenguaMaternaId,
-                                  items: state.nombresLenguasMaternaLoaded!
+                                  items: nombresLenguasMaternaLoaded
                                       .map(
                                         (lenguaMaterna) =>
                                             DropdownMenuItem<int>(

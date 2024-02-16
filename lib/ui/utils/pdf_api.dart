@@ -11,7 +11,6 @@ class PDFApi {
 
       return _storeFile(url, bytes);
     } on SocketException catch (e) {
-      // TODO: Dispara excepcion cuando no hay conexion al api
       throw SocketException(e.toString());
     }
   }

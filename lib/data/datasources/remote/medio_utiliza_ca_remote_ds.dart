@@ -8,7 +8,7 @@ import '../../../services/shared_preferences_service.dart';
 import '../../models/medio_utiliza_ca_model.dart';
 
 abstract class MedioUtilizaCARemoteDataSource {
-  Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA();
+  Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA(int ideDpto);
 }
 
 class MedioUtilizaCARemoteDataSourceImpl
@@ -19,10 +19,10 @@ class MedioUtilizaCARemoteDataSourceImpl
   MedioUtilizaCARemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA() async {
+  Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA(int ideDpto) async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/mediosutilizaCentroAtencion');
+      final uri = Uri.parse(
+          '${Constants.ifasorisBaseUrl}/mediosutilizaCentroAtencionbyDpto?IdeDpto=$ideDpto');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

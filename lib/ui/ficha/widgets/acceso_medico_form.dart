@@ -14,6 +14,8 @@ import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
+import '../helpers/dificultades_acceso_med_trad_helper.dart';
+import '../helpers/medios_utiliza_med_trad_helper.dart';
 
 class AccesoMedicoForm extends StatefulWidget {
   const AccesoMedicoForm({super.key, this.dimUbicacion});
@@ -55,29 +57,6 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
     });
   }
 
-  void _addFormField() {
-    if (_nombresMedTrad.length < 5) {
-      setState(() {
-        _nombresMedTrad.add(LstNombreMedTradicional(nombreMedTradicional: ''));
-      });
-    } else {
-      CustomSnackBar.showCustomDialog(
-          context,
-          'Límite excedido',
-          'No puede agregar más de 5 campos.',
-          () => Navigator.pop(context),
-          false);
-    }
-  }
-
-  void _removeFormField(int index) {
-    if (_nombresMedTrad.length > 1) {
-      setState(() {
-        _nombresMedTrad.removeAt(index);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
@@ -95,12 +74,14 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _existeMedTradicionalComunidad,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
@@ -149,10 +130,11 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                             newValue!;
                                       });
 
+                                      formstate.didChange(newValue);
+
                                       dimUbicacionBloc.add(
                                           ExisteMedTradicionalComunidadChanged(
                                               newValue!));
-                                      formstate.didChange(newValue);
                                     },
                                   ),
                           )
@@ -192,6 +174,9 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                 EspecialidadesMedTradicionalState>(
               builder: (context, state) {
                 if (state is EspecialidadesMedTradicionalLoaded) {
+                  final especialidadesMedTradicionalLoaded =
+                      state.especialidadesMedTradicionalLoaded!;
+
                   return FormField<List<LstEspMedTradicional>>(
                     initialValue: dimUbicacionBloc.state.lstEspMedTradicional,
                     validator: (value) {
@@ -206,62 +191,53 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                         children: [
                           Wrap(
                             children: List<Widget>.generate(
-                              state.especialidadesMedTradicionalLoaded!.length,
+                              especialidadesMedTradicionalLoaded.length,
                               (index) {
-                                final e = state
+                                final especialidadMedTradicional = state
                                     .especialidadesMedTradicionalLoaded![index];
+
                                 return Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Checkbox(
-                                      value: formState.value?.any((element) =>
-                                              element.especialidadMedTradId ==
-                                              e.especialidadMedTradId) ??
+                                      value: formState.value?.any((e) =>
+                                              e.especialidadMedTradId ==
+                                              especialidadMedTradicional
+                                                  .especialidadMedTradId) ??
                                           false,
                                       onChanged: (bool? value) {
-                                        (value! &&
-                                                formState.value != null &&
-                                                formState.value!.length >= 5 &&
-                                                e.especialidadMedTradId != 5)
-                                            ? CustomSnackBar.showCustomDialog(
-                                                context,
-                                                'Error',
-                                                'Máximo cinco opciones',
-                                                () => Navigator.pop(context),
-                                                false)
-                                            : setState(() {
-                                                var selectedItems = List<
-                                                        LstEspMedTradicional>.from(
-                                                    formState.value ?? []);
-                                                if (value == true) {
-                                                  selectedItems.add(
-                                                      LstEspMedTradicional(
-                                                          especialidadMedTradId:
-                                                              e.especialidadMedTradId));
-                                                } else {
-                                                  selectedItems.removeWhere(
-                                                    (element) =>
-                                                        element
-                                                            .especialidadMedTradId ==
-                                                        e.especialidadMedTradId,
-                                                  );
-                                                }
-                                                formState
-                                                    .didChange(selectedItems);
-                                                dimUbicacionBloc.add(
-                                                    EspecialidadesMedTradChanged(
-                                                        selectedItems));
-                                              });
+                                        setState(() {
+                                          var selectedItems =
+                                              List<LstEspMedTradicional>.from(
+                                                  formState.value ?? []);
+                                          if (value == true) {
+                                            selectedItems.add(LstEspMedTradicional(
+                                                especialidadMedTradId:
+                                                    especialidadMedTradicional
+                                                        .especialidadMedTradId));
+                                          } else {
+                                            selectedItems.removeWhere(
+                                              (e) =>
+                                                  e.especialidadMedTradId ==
+                                                  especialidadMedTradicional
+                                                      .especialidadMedTradId,
+                                            );
+                                          }
+                                          formState.didChange(selectedItems);
+                                          dimUbicacionBloc.add(
+                                              EspecialidadesMedTradChanged(
+                                                  selectedItems));
+                                        });
                                       },
                                     ),
                                     Flexible(
                                       child: Text(
-                                        e.descripcion,
+                                        especialidadMedTradicional.descripcion,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     if (index <
-                                        state.especialidadesMedTradicionalLoaded!
+                                        especialidadesMedTradicionalLoaded
                                                 .length -
                                             1)
                                       const VerticalDivider(),
@@ -287,9 +263,12 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                 TiemposTardaMedTradicionalState>(
               builder: (context, state) {
                 if (state is TiemposTardaMedTradicionalLoaded) {
+                  final tiemposTardaMedTradicionalLoaded =
+                      state.tiemposTardaMedTradicionalLoaded!;
+
                   return DropdownButtonFormField<int>(
                     value: _tiempoTardaMedTradId,
-                    items: state.tiemposTardaMedTradicionalLoaded!
+                    items: tiemposTardaMedTradicionalLoaded
                         .map(
                           (tiempoTardaMedTradicional) => DropdownMenuItem<int>(
                             value:
@@ -331,6 +310,9 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                 MediosUtilizaMedTradicionalState>(
               builder: (context, state) {
                 if (state is MediosUtilizaMedTradicionalLoaded) {
+                  final mediosUtilizaMedTradicionalLoaded =
+                      state.mediosUtilizaMedTradicionalLoaded!;
+
                   return FormField<List<LstMediosMedTradicional>>(
                     initialValue:
                         dimUbicacionBloc.state.lstMediosMedTradicional,
@@ -346,61 +328,37 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                         children: [
                           Wrap(
                             children: List<Widget>.generate(
-                              state.mediosUtilizaMedTradicionalLoaded!.length,
+                              mediosUtilizaMedTradicionalLoaded.length,
                               (index) {
-                                final e = state
+                                final medioUtilizaMedTrad = state
                                     .mediosUtilizaMedTradicionalLoaded![index];
                                 return Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Checkbox(
-                                      value: formState.value?.any((element) =>
-                                              element.medioUtilizaMedTradId ==
-                                              e.medioUtilizaMedTradId) ??
+                                      value: formState.value?.any((e) =>
+                                              e.medioUtilizaMedTradId ==
+                                              medioUtilizaMedTrad
+                                                  .medioUtilizaMedTradId) ??
                                           false,
                                       onChanged: (bool? value) {
-                                        (value! &&
-                                                formState.value != null &&
-                                                formState.value!.length >= 3)
-                                            ? CustomSnackBar.showCustomDialog(
-                                                context,
-                                                'Error',
-                                                'Máximo tres opciones',
-                                                () => Navigator.pop(context),
-                                                false)
-                                            : setState(() {
-                                                var selectedItems = List<
-                                                        LstMediosMedTradicional>.from(
-                                                    formState.value ?? []);
-                                                if (value == true) {
-                                                  selectedItems.add(
-                                                      LstMediosMedTradicional(
-                                                          medioUtilizaMedTradId:
-                                                              e.medioUtilizaMedTradId));
-                                                } else {
-                                                  selectedItems.removeWhere(
-                                                    (element) =>
-                                                        element
-                                                            .medioUtilizaMedTradId ==
-                                                        e.medioUtilizaMedTradId,
-                                                  );
-                                                }
-                                                formState
-                                                    .didChange(selectedItems);
-                                                dimUbicacionBloc.add(
-                                                    MediosUtilizaMedTradChanged(
-                                                        selectedItems));
-                                              });
+                                        handleMedioUtilizaMedTradSelection(
+                                            formState,
+                                            context,
+                                            value,
+                                            medioUtilizaMedTrad
+                                                .medioUtilizaMedTradId,
+                                            dimUbicacionBloc);
                                       },
                                     ),
                                     Flexible(
                                       child: Text(
-                                        e.descripcion,
+                                        medioUtilizaMedTrad.descripcion,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     if (index <
-                                        state.mediosUtilizaMedTradicionalLoaded!
+                                        mediosUtilizaMedTradicionalLoaded
                                                 .length -
                                             1)
                                       const VerticalDivider(),
@@ -432,6 +390,17 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                 DificultadesAccesoMedTradicionalState>(
               builder: (context, state) {
                 if (state is DificultadesAccesoMedTradicionalLoaded) {
+                  final dificultadesAccesoMedTradicionalLoaded =
+                      state.dificultadesAccesoMedTradicionalLoaded!;
+
+                  int? ningunaId;
+
+                  for (var e in dificultadesAccesoMedTradicionalLoaded) {
+                    if (e.descripcion == 'Ninguna') {
+                      ningunaId = e.dificultadAccesoMedTradId;
+                    }
+                  }
+
                   return FormField<List<LstDificultadAccesoMedTradicional>>(
                     initialValue: dimUbicacionBloc
                         .state.lstDificultadAccesoMedTradicional,
@@ -448,79 +417,41 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                         children: [
                           Wrap(
                             children: List<Widget>.generate(
-                              state.dificultadesAccesoMedTradicionalLoaded!
-                                  .length,
+                              dificultadesAccesoMedTradicionalLoaded.length,
                               (index) {
-                                final e = state
+                                final dificultadAccesoMedTradicional = state
                                         .dificultadesAccesoMedTradicionalLoaded![
                                     index];
+
                                 return Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Checkbox(
-                                      value: formState.value?.any((element) =>
-                                              element
-                                                  .dificultadAccesoMedTradId ==
-                                              e.dificultadAccesoMedTradId) ??
+                                      value: formState.value?.any((e) =>
+                                              e.dificultadAccesoMedTradId ==
+                                              dificultadAccesoMedTradicional
+                                                  .dificultadAccesoMedTradId) ??
                                           false,
                                       onChanged: (bool? value) {
-                                        (value! &&
-                                                formState.value != null &&
-                                                formState.value!.length >= 3 &&
-                                                e.dificultadAccesoMedTradId !=
-                                                    5)
-                                            ? CustomSnackBar.showCustomDialog(
-                                                context,
-                                                'Error',
-                                                'Máximo tres opciones',
-                                                () => Navigator.pop(context),
-                                                false)
-                                            : setState(() {
-                                                var selectedItems = List<
-                                                        LstDificultadAccesoMedTradicional>.from(
-                                                    formState.value ?? []);
-
-                                                if (e.dificultadAccesoMedTradId ==
-                                                    5) {
-                                                  selectedItems = [
-                                                    LstDificultadAccesoMedTradicional(
-                                                        dificultadAccesoMedTradId:
-                                                            e.dificultadAccesoMedTradId)
-                                                  ];
-                                                } else if (value == true) {
-                                                  selectedItems.removeWhere(
-                                                      (element) =>
-                                                          element
-                                                              .dificultadAccesoMedTradId ==
-                                                          5);
-                                                  selectedItems.add(
-                                                      LstDificultadAccesoMedTradicional(
-                                                          dificultadAccesoMedTradId:
-                                                              e.dificultadAccesoMedTradId));
-                                                } else {
-                                                  selectedItems.removeWhere(
-                                                    (element) =>
-                                                        element
-                                                            .dificultadAccesoMedTradId ==
-                                                        e.dificultadAccesoMedTradId,
-                                                  );
-                                                }
-                                                formState
-                                                    .didChange(selectedItems);
-                                                dimUbicacionBloc.add(
-                                                    DificultadesAccesoMedTradicionalChanged(
-                                                        selectedItems));
-                                              });
+                                        handleDificultadAccesoMedTradSelection(
+                                            formState,
+                                            ningunaId,
+                                            context,
+                                            value,
+                                            dificultadAccesoMedTradicional
+                                                .dificultadAccesoMedTradId,
+                                            dimUbicacionBloc);
                                       },
                                     ),
                                     Flexible(
                                       child: Text(
-                                        e.descripcion,
+                                        dificultadAccesoMedTradicional
+                                            .descripcion,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     if (index <
-                                        state.dificultadesAccesoMedTradicionalLoaded!
+                                        dificultadesAccesoMedTradicionalLoaded
                                                 .length -
                                             1)
                                       const VerticalDivider(),
@@ -545,9 +476,12 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
             BlocBuilder<CostoDesplazamientoCubit, CostosDesplazamientoState>(
               builder: (context, state) {
                 if (state is CostosDesplazamientoLoaded) {
+                  final costosDesplazamientoLoaded =
+                      state.costosDesplazamientoLoaded!;
+
                   return DropdownButtonFormField<int>(
                     value: _costoDesplazamientoMedTradicional,
-                    items: state.costosDesplazamientoLoaded!
+                    items: costosDesplazamientoLoaded
                         .map(
                           (costoDesplazamiento) => DropdownMenuItem<int>(
                             value: costoDesplazamiento.costoDesplazamientoId,
@@ -597,7 +531,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                           }
                           return null;
                         },
-                        onSaved: (String? value) {
+                        onChanged: (String? value) {
                           _nombresMedTrad[index].nombreMedTradicional = value!;
                           dimUbicacionBloc.add(
                               NombresMedTradicionalChanged(_nombresMedTrad));
@@ -605,11 +539,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.remove),
-                      onPressed: () {
-                        _removeFormField(index);
-                      },
-                    ),
+                        icon: const Icon(Icons.remove),
+                        onPressed: () => _removeFormField(index)),
                   ],
                 );
               },
@@ -621,5 +552,28 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
           ],
         ),
     ]);
+  }
+
+  void _addFormField() {
+    if (_nombresMedTrad.length < 5) {
+      setState(() {
+        _nombresMedTrad.add(LstNombreMedTradicional(nombreMedTradicional: ''));
+      });
+    } else {
+      CustomSnackBar.showCustomDialog(
+          context,
+          'Límite excedido',
+          'No puede agregar más de 5 campos.',
+          () => Navigator.pop(context),
+          false);
+    }
+  }
+
+  void _removeFormField(int index) {
+    if (_nombresMedTrad.length > 1) {
+      setState(() {
+        _nombresMedTrad.removeAt(index);
+      });
+    }
   }
 }

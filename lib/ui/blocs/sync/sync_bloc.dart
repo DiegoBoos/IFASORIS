@@ -940,7 +940,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** Medios utiliza CA ****************************
 
   Future<void> syncMediosUtilizaCA(SyncStarted event) async {
-    final result = await medioUtilizaCAUsecase.getMediosUtilizaCAUsecase();
+    final result = await medioUtilizaCAUsecase
+        .getMediosUtilizaCAUsecase(event.usuario.departamentoId!);
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
       mediosUtilizaCATemp.addAll(data);

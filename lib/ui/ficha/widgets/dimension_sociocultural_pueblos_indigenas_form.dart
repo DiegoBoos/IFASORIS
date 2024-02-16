@@ -10,6 +10,7 @@ import '../../../domain/usecases/sancion_justicia/sancion_justicia_exports.dart'
 import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 import '../../cubits/costumbre_practica/costumbre_practica_cubit.dart';
 import '../../cubits/religion_profesa/religion_profesa_cubit.dart';
+import '../helpers/eventos_costumbres_participa.dart';
 
 class DimensionSocioCulturalPueblosIndigenasForm extends StatefulWidget {
   const DimensionSocioCulturalPueblosIndigenasForm(
@@ -146,12 +147,13 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
             return FormField(
               initialValue: _conoceUsosCostumbresId,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
@@ -254,12 +256,13 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
             BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
               builder: (context, state) {
                 if (state is OpcionesSiNoLoaded) {
+                  final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
                   return FormField(
                     initialValue: _participaCostumbresId,
                     builder: (FormFieldState<int> formstate) => Column(
                       children: [
                         Column(
-                            children: state.opcionesSiNoLoaded!
+                            children: opcionesSiNoLoaded
                                 .map(
                                   (e) => e.opcionId == 3
                                       ? Container()
@@ -337,6 +340,16 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                       EventosCostumbresParticipaState>(
                     builder: (context, state) {
                       if (state is EventosCostumbresParticipaLoaded) {
+                        final eventosCostumbresParticipaLoaded =
+                            state.eventosCostumbresParticipaLoaded!;
+
+                        int? ningunoId;
+                        for (var e in eventosCostumbresParticipaLoaded) {
+                          if (e.descripcion == 'Ninguno') {
+                            ningunoId = e.eventoCostumbreParticipaId;
+                          }
+                        }
+
                         return FormField<List<LstEventoCostumbreParticipa>>(
                           initialValue:
                               dimensionSocioCulturalPueblosIndigenasBloc
@@ -354,61 +367,35 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                               children: [
                                 Wrap(
                                   children: List<Widget>.generate(
-                                    state.eventosCostumbresParticipaLoaded!
-                                        .length,
+                                    eventosCostumbresParticipaLoaded.length,
                                     (index) {
-                                      final e = state
-                                              .eventosCostumbresParticipaLoaded![
-                                          index];
+                                      final eventoCostumbreParticipa =
+                                          eventosCostumbresParticipaLoaded[
+                                              index];
                                       return Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Checkbox(
-                                            value: formState.value?.any((element) =>
-                                                    element
-                                                        .eventoCostumbreParticipaId ==
-                                                    e.eventoCostumbreParticipaId) ??
+                                            value: formState.value?.any((e) =>
+                                                    e.eventoCostumbreParticipaId ==
+                                                    eventoCostumbreParticipa
+                                                        .eventoCostumbreParticipaId) ??
                                                 false,
                                             onChanged: (bool? value) {
-                                              var selectedItems = List<
-                                                      LstEventoCostumbreParticipa>.from(
-                                                  formState.value ?? []);
-                                              if (e.eventoCostumbreParticipaId ==
-                                                  5) {
-                                                selectedItems = [
-                                                  LstEventoCostumbreParticipa(
-                                                      eventoCostumbreParticipaId:
-                                                          e.eventoCostumbreParticipaId)
-                                                ];
-                                              } else if (value == true) {
-                                                selectedItems.removeWhere(
-                                                    (element) =>
-                                                        element
-                                                            .eventoCostumbreParticipaId ==
-                                                        5);
-                                                selectedItems.add(
-                                                    LstEventoCostumbreParticipa(
-                                                        eventoCostumbreParticipaId:
-                                                            e.eventoCostumbreParticipaId));
-                                              } else {
-                                                selectedItems.removeWhere(
-                                                  (element) =>
-                                                      element
-                                                          .eventoCostumbreParticipaId ==
-                                                      e.eventoCostumbreParticipaId,
-                                                );
-                                              }
-                                              formState
-                                                  .didChange(selectedItems);
-                                              dimensionSocioCulturalPueblosIndigenasBloc
-                                                  .add(
-                                                      EventosCostumbresParticipaChanged(
-                                                          selectedItems));
+                                              handleEventoCostumbreParticipaSelection(
+                                                  formState,
+                                                  ningunoId,
+                                                  context,
+                                                  value,
+                                                  eventoCostumbreParticipa
+                                                      .eventoCostumbreParticipaId,
+                                                  dimensionSocioCulturalPueblosIndigenasBloc);
                                             },
                                           ),
                                           Flexible(
                                             child: Text(
-                                              e.descripcion,
+                                              eventoCostumbreParticipa
+                                                  .descripcion,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
@@ -444,10 +431,13 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                   BlocBuilder<CostumbrePracticaCubit, CostumbresPracticanState>(
                     builder: (context, state) {
                       if (state is CostumbresPracticanLoaded) {
+                        final costumbresPracticanLoaded =
+                            state.costumbresPracticanLoaded!;
+
                         return DropdownButtonFormField<int>(
                           isExpanded: true,
                           value: _costumbrePracticaId,
-                          items: state.costumbresPracticanLoaded!
+                          items: costumbresPracticanLoaded
                               .map(
                                 (costumbrePractica) => DropdownMenuItem<int>(
                                   value: costumbrePractica.costumbrePracticaId,
@@ -487,9 +477,12 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                   BlocBuilder<SancionJusticiaCubit, SancionesJusticiaState>(
                     builder: (context, state) {
                       if (state is SancionesJusticiaLoaded) {
+                        final sancionesJusticiaLoaded =
+                            state.sancionesJusticiaLoaded!;
+
                         return DropdownButtonFormField<int>(
                           value: _sancionJusticiaId,
-                          items: state.sancionesJusticiaLoaded!
+                          items: sancionesJusticiaLoaded
                               .map(
                                 (sancionJusticia) => DropdownMenuItem<int>(
                                   value: sancionJusticia.sancionJusticiaId,
@@ -533,12 +526,14 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _sitiosSagradosId,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()

@@ -85,9 +85,11 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
       BlocBuilder<ActividadFisicaCubit, ActividadesFisicasState>(
         builder: (context, state) {
           if (state is ActividadesFisicasLoaded) {
+            final actividadesFisicas = state.actividadesFisicasLoaded!;
+
             return DropdownButtonFormField<int>(
               value: _actividadFisicaId,
-              items: state.actividadesFisicasLoaded!
+              items: actividadesFisicas
                   .map(
                     (actividadFisica) => DropdownMenuItem<int>(
                       value: actividadFisica.actividadFisicaId,
@@ -126,10 +128,11 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
       BlocBuilder<AlimentacionCubit, AlimentacionesState>(
         builder: (context, state) {
           if (state is AlimentacionesLoaded) {
+            final alimentacionesLoaded = state.alimentacionesLoaded!;
             return DropdownButtonFormField<int>(
               isExpanded: true,
               value: _alimentacionId,
-              items: state.alimentacionesLoaded!
+              items: alimentacionesLoaded
                   .map(
                     (alimentacion) => DropdownMenuItem<int>(
                       value: alimentacion.alimentacionId,
@@ -168,12 +171,14 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _consumoCigarrillo,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
@@ -235,9 +240,11 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
             BlocBuilder<CigarrilloDiaCubit, CigarrillosDiaState>(
               builder: (context, state) {
                 if (state is CigarrillosDiaLoaded) {
+                  final cigarrillosDiaLoaded = state.cigarrillosDiaLoaded!;
+
                   return DropdownButtonFormField<int>(
                     value: _numeroCigarrillosDiaId,
-                    items: state.cigarrillosDiaLoaded!
+                    items: cigarrillosDiaLoaded
                         .map(
                           (numeroCigarrilloDia) => DropdownMenuItem<int>(
                             value: numeroCigarrilloDia.numeroCigarrilloDiaId,
@@ -279,9 +286,11 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
       BlocBuilder<ConsumoAlcoholCubit, ConsumosAlcoholState>(
         builder: (context, state) {
           if (state is ConsumosAlcoholLoaded) {
+            final consumosAlcoholLoaded = state.consumosAlcoholLoaded!;
+
             return DropdownButtonFormField<int>(
               value: _consumoAlcoholId,
-              items: state.consumosAlcoholLoaded!
+              items: consumosAlcoholLoaded
                   .map(
                     (consumoAlcohol) => DropdownMenuItem<int>(
                       value: consumoAlcohol.consumoAlcoholId,
@@ -320,12 +329,14 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _consumoSustanciaId,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()

@@ -23,7 +23,7 @@ class NombreLenguaMaternaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/nombrelenguamanejaByDpto?IdeDpto=$dtoId');
+          '${Constants.ifasorisBaseUrl}/nombrelenguamaternaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

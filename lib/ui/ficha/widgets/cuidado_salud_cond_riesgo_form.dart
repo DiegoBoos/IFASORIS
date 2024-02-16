@@ -17,6 +17,8 @@ import '../../../domain/usecases/ultima_vez_inst_salud/ultima_vez_inst_salud_exp
 import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 import '../../cubits/metodo_planificacion/metodo_planificacion_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
+import '../helpers/nombres_enfermedades_helper.dart';
+import '../helpers/servicios_solicitados_helper.dart';
 
 class CuidadoSaludCondRiesgoForm extends StatefulWidget {
   const CuidadoSaludCondRiesgoForm(
@@ -131,9 +133,12 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<UltimaVezInstSaludCubit, UltimasVecesInstSaludState>(
         builder: (context, state) {
           if (state is UltimasVecesInstSaludLoaded) {
+            final ultimasVecesInstSaludLoaded =
+                state.ultimasVecesInstSaludLoaded!;
+
             return DropdownButtonFormField<int>(
               value: _ultimaVezInstSaludId,
-              items: state.ultimasVecesInstSaludLoaded!
+              items: ultimasVecesInstSaludLoaded
                   .map(
                     (ultimaVezInstSalud) => DropdownMenuItem<int>(
                       value: ultimaVezInstSalud.ultimaVezInstSaludId,
@@ -173,6 +178,9 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<ServicioSolicitadoCubit, ServiciosSolicitadosState>(
         builder: (context, state) {
           if (state is ServiciosSolicitadosLoaded) {
+            final serviciosSolicitadosLoaded =
+                state.serviciosSolicitadosLoaded!;
+
             return FormField<List<LstServicioSolicitado>>(
               initialValue:
                   cuidadoSaludCondRiesgoBloc.state.lstServiciosSolicitados,
@@ -187,61 +195,34 @@ class _CuidadoSaludCondRiesgoFormState
                   children: [
                     Wrap(
                       children: List<Widget>.generate(
-                        state.serviciosSolicitadosLoaded!.length,
+                        serviciosSolicitadosLoaded.length,
                         (index) {
-                          final e = state.serviciosSolicitadosLoaded![index];
+                          final servicioSolicitado =
+                              serviciosSolicitadosLoaded[index];
                           return Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Checkbox(
-                                  value: formState.value?.any((element) =>
-                                          element.servicioSolicitadoId ==
-                                          e.servicioSolicitadoId) ??
+                                  value: formState.value?.any((e) =>
+                                          e.servicioSolicitadoId ==
+                                          servicioSolicitado
+                                              .servicioSolicitadoId) ??
                                       false,
                                   onChanged: (bool? value) {
-                                    (value! &&
-                                            formState.value != null &&
-                                            formState.value!.length >= 3)
-                                        ? CustomSnackBar.showCustomDialog(
-                                            context,
-                                            'Error',
-                                            'Máximo tres opciones',
-                                            () => Navigator.pop(context),
-                                            false)
-                                        : setState(
-                                            () {
-                                              var selectedItems = List<
-                                                      LstServicioSolicitado>.from(
-                                                  formState.value ?? []);
-                                              if (value == true) {
-                                                selectedItems.add(
-                                                    LstServicioSolicitado(
-                                                        servicioSolicitadoId: e
-                                                            .servicioSolicitadoId));
-                                              } else {
-                                                selectedItems.removeWhere(
-                                                  (element) =>
-                                                      element
-                                                          .servicioSolicitadoId ==
-                                                      e.servicioSolicitadoId,
-                                                );
-                                              }
-                                              formState
-                                                  .didChange(selectedItems);
-                                              cuidadoSaludCondRiesgoBloc.add(
-                                                  ServiciosSolicitadosChanged(
-                                                      selectedItems));
-                                            },
-                                          );
+                                    handleServicioSolicitadoSelection(
+                                        formState,
+                                        context,
+                                        value,
+                                        servicioSolicitado.servicioSolicitadoId,
+                                        cuidadoSaludCondRiesgoBloc);
                                   }),
                               Flexible(
                                 child: Text(
-                                  e.descripcion,
+                                  servicioSolicitado.descripcion,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              if (index <
-                                  state.serviciosSolicitadosLoaded!.length - 1)
+                              if (index < serviciosSolicitadosLoaded.length - 1)
                                 const VerticalDivider(),
                             ],
                           );
@@ -270,12 +251,14 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _tieneEnfermedad,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
@@ -335,6 +318,9 @@ class _CuidadoSaludCondRiesgoFormState
             BlocBuilder<NombreEnfermedadCubit, NombresEnfermedadesState>(
               builder: (context, state) {
                 if (state is NombresEnfermedadesLoaded) {
+                  final nombresEnfermedadesLoaded =
+                      state.nombresEnfermedadesLoaded!;
+
                   return FormField<List<LstNombreEnfermedad>>(
                     initialValue:
                         cuidadoSaludCondRiesgoBloc.state.lstNombresEnfermedades,
@@ -350,63 +336,36 @@ class _CuidadoSaludCondRiesgoFormState
                         children: [
                           Wrap(
                             children: List<Widget>.generate(
-                              state.nombresEnfermedadesLoaded!.length,
+                              nombresEnfermedadesLoaded.length,
                               (index) {
-                                final e =
-                                    state.nombresEnfermedadesLoaded![index];
+                                final nombreEnfermedad =
+                                    nombresEnfermedadesLoaded[index];
                                 return Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Checkbox(
-                                        value: formState.value?.any((element) =>
-                                                element.nombreEnfermedadId ==
-                                                e.nombreEnfermedadId) ??
+                                        value: formState.value?.any((e) =>
+                                                e.nombreEnfermedadId ==
+                                                nombreEnfermedad
+                                                    .nombreEnfermedadId) ??
                                             false,
                                         onChanged: (bool? value) {
-                                          (value! &&
-                                                  formState.value!.length >= 3)
-                                              ? CustomSnackBar.showCustomDialog(
-                                                  context,
-                                                  'Error',
-                                                  'Máximo tres opciones',
-                                                  () => Navigator.pop(context),
-                                                  false)
-                                              : setState(
-                                                  () {
-                                                    var selectedItems = List<
-                                                            LstNombreEnfermedad>.from(
-                                                        formState.value ?? []);
-                                                    if (value == true) {
-                                                      selectedItems.add(
-                                                          LstNombreEnfermedad(
-                                                              nombreEnfermedadId:
-                                                                  e.nombreEnfermedadId));
-                                                    } else {
-                                                      selectedItems.removeWhere(
-                                                        (element) =>
-                                                            element
-                                                                .nombreEnfermedadId ==
-                                                            e.nombreEnfermedadId,
-                                                      );
-                                                    }
-                                                    formState.didChange(
-                                                        selectedItems);
-                                                    cuidadoSaludCondRiesgoBloc.add(
-                                                        NombresEnfermedadesChanged(
-                                                            selectedItems));
-                                                  },
-                                                );
+                                          handleNombreEnfermedadSelection(
+                                              formState,
+                                              context,
+                                              value,
+                                              nombreEnfermedad
+                                                  .nombreEnfermedadId,
+                                              cuidadoSaludCondRiesgoBloc);
                                         }),
                                     Flexible(
                                       child: Text(
-                                        e.descripcion,
+                                        nombreEnfermedad.descripcion,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     if (index <
-                                        state.nombresEnfermedadesLoaded!
-                                                .length -
-                                            1)
+                                        nombresEnfermedadesLoaded.length - 1)
                                       const VerticalDivider(),
                                   ],
                                 );
@@ -436,10 +395,13 @@ class _CuidadoSaludCondRiesgoFormState
                 SeguimientoEnfermedadesState>(
               builder: (context, state) {
                 if (state is SeguimientoEnfermedadesLoaded) {
+                  final seguimientoEnfermedadesLoaded =
+                      state.seguimientoEnfermedadesLoaded!;
+
                   return DropdownButtonFormField<int>(
                     isExpanded: true,
                     value: _seguimientoEnfermedadId,
-                    items: state.seguimientoEnfermedadesLoaded!
+                    items: seguimientoEnfermedadesLoaded
                         .map(
                           (seguimientoEnfermedad) => DropdownMenuItem<int>(
                             value:
@@ -482,9 +444,12 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<CondicionNutricionalCubit, CondicionesNutricionalesState>(
         builder: (context, state) {
           if (state is CondicionesNutricionalesLoaded) {
+            final condicionesNutricionalesLoaded =
+                state.condicionesNutricionalesLoaded!;
+
             return DropdownButtonFormField<int>(
               value: _condicionNutricionalId,
-              items: state.condicionesNutricionalesLoaded!
+              items: condicionesNutricionalesLoaded
                   .map(
                     (condicionNutricional) => DropdownMenuItem<int>(
                       value: condicionNutricional.condicionNutricionalId,
@@ -524,12 +489,14 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _tosFlemaId,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
@@ -541,9 +508,10 @@ class _CuidadoSaludCondRiesgoFormState
                                       setState(() {
                                         _tosFlemaId = newValue!;
                                       });
+                                      formstate.didChange(newValue);
+
                                       cuidadoSaludCondRiesgoBloc
                                           .add(TosFlemaChanged(newValue!));
-                                      formstate.didChange(newValue);
                                     },
                                   ),
                           )
@@ -578,12 +546,14 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _manchasPielId,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
@@ -632,12 +602,14 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _carnetVacunacionId,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
@@ -660,9 +632,9 @@ class _CuidadoSaludCondRiesgoFormState
                                         _carnetVacunacionId = newValue!;
                                       });
 
+                                      formstate.didChange(newValue);
                                       cuidadoSaludCondRiesgoBloc.add(
                                           CarnetVacunacionChanged(newValue!));
-                                      formstate.didChange(newValue);
                                     },
                                   ),
                           )
@@ -700,12 +672,14 @@ class _CuidadoSaludCondRiesgoFormState
             BlocBuilder<EsquemaVacunacionCubit, EsquemasVacunacionState>(
               builder: (context, state) {
                 if (state is EsquemasVacunacionLoaded) {
+                  final esquemasVacunacionLoaded =
+                      state.esquemasVacunacionLoaded!;
                   return FormField(
                     initialValue: _esquemaVacunacionId,
                     builder: (FormFieldState<int> formstate) => Column(
                       children: [
                         Column(
-                            children: state.esquemasVacunacionLoaded!
+                            children: esquemasVacunacionLoaded
                                 .map(
                                   (e) => RadioListTile(
                                     title: Text(e.descripcion),
@@ -715,9 +689,9 @@ class _CuidadoSaludCondRiesgoFormState
                                       setState(() {
                                         _esquemaVacunacionId = newValue!;
                                       });
+                                      formstate.didChange(newValue);
                                       cuidadoSaludCondRiesgoBloc.add(
                                           EsquemaVacunacionChanged(newValue!));
-                                      formstate.didChange(newValue);
                                     },
                                   ),
                                 )
@@ -751,12 +725,15 @@ class _CuidadoSaludCondRiesgoFormState
             BlocBuilder<LugarVacunacionCubit, LugaresVacunacionState>(
               builder: (context, state) {
                 if (state is LugaresVacunacionLoaded) {
+                  final lugaresVacunacionLoaded =
+                      state.lugaresVacunacionLoaded!;
+
                   return FormField(
                     initialValue: _lugarVacunacionId,
                     builder: (FormFieldState<int> formstate) => Column(
                       children: [
                         Column(
-                            children: state.lugaresVacunacionLoaded!
+                            children: lugaresVacunacionLoaded
                                 .map(
                                   (e) => RadioListTile(
                                     title: Text(e.descripcion),
@@ -766,9 +743,10 @@ class _CuidadoSaludCondRiesgoFormState
                                       setState(() {
                                         _lugarVacunacionId = newValue!;
                                       });
+                                      formstate.didChange(newValue);
+
                                       cuidadoSaludCondRiesgoBloc.add(
                                           LugarVacunacionChanged(newValue!));
-                                      formstate.didChange(newValue);
                                     },
                                   ),
                                 )
@@ -805,12 +783,14 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
         builder: (context, state) {
           if (state is OpcionesSiNoLoaded) {
+            final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
             return FormField(
               initialValue: _utilizaMetodoPlanificacionId,
               builder: (FormFieldState<int> formstate) => Column(
                 children: [
                   Column(
-                      children: state.opcionesSiNoLoaded!
+                      children: opcionesSiNoLoaded
                           .map(
                             (e) => widget.currentAfiliado.edad! < 12 &&
                                     e.opcionId == 1
@@ -836,10 +816,10 @@ class _CuidadoSaludCondRiesgoFormState
                                         _utilizaMetodoPlanificacionId =
                                             newValue!;
                                       });
+                                      formstate.didChange(newValue);
                                       cuidadoSaludCondRiesgoBloc.add(
                                           UtilizaMetodoPlanificacionChanged(
                                               newValue!));
-                                      formstate.didChange(newValue);
                                     },
                                   ),
                           )
@@ -877,9 +857,12 @@ class _CuidadoSaludCondRiesgoFormState
             BlocBuilder<MetodoPlanificacionCubit, MetodosPlanificacionState>(
               builder: (context, state) {
                 if (state is MetodosPlanificacionLoaded) {
+                  final metodosPlanificacionLoaded =
+                      state.metodosPlanificacionLoaded!;
+
                   return DropdownButtonFormField<int>(
                     value: _metodoPlanificacionId,
-                    items: state.metodosPlanificacionLoaded!
+                    items: metodosPlanificacionLoaded
                         .map(
                           (metodoPlanificacion) => DropdownMenuItem<int>(
                             value: metodoPlanificacion.metodoPlanificacionId,
@@ -921,10 +904,12 @@ class _CuidadoSaludCondRiesgoFormState
       BlocBuilder<ConductaSeguirCubit, ConductasSeguirState>(
         builder: (context, state) {
           if (state is ConductasSeguirLoaded) {
+            final conductasSeguirLoaded = state.conductasSeguirLoaded!;
+
             return DropdownButtonFormField<int>(
               isExpanded: true,
               value: _conductaSeguirId,
-              items: state.conductasSeguirLoaded!
+              items: conductasSeguirLoaded
                   .map(
                     (conductaSeguir) => DropdownMenuItem<int>(
                       value: conductaSeguir.conductaSeguirId,

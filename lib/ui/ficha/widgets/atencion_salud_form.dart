@@ -16,7 +16,10 @@ import '../../cubits/enfermedad_tratamiento/enfermedad_tratamiento_cubit.dart';
 import '../../cubits/especialidad_med_tradicional/especialidad_med_tradicional_cubit.dart';
 import '../../cubits/lugar_atencion_medico/lugar_atencion_medico_cubit.dart';
 import '../../cubits/planta_medicinal/planta_medicinal_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../helpers/enfermedades_tradicionales_helper.dart';
+import '../helpers/esp_med_tradicional_helper.dart';
+import '../helpers/lugares_atencion_medico_helper.dart';
+import '../helpers/plantas_medicinales_helper.dart';
 
 class AtencionSaludForm extends StatefulWidget {
   const AtencionSaludForm(
@@ -90,10 +93,12 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
         BlocBuilder<EnfermedadAcudeCubit, EnfermedadesAcudeState>(
           builder: (context, state) {
             if (state is EnfermedadesAcudeLoaded) {
+              final enfermedadesAcudeLoaded = state.enfermedadesAcudeLoaded!;
+
               return DropdownButtonFormField<int>(
                 isExpanded: true,
                 value: _enfermedadAcudeId,
-                items: state.enfermedadesAcudeLoaded!
+                items: enfermedadesAcudeLoaded
                     .map(
                       (enfermedadAcude) => DropdownMenuItem<int>(
                         value: enfermedadAcude.enfermedadAcudeId,
@@ -132,12 +137,14 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
         BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
           builder: (context, state) {
             if (state is OpcionesSiNoLoaded) {
+              final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
               return FormField(
                 initialValue: _recibioAtencionMedTradicionalId,
                 builder: (FormFieldState<int> formstate) => Column(
                   children: [
                     Column(
-                        children: state.opcionesSiNoLoaded!
+                        children: opcionesSiNoLoaded
                             .map(
                               (e) => e.opcionId == 3
                                   ? Container()
@@ -206,6 +213,9 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                   EspecialidadesMedTradicionalState>(
                 builder: (context, state) {
                   if (state is EspecialidadesMedTradicionalLoaded) {
+                    final especialidadesMedTradicionalLoaded =
+                        state.especialidadesMedTradicionalLoaded!;
+
                     return FormField<List<LstEspMedTradicional>>(
                       initialValue: atencionSaludBloc
                           .state.lstEspecialidadesMedTradicional,
@@ -221,70 +231,37 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                           children: [
                             Wrap(
                               children: List<Widget>.generate(
-                                state
-                                    .especialidadesMedTradicionalLoaded!.length,
+                                especialidadesMedTradicionalLoaded.length,
                                 (index) {
-                                  final e =
-                                      state.especialidadesMedTradicionalLoaded![
-                                          index];
+                                  final especialidadMedTradicional =
+                                      especialidadesMedTradicionalLoaded[index];
                                   return Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                          value: formState.value?.any((element) =>
-                                                  element
-                                                      .especialidadMedTradId ==
-                                                  e.especialidadMedTradId) ??
+                                          value: formState.value?.any((e) =>
+                                                  e.especialidadMedTradId ==
+                                                  especialidadMedTradicional
+                                                      .especialidadMedTradId) ??
                                               false,
                                           onChanged: (bool? value) {
-                                            (value! &&
-                                                    formState.value != null &&
-                                                    formState.value!.length >=
-                                                        3)
-                                                ? CustomSnackBar
-                                                    .showCustomDialog(
-                                                        context,
-                                                        'Error',
-                                                        'Máximo tres opciones',
-                                                        () => Navigator.pop(
-                                                            context),
-                                                        false)
-                                                : setState(
-                                                    () {
-                                                      var selectedItems = List<
-                                                              LstEspMedTradicional>.from(
-                                                          formState.value ??
-                                                              []);
-                                                      if (value == true) {
-                                                        selectedItems.add(
-                                                            LstEspMedTradicional(
-                                                                especialidadMedTradId:
-                                                                    e.especialidadMedTradId));
-                                                      } else {
-                                                        selectedItems
-                                                            .removeWhere(
-                                                          (element) =>
-                                                              element
-                                                                  .especialidadMedTradId ==
-                                                              e.especialidadMedTradId,
-                                                        );
-                                                      }
-                                                      formState.didChange(
-                                                          selectedItems);
-                                                      atencionSaludBloc.add(
-                                                          EspecialidadesMedTradicionalChanged(
-                                                              selectedItems));
-                                                    },
-                                                  );
+                                            handleEspecialidadMedTradSelection(
+                                                formState,
+                                                context,
+                                                value,
+                                                especialidadMedTradicional
+                                                    .especialidadMedTradId,
+                                                atencionSaludBloc);
                                           }),
                                       Flexible(
                                         child: Text(
-                                          e.descripcion,
+                                          especialidadMedTradicional
+                                              .descripcion,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       if (index <
-                                          state.especialidadesMedTradicionalLoaded!
+                                          especialidadesMedTradicionalLoaded
                                                   .length -
                                               1)
                                         const VerticalDivider(),
@@ -316,6 +293,8 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                   EnfermedadesTradicionalesState>(
                 builder: (context, state) {
                   if (state is EnfermedadesTradicionalesLoaded) {
+                    final enfermedadesTradicionalesLoaded =
+                        state.enfermedadesTradicionalesLoaded!;
                     return FormField<List<LstEnfermedadTradicional>>(
                       initialValue:
                           atencionSaludBloc.state.lstEnfermedadesTradicionales,
@@ -331,68 +310,36 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                           children: [
                             Wrap(
                               children: List<Widget>.generate(
-                                state.enfermedadesTradicionalesLoaded!.length,
+                                enfermedadesTradicionalesLoaded.length,
                                 (index) {
-                                  final e = state
+                                  final enfermedadTradicional = state
                                       .enfermedadesTradicionalesLoaded![index];
                                   return Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                          value: formState.value?.any((element) =>
-                                                  element
-                                                      .enfermedadTradicionalId ==
-                                                  e.enfermedadTradicionalId) ??
+                                          value: formState.value?.any((e) =>
+                                                  e.enfermedadTradicionalId ==
+                                                  enfermedadTradicional
+                                                      .enfermedadTradicionalId) ??
                                               false,
                                           onChanged: (bool? value) {
-                                            (value! &&
-                                                    formState.value != null &&
-                                                    formState.value!.length >=
-                                                        5)
-                                                ? CustomSnackBar
-                                                    .showCustomDialog(
-                                                        context,
-                                                        'Error',
-                                                        'Máximo cinco opciones',
-                                                        () => Navigator.pop(
-                                                            context),
-                                                        false)
-                                                : setState(
-                                                    () {
-                                                      var selectedItems = List<
-                                                              LstEnfermedadTradicional>.from(
-                                                          formState.value ??
-                                                              []);
-                                                      if (value == true) {
-                                                        selectedItems.add(
-                                                            LstEnfermedadTradicional(
-                                                                enfermedadTradicionalId:
-                                                                    e.enfermedadTradicionalId));
-                                                      } else {
-                                                        selectedItems
-                                                            .removeWhere(
-                                                          (element) =>
-                                                              element
-                                                                  .enfermedadTradicionalId ==
-                                                              e.enfermedadTradicionalId,
-                                                        );
-                                                      }
-                                                      formState.didChange(
-                                                          selectedItems);
-                                                      atencionSaludBloc.add(
-                                                          EnfermedadesTradicionalesChanged(
-                                                              selectedItems));
-                                                    },
-                                                  );
+                                            handleEnfermedadTradicionalSelection(
+                                                formState,
+                                                context,
+                                                value,
+                                                enfermedadTradicional
+                                                    .enfermedadTradicionalId,
+                                                atencionSaludBloc);
                                           }),
                                       Flexible(
                                         child: Text(
-                                          e.descripcion,
+                                          enfermedadTradicional.descripcion,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       if (index <
-                                          state.enfermedadesTradicionalesLoaded!
+                                          enfermedadesTradicionalesLoaded
                                                   .length -
                                               1)
                                         const VerticalDivider(),
@@ -423,6 +370,8 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
               BlocBuilder<LugarAtencionMedicoCubit, LugaresAtencionMedicoState>(
                 builder: (context, state) {
                   if (state is LugaresAtencionMedicoLoaded) {
+                    final lugaresAtencionMedicoLoaded =
+                        state.lugaresAtencionMedicoLoaded!;
                     return FormField<List<LstLugarAtencionMedico>>(
                       initialValue:
                           atencionSaludBloc.state.lstLugaresAtencionMedico,
@@ -438,69 +387,36 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                           children: [
                             Wrap(
                               children: List<Widget>.generate(
-                                state.lugaresAtencionMedicoLoaded!.length,
+                                lugaresAtencionMedicoLoaded.length,
                                 (index) {
-                                  final e =
-                                      state.lugaresAtencionMedicoLoaded![index];
+                                  final lugarAtencionMedico =
+                                      lugaresAtencionMedicoLoaded[index];
                                   return Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                          value: formState.value?.any((element) =>
-                                                  element
-                                                      .lugarAtencionMedicoId ==
-                                                  e.lugarAtencionMedicoId) ??
+                                          value: formState.value?.any((e) =>
+                                                  e.lugarAtencionMedicoId ==
+                                                  lugarAtencionMedico
+                                                      .lugarAtencionMedicoId) ??
                                               false,
                                           onChanged: (bool? value) {
-                                            (value! &&
-                                                    formState.value != null &&
-                                                    formState.value!.length >=
-                                                        3)
-                                                ? CustomSnackBar
-                                                    .showCustomDialog(
-                                                        context,
-                                                        'Error',
-                                                        'Máximo tres opciones',
-                                                        () => Navigator.pop(
-                                                            context),
-                                                        false)
-                                                : setState(
-                                                    () {
-                                                      var selectedItems = List<
-                                                              LstLugarAtencionMedico>.from(
-                                                          formState.value ??
-                                                              []);
-                                                      if (value == true) {
-                                                        selectedItems.add(
-                                                            LstLugarAtencionMedico(
-                                                                lugarAtencionMedicoId:
-                                                                    e.lugarAtencionMedicoId));
-                                                      } else {
-                                                        selectedItems
-                                                            .removeWhere(
-                                                          (element) =>
-                                                              element
-                                                                  .lugarAtencionMedicoId ==
-                                                              e.lugarAtencionMedicoId,
-                                                        );
-                                                      }
-                                                      formState.didChange(
-                                                          selectedItems);
-                                                      atencionSaludBloc.add(
-                                                          LugaresAtencionMedicoChanged(
-                                                              selectedItems));
-                                                    },
-                                                  );
+                                            handleLugarAtencionMedicoSelection(
+                                                formState,
+                                                context,
+                                                value,
+                                                lugarAtencionMedico
+                                                    .lugarAtencionMedicoId,
+                                                atencionSaludBloc);
                                           }),
                                       Flexible(
                                         child: Text(
-                                          e.descripcion,
+                                          lugarAtencionMedico.descripcion,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       if (index <
-                                          state.lugaresAtencionMedicoLoaded!
-                                                  .length -
+                                          lugaresAtencionMedicoLoaded.length -
                                               1)
                                         const VerticalDivider(),
                                     ],
@@ -532,10 +448,12 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
         BlocBuilder<EnfermedadTratamientoCubit, EnfermedadesTratamientoState>(
           builder: (context, state) {
             if (state is EnfermedadesTratamientoLoaded) {
+              final enfermedadesTratamientoLoaded =
+                  state.enfermedadesTratamientoLoaded!;
               return DropdownButtonFormField<int>(
                 isExpanded: true,
                 value: _enfermedadTratamientoId,
-                items: state.enfermedadesTratamientoLoaded!
+                items: enfermedadesTratamientoLoaded
                     .map(
                       (enfermedadTratamiento) => DropdownMenuItem<int>(
                         value: enfermedadTratamiento.enfermedadTratamientoId,
@@ -575,12 +493,14 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
         BlocBuilder<OpcionSiNoCubit, OpcionesSiNoState>(
           builder: (context, state) {
             if (state is OpcionesSiNoLoaded) {
+              final opcionesSiNoLoaded = state.opcionesSiNoLoaded!;
+
               return FormField(
                 initialValue: _utilizaPlantasMedId,
                 builder: (FormFieldState<int> formstate) => Column(
                   children: [
                     Column(
-                        children: state.opcionesSiNoLoaded!
+                        children: opcionesSiNoLoaded
                             .map(
                               (e) => e.opcionId == 3
                                   ? Container()
@@ -648,9 +568,12 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                   LugaresPlantasMedicinalesState>(
                 builder: (context, state) {
                   if (state is LugaresPlantasMedicinalesLoaded) {
+                    final lugaresPlantasMedicinalesLoaded =
+                        state.lugaresPlantasMedicinalesLoaded!;
+
                     return DropdownButtonFormField<int>(
                       value: _lugarPlantaMedicinalId,
-                      items: state.lugaresPlantasMedicinalesLoaded!
+                      items: lugaresPlantasMedicinalesLoaded
                           .map(
                             (lugarPlantaMedicinal) => DropdownMenuItem<int>(
                               value:
@@ -691,6 +614,9 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
               BlocBuilder<PlantaMedicinalCubit, PlantasMedicinalesState>(
                 builder: (context, state) {
                   if (state is PlantasMedicinalesLoaded) {
+                    final plantasMedicinalesLoaded =
+                        state.plantasMedicinalesLoaded!;
+
                     return FormField<List<LstPlantaMedicinal>>(
                       initialValue:
                           atencionSaludBloc.state.lstPlantasMedicinales,
@@ -706,71 +632,36 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                           children: [
                             Wrap(
                               children: List<Widget>.generate(
-                                state.plantasMedicinalesLoaded!.length,
+                                plantasMedicinalesLoaded.length,
                                 (index) {
-                                  final e =
-                                      state.plantasMedicinalesLoaded![index];
+                                  final plantaMedicinal =
+                                      plantasMedicinalesLoaded[index];
                                   return Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Checkbox(
-                                          value: formState.value?.any(
-                                                  (element) =>
-                                                      element
-                                                          .plantaMedicinalId ==
-                                                      e.plantaMedicinalId) ??
+                                          value: formState.value?.any((e) =>
+                                                  e.plantaMedicinalId ==
+                                                  plantaMedicinal
+                                                      .plantaMedicinalId) ??
                                               false,
                                           onChanged: (bool? value) {
-                                            (value! &&
-                                                    formState.value != null &&
-                                                    formState.value!.length >=
-                                                        5)
-                                                ? CustomSnackBar
-                                                    .showCustomDialog(
-                                                        context,
-                                                        'Error',
-                                                        'Máximo cinco opciones',
-                                                        () => Navigator.pop(
-                                                            context),
-                                                        false)
-                                                : setState(
-                                                    () {
-                                                      var selectedItems = List<
-                                                              LstPlantaMedicinal>.from(
-                                                          formState.value ??
-                                                              []);
-                                                      if (value == true) {
-                                                        selectedItems.add(
-                                                            LstPlantaMedicinal(
-                                                                plantaMedicinalId:
-                                                                    e.plantaMedicinalId));
-                                                      } else {
-                                                        selectedItems
-                                                            .removeWhere(
-                                                          (element) =>
-                                                              element
-                                                                  .plantaMedicinalId ==
-                                                              e.plantaMedicinalId,
-                                                        );
-                                                      }
-                                                      formState.didChange(
-                                                          selectedItems);
-                                                      atencionSaludBloc.add(
-                                                          PlantasMedicinalesChanged(
-                                                              selectedItems));
-                                                    },
-                                                  );
+                                            handlePlantaMedicinalSelection(
+                                                formState,
+                                                context,
+                                                value,
+                                                plantaMedicinal
+                                                    .plantaMedicinalId,
+                                                atencionSaludBloc);
                                           }),
                                       Flexible(
                                         child: Text(
-                                          e.descripcion,
+                                          plantaMedicinal.descripcion,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       if (index <
-                                          state.plantasMedicinalesLoaded!
-                                                  .length -
-                                              1)
+                                          plantasMedicinalesLoaded.length - 1)
                                         const VerticalDivider(),
                                     ],
                                   );

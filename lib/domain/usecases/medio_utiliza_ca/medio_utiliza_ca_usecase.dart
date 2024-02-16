@@ -9,8 +9,8 @@ class MedioUtilizaCAUsecase {
 
   MedioUtilizaCAUsecase(this.repository);
 
-  Future<Either<Failure, List<MedioUtilizaCAEntity>>>
-      getMediosUtilizaCAUsecase() {
-    return repository.getMediosUtilizaCARepository();
+  Future<Either<Failure, List<MedioUtilizaCAEntity>>> getMediosUtilizaCAUsecase(
+      int ideDpto) {
+    return repository.getMediosUtilizaCARepository(ideDpto);
   }
 }

@@ -15,9 +15,10 @@ class MedioUtilizaCARepositoryImpl implements MedioUtilizaCARepository {
 
   @override
   Future<Either<Failure, List<MedioUtilizaCAEntity>>>
-      getMediosUtilizaCARepository() async {
+      getMediosUtilizaCARepository(int ideDpto) async {
     try {
-      final result = await medioUtilizaCARemoteDataSource.getMediosUtilizaCA();
+      final result =
+          await medioUtilizaCARemoteDataSource.getMediosUtilizaCA(ideDpto);
 
       return Right(result);
     } on ServerFailure catch (e) {

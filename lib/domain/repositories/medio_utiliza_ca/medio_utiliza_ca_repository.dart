@@ -5,5 +5,5 @@ import '../../entities/medio_utiliza_ca_entity.dart';
 
 abstract class MedioUtilizaCARepository {
   Future<Either<Failure, List<MedioUtilizaCAEntity>>>
-      getMediosUtilizaCARepository();
+      getMediosUtilizaCARepository(int ideDpto);
 }
