@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleEspecieAnimalCriaSelection(
     FormFieldState<List<LstAnimalCria>> formState,
-    int? ningunaId,
+    int? optionId,
     BuildContext context,
     bool? value,
     int especieAnimalCriaId,
@@ -16,9 +16,9 @@ void handleEspecieAnimalCriaSelection(
 
   var selectedItems = List<LstAnimalCria>.from(formState.value ?? []);
 
-  if (ningunaId != null) {
-    _handleNingunaIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, especieAnimalCriaId, ningunaId);
+  if (optionId != null) {
+    _handleOptionIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, especieAnimalCriaId, optionId);
   } else {
     _handleRegularSelection(context, value, isMaxSelectionReached,
         selectedItems, especieAnimalCriaId);
@@ -28,18 +28,18 @@ void handleEspecieAnimalCriaSelection(
   dimUbicacionBloc.add(EspeciesAnimalesCriaChanged(selectedItems));
 }
 
-void _handleNingunaIdSelection(
+void _handleOptionIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstAnimalCria> selectedItems,
     int especieAnimalCriaId,
-    int ningunaId) {
-  if (isMaxSelectionReached && especieAnimalCriaId != ningunaId) {
+    int optionId) {
+  if (isMaxSelectionReached && especieAnimalCriaId != optionId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithNingunaId(
-        value, selectedItems, especieAnimalCriaId, ningunaId);
+    _updateSelectedItemsWithOptionId(
+        value, selectedItems, especieAnimalCriaId, optionId);
   }
 }
 
@@ -61,13 +61,13 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithNingunaId(bool value,
-    List<LstAnimalCria> selectedItems, int especieAnimalCriaId, int ningunaId) {
-  if (especieAnimalCriaId == ningunaId) {
+void _updateSelectedItemsWithOptionId(bool value,
+    List<LstAnimalCria> selectedItems, int especieAnimalCriaId, int optionId) {
+  if (especieAnimalCriaId == optionId) {
     selectedItems.clear();
-    selectedItems.add(LstAnimalCria(especieAnimalCriaId: ningunaId));
+    selectedItems.add(LstAnimalCria(especieAnimalCriaId: optionId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.especieAnimalCriaId == ningunaId);
+    selectedItems.removeWhere((e) => e.especieAnimalCriaId == optionId);
     selectedItems.add(LstAnimalCria(especieAnimalCriaId: especieAnimalCriaId));
   } else {
     selectedItems

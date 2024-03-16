@@ -12,6 +12,12 @@ class ExisteAfiliadoCabezaFamilia extends AfiliadosGrupoFamiliarEvent {
   const ExisteAfiliadoCabezaFamilia(this.familiaId);
 }
 
+class AddAfiliadoGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
+  final GrupoFamiliarEntity grupoFamiliar;
+
+  const AddAfiliadoGrupoFamiliar(this.grupoFamiliar);
+}
+
 class GetAfiliadosGrupoFamiliar extends AfiliadosGrupoFamiliarEvent {
   final int familiaId;
 

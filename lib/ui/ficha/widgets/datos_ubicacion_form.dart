@@ -13,6 +13,7 @@ import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../cubits/resguardo/resguardo_cubit.dart';
+import '../../utils/validators/form_validators.dart';
 import '../helpers/medios_comunicacion_helper.dart';
 
 class DatosUbicacionForm extends StatefulWidget {
@@ -476,11 +477,11 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           builder: (context, state) {
             if (state is MediosComunicacionLoaded) {
               final mediosComunicacionLoaded = state.mediosComunicacionLoaded!;
-              int? ningunoId;
+              int? optionId;
 
               for (var e in mediosComunicacionLoaded) {
-                if (e.descripcion == 'Ninguno') {
-                  ningunoId = e.medioComunicacionId;
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.medioComunicacionId;
                 }
               }
 
@@ -513,7 +514,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                                   onChanged: (bool? value) {
                                     handleMediosComunicacionSelection(
                                         formState,
-                                        ningunoId,
+                                        optionId,
                                         context,
                                         value,
                                         medioComunicacion.medioComunicacionId,

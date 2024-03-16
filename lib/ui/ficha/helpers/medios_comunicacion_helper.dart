@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleMediosComunicacionSelection(
     FormFieldState<List<LstMediosComunica>> formState,
-    int? ningunaId,
+    int? optionId,
     BuildContext context,
     bool? value,
     int medioComunicacionId,
@@ -16,9 +16,9 @@ void handleMediosComunicacionSelection(
 
   var selectedItems = List<LstMediosComunica>.from(formState.value ?? []);
 
-  if (ningunaId != null) {
-    _handleNingunaIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, medioComunicacionId, ningunaId);
+  if (optionId != null) {
+    _handleOptionIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, medioComunicacionId, optionId);
   } else {
     _handleRegularSelection(context, value, isMaxSelectionReached,
         selectedItems, medioComunicacionId);
@@ -28,18 +28,18 @@ void handleMediosComunicacionSelection(
   dimUbicacionBloc.add(MediosComunicacionChanged(selectedItems));
 }
 
-void _handleNingunaIdSelection(
+void _handleOptionIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstMediosComunica> selectedItems,
     int medioComunicacionId,
-    int ningunaId) {
-  if (isMaxSelectionReached && medioComunicacionId != ningunaId) {
+    int optionId) {
+  if (isMaxSelectionReached && medioComunicacionId != optionId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithNingunaId(
-        value, selectedItems, medioComunicacionId, ningunaId);
+    _updateSelectedItemsWithOptionId(
+        value, selectedItems, medioComunicacionId, optionId);
   }
 }
 
@@ -61,16 +61,16 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithNingunaId(
+void _updateSelectedItemsWithOptionId(
     bool value,
     List<LstMediosComunica> selectedItems,
     int medioComunicacionId,
-    int ningunaId) {
-  if (medioComunicacionId == ningunaId) {
+    int optionId) {
+  if (medioComunicacionId == optionId) {
     selectedItems.clear();
-    selectedItems.add(LstMediosComunica(medioComunicacionId: ningunaId));
+    selectedItems.add(LstMediosComunica(medioComunicacionId: optionId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.medioComunicacionId == ningunaId);
+    selectedItems.removeWhere((e) => e.medioComunicacionId == optionId);
     selectedItems
         .add(LstMediosComunica(medioComunicacionId: medioComunicacionId));
   } else {

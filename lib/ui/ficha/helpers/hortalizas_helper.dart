@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleHortalizaSelection(
     FormFieldState<List<LstHortaliza>> formState,
-    int? ningunaId,
+    int? optionId,
     BuildContext context,
     bool? value,
     int hortalizaId,
@@ -16,9 +16,9 @@ void handleHortalizaSelection(
 
   var selectedItems = List<LstHortaliza>.from(formState.value ?? []);
 
-  if (ningunaId != null) {
-    _handleNingunaIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, hortalizaId, ningunaId);
+  if (optionId != null) {
+    _handleOptionIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, hortalizaId, optionId);
   } else {
     _handleRegularSelection(
         context, value, isMaxSelectionReached, selectedItems, hortalizaId);
@@ -28,18 +28,18 @@ void handleHortalizaSelection(
   dimUbicacionBloc.add(HortalizasChanged(selectedItems));
 }
 
-void _handleNingunaIdSelection(
+void _handleOptionIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstHortaliza> selectedItems,
     int hortalizaId,
-    int ningunaId) {
-  if (isMaxSelectionReached && hortalizaId != ningunaId) {
+    int optionId) {
+  if (isMaxSelectionReached && hortalizaId != optionId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithNingunaId(
-        value, selectedItems, hortalizaId, ningunaId);
+    _updateSelectedItemsWithOptionId(
+        value, selectedItems, hortalizaId, optionId);
   }
 }
 
@@ -61,13 +61,13 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithNingunaId(bool value,
-    List<LstHortaliza> selectedItems, int hortalizaId, int ningunaId) {
-  if (hortalizaId == ningunaId) {
+void _updateSelectedItemsWithOptionId(bool value,
+    List<LstHortaliza> selectedItems, int hortalizaId, int optionId) {
+  if (hortalizaId == optionId) {
     selectedItems.clear();
-    selectedItems.add(LstHortaliza(hortalizaId: ningunaId));
+    selectedItems.add(LstHortaliza(hortalizaId: optionId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.hortalizaId == ningunaId);
+    selectedItems.removeWhere((e) => e.hortalizaId == optionId);
     selectedItems.add(LstHortaliza(hortalizaId: hortalizaId));
   } else {
     selectedItems.removeWhere((e) => e.hortalizaId == hortalizaId);

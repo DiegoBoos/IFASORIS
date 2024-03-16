@@ -14,6 +14,7 @@ import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
+import '../../utils/validators/form_validators.dart';
 import '../helpers/dificultades_acceso_med_trad_helper.dart';
 import '../helpers/medios_utiliza_med_trad_helper.dart';
 
@@ -393,11 +394,11 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                   final dificultadesAccesoMedTradicionalLoaded =
                       state.dificultadesAccesoMedTradicionalLoaded!;
 
-                  int? ningunaId;
+                  int? optionId;
 
                   for (var e in dificultadesAccesoMedTradicionalLoaded) {
-                    if (e.descripcion == 'Ninguna') {
-                      ningunaId = e.dificultadAccesoMedTradId;
+                    if (FormValidators.validateDescription(e.descripcion)) {
+                      optionId = e.dificultadAccesoMedTradId;
                     }
                   }
 
@@ -435,7 +436,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                       onChanged: (bool? value) {
                                         handleDificultadAccesoMedTradSelection(
                                             formState,
-                                            ningunaId,
+                                            optionId,
                                             context,
                                             value,
                                             dificultadAccesoMedTradicional

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/utils/validators/form_validators.dart';
 
 import '../../../data/models/cereal_model.dart';
 import '../../../data/models/especie_animal_model.dart';
@@ -168,11 +169,11 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                   if (state is TuberculosPlatanosLoaded) {
                     final tuberculosPlatanosLoaded =
                         state.tuberculosPlatanosLoaded!;
-                    int? ningunoId;
+                    int? optionId;
 
                     for (var e in tuberculosPlatanosLoaded) {
-                      if (e.descripcion == 'Ninguno') {
-                        ningunoId = e.tuberculoPlatanoId;
+                      if (FormValidators.validateDescription(e.descripcion)) {
+                        optionId = e.tuberculoPlatanoId;
                       }
                     }
 
@@ -206,7 +207,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                         onChanged: (bool? value) {
                                           handleTuberculoPlatanoSelection(
                                               formState,
-                                              ningunoId,
+                                              optionId,
                                               context,
                                               value,
                                               tuberculoPlatano
@@ -251,11 +252,11 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is LeguminosasLoaded) {
                     final leguminosasLoaded = state.leguminosasLoaded!;
-                    int? ningunoId;
+                    int? optionId;
 
                     for (var e in leguminosasLoaded) {
-                      if (e.descripcion == 'Ninguno') {
-                        ningunoId = e.leguminosaId;
+                      if (FormValidators.validateDescription(e.descripcion)) {
+                        optionId = e.leguminosaId;
                       }
                     }
 
@@ -286,7 +287,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                         onChanged: (bool? value) {
                                           handleLeguminosaSelection(
                                               formState,
-                                              ningunoId,
+                                              optionId,
                                               context,
                                               value,
                                               leguminosa.leguminosaId,
@@ -329,11 +330,11 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is HortalizasLoaded) {
                     final hortalizasLoaded = state.hortalizasLoaded!;
-                    int? ningunoId;
+                    int? optionId;
 
                     for (var e in hortalizasLoaded) {
-                      if (e.descripcion == 'Ninguno') {
-                        ningunoId = e.hortalizaId;
+                      if (FormValidators.validateDescription(e.descripcion)) {
+                        optionId = e.hortalizaId;
                       }
                     }
 
@@ -364,7 +365,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           onChanged: (bool? value) {
                                             handleHortalizaSelection(
                                                 formState,
-                                                ningunoId,
+                                                optionId,
                                                 context,
                                                 value,
                                                 hortaliza.hortalizaId,
@@ -406,11 +407,11 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is VerdurasLoaded) {
                     final verdurasLoaded = state.verdurasLoaded!;
-                    int? ningunoId;
+                    int? optionId;
 
                     for (var e in verdurasLoaded) {
-                      if (e.descripcion == 'Ninguno') {
-                        ningunoId = e.verduraId;
+                      if (FormValidators.validateDescription(e.descripcion)) {
+                        optionId = e.verduraId;
                       }
                     }
 
@@ -441,7 +442,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           onChanged: (bool? value) {
                                             handleVerduraSelection(
                                                 formState,
-                                                ningunoId,
+                                                optionId,
                                                 context,
                                                 value,
                                                 verdura.verduraId,
@@ -483,11 +484,11 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is FrutosLoaded) {
                     final frutosLoaded = state.frutosLoaded!;
-                    int? ningunoId;
+                    int? optionId;
 
                     for (var e in frutosLoaded) {
-                      if (e.descripcion == 'Ninguno') {
-                        ningunoId = e.frutoId;
+                      if (FormValidators.validateDescription(e.descripcion)) {
+                        optionId = e.frutoId;
                       }
                     }
 
@@ -517,7 +518,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           onChanged: (bool? value) {
                                             handleFrutoSelection(
                                                 formState,
-                                                ningunoId,
+                                                optionId,
                                                 context,
                                                 value,
                                                 fruto.frutoId,
@@ -559,11 +560,11 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is CerealesLoaded) {
                     final cerealesLoaded = state.cerealesLoaded!;
-                    int? ningunoId;
+                    int? optionId;
 
                     for (var e in cerealesLoaded) {
-                      if (e.descripcion == 'Ninguno') {
-                        ningunoId = e.cerealId;
+                      if (FormValidators.validateDescription(e.descripcion)) {
+                        optionId = e.cerealId;
                       }
                     }
 
@@ -594,7 +595,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           onChanged: (bool? value) {
                                             handleCerealSelection(
                                                 formState,
-                                                ningunoId,
+                                                optionId,
                                                 context,
                                                 value,
                                                 cereal.cerealId,
@@ -638,11 +639,11 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
           builder: (context, state) {
             if (state is EspeciesAnimalesLoaded) {
               final especiesAnimalesLoaded = state.especiesAnimalesLoaded!;
-              int? ningunoId;
+              int? optionId;
 
               for (var e in especiesAnimalesLoaded) {
-                if (e.descripcion == 'Ninguno') {
-                  ningunoId = e.especieAnimalCriaId;
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.especieAnimalCriaId;
                 }
               }
 
@@ -674,7 +675,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                     onChanged: (bool? value) {
                                       handleEspecieAnimalCriaSelection(
                                           formState,
-                                          ningunoId,
+                                          optionId,
                                           context,
                                           value,
                                           especieAnimal.especieAnimalCriaId,

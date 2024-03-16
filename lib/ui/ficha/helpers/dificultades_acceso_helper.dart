@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleDificultadAccesoSelection(
     FormFieldState<List<LstDificultadAccesoAtencion>> formState,
-    int? ningunaId,
+    int? optionId,
     BuildContext context,
     bool? value,
     int dificultaAccesoId,
@@ -17,9 +17,9 @@ void handleDificultadAccesoSelection(
   var selectedItems =
       List<LstDificultadAccesoAtencion>.from(formState.value ?? []);
 
-  if (ningunaId != null) {
-    _handleNingunaIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, dificultaAccesoId, ningunaId);
+  if (optionId != null) {
+    _handleOptionIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, dificultaAccesoId, optionId);
   } else {
     _handleRegularSelection(context, value, isMaxSelectionReached,
         selectedItems, dificultaAccesoId);
@@ -29,18 +29,18 @@ void handleDificultadAccesoSelection(
   dimUbicacionBloc.add(DificultadesAccesoCAChanged(selectedItems));
 }
 
-void _handleNingunaIdSelection(
+void _handleOptionIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstDificultadAccesoAtencion> selectedItems,
     int dificultaAccesoId,
-    int ningunaId) {
-  if (isMaxSelectionReached && dificultaAccesoId != ningunaId) {
+    int optionId) {
+  if (isMaxSelectionReached && dificultaAccesoId != optionId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithNingunaId(
-        value, selectedItems, dificultaAccesoId, ningunaId);
+    _updateSelectedItemsWithOptionId(
+        value, selectedItems, dificultaAccesoId, optionId);
   }
 }
 
@@ -62,17 +62,16 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithNingunaId(
+void _updateSelectedItemsWithOptionId(
     bool value,
     List<LstDificultadAccesoAtencion> selectedItems,
     int dificultaAccesoId,
-    int ningunaId) {
-  if (dificultaAccesoId == ningunaId) {
+    int optionId) {
+  if (dificultaAccesoId == optionId) {
     selectedItems.clear();
-    selectedItems
-        .add(LstDificultadAccesoAtencion(dificultaAccesoId: ningunaId));
+    selectedItems.add(LstDificultadAccesoAtencion(dificultaAccesoId: optionId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.dificultaAccesoId == ningunaId);
+    selectedItems.removeWhere((e) => e.dificultaAccesoId == optionId);
     selectedItems
         .add(LstDificultadAccesoAtencion(dificultaAccesoId: dificultaAccesoId));
   } else {

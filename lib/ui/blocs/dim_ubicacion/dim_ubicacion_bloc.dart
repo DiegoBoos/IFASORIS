@@ -94,7 +94,7 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
           emit(data);
           add(GetDificultadesAcceso(data.ubicacionId));
         } else {
-          emit(state.copyWith(formStatus: DimUbicacionFormEmpty()));
+          emit(initObject().copyWith(formStatus: DimUbicacionFormEmpty()));
         }
       });
     });

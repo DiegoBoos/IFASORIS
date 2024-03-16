@@ -24,6 +24,11 @@ class AfiliadosGrupoFamiliarBloc
       }, (data) => emit(AfiliadoCabezaFamiliaLoaded(data)));
     });
 
+    on<AddAfiliadoGrupoFamiliar>((event, emit) async {
+      emit(AfiliadosGrupoFamiliarLoaded(
+          afiliadosGrupoFamiliarLoaded: [event.grupoFamiliar]));
+    });
+
     on<GetAfiliadosGrupoFamiliar>((event, emit) async {
       emit(AfiliadosGrupoFamiliarLoading());
       final result = await grupoFamiliarUsecaseDB
@@ -33,12 +38,7 @@ class AfiliadosGrupoFamiliarBloc
           'Excepción no controlada',
         ));
       }, (data) {
-        if (data.isNotEmpty) {
-          emit(
-              AfiliadosGrupoFamiliarLoaded(afiliadosGrupoFamiliarLoaded: data));
-        } else {
-          emit(AfiliadosGrupoFamiliarInitial());
-        }
+        emit(AfiliadosGrupoFamiliarLoaded(afiliadosGrupoFamiliarLoaded: data));
       });
     });
 

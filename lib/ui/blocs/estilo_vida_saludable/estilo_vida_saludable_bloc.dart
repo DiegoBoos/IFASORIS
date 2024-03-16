@@ -43,7 +43,8 @@ class EstiloVidaSaludableBloc
         if (data != null) {
           emit(data.copyWith(formStatus: EstiloVidaSaludableFormLoaded()));
         } else {
-          emit(state.copyWith(formStatus: EstiloVidaSaludableFormEmpty()));
+          emit(initObject()
+              .copyWith(formStatus: EstiloVidaSaludableFormEmpty()));
         }
       });
     });

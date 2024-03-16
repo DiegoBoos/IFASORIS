@@ -10,6 +10,7 @@ import '../../../domain/usecases/sancion_justicia/sancion_justicia_exports.dart'
 import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 import '../../cubits/costumbre_practica/costumbre_practica_cubit.dart';
 import '../../cubits/religion_profesa/religion_profesa_cubit.dart';
+import '../../utils/validators/form_validators.dart';
 import '../helpers/eventos_costumbres_participa.dart';
 
 class DimensionSocioCulturalPueblosIndigenasForm extends StatefulWidget {
@@ -343,10 +344,12 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                         final eventosCostumbresParticipaLoaded =
                             state.eventosCostumbresParticipaLoaded!;
 
-                        int? ningunoId;
+                        int? optionId;
+
                         for (var e in eventosCostumbresParticipaLoaded) {
-                          if (e.descripcion == 'Ninguno') {
-                            ningunoId = e.eventoCostumbreParticipaId;
+                          if (FormValidators.validateDescription(
+                              e.descripcion)) {
+                            optionId = e.eventoCostumbreParticipaId;
                           }
                         }
 
@@ -384,7 +387,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                             onChanged: (bool? value) {
                                               handleEventoCostumbreParticipaSelection(
                                                   formState,
-                                                  ningunoId,
+                                                  optionId,
                                                   context,
                                                   value,
                                                   eventoCostumbreParticipa

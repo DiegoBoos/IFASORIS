@@ -25,7 +25,11 @@ import '../../cubits/techo_vivienda/techo_vivienda_cubit.dart';
 import '../../cubits/tipo_combustible_vivienda/tipo_combustible_vivienda_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../../utils/input_decoration.dart';
+import '../../utils/validators/form_validators.dart';
 import '../helpers/servicios_publicos_helper.dart';
+import 'package:ifasoris/domain/entities/piso_vivienda_entity.dart';
+import 'package:ifasoris/domain/entities/techo_vivienda_entity.dart';
+import 'package:ifasoris/domain/entities/tipo_combustible_vivienda_entity.dart';
 
 class DatosViviendaForm extends StatefulWidget {
   const DatosViviendaForm({super.key, required this.dimVivienda});
@@ -311,13 +315,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is PisosViviendaLoaded) {
               final pisosViviendaLoaded = state.pisosViviendaLoaded!;
-              final otroId = pisosViviendaLoaded
-                  .firstWhere((e) => e.descripcion == 'Otro',
-                      orElse: () => PisoViviendaModel(
-                          pisoViviendaId: 0,
-                          descripcion: '',
-                          departamentoIde: 0))
-                  .pisoViviendaId;
+              int? optionId;
+
+              for (var e in pisosViviendaLoaded) {
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.pisoViviendaId;
+                }
+              }
 
               return FormField<List<LstPiso>>(
                 initialValue: dimViviendaBloc.state.lstPiso,
@@ -351,7 +355,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value != null &&
                                             formState.value!.length >= 3 &&
                                             pisoVivienda.pisoViviendaId !=
-                                                otroId)
+                                                optionId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -359,36 +363,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             () => Navigator.pop(context),
                                             false)
                                         : setState(() {
-                                            if (pisoVivienda.pisoViviendaId ==
-                                                otroId) {
-                                              selectedItems = [
-                                                LstPiso(
-                                                    pisoViviendaId: pisoVivienda
-                                                        .pisoViviendaId)
-                                              ];
-                                              _showOtroPisoVivienda = true;
-                                            } else if (value == true) {
-                                              selectedItems.removeWhere((e) =>
-                                                  e.pisoViviendaId == otroId);
-                                              selectedItems.add(LstPiso(
-                                                  pisoViviendaId: pisoVivienda
-                                                      .pisoViviendaId));
-                                              _showOtroPisoVivienda = false;
-                                              _otroTipoPiso = null;
-                                            } else {
-                                              selectedItems.removeWhere(
-                                                (e) =>
-                                                    e.pisoViviendaId ==
-                                                    pisoVivienda.pisoViviendaId,
-                                              );
-                                            }
-                                            formState.didChange(selectedItems);
-
-                                            if (!_showOtroPisoVivienda) {
-                                              dimViviendaBloc.add(
-                                                  PisosViviendaChanged(
-                                                      selectedItems));
-                                            }
+                                            _updatePisosVivienda(
+                                                pisoVivienda,
+                                                optionId,
+                                                selectedItems,
+                                                value,
+                                                formState,
+                                                dimViviendaBloc);
                                           });
                                   },
                                 ),
@@ -430,7 +411,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
                               dimViviendaBloc.add(PisosViviendaChanged([
                                 LstPiso(
-                                    pisoViviendaId: otroId,
+                                    pisoViviendaId: optionId,
                                     otroTipoPiso: _otroTipoPiso)
                               ]));
                             },
@@ -455,13 +436,14 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is TechosViviendaLoaded) {
               final techosViviendaLoaded = state.techosViviendaLoaded!;
-              final otroId = techosViviendaLoaded
-                  .firstWhere((e) => e.descripcion == 'Otro',
-                      orElse: () => TechoViviendaModel(
-                          techoViviendaId: 0,
-                          descripcion: '',
-                          departamentoIde: 0))
-                  .techoViviendaId;
+
+              int? optionId;
+
+              for (var e in techosViviendaLoaded) {
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.techoViviendaId;
+                }
+              }
 
               return FormField<List<LstTecho>>(
                 initialValue: dimViviendaBloc.state.lstTecho,
@@ -492,7 +474,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value != null &&
                                             formState.value!.length >= 3 &&
                                             techoVivienda.techoViviendaId !=
-                                                otroId)
+                                                optionId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -500,42 +482,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             () => Navigator.pop(context),
                                             false)
                                         : setState(() {
-                                            var selectedItems =
-                                                List<LstTecho>.from(
-                                                    formState.value ?? []);
-
-                                            if (techoVivienda.techoViviendaId ==
-                                                otroId) {
-                                              selectedItems = [
-                                                LstTecho(
-                                                    techoViviendaId:
-                                                        techoVivienda
-                                                            .techoViviendaId)
-                                              ];
-                                              _showOtroTechoVivienda = true;
-                                            } else if (value == true) {
-                                              selectedItems.removeWhere((e) =>
-                                                  e.techoViviendaId == otroId);
-                                              selectedItems.add(LstTecho(
-                                                  techoViviendaId: techoVivienda
-                                                      .techoViviendaId));
-                                              _showOtroTechoVivienda = false;
-                                              _otroTipoTecho = null;
-                                            } else {
-                                              selectedItems.removeWhere(
-                                                (e) =>
-                                                    e.techoViviendaId ==
-                                                    techoVivienda
-                                                        .techoViviendaId,
-                                              );
-                                            }
-
-                                            if (!_showOtroTechoVivienda) {
-                                              dimViviendaBloc.add(
-                                                  TechosViviendaChanged(
-                                                      selectedItems));
-                                            }
-                                            formState.didChange(selectedItems);
+                                            _updateTechosVivienda(
+                                                formState,
+                                                techoVivienda,
+                                                optionId,
+                                                value,
+                                                dimViviendaBloc);
                                           });
                                   },
                                 ),
@@ -577,7 +529,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
                               dimViviendaBloc.add(TechosViviendaChanged([
                                 LstTecho(
-                                    techoViviendaId: otroId,
+                                    techoViviendaId: optionId,
                                     otroTipoTecho: _otroTipoTecho)
                               ]));
                             },
@@ -749,11 +701,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
             if (state is ServiciosPublicosViviendaLoaded) {
               final serviciosPublicosViviendaLoaded =
                   state.serviciosPublicosViviendaLoaded!;
-              int? ningunoId;
+
+              int? optionId;
 
               for (var e in serviciosPublicosViviendaLoaded) {
-                if (e.descripcion == 'Ninguno') {
-                  ningunoId = e.servicioPublicoViviendaId;
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.servicioPublicoViviendaId;
                 }
               }
 
@@ -786,7 +739,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                   onChanged: (bool? value) {
                                     handleServiciosPublicosSelection(
                                         formState,
-                                        ningunoId,
+                                        optionId,
                                         context,
                                         value,
                                         servicioPublicoVivienda
@@ -834,13 +787,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final tratamientosAguaViviendaLoaded =
                   state.tratamientosAguaViviendaLoaded!;
 
-              final otroId = tratamientosAguaViviendaLoaded
-                  .firstWhere((e) => e.descripcion == 'Otro',
-                      orElse: () => TratamientoAguaViviendaModel(
-                          tratamientoAguaViviendaId: 0,
-                          descripcion: '',
-                          departamentoIde: 0))
-                  .tratamientoAguaViviendaId;
+              int? optionId;
+
+              for (var e in tratamientosAguaViviendaLoaded) {
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.tratamientoAguaViviendaId;
+                }
+              }
 
               return FormField<List<LstTmtoAgua>>(
                 initialValue: dimViviendaBloc.state.lstTmtoAgua,
@@ -874,7 +827,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value!.length >= 3 &&
                                             tratamientoAguaVivienda
                                                     .tratamientoAguaViviendaId !=
-                                                otroId)
+                                                optionId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -882,44 +835,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             () => Navigator.pop(context),
                                             false)
                                         : setState(() {
-                                            var selectedItems =
-                                                List<LstTmtoAgua>.from(
-                                                    formState.value ?? []);
-                                            if (tratamientoAguaVivienda
-                                                    .tratamientoAguaViviendaId ==
-                                                otroId) {
-                                              selectedItems = [
-                                                LstTmtoAgua(
-                                                    tratamientoAguaViviendaId:
-                                                        tratamientoAguaVivienda
-                                                            .tratamientoAguaViviendaId)
-                                              ];
-                                              _showOtroTratamientoAgua = true;
-                                            } else if (value == true) {
-                                              selectedItems.removeWhere((e) =>
-                                                  e.tratamientoAguaViviendaId ==
-                                                  otroId);
-                                              selectedItems.add(LstTmtoAgua(
-                                                  tratamientoAguaViviendaId:
-                                                      tratamientoAguaVivienda
-                                                          .tratamientoAguaViviendaId));
-                                              _showOtroTratamientoAgua = false;
-                                              _otroTratamientoAgua = null;
-                                            } else {
-                                              selectedItems.removeWhere(
-                                                (e) =>
-                                                    e.tratamientoAguaViviendaId ==
-                                                    tratamientoAguaVivienda
-                                                        .tratamientoAguaViviendaId,
-                                              );
-                                            }
-                                            formState.didChange(selectedItems);
-
-                                            if (!_showOtroTratamientoAgua) {
-                                              dimViviendaBloc.add(
-                                                  TratamientosAguaViviendaChanged(
-                                                      selectedItems));
-                                            }
+                                            _updateTmtoAgua(
+                                                formState,
+                                                tratamientoAguaVivienda,
+                                                optionId,
+                                                value,
+                                                dimViviendaBloc);
                                           });
                                   },
                                 ),
@@ -963,7 +884,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(TratamientosAguaViviendaChanged([
                                 LstTmtoAgua(
-                                    tratamientoAguaViviendaId: otroId,
+                                    tratamientoAguaViviendaId: optionId,
                                     otroTratamientoAgua: _otroTratamientoAgua)
                               ]));
                             },
@@ -989,21 +910,17 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
             if (state is TiposSanitarioViviendaLoaded) {
               final tiposSanitarioViviendaLoaded =
                   state.tiposSanitarioViviendaLoaded!;
-              final noTieneId = tiposSanitarioViviendaLoaded
-                  .firstWhere((e) => e.descripcion == 'No tiene',
-                      orElse: () => TipoSanitarioViviendaModel(
-                          tipoSanitarioViviendaId: 0,
-                          descripcion: '',
-                          departamentoIde: 0))
-                  .tipoSanitarioViviendaId;
 
-              final otroId = tiposSanitarioViviendaLoaded
-                  .firstWhere((e) => e.descripcion == 'Otro',
-                      orElse: () => TipoSanitarioViviendaModel(
-                          tipoSanitarioViviendaId: 0,
-                          descripcion: '',
-                          departamentoIde: 0))
-                  .tipoSanitarioViviendaId;
+              int? optionId;
+              int? noTieneId;
+
+              for (var e in tiposSanitarioViviendaLoaded) {
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.tipoSanitarioViviendaId;
+                } else if (e.descripcion == 'No tiene') {
+                  noTieneId = e.tipoSanitarioViviendaId;
+                }
+              }
 
               return FormField<List<LstTipoSanitario>>(
                 initialValue: dimViviendaBloc.state.lstTipoSanitario,
@@ -1040,7 +957,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 noTieneId &&
                                             tipoSanitarioVivienda
                                                     .tipoSanitarioViviendaId !=
-                                                otroId)
+                                                optionId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -1048,57 +965,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             () => Navigator.pop(context),
                                             false)
                                         : setState(() {
-                                            var selectedItems =
-                                                List<LstTipoSanitario>.from(
-                                                    formState.value ?? []);
-
-                                            if (tipoSanitarioVivienda
-                                                    .tipoSanitarioViviendaId ==
-                                                noTieneId) {
-                                              selectedItems = [
-                                                LstTipoSanitario(
-                                                    tipoSanitarioViviendaId:
-                                                        tipoSanitarioVivienda
-                                                            .tipoSanitarioViviendaId)
-                                              ];
-                                              _showOtroTipoSanitario = false;
-                                              _otroTipoSanitario = null;
-                                            } else if (tipoSanitarioVivienda
-                                                    .tipoSanitarioViviendaId ==
-                                                otroId) {
-                                              selectedItems = [
-                                                LstTipoSanitario(
-                                                    tipoSanitarioViviendaId:
-                                                        tipoSanitarioVivienda
-                                                            .tipoSanitarioViviendaId)
-                                              ];
-                                              _showOtroTipoSanitario = true;
-                                            } else if (value == true) {
-                                              selectedItems.removeWhere((e) =>
-                                                  e.tipoSanitarioViviendaId ==
-                                                      noTieneId ||
-                                                  e.tipoSanitarioViviendaId ==
-                                                      otroId);
-                                              selectedItems.add(LstTipoSanitario(
-                                                  tipoSanitarioViviendaId:
-                                                      tipoSanitarioVivienda
-                                                          .tipoSanitarioViviendaId));
-                                              _showOtroTipoSanitario = false;
-                                            } else {
-                                              selectedItems.removeWhere(
-                                                (e) =>
-                                                    e.tipoSanitarioViviendaId ==
-                                                    tipoSanitarioVivienda
-                                                        .tipoSanitarioViviendaId,
-                                              );
-                                            }
-                                            formState.didChange(selectedItems);
-
-                                            if (!_showOtroTipoSanitario) {
-                                              dimViviendaBloc.add(
-                                                  TiposSanitarioViviendaChanged(
-                                                      selectedItems));
-                                            }
+                                            _updateTipoSanitario(
+                                                formState,
+                                                tipoSanitarioVivienda,
+                                                noTieneId,
+                                                optionId,
+                                                value,
+                                                dimViviendaBloc);
                                           });
                                   },
                                 ),
@@ -1142,7 +1015,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(TiposSanitarioViviendaChanged([
                                 LstTipoSanitario(
-                                    tipoSanitarioViviendaId: otroId,
+                                    tipoSanitarioViviendaId: optionId,
                                     otroTipoSanitario: _otroTipoSanitario)
                               ]));
                             },
@@ -1170,13 +1043,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final tiposCombustibleViviendaLoaded =
                   state.tiposCombustibleViviendaLoaded!;
 
-              final otroId = tiposCombustibleViviendaLoaded
-                  .firstWhere((e) => e.descripcion == 'otro',
-                      orElse: () => TipoCombustibleViviendaModel(
-                          tipoCombustibleViviendaId: 0,
-                          descripcion: '',
-                          departamentoIde: 0))
-                  .tipoCombustibleViviendaId;
+              int? optionId;
+
+              for (var e in tiposCombustibleViviendaLoaded) {
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.tipoCombustibleViviendaId;
+                }
+              }
 
               return FormField<List<LstTipoCombustible>>(
                 initialValue: dimViviendaBloc.state.lstTipoCombustible,
@@ -1210,7 +1083,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value!.length >= 3 &&
                                             tipoCombustibleVivienda
                                                     .tipoCombustibleViviendaId !=
-                                                otroId)
+                                                optionId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -1218,45 +1091,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             () => Navigator.pop(context),
                                             false)
                                         : setState(() {
-                                            var selectedItems =
-                                                List<LstTipoCombustible>.from(
-                                                    formState.value ?? []);
-
-                                            if (tipoCombustibleVivienda
-                                                    .tipoCombustibleViviendaId ==
-                                                otroId) {
-                                              selectedItems = [
-                                                LstTipoCombustible(
-                                                    tipoCombustibleViviendaId:
-                                                        tipoCombustibleVivienda
-                                                            .tipoCombustibleViviendaId)
-                                              ];
-                                              _showOtroTipoCombustible = true;
-                                            } else if (value == true) {
-                                              selectedItems.removeWhere((e) =>
-                                                  e.tipoCombustibleViviendaId ==
-                                                  otroId);
-                                              selectedItems.add(LstTipoCombustible(
-                                                  tipoCombustibleViviendaId:
-                                                      tipoCombustibleVivienda
-                                                          .tipoCombustibleViviendaId));
-                                              _showOtroTipoCombustible = false;
-                                              _otroTipoCombustible = null;
-                                            } else {
-                                              selectedItems.removeWhere(
-                                                (e) =>
-                                                    e.tipoCombustibleViviendaId ==
-                                                    tipoCombustibleVivienda
-                                                        .tipoCombustibleViviendaId,
-                                              );
-                                            }
-                                            formState.didChange(selectedItems);
-
-                                            if (!_showOtroTipoCombustible) {
-                                              dimViviendaBloc.add(
-                                                  TiposCombustibleViviendaChanged(
-                                                      selectedItems));
-                                            }
+                                            _updateTipoCombustible(
+                                                formState,
+                                                tipoCombustibleVivienda,
+                                                optionId,
+                                                value,
+                                                dimViviendaBloc);
                                           });
                                   },
                                 ),
@@ -1300,7 +1140,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(TiposCombustibleViviendaChanged([
                                 LstTipoCombustible(
-                                    tipoCombustibleViviendaId: otroId,
+                                    tipoCombustibleViviendaId: optionId,
                                     otroTipoCombustible: _otroTipoCombustible)
                               ]));
                             },
@@ -1327,13 +1167,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final factoresRiesgoViviendaLoaded =
                   state.factoresRiesgoViviendaLoaded!;
 
-              final otrosId = factoresRiesgoViviendaLoaded
-                  .firstWhere((e) => e.descripcion == 'Otros',
-                      orElse: () => FactorRiesgoViviendaModel(
-                          factorRiesgoViviendaId: 0,
-                          descripcion: '',
-                          departamentoIde: 0))
-                  .factorRiesgoViviendaId;
+              int? optionId;
+
+              for (var e in factoresRiesgoViviendaLoaded) {
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.factorRiesgoViviendaId;
+                }
+              }
 
               return FormField<List<LstFactorRiesgo>>(
                 initialValue: dimViviendaBloc.state.lstFactorRiesgo,
@@ -1367,7 +1207,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               formState.value!.length >= 3 &&
                                               factorRiesgoVivienda
                                                       .factorRiesgoViviendaId !=
-                                                  otrosId)
+                                                  optionId)
                                           ? CustomSnackBar.showCustomDialog(
                                               context,
                                               'Error',
@@ -1376,45 +1216,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               false)
                                           : setState(
                                               () {
-                                                var selectedItems =
-                                                    List<LstFactorRiesgo>.from(
-                                                        formState.value ?? []);
-                                                if (factorRiesgoVivienda
-                                                        .factorRiesgoViviendaId ==
-                                                    otrosId) {
-                                                  selectedItems = [
-                                                    LstFactorRiesgo(
-                                                        factorRiesgoViviendaId:
-                                                            factorRiesgoVivienda
-                                                                .factorRiesgoViviendaId)
-                                                  ];
-                                                  _showOtroFactorRiesgo = true;
-                                                } else if (value == true) {
-                                                  selectedItems.removeWhere((e) =>
-                                                      e.factorRiesgoViviendaId ==
-                                                      otrosId);
-                                                  selectedItems.add(LstFactorRiesgo(
-                                                      factorRiesgoViviendaId:
-                                                          factorRiesgoVivienda
-                                                              .factorRiesgoViviendaId));
-                                                  _showOtroFactorRiesgo = false;
-                                                  _otroFactorRiesgo = null;
-                                                } else {
-                                                  selectedItems.removeWhere(
-                                                    (e) =>
-                                                        e.factorRiesgoViviendaId ==
-                                                        factorRiesgoVivienda
-                                                            .factorRiesgoViviendaId,
-                                                  );
-                                                }
-                                                formState
-                                                    .didChange(selectedItems);
-
-                                                if (!_showOtroFactorRiesgo) {
-                                                  dimViviendaBloc.add(
-                                                      FactoresRiesgoViviendaChanged(
-                                                          selectedItems));
-                                                }
+                                                _updateFactorRiesgo(
+                                                    formState,
+                                                    factorRiesgoVivienda,
+                                                    optionId,
+                                                    value,
+                                                    dimViviendaBloc);
                                               },
                                             );
                                     }),
@@ -1458,7 +1265,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(FactoresRiesgoViviendaChanged([
                                 LstFactorRiesgo(
-                                    factorRiesgoViviendaId: otrosId,
+                                    factorRiesgoViviendaId: optionId,
                                     otroFactorRiesgo: _otroFactorRiesgo)
                               ]));
                             },
@@ -1486,15 +1293,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final presenciaAnimalesViviendaLoaded =
                   state.presenciaAnimalesViviendaLoaded!;
 
-              final otrosId = presenciaAnimalesViviendaLoaded
-                  .firstWhere(
-                    (e) => e.descripcion == 'Otros',
-                    orElse: () => PresenciaAnimalViviendaModel(
-                        presenciaAnimalViviendaId: 0,
-                        descripcion: '',
-                        departamentoIde: 0),
-                  )
-                  .presenciaAnimalViviendaId;
+              int? optionId;
+
+              for (var e in presenciaAnimalesViviendaLoaded) {
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.presenciaAnimalViviendaId;
+                }
+              }
 
               return FormField<List<LstPresenciaAnimal>>(
                 initialValue: dimViviendaBloc.state.lstPresenciaAnimal,
@@ -1528,7 +1333,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               formState.value!.length >= 3 &&
                                               presenciaAnimalVivienda
                                                       .presenciaAnimalViviendaId !=
-                                                  otrosId)
+                                                  optionId)
                                           ? CustomSnackBar.showCustomDialog(
                                               context,
                                               'Error',
@@ -1537,47 +1342,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               false)
                                           : setState(
                                               () {
-                                                var selectedItems = List<
-                                                        LstPresenciaAnimal>.from(
-                                                    formState.value ?? []);
-                                                if (presenciaAnimalVivienda
-                                                        .presenciaAnimalViviendaId ==
-                                                    otrosId) {
-                                                  selectedItems = [
-                                                    LstPresenciaAnimal(
-                                                        presenciaAnimalViviendaId:
-                                                            presenciaAnimalVivienda
-                                                                .presenciaAnimalViviendaId)
-                                                  ];
-                                                  _showOtroPresenciaAnimal =
-                                                      true;
-                                                } else if (value == true) {
-                                                  selectedItems.removeWhere((e) =>
-                                                      e.presenciaAnimalViviendaId ==
-                                                      otrosId);
-                                                  selectedItems.add(LstPresenciaAnimal(
-                                                      presenciaAnimalViviendaId:
-                                                          presenciaAnimalVivienda
-                                                              .presenciaAnimalViviendaId));
-                                                  _showOtroPresenciaAnimal =
-                                                      false;
-                                                  _otroPresenciaAnimal = null;
-                                                } else {
-                                                  selectedItems.removeWhere(
-                                                    (e) =>
-                                                        e.presenciaAnimalViviendaId ==
-                                                        presenciaAnimalVivienda
-                                                            .presenciaAnimalViviendaId,
-                                                  );
-                                                }
-                                                formState
-                                                    .didChange(selectedItems);
-
-                                                if (!_showOtroPresenciaAnimal) {
-                                                  dimViviendaBloc.add(
-                                                      PresenciaAnimalesViviendaChanged(
-                                                          selectedItems));
-                                                }
+                                                _updatePresenciaAnimal(
+                                                    formState,
+                                                    presenciaAnimalVivienda,
+                                                    optionId,
+                                                    value,
+                                                    dimViviendaBloc);
                                               },
                                             );
                                     }),
@@ -1621,7 +1391,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(PresenciaAnimalesViviendaChanged([
                                 LstPresenciaAnimal(
-                                    presenciaAnimalViviendaId: otrosId,
+                                    presenciaAnimalViviendaId: optionId,
                                     otroPresenciaAnimal: _otroPresenciaAnimal)
                               ]));
                             },
@@ -1637,5 +1407,248 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
         ),
       ],
     );
+  }
+
+  void _updatePresenciaAnimal(
+      FormFieldState<List<LstPresenciaAnimal>> formState,
+      PresenciaAnimalViviendaEntity presenciaAnimalVivienda,
+      int? optionId,
+      bool value,
+      DimViviendaBloc dimViviendaBloc) {
+    var selectedItems = List<LstPresenciaAnimal>.from(formState.value ?? []);
+    if (presenciaAnimalVivienda.presenciaAnimalViviendaId == optionId) {
+      selectedItems = [
+        LstPresenciaAnimal(
+            presenciaAnimalViviendaId:
+                presenciaAnimalVivienda.presenciaAnimalViviendaId)
+      ];
+      _showOtroPresenciaAnimal = true;
+    } else if (value == true) {
+      selectedItems.removeWhere((e) => e.presenciaAnimalViviendaId == optionId);
+      selectedItems.add(LstPresenciaAnimal(
+          presenciaAnimalViviendaId:
+              presenciaAnimalVivienda.presenciaAnimalViviendaId));
+      _showOtroPresenciaAnimal = false;
+      _otroPresenciaAnimal = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) =>
+            e.presenciaAnimalViviendaId ==
+            presenciaAnimalVivienda.presenciaAnimalViviendaId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroPresenciaAnimal) {
+      dimViviendaBloc.add(PresenciaAnimalesViviendaChanged(selectedItems));
+    }
+  }
+
+  void _updateFactorRiesgo(
+      FormFieldState<List<LstFactorRiesgo>> formState,
+      FactorRiesgoViviendaEntity factorRiesgoVivienda,
+      int? optionId,
+      bool value,
+      DimViviendaBloc dimViviendaBloc) {
+    var selectedItems = List<LstFactorRiesgo>.from(formState.value ?? []);
+    if (factorRiesgoVivienda.factorRiesgoViviendaId == optionId) {
+      selectedItems = [
+        LstFactorRiesgo(
+            factorRiesgoViviendaId: factorRiesgoVivienda.factorRiesgoViviendaId)
+      ];
+      _showOtroFactorRiesgo = true;
+    } else if (value == true) {
+      selectedItems.removeWhere((e) => e.factorRiesgoViviendaId == optionId);
+      selectedItems.add(LstFactorRiesgo(
+          factorRiesgoViviendaId: factorRiesgoVivienda.factorRiesgoViviendaId));
+      _showOtroFactorRiesgo = false;
+      _otroFactorRiesgo = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) =>
+            e.factorRiesgoViviendaId ==
+            factorRiesgoVivienda.factorRiesgoViviendaId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroFactorRiesgo) {
+      dimViviendaBloc.add(FactoresRiesgoViviendaChanged(selectedItems));
+    }
+  }
+
+  void _updateTipoCombustible(
+      FormFieldState<List<LstTipoCombustible>> formState,
+      TipoCombustibleViviendaEntity tipoCombustibleVivienda,
+      int? optionId,
+      bool value,
+      DimViviendaBloc dimViviendaBloc) {
+    var selectedItems = List<LstTipoCombustible>.from(formState.value ?? []);
+
+    if (tipoCombustibleVivienda.tipoCombustibleViviendaId == optionId) {
+      selectedItems = [
+        LstTipoCombustible(
+            tipoCombustibleViviendaId:
+                tipoCombustibleVivienda.tipoCombustibleViviendaId)
+      ];
+      _showOtroTipoCombustible = true;
+    } else if (value == true) {
+      selectedItems.removeWhere((e) => e.tipoCombustibleViviendaId == optionId);
+      selectedItems.add(LstTipoCombustible(
+          tipoCombustibleViviendaId:
+              tipoCombustibleVivienda.tipoCombustibleViviendaId));
+      _showOtroTipoCombustible = false;
+      _otroTipoCombustible = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) =>
+            e.tipoCombustibleViviendaId ==
+            tipoCombustibleVivienda.tipoCombustibleViviendaId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroTipoCombustible) {
+      dimViviendaBloc.add(TiposCombustibleViviendaChanged(selectedItems));
+    }
+  }
+
+  void _updateTipoSanitario(
+      FormFieldState<List<LstTipoSanitario>> formState,
+      TipoSanitarioViviendaEntity tipoSanitarioVivienda,
+      int? noTieneId,
+      int? optionId,
+      bool value,
+      DimViviendaBloc dimViviendaBloc) {
+    var selectedItems = List<LstTipoSanitario>.from(formState.value ?? []);
+
+    if (tipoSanitarioVivienda.tipoSanitarioViviendaId == noTieneId) {
+      selectedItems = [
+        LstTipoSanitario(
+            tipoSanitarioViviendaId:
+                tipoSanitarioVivienda.tipoSanitarioViviendaId)
+      ];
+      _showOtroTipoSanitario = false;
+      _otroTipoSanitario = null;
+    } else if (tipoSanitarioVivienda.tipoSanitarioViviendaId == optionId) {
+      selectedItems = [
+        LstTipoSanitario(
+            tipoSanitarioViviendaId:
+                tipoSanitarioVivienda.tipoSanitarioViviendaId)
+      ];
+      _showOtroTipoSanitario = true;
+    } else if (value == true) {
+      selectedItems.removeWhere((e) =>
+          e.tipoSanitarioViviendaId == noTieneId ||
+          e.tipoSanitarioViviendaId == optionId);
+      selectedItems.add(LstTipoSanitario(
+          tipoSanitarioViviendaId:
+              tipoSanitarioVivienda.tipoSanitarioViviendaId));
+      _showOtroTipoSanitario = false;
+    } else {
+      selectedItems.removeWhere(
+        (e) =>
+            e.tipoSanitarioViviendaId ==
+            tipoSanitarioVivienda.tipoSanitarioViviendaId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroTipoSanitario) {
+      dimViviendaBloc.add(TiposSanitarioViviendaChanged(selectedItems));
+    }
+  }
+
+  void _updateTmtoAgua(
+      FormFieldState<List<LstTmtoAgua>> formState,
+      TratamientoAguaViviendaEntity tratamientoAguaVivienda,
+      int? optionId,
+      bool value,
+      DimViviendaBloc dimViviendaBloc) {
+    var selectedItems = List<LstTmtoAgua>.from(formState.value ?? []);
+    if (tratamientoAguaVivienda.tratamientoAguaViviendaId == optionId) {
+      selectedItems = [
+        LstTmtoAgua(
+            tratamientoAguaViviendaId:
+                tratamientoAguaVivienda.tratamientoAguaViviendaId)
+      ];
+      _showOtroTratamientoAgua = true;
+    } else if (value == true) {
+      selectedItems.removeWhere((e) => e.tratamientoAguaViviendaId == optionId);
+      selectedItems.add(LstTmtoAgua(
+          tratamientoAguaViviendaId:
+              tratamientoAguaVivienda.tratamientoAguaViviendaId));
+      _showOtroTratamientoAgua = false;
+      _otroTratamientoAgua = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) =>
+            e.tratamientoAguaViviendaId ==
+            tratamientoAguaVivienda.tratamientoAguaViviendaId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroTratamientoAgua) {
+      dimViviendaBloc.add(TratamientosAguaViviendaChanged(selectedItems));
+    }
+  }
+
+  void _updateTechosVivienda(
+      FormFieldState<List<LstTecho>> formState,
+      TechoViviendaEntity techoVivienda,
+      int? optionId,
+      bool value,
+      DimViviendaBloc dimViviendaBloc) {
+    var selectedItems = List<LstTecho>.from(formState.value ?? []);
+
+    if (techoVivienda.techoViviendaId == optionId) {
+      selectedItems = [
+        LstTecho(techoViviendaId: techoVivienda.techoViviendaId)
+      ];
+      _showOtroTechoVivienda = true;
+    } else if (value == true) {
+      selectedItems.removeWhere((e) => e.techoViviendaId == optionId);
+      selectedItems
+          .add(LstTecho(techoViviendaId: techoVivienda.techoViviendaId));
+      _showOtroTechoVivienda = false;
+      _otroTipoTecho = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) => e.techoViviendaId == techoVivienda.techoViviendaId,
+      );
+    }
+
+    if (!_showOtroTechoVivienda) {
+      dimViviendaBloc.add(TechosViviendaChanged(selectedItems));
+    }
+    formState.didChange(selectedItems);
+  }
+
+  void _updatePisosVivienda(
+      PisoViviendaEntity pisoVivienda,
+      int? optionId,
+      List<LstPiso> selectedItems,
+      bool value,
+      FormFieldState<List<LstPiso>> formState,
+      DimViviendaBloc dimViviendaBloc) {
+    if (pisoVivienda.pisoViviendaId == optionId) {
+      selectedItems = [LstPiso(pisoViviendaId: pisoVivienda.pisoViviendaId)];
+      _showOtroPisoVivienda = true;
+    } else if (value == true) {
+      selectedItems.removeWhere((e) => e.pisoViviendaId == optionId);
+      selectedItems.add(LstPiso(pisoViviendaId: pisoVivienda.pisoViviendaId));
+      _showOtroPisoVivienda = false;
+      _otroTipoPiso = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) => e.pisoViviendaId == pisoVivienda.pisoViviendaId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroPisoVivienda) {
+      dimViviendaBloc.add(PisosViviendaChanged(selectedItems));
+    }
   }
 }

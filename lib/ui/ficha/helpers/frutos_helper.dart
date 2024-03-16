@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleFrutoSelection(
     FormFieldState<List<LstFruto>> formState,
-    int? ningunaId,
+    int? optionId,
     BuildContext context,
     bool? value,
     int frutoId,
@@ -16,9 +16,9 @@ void handleFrutoSelection(
 
   var selectedItems = List<LstFruto>.from(formState.value ?? []);
 
-  if (ningunaId != null) {
-    _handleNingunaIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, frutoId, ningunaId);
+  if (optionId != null) {
+    _handleOptionIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, frutoId, optionId);
   } else {
     _handleRegularSelection(
         context, value, isMaxSelectionReached, selectedItems, frutoId);
@@ -28,17 +28,17 @@ void handleFrutoSelection(
   dimUbicacionBloc.add(FrutosChanged(selectedItems));
 }
 
-void _handleNingunaIdSelection(
+void _handleOptionIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstFruto> selectedItems,
     int frutoId,
-    int ningunaId) {
-  if (isMaxSelectionReached && frutoId != ningunaId) {
+    int optionId) {
+  if (isMaxSelectionReached && frutoId != optionId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithNingunaId(value, selectedItems, frutoId, ningunaId);
+    _updateSelectedItemsWithOptionId(value, selectedItems, frutoId, optionId);
   }
 }
 
@@ -56,13 +56,13 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithNingunaId(
-    bool value, List<LstFruto> selectedItems, int frutoId, int ningunaId) {
-  if (frutoId == ningunaId) {
+void _updateSelectedItemsWithOptionId(
+    bool value, List<LstFruto> selectedItems, int frutoId, int optionId) {
+  if (frutoId == optionId) {
     selectedItems.clear();
-    selectedItems.add(LstFruto(frutoId: ningunaId));
+    selectedItems.add(LstFruto(frutoId: optionId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.frutoId == ningunaId);
+    selectedItems.removeWhere((e) => e.frutoId == optionId);
     selectedItems.add(LstFruto(frutoId: frutoId));
   } else {
     selectedItems.removeWhere((e) => e.frutoId == frutoId);

@@ -10,6 +10,7 @@ import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart'
 import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
+import '../../utils/validators/form_validators.dart';
 import '../helpers/dificultades_acceso_helper.dart';
 import '../helpers/medios_utiliza_helper.dart';
 
@@ -169,11 +170,11 @@ class AccesoCAFormState extends State<AccesoCAForm> {
             if (state is DificultadesAccesoCALoaded) {
               final dificultadesAccesoCALoaded =
                   state.dificultadesAccesoCALoaded!;
-              int? ningunaId;
+              int? optionId;
 
               for (var e in dificultadesAccesoCALoaded) {
-                if (e.descripcion == 'Ninguna') {
-                  ningunaId = e.dificultaAccesoId;
+                if (FormValidators.validateDescription(e.descripcion)) {
+                  optionId = e.dificultaAccesoId;
                 }
               }
 
@@ -208,13 +209,12 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                                       false,
                                   onChanged: (bool? value) {
                                     handleDificultadAccesoSelection(
-                                      formState,
-                                      ningunaId,
-                                      context,
-                                      value,
-                                      dificultadAccesoCA.dificultaAccesoId,
-                                      dimUbicacionBloc,
-                                    );
+                                        formState,
+                                        optionId,
+                                        context,
+                                        value ?? false,
+                                        dificultadAccesoCA.dificultaAccesoId,
+                                        dimUbicacionBloc);
                                   },
                                 ),
                                 Flexible(

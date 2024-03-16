@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleTuberculoPlatanoSelection(
     FormFieldState<List<LstTuberculo>> formState,
-    int? ningunaId,
+    int? optionId,
     BuildContext context,
     bool? value,
     int tuberculoPlatanoId,
@@ -16,9 +16,9 @@ void handleTuberculoPlatanoSelection(
 
   var selectedItems = List<LstTuberculo>.from(formState.value ?? []);
 
-  if (ningunaId != null) {
-    _handleNingunaIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, tuberculoPlatanoId, ningunaId);
+  if (optionId != null) {
+    _handleOptionIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, tuberculoPlatanoId, optionId);
   } else {
     _handleRegularSelection(context, value, isMaxSelectionReached,
         selectedItems, tuberculoPlatanoId);
@@ -28,18 +28,18 @@ void handleTuberculoPlatanoSelection(
   dimUbicacionBloc.add(TuberculosPlatanosChanged(selectedItems));
 }
 
-void _handleNingunaIdSelection(
+void _handleOptionIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstTuberculo> selectedItems,
     int tuberculoPlatanoId,
-    int ningunaId) {
-  if (isMaxSelectionReached && tuberculoPlatanoId != ningunaId) {
+    int optionId) {
+  if (isMaxSelectionReached && tuberculoPlatanoId != optionId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithNingunaId(
-        value, selectedItems, tuberculoPlatanoId, ningunaId);
+    _updateSelectedItemsWithOptionId(
+        value, selectedItems, tuberculoPlatanoId, optionId);
   }
 }
 
@@ -61,13 +61,13 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithNingunaId(bool value,
-    List<LstTuberculo> selectedItems, int tuberculoPlatanoId, int ningunaId) {
-  if (tuberculoPlatanoId == ningunaId) {
+void _updateSelectedItemsWithOptionId(bool value,
+    List<LstTuberculo> selectedItems, int tuberculoPlatanoId, int optionId) {
+  if (tuberculoPlatanoId == optionId) {
     selectedItems.clear();
-    selectedItems.add(LstTuberculo(tuberculoPlatanoId: ningunaId));
+    selectedItems.add(LstTuberculo(tuberculoPlatanoId: optionId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.tuberculoPlatanoId == ningunaId);
+    selectedItems.removeWhere((e) => e.tuberculoPlatanoId == optionId);
     selectedItems.add(LstTuberculo(tuberculoPlatanoId: tuberculoPlatanoId));
   } else {
     selectedItems

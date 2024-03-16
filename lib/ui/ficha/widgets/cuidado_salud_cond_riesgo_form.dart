@@ -16,7 +16,6 @@ import '../../../domain/usecases/servicio_solicitado/servicio_solicitado_exports
 import '../../../domain/usecases/ultima_vez_inst_salud/ultima_vez_inst_salud_exports.dart';
 import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 import '../../cubits/metodo_planificacion/metodo_planificacion_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
 import '../helpers/nombres_enfermedades_helper.dart';
 import '../helpers/servicios_solicitados_helper.dart';
 

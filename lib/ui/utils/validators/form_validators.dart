@@ -25,4 +25,15 @@ abstract class FormValidators {
     }
     return null;
   }
+
+  static bool validateDescription(String optionName) {
+    final descripcion = optionName.toLowerCase();
+    if (descripcion == 'ninguna' ||
+        descripcion == 'ninguno' ||
+        descripcion == 'otro' ||
+        descripcion == 'otros') {
+      return true;
+    }
+    return false;
+  }
 }

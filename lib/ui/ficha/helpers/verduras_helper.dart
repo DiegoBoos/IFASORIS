@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleVerduraSelection(
     FormFieldState<List<LstVerdura>> formState,
-    int? ningunaId,
+    int? optionId,
     BuildContext context,
     bool? value,
     int verduraId,
@@ -16,9 +16,9 @@ void handleVerduraSelection(
 
   var selectedItems = List<LstVerdura>.from(formState.value ?? []);
 
-  if (ningunaId != null) {
-    _handleNingunaIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, verduraId, ningunaId);
+  if (optionId != null) {
+    _handleOptionIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, verduraId, optionId);
   } else {
     _handleRegularSelection(
         context, value, isMaxSelectionReached, selectedItems, verduraId);
@@ -28,18 +28,17 @@ void handleVerduraSelection(
   dimUbicacionBloc.add(VerdurasChanged(selectedItems));
 }
 
-void _handleNingunaIdSelection(
+void _handleOptionIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstVerdura> selectedItems,
     int verduraId,
-    int ningunaId) {
-  if (isMaxSelectionReached && verduraId != ningunaId) {
+    int optionId) {
+  if (isMaxSelectionReached && verduraId != optionId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithNingunaId(
-        value, selectedItems, verduraId, ningunaId);
+    _updateSelectedItemsWithOptionId(value, selectedItems, verduraId, optionId);
   }
 }
 
@@ -57,13 +56,13 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithNingunaId(
-    bool value, List<LstVerdura> selectedItems, int verduraId, int ningunaId) {
-  if (verduraId == ningunaId) {
+void _updateSelectedItemsWithOptionId(
+    bool value, List<LstVerdura> selectedItems, int verduraId, int optionId) {
+  if (verduraId == optionId) {
     selectedItems.clear();
-    selectedItems.add(LstVerdura(verduraId: ningunaId));
+    selectedItems.add(LstVerdura(verduraId: optionId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.verduraId == ningunaId);
+    selectedItems.removeWhere((e) => e.verduraId == optionId);
     selectedItems.add(LstVerdura(verduraId: verduraId));
   } else {
     selectedItems.removeWhere((e) => e.verduraId == verduraId);

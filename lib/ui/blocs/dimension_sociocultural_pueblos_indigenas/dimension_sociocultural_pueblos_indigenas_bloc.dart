@@ -51,7 +51,7 @@ class DimensionSocioCulturalPueblosIndigenasBloc extends Bloc<
           add(GetEventosCostumbresParticipa(
               data.dimSocioCulturalPueblosIndigenasId));
         } else {
-          emit(state.copyWith(
+          emit(initObject().copyWith(
               formStatus: DimensionSocioCulturalPueblosIndigenasFormEmpty()));
         }
       });

@@ -30,4 +30,30 @@ class CustomSnackBar {
       },
     );
   }
+
+  static Future<dynamic> exitDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Salir de la ficha'),
+          content: const Text('¿Está seguro que desea salir?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Aceptar'),
+              onPressed: () {
+                Navigator.popUntil(context, ModalRoute.withName('home'));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

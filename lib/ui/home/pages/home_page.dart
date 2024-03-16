@@ -5,13 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../domain/entities/afiliado_entity.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
-import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
-import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
-import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
-import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
-import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../../utils/eliminar_ficha.dart';
 import '../widgets/app_drawer.dart';
@@ -40,28 +35,18 @@ class _HomePageState extends State<HomePage> {
 
     final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
     final dimViviendaBloc = BlocProvider.of<DimViviendaBloc>(context);
-    final grupoFamiliarBloc = BlocProvider.of<GrupoFamiliarBloc>(context);
-    final estiloVidaSaludableBloc =
-        BlocProvider.of<EstiloVidaSaludableBloc>(context);
-    final cuidadoSaludCondRiesgoBloc =
-        BlocProvider.of<CuidadoSaludCondRiesgoBloc>(context);
-    final dimensionSocioCulturalPueblosIndigenasBloc =
-        BlocProvider.of<DimensionSocioCulturalPueblosIndigenasBloc>(context);
-    final atencionSaludBloc = BlocProvider.of<AtencionSaludBloc>(context);
 
     return MultiBlocListener(
         listeners: [
           BlocListener<AfiliadoPrefsBloc, AfiliadoPrefsState>(
             listener: (context, state) {
+              // Una vez que se carga el afiliado, se cargan los datos de las dos dimensiones
               if (state is AfiliadoLoaded) {
-                dimUbicacionBloc.add(DimUbicacionInit());
-                dimViviendaBloc.add(DimViviendaInit());
-                grupoFamiliarBloc.add(GrupoFamiliarInit());
-                estiloVidaSaludableBloc.add(EstiloVidaSaludableInit());
-                cuidadoSaludCondRiesgoBloc.add(CuidadoSaludCondRiesgoInit());
-                dimensionSocioCulturalPueblosIndigenasBloc
-                    .add(DimensionSocioCulturalPueblosIndigenasInit());
-                atencionSaludBloc.add(AtencionSaludInit());
+                final afiliado = state.afiliado!;
+                dimUbicacionBloc.add(
+                    GetDimUbicacion(afiliado.afiliadoId!, afiliado.familiaId!));
+                dimViviendaBloc.add(
+                    GetDimVivienda(afiliado.afiliadoId!, afiliado.familiaId!));
               }
               if (state is AfiliadoError) {
                 CustomSnackBar.showSnackBar(
