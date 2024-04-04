@@ -49,7 +49,8 @@ class TuberculoPlatanoLocalDataSourceImpl
     final ubicacionTuberculosPlatanos = lstTuberculos
         .map((item) => UbicacionTuberculosPlatanos(
             tuberculoPlatanoId: item.tuberculoPlatanoId,
-            ubicacionId: ubicacionId))
+            ubicacionId: ubicacionId,
+            otroTuberculoPlatano: item.otroTuberculoPlatano))
         .toList();
 
     for (final ubicacionTuberculoPlatano in ubicacionTuberculosPlatanos) {

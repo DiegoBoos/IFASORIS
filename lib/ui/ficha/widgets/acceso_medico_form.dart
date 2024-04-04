@@ -19,9 +19,9 @@ import '../helpers/dificultades_acceso_med_trad_helper.dart';
 import '../helpers/medios_utiliza_med_trad_helper.dart';
 
 class AccesoMedicoForm extends StatefulWidget {
-  const AccesoMedicoForm({super.key, this.dimUbicacion});
+  const AccesoMedicoForm({super.key, required this.dimUbicacion});
 
-  final DimUbicacionEntity? dimUbicacion;
+  final DimUbicacionEntity dimUbicacion;
 
   @override
   State<AccesoMedicoForm> createState() => AccesoMedicoFormState();
@@ -39,18 +39,18 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
 
     setState(() {
       _existeMedTradicionalComunidad =
-          widget.dimUbicacion?.existeMedTradicionalComunidad;
+          widget.dimUbicacion.existeMedTradicionalComunidad;
 
-      _tiempoTardaMedTradId = widget.dimUbicacion?.tiempoTardaMedTradId == 0
+      _tiempoTardaMedTradId = widget.dimUbicacion.tiempoTardaMedTradId == 0
           ? null
-          : widget.dimUbicacion?.tiempoTardaMedTradId;
+          : widget.dimUbicacion.tiempoTardaMedTradId;
 
       _costoDesplazamientoMedTradicional =
-          widget.dimUbicacion?.costoDesplazamientoMedTradicional == 0
+          widget.dimUbicacion.costoDesplazamientoMedTradicional == 0
               ? null
-              : widget.dimUbicacion?.costoDesplazamientoMedTradicional;
+              : widget.dimUbicacion.costoDesplazamientoMedTradicional;
 
-      _nombresMedTrad = widget.dimUbicacion?.lstNombreMedTradicional ?? [];
+      _nombresMedTrad = widget.dimUbicacion.lstNombreMedTradicional ?? [];
 
       if (_nombresMedTrad.isEmpty) {
         _nombresMedTrad = [LstNombreMedTradicional(nombreMedTradicional: '')];
@@ -394,11 +394,12 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                   final dificultadesAccesoMedTradicionalLoaded =
                       state.dificultadesAccesoMedTradicionalLoaded!;
 
-                  int? optionId;
+                  int? ningunoId;
 
                   for (var e in dificultadesAccesoMedTradicionalLoaded) {
-                    if (FormValidators.validateDescription(e.descripcion)) {
-                      optionId = e.dificultadAccesoMedTradId;
+                    final optionType = FormValidators.optionType(e.descripcion);
+                    if (optionType == 'N') {
+                      ningunoId = e.dificultadAccesoMedTradId;
                     }
                   }
 
@@ -436,7 +437,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                       onChanged: (bool? value) {
                                         handleDificultadAccesoMedTradSelection(
                                             formState,
-                                            optionId,
+                                            ningunoId,
                                             context,
                                             value,
                                             dificultadAccesoMedTradicional

@@ -15,8 +15,8 @@ import '../helpers/dificultades_acceso_helper.dart';
 import '../helpers/medios_utiliza_helper.dart';
 
 class AccesoCAForm extends StatefulWidget {
-  const AccesoCAForm({super.key, this.dimUbicacion});
-  final DimUbicacionEntity? dimUbicacion;
+  const AccesoCAForm({super.key, required this.dimUbicacion});
+  final DimUbicacionEntity dimUbicacion;
 
   @override
   State<AccesoCAForm> createState() => AccesoCAFormState();
@@ -32,9 +32,9 @@ class AccesoCAFormState extends State<AccesoCAForm> {
     super.initState();
 
     setState(() {
-      _tiempoTardaId = widget.dimUbicacion?.tiempoTardaId;
-      _costoDesplazamientoId = widget.dimUbicacion?.costoDesplazamientoId;
-      _produccionMinera = widget.dimUbicacion?.produccionMinera;
+      _tiempoTardaId = widget.dimUbicacion.tiempoTardaId;
+      _costoDesplazamientoId = widget.dimUbicacion.costoDesplazamientoId;
+      _produccionMinera = widget.dimUbicacion.produccionMinera;
     });
   }
 
@@ -170,11 +170,12 @@ class AccesoCAFormState extends State<AccesoCAForm> {
             if (state is DificultadesAccesoCALoaded) {
               final dificultadesAccesoCALoaded =
                   state.dificultadesAccesoCALoaded!;
-              int? optionId;
+              int? ningunoId;
 
               for (var e in dificultadesAccesoCALoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.dificultaAccesoId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'N') {
+                  ningunoId = e.dificultaAccesoId;
                 }
               }
 
@@ -210,7 +211,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                                   onChanged: (bool? value) {
                                     handleDificultadAccesoSelection(
                                         formState,
-                                        optionId,
+                                        ningunoId,
                                         context,
                                         value ?? false,
                                         dificultadAccesoCA.dificultaAccesoId,

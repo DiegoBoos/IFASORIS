@@ -18,6 +18,8 @@ import '../../cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
 import '../../cubits/regimen/regimen_cubit.dart';
 import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
+import '../../utils/input_decoration.dart';
+import '../../utils/validators/form_validators.dart';
 
 class GrupoFamiliarForm extends StatefulWidget {
   const GrupoFamiliarForm({
@@ -46,6 +48,8 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
   String? _codRegimenAfiliado;
   int? _nivelEducativoId;
   int? _ocupacionId;
+  String? _otroOcupacion;
+  bool _showOtroOcupacion = false;
   int? _grupoRiesgoId;
   int? _etniaId;
   int? _puebloIde;
@@ -126,6 +130,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
         grupoFamiliarBloc.add(OcupacionChanged(_ocupacionId!));
       }
 
+      _otroOcupacion = widget.afiliadoGrupoFamiliar.otroOcupacion;
+      if (_otroOcupacion != null && _otroOcupacion!.isNotEmpty) {
+        _showOtroOcupacion = true;
+        grupoFamiliarBloc.add(OtroOcupacionChanged(_otroOcupacion));
+      }
+
       _grupoRiesgoId = widget.afiliadoGrupoFamiliar.grupoRiesgoId;
       if (_grupoRiesgoId != null) {
         grupoFamiliarBloc.add(GrupoRiesgoChanged(_grupoRiesgoId!));
@@ -136,7 +146,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
         grupoFamiliarBloc.add(EtniaChanged(_etniaId!));
       }
 
-      //TODO: validar puebloIde
       _puebloIde = widget.afiliadoGrupoFamiliar.puebloIndigenaId == 0
           ? null
           : widget.afiliadoGrupoFamiliar.puebloIndigenaId;
@@ -329,9 +338,6 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                       labelText: 'Fecha de Nacimiento',
                       border: OutlineInputBorder(),
                     ),
-                    onSaved: (String? value) {
-                      //TODO:  grupoFamiliarBloc.add(FechaNacChanged(newValue!));
-                    },
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
@@ -513,6 +519,16 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                       if (state is OcupacionesLoaded) {
                         final ocupacionesLoaded = state.ocupacionesLoaded!;
 
+                        int? otroId;
+
+                        for (var e in ocupacionesLoaded) {
+                          final optionType =
+                              FormValidators.optionType(e.descripcion);
+                          if (optionType == 'O') {
+                            otroId = e.ocupacionId;
+                          }
+                        }
+
                         return DropdownButtonFormField<int>(
                           value: _ocupacionId,
                           items: ocupacionesLoaded
@@ -529,8 +545,19 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                           onChanged: (int? newValue) {
                             setState(() {
                               _ocupacionId = newValue;
+                              if (newValue == otroId) {
+                                _showOtroOcupacion = true;
+                              } else {
+                                _showOtroOcupacion = false;
+                                _otroOcupacion = null;
+                                grupoFamiliarBloc
+                                    .add(const OtroOcupacionChanged(''));
+                              }
                             });
-                            grupoFamiliarBloc.add(OcupacionChanged(newValue!));
+
+                            grupoFamiliarBloc.add(OcupacionChanged(
+                              newValue!,
+                            ));
                           },
                           validator: (value) {
                             if (value == null) {
@@ -543,6 +570,30 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                       return Container();
                     },
                   ),
+                  if (_showOtroOcupacion)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: TextFormField(
+                        initialValue:
+                            grupoFamiliarBloc.state.otroOcupacion ?? '',
+                        decoration: CustomInputDecoration.inputDecoration(
+                            hintText: 'Cuál', labelText: 'Cuál'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo requerido';
+                          }
+                          return null;
+                        },
+                        onChanged: (String? value) {
+                          setState(() {
+                            _otroOcupacion = value;
+                          });
+
+                          grupoFamiliarBloc
+                              .add(OtroOcupacionChanged(_otroOcupacion));
+                        },
+                      ),
+                    ),
                   const Divider(),
                   const Text(
                     'GRUPO DE RIESGO',

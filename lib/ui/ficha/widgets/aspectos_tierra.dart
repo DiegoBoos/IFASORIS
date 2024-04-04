@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/ui/utils/validators/form_validators.dart';
+import 'package:ifasoris/domain/entities/hortaliza_entity.dart';
+import 'package:ifasoris/domain/entities/tuberculo_platano_entity.dart';
 
 import '../../../data/models/cereal_model.dart';
 import '../../../data/models/especie_animal_model.dart';
@@ -9,7 +10,9 @@ import '../../../data/models/hortaliza_model.dart';
 import '../../../data/models/leguminosa_model.dart';
 import '../../../data/models/tuberculo_platano_model.dart';
 import '../../../data/models/verdura_model.dart';
+import '../../../domain/entities/cereal_entity.dart';
 import '../../../domain/entities/dim_ubicacion_entity.dart';
+import '../../../domain/entities/verdura_entity.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/especie_animal/especie_animal_cubit.dart';
@@ -21,17 +24,16 @@ import '../../cubits/tipo_calendario/tipo_calendario_cubit.dart';
 import '../../cubits/tuberculo_platano/tuberculo_platano_cubit.dart';
 import '../../cubits/verdura/verdura_cubit.dart';
 import '../../cubits/cereal/cereal_cubit.dart';
-import '../helpers/cereales_helper.dart';
+import '../../utils/custom_snack_bar.dart';
+import '../../utils/input_decoration.dart';
+import '../../utils/validators/form_validators.dart';
 import '../helpers/especies_animales_cria_helper.dart';
 import '../helpers/frutos_helper.dart';
-import '../helpers/hortalizas_helper.dart';
 import '../helpers/leguminosas_helper.dart';
-import '../helpers/tuberculos_platano_helper.dart';
-import '../helpers/verduras_helper.dart';
 
 class AspectosTierraForm extends StatefulWidget {
-  const AspectosTierraForm({super.key, this.dimUbicacion});
-  final DimUbicacionEntity? dimUbicacion;
+  const AspectosTierraForm({super.key, required this.dimUbicacion});
+  final DimUbicacionEntity dimUbicacion;
 
   @override
   State<AspectosTierraForm> createState() => AspectosTierraFormState();
@@ -40,14 +42,46 @@ class AspectosTierraForm extends StatefulWidget {
 class AspectosTierraFormState extends State<AspectosTierraForm> {
   int? _poseeChagra;
   int? _tipoCalendarioId;
+  bool _showOtroCereal = false;
+  String? _otroCereal;
+  bool _showOtroVerdura = false;
+  String? _otroVerdura;
+  bool _showOtroTuberculoPlatano = false;
+  String? _otroTuberculoPlatano;
+  bool _showOtroHortaliza = false;
+  String? _otroHortaliza;
 
   @override
   void initState() {
     super.initState();
 
     setState(() {
-      _poseeChagra = widget.dimUbicacion?.poseeChagra;
-      _tipoCalendarioId = widget.dimUbicacion?.tipoCalendarioId;
+      _poseeChagra = widget.dimUbicacion.poseeChagra;
+      _tipoCalendarioId = widget.dimUbicacion.tipoCalendarioId;
+
+      if (widget.dimUbicacion.lstTuberculos != null &&
+          widget.dimUbicacion.lstTuberculos!.isNotEmpty &&
+          widget.dimUbicacion.lstTuberculos![0].otroTuberculoPlatano != null) {
+        _showOtroTuberculoPlatano = true;
+      }
+
+      if (widget.dimUbicacion.lstHortalizas != null &&
+          widget.dimUbicacion.lstHortalizas!.isNotEmpty &&
+          widget.dimUbicacion.lstHortalizas![0].otroHortaliza != null) {
+        _showOtroHortaliza = true;
+      }
+
+      if (widget.dimUbicacion.lstVerduras != null &&
+          widget.dimUbicacion.lstVerduras!.isNotEmpty &&
+          widget.dimUbicacion.lstVerduras![0].otroVerdura != null) {
+        _showOtroVerdura = true;
+      }
+
+      if (widget.dimUbicacion.lstCereales != null &&
+          widget.dimUbicacion.lstCereales!.isNotEmpty &&
+          widget.dimUbicacion.lstCereales![0].otroCereal != null) {
+        _showOtroCereal = true;
+      }
     });
   }
 
@@ -169,11 +203,16 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                   if (state is TuberculosPlatanosLoaded) {
                     final tuberculosPlatanosLoaded =
                         state.tuberculosPlatanosLoaded!;
-                    int? optionId;
+                    int? ningunoId;
+                    int? otroId;
 
                     for (var e in tuberculosPlatanosLoaded) {
-                      if (FormValidators.validateDescription(e.descripcion)) {
-                        optionId = e.tuberculoPlatanoId;
+                      final optionType =
+                          FormValidators.optionType(e.descripcion);
+                      if (optionType == 'N') {
+                        ningunoId = e.tuberculoPlatanoId;
+                      } else if (optionType == 'O') {
+                        otroId = e.tuberculoPlatanoId;
                       }
                     }
 
@@ -205,14 +244,31 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                     .tuberculoPlatanoId) ??
                                             false,
                                         onChanged: (bool? value) {
-                                          handleTuberculoPlatanoSelection(
-                                              formState,
-                                              optionId,
-                                              context,
-                                              value,
-                                              tuberculoPlatano
-                                                  .tuberculoPlatanoId,
-                                              dimUbicacionBloc);
+                                          (value! &&
+                                                  formState.value != null &&
+                                                  formState.value!.length >=
+                                                      4 &&
+                                                  tuberculoPlatano
+                                                          .tuberculoPlatanoId !=
+                                                      ningunoId &&
+                                                  tuberculoPlatano
+                                                          .tuberculoPlatanoId !=
+                                                      otroId)
+                                              ? CustomSnackBar.showCustomDialog(
+                                                  context,
+                                                  'Error',
+                                                  'Máximo cuatro opciones',
+                                                  () => Navigator.pop(context),
+                                                  false)
+                                              : setState(() {
+                                                  _updateTuberculoPlatano(
+                                                      formState,
+                                                      tuberculoPlatano,
+                                                      ningunoId,
+                                                      otroId,
+                                                      value,
+                                                      dimUbicacionBloc);
+                                                });
                                         },
                                       ),
                                       Flexible(
@@ -233,6 +289,44 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                               formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
+                            if (_showOtroTuberculoPlatano)
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: TextFormField(
+                                  initialValue:
+                                      dimUbicacionBloc.state.lstTuberculos !=
+                                                  null &&
+                                              dimUbicacionBloc.state
+                                                  .lstTuberculos!.isNotEmpty
+                                          ? dimUbicacionBloc
+                                              .state
+                                              .lstTuberculos![0]
+                                              .otroTuberculoPlatano
+                                          : '',
+                                  decoration:
+                                      CustomInputDecoration.inputDecoration(
+                                          hintText: 'Otro', labelText: 'Cuál'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Campo requerido';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      _otroTuberculoPlatano = value;
+                                    });
+
+                                    dimUbicacionBloc
+                                        .add(TuberculosPlatanosChanged([
+                                      LstTuberculo(
+                                          tuberculoPlatanoId: otroId,
+                                          otroTuberculoPlatano:
+                                              _otroTuberculoPlatano)
+                                    ]));
+                                  },
+                                ),
+                              ),
                           ],
                         );
                       },
@@ -252,11 +346,13 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is LeguminosasLoaded) {
                     final leguminosasLoaded = state.leguminosasLoaded!;
-                    int? optionId;
+                    int? ningunoId;
 
                     for (var e in leguminosasLoaded) {
-                      if (FormValidators.validateDescription(e.descripcion)) {
-                        optionId = e.leguminosaId;
+                      final optionType =
+                          FormValidators.optionType(e.descripcion);
+                      if (optionType == 'N') {
+                        ningunoId = e.leguminosaId;
                       }
                     }
 
@@ -287,7 +383,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                         onChanged: (bool? value) {
                                           handleLeguminosaSelection(
                                               formState,
-                                              optionId,
+                                              ningunoId,
                                               context,
                                               value,
                                               leguminosa.leguminosaId,
@@ -330,11 +426,16 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is HortalizasLoaded) {
                     final hortalizasLoaded = state.hortalizasLoaded!;
-                    int? optionId;
+                    int? ningunoId;
+                    int? otroId;
 
                     for (var e in hortalizasLoaded) {
-                      if (FormValidators.validateDescription(e.descripcion)) {
-                        optionId = e.hortalizaId;
+                      final optionType =
+                          FormValidators.optionType(e.descripcion);
+                      if (optionType == 'N') {
+                        ningunoId = e.hortalizaId;
+                      } else if (optionType == 'O') {
+                        otroId = e.hortalizaId;
                       }
                     }
 
@@ -363,13 +464,31 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                   hortaliza.hortalizaId) ??
                                               false,
                                           onChanged: (bool? value) {
-                                            handleHortalizaSelection(
-                                                formState,
-                                                optionId,
-                                                context,
-                                                value,
-                                                hortaliza.hortalizaId,
-                                                dimUbicacionBloc);
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        5 &&
+                                                    hortaliza.hortalizaId !=
+                                                        ningunoId &&
+                                                    hortaliza.hortalizaId !=
+                                                        otroId)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo cinco opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(() {
+                                                    _updateHortaliza(
+                                                        formState,
+                                                        hortaliza,
+                                                        ningunoId,
+                                                        otroId,
+                                                        value,
+                                                        dimUbicacionBloc);
+                                                  });
                                           }),
                                       Flexible(
                                         child: Text(
@@ -388,6 +507,40 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                               formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
+                            if (_showOtroHortaliza)
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: TextFormField(
+                                  initialValue:
+                                      dimUbicacionBloc.state.lstHortalizas !=
+                                                  null &&
+                                              dimUbicacionBloc.state
+                                                  .lstHortalizas!.isNotEmpty
+                                          ? dimUbicacionBloc.state
+                                              .lstHortalizas![0].otroHortaliza
+                                          : '',
+                                  decoration:
+                                      CustomInputDecoration.inputDecoration(
+                                          hintText: 'Otro', labelText: 'Cuál'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Campo requerido';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      _otroHortaliza = value;
+                                    });
+
+                                    dimUbicacionBloc.add(HortalizasChanged([
+                                      LstHortaliza(
+                                          hortalizaId: otroId,
+                                          otroHortaliza: _otroHortaliza)
+                                    ]));
+                                  },
+                                ),
+                              ),
                           ],
                         );
                       },
@@ -407,11 +560,16 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is VerdurasLoaded) {
                     final verdurasLoaded = state.verdurasLoaded!;
-                    int? optionId;
+                    int? ningunoId;
+                    int? otroId;
 
                     for (var e in verdurasLoaded) {
-                      if (FormValidators.validateDescription(e.descripcion)) {
-                        optionId = e.verduraId;
+                      final optionType =
+                          FormValidators.optionType(e.descripcion);
+                      if (optionType == 'N') {
+                        ningunoId = e.verduraId;
+                      } else if (optionType == 'O') {
+                        otroId = e.verduraId;
                       }
                     }
 
@@ -440,13 +598,30 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                   verdura.verduraId) ??
                                               false,
                                           onChanged: (bool? value) {
-                                            handleVerduraSelection(
-                                                formState,
-                                                optionId,
-                                                context,
-                                                value,
-                                                verdura.verduraId,
-                                                dimUbicacionBloc);
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        3 &&
+                                                    verdura.verduraId !=
+                                                        ningunoId &&
+                                                    verdura.verduraId != otroId)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo tres opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(() {
+                                                    _updateVerdura(
+                                                        formState,
+                                                        verdura,
+                                                        ningunoId,
+                                                        otroId,
+                                                        value,
+                                                        dimUbicacionBloc);
+                                                  });
                                           }),
                                       Flexible(
                                         child: Text(
@@ -465,6 +640,40 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                               formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
+                            if (_showOtroVerdura)
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: TextFormField(
+                                  initialValue:
+                                      dimUbicacionBloc.state.lstVerduras !=
+                                                  null &&
+                                              dimUbicacionBloc
+                                                  .state.lstVerduras!.isNotEmpty
+                                          ? dimUbicacionBloc
+                                              .state.lstVerduras![0].otroVerdura
+                                          : '',
+                                  decoration:
+                                      CustomInputDecoration.inputDecoration(
+                                          hintText: 'Otro', labelText: 'Cuál'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Campo requerido';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      _otroVerdura = value;
+                                    });
+
+                                    dimUbicacionBloc.add(VerdurasChanged([
+                                      LstVerdura(
+                                          verduraId: otroId,
+                                          otroVerdura: _otroVerdura)
+                                    ]));
+                                  },
+                                ),
+                              ),
                           ],
                         );
                       },
@@ -484,11 +693,13 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is FrutosLoaded) {
                     final frutosLoaded = state.frutosLoaded!;
-                    int? optionId;
+                    int? ningunoId;
 
                     for (var e in frutosLoaded) {
-                      if (FormValidators.validateDescription(e.descripcion)) {
-                        optionId = e.frutoId;
+                      final optionType =
+                          FormValidators.optionType(e.descripcion);
+                      if (optionType == 'N') {
+                        ningunoId = e.frutoId;
                       }
                     }
 
@@ -518,7 +729,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           onChanged: (bool? value) {
                                             handleFrutoSelection(
                                                 formState,
-                                                optionId,
+                                                ningunoId,
                                                 context,
                                                 value,
                                                 fruto.frutoId,
@@ -560,11 +771,16 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                 builder: (context, state) {
                   if (state is CerealesLoaded) {
                     final cerealesLoaded = state.cerealesLoaded!;
-                    int? optionId;
+                    int? ningunoId;
+                    int? otroId;
 
                     for (var e in cerealesLoaded) {
-                      if (FormValidators.validateDescription(e.descripcion)) {
-                        optionId = e.cerealId;
+                      final optionType =
+                          FormValidators.optionType(e.descripcion);
+                      if (optionType == 'N') {
+                        ningunoId = e.cerealId;
+                      } else if (optionType == 'O') {
+                        otroId = e.cerealId;
                       }
                     }
 
@@ -593,13 +809,34 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                   cereal.cerealId) ??
                                               false,
                                           onChanged: (bool? value) {
-                                            handleCerealSelection(
-                                                formState,
-                                                optionId,
-                                                context,
-                                                value,
-                                                cereal.cerealId,
-                                                dimUbicacionBloc);
+                                            var selectedItems =
+                                                List<LstCereal>.from(
+                                                    formState.value ?? []);
+                                            (value! &&
+                                                    formState.value != null &&
+                                                    formState.value!.length >=
+                                                        3 &&
+                                                    cereal.cerealId !=
+                                                        ningunoId &&
+                                                    cereal.cerealId != otroId)
+                                                ? CustomSnackBar
+                                                    .showCustomDialog(
+                                                        context,
+                                                        'Error',
+                                                        'Máximo tres opciones',
+                                                        () => Navigator.pop(
+                                                            context),
+                                                        false)
+                                                : setState(() {
+                                                    _updateCereales(
+                                                        cereal,
+                                                        ningunoId,
+                                                        otroId,
+                                                        selectedItems,
+                                                        value,
+                                                        formState,
+                                                        dimUbicacionBloc);
+                                                  });
                                           }),
                                       Flexible(
                                         child: Text(
@@ -618,6 +855,40 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                               formState.errorText ?? '',
                               style: const TextStyle(color: Colors.red),
                             ),
+                            if (_showOtroCereal)
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: TextFormField(
+                                  initialValue:
+                                      dimUbicacionBloc.state.lstCereales !=
+                                                  null &&
+                                              dimUbicacionBloc
+                                                  .state.lstCereales!.isNotEmpty
+                                          ? dimUbicacionBloc
+                                              .state.lstCereales![0].otroCereal
+                                          : '',
+                                  decoration:
+                                      CustomInputDecoration.inputDecoration(
+                                          hintText: 'Otro', labelText: 'Cuál'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Campo requerido';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      _otroCereal = value;
+                                    });
+
+                                    dimUbicacionBloc.add(CerealesChanged([
+                                      LstCereal(
+                                          cerealId: otroId,
+                                          otroCereal: _otroCereal)
+                                    ]));
+                                  },
+                                ),
+                              ),
                           ],
                         );
                       },
@@ -639,11 +910,12 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
           builder: (context, state) {
             if (state is EspeciesAnimalesLoaded) {
               final especiesAnimalesLoaded = state.especiesAnimalesLoaded!;
-              int? optionId;
+              int? ningunoId;
 
               for (var e in especiesAnimalesLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.especieAnimalCriaId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'N') {
+                  ningunoId = e.especieAnimalCriaId;
                 }
               }
 
@@ -675,7 +947,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                     onChanged: (bool? value) {
                                       handleEspecieAnimalCriaSelection(
                                           formState,
-                                          optionId,
+                                          ningunoId,
                                           context,
                                           value,
                                           especieAnimal.especieAnimalCriaId,
@@ -743,5 +1015,151 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
         ),
       ],
     );
+  }
+
+  void _updateCereales(
+      CerealEntity cereal,
+      int? ningunoId,
+      int? otroId,
+      List<LstCereal> selectedItems,
+      bool value,
+      FormFieldState<List<LstCereal>> formState,
+      DimUbicacionBloc dimUbicacionBloc) {
+    if (cereal.cerealId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstCereal(cerealId: cereal.cerealId));
+      _showOtroCereal = false;
+      _otroCereal = null;
+    } else if (cereal.cerealId == otroId) {
+      selectedItems.clear();
+      selectedItems.add(LstCereal(cerealId: cereal.cerealId));
+      _showOtroCereal = true;
+    } else if (value == true) {
+      selectedItems
+          .removeWhere((e) => e.cerealId == otroId || e.cerealId == ningunoId);
+      selectedItems.add(LstCereal(cerealId: cereal.cerealId));
+      _showOtroCereal = false;
+      _otroCereal = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) => e.cerealId == cereal.cerealId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroCereal) {
+      dimUbicacionBloc.add(CerealesChanged(selectedItems));
+    }
+  }
+
+  void _updateVerdura(
+      FormFieldState<List<LstVerdura>> formState,
+      VerduraEntity verdura,
+      int? ningunoId,
+      int? otroId,
+      bool value,
+      DimUbicacionBloc dimUbicacionBloc) {
+    var selectedItems = List<LstVerdura>.from(formState.value ?? []);
+
+    if (verdura.verduraId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstVerdura(verduraId: verdura.verduraId));
+      _showOtroVerdura = false;
+      _otroVerdura = null;
+    } else if (verdura.verduraId == otroId) {
+      selectedItems.clear();
+      selectedItems.add(LstVerdura(verduraId: verdura.verduraId));
+      _showOtroVerdura = true;
+    } else if (value == true) {
+      selectedItems.removeWhere(
+          (e) => e.verduraId == otroId || e.verduraId == ningunoId);
+      selectedItems.add(LstVerdura(verduraId: verdura.verduraId));
+      _showOtroVerdura = false;
+      _otroVerdura = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) => e.verduraId == verdura.verduraId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroVerdura) {
+      dimUbicacionBloc.add(VerdurasChanged(selectedItems));
+    }
+  }
+
+  void _updateHortaliza(
+      FormFieldState<List<LstHortaliza>> formState,
+      HortalizaEntity hortaliza,
+      int? ningunoId,
+      int? otroId,
+      bool value,
+      DimUbicacionBloc dimUbicacionBloc) {
+    var selectedItems = List<LstHortaliza>.from(formState.value ?? []);
+
+    if (hortaliza.hortalizaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstHortaliza(hortalizaId: hortaliza.hortalizaId));
+      _showOtroHortaliza = false;
+      _otroHortaliza = null;
+    } else if (hortaliza.hortalizaId == otroId) {
+      selectedItems.clear();
+      selectedItems.add(LstHortaliza(hortalizaId: hortaliza.hortalizaId));
+      _showOtroHortaliza = true;
+    } else if (value == true) {
+      selectedItems.removeWhere(
+          (e) => e.hortalizaId == otroId || e.hortalizaId == ningunoId);
+      selectedItems.add(LstHortaliza(hortalizaId: hortaliza.hortalizaId));
+      _showOtroHortaliza = false;
+      _otroHortaliza = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) => e.hortalizaId == hortaliza.hortalizaId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroHortaliza) {
+      dimUbicacionBloc.add(HortalizasChanged(selectedItems));
+    }
+  }
+
+  void _updateTuberculoPlatano(
+      FormFieldState<List<LstTuberculo>> formState,
+      TuberculoPlatanoEntity tuberculoPlatano,
+      int? ningunoId,
+      int? otroId,
+      bool value,
+      DimUbicacionBloc dimUbicacionBloc) {
+    var selectedItems = List<LstTuberculo>.from(formState.value ?? []);
+
+    if (tuberculoPlatano.tuberculoPlatanoId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstTuberculo(
+          tuberculoPlatanoId: tuberculoPlatano.tuberculoPlatanoId));
+      _showOtroTuberculoPlatano = false;
+      _otroTuberculoPlatano = null;
+    } else if (tuberculoPlatano.tuberculoPlatanoId == otroId) {
+      selectedItems.clear();
+      selectedItems.add(LstTuberculo(
+          tuberculoPlatanoId: tuberculoPlatano.tuberculoPlatanoId));
+      _showOtroTuberculoPlatano = true;
+    } else if (value == true) {
+      selectedItems.removeWhere((e) =>
+          e.tuberculoPlatanoId == otroId || e.tuberculoPlatanoId == ningunoId);
+      selectedItems.add(LstTuberculo(
+          tuberculoPlatanoId: tuberculoPlatano.tuberculoPlatanoId));
+      _showOtroTuberculoPlatano = false;
+      _otroTuberculoPlatano = null;
+    } else {
+      selectedItems.removeWhere(
+        (e) => e.tuberculoPlatanoId == tuberculoPlatano.tuberculoPlatanoId,
+      );
+    }
+    formState.didChange(selectedItems);
+
+    if (!_showOtroTuberculoPlatano) {
+      dimUbicacionBloc.add(TuberculosPlatanosChanged(selectedItems));
+    }
   }
 }

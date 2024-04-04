@@ -18,7 +18,7 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  bool eyeToggle = false;
+  bool eyeToggle = true;
 
   @override
   Widget build(BuildContext context) {

@@ -48,6 +48,9 @@ class GrupoFamiliarBloc extends Bloc<GrupoFamiliarEvent, GrupoFamiliarEntity> {
     on<OcupacionChanged>((event, emit) {
       emit(state.copyWith(ocupacionId: event.ocupacionId));
     });
+    on<OtroOcupacionChanged>((event, emit) {
+      emit(state.copyWith(otroOcupacion: event.otroOcupacion));
+    });
     on<GrupoRiesgoChanged>((event, emit) {
       emit(state.copyWith(grupoRiesgoId: event.grupoRiesgoId));
     });

@@ -315,11 +315,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           builder: (context, state) {
             if (state is PisosViviendaLoaded) {
               final pisosViviendaLoaded = state.pisosViviendaLoaded!;
-              int? optionId;
+              int? otroId;
 
               for (var e in pisosViviendaLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.pisoViviendaId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'O') {
+                  otroId = e.pisoViviendaId;
                 }
               }
 
@@ -355,7 +356,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value != null &&
                                             formState.value!.length >= 3 &&
                                             pisoVivienda.pisoViviendaId !=
-                                                optionId)
+                                                otroId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -365,7 +366,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                         : setState(() {
                                             _updatePisosVivienda(
                                                 pisoVivienda,
-                                                optionId,
+                                                otroId,
                                                 selectedItems,
                                                 value,
                                                 formState,
@@ -394,8 +395,11 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextFormField(
-                            initialValue:
-                                dimViviendaBloc.state.lstPiso?[0].otroTipoPiso,
+                            initialValue: dimViviendaBloc.state.lstPiso !=
+                                        null &&
+                                    dimViviendaBloc.state.lstPiso!.isNotEmpty
+                                ? dimViviendaBloc.state.lstPiso![0].otroTipoPiso
+                                : '',
                             decoration: CustomInputDecoration.inputDecoration(
                                 hintText: 'Otro', labelText: 'Cuál'),
                             validator: (value) {
@@ -411,7 +415,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
                               dimViviendaBloc.add(PisosViviendaChanged([
                                 LstPiso(
-                                    pisoViviendaId: optionId,
+                                    pisoViviendaId: otroId,
                                     otroTipoPiso: _otroTipoPiso)
                               ]));
                             },
@@ -437,11 +441,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
             if (state is TechosViviendaLoaded) {
               final techosViviendaLoaded = state.techosViviendaLoaded!;
 
-              int? optionId;
+              int? otroId;
 
               for (var e in techosViviendaLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.techoViviendaId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'O') {
+                  otroId = e.techoViviendaId;
                 }
               }
 
@@ -474,7 +479,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value != null &&
                                             formState.value!.length >= 3 &&
                                             techoVivienda.techoViviendaId !=
-                                                optionId)
+                                                otroId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -485,7 +490,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             _updateTechosVivienda(
                                                 formState,
                                                 techoVivienda,
-                                                optionId,
+                                                otroId,
                                                 value,
                                                 dimViviendaBloc);
                                           });
@@ -512,8 +517,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextFormField(
-                            initialValue: dimViviendaBloc
-                                .state.lstTecho?[0].otroTipoTecho,
+                            initialValue: dimViviendaBloc.state.lstTecho !=
+                                        null &&
+                                    dimViviendaBloc.state.lstTecho!.isNotEmpty
+                                ? dimViviendaBloc
+                                    .state.lstTecho![0].otroTipoTecho
+                                : '',
                             decoration: CustomInputDecoration.inputDecoration(
                                 hintText: 'Otro', labelText: 'Cuál'),
                             validator: (value) {
@@ -529,7 +538,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
                               dimViviendaBloc.add(TechosViviendaChanged([
                                 LstTecho(
-                                    techoViviendaId: optionId,
+                                    techoViviendaId: otroId,
                                     otroTipoTecho: _otroTipoTecho)
                               ]));
                             },
@@ -702,11 +711,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final serviciosPublicosViviendaLoaded =
                   state.serviciosPublicosViviendaLoaded!;
 
-              int? optionId;
+              int? ningunoId;
 
               for (var e in serviciosPublicosViviendaLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.servicioPublicoViviendaId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'N') {
+                  ningunoId = e.servicioPublicoViviendaId;
                 }
               }
 
@@ -739,7 +749,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                   onChanged: (bool? value) {
                                     handleServiciosPublicosSelection(
                                         formState,
-                                        optionId,
+                                        ningunoId,
                                         context,
                                         value,
                                         servicioPublicoVivienda
@@ -787,11 +797,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final tratamientosAguaViviendaLoaded =
                   state.tratamientosAguaViviendaLoaded!;
 
-              int? optionId;
+              int? otroId;
 
               for (var e in tratamientosAguaViviendaLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.tratamientoAguaViviendaId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'O') {
+                  otroId = e.tratamientoAguaViviendaId;
                 }
               }
 
@@ -827,7 +838,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value!.length >= 3 &&
                                             tratamientoAguaVivienda
                                                     .tratamientoAguaViviendaId !=
-                                                optionId)
+                                                otroId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -838,7 +849,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             _updateTmtoAgua(
                                                 formState,
                                                 tratamientoAguaVivienda,
-                                                optionId,
+                                                otroId,
                                                 value,
                                                 dimViviendaBloc);
                                           });
@@ -866,8 +877,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextFormField(
-                            initialValue: dimViviendaBloc
-                                .state.lstTmtoAgua?[0].otroTratamientoAgua,
+                            initialValue:
+                                dimViviendaBloc.state.lstTmtoAgua != null &&
+                                        dimViviendaBloc
+                                            .state.lstTmtoAgua!.isNotEmpty
+                                    ? dimViviendaBloc.state.lstTmtoAgua![0]
+                                        .otroTratamientoAgua
+                                    : '',
                             decoration: CustomInputDecoration.inputDecoration(
                                 hintText: 'Otro', labelText: 'Cuál'),
                             validator: (value) {
@@ -884,7 +900,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(TratamientosAguaViviendaChanged([
                                 LstTmtoAgua(
-                                    tratamientoAguaViviendaId: optionId,
+                                    tratamientoAguaViviendaId: otroId,
                                     otroTratamientoAgua: _otroTratamientoAgua)
                               ]));
                             },
@@ -911,13 +927,14 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final tiposSanitarioViviendaLoaded =
                   state.tiposSanitarioViviendaLoaded!;
 
-              int? optionId;
+              int? otroId;
               int? noTieneId;
 
               for (var e in tiposSanitarioViviendaLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.tipoSanitarioViviendaId;
-                } else if (e.descripcion == 'No tiene') {
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'O') {
+                  otroId = e.tipoSanitarioViviendaId;
+                } else if (optionType == 'NT') {
                   noTieneId = e.tipoSanitarioViviendaId;
                 }
               }
@@ -957,7 +974,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 noTieneId &&
                                             tipoSanitarioVivienda
                                                     .tipoSanitarioViviendaId !=
-                                                optionId)
+                                                otroId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -969,7 +986,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 formState,
                                                 tipoSanitarioVivienda,
                                                 noTieneId,
-                                                optionId,
+                                                otroId,
                                                 value,
                                                 dimViviendaBloc);
                                           });
@@ -997,8 +1014,14 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextFormField(
-                            initialValue: dimViviendaBloc
-                                .state.lstTipoSanitario?[0].otroTipoSanitario,
+                            initialValue:
+                                dimViviendaBloc.state.lstTipoSanitario !=
+                                            null &&
+                                        dimViviendaBloc
+                                            .state.lstTipoSanitario!.isNotEmpty
+                                    ? dimViviendaBloc.state.lstTipoSanitario![0]
+                                        .otroTipoSanitario
+                                    : '',
                             decoration: CustomInputDecoration.inputDecoration(
                                 hintText: 'Otro', labelText: 'Cuál'),
                             validator: (value) {
@@ -1015,7 +1038,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(TiposSanitarioViviendaChanged([
                                 LstTipoSanitario(
-                                    tipoSanitarioViviendaId: optionId,
+                                    tipoSanitarioViviendaId: otroId,
                                     otroTipoSanitario: _otroTipoSanitario)
                               ]));
                             },
@@ -1043,11 +1066,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final tiposCombustibleViviendaLoaded =
                   state.tiposCombustibleViviendaLoaded!;
 
-              int? optionId;
+              int? otroId;
 
               for (var e in tiposCombustibleViviendaLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.tipoCombustibleViviendaId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'O') {
+                  otroId = e.tipoCombustibleViviendaId;
                 }
               }
 
@@ -1083,7 +1107,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value!.length >= 3 &&
                                             tipoCombustibleVivienda
                                                     .tipoCombustibleViviendaId !=
-                                                optionId)
+                                                otroId)
                                         ? CustomSnackBar.showCustomDialog(
                                             context,
                                             'Error',
@@ -1094,7 +1118,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             _updateTipoCombustible(
                                                 formState,
                                                 tipoCombustibleVivienda,
-                                                optionId,
+                                                otroId,
                                                 value,
                                                 dimViviendaBloc);
                                           });
@@ -1122,8 +1146,16 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextFormField(
-                            initialValue: dimViviendaBloc.state
-                                .lstTipoCombustible?[0].otroTipoCombustible,
+                            initialValue:
+                                dimViviendaBloc.state.lstTipoCombustible !=
+                                            null &&
+                                        dimViviendaBloc.state
+                                            .lstTipoCombustible!.isNotEmpty
+                                    ? dimViviendaBloc
+                                        .state
+                                        .lstTipoCombustible![0]
+                                        .otroTipoCombustible
+                                    : '',
                             decoration: CustomInputDecoration.inputDecoration(
                                 hintText: 'Otro', labelText: 'Cuál'),
                             validator: (value) {
@@ -1140,7 +1172,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(TiposCombustibleViviendaChanged([
                                 LstTipoCombustible(
-                                    tipoCombustibleViviendaId: optionId,
+                                    tipoCombustibleViviendaId: otroId,
                                     otroTipoCombustible: _otroTipoCombustible)
                               ]));
                             },
@@ -1167,11 +1199,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final factoresRiesgoViviendaLoaded =
                   state.factoresRiesgoViviendaLoaded!;
 
-              int? optionId;
+              int? otroId;
 
               for (var e in factoresRiesgoViviendaLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.factorRiesgoViviendaId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'O') {
+                  otroId = e.factorRiesgoViviendaId;
                 }
               }
 
@@ -1207,7 +1240,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               formState.value!.length >= 3 &&
                                               factorRiesgoVivienda
                                                       .factorRiesgoViviendaId !=
-                                                  optionId)
+                                                  otroId)
                                           ? CustomSnackBar.showCustomDialog(
                                               context,
                                               'Error',
@@ -1219,7 +1252,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 _updateFactorRiesgo(
                                                     formState,
                                                     factorRiesgoVivienda,
-                                                    optionId,
+                                                    otroId,
                                                     value,
                                                     dimViviendaBloc);
                                               },
@@ -1247,8 +1280,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextFormField(
-                            initialValue: dimViviendaBloc
-                                .state.lstFactorRiesgo?[0].otroFactorRiesgo,
+                            initialValue:
+                                dimViviendaBloc.state.lstFactorRiesgo != null &&
+                                        dimViviendaBloc
+                                            .state.lstFactorRiesgo!.isNotEmpty
+                                    ? dimViviendaBloc.state.lstFactorRiesgo![0]
+                                        .otroFactorRiesgo
+                                    : '',
                             decoration: CustomInputDecoration.inputDecoration(
                                 hintText: 'Otro', labelText: 'Cuál'),
                             validator: (value) {
@@ -1265,7 +1303,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(FactoresRiesgoViviendaChanged([
                                 LstFactorRiesgo(
-                                    factorRiesgoViviendaId: optionId,
+                                    factorRiesgoViviendaId: otroId,
                                     otroFactorRiesgo: _otroFactorRiesgo)
                               ]));
                             },
@@ -1293,11 +1331,12 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               final presenciaAnimalesViviendaLoaded =
                   state.presenciaAnimalesViviendaLoaded!;
 
-              int? optionId;
+              int? otroId;
 
               for (var e in presenciaAnimalesViviendaLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.presenciaAnimalViviendaId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'O') {
+                  otroId = e.presenciaAnimalViviendaId;
                 }
               }
 
@@ -1333,7 +1372,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               formState.value!.length >= 3 &&
                                               presenciaAnimalVivienda
                                                       .presenciaAnimalViviendaId !=
-                                                  optionId)
+                                                  otroId)
                                           ? CustomSnackBar.showCustomDialog(
                                               context,
                                               'Error',
@@ -1345,7 +1384,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 _updatePresenciaAnimal(
                                                     formState,
                                                     presenciaAnimalVivienda,
-                                                    optionId,
+                                                    otroId,
                                                     value,
                                                     dimViviendaBloc);
                                               },
@@ -1373,8 +1412,16 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: TextFormField(
-                            initialValue: dimViviendaBloc.state
-                                .lstPresenciaAnimal?[0].otroPresenciaAnimal,
+                            initialValue:
+                                dimViviendaBloc.state.lstPresenciaAnimal !=
+                                            null &&
+                                        dimViviendaBloc.state
+                                            .lstPresenciaAnimal!.isNotEmpty
+                                    ? dimViviendaBloc
+                                        .state
+                                        .lstPresenciaAnimal![0]
+                                        .otroPresenciaAnimal
+                                    : '',
                             decoration: CustomInputDecoration.inputDecoration(
                                 hintText: 'Otro', labelText: 'Cuál'),
                             validator: (value) {
@@ -1391,7 +1438,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                               dimViviendaBloc
                                   .add(PresenciaAnimalesViviendaChanged([
                                 LstPresenciaAnimal(
-                                    presenciaAnimalViviendaId: optionId,
+                                    presenciaAnimalViviendaId: otroId,
                                     otroPresenciaAnimal: _otroPresenciaAnimal)
                               ]));
                             },
@@ -1412,19 +1459,19 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   void _updatePresenciaAnimal(
       FormFieldState<List<LstPresenciaAnimal>> formState,
       PresenciaAnimalViviendaEntity presenciaAnimalVivienda,
-      int? optionId,
+      int? ningunoId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstPresenciaAnimal>.from(formState.value ?? []);
-    if (presenciaAnimalVivienda.presenciaAnimalViviendaId == optionId) {
-      selectedItems = [
-        LstPresenciaAnimal(
-            presenciaAnimalViviendaId:
-                presenciaAnimalVivienda.presenciaAnimalViviendaId)
-      ];
+    if (presenciaAnimalVivienda.presenciaAnimalViviendaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstPresenciaAnimal(
+          presenciaAnimalViviendaId:
+              presenciaAnimalVivienda.presenciaAnimalViviendaId));
       _showOtroPresenciaAnimal = true;
     } else if (value == true) {
-      selectedItems.removeWhere((e) => e.presenciaAnimalViviendaId == optionId);
+      selectedItems
+          .removeWhere((e) => e.presenciaAnimalViviendaId == ningunoId);
       selectedItems.add(LstPresenciaAnimal(
           presenciaAnimalViviendaId:
               presenciaAnimalVivienda.presenciaAnimalViviendaId));
@@ -1447,18 +1494,18 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   void _updateFactorRiesgo(
       FormFieldState<List<LstFactorRiesgo>> formState,
       FactorRiesgoViviendaEntity factorRiesgoVivienda,
-      int? optionId,
+      int? ningunoId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstFactorRiesgo>.from(formState.value ?? []);
-    if (factorRiesgoVivienda.factorRiesgoViviendaId == optionId) {
-      selectedItems = [
-        LstFactorRiesgo(
-            factorRiesgoViviendaId: factorRiesgoVivienda.factorRiesgoViviendaId)
-      ];
+    if (factorRiesgoVivienda.factorRiesgoViviendaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstFactorRiesgo(
+          factorRiesgoViviendaId: factorRiesgoVivienda.factorRiesgoViviendaId));
+
       _showOtroFactorRiesgo = true;
     } else if (value == true) {
-      selectedItems.removeWhere((e) => e.factorRiesgoViviendaId == optionId);
+      selectedItems.removeWhere((e) => e.factorRiesgoViviendaId == ningunoId);
       selectedItems.add(LstFactorRiesgo(
           factorRiesgoViviendaId: factorRiesgoVivienda.factorRiesgoViviendaId));
       _showOtroFactorRiesgo = false;
@@ -1480,20 +1527,21 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   void _updateTipoCombustible(
       FormFieldState<List<LstTipoCombustible>> formState,
       TipoCombustibleViviendaEntity tipoCombustibleVivienda,
-      int? optionId,
+      int? ningunoId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstTipoCombustible>.from(formState.value ?? []);
 
-    if (tipoCombustibleVivienda.tipoCombustibleViviendaId == optionId) {
-      selectedItems = [
-        LstTipoCombustible(
-            tipoCombustibleViviendaId:
-                tipoCombustibleVivienda.tipoCombustibleViviendaId)
-      ];
+    if (tipoCombustibleVivienda.tipoCombustibleViviendaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstTipoCombustible(
+          tipoCombustibleViviendaId:
+              tipoCombustibleVivienda.tipoCombustibleViviendaId));
+
       _showOtroTipoCombustible = true;
     } else if (value == true) {
-      selectedItems.removeWhere((e) => e.tipoCombustibleViviendaId == optionId);
+      selectedItems
+          .removeWhere((e) => e.tipoCombustibleViviendaId == ningunoId);
       selectedItems.add(LstTipoCombustible(
           tipoCombustibleViviendaId:
               tipoCombustibleVivienda.tipoCombustibleViviendaId));
@@ -1517,34 +1565,34 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
       FormFieldState<List<LstTipoSanitario>> formState,
       TipoSanitarioViviendaEntity tipoSanitarioVivienda,
       int? noTieneId,
-      int? optionId,
+      int? otroId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstTipoSanitario>.from(formState.value ?? []);
 
     if (tipoSanitarioVivienda.tipoSanitarioViviendaId == noTieneId) {
-      selectedItems = [
-        LstTipoSanitario(
-            tipoSanitarioViviendaId:
-                tipoSanitarioVivienda.tipoSanitarioViviendaId)
-      ];
+      selectedItems.clear();
+      selectedItems.add(LstTipoSanitario(
+          tipoSanitarioViviendaId:
+              tipoSanitarioVivienda.tipoSanitarioViviendaId));
+
       _showOtroTipoSanitario = false;
       _otroTipoSanitario = null;
-    } else if (tipoSanitarioVivienda.tipoSanitarioViviendaId == optionId) {
-      selectedItems = [
-        LstTipoSanitario(
-            tipoSanitarioViviendaId:
-                tipoSanitarioVivienda.tipoSanitarioViviendaId)
-      ];
+    } else if (tipoSanitarioVivienda.tipoSanitarioViviendaId == otroId) {
+      selectedItems.clear();
+      selectedItems.add(LstTipoSanitario(
+          tipoSanitarioViviendaId:
+              tipoSanitarioVivienda.tipoSanitarioViviendaId));
       _showOtroTipoSanitario = true;
     } else if (value == true) {
       selectedItems.removeWhere((e) =>
           e.tipoSanitarioViviendaId == noTieneId ||
-          e.tipoSanitarioViviendaId == optionId);
+          e.tipoSanitarioViviendaId == otroId);
       selectedItems.add(LstTipoSanitario(
           tipoSanitarioViviendaId:
               tipoSanitarioVivienda.tipoSanitarioViviendaId));
       _showOtroTipoSanitario = false;
+      _otroTipoSanitario = null;
     } else {
       selectedItems.removeWhere(
         (e) =>
@@ -1562,19 +1610,19 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   void _updateTmtoAgua(
       FormFieldState<List<LstTmtoAgua>> formState,
       TratamientoAguaViviendaEntity tratamientoAguaVivienda,
-      int? optionId,
+      int? ningunoId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstTmtoAgua>.from(formState.value ?? []);
-    if (tratamientoAguaVivienda.tratamientoAguaViviendaId == optionId) {
-      selectedItems = [
-        LstTmtoAgua(
-            tratamientoAguaViviendaId:
-                tratamientoAguaVivienda.tratamientoAguaViviendaId)
-      ];
+    if (tratamientoAguaVivienda.tratamientoAguaViviendaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstTmtoAgua(
+          tratamientoAguaViviendaId:
+              tratamientoAguaVivienda.tratamientoAguaViviendaId));
       _showOtroTratamientoAgua = true;
     } else if (value == true) {
-      selectedItems.removeWhere((e) => e.tratamientoAguaViviendaId == optionId);
+      selectedItems
+          .removeWhere((e) => e.tratamientoAguaViviendaId == ningunoId);
       selectedItems.add(LstTmtoAgua(
           tratamientoAguaViviendaId:
               tratamientoAguaVivienda.tratamientoAguaViviendaId));
@@ -1597,18 +1645,18 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   void _updateTechosVivienda(
       FormFieldState<List<LstTecho>> formState,
       TechoViviendaEntity techoVivienda,
-      int? optionId,
+      int? ningunoId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstTecho>.from(formState.value ?? []);
 
-    if (techoVivienda.techoViviendaId == optionId) {
-      selectedItems = [
-        LstTecho(techoViviendaId: techoVivienda.techoViviendaId)
-      ];
+    if (techoVivienda.techoViviendaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems
+          .add(LstTecho(techoViviendaId: techoVivienda.techoViviendaId));
       _showOtroTechoVivienda = true;
     } else if (value == true) {
-      selectedItems.removeWhere((e) => e.techoViviendaId == optionId);
+      selectedItems.removeWhere((e) => e.techoViviendaId == ningunoId);
       selectedItems
           .add(LstTecho(techoViviendaId: techoVivienda.techoViviendaId));
       _showOtroTechoVivienda = false;
@@ -1627,16 +1675,17 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
   void _updatePisosVivienda(
       PisoViviendaEntity pisoVivienda,
-      int? optionId,
+      int? ningunoId,
       List<LstPiso> selectedItems,
       bool value,
       FormFieldState<List<LstPiso>> formState,
       DimViviendaBloc dimViviendaBloc) {
-    if (pisoVivienda.pisoViviendaId == optionId) {
-      selectedItems = [LstPiso(pisoViviendaId: pisoVivienda.pisoViviendaId)];
+    if (pisoVivienda.pisoViviendaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstPiso(pisoViviendaId: pisoVivienda.pisoViviendaId));
       _showOtroPisoVivienda = true;
     } else if (value == true) {
-      selectedItems.removeWhere((e) => e.pisoViviendaId == optionId);
+      selectedItems.removeWhere((e) => e.pisoViviendaId == ningunoId);
       selectedItems.add(LstPiso(pisoViviendaId: pisoVivienda.pisoViviendaId));
       _showOtroPisoVivienda = false;
       _otroTipoPiso = null;

@@ -1,0 +1,21 @@
+# android/fastlane/Fastfile
+
+default_platform(:android)
+
+platform :android do
+ desc "Deploy to Firebase"
+ lane :deploy do
+  begin
+    # (start) Add this
+    firebase_app_distribution(
+      groups: "testers",
+      release_notes: "Bug fixes and improvements.",
+      apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
+      firebase_cli_path: "/usr/local/bin/firebase",
+      firebase_cli_token: "1//05GX8D0e4gGDjCgYIARAAGAUSNwF-L9Irn0WIayCEwrshgofCwpIVXQLNu5QFvBTw9Ttucy2HV9FS2wEvUomJShzKRzMqqQVxK4E",
+      app: "1:863013060698:android:2a71513cd4d54c294ed863"
+     )
+   # (end)
+  end
+ end 
+end

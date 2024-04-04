@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleDificultadAccesoMedTradSelection(
     FormFieldState<List<LstDificultadAccesoMedTradicional>> formState,
-    int? optionId,
+    int? ningunoId,
     BuildContext context,
     bool? value,
     int dificultadAccesoMedTradId,
@@ -17,9 +17,9 @@ void handleDificultadAccesoMedTradSelection(
   var selectedItems =
       List<LstDificultadAccesoMedTradicional>.from(formState.value ?? []);
 
-  if (optionId != null) {
-    _handleOptionIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, dificultadAccesoMedTradId, optionId);
+  if (ningunoId != null) {
+    _handleNingunoIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, dificultadAccesoMedTradId, ningunoId);
   } else {
     _handleRegularSelection(context, value, isMaxSelectionReached,
         selectedItems, dificultadAccesoMedTradId);
@@ -29,18 +29,18 @@ void handleDificultadAccesoMedTradSelection(
   dimUbicacionBloc.add(DificultadesAccesoMedTradicionalChanged(selectedItems));
 }
 
-void _handleOptionIdSelection(
+void _handleNingunoIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstDificultadAccesoMedTradicional> selectedItems,
     int dificultadAccesoMedTradId,
-    int optionId) {
-  if (isMaxSelectionReached && dificultadAccesoMedTradId != optionId) {
+    int ningunoId) {
+  if (isMaxSelectionReached && dificultadAccesoMedTradId != ningunoId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithOptionId(
-        value, selectedItems, dificultadAccesoMedTradId, optionId);
+    _updateSelectedItemsWithNingunoId(
+        value, selectedItems, dificultadAccesoMedTradId, ningunoId);
   }
 }
 
@@ -63,17 +63,17 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithOptionId(
+void _updateSelectedItemsWithNingunoId(
     bool value,
     List<LstDificultadAccesoMedTradicional> selectedItems,
     int dificultadAccesoMedTradId,
-    int optionId) {
-  if (dificultadAccesoMedTradId == optionId) {
+    int ningunoId) {
+  if (dificultadAccesoMedTradId == ningunoId) {
     selectedItems.clear();
-    selectedItems.add(
-        LstDificultadAccesoMedTradicional(dificultadAccesoMedTradId: optionId));
+    selectedItems.add(LstDificultadAccesoMedTradicional(
+        dificultadAccesoMedTradId: ningunoId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.dificultadAccesoMedTradId == optionId);
+    selectedItems.removeWhere((e) => e.dificultadAccesoMedTradId == ningunoId);
     selectedItems.add(LstDificultadAccesoMedTradicional(
         dificultadAccesoMedTradId: dificultadAccesoMedTradId));
   } else {

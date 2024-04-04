@@ -177,9 +177,6 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
             labelText: 'Fecha de Diligenciamiento',
             border: OutlineInputBorder(),
           ),
-          onChanged: (String? value) {
-            //TODO: dimUbicacionBloc.add(FechaDiligenciamientoChanged(newValue!));
-          },
         ),
         const SizedBox(height: 20),
         Row(
@@ -366,6 +363,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               final autoridadesIndigenasLoaded = state.autoridadesIndigenas!;
 
               return DropdownButtonFormField<int>(
+                isExpanded: true,
                 value: _autoridadIndigena,
                 items: autoridadesIndigenasLoaded
                     .map(
@@ -403,6 +401,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               final viasAccesoLoaded = state.viasAccesoLoaded!;
 
               return DropdownButtonFormField<int>(
+                isExpanded: true,
                 value: _viaAcceso,
                 items: viasAccesoLoaded
                     .map((viaAcceso) => DropdownMenuItem<int>(
@@ -437,6 +436,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               final estadosViasLoaded = state.estadosViasLoaded!;
 
               return DropdownButtonFormField<int>(
+                isExpanded: true,
                 value: _estadoVia,
                 items: estadosViasLoaded
                     .map(
@@ -477,11 +477,12 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
           builder: (context, state) {
             if (state is MediosComunicacionLoaded) {
               final mediosComunicacionLoaded = state.mediosComunicacionLoaded!;
-              int? optionId;
+              int? ningunoId;
 
               for (var e in mediosComunicacionLoaded) {
-                if (FormValidators.validateDescription(e.descripcion)) {
-                  optionId = e.medioComunicacionId;
+                final optionType = FormValidators.optionType(e.descripcion);
+                if (optionType == 'N') {
+                  ningunoId = e.medioComunicacionId;
                 }
               }
 
@@ -514,7 +515,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                                   onChanged: (bool? value) {
                                     handleMediosComunicacionSelection(
                                         formState,
-                                        optionId,
+                                        ningunoId,
                                         context,
                                         value,
                                         medioComunicacion.medioComunicacionId,

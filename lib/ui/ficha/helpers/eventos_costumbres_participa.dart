@@ -5,7 +5,7 @@ import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocul
 
 void handleEventoCostumbreParticipaSelection(
     FormFieldState<List<LstEventoCostumbreParticipa>> formState,
-    int? optionId,
+    int? ningunoId,
     BuildContext context,
     bool? value,
     int eventoCostumbreParticipaId,
@@ -14,9 +14,9 @@ void handleEventoCostumbreParticipaSelection(
   var selectedItems =
       List<LstEventoCostumbreParticipa>.from(formState.value ?? []);
 
-  if (optionId != null) {
-    _handleOptionIdSelection(
-        context, value!, selectedItems, eventoCostumbreParticipaId, optionId);
+  if (ningunoId != null) {
+    _handleNingunoIdSelection(
+        context, value!, selectedItems, eventoCostumbreParticipaId, ningunoId);
   } else {
     _handleRegularSelection(
         context, value!, selectedItems, eventoCostumbreParticipaId);
@@ -27,14 +27,14 @@ void handleEventoCostumbreParticipaSelection(
       .add(EventosCostumbresParticipaChanged(selectedItems));
 }
 
-void _handleOptionIdSelection(
+void _handleNingunoIdSelection(
     BuildContext context,
     bool value,
     List<LstEventoCostumbreParticipa> selectedItems,
     int eventoCostumbreParticipaId,
-    int optionId) {
-  _updateSelectedItemsWithOptionId(
-      value, selectedItems, eventoCostumbreParticipaId, optionId);
+    int ningunoId) {
+  _updateSelectedItemsWithNingunoId(
+      value, selectedItems, eventoCostumbreParticipaId, ningunoId);
 }
 
 void _handleRegularSelection(
@@ -45,17 +45,17 @@ void _handleRegularSelection(
   _updateSelectedItemsRegular(value, selectedItems, eventoCostumbreParticipaId);
 }
 
-void _updateSelectedItemsWithOptionId(
+void _updateSelectedItemsWithNingunoId(
     bool value,
     List<LstEventoCostumbreParticipa> selectedItems,
     int eventoCostumbreParticipaId,
-    int optionId) {
-  if (eventoCostumbreParticipaId == optionId) {
+    int ningunoId) {
+  if (eventoCostumbreParticipaId == ningunoId) {
     selectedItems.clear();
-    selectedItems
-        .add(LstEventoCostumbreParticipa(eventoCostumbreParticipaId: optionId));
+    selectedItems.add(
+        LstEventoCostumbreParticipa(eventoCostumbreParticipaId: ningunoId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.eventoCostumbreParticipaId == optionId);
+    selectedItems.removeWhere((e) => e.eventoCostumbreParticipaId == ningunoId);
     selectedItems.add(LstEventoCostumbreParticipa(
         eventoCostumbreParticipaId: eventoCostumbreParticipaId));
   } else {

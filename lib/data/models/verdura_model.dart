@@ -26,19 +26,23 @@ class VerduraModel extends VerduraEntity {
 class LstVerdura {
   int? ubicacionId;
   int? verduraId;
+  String? otroVerdura;
 
   LstVerdura({
     this.ubicacionId,
     this.verduraId,
+    this.otroVerdura,
   });
 
   factory LstVerdura.fromJson(Map<String, dynamic> json) => LstVerdura(
         verduraId: json["Verdura_id"],
+        otroVerdura: json["OtroVerdura"],
       );
 
   Map<String, dynamic> toJson() => {
         "Ubicacion_id": ubicacionId,
         "Verdura_id": verduraId,
+        "OtroVerdura": otroVerdura,
       };
 }
 
@@ -50,11 +54,13 @@ class UbicacionVerduras {
   int? ubicacionVerduraId;
   int? ubicacionId;
   int? verduraId;
+  String? otroVerdura;
 
   UbicacionVerduras({
     this.ubicacionVerduraId,
     this.ubicacionId,
     this.verduraId,
+    this.otroVerdura,
   });
 
   factory UbicacionVerduras.fromJson(Map<String, dynamic> json) =>
@@ -62,10 +68,12 @@ class UbicacionVerduras {
         ubicacionVerduraId: json["UbicacionVerdura_id"],
         ubicacionId: json["Ubicacion_id"],
         verduraId: json["Verdura_id"],
+        otroVerdura: json["OtroVerdura"],
       );
 
   Map<String, dynamic> toJson() => {
         "Ubicacion_id": ubicacionId,
         "Verdura_id": verduraId,
+        "OtroVerdura": otroVerdura,
       };
 }

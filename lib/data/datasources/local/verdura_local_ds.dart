@@ -47,7 +47,9 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
 
     final ubicacionVerduras = lstVerduras
         .map((item) => UbicacionVerduras(
-            verduraId: item.verduraId, ubicacionId: ubicacionId))
+            verduraId: item.verduraId,
+            ubicacionId: ubicacionId,
+            otroVerdura: item.otroVerdura))
         .toList();
 
     for (final ubicacionVerdura in ubicacionVerduras) {

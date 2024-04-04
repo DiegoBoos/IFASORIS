@@ -173,12 +173,12 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // TratamientosAgua
-        // TODO:Falta columna otroTratamientoAgua
         final resTratamientosAgua = await db.rawQuery('''
           SELECT
           -- ViviendaTmtoAgua_id AS viviendaTmtoAguaId,
           DatoVivienda_id AS datoViviendaId,
-          TratamientoAguaVivienda_id AS tratamientoAguaViviendaId
+          TratamientoAguaVivienda_id AS tratamientoAguaViviendaId,
+          OtroTratamientoAgua AS otroTratamientoAgua
           FROM Asp2_DatosViviendaTratamientosAgua
           WHERE DatoVivienda_id = $datoViviendaId
           ''');
@@ -192,12 +192,12 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // FactoresRieso
-        // TODO:Falta columna otroFactorRiesgo
         final resFactoresRiesgo = await db.rawQuery('''
           SELECT
           -- ViviendaFactorRiesgo_id AS viviendaFactorRiesgoId,
           DatoVivienda_id AS datoViviendaId,
-          FactorRiesgoVivienda_id AS factorRiesgoViviendaId
+          FactorRiesgoVivienda_id AS factorRiesgoViviendaId,
+          OtroFactorRiesgo AS otroFactorRiesgo
           FROM Asp2_DatosViviendaFactoresRiesgo
           WHERE DatoVivienda_id = $datoViviendaId
           ''');
@@ -370,7 +370,8 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // Cereales
         final resCereales = await db.rawQuery('''
           SELECT
-          Cereal_id AS cerealId
+          Cereal_id AS cerealId,
+          OtroCereal AS otroCereal
           FROM Asp1_UbicacionCereales
           WHERE Ubicacion_id = $ubicacionId
           ''');
@@ -448,7 +449,8 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // Hortalizas
         final resHortalizas = await db.rawQuery('''
           SELECT
-          Hortaliza_id AS hortalizaId
+          Hortaliza_id AS hortalizaId,
+          OtroHortaliza AS otroHortaliza
           FROM Asp1_UbicacionHortalizas
           WHERE Ubicacion_id = $ubicacionId
           ''');
@@ -528,7 +530,8 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // TuberculosPlatanos
         final resTuberculosPlatanos = await db.rawQuery('''
           SELECT
-          TuberculoPlatano_id AS tuberculoPlatanoId
+          TuberculoPlatano_id AS tuberculoPlatanoId,
+          OtroTuberculoPlatano AS otroTuberculoPlatano
           FROM Asp1_UbicacionTuberculosPlatanos
           WHERE Ubicacion_id = $ubicacionId
           ''');
@@ -544,7 +547,8 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // Verduras
         final resVerduras = await db.rawQuery('''
           SELECT
-          Verdura_id AS verduraId
+          Verdura_id AS verduraId,
+          OtroVerdura AS otroVerdura
           FROM Asp1_UbicacionVerduras
           WHERE Ubicacion_id = $ubicacionId
           ''');
@@ -607,6 +611,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           CursoVida_id AS cursoVidaId,
           NivelEducativo_id AS nivelEducativoId,
           Ocupacion_id AS ocupacionId,
+          OtroOcupacion AS otroOcupacion,
           GrupoRiesgo_id AS grupoRiesgoId,
           OrigenEtnico5602_id AS origenEtnico5602Id,
 

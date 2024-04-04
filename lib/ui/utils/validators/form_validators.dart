@@ -26,14 +26,17 @@ abstract class FormValidators {
     return null;
   }
 
-  static bool validateDescription(String optionName) {
-    final descripcion = optionName.toLowerCase();
-    if (descripcion == 'ninguna' ||
-        descripcion == 'ninguno' ||
-        descripcion == 'otro' ||
-        descripcion == 'otros') {
-      return true;
+  static String? optionType(String optionName) {
+    final descripcion = optionName.toLowerCase().trim();
+    if (descripcion == 'ninguna' || descripcion == 'ninguno') {
+      return 'N';
+    } else if (descripcion == 'otro' ||
+        descripcion == 'otros' ||
+        descripcion == 'otro.') {
+      return 'O';
+    } else if (descripcion == 'no tiene') {
+      return 'NT';
     }
-    return false;
+    return null;
   }
 }

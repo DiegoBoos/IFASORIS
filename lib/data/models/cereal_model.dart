@@ -25,17 +25,21 @@ class CerealModel extends CerealEntity {
 
 class LstCereal {
   int? cerealId;
+  String? otroCereal;
 
   LstCereal({
     this.cerealId,
+    this.otroCereal,
   });
 
   factory LstCereal.fromJson(Map<String, dynamic> json) => LstCereal(
         cerealId: json["Cereal_id"],
+        otroCereal: json["OtroCereal"],
       );
 
   Map<String, dynamic> toJson() => {
         "Cereal_id": cerealId,
+        "OtroCereal": otroCereal,
       };
 }
 
@@ -47,11 +51,13 @@ class UbicacionCereales {
   int? ubicacionCerealId;
   int? ubicacionId;
   int? cerealId;
+  String? otroCereal;
 
   UbicacionCereales({
     this.ubicacionCerealId,
     this.ubicacionId,
     this.cerealId,
+    this.otroCereal,
   });
 
   factory UbicacionCereales.fromJson(Map<String, dynamic> json) =>
@@ -59,10 +65,12 @@ class UbicacionCereales {
         ubicacionCerealId: json["UbicacionCereal_id"],
         ubicacionId: json["Ubicacion_id"],
         cerealId: json["Cereal_id"],
+        otroCereal: json["OtroCereal"],
       );
 
   Map<String, dynamic> toJson() => {
         "Ubicacion_id": ubicacionId,
         "Cereal_id": cerealId,
+        "OtroCereal": otroCereal,
       };
 }

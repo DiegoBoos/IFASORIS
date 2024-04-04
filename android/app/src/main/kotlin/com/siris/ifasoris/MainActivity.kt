@@ -1,4 +1,4 @@
-package com.example.ifasoris
+package com.siris.ifasoris
 
 import io.flutter.embedding.android.FlutterActivity
 

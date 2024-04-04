@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "863013060698",
+    "project_id": "ifasoris-c75e2",
+    "storage_bucket": "ifasoris-c75e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863013060698:android:2a71513cd4d54c294ed863",
+        "android_client_info": {
+          "package_name": "com.siris.ifasoris"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4twQnJ0njD1pj78WlOapGBTH7RJcf_7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -28,19 +28,23 @@ class TuberculoPlatanoModel extends TuberculoPlatanoEntity {
 class LstTuberculo {
   int? ubicacionId;
   int? tuberculoPlatanoId;
+  String? otroTuberculoPlatano;
 
   LstTuberculo({
     this.ubicacionId,
     this.tuberculoPlatanoId,
+    this.otroTuberculoPlatano,
   });
 
   factory LstTuberculo.fromJson(Map<String, dynamic> json) => LstTuberculo(
         tuberculoPlatanoId: json["TuberculoPlatano_id"],
+        otroTuberculoPlatano: json["OtroTuberculoPlatano"],
       );
 
   Map<String, dynamic> toJson() => {
         "Ubicacion_id": ubicacionId,
         "TuberculoPlatano_id": tuberculoPlatanoId,
+        "OtroTuberculoPlatano": otroTuberculoPlatano,
       };
 }
 
@@ -53,11 +57,13 @@ class UbicacionTuberculosPlatanos {
   int? ubicacionTuberculoPlatanoId;
   int? ubicacionId;
   int? tuberculoPlatanoId;
+  String? otroTuberculoPlatano;
 
   UbicacionTuberculosPlatanos({
     this.ubicacionTuberculoPlatanoId,
     this.ubicacionId,
     this.tuberculoPlatanoId,
+    this.otroTuberculoPlatano,
   });
 
   factory UbicacionTuberculosPlatanos.fromJson(Map<String, dynamic> json) =>
@@ -65,10 +71,12 @@ class UbicacionTuberculosPlatanos {
         ubicacionTuberculoPlatanoId: json["UbicacionTuberculoPlatano_id"],
         ubicacionId: json["Ubicacion_id"],
         tuberculoPlatanoId: json["TuberculoPlatano_id"],
+        otroTuberculoPlatano: json["OtroTuberculoPlatano"],
       );
 
   Map<String, dynamic> toJson() => {
         "Ubicacion_id": ubicacionId,
         "TuberculoPlatano_id": tuberculoPlatanoId,
+        "OtroTuberculoPlatano": otroTuberculoPlatano,
       };
 }

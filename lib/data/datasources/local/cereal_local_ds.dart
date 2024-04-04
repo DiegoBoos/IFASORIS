@@ -45,7 +45,9 @@ class CerealLocalDataSourceImpl implements CerealLocalDataSource {
 
     final ubicacionCereales = lstCereales
         .map((item) => UbicacionCereales(
-            cerealId: item.cerealId, ubicacionId: ubicacionId))
+            cerealId: item.cerealId,
+            ubicacionId: ubicacionId,
+            otroCereal: item.otroCereal))
         .toList();
 
     for (final ubicacionCereal in ubicacionCereales) {

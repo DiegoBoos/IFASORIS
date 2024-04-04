@@ -22,6 +22,7 @@ class GrupoFamiliarEntity {
   int? cursoVidaId;
   int? nivelEducativoId;
   int? ocupacionId;
+  String? otroOcupacion;
   int? grupoRiesgoId;
   int? origenEtnico5602Id;
   int? puebloIndigenaId;
@@ -52,6 +53,7 @@ class GrupoFamiliarEntity {
       this.cursoVidaId,
       this.nivelEducativoId,
       this.ocupacionId,
+      this.otroOcupacion,
       this.grupoRiesgoId,
       this.origenEtnico5602Id,
       this.puebloIndigenaId,
@@ -82,6 +84,7 @@ class GrupoFamiliarEntity {
     int? cursoVidaId,
     int? nivelEducativoId,
     int? ocupacionId,
+    String? otroOcupacion,
     int? grupoRiesgoId,
     int? origenEtnico5602Id,
     int? puebloIndigenaId,
@@ -112,6 +115,7 @@ class GrupoFamiliarEntity {
         cursoVidaId: cursoVidaId ?? this.cursoVidaId,
         nivelEducativoId: nivelEducativoId ?? this.nivelEducativoId,
         ocupacionId: ocupacionId ?? this.ocupacionId,
+        otroOcupacion: otroOcupacion ?? this.otroOcupacion,
         grupoRiesgoId: grupoRiesgoId ?? this.grupoRiesgoId,
         origenEtnico5602Id: origenEtnico5602Id ?? this.origenEtnico5602Id,
         puebloIndigenaId: puebloIndigenaId ?? this.puebloIndigenaId,
@@ -136,6 +140,7 @@ class GrupoFamiliarEntity {
         "CursoVida_id": cursoVidaId,
         "NivelEducativo_id": nivelEducativoId,
         "Ocupacion_id": ocupacionId,
+        "OtroOcupacion": otroOcupacion,
         "GrupoRiesgo_id": grupoRiesgoId,
         "OrigenEtnico5602_id": origenEtnico5602Id,
         "PuebloIndigena_id": puebloIndigenaId,

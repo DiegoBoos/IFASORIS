@@ -6,7 +6,7 @@ import '../../utils/custom_snack_bar.dart';
 
 void handleLeguminosaSelection(
     FormFieldState<List<LstLeguminosa>> formState,
-    int? optionId,
+    int? ningunoId,
     BuildContext context,
     bool? value,
     int leguminosaId,
@@ -16,9 +16,9 @@ void handleLeguminosaSelection(
 
   var selectedItems = List<LstLeguminosa>.from(formState.value ?? []);
 
-  if (optionId != null) {
-    _handleOptionIdSelection(context, value, isMaxSelectionReached,
-        selectedItems, leguminosaId, optionId);
+  if (ningunoId != null) {
+    _handleNingunoIdSelection(context, value, isMaxSelectionReached,
+        selectedItems, leguminosaId, ningunoId);
   } else {
     _handleRegularSelection(
         context, value, isMaxSelectionReached, selectedItems, leguminosaId);
@@ -28,18 +28,18 @@ void handleLeguminosaSelection(
   dimUbicacionBloc.add(LeguminosasChanged(selectedItems));
 }
 
-void _handleOptionIdSelection(
+void _handleNingunoIdSelection(
     BuildContext context,
     bool value,
     bool isMaxSelectionReached,
     List<LstLeguminosa> selectedItems,
     int leguminosaId,
-    int optionId) {
-  if (isMaxSelectionReached && leguminosaId != optionId) {
+    int ningunoId) {
+  if (isMaxSelectionReached && leguminosaId != ningunoId) {
     _showMaxSelectionError(context);
   } else {
-    _updateSelectedItemsWithOptionId(
-        value, selectedItems, leguminosaId, optionId);
+    _updateSelectedItemsWithNingunoId(
+        value, selectedItems, leguminosaId, ningunoId);
   }
 }
 
@@ -61,13 +61,13 @@ void _showMaxSelectionError(BuildContext context) {
       () => Navigator.pop(context), false);
 }
 
-void _updateSelectedItemsWithOptionId(bool value,
-    List<LstLeguminosa> selectedItems, int leguminosaId, int optionId) {
-  if (leguminosaId == optionId) {
+void _updateSelectedItemsWithNingunoId(bool value,
+    List<LstLeguminosa> selectedItems, int leguminosaId, int ningunoId) {
+  if (leguminosaId == ningunoId) {
     selectedItems.clear();
-    selectedItems.add(LstLeguminosa(leguminosaId: optionId));
+    selectedItems.add(LstLeguminosa(leguminosaId: ningunoId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.leguminosaId == optionId);
+    selectedItems.removeWhere((e) => e.leguminosaId == ningunoId);
     selectedItems.add(LstLeguminosa(leguminosaId: leguminosaId));
   } else {
     selectedItems.removeWhere((e) => e.leguminosaId == leguminosaId);

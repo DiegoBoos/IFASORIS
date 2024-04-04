@@ -47,7 +47,9 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
 
     final ubicacionHortalizas = lstHortalizas
         .map((item) => UbicacionHortalizas(
-            hortalizaId: item.hortalizaId, ubicacionId: ubicacionId))
+            hortalizaId: item.hortalizaId,
+            ubicacionId: ubicacionId,
+            otroHortaliza: item.otroHortaliza))
         .toList();
 
     for (final ubicacionHortaliza in ubicacionHortalizas) {

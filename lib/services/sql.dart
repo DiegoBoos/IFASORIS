@@ -93,6 +93,7 @@ class ConnectionSQL {
 	[UbicacionCereal_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
 	[Cereal_id]	integer NOT NULL,
+  [OtroCereal]	varchar(150) COLLATE NOCASE,
   FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
@@ -133,6 +134,7 @@ class ConnectionSQL {
 	[UbicacionHortaliza_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
 	[Hortaliza_id]	integer NOT NULL,
+  [OtroHortaliza]	varchar(150) COLLATE NOCASE,
   FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
@@ -173,6 +175,7 @@ class ConnectionSQL {
 	[UbicacionTuberculoPlatano_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
 	[TuberculoPlatano_id]	integer NOT NULL,
+  [OtroTuberculoPlatano]	varchar(150) COLLATE NOCASE,
   FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
@@ -181,6 +184,7 @@ class ConnectionSQL {
 	[UbicacionVerdura_id]	integer PRIMARY KEY AUTOINCREMENT,
 	[Ubicacion_id]	integer NOT NULL,
 	[Verdura_id]	integer NOT NULL,
+  [OtroVerdura]	varchar(150) COLLATE NOCASE,
   FOREIGN KEY (Ubicacion_id) REFERENCES Asp1_Ubicacion(Ubicacion_id) ON DELETE CASCADE
   )''';
 
@@ -284,6 +288,7 @@ class ConnectionSQL {
 	[CursoVida_id]	integer NOT NULL,
 	[NivelEducativo_id]	integer NOT NULL,
 	[Ocupacion_id]	integer NOT NULL,
+  [OtroOcupacion]	varchar(150) COLLATE NOCASE,
 	[GrupoRiesgo_id]	integer NOT NULL,
 	[OrigenEtnico5602_id]	integer NOT NULL,
 	[PuebloIndigena_id]	integer,

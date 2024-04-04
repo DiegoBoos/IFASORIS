@@ -5,16 +5,16 @@ import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
 
 void handleServiciosPublicosSelection(
     FormFieldState<List<LstServPublico>> formState,
-    int? optionId,
+    int? ningunoId,
     BuildContext context,
     bool? value,
     int servicioPublicoViviendaId,
     DimViviendaBloc dimViviendaBloc) {
   var selectedItems = List<LstServPublico>.from(formState.value ?? []);
 
-  if (optionId != null) {
-    _handleOptionIdSelection(
-        context, value!, selectedItems, servicioPublicoViviendaId, optionId);
+  if (ningunoId != null) {
+    _handleNingunoIdSelection(
+        context, value!, selectedItems, servicioPublicoViviendaId, ningunoId);
   } else {
     _handleRegularSelection(
         context, value!, selectedItems, servicioPublicoViviendaId);
@@ -24,14 +24,14 @@ void handleServiciosPublicosSelection(
   dimViviendaBloc.add(ServiciosPublicosViviendaChanged(selectedItems));
 }
 
-void _handleOptionIdSelection(
+void _handleNingunoIdSelection(
     BuildContext context,
     bool value,
     List<LstServPublico> selectedItems,
     int servicioPublicoViviendaId,
-    int optionId) {
-  _updateSelectedItemsWithOptionId(
-      value, selectedItems, servicioPublicoViviendaId, optionId);
+    int ningunoId) {
+  _updateSelectedItemsWithNingunoId(
+      value, selectedItems, servicioPublicoViviendaId, ningunoId);
 }
 
 void _handleRegularSelection(BuildContext context, bool value,
@@ -39,16 +39,16 @@ void _handleRegularSelection(BuildContext context, bool value,
   _updateSelectedItemsRegular(value, selectedItems, servicioPublicoViviendaId);
 }
 
-void _updateSelectedItemsWithOptionId(
+void _updateSelectedItemsWithNingunoId(
     bool value,
     List<LstServPublico> selectedItems,
     int servicioPublicoViviendaId,
-    int optionId) {
-  if (servicioPublicoViviendaId == optionId) {
+    int ningunoId) {
+  if (servicioPublicoViviendaId == ningunoId) {
     selectedItems.clear();
-    selectedItems.add(LstServPublico(servicioPublicoViviendaId: optionId));
+    selectedItems.add(LstServPublico(servicioPublicoViviendaId: ningunoId));
   } else if (value) {
-    selectedItems.removeWhere((e) => e.servicioPublicoViviendaId == optionId);
+    selectedItems.removeWhere((e) => e.servicioPublicoViviendaId == ningunoId);
     selectedItems.add(
         LstServPublico(servicioPublicoViviendaId: servicioPublicoViviendaId));
   } else {

@@ -51,6 +51,12 @@ class OcupacionChanged extends GrupoFamiliarEvent {
   const OcupacionChanged(this.ocupacionId);
 }
 
+class OtroOcupacionChanged extends GrupoFamiliarEvent {
+  final String? otroOcupacion;
+
+  const OtroOcupacionChanged(this.otroOcupacion);
+}
+
 class GrupoRiesgoChanged extends GrupoFamiliarEvent {
   final int grupoRiesgoId;
 

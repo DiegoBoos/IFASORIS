@@ -344,12 +344,13 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                         final eventosCostumbresParticipaLoaded =
                             state.eventosCostumbresParticipaLoaded!;
 
-                        int? optionId;
+                        int? ningunoId;
 
                         for (var e in eventosCostumbresParticipaLoaded) {
-                          if (FormValidators.validateDescription(
-                              e.descripcion)) {
-                            optionId = e.eventoCostumbreParticipaId;
+                          final optionType =
+                              FormValidators.optionType(e.descripcion);
+                          if (optionType == 'N') {
+                            ningunoId = e.eventoCostumbreParticipaId;
                           }
                         }
 
@@ -387,7 +388,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                             onChanged: (bool? value) {
                                               handleEventoCostumbreParticipaSelection(
                                                   formState,
-                                                  optionId,
+                                                  ningunoId,
                                                   context,
                                                   value,
                                                   eventoCostumbreParticipa
