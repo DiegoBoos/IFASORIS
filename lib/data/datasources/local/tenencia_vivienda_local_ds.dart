@@ -1,10 +1,9 @@
-import '../../../domain/entities/tenencia_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/tenencia_vivienda_model.dart';
+import '../../models/tenencia_vivienda.dart';
 
 abstract class TenenciaViviendaLocalDataSource {
   Future<List<TenenciaViviendaModel>> getTenenciasVivienda();
-  Future<int> saveTenenciaVivienda(TenenciaViviendaEntity tenenciaVivienda);
+  Future<int> saveTenenciaVivienda(TenenciaViviendaModel tenenciaVivienda);
 }
 
 class TenenciaViviendaLocalDataSourceImpl
@@ -21,7 +20,7 @@ class TenenciaViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveTenenciaVivienda(
-      TenenciaViviendaEntity tenenciaVivienda) async {
+      TenenciaViviendaModel tenenciaVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

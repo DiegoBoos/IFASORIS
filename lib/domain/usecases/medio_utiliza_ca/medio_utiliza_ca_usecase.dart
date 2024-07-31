@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/medio_utiliza_ca_entity.dart';
+import '../../entities/medio_utiliza_ca.dart';
 import '../../repositories/medio_utiliza_ca/medio_utiliza_ca_repository.dart';
 
 class MedioUtilizaCAUsecase {

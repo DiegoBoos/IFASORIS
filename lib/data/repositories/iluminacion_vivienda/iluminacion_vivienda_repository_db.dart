@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/iluminacion_vivienda_entity.dart';
+import '../../../domain/entities/iluminacion_vivienda.dart';
 import '../../../domain/repositories/iluminacion_vivienda/iluminacion_vivienda_repository_db.dart';
 import '../../datasources/local/iluminacion_vivienda_local_ds.dart';
+import '../../models/iluminacion_vivienda.dart';
 
 class IluminacionViviendaRepositoryDBImpl
     implements IluminacionViviendaRepositoryDB {
@@ -14,7 +14,7 @@ class IluminacionViviendaRepositoryDBImpl
       {required this.iluminacionViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<IluminacionViviendaEntity>>>
+  Future<Either<Failure, List<IluminacionViviendaModel>>>
       getIluminacionesViviendaRepositoryDB() async {
     try {
       final result =
@@ -22,7 +22,7 @@ class IluminacionViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +31,14 @@ class IluminacionViviendaRepositoryDBImpl
   Future<Either<Failure, int>> saveIluminacionViviendaRepositoryDB(
       IluminacionViviendaEntity iluminacionVivienda) async {
     try {
+      final iluminacionViviendaModel =
+          IluminacionViviendaModel.fromEntity(iluminacionVivienda);
       final result = await iluminacionViviendaLocalDataSource
-          .saveIluminacionVivienda(iluminacionVivienda);
+          .saveIluminacionVivienda(iluminacionViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

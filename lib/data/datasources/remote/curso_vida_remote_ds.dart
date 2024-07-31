@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/curso_vida_model.dart';
+import '../../models/curso_vida.dart';
 
 abstract class CursoVidaRemoteDataSource {
   Future<List<CursoVidaModel>> getCursosVida();
@@ -20,7 +20,7 @@ class CursoVidaRemoteDataSourceImpl implements CursoVidaRemoteDataSource {
   @override
   Future<List<CursoVidaModel>> getCursosVida() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/cursovida');
+      final uri = Uri.parse('${Constants.apiPublica}/cursovida');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

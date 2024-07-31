@@ -372,7 +372,7 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<SancionJusticiaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<NroCuartoViviendaCubit>(),
+            create: (_) => di.locator<CuartoViviendaCubit>(),
           ),
         ],
         child: MaterialApp(

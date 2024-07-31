@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/dificultad_acceso_ca_model.dart';
+import '../../models/dificultad_acceso_ca.dart';
 
 abstract class DificultadAccesoCARemoteDataSource {
   Future<List<DificultadAccesoCAModel>> getDificultadesAccesoCA();
@@ -21,8 +21,8 @@ class DificultadAccesoCARemoteDataSourceImpl
   @override
   Future<List<DificultadAccesoCAModel>> getDificultadesAccesoCA() async {
     try {
-      final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/dificultadesaccesoCentroAtencion');
+      final uri =
+          Uri.parse('${Constants.apiPublica}/dificultadesaccesoCentroAtencion');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

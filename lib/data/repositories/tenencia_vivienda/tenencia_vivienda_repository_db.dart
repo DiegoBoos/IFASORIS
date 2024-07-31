@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/tenencia_vivienda_entity.dart';
+import '../../../domain/entities/tenencia_vivienda.dart';
 import '../../../domain/repositories/tenencia_vivienda/tenencia_vivienda_repository_db.dart';
 import '../../datasources/local/tenencia_vivienda_local_ds.dart';
+import '../../models/tenencia_vivienda.dart';
 
 class TenenciaViviendaRepositoryDBImpl implements TenenciaViviendaRepositoryDB {
   final TenenciaViviendaLocalDataSource tenenciaViviendaLocalDataSource;
@@ -13,7 +13,7 @@ class TenenciaViviendaRepositoryDBImpl implements TenenciaViviendaRepositoryDB {
       {required this.tenenciaViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<TenenciaViviendaEntity>>>
+  Future<Either<Failure, List<TenenciaViviendaModel>>>
       getTenenciasViviendaRepositoryDB() async {
     try {
       final result =
@@ -21,7 +21,7 @@ class TenenciaViviendaRepositoryDBImpl implements TenenciaViviendaRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -30,12 +30,14 @@ class TenenciaViviendaRepositoryDBImpl implements TenenciaViviendaRepositoryDB {
   Future<Either<Failure, int>> saveTenenciaViviendaRepositoryDB(
       TenenciaViviendaEntity tenenciaVivienda) async {
     try {
+      final tenenciaViviendaModel =
+          TenenciaViviendaModel.fromEntity(tenenciaVivienda);
       final result = await tenenciaViviendaLocalDataSource
-          .saveTenenciaVivienda(tenenciaVivienda);
+          .saveTenenciaVivienda(tenenciaViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

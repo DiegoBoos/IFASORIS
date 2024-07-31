@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/nombre_enfermedad_model.dart';
-import '../../../data/models/servicio_solicitado_model.dart';
-import '../../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
+import '../../../data/models/nombre_enfermedad.dart';
+import '../../../data/models/servicio_solicitado.dart';
+import '../../../domain/entities/cuidado_salud_cond_riesgo.dart';
 import '../../../domain/usecases/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_db_usecase.dart';
 import '../../../domain/usecases/nombre_enfermedad/nombre_enfermedad_db_usecase.dart';
 import '../../../domain/usecases/servicio_solicitado/servicio_solicitado_db_usecase.dart';

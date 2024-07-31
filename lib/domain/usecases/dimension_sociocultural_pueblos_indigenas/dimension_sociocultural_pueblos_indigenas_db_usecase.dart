@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
+import '../../entities/dimension_sociocultural_pueblos_indigenas.dart';
 import '../../repositories/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_repository_db.dart';
 
 class DimensionSocioCulturalPueblosIndigenasUsecaseDB {

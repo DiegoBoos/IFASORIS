@@ -1,10 +1,9 @@
-import '../../../domain/entities/consumo_alcohol_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/consumo_alcohol_model.dart';
+import '../../models/consumo_alcohol.dart';
 
 abstract class ConsumoAlcoholLocalDataSource {
   Future<List<ConsumoAlcoholModel>> getConsumosAlcohol();
-  Future<int> saveConsumoAlcohol(ConsumoAlcoholEntity consumoAlcohol);
+  Future<int> saveConsumoAlcohol(ConsumoAlcoholModel consumoAlcohol);
 }
 
 class ConsumoAlcoholLocalDataSourceImpl
@@ -20,7 +19,7 @@ class ConsumoAlcoholLocalDataSourceImpl
   }
 
   @override
-  Future<int> saveConsumoAlcohol(ConsumoAlcoholEntity consumoAlcohol) async {
+  Future<int> saveConsumoAlcohol(ConsumoAlcoholModel consumoAlcohol) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/autoridad_indigena_entity.dart';
+import 'package:ifasoris/domain/entities/autoridad_indigena.dart';
 
 import '../../../core/error/failure.dart';
 

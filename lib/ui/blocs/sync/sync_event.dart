@@ -47,7 +47,7 @@ class SyncError extends SyncEvent {
 }
 
 class SyncLog extends SyncEvent {
-  final List<SyncLogEntity> syncLog;
+  final List<SyncLog> syncLog;
 
   const SyncLog(this.syncLog);
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../data/models/nombre_enfermedad_model.dart';
+import '../../../data/models/nombre_enfermedad.dart';
 import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 

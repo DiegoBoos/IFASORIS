@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/resguardo_entity.dart';
+import '../../../domain/entities/resguardo.dart';
 import '../../../domain/usecases/resguardo/resguardo_db_usecase.dart';
 
 part 'resguardo_state.dart';

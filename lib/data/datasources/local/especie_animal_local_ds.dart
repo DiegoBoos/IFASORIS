@@ -1,12 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/especie_animal_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/especie_animal_model.dart';
+import '../../models/especie_animal.dart';
 
 abstract class EspecieAnimalLocalDataSource {
   Future<List<EspecieAnimalModel>> getEspeciesAnimales();
-  Future<int> saveEspecieAnimal(EspecieAnimalEntity especieAnimal);
+  Future<int> saveEspecieAnimal(EspecieAnimalModel especieAnimal);
   Future<int> saveUbicacionEspecieAnimalesCria(
       int ubicacionId, List<LstAnimalCria> lstAnimalCria);
   Future<List<LstAnimalCria>> getAsp1EspeciesAnimales(int? ubicacionId);
@@ -24,7 +23,7 @@ class EspecieAnimalLocalDataSourceImpl implements EspecieAnimalLocalDataSource {
   }
 
   @override
-  Future<int> saveEspecieAnimal(EspecieAnimalEntity especieAnimal) async {
+  Future<int> saveEspecieAnimal(EspecieAnimalModel especieAnimal) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/cereal_model.dart';
+import 'package:ifasoris/data/models/cereal.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/cereal_entity.dart';
+import '../../../domain/entities/cereal.dart';
 import '../../../domain/repositories/cereal/cereal_repository_db.dart';
 import '../../datasources/local/cereal_local_ds.dart';
 
@@ -13,13 +12,13 @@ class CerealRepositoryDBImpl implements CerealRepositoryDB {
   CerealRepositoryDBImpl({required this.cerealLocalDataSource});
 
   @override
-  Future<Either<Failure, List<CerealEntity>>> getCerealesRepositoryDB() async {
+  Future<Either<Failure, List<CerealModel>>> getCerealesRepositoryDB() async {
     try {
       final result = await cerealLocalDataSource.getCereales();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -28,11 +27,12 @@ class CerealRepositoryDBImpl implements CerealRepositoryDB {
   Future<Either<Failure, int>> saveCerealRepositoryDB(
       CerealEntity cereal) async {
     try {
-      final result = await cerealLocalDataSource.saveCereal(cereal);
+      final cerealModel = CerealModel.fromEntity(cereal);
+      final result = await cerealLocalDataSource.saveCereal(cerealModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -46,7 +46,7 @@ class CerealRepositoryDBImpl implements CerealRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -60,7 +60,7 @@ class CerealRepositoryDBImpl implements CerealRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

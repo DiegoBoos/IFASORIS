@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:ifasoris/domain/usecases/estado_via/estado_via_db_usecase.dart';
 
-import '../../../domain/entities/estado_via_entity.dart';
+import '../../../domain/entities/estado_via.dart';
 
 part 'estado_via_state.dart';
 

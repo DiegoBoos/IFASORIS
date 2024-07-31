@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/lugar_atencion_medico_entity.dart';
+import '../../../domain/entities/lugar_atencion_medico.dart';
 import '../../../domain/repositories/lugar_atencion_medico/lugar_atencion_medico_repository_db.dart';
 import '../../datasources/local/lugar_atencion_medico_local_ds.dart';
-import '../../models/lugar_atencion_medico_model.dart';
+import '../../models/lugar_atencion_medico.dart';
 
 class LugarAtencionMedicoRepositoryDBImpl
     implements LugarAtencionMedicoRepositoryDB {
@@ -15,7 +14,7 @@ class LugarAtencionMedicoRepositoryDBImpl
       {required this.lugarAtencionMedicoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<LugarAtencionMedicoEntity>>>
+  Future<Either<Failure, List<LugarAtencionMedicoModel>>>
       getLugaresAtencionMedicoRepositoryDB() async {
     try {
       final result =
@@ -23,7 +22,7 @@ class LugarAtencionMedicoRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -32,12 +31,14 @@ class LugarAtencionMedicoRepositoryDBImpl
   Future<Either<Failure, int>> saveLugarAtencionMedicoRepositoryDB(
       LugarAtencionMedicoEntity lugarAtencionMedico) async {
     try {
+      final lugarAtencionMedicoModel =
+          LugarAtencionMedicoModel.fromEntity(lugarAtencionMedico);
       final result = await lugarAtencionMedicoLocalDataSource
-          .saveLugarAtencionMedico(lugarAtencionMedico);
+          .saveLugarAtencionMedico(lugarAtencionMedicoModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -52,7 +53,7 @@ class LugarAtencionMedicoRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -68,7 +69,7 @@ class LugarAtencionMedicoRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

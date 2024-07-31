@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/seguimiento_enfermedad_entity.dart';
+import '../../entities/seguimiento_enfermedad.dart';
 import '../../repositories/seguimiento_enfermedad/seguimiento_enfermedad_repository_db.dart';
 
 class SeguimientoEnfermedadUsecaseDB {

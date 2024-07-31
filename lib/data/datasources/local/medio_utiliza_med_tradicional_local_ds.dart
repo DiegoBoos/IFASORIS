@@ -1,14 +1,13 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/medio_utiliza_med_tradicional_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/medio_utiliza_med_tradicional_model.dart';
+import '../../models/medio_utiliza_med_tradicional.dart';
 
 abstract class MedioUtilizaMedTradicionalLocalDataSource {
   Future<List<MedioUtilizaMedTradicionalModel>>
       getMediosUtilizaMedTradicional();
   Future<int> saveMedioUtilizaMedTradicional(
-      MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicional);
+      MedioUtilizaMedTradicionalModel medioUtilizaMedTradicional);
 
   Future<int> saveUbicacionMediosMedTradicional(
       int ubicacionId, List<LstMediosMedTradicional> lstMediosMedTradicional);
@@ -32,7 +31,7 @@ class MedioUtilizaMedTradicionalLocalDataSourceImpl
 
   @override
   Future<int> saveMedioUtilizaMedTradicional(
-      MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicional) async {
+      MedioUtilizaMedTradicionalModel medioUtilizaMedTradicional) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('MediosUtiliza_AccesoMedTradicional',

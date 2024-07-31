@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/leguminosa_entity.dart';
+import '../../entities/leguminosa.dart';
 import '../../repositories/leguminosa/leguminosa_repository.dart';
 
 class LeguminosaUsecase {

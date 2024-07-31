@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/fruto_model.dart';
+import 'package:ifasoris/data/models/fruto.dart';
 
-import '../../../domain/entities/fruto_entity.dart';
+import '../../../domain/entities/fruto.dart';
 import '../../../domain/usecases/fruto/fruto_db_usecase.dart';
 
 part 'fruto_state.dart';

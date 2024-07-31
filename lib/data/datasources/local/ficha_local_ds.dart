@@ -1,14 +1,12 @@
-import 'package:ifasoris/data/models/familia_model.dart';
-
-import '../../../domain/entities/ficha_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/estadistica_model.dart';
-import '../../models/ficha_model.dart';
+import '../../models/estadistica.dart';
+import '../../models/familia.dart';
+import '../../models/ficha.dart';
+import '../../models/grupo_familiar.dart';
 
 abstract class FichaLocalDataSource {
-  Future<FichaEntity> createFicha(FichaEntity ficha);
-  Future<FichaEntity> createFichaCompleta(FichaEntity ficha);
+  Future<FichaModel> createFicha(FichaModel ficha);
+  Future<FichaModel> createFichaCompleta(FichaModel ficha);
   Future<List<FichaModel>> loadFichas(int familiaId);
   Future<List<EstadisticaModel>> loadEstadisticas();
   Future<int> deleteFicha(int fichaId);
@@ -17,12 +15,12 @@ abstract class FichaLocalDataSource {
 
 class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   @override
-  Future<FichaEntity> createFicha(FichaEntity ficha) async {
+  Future<FichaModel> createFicha(FichaModel ficha) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('Ficha', ficha.toJsonLocal());
 
-    ficha.fichaId = res;
+    ficha.copyWith(fichaId: res);
 
     return ficha;
   }
@@ -109,16 +107,16 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   }
 
   @override
-  Future<FichaEntity> createFichaCompleta(FichaEntity ficha) async {
+  Future<FichaModel> createFichaCompleta(FichaModel ficha) async {
     final db = await ConnectionSQLiteService.db;
 
     // Ficha
-    ficha.fichaIdRemote = ficha.fichaId;
-    ficha.fichaId = null;
+    ficha.copyWith(fichaIdRemote: ficha.fichaId);
+    ficha.copyWith(fichaId: null);
 
     // Familia
     final familia = ficha.familia;
-    familia!.familiaId = null;
+    familia?.copyWith(familiaId: null);
 
     // GrupoFamiliar
     final grupoFamiliar = ficha.familia!.grupoFamiliar;
@@ -128,13 +126,13 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
       final newFichaId = await txn.insert('Ficha', ficha.toJsonLocal());
 
       // Familia
-      familia.fichaId = newFichaId;
-      final newFamilia = await txn.insert('Familia', familia.toJson());
+      familia?.copyWith(fichaId: newFichaId);
+      final newFamilia = await txn.insert('Familia', familia!.toJson());
 
       // grupoFamiliar
-      List<GrupoFamiliarEntity> grupoFamiliarDat =
+      List<GrupoFamiliarModel> grupoFamiliarDat =
           grupoFamiliar!.map((integrante) {
-        return GrupoFamiliarEntity(
+        return GrupoFamiliarModel(
           familiaId: newFamilia,
           afiliadoId: integrante.afiliadoId,
           tipoDocumentoId: integrante.tipoDocumentoId,

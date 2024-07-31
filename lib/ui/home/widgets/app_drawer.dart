@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/usuario_entity.dart';
+import '../../../domain/entities/usuario.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/ficha/ficha_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
@@ -18,7 +18,7 @@ class AppDrawer extends StatelessWidget {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     final fichaBloc = BlocProvider.of<FichaBloc>(context);
     final usuario = authBloc.state.usuario ??
-        UsuarioEntity(userName: '', deviceId: '', password: '');
+        const UsuarioEntity(userName: '', deviceId: '', password: '');
 
     return Drawer(
       elevation: 16.0,
@@ -44,7 +44,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  usuario.userName,
+                  usuario.userName ?? '',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24.0,
@@ -100,13 +100,13 @@ class AppDrawer extends StatelessWidget {
                     context,
                     MaterialPageRoute<void>(
                       builder: (BuildContext context) => GraficasPage(
-                        countCompletas: completas.cantidad,
-                        countInCompletas: incompletas.cantidad,
-                        countSincronizadas: reportadas.cantidad,
-                        countPendientes: registradas.cantidad,
+                        countCompletas: completas.cantidad!,
+                        countInCompletas: incompletas.cantidad!,
+                        countSincronizadas: reportadas.cantidad!,
+                        countPendientes: registradas.cantidad!,
                         countAfiliadosRegistrados:
-                            afiliadosRegistrados.cantidad,
-                        countAfiliadosReportados: afiliadosReportados.cantidad,
+                            afiliadosRegistrados.cantidad!,
+                        countAfiliadosReportados: afiliadosReportados.cantidad!,
                       ),
                     ),
                   );

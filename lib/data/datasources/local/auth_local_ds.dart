@@ -1,16 +1,15 @@
-import '../../../domain/entities/usuario_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/usuario_model.dart';
+import '../../models/usuario.dart';
 
 abstract class AuthLocalDataSource {
-  Future<UsuarioModel?> logIn(UsuarioEntity usuario);
+  Future<UsuarioModel?> logIn(UsuarioModel usuario);
   Future<int> logOut();
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
-  Future<UsuarioModel?> logIn(UsuarioEntity usuario) async {
+  Future<UsuarioModel?> logIn(UsuarioModel usuario) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.query('Usuario',
@@ -39,12 +38,12 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     }
   }
 
-  static Future<int> saveUsuario(UsuarioEntity usuarioEntity) async {
+  static Future<int> saveUsuario(UsuarioModel usuario) async {
     final db = await ConnectionSQLiteService.db;
 
     await db.delete('Usuario');
 
-    final res = await db.insert('Usuario', usuarioEntity.toJson());
+    final res = await db.insert('Usuario', usuario.toJson());
     return res;
   }
 }

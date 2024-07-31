@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../data/models/presencia_animal_vivienda_model.dart';
-import '../../entities/presencia_animal_vivienda_entity.dart';
+import '../../../data/models/presencia_animal_vivienda.dart';
+import '../../entities/presencia_animal_vivienda.dart';
 
 abstract class PresenciaAnimalViviendaRepositoryDB {
   Future<Either<Failure, int>> savePresenciaAnimalViviendaRepositoryDB(

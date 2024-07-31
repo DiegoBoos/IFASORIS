@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/ocupacion_entity.dart';
+import '../../entities/ocupacion.dart';
 import '../../repositories/ocupacion/ocupacion_repository.dart';
 
 class OcupacionUsecase {

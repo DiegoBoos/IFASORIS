@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/medio_comunicacion_model.dart';
+import '../../../data/models/medio_comunicacion.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 

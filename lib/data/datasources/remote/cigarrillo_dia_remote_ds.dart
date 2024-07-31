@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/cigarrillo_dia_model.dart';
+import '../../models/cigarrillo_dia.dart';
 
 abstract class CigarrilloDiaRemoteDataSource {
   Future<List<CigarrilloDiaModel>> getCigarrillosDia();
@@ -21,7 +21,7 @@ class CigarrilloDiaRemoteDataSourceImpl
   @override
   Future<List<CigarrilloDiaModel>> getCigarrillosDia() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/cigarrillosdia');
+      final uri = Uri.parse('${Constants.apiPublica}/cigarrillosdia');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/ultima_vez_inst_salud_model.dart';
+import '../../models/ultima_vez_inst_salud.dart';
 
 abstract class UltimaVezInstSaludRemoteDataSource {
   Future<List<UltimaVezInstSaludModel>> getUltimasVecesInstSalud();
@@ -21,7 +21,7 @@ class UltimaVezInstSaludRemoteDataSourceImpl
   @override
   Future<List<UltimaVezInstSaludModel>> getUltimasVecesInstSalud() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/ultimavezinstsalud');
+      final uri = Uri.parse('${Constants.apiPublica}/ultimavezinstsalud');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

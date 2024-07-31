@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/medio_utiliza_med_tradicional_model.dart';
+import 'package:ifasoris/data/models/medio_utiliza_med_tradicional.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/medio_utiliza_med_tradicional_entity.dart';
+import '../../../domain/entities/medio_utiliza_med_tradicional.dart';
 import '../../../domain/repositories/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_repository_db.dart';
 import '../../datasources/local/medio_utiliza_med_tradicional_local_ds.dart';
 
@@ -16,7 +15,7 @@ class MedioUtilizaMedTradicionalRepositoryDBImpl
       {required this.medioUtilizaMedTradicionalLocalDataSource});
 
   @override
-  Future<Either<Failure, List<MedioUtilizaMedTradicionalEntity>>>
+  Future<Either<Failure, List<MedioUtilizaMedTradicionalModel>>>
       getMediosUtilizaMedTradicionalRepositoryDB() async {
     try {
       final result = await medioUtilizaMedTradicionalLocalDataSource
@@ -24,7 +23,7 @@ class MedioUtilizaMedTradicionalRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -33,12 +32,15 @@ class MedioUtilizaMedTradicionalRepositoryDBImpl
   Future<Either<Failure, int>> saveMedioUtilizaMedTradicionalRepositoryDB(
       MedioUtilizaMedTradicionalEntity medioUtilizaMedTradicional) async {
     try {
+      final medioUtilizaMedTradicionalModel =
+          MedioUtilizaMedTradicionalModel.fromEntity(
+              medioUtilizaMedTradicional);
       final result = await medioUtilizaMedTradicionalLocalDataSource
-          .saveMedioUtilizaMedTradicional(medioUtilizaMedTradicional);
+          .saveMedioUtilizaMedTradicional(medioUtilizaMedTradicionalModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -54,7 +56,7 @@ class MedioUtilizaMedTradicionalRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -69,7 +71,7 @@ class MedioUtilizaMedTradicionalRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

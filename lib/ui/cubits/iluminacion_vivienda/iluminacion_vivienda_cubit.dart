@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/iluminacion_vivienda_entity.dart';
+import '../../../domain/entities/iluminacion_vivienda.dart';
 import '../../../domain/usecases/iluminacion_vivienda/iluminacion_vivienda_db_usecase.dart';
 
 part 'iluminacion_vivienda_state.dart';

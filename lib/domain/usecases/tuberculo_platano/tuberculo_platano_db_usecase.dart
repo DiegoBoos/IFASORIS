@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/tuberculo_platano_model.dart';
+import 'package:ifasoris/data/models/tuberculo_platano.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/tuberculo_platano_entity.dart';
+import '../../entities/tuberculo_platano.dart';
 import '../../repositories/tuberculo_platano/tuberculo_platano_repository_db.dart';
 
 class TuberculoPlatanoUsecaseDB {

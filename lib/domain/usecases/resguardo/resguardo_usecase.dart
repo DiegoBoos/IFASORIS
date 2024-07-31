@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/resguardo_entity.dart';
+import '../../entities/resguardo.dart';
 import '../../repositories/resguardo/resguardo_repository.dart';
 
 class ResguardoUsecase {

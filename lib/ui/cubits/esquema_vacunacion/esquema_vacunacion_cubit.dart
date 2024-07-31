@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/esquema_vacunacion_entity.dart';
+import '../../../domain/entities/esquema_vacunacion.dart';
 import '../../../domain/usecases/esquema_vacunacion/esquema_vacunacion_db_usecase.dart';
 
 part 'esquema_vacunacion_state.dart';

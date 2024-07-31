@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/estilo_vida_saludable/estilo_vida_saludable_exports.dart';
 import 'package:ifasoris/ui/cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../cubits/actividad_fisica/actividad_fisica_cubit.dart';
 import '../../cubits/alimentacion/alimentacion_cubit.dart';
 import '../../cubits/cigarrillo_dia/cigarrillo_dia_cubit.dart';
@@ -93,7 +93,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                   .map(
                     (actividadFisica) => DropdownMenuItem<int>(
                       value: actividadFisica.actividadFisicaId,
-                      child: Text(actividadFisica.descripcion),
+                      child: Text(actividadFisica.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -136,7 +136,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                   .map(
                     (alimentacion) => DropdownMenuItem<int>(
                       value: alimentacion.alimentacionId,
-                      child: Text(alimentacion.descripcion),
+                      child: Text(alimentacion.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -182,8 +182,8 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _consumoCigarrillo,
                                     onChanged: (int? newValue) {
@@ -248,7 +248,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                         .map(
                           (numeroCigarrilloDia) => DropdownMenuItem<int>(
                             value: numeroCigarrilloDia.numeroCigarrilloDiaId,
-                            child: Text(numeroCigarrilloDia.descripcion),
+                            child: Text(numeroCigarrilloDia.descripcion ?? ''),
                           ),
                         )
                         .toList(),
@@ -294,7 +294,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                   .map(
                     (consumoAlcohol) => DropdownMenuItem<int>(
                       value: consumoAlcohol.consumoAlcoholId,
-                      child: Text(consumoAlcohol.descripcion),
+                      child: Text(consumoAlcohol.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -340,8 +340,8 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _consumoSustanciaId,
                                     onChanged: (int? newValue) {

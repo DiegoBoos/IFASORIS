@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/domain/entities/medio_comunicacion_entity.dart';
 import 'package:ifasoris/domain/usecases/medio_comunicacion/medio_comunicacion_db_usecase.dart';
 
-import '../../../data/models/medio_comunicacion_model.dart';
+import '../../../data/models/medio_comunicacion.dart';
+import '../../../domain/entities/medio_comunicacion.dart';
 
 part 'medio_comunicacion_state.dart';
 

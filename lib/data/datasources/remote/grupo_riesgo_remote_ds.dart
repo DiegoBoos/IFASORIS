@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/grupo_riesgo_model.dart';
+import '../../models/grupo_riesgo.dart';
 
 abstract class GrupoRiesgoRemoteDataSource {
   Future<List<GrupoRiesgoModel>> getGruposRiesgo();
@@ -20,7 +20,7 @@ class GrupoRiesgoRemoteDataSourceImpl implements GrupoRiesgoRemoteDataSource {
   @override
   Future<List<GrupoRiesgoModel>> getGruposRiesgo() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/gruporiesgo');
+      final uri = Uri.parse('${Constants.apiPublica}/gruporiesgo');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

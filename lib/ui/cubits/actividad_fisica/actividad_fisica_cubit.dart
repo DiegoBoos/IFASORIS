@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/actividad_fisica_entity.dart';
+import '../../../domain/entities/actividad_fisica.dart';
 import '../../../domain/usecases/actividad_fisica/actividad_fisica_db_usecase.dart';
 
 part 'actividad_fisica_state.dart';

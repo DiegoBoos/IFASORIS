@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../data/models/planta_medicinal_model.dart';
-import '../../entities/planta_medicinal_entity.dart';
+import '../../../data/models/planta_medicinal.dart';
+import '../../entities/planta_medicinal.dart';
 import '../../repositories/planta_medicinal/planta_medicinal_repository_db.dart';
 
 class PlantaMedicinalUsecaseDB {

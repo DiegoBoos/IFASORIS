@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/pueblo_indigena_entity.dart';
+import '../../entities/pueblo_indigena.dart';
 import '../../repositories/pueblo_indigena/pueblo_indigena_repository_db.dart';
 
 class PuebloIndigenaUsecaseDB {

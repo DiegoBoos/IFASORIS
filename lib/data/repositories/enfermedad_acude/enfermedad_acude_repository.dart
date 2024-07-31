@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/enfermedad_acude_entity.dart';
 import '../../../domain/repositories/enfermedad_acude/enfermedad_acude_repository.dart';
 import '../../datasources/remote/enfermedad_acude_remote_ds.dart';
+import '../../models/enfermedad_acude.dart';
 
 class EnfermedadAcudeRepositoryImpl implements EnfermedadAcudeRepository {
   final EnfermedadAcudeRemoteDataSource enfermedadAcudeRemoteDataSource;
@@ -15,7 +14,7 @@ class EnfermedadAcudeRepositoryImpl implements EnfermedadAcudeRepository {
       {required this.enfermedadAcudeRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<EnfermedadAcudeEntity>>>
+  Future<Either<Failure, List<EnfermedadAcudeModel>>>
       getEnfermedadesAcudeRepository() async {
     try {
       final result =
@@ -24,8 +23,6 @@ class EnfermedadAcudeRepositoryImpl implements EnfermedadAcudeRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

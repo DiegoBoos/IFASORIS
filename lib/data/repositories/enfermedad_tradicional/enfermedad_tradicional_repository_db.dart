@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/enfermedad_tradicional_model.dart';
+import 'package:ifasoris/data/models/enfermedad_tradicional.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/enfermedad_tradicional_entity.dart';
+import '../../../domain/entities/enfermedad_tradicional.dart';
 import '../../../domain/repositories/enfermedad_tradicional/enfermedad_tradicional_repository_db.dart';
 import '../../datasources/local/enfermedad_tradicional_local_ds.dart';
 
@@ -16,7 +15,7 @@ class EnfermedadTradicionalRepositoryDBImpl
       {required this.enfermedadTradicionalLocalDataSource});
 
   @override
-  Future<Either<Failure, List<EnfermedadTradicionalEntity>>>
+  Future<Either<Failure, List<EnfermedadTradicionalModel>>>
       getEnfermedadesTradicionalesRepositoryDB() async {
     try {
       final result = await enfermedadTradicionalLocalDataSource
@@ -24,7 +23,7 @@ class EnfermedadTradicionalRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -33,12 +32,14 @@ class EnfermedadTradicionalRepositoryDBImpl
   Future<Either<Failure, int>> saveEnfermedadTradicionalRepositoryDB(
       EnfermedadTradicionalEntity enfermedadTradicional) async {
     try {
+      final enfermedadTradicionalModel =
+          EnfermedadTradicionalModel.fromEntity(enfermedadTradicional);
       final result = await enfermedadTradicionalLocalDataSource
-          .saveEnfermedadTradicional(enfermedadTradicional);
+          .saveEnfermedadTradicional(enfermedadTradicionalModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -53,7 +54,7 @@ class EnfermedadTradicionalRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -70,7 +71,7 @@ class EnfermedadTradicionalRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

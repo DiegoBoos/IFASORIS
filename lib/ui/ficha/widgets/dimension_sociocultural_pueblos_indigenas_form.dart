@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/evento_costumbre_participa_model.dart';
-import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../data/models/evento_costumbre_participa.dart';
+import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../../domain/usecases/evento_costumbre_participa/evento_costumbre_participa_exports.dart';
 import '../../../domain/usecases/opcion_si_no/opcion_si_no_exports.dart';
 import '../../../domain/usecases/sancion_justicia/sancion_justicia_exports.dart';
@@ -112,7 +112,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                   .map(
                     (religionProfesa) => DropdownMenuItem<int>(
                       value: religionProfesa.religionProfesaId,
-                      child: Text(religionProfesa.descripcion),
+                      child: Text(religionProfesa.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -158,8 +158,8 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _conoceUsosCostumbresId,
                                     onChanged: (int? newValue) {
@@ -267,8 +267,8 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                 .map(
                                   (e) => e.opcionId == 3
                                       ? Container()
-                                      : RadioListTile(
-                                          title: Text(e.descripcion),
+                                      : RadioListTile<int?>(
+                                          title: Text(e.descripcion ?? ''),
                                           value: e.opcionId,
                                           groupValue: _participaCostumbresId,
                                           onChanged: (int? newValue) {
@@ -348,7 +348,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
 
                         for (var e in eventosCostumbresParticipaLoaded) {
                           final optionType =
-                              FormValidators.optionType(e.descripcion);
+                              FormValidators.optionType(e.descripcion ?? '');
                           if (optionType == 'N') {
                             ningunoId = e.eventoCostumbreParticipaId;
                           }
@@ -392,14 +392,15 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                                   context,
                                                   value,
                                                   eventoCostumbreParticipa
-                                                      .eventoCostumbreParticipaId,
+                                                      .eventoCostumbreParticipaId!,
                                                   dimensionSocioCulturalPueblosIndigenasBloc);
                                             },
                                           ),
                                           Flexible(
                                             child: Text(
                                               eventoCostumbreParticipa
-                                                  .descripcion,
+                                                      .descripcion ??
+                                                  '',
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
@@ -445,7 +446,8 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                               .map(
                                 (costumbrePractica) => DropdownMenuItem<int>(
                                   value: costumbrePractica.costumbrePracticaId,
-                                  child: Text(costumbrePractica.descripcion),
+                                  child:
+                                      Text(costumbrePractica.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -490,7 +492,8 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                               .map(
                                 (sancionJusticia) => DropdownMenuItem<int>(
                                   value: sancionJusticia.sancionJusticiaId,
-                                  child: Text(sancionJusticia.descripcion),
+                                  child:
+                                      Text(sancionJusticia.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -541,8 +544,8 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _sitiosSagradosId,
                                     onChanged: (int? newValue) {

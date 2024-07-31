@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/alimentacion_entity.dart';
+import '../../entities/alimentacion.dart';
 import '../../repositories/alimentacion/alimentacion_repository.dart';
 
 class AlimentacionUsecase {

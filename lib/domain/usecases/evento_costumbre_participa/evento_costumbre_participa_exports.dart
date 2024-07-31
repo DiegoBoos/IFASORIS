@@ -2,7 +2,7 @@ export 'package:ifasoris/domain/usecases/evento_costumbre_participa/evento_costu
 export 'package:ifasoris/domain/usecases/evento_costumbre_participa/evento_costumbre_participa_db_usecase.dart';
 export 'package:ifasoris/domain/repositories/evento_costumbre_participa/evento_costumbre_participa_repository.dart';
 export 'package:ifasoris/domain/repositories/evento_costumbre_participa/evento_costumbre_participa_repository_db.dart';
-export 'package:ifasoris/domain/entities/evento_costumbre_participa_entity.dart';
+export 'package:ifasoris/domain/entities/evento_costumbre_participa.dart';
 export 'package:ifasoris/ui/cubits/evento_costumbre_participa/evento_costumbre_participa_cubit.dart';
 export 'package:ifasoris/data/repositories/evento_costumbre_participa/evento_costumbre_participa_repository.dart';
 export 'package:ifasoris/data/repositories/evento_costumbre_participa/evento_costumbre_participa_repository_db.dart';

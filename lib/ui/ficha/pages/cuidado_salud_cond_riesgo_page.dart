@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/cuidado_salud_cond_riesgo.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
 import '../../cubits/condicion_nutricional/condicion_nutricional_cubit.dart';
 import '../../cubits/conducta_seguir/conducta_seguir_cubit.dart';

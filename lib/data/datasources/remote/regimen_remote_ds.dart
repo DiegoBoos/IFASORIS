@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/regimen_model.dart';
+import '../../models/regimen.dart';
 
 abstract class RegimenRemoteDataSource {
   Future<List<RegimenModel>> getRegimenes();
@@ -20,7 +20,7 @@ class RegimenRemoteDataSourceImpl implements RegimenRemoteDataSource {
   @override
   Future<List<RegimenModel>> getRegimenes() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/regimen');
+      final uri = Uri.parse('${Constants.apiPublica}/regimen');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

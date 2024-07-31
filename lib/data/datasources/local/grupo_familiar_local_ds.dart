@@ -1,11 +1,10 @@
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/grupo_familiar_model.dart';
+import '../../models/grupo_familiar.dart';
 
 abstract class GrupoFamiliarLocalDataSource {
   Future<GrupoFamiliarModel> saveGrupoFamiliar(
-      GrupoFamiliarEntity afiliadoGrupoFamiliar);
+      GrupoFamiliarModel afiliadoGrupoFamiliar);
 
   Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId);
 
@@ -19,7 +18,7 @@ abstract class GrupoFamiliarLocalDataSource {
 class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   @override
   Future<GrupoFamiliarModel> saveGrupoFamiliar(
-      GrupoFamiliarEntity afiliadoGrupoFamiliar) async {
+      GrupoFamiliarModel afiliadoGrupoFamiliar) async {
     try {
       final db = await ConnectionSQLiteService.db;
 

@@ -1,10 +1,9 @@
-import '../../../domain/entities/grupo_riesgo_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/grupo_riesgo_model.dart';
+import '../../models/grupo_riesgo.dart';
 
 abstract class GrupoRiesgoLocalDataSource {
   Future<List<GrupoRiesgoModel>> getGruposRiesgo();
-  Future<int> saveGrupoRiesgo(GrupoRiesgoEntity grupoRiesgo);
+  Future<int> saveGrupoRiesgo(GrupoRiesgoModel grupoRiesgo);
 }
 
 class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
@@ -19,7 +18,7 @@ class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
   }
 
   @override
-  Future<int> saveGrupoRiesgo(GrupoRiesgoEntity grupoRiesgo) async {
+  Future<int> saveGrupoRiesgo(GrupoRiesgoModel grupoRiesgo) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =

@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
+import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas.dart';
 import '../../../domain/repositories/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_repository_db.dart';
 import '../../datasources/local/dimension_sociocultural_pueblos_indigenas_local_ds.dart';
+import '../../models/dimension_sociocultural_pueblos_indigenas.dart';
 
 class DimensionSocioCulturalPueblosIndigenasRepositoryDBImpl
     implements DimensionSocioCulturalPueblosIndigenasRepositoryDB {
@@ -20,20 +20,24 @@ class DimensionSocioCulturalPueblosIndigenasRepositoryDBImpl
           DimensionSocioCulturalPueblosIndigenasEntity
               dimensionSocioCulturalPueblosIndigenas) async {
     try {
+      final dimensionSocioCulturalPueblosIndigenasModel =
+          DimensionSocioCulturalPueblosIndigenasModel.fromEntity(
+              dimensionSocioCulturalPueblosIndigenas);
+
       final result = await dimensionSocioCulturalPueblosIndigenasLocalDataSource
           .saveDimensionSocioCulturalPueblosIndigenas(
-              dimensionSocioCulturalPueblosIndigenas);
+              dimensionSocioCulturalPueblosIndigenasModel);
 
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
   @override
-  Future<Either<Failure, DimensionSocioCulturalPueblosIndigenasEntity?>>
+  Future<Either<Failure, DimensionSocioCulturalPueblosIndigenasModel?>>
       getDimensionSocioCulturalPueblosIndigenasRepositoryDB(
           int afiliadoId) async {
     try {
@@ -43,7 +47,7 @@ class DimensionSocioCulturalPueblosIndigenasRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

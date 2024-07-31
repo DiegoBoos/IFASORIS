@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/ocupacion_entity.dart';
+import '../../../domain/entities/ocupacion.dart';
 import '../../../domain/usecases/ocupacion/ocupacion_db_usecase.dart';
 
 part 'ocupacion_state.dart';

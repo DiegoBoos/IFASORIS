@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:ifasoris/services/shared_preferences_service.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
-import '../../models/afiliado_response_model.dart';
+import '../../models/afiliado.dart';
 
 abstract class AfiliadoRemoteDataSource {
   Future<AfiliadoResponseModel> getAfiliados(int dtoId);
@@ -25,7 +25,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
     List<dynamic> afiliadosMap = [];
 
     final requestUrl =
-        Uri.parse('${Constants.syncUrl}/afiliados/$dtoId/$limit');
+        Uri.parse('${Constants.syncPublica}/afiliados/$dtoId/$limit');
 
     try {
       final reqRes = await http.get(requestUrl);
@@ -37,7 +37,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
 
         for (var i = 0; i < loopValue; i++) {
           final afiliadosUrl = Uri.parse(
-              '${Constants.syncUrl}/afiliados/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
+              '${Constants.syncPublica}/afiliados/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
           final afiliadosRes = await http.get(afiliadosUrl);
           if (afiliadosRes.statusCode == 200) {
             final decodeReq = json.decode(afiliadosRes.body);
@@ -51,7 +51,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
             throw const ServerFailure(['Excepción no controlada']);
           }
           // final base64Url = Uri.parse(
-          //     '${Constants.syncUrl}/api/afiliados/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
+          //     '${Constants.syncPublica}/api/afiliados/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
           // final base64Res = await http.get(base64Url);
 
           // if (base64Res.statusCode == 200) {

@@ -4,13 +4,13 @@ import 'package:http/http.dart' as http;
 import 'package:ifasoris/services/shared_preferences_service.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../../domain/entities/usuario_entity.dart';
-import '../../../constants.dart';
-import '../../models/usuario_model.dart';
+
+import '../../../core/constants.dart';
+import '../../models/usuario.dart';
 import '../local/auth_local_ds.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<UsuarioModel> logIn(UsuarioEntity usuario);
+  Future<UsuarioModel> logIn(UsuarioModel usuario);
 
   Future<String> cambioDispositivo(String userName, String idEquipo);
 }
@@ -22,7 +22,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<UsuarioModel> logIn(UsuarioEntity usuario) async {
+  Future<UsuarioModel> logIn(UsuarioModel usuario) async {
     try {
       final formData = {
         "UserName": usuario.userName,
@@ -30,7 +30,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         "Device_Id": usuario.deviceId
       };
 
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/usuarios/login');
+      final uri = Uri.parse('${Constants.apiPublica}/usuarios/login');
 
       final resp = await client.post(uri,
           headers: {
@@ -72,7 +72,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final formData = {"UserName": userName, "Device_Id": idEquipo};
 
       final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/usuarios/cambiodispositivo');
+          Uri.parse('${Constants.apiPublica}/usuarios/cambiodispositivo');
 
       final resp = await client.put(uri,
           headers: {

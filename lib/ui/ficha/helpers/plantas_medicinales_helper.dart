@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../data/models/planta_medicinal_model.dart';
+import '../../../data/models/planta_medicinal.dart';
 import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 

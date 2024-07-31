@@ -23,5 +23,5 @@ class GrupoFamiliarSubmissionFailed extends GrupoFamiliarState {
 }
 
 GrupoFamiliarEntity initObject() {
-  return GrupoFamiliarEntity(formStatus: const GrupoFamiliarFormInitial());
+  return const GrupoFamiliarEntity(formStatus: GrupoFamiliarFormInitial());
 }

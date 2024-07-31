@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/servicio_publico_vivienda_model.dart';
+import '../../../data/models/servicio_publico_vivienda.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
 
 void handleServiciosPublicosSelection(

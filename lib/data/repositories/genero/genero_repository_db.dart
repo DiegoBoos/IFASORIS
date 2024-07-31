@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/genero_entity.dart';
+import '../../../domain/entities/genero.dart';
 import '../../../domain/repositories/genero/genero_repository_db.dart';
 import '../../datasources/local/genero_local_ds.dart';
+import '../../models/genero.dart';
 
 class GeneroRepositoryDBImpl implements GeneroRepositoryDB {
   final GeneroLocalDataSource generoLocalDataSource;
@@ -12,13 +12,13 @@ class GeneroRepositoryDBImpl implements GeneroRepositoryDB {
   GeneroRepositoryDBImpl({required this.generoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<GeneroEntity>>> getGenerosRepositoryDB() async {
+  Future<Either<Failure, List<GeneroModel>>> getGenerosRepositoryDB() async {
     try {
       final result = await generoLocalDataSource.getGeneros();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -27,11 +27,12 @@ class GeneroRepositoryDBImpl implements GeneroRepositoryDB {
   Future<Either<Failure, int>> saveGeneroRepositoryDB(
       GeneroEntity genero) async {
     try {
-      final result = await generoLocalDataSource.saveGenero(genero);
+      final generoModel = GeneroModel.fromEntity(genero);
+      final result = await generoLocalDataSource.saveGenero(generoModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

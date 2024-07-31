@@ -1,12 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/piso_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/piso_vivienda_model.dart';
+import '../../models/piso_vivienda.dart';
 
 abstract class PisoViviendaLocalDataSource {
   Future<List<PisoViviendaModel>> getPisosVivienda();
-  Future<int> savePisoVivienda(PisoViviendaEntity pisoVivienda);
+  Future<int> savePisoVivienda(PisoViviendaModel pisoVivienda);
   Future<int> savePisosVivienda(int datoViviendaId, List<LstPiso> lstPiso);
   Future<List<LstPiso>> getPisosViviendaVivienda(int? datoViviendaId);
 }
@@ -23,7 +22,7 @@ class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
   }
 
   @override
-  Future<int> savePisoVivienda(PisoViviendaEntity pisoVivienda) async {
+  Future<int> savePisoVivienda(PisoViviendaModel pisoVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =

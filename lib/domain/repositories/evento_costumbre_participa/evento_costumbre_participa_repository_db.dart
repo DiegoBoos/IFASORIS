@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../data/models/evento_costumbre_participa_model.dart';
-import '../../entities/evento_costumbre_participa_entity.dart';
+import '../../../data/models/evento_costumbre_participa.dart';
+import '../../entities/evento_costumbre_participa.dart';
 
 abstract class EventoCostumbreParticipaRepositoryDB {
   Future<Either<Failure, int>> saveEventoCostumbreParticipaRepositoryDB(

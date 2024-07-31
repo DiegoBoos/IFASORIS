@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/leguminosa_model.dart';
+import '../../models/leguminosa.dart';
 
 abstract class LeguminosaRemoteDataSource {
   Future<List<LeguminosaModel>> getLeguminosas(int dtoId);
@@ -20,8 +20,8 @@ class LeguminosaRemoteDataSourceImpl implements LeguminosaRemoteDataSource {
   @override
   Future<List<LeguminosaModel>> getLeguminosas(int dtoId) async {
     try {
-      final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/leguminosasbyDpto?IdeDpto=$dtoId');
+      final uri =
+          Uri.parse('${Constants.apiPublica}/leguminosasbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

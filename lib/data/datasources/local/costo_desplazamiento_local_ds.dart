@@ -1,11 +1,10 @@
-import '../../../domain/entities/costo_desplazamiento_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/costo_desplazamiento_model.dart';
+import '../../models/costo_desplazamiento.dart';
 
 abstract class CostoDesplazamientoLocalDataSource {
   Future<List<CostoDesplazamientoModel>> getCostosDesplazamiento();
   Future<int> saveCostoDesplazamiento(
-      CostoDesplazamientoEntity costoDesplazamiento);
+      CostoDesplazamientoModel costoDesplazamiento);
 }
 
 class CostoDesplazamientoLocalDataSourceImpl
@@ -22,7 +21,7 @@ class CostoDesplazamientoLocalDataSourceImpl
 
   @override
   Future<int> saveCostoDesplazamiento(
-      CostoDesplazamientoEntity costoDesplazamiento) async {
+      CostoDesplazamientoModel costoDesplazamiento) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

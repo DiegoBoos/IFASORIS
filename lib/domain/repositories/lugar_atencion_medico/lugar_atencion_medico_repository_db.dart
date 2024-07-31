@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/lugar_atencion_medico_model.dart';
+import 'package:ifasoris/data/models/lugar_atencion_medico.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/lugar_atencion_medico_entity.dart';
+import '../../entities/lugar_atencion_medico.dart';
 
 abstract class LugarAtencionMedicoRepositoryDB {
   Future<Either<Failure, int>> saveLugarAtencionMedicoRepositoryDB(

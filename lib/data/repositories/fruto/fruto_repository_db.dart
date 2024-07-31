@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/fruto_model.dart';
+import 'package:ifasoris/data/models/fruto.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/fruto_entity.dart';
+import '../../../domain/entities/fruto.dart';
 import '../../../domain/repositories/fruto/fruto_repository_db.dart';
 import '../../datasources/local/fruto_local_ds.dart';
 
@@ -13,13 +12,13 @@ class FrutoRepositoryDBImpl implements FrutoRepositoryDB {
   FrutoRepositoryDBImpl({required this.frutoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<FrutoEntity>>> getFrutosRepositoryDB() async {
+  Future<Either<Failure, List<FrutoModel>>> getFrutosRepositoryDB() async {
     try {
       final result = await frutoLocalDataSource.getFrutos();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -27,11 +26,12 @@ class FrutoRepositoryDBImpl implements FrutoRepositoryDB {
   @override
   Future<Either<Failure, int>> saveFrutoRepositoryDB(FrutoEntity fruto) async {
     try {
-      final result = await frutoLocalDataSource.saveFruto(fruto);
+      final frutoModel = FrutoModel.fromEntity(fruto);
+      final result = await frutoLocalDataSource.saveFruto(frutoModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -45,7 +45,7 @@ class FrutoRepositoryDBImpl implements FrutoRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -58,7 +58,7 @@ class FrutoRepositoryDBImpl implements FrutoRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

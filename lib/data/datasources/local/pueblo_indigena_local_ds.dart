@@ -1,10 +1,9 @@
-import '../../../domain/entities/pueblo_indigena_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/pueblo_indigena_model.dart';
+import '../../models/pueblo_indigena.dart';
 
 abstract class PuebloIndigenaLocalDataSource {
   Future<List<PuebloIndigenaModel>> getPueblosIndigenas();
-  Future<int> savePuebloIndigena(PuebloIndigenaEntity puebloIndigena);
+  Future<int> savePuebloIndigena(PuebloIndigenaModel puebloIndigena);
 }
 
 class PuebloIndigenaLocalDataSourceImpl
@@ -20,7 +19,7 @@ class PuebloIndigenaLocalDataSourceImpl
   }
 
   @override
-  Future<int> savePuebloIndigena(PuebloIndigenaEntity puebloIndigena) async {
+  Future<int> savePuebloIndigena(PuebloIndigenaModel puebloIndigena) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

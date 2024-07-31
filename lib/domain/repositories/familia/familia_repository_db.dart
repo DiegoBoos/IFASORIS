@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/familia_entity.dart';
+import 'package:ifasoris/domain/entities/familia.dart';
 
 import '../../../core/error/failure.dart';
 

@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/costo_desplazamiento_entity.dart';
 import '../../../domain/repositories/costo_desplazamiento/costo_desplazamiento_repository.dart';
 import '../../datasources/remote/costo_desplazamiento_remote_ds.dart';
+import '../../models/costo_desplazamiento.dart';
 
 class CostoDesplazamientoRepositoryImpl
     implements CostoDesplazamientoRepository {
@@ -16,7 +15,7 @@ class CostoDesplazamientoRepositoryImpl
       {required this.costoDesplazamientoRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<CostoDesplazamientoEntity>>>
+  Future<Either<Failure, List<CostoDesplazamientoModel>>>
       getCostosDesplazamientoRepository() async {
     try {
       final result =
@@ -25,8 +24,6 @@ class CostoDesplazamientoRepositoryImpl
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

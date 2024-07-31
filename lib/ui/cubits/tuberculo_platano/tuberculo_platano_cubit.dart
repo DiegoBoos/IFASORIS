@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/tuberculo_platano_model.dart';
+import 'package:ifasoris/data/models/tuberculo_platano.dart';
 
-import '../../../domain/entities/tuberculo_platano_entity.dart';
+import '../../../domain/entities/tuberculo_platano.dart';
 import '../../../domain/usecases/tuberculo_platano/tuberculo_platano_db_usecase.dart';
 
 part 'tuberculo_platano_state.dart';

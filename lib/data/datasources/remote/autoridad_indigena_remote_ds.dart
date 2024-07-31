@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/autoridad_indigena_model.dart';
+import '../../models/autoridad_indigena.dart';
 
 abstract class AutoridadIndigenaRemoteDataSource {
   Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas(int dtoId);
@@ -23,7 +23,7 @@ class AutoridadIndigenaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/AutoridadIndigenaByDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/AutoridadIndigenaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

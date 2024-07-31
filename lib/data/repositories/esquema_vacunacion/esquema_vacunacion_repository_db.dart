@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/esquema_vacunacion_entity.dart';
+import '../../../domain/entities/esquema_vacunacion.dart';
 import '../../../domain/repositories/esquema_vacunacion/esquema_vacunacion_repository_db.dart';
 import '../../datasources/local/esquema_vacunacion_local_ds.dart';
+import '../../models/esquema_vacunacion.dart';
 
 class EsquemaVacunacionRepositoryDBImpl
     implements EsquemaVacunacionRepositoryDB {
@@ -14,7 +14,7 @@ class EsquemaVacunacionRepositoryDBImpl
       {required this.esquemaVacunacionLocalDataSource});
 
   @override
-  Future<Either<Failure, List<EsquemaVacunacionEntity>>>
+  Future<Either<Failure, List<EsquemaVacunacionModel>>>
       getEsquemasVacunacionRepositoryDB() async {
     try {
       final result =
@@ -22,7 +22,7 @@ class EsquemaVacunacionRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +31,14 @@ class EsquemaVacunacionRepositoryDBImpl
   Future<Either<Failure, int>> saveEsquemaVacunacionRepositoryDB(
       EsquemaVacunacionEntity esquemaVacunacion) async {
     try {
+      final esquemaVacunacionModel =
+          EsquemaVacunacionModel.fromEntity(esquemaVacunacion);
       final result = await esquemaVacunacionLocalDataSource
-          .saveEsquemaVacunacion(esquemaVacunacion);
+          .saveEsquemaVacunacion(esquemaVacunacionModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

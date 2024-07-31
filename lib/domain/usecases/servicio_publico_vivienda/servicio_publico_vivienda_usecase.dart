@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/servicio_publico_vivienda_entity.dart';
+import '../../entities/servicio_publico_vivienda.dart';
 import '../../repositories/servicio_publico_vivienda/servicio_publico_vivienda_repository.dart';
 
 class ServicioPublicoViviendaUsecase {

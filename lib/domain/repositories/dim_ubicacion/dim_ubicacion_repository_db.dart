@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/dim_ubicacion_entity.dart';
+import 'package:ifasoris/domain/entities/dim_ubicacion.dart';
 
 import '../../../core/error/failure.dart';
 

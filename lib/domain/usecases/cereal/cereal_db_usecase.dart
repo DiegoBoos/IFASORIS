@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/cereal_model.dart';
+import 'package:ifasoris/data/models/cereal.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/cereal_entity.dart';
+import '../../entities/cereal.dart';
 import '../../repositories/cereal/cereal_repository_db.dart';
 
 class CerealUsecaseDB {

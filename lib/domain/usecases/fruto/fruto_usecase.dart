@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/fruto_entity.dart';
+import '../../entities/fruto.dart';
 import '../../repositories/fruto/fruto_repository.dart';
 
 class FrutoUsecase {

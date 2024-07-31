@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/dificultad_acceso_ca_model.dart';
+import 'package:ifasoris/data/models/dificultad_acceso_ca.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/dificultad_acceso_ca_entity.dart';
+import '../../entities/dificultad_acceso_ca.dart';
 import '../../repositories/dificultad_acceso_ca/dificultad_acceso_ca_repository_db.dart';
 
 class DificultadAccesoCAUsecaseDB {

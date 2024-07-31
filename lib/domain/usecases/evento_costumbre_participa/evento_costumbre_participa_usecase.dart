@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/evento_costumbre_participa_entity.dart';
+import '../../entities/evento_costumbre_participa.dart';
 import '../../repositories/evento_costumbre_participa/evento_costumbre_participa_repository.dart';
 
 class EventoCostumbreParticipaUsecase {

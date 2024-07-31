@@ -1,10 +1,9 @@
-import '../../../domain/entities/alimentacion_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/alimentacion_model.dart';
+import '../../models/alimentacion.dart';
 
 abstract class AlimentacionLocalDataSource {
   Future<List<AlimentacionModel>> getAlimentaciones();
-  Future<int> saveAlimentacion(AlimentacionEntity alimentacion);
+  Future<int> saveAlimentacion(AlimentacionModel alimentacion);
 }
 
 class AlimentacionLocalDataSourceImpl implements AlimentacionLocalDataSource {
@@ -19,7 +18,7 @@ class AlimentacionLocalDataSourceImpl implements AlimentacionLocalDataSource {
   }
 
   @override
-  Future<int> saveAlimentacion(AlimentacionEntity alimentacion) async {
+  Future<int> saveAlimentacion(AlimentacionModel alimentacion) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

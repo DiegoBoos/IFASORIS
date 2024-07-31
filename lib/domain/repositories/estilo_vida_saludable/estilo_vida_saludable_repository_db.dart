@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/estilo_vida_saludable_entity.dart';
+import 'package:ifasoris/domain/entities/estilo_vida_saludable.dart';
 
 import '../../../core/error/failure.dart';
 

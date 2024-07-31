@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/models/piso_vivienda_model.dart';
-import '../../../domain/entities/piso_vivienda_entity.dart';
+import '../../../data/models/piso_vivienda.dart';
+import '../../../domain/entities/piso_vivienda.dart';
 import '../../../domain/usecases/piso_vivienda/piso_vivienda_db_usecase.dart';
 
 part 'piso_vivienda_state.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/autoridad_indigena_entity.dart';
+import '../../../domain/entities/autoridad_indigena.dart';
 import '../../../domain/usecases/autoridad_indigena/autoridad_indigena_db_usecase.dart';
 
 part 'autoridad_indigena_state.dart';

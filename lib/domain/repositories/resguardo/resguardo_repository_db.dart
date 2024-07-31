@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/resguardo_entity.dart';
+import '../../entities/resguardo.dart';
 
 abstract class ResguardoRepositoryDB {
   Future<Either<Failure, int>> saveResguardoRepositoryDB(

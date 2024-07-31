@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/presencia_animal_vivienda_model.dart';
+import 'package:ifasoris/data/models/presencia_animal_vivienda.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/presencia_animal_vivienda_entity.dart';
+import '../../../domain/entities/presencia_animal_vivienda.dart';
 import '../../../domain/repositories/presencia_animal_vivienda/presencia_animal_vivienda_repository_db.dart';
 import '../../datasources/local/presencia_animal_vivienda_local_ds.dart';
 
@@ -16,7 +15,7 @@ class PresenciaAnimalViviendaRepositoryDBImpl
       {required this.presenciaAnimalViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<PresenciaAnimalViviendaEntity>>>
+  Future<Either<Failure, List<PresenciaAnimalViviendaModel>>>
       getPresenciaAnimalesRepositoryDB() async {
     try {
       final result =
@@ -24,7 +23,7 @@ class PresenciaAnimalViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -33,12 +32,14 @@ class PresenciaAnimalViviendaRepositoryDBImpl
   Future<Either<Failure, int>> savePresenciaAnimalViviendaRepositoryDB(
       PresenciaAnimalViviendaEntity presenciaAnimalVivienda) async {
     try {
+      final presenciaAnimalViviendaModel =
+          PresenciaAnimalViviendaModel.fromEntity(presenciaAnimalVivienda);
       final result = await presenciaAnimalViviendaLocalDataSource
-          .savePresenciaAnimalVivienda(presenciaAnimalVivienda);
+          .savePresenciaAnimalVivienda(presenciaAnimalViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -52,7 +53,7 @@ class PresenciaAnimalViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -66,7 +67,7 @@ class PresenciaAnimalViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

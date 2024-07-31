@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/cereal_entity.dart';
+import '../../entities/cereal.dart';
 import '../../repositories/cereal/cereal_repository.dart';
 
 class CerealUsecase {

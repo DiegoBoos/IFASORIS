@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/medio_comunicacion_model.dart';
+import 'package:ifasoris/data/models/medio_comunicacion.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/medio_comunicacion_entity.dart';
+import '../../entities/medio_comunicacion.dart';
 
 abstract class MedioComunicacionRepositoryDB {
   Future<Either<Failure, int>> saveMedioComunicacionRepositoryDB(

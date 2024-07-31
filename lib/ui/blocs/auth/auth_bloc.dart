@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
 
-import '../../../domain/entities/usuario_entity.dart';
+import '../../../domain/entities/usuario.dart';
 import '../../../domain/usecases/auth/auth_db_usecase.dart';
 import '../../../domain/usecases/auth/auth_usecase.dart';
 

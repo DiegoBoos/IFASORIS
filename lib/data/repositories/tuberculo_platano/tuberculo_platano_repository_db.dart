@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/tuberculo_platano_model.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/tuberculo_platano_entity.dart';
+import '../../../domain/entities/tuberculo_platano.dart';
 import '../../../domain/repositories/tuberculo_platano/tuberculo_platano_repository_db.dart';
 import '../../datasources/local/tuberculo_platano_local_ds.dart';
+import '../../models/tuberculo_platano.dart';
 
 class TuberculoPlatanoRepositoryDBImpl implements TuberculoPlatanoRepositoryDB {
   final TuberculoPlatanoLocalDataSource tuberculoPlatanoLocalDataSource;
@@ -14,7 +13,7 @@ class TuberculoPlatanoRepositoryDBImpl implements TuberculoPlatanoRepositoryDB {
       {required this.tuberculoPlatanoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<TuberculoPlatanoEntity>>>
+  Future<Either<Failure, List<TuberculoPlatanoModel>>>
       getTuberculosPlatanosRepositoryDB() async {
     try {
       final result =
@@ -22,7 +21,7 @@ class TuberculoPlatanoRepositoryDBImpl implements TuberculoPlatanoRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +30,14 @@ class TuberculoPlatanoRepositoryDBImpl implements TuberculoPlatanoRepositoryDB {
   Future<Either<Failure, int>> saveTuberculoPlatanoRepositoryDB(
       TuberculoPlatanoEntity tuberculoPlatano) async {
     try {
+      final tuberculoPlatanoModel =
+          TuberculoPlatanoModel.fromEntity(tuberculoPlatano);
       final result = await tuberculoPlatanoLocalDataSource
-          .saveTuberculoPlatano(tuberculoPlatano);
+          .saveTuberculoPlatano(tuberculoPlatanoModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -50,7 +51,7 @@ class TuberculoPlatanoRepositoryDBImpl implements TuberculoPlatanoRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -64,7 +65,7 @@ class TuberculoPlatanoRepositoryDBImpl implements TuberculoPlatanoRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

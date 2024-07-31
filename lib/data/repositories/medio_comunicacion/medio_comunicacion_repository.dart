@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/medio_comunicacion_entity.dart';
 import '../../../domain/repositories/medio_comunicacion/medio_comunicacion_repository.dart';
 import '../../datasources/remote/medio_comunicacion_remote_ds.dart';
+import '../../models/medio_comunicacion.dart';
 
 class MedioComunicacionRepositoryImpl implements MedioComunicacionRepository {
   final MedioComunicacionRemoteDataSource medioComunicacionRemoteDataSource;
@@ -15,7 +14,7 @@ class MedioComunicacionRepositoryImpl implements MedioComunicacionRepository {
       {required this.medioComunicacionRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<MedioComunicacionEntity>>>
+  Future<Either<Failure, List<MedioComunicacionModel>>>
       getMediosComunicacionRepository(int dtoId) async {
     try {
       final result =
@@ -24,8 +23,6 @@ class MedioComunicacionRepositoryImpl implements MedioComunicacionRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

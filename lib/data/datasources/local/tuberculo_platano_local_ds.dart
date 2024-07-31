@@ -1,12 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/tuberculo_platano_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/tuberculo_platano_model.dart';
+import '../../models/tuberculo_platano.dart';
 
 abstract class TuberculoPlatanoLocalDataSource {
   Future<List<TuberculoPlatanoModel>> getTuberculosPlatanos();
-  Future<int> saveTuberculoPlatano(TuberculoPlatanoEntity tuberculoPlatano);
+  Future<int> saveTuberculoPlatano(TuberculoPlatanoModel tuberculoPlatano);
 
   Future<int> saveUbicacionTuberculosPlatanos(
       int ubicacionId, List<LstTuberculo> lstTuberculos);
@@ -28,7 +27,7 @@ class TuberculoPlatanoLocalDataSourceImpl
 
   @override
   Future<int> saveTuberculoPlatano(
-      TuberculoPlatanoEntity tuberculoPlatano) async {
+      TuberculoPlatanoModel tuberculoPlatano) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('TuberculosPlatanos_AspectosSocioEconomicos',

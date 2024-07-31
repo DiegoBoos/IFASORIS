@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/enfermedad_tradicional_model.dart';
-import '../../../data/models/especialidad_med_tradicional_model.dart';
-import '../../../data/models/lugar_atencion_medico_model.dart';
-import '../../../data/models/planta_medicinal_model.dart';
-import '../../../domain/entities/atencion_salud_entity.dart';
+import '../../../data/models/atencion_salud.dart';
+import '../../../data/models/enfermedad_tradicional.dart';
+import '../../../data/models/especialidad_med_tradicional.dart';
+import '../../../data/models/lugar_atencion_medico.dart';
+import '../../../data/models/planta_medicinal.dart';
+import '../../../domain/entities/atencion_salud.dart';
 import '../../../domain/usecases/atencion_salud/atencion_salud_db_usecase.dart';
 import '../../../domain/usecases/enfermedad_tradicional/enfermedad_tradicional_db_usecase.dart';
 import '../../../domain/usecases/especialidad_med_tradicional/especialidad_med_tradicional_db_usecase.dart';
@@ -35,8 +36,9 @@ class AtencionSaludBloc extends Bloc<AtencionSaludEvent, AtencionSaludEntity> {
 
     on<AtencionSaludSubmitted>((event, emit) async {
       emit(state.copyWith(formStatus: AtencionSaludFormLoading()));
-      final result =
-          await atencionSaludUsecaseDB.saveAtencionSaludUsecaseDB(state);
+      final atencionSaludModel = AtencionSaludModel.fromEntity(state);
+      final result = await atencionSaludUsecaseDB
+          .saveAtencionSaludUsecaseDB(atencionSaludModel);
       result.fold((failure) {
         emit(state.copyWith(
             formStatus:

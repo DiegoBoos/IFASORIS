@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/cereal_model.dart';
+import 'package:ifasoris/data/models/cereal.dart';
 
-import '../../../domain/entities/cereal_entity.dart';
+import '../../../domain/entities/cereal.dart';
 import '../../../domain/usecases/cereal/cereal_db_usecase.dart';
 
 part 'cereal_state.dart';

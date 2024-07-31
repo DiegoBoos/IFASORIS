@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../data/models/lugar_atencion_medico_model.dart';
-import '../../entities/lugar_atencion_medico_entity.dart';
+import '../../../data/models/lugar_atencion_medico.dart';
+import '../../entities/lugar_atencion_medico.dart';
 import '../../repositories/lugar_atencion_medico/lugar_atencion_medico_repository_db.dart';
 
 class LugarAtencionMedicoUsecaseDB {

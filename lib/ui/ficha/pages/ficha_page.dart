@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/entities/dim_ubicacion_entity.dart';
-import '../../../domain/entities/dim_vivienda_entity.dart';
+import '../../../domain/entities/dim_ubicacion.dart';
+import '../../../domain/entities/dim_vivienda.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/consumo_alcohol_entity.dart';
+import '../../../domain/entities/consumo_alcohol.dart';
 import '../../../domain/usecases/consumo_alcohol/consumo_alcohol_db_usecase.dart';
 
 part 'consumo_alcohol_state.dart';

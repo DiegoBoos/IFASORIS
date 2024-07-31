@@ -1,10 +1,9 @@
-import '../../../domain/entities/tipo_documento_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/tipo_documento_model.dart';
+import '../../models/tipo_documento.dart';
 
 abstract class TipoDocumentoLocalDataSource {
   Future<List<TipoDocumentoModel>> getTiposDocumento();
-  Future<int> saveTipoDocumento(TipoDocumentoEntity tipoDocumento);
+  Future<int> saveTipoDocumento(TipoDocumentoModel tipoDocumento);
 }
 
 class TipoDocumentoLocalDataSourceImpl implements TipoDocumentoLocalDataSource {
@@ -19,7 +18,7 @@ class TipoDocumentoLocalDataSourceImpl implements TipoDocumentoLocalDataSource {
   }
 
   @override
-  Future<int> saveTipoDocumento(TipoDocumentoEntity tipoDocumento) async {
+  Future<int> saveTipoDocumento(TipoDocumentoModel tipoDocumento) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =

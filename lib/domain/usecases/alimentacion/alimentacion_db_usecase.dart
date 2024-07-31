@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/alimentacion_entity.dart';
+import '../../../data/models/alimentacion.dart';
+import '../../entities/alimentacion.dart';
 import '../../repositories/alimentacion/alimentacion_repository_db.dart';
 
 class AlimentacionUsecaseDB {
@@ -10,7 +11,7 @@ class AlimentacionUsecaseDB {
   AlimentacionUsecaseDB(this.repositoryDB);
 
   Future<Either<Failure, int>> saveAlimentacionUsecaseDB(
-      AlimentacionEntity alimentacion) {
+      AlimentacionModel alimentacion) {
     return repositoryDB.saveAlimentacionRepositoryDB(alimentacion);
   }
 

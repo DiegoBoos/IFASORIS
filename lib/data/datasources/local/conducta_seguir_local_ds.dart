@@ -1,10 +1,9 @@
-import '../../../domain/entities/conducta_seguir_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/conducta_seguir_model.dart';
+import '../../models/conducta_seguir.dart';
 
 abstract class ConductaSeguirLocalDataSource {
   Future<List<ConductaSeguirModel>> getConductasSeguir();
-  Future<int> saveConductaSeguir(ConductaSeguirEntity conductaSeguir);
+  Future<int> saveConductaSeguir(ConductaSeguirModel conductaSeguir);
 }
 
 class ConductaSeguirLocalDataSourceImpl
@@ -20,7 +19,7 @@ class ConductaSeguirLocalDataSourceImpl
   }
 
   @override
-  Future<int> saveConductaSeguir(ConductaSeguirEntity conductaSeguir) async {
+  Future<int> saveConductaSeguir(ConductaSeguirModel conductaSeguir) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

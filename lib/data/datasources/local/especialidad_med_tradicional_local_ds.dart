@@ -1,15 +1,14 @@
-import 'package:ifasoris/data/models/nombre_med_tradicional_model.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/especialidad_med_tradicional_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/especialidad_med_tradicional_model.dart';
+import '../../models/especialidad_med_tradicional.dart';
+import '../../models/nombre_med_tradicional.dart';
 
 abstract class EspecialidadMedTradicionalLocalDataSource {
   Future<List<EspecialidadMedTradicionalModel>>
       getEspecialidadesMedTradicional();
   Future<int> saveEspecialidadMedTradicional(
-      EspecialidadMedTradicionalEntity especialidadMedTradicional);
+      EspecialidadMedTradicionalModel especialidadMedTradicional);
 
   Future<int> saveUbicacionEspecialidadMedTradicional(
       int ubicacionId, List<LstEspMedTradicional> lstEspMedTradicional);
@@ -44,7 +43,7 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
 
   @override
   Future<int> saveEspecialidadMedTradicional(
-      EspecialidadMedTradicionalEntity especialidadMedTradicional) async {
+      EspecialidadMedTradicionalModel especialidadMedTradicional) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('EspecialidadesMedTrad_AccesoMedTradicional',

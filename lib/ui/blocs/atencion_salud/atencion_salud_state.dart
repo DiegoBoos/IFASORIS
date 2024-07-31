@@ -23,5 +23,5 @@ class AtencionSaludSubmissionFailed extends AtencionSaludState {
 }
 
 AtencionSaludEntity initObject() {
-  return AtencionSaludEntity(formStatus: const AtencionSaludFormInitial());
+  return const AtencionSaludEntity(formStatus: AtencionSaludFormInitial());
 }

@@ -19,8 +19,8 @@ class SyncLogCubit extends Cubit<SyncLogState> {
         (data) => emit(SyncLogsLoaded(data)));
   }
 
-  Future<int> forceSyncDB(List<SyncLogEntity> syncLogsEntity) async {
-    final result = await syncLogDB.forceSyncUsecaseDB(syncLogsEntity);
+  Future<int> forceSyncDB(List<SyncLogEntity> syncLogs) async {
+    final result = await syncLogDB.forceSyncUsecaseDB(syncLogs);
     return result.fold(
         (failure) => throw ErrorDescription(failure.properties.first),
         (data) => data);

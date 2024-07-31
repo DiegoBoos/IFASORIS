@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/religion_profesa_model.dart';
+import '../../models/religion_profesa.dart';
 
 abstract class ReligionProfesaRemoteDataSource {
   Future<List<ReligionProfesaModel>> getReligionesProfesa();
@@ -21,7 +21,7 @@ class ReligionProfesaRemoteDataSourceImpl
   @override
   Future<List<ReligionProfesaModel>> getReligionesProfesa() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/religionesprofesa');
+      final uri = Uri.parse('${Constants.apiPublica}/religionesprofesa');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

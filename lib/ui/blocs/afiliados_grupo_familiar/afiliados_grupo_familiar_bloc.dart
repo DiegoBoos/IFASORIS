@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../../domain/usecases/grupo_familiar/grupo_familiar_db_usecase.dart';
 
 part 'afiliados_grupo_familiar_event.dart';

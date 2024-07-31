@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/dim_ubicacion/dim_ubicacion_db_usecase.dart';
 
-import '../../../domain/entities/dim_ubicacion_entity.dart';
+import '../../../domain/entities/dim_ubicacion.dart';
 
 part 'dim_ubicacion_cubit.dart';
 
@@ -56,7 +56,7 @@ class DimUbicacionError extends DimUbicacionState {
 }
 
 DimUbicacionEntity initObject() {
-  return DimUbicacionEntity(
+  return const DimUbicacionEntity(
     familiaId: 0,
     nombreRecibeVisita: '',
     tipoDocRecibeVisita: '',

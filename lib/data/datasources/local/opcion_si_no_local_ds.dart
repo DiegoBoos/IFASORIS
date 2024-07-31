@@ -1,10 +1,9 @@
-import '../../../domain/entities/opcion_si_no_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/opcion_si_no_model.dart';
+import '../../models/opcion_si_no.dart';
 
 abstract class OpcionSiNoLocalDataSource {
   Future<List<OpcionSiNoModel>> getOpcionesSiNo();
-  Future<int> saveOpcionSiNo(OpcionSiNoEntity opcionSiNo);
+  Future<int> saveOpcionSiNo(OpcionSiNoModel opcionSiNo);
 }
 
 class OpcionSiNoLocalDataSourceImpl implements OpcionSiNoLocalDataSource {
@@ -20,7 +19,7 @@ class OpcionSiNoLocalDataSourceImpl implements OpcionSiNoLocalDataSource {
   }
 
   @override
-  Future<int> saveOpcionSiNo(OpcionSiNoEntity opcionSiNo) async {
+  Future<int> saveOpcionSiNo(OpcionSiNoModel opcionSiNo) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('OpcionesSi_No', opcionSiNo.toJson());

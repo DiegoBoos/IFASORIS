@@ -1,10 +1,9 @@
-import '../../../domain/entities/tipo_calendario_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/tipo_calendario_model.dart';
+import '../../models/tipo_calendario.dart';
 
 abstract class TipoCalendarioLocalDataSource {
   Future<List<TipoCalendarioModel>> getTiposCalendario();
-  Future<int> saveTipoCalendario(TipoCalendarioEntity tipoCalendario);
+  Future<int> saveTipoCalendario(TipoCalendarioModel tipoCalendario);
 }
 
 class TipoCalendarioLocalDataSourceImpl
@@ -20,7 +19,7 @@ class TipoCalendarioLocalDataSourceImpl
   }
 
   @override
-  Future<int> saveTipoCalendario(TipoCalendarioEntity tipoCalendario) async {
+  Future<int> saveTipoCalendario(TipoCalendarioModel tipoCalendario) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

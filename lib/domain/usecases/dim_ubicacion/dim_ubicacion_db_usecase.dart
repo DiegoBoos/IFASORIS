@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/dim_ubicacion_entity.dart';
+import '../../entities/dim_ubicacion.dart';
 import '../../repositories/dim_ubicacion/dim_ubicacion_repository_db.dart';
 
 class DimUbicacionUsecaseDB {

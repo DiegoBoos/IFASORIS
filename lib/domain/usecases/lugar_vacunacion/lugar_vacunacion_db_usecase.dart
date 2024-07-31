@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/lugar_vacunacion_entity.dart';
+import '../../entities/lugar_vacunacion.dart';
 import '../../repositories/lugar_vacunacion/lugar_vacunacion_repository_db.dart';
 
 class LugarVacunacionUsecaseDB {

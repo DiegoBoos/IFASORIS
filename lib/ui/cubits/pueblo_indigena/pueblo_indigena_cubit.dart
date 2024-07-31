@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/pueblo_indigena_entity.dart';
+import '../../../domain/entities/pueblo_indigena.dart';
 import '../../../domain/usecases/pueblo_indigena/pueblo_indigena_db_usecase.dart';
 
 part 'pueblo_indigena_state.dart';

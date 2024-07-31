@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/metodo_planificacion_model.dart';
+import '../../models/metodo_planificacion.dart';
 
 abstract class MetodoPlanificacionRemoteDataSource {
   Future<List<MetodoPlanificacionModel>> getMetodosPlanificacion();
@@ -21,8 +21,7 @@ class MetodoPlanificacionRemoteDataSourceImpl
   @override
   Future<List<MetodoPlanificacionModel>> getMetodosPlanificacion() async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/metodosplanificacion');
+      final uri = Uri.parse('${Constants.apiPublica}/metodosplanificacion');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

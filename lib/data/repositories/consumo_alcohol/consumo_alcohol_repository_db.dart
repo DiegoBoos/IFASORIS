@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/consumo_alcohol_entity.dart';
+import '../../../domain/entities/consumo_alcohol.dart';
 import '../../../domain/repositories/consumo_alcohol/consumo_alcohol_repository_db.dart';
 import '../../datasources/local/consumo_alcohol_local_ds.dart';
+import '../../models/consumo_alcohol.dart';
 
 class ConsumoAlcoholRepositoryDBImpl implements ConsumoAlcoholRepositoryDB {
   final ConsumoAlcoholLocalDataSource consumoAlcoholLocalDataSource;
@@ -12,14 +12,14 @@ class ConsumoAlcoholRepositoryDBImpl implements ConsumoAlcoholRepositoryDB {
   ConsumoAlcoholRepositoryDBImpl({required this.consumoAlcoholLocalDataSource});
 
   @override
-  Future<Either<Failure, List<ConsumoAlcoholEntity>>>
+  Future<Either<Failure, List<ConsumoAlcoholModel>>>
       getConsumosAlcoholRepositoryDB() async {
     try {
       final result = await consumoAlcoholLocalDataSource.getConsumosAlcohol();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -28,12 +28,14 @@ class ConsumoAlcoholRepositoryDBImpl implements ConsumoAlcoholRepositoryDB {
   Future<Either<Failure, int>> saveConsumoAlcoholRepositoryDB(
       ConsumoAlcoholEntity consumoAlcohol) async {
     try {
+      final consumoAlcoholModel =
+          ConsumoAlcoholModel.fromEntity(consumoAlcohol);
       final result = await consumoAlcoholLocalDataSource
-          .saveConsumoAlcohol(consumoAlcohol);
+          .saveConsumoAlcohol(consumoAlcoholModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

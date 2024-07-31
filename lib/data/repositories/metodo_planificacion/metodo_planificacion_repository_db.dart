@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/metodo_planificacion_entity.dart';
+import '../../../domain/entities/metodo_planificacion.dart';
 import '../../../domain/repositories/metodo_planificacion/metodo_planificacion_repository_db.dart';
 import '../../datasources/local/metodo_planificacion_local_ds.dart';
+import '../../models/metodo_planificacion.dart';
 
 class MetodoPlanificacionRepositoryDBImpl
     implements MetodoPlanificacionRepositoryDB {
@@ -14,7 +14,7 @@ class MetodoPlanificacionRepositoryDBImpl
       {required this.metodoPlanificacionLocalDataSource});
 
   @override
-  Future<Either<Failure, List<MetodoPlanificacionEntity>>>
+  Future<Either<Failure, List<MetodoPlanificacionModel>>>
       getMetodosPlanificacionRepositoryDB() async {
     try {
       final result =
@@ -22,7 +22,7 @@ class MetodoPlanificacionRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +31,14 @@ class MetodoPlanificacionRepositoryDBImpl
   Future<Either<Failure, int>> saveMetodoPlanificacionRepositoryDB(
       MetodoPlanificacionEntity metodoPlanificacion) async {
     try {
+      final metodoPlanificacionModel =
+          MetodoPlanificacionModel.fromEntity(metodoPlanificacion);
       final result = await metodoPlanificacionLocalDataSource
-          .saveMetodoPlanificacion(metodoPlanificacion);
+          .saveMetodoPlanificacion(metodoPlanificacionModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

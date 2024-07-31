@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/planta_medicinal_model.dart';
+import '../../models/planta_medicinal.dart';
 
 abstract class PlantaMedicinalRemoteDataSource {
   Future<List<PlantaMedicinalModel>> getPlantasMedicinales(int dtoId);
@@ -22,7 +22,7 @@ class PlantaMedicinalRemoteDataSourceImpl
   Future<List<PlantaMedicinalModel>> getPlantasMedicinales(int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/plantasmedicinalesbyDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/plantasmedicinalesbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

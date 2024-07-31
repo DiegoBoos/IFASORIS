@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/actividad_fisica_entity.dart';
-import '../../../domain/repositories/actividad_fisica/actividad_fisica_repository_db.dart';
-import '../../datasources/local/actividad_fisica_local_ds.dart';
+import '../../../domain/usecases/actividad_fisica/actividad_fisica_exports.dart';
+import '../../models/actividad_fisica.dart';
 
 class ActividadFisicaRepositoryDBImpl implements ActividadFisicaRepositoryDB {
   final ActividadFisicaLocalDataSource actividadFisicaLocalDataSource;
@@ -13,7 +11,7 @@ class ActividadFisicaRepositoryDBImpl implements ActividadFisicaRepositoryDB {
       {required this.actividadFisicaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<ActividadFisicaEntity>>>
+  Future<Either<Failure, List<ActividadFisicaModel>>>
       getActividadesFisicasRepositoryDB() async {
     try {
       final result =
@@ -21,7 +19,7 @@ class ActividadFisicaRepositoryDBImpl implements ActividadFisicaRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -30,12 +28,15 @@ class ActividadFisicaRepositoryDBImpl implements ActividadFisicaRepositoryDB {
   Future<Either<Failure, int>> saveActividadFisicaRepositoryDB(
       ActividadFisicaEntity actividadFisica) async {
     try {
+      final actividadFisicaModel =
+          ActividadFisicaModel.fromEntity(actividadFisica);
+
       final result = await actividadFisicaLocalDataSource
-          .saveActividadFisica(actividadFisica);
+          .saveActividadFisica(actividadFisicaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

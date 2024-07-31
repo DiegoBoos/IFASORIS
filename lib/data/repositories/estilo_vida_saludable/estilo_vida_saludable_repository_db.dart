@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/estilo_vida_saludable_entity.dart';
+import '../../../domain/entities/estilo_vida_saludable.dart';
 import '../../../domain/repositories/estilo_vida_saludable/estilo_vida_saludable_repository_db.dart';
 import '../../datasources/local/estilo_vida_saludable_local_ds.dart';
+import '../../models/estilo_vida_saludable.dart';
 
 class EstiloVidaSaludableRepositoryDBImpl
     implements EstiloVidaSaludableRepositoryDB {
@@ -17,19 +17,21 @@ class EstiloVidaSaludableRepositoryDBImpl
   Future<Either<Failure, int>> saveEstiloVidaSaludableRepositoryDB(
       EstiloVidaSaludableEntity estiloVidaSaludable) async {
     try {
+      final estiloVidaSaludableModel =
+          EstiloVidaSaludableModel.fromEntity(estiloVidaSaludable);
       final result = await estiloVidaSaludableLocalDataSource
-          .saveEstiloVidaSaludable(estiloVidaSaludable);
+          .saveEstiloVidaSaludable(estiloVidaSaludableModel);
 
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
   @override
-  Future<Either<Failure, EstiloVidaSaludableEntity?>>
+  Future<Either<Failure, EstiloVidaSaludableModel?>>
       getEstiloVidaSaludableRepositoryDB(int afiliadoId) async {
     try {
       final result = await estiloVidaSaludableLocalDataSource
@@ -38,7 +40,7 @@ class EstiloVidaSaludableRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

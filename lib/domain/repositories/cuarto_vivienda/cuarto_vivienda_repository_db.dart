@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/cuarto_vivienda_entity.dart';
+import '../../entities/cuarto_vivienda.dart';
 
-abstract class NroCuartoViviendaRepositoryDB {
-  Future<Either<Failure, int>> saveNroCuartoViviendaRepositoryDB(
-      NroCuartoViviendaEntity nroCuartoVivienda);
+abstract class CuartoViviendaRepositoryDB {
+  Future<Either<Failure, int>> saveCuartoViviendaRepositoryDB(
+      CuartoViviendaEntity cuartoVivienda);
 
-  Future<Either<Failure, List<NroCuartoViviendaEntity>>>
-      getNroCuartosViviendaRepositoryDB();
+  Future<Either<Failure, List<CuartoViviendaEntity>>>
+      getCuartosViviendaRepositoryDB();
 }

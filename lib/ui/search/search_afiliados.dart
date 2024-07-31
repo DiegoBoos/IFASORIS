@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
 
-import '../../domain/entities/afiliado_entity.dart';
-import '../../domain/entities/familia_entity.dart';
-import '../../domain/entities/ficha_entity.dart';
-import '../../domain/entities/grupo_familiar_entity.dart';
+import '../../domain/entities/afiliado.dart';
+import '../../domain/entities/familia.dart';
+import '../../domain/entities/ficha.dart';
+import '../../domain/entities/grupo_familiar.dart';
 import '../blocs/afiliado/afiliado_bloc.dart';
 import '../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../blocs/auth/auth_bloc.dart';
@@ -155,8 +155,8 @@ class SearchAfiliados extends SearchDelegate {
                               if (ficha != null) {
                                 if (ficha.numFicha == null ||
                                     ficha.numFicha == '') {
-                                  afiliado.afiliadoId =
-                                      ficha.familia!.fkAfiliadoId;
+                                  afiliado.copyWith(
+                                      afiliadoId: ficha.familia!.fkAfiliadoId);
 
                                   cargarFicha(context, ficha, afiliado);
                                 } else {

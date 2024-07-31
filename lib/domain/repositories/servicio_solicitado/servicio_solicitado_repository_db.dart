@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/servicio_solicitado_model.dart';
+import 'package:ifasoris/data/models/servicio_solicitado.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/servicio_solicitado_entity.dart';
+import '../../entities/servicio_solicitado.dart';
 
 abstract class ServicioSolicitadoRepositoryDB {
   Future<Either<Failure, int>> saveServicioSolicitadoRepositoryDB(

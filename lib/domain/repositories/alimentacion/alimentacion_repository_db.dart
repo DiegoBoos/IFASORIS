@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/alimentacion_entity.dart';
+import '../../entities/alimentacion.dart';
 
 abstract class AlimentacionRepositoryDB {
   Future<Either<Failure, int>> saveAlimentacionRepositoryDB(

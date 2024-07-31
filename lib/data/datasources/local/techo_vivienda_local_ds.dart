@@ -1,12 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/techo_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/techo_vivienda_model.dart';
+import '../../models/techo_vivienda.dart';
 
 abstract class TechoViviendaLocalDataSource {
   Future<List<TechoViviendaModel>> getTechosVivienda();
-  Future<int> saveTechoVivienda(TechoViviendaEntity techoVivienda);
+  Future<int> saveTechoVivienda(TechoViviendaModel techoVivienda);
 
   Future<int> saveTechosVivienda(int datoViviendaId, List<LstTecho> lstTecho);
 
@@ -25,7 +24,7 @@ class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
   }
 
   @override
-  Future<int> saveTechoVivienda(TechoViviendaEntity techoVivienda) async {
+  Future<int> saveTechoVivienda(TechoViviendaModel techoVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =

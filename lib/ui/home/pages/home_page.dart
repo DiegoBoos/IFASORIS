@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../domain/entities/afiliado_entity.dart';
+import '../../../domain/entities/afiliado.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';

@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/medio_utiliza_med_tradicional_entity.dart';
 import '../../../domain/repositories/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_repository.dart';
 import '../../datasources/remote/medio_utiliza_med_tradicional_remote_ds.dart';
+import '../../models/medio_utiliza_med_tradicional.dart';
 
 class MedioUtilizaMedTradicionalRepositoryImpl
     implements MedioUtilizaMedTradicionalRepository {
@@ -17,7 +16,7 @@ class MedioUtilizaMedTradicionalRepositoryImpl
       {required this.medioUtilizaMedTradicionalRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<MedioUtilizaMedTradicionalEntity>>>
+  Future<Either<Failure, List<MedioUtilizaMedTradicionalModel>>>
       getMediosUtilizaMedTradicionalRepository(int dtoId) async {
     try {
       final result = await medioUtilizaMedTradicionalRemoteDataSource
@@ -26,8 +25,6 @@ class MedioUtilizaMedTradicionalRepositoryImpl
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

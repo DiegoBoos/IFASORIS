@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/hortaliza_entity.dart';
 import '../../../domain/repositories/hortaliza/hortaliza_repository.dart';
 import '../../datasources/remote/hortaliza_remote_ds.dart';
+import '../../models/hortaliza.dart';
 
 class HortalizaRepositoryImpl implements HortalizaRepository {
   final HortalizaRemoteDataSource hortalizaRemoteDataSource;
@@ -14,7 +13,7 @@ class HortalizaRepositoryImpl implements HortalizaRepository {
   HortalizaRepositoryImpl({required this.hortalizaRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<HortalizaEntity>>> getHortalizasRepository(
+  Future<Either<Failure, List<HortalizaModel>>> getHortalizasRepository(
       int dtoId) async {
     try {
       final result = await hortalizaRemoteDataSource.getHortalizas(dtoId);
@@ -22,8 +21,6 @@ class HortalizaRepositoryImpl implements HortalizaRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

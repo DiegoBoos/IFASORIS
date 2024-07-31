@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/tipo_vivienda_entity.dart';
+import '../../../domain/entities/tipo_vivienda.dart';
 import '../../../domain/repositories/tipo_vivienda/tipo_vivienda_repository_db.dart';
 import '../../datasources/local/tipo_vivienda_local_ds.dart';
+import '../../models/tipo_vivienda.dart';
 
 class TipoViviendaRepositoryDBImpl implements TipoViviendaRepositoryDB {
   final TipoViviendaLocalDataSource tipoViviendaLocalDataSource;
@@ -12,14 +12,14 @@ class TipoViviendaRepositoryDBImpl implements TipoViviendaRepositoryDB {
   TipoViviendaRepositoryDBImpl({required this.tipoViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<TipoViviendaEntity>>>
+  Future<Either<Failure, List<TipoViviendaModel>>>
       getTiposViviendaRepositoryDB() async {
     try {
       final result = await tipoViviendaLocalDataSource.getTiposVivienda();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -28,12 +28,13 @@ class TipoViviendaRepositoryDBImpl implements TipoViviendaRepositoryDB {
   Future<Either<Failure, int>> saveTipoViviendaRepositoryDB(
       TipoViviendaEntity tipoVivienda) async {
     try {
+      final tipoViviendaModel = TipoViviendaModel.fromEntity(tipoVivienda);
       final result =
-          await tipoViviendaLocalDataSource.saveTipoVivienda(tipoVivienda);
+          await tipoViviendaLocalDataSource.saveTipoVivienda(tipoViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

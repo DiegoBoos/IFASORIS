@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/enfermedad_acude_entity.dart';
+import '../../../domain/entities/enfermedad_acude.dart';
 import '../../../domain/usecases/enfermedad_acude/enfermedad_acude_db_usecase.dart';
 
 part 'enfermedad_acude_state.dart';

@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/repositories/afiliado/afiliado_repository.dart';
 import '../../datasources/remote/afiliado_remote_ds.dart';
-import '../../models/afiliado_response_model.dart';
+import '../../models/afiliado.dart';
 
 class AfiliadoRepositoryImpl implements AfiliadoRepository {
   final AfiliadoRemoteDataSource afiliadoRemoteDataSource;
@@ -22,8 +21,6 @@ class AfiliadoRepositoryImpl implements AfiliadoRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

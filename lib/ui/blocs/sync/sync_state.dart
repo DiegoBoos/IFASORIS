@@ -62,7 +62,7 @@ class SyncFailure extends SyncState {
 }
 
 class IncompleteSync extends SyncState {
-  final List<SyncLogEntity> syncLog;
+  final List<SyncLog> syncLog;
 
   IncompleteSync(this.syncLog)
       : super(

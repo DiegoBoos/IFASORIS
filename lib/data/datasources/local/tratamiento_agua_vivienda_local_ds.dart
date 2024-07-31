@@ -1,13 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/tratamiento_agua_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/tratamiento_agua_vivienda_model.dart';
+import '../../models/tratamiento_agua_vivienda.dart';
 
 abstract class TratamientoAguaViviendaLocalDataSource {
   Future<List<TratamientoAguaViviendaModel>> getTratamientosAgua();
   Future<int> saveTratamientoAguaVivienda(
-      TratamientoAguaViviendaEntity tratamientoAguaVivienda);
+      TratamientoAguaViviendaModel tratamientoAguaVivienda);
 
   Future<int> saveTmtoAguasVivienda(
       int datoViviendaId, List<LstTmtoAgua> lstTmtoAgua);
@@ -29,7 +28,7 @@ class TratamientoAguaViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveTratamientoAguaVivienda(
-      TratamientoAguaViviendaEntity tratamientoAguaVivienda) async {
+      TratamientoAguaViviendaModel tratamientoAguaVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('TratamientoAguaVivienda_DatosVivienda',

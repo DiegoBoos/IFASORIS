@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/tratamiento_agua_vivienda_model.dart';
+import 'package:ifasoris/data/models/tratamiento_agua_vivienda.dart';
 
-import '../../../domain/entities/tratamiento_agua_vivienda_entity.dart';
+import '../../../domain/entities/tratamiento_agua_vivienda.dart';
 import '../../../domain/usecases/tratamiento_agua_vivienda/tratamiento_agua_vivienda_db_usecase.dart';
 
 part 'tratamiento_agua_vivienda_state.dart';

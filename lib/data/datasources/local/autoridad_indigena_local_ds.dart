@@ -1,10 +1,9 @@
-import '../../../domain/entities/autoridad_indigena_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/autoridad_indigena_model.dart';
+import '../../models/autoridad_indigena.dart';
 
 abstract class AutoridadIndigenaLocalDataSource {
   Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas();
-  Future<int> saveAutoridadIndigena(AutoridadIndigenaEntity autoridadIndigena);
+  Future<int> saveAutoridadIndigena(AutoridadIndigenaModel autoridadIndigena);
 }
 
 class AutoridadIndigenaLocalDataSourceImpl
@@ -21,7 +20,7 @@ class AutoridadIndigenaLocalDataSourceImpl
 
   @override
   Future<int> saveAutoridadIndigena(
-      AutoridadIndigenaEntity autoridadIndigena) async {
+      AutoridadIndigenaModel autoridadIndigena) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

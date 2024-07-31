@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/tipo_combustible_vivienda_entity.dart';
+import '../../entities/tipo_combustible_vivienda.dart';
 import '../../repositories/tipo_combustible_vivienda/tipo_combustible_vivienda_repository.dart';
 
 class TipoCombustibleViviendaUsecase {

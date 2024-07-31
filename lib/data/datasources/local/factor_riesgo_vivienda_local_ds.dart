@@ -1,13 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/factor_riesgo_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/factor_riesgo_vivienda_model.dart';
+import '../../models/factor_riesgo_vivienda.dart';
 
 abstract class FactorRiesgoViviendaLocalDataSource {
   Future<List<FactorRiesgoViviendaModel>> getFactoresRiesgo();
   Future<int> saveFactorRiesgoVivienda(
-      FactorRiesgoViviendaEntity factorRiesgoVivienda);
+      FactorRiesgoViviendaModel factorRiesgoVivienda);
 
   Future<int> saveFactoresRiesgoVivienda(
       int datoViviendaId, List<LstFactorRiesgo> lstFactorRiesgo);
@@ -29,7 +28,7 @@ class FactorRiesgoViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveFactorRiesgoVivienda(
-      FactorRiesgoViviendaEntity factorRiesgoVivienda) async {
+      FactorRiesgoViviendaModel factorRiesgoVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

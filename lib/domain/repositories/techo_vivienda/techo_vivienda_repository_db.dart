@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/techo_vivienda_model.dart';
+import 'package:ifasoris/data/models/techo_vivienda.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/techo_vivienda_entity.dart';
+import '../../entities/techo_vivienda.dart';
 
 abstract class TechoViviendaRepositoryDB {
   Future<Either<Failure, int>> saveTechoViviendaRepositoryDB(

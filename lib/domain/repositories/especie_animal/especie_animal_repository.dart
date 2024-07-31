@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/especie_animal_entity.dart';
+import '../../entities/especie_animal.dart';
 
 abstract class EspecieAnimalRepository {
   Future<Either<Failure, List<EspecieAnimalEntity>>>

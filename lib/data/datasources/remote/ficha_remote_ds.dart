@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../services/connection_sqlite_service.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/ficha_model.dart';
+import '../../models/ficha.dart';
 
 abstract class FichaRemoteDataSource {
   Future<List<dynamic>> createFicha();
@@ -22,7 +22,8 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
   @override
   Future<List<FichaModel>> getFichas(userName) async {
     try {
-      final uri = Uri.parse('${Constants.syncUrl}/ficha/by-username/$userName');
+      final uri =
+          Uri.parse('${Constants.syncPublica}/ficha/by-username/$userName');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -120,7 +121,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           TenenciaVivienda_id AS tenenciaViviendaId,
           VentilacionVivienda_id AS ventilacionViviendaId,
           IluminacionVivienda_id AS iluminacionViviendaId,
-          NroCuartosVivienda_id AS nroCuartosViviendaId
+          CuartosVivienda_id AS CuartosViviendaId
           FROM Asp2_DatosVivienda
           WHERE Familia_id = $familiaId
           ''');

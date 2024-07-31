@@ -1,26 +1,26 @@
 part of 'cuarto_vivienda_cubit.dart';
 
-abstract class NroCuartosViviendaState extends Equatable {
-  final List<NroCuartoViviendaEntity>? nroCuartosVivienda;
-  const NroCuartosViviendaState({this.nroCuartosVivienda});
+abstract class CuartosViviendaState extends Equatable {
+  final List<CuartoViviendaEntity>? cuartosVivienda;
+  const CuartosViviendaState({this.cuartosVivienda});
 
   @override
   List<Object> get props => [];
 }
 
-class NroCuartosViviendaInitial extends NroCuartosViviendaState {}
+class CuartosViviendaInitial extends CuartosViviendaState {}
 
-class NroCuartosViviendaLoading extends NroCuartosViviendaState {}
+class CuartosViviendaLoading extends CuartosViviendaState {}
 
-class NroCuartosViviendaLoaded extends NroCuartosViviendaState {
-  final List<NroCuartoViviendaEntity>? nroCuartosViviendaLoaded;
+class CuartosViviendaLoaded extends CuartosViviendaState {
+  final List<CuartoViviendaEntity>? cuartosViviendaLoaded;
 
-  const NroCuartosViviendaLoaded(this.nroCuartosViviendaLoaded)
-      : super(nroCuartosVivienda: nroCuartosViviendaLoaded);
+  const CuartosViviendaLoaded(this.cuartosViviendaLoaded)
+      : super(cuartosVivienda: cuartosViviendaLoaded);
 }
 
-class NroCuartosViviendaError extends NroCuartosViviendaState {
+class CuartosViviendaError extends CuartosViviendaState {
   final String message;
 
-  const NroCuartosViviendaError(this.message);
+  const CuartosViviendaError(this.message);
 }

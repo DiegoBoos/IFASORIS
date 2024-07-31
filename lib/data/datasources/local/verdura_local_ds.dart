@@ -1,12 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/verdura_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/verdura_model.dart';
+import '../../models/verdura.dart';
 
 abstract class VerduraLocalDataSource {
   Future<List<VerduraModel>> getVerduras();
-  Future<int> saveVerdura(VerduraEntity verdura);
+  Future<int> saveVerdura(VerduraModel verdura);
 
   Future<int> saveUbicacionVerduras(
       int ubicacionId, List<LstVerdura> lstVerduras);
@@ -27,7 +26,7 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
   }
 
   @override
-  Future<int> saveVerdura(VerduraEntity verdura) async {
+  Future<int> saveVerdura(VerduraModel verdura) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =

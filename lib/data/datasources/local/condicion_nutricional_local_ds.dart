@@ -1,11 +1,10 @@
-import '../../../domain/entities/condicion_nutricional_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/condicion_nutricional_model.dart';
+import '../../models/condicion_nutricional.dart';
 
 abstract class CondicionNutricionalLocalDataSource {
   Future<List<CondicionNutricionalModel>> getCondicionesNutricionales();
   Future<int> saveCondicionNutricional(
-      CondicionNutricionalEntity condicionNutricional);
+      CondicionNutricionalModel condicionNutricional);
 }
 
 class CondicionNutricionalLocalDataSourceImpl
@@ -23,7 +22,7 @@ class CondicionNutricionalLocalDataSourceImpl
 
   @override
   Future<int> saveCondicionNutricional(
-      CondicionNutricionalEntity condicionNutricional) async {
+      CondicionNutricionalModel condicionNutricional) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

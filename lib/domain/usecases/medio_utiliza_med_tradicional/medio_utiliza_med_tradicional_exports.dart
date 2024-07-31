@@ -2,7 +2,7 @@ export 'package:ifasoris/domain/usecases/medio_utiliza_med_tradicional/medio_uti
 export 'package:ifasoris/domain/usecases/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_db_usecase.dart';
 export 'package:ifasoris/domain/repositories/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_repository.dart';
 export 'package:ifasoris/domain/repositories/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_repository_db.dart';
-export 'package:ifasoris/domain/entities/medio_utiliza_med_tradicional_entity.dart';
+export 'package:ifasoris/domain/entities/medio_utiliza_med_tradicional.dart';
 export 'package:ifasoris/ui/cubits/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_cubit.dart';
 export 'package:ifasoris/data/repositories/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_repository.dart';
 export 'package:ifasoris/data/repositories/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_repository_db.dart';

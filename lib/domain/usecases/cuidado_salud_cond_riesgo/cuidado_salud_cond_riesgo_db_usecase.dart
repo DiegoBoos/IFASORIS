@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/cuidado_salud_cond_riesgo_entity.dart';
+import '../../entities/cuidado_salud_cond_riesgo.dart';
 import '../../repositories/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_repository_db.dart';
 
 class CuidadoSaludCondRiesgoUsecaseDB {

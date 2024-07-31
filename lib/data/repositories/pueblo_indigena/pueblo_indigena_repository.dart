@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/pueblo_indigena_entity.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/repositories/pueblo_indigena/pueblo_indigena_repository.dart';
 import '../../datasources/remote/pueblo_indigena_remote_ds.dart';
+import '../../models/pueblo_indigena.dart';
 
 class PuebloIndigenaRepositoryImpl implements PuebloIndigenaRepository {
   final PuebloIndigenaRemoteDataSource puebloIndigenaRemoteDataSource;
@@ -14,7 +13,7 @@ class PuebloIndigenaRepositoryImpl implements PuebloIndigenaRepository {
   PuebloIndigenaRepositoryImpl({required this.puebloIndigenaRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<PuebloIndigenaEntity>>>
+  Future<Either<Failure, List<PuebloIndigenaModel>>>
       getPueblosIndigenasRepository(int dtoId) async {
     try {
       final result =
@@ -23,8 +22,6 @@ class PuebloIndigenaRepositoryImpl implements PuebloIndigenaRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

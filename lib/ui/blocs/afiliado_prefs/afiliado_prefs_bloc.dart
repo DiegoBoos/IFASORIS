@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/usecases/afiliado/afiliado_exports.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
 
-import '../../../data/models/afiliado_response_model.dart';
+import '../../../data/models/afiliado.dart';
+import '../../../domain/entities/afiliado.dart';
 
 part 'afiliado_prefs_event.dart';
 part 'afiliado_prefs_state.dart';
@@ -14,7 +14,8 @@ class AfiliadoPrefsBloc extends Bloc<AfiliadoPrefsEvent, AfiliadoPrefsState> {
       : super(AfiliadoInitial()) {
     on<SaveAfiliado>((event, emit) {
       // Persist data to shared preferences
-      sharedPreferencesService.saveAfiliadoToSharedPreferences(event.afiliado);
+      final afiliadoModel = AfiliadoModel.fromEntity(event.afiliado);
+      sharedPreferencesService.saveAfiliadoToSharedPreferences(afiliadoModel);
 
       final afiliadoJson = sharedPreferencesService.getJson('afiliado');
 

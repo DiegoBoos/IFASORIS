@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/enfermedad_tratamiento_entity.dart';
+import '../../../domain/entities/enfermedad_tratamiento.dart';
 import '../../../domain/repositories/enfermedad_tratamiento/enfermedad_tratamiento_repository_db.dart';
 import '../../datasources/local/enfermedad_tratamiento_local_ds.dart';
+import '../../models/enfermedad_tratamiento.dart';
 
 class EnfermedadTratamientoRepositoryDBImpl
     implements EnfermedadTratamientoRepositoryDB {
@@ -23,7 +23,7 @@ class EnfermedadTratamientoRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -32,12 +32,14 @@ class EnfermedadTratamientoRepositoryDBImpl
   Future<Either<Failure, int>> saveEnfermedadTratamientoRepositoryDB(
       EnfermedadTratamientoEntity enfermedadTratamiento) async {
     try {
+      final enfermedadTratamientoModel =
+          EnfermedadTratamientoModel.fromEntity(enfermedadTratamiento);
       final result = await enfermedadTratamientoLocalDataSource
-          .saveEnfermedadTratamiento(enfermedadTratamiento);
+          .saveEnfermedadTratamiento(enfermedadTratamientoModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

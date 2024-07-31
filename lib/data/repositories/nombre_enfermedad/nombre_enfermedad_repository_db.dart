@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/nombre_enfermedad_model.dart';
+import 'package:ifasoris/data/models/nombre_enfermedad.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/nombre_enfermedad_entity.dart';
+import '../../../domain/entities/nombre_enfermedad.dart';
 import '../../../domain/repositories/nombre_enfermedad/nombre_enfermedad_repository_db.dart';
 import '../../datasources/local/nombre_enfermedad_local_ds.dart';
 
@@ -14,7 +13,7 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
       {required this.nombreEnfermedadLocalDataSource});
 
   @override
-  Future<Either<Failure, List<NombreEnfermedadEntity>>>
+  Future<Either<Failure, List<NombreEnfermedadModel>>>
       getNombresEnfermedadesRepositoryDB() async {
     try {
       final result =
@@ -22,7 +21,7 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +30,14 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
   Future<Either<Failure, int>> saveNombreEnfermedadRepositoryDB(
       NombreEnfermedadEntity nombreEnfermedad) async {
     try {
+      final nombreEnfermedadModel =
+          NombreEnfermedadModel.fromEntity(nombreEnfermedad);
       final result = await nombreEnfermedadLocalDataSource
-          .saveNombreEnfermedad(nombreEnfermedad);
+          .saveNombreEnfermedad(nombreEnfermedadModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -51,7 +52,7 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -67,7 +68,7 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../data/models/medio_utiliza_ca_model.dart';
-import '../../entities/medio_utiliza_ca_entity.dart';
+import '../../../data/models/medio_utiliza_ca.dart';
+import '../../entities/medio_utiliza_ca.dart';
 
 abstract class MedioUtilizaCARepositoryDB {
   Future<Either<Failure, int>> saveMedioUtilizaCARepositoryDB(

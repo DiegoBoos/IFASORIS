@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/condicion_nutricional_model.dart';
+import '../../models/condicion_nutricional.dart';
 
 abstract class CondicionNutricionalRemoteDataSource {
   Future<List<CondicionNutricionalModel>> getCondicionesNutricionales();
@@ -21,8 +21,7 @@ class CondicionNutricionalRemoteDataSourceImpl
   @override
   Future<List<CondicionNutricionalModel>> getCondicionesNutricionales() async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/condicionesnutricionales');
+      final uri = Uri.parse('${Constants.apiPublica}/condicionesnutricionales');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/servicio_publico_vivienda_model.dart';
+import 'package:ifasoris/data/models/servicio_publico_vivienda.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/servicio_publico_vivienda_entity.dart';
+import '../../entities/servicio_publico_vivienda.dart';
 import '../../repositories/servicio_publico_vivienda/servicio_publico_vivienda_repository_db.dart';
 
 class ServicioPublicoViviendaUsecaseDB {

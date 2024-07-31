@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/resguardo_entity.dart';
+import '../../../domain/entities/resguardo.dart';
 import '../../../domain/repositories/resguardo/resguardo_repository_db.dart';
 import '../../datasources/local/resguardo_local_ds.dart';
+import '../../models/resguardo.dart';
 
 class ResguardoRepositoryDBImpl implements ResguardoRepositoryDB {
   final ResguardoLocalDataSource resguardoLocalDataSource;
@@ -12,14 +12,14 @@ class ResguardoRepositoryDBImpl implements ResguardoRepositoryDB {
   ResguardoRepositoryDBImpl({required this.resguardoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<ResguardoEntity>>>
+  Future<Either<Failure, List<ResguardoModel>>>
       getResguardosRepositoryDB() async {
     try {
       final result = await resguardoLocalDataSource.getResguardos();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -28,11 +28,13 @@ class ResguardoRepositoryDBImpl implements ResguardoRepositoryDB {
   Future<Either<Failure, int>> saveResguardoRepositoryDB(
       ResguardoEntity resguardo) async {
     try {
-      final result = await resguardoLocalDataSource.saveResguardo(resguardo);
+      final resguardoModel = ResguardoModel.fromEntity(resguardo);
+      final result =
+          await resguardoLocalDataSource.saveResguardo(resguardoModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

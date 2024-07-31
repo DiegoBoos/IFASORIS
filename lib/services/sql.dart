@@ -205,7 +205,7 @@ class ConnectionSQL {
 	[TenenciaVivienda_id]	integer NOT NULL,
 	[VentilacionVivienda_id]	integer NOT NULL,
 	[IluminacionVivienda_id]	integer NOT NULL,
-	[NroCuartosVivienda_id]	integer NOT NULL,
+	[CuartosVivienda_id]	integer NOT NULL,
   FOREIGN KEY (Familia_id) REFERENCES Familia(Familia_id) ON DELETE CASCADE
   UNIQUE (Familia_id, Afiliado_id)
   )''';
@@ -340,9 +340,9 @@ class ConnectionSQL {
   FOREIGN KEY (CuidadoSaludCondRiesgo_id) REFERENCES Asp5_CuidadoSaludCondRiesgo(CuidadoSaludCondRiesgo_id) ON DELETE CASCADE
   )''';
 
-  static const CREATE_NRO_CUARTOS_VIVIENDA = ''' 
-  CREATE TABLE [NroCuartosVivienda_DatosVivienda] (
-	[NroCuartosVivienda_id]	integer NOT NULL,
+  static const CREATE__CUARTOS_VIVIENDA = ''' 
+  CREATE TABLE [CuartosVivienda_DatosVivienda] (
+	[CuartosVivienda_id]	integer NOT NULL,
 	[Descripcion]	varchar(30) NOT NULL COLLATE NOCASE
   )''';
 

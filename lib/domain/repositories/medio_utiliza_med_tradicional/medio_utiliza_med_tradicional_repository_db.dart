@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/medio_utiliza_med_tradicional_model.dart';
+import 'package:ifasoris/data/models/medio_utiliza_med_tradicional.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/medio_utiliza_med_tradicional_entity.dart';
+import '../../entities/medio_utiliza_med_tradicional.dart';
 
 abstract class MedioUtilizaMedTradicionalRepositoryDB {
   Future<Either<Failure, int>> saveMedioUtilizaMedTradicionalRepositoryDB(

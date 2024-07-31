@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/nombre_lengua_materna_entity.dart';
+import '../../entities/nombre_lengua_materna.dart';
 import '../../repositories/nombre_lengua_materna/nombre_lengua_materna_repository_db.dart';
 
 class NombreLenguaMaternaUsecaseDB {

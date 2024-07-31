@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/evento_costumbre_participa_model.dart';
+import '../../models/evento_costumbre_participa.dart';
 
 abstract class EventoCostumbreParticipaRemoteDataSource {
   Future<List<EventoCostumbreParticipaModel>> getEventosCostumbresParticipa(
@@ -24,7 +24,7 @@ class EventoCostumbreParticipaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/eventoscostumbresparticipaByDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/eventoscostumbresparticipaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

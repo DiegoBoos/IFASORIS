@@ -25,6 +25,6 @@ class CuidadoSaludCondRiesgoSubmissionFailed
 }
 
 CuidadoSaludCondRiesgoEntity initObject() {
-  return CuidadoSaludCondRiesgoEntity(
-      formStatus: const CuidadoSaludCondRiesgoFormInitial());
+  return const CuidadoSaludCondRiesgoEntity(
+      formStatus: CuidadoSaludCondRiesgoFormInitial());
 }

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/via_acceso_model.dart';
+import '../../models/via_acceso.dart';
 
 abstract class ViaAccesoRemoteDataSource {
   Future<List<ViaAccesoModel>> getViasAcceso(int dtoId);
@@ -20,8 +20,8 @@ class ViaAccesoRemoteDataSourceImpl implements ViaAccesoRemoteDataSource {
   @override
   Future<List<ViaAccesoModel>> getViasAcceso(int dtoId) async {
     try {
-      final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/viasaccesobyDpto?IdeDpto=$dtoId');
+      final uri =
+          Uri.parse('${Constants.apiPublica}/viasaccesobyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/atencion_salud_entity.dart';
-import '../../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
-import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
-import '../../../domain/entities/estilo_vida_saludable_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/atencion_salud.dart';
+import '../../../domain/entities/cuidado_salud_cond_riesgo.dart';
+import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas.dart';
+import '../../../domain/entities/estilo_vida_saludable.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../cubits/slider/slider_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../widgets/slide_show.dart';

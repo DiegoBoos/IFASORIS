@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/estadistica_entity.dart';
-import '../../../domain/entities/ficha_entity.dart';
+import '../../../domain/entities/estadistica.dart';
+import '../../../domain/entities/ficha.dart';
 import '../../../domain/usecases/ficha/ficha_db_usecase.dart';
 
 part 'ficha_event.dart';

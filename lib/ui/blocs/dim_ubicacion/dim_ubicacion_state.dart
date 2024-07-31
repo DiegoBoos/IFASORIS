@@ -23,5 +23,5 @@ class DimUbicacionSubmissionFailed extends DimUbicacionState {
 }
 
 DimUbicacionEntity initObject() {
-  return DimUbicacionEntity(formStatus: const DimUbicacionFormInitial());
+  return const DimUbicacionEntity(formStatus: DimUbicacionFormInitial());
 }

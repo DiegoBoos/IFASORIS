@@ -1,42 +1,41 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/cuarto_vivienda_entity.dart';
+import '../../../domain/entities/cuarto_vivienda.dart';
 import '../../../domain/repositories/cuarto_vivienda/cuarto_vivienda_repository_db.dart';
 import '../../datasources/local/cuarto_vivienda_local_ds.dart';
+import '../../models/cuarto_vivienda.dart';
 
-class NroCuartoViviendaRepositoryDBImpl
-    implements NroCuartoViviendaRepositoryDB {
-  final NroCuartoViviendaLocalDataSource nroCuartoViviendaLocalDataSource;
+class CuartoViviendaRepositoryDBImpl implements CuartoViviendaRepositoryDB {
+  final CuartoViviendaLocalDataSource cuartoViviendaLocalDataSource;
 
-  NroCuartoViviendaRepositoryDBImpl(
-      {required this.nroCuartoViviendaLocalDataSource});
+  CuartoViviendaRepositoryDBImpl({required this.cuartoViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<NroCuartoViviendaEntity>>>
-      getNroCuartosViviendaRepositoryDB() async {
+  Future<Either<Failure, List<CuartoViviendaEntity>>>
+      getCuartosViviendaRepositoryDB() async {
     try {
-      final result =
-          await nroCuartoViviendaLocalDataSource.getNroCuartosVivienda();
+      final result = await cuartoViviendaLocalDataSource.getCuartosVivienda();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
   @override
-  Future<Either<Failure, int>> saveNroCuartoViviendaRepositoryDB(
-      NroCuartoViviendaEntity nroCuartoVivienda) async {
+  Future<Either<Failure, int>> saveCuartoViviendaRepositoryDB(
+      CuartoViviendaEntity cuartoVivienda) async {
     try {
-      final result = await nroCuartoViviendaLocalDataSource
-          .saveNroCuartoVivienda(nroCuartoVivienda);
+      final cuartoViviendaModel =
+          CuartoViviendaModel.fromEntity(cuartoVivienda);
+      final result = await cuartoViviendaLocalDataSource
+          .saveCuartoVivienda(cuartoViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

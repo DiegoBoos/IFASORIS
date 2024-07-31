@@ -1,10 +1,9 @@
-import '../../../domain/entities/ocupacion_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/ocupacion_model.dart';
+import '../../models/ocupacion.dart';
 
 abstract class OcupacionLocalDataSource {
   Future<List<OcupacionModel>> getOcupaciones();
-  Future<int> saveOcupacion(OcupacionEntity ocupacion);
+  Future<int> saveOcupacion(OcupacionModel ocupacion);
 }
 
 class OcupacionLocalDataSourceImpl implements OcupacionLocalDataSource {
@@ -20,7 +19,7 @@ class OcupacionLocalDataSourceImpl implements OcupacionLocalDataSource {
   }
 
   @override
-  Future<int> saveOcupacion(OcupacionEntity ocupacion) async {
+  Future<int> saveOcupacion(OcupacionModel ocupacion) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('Ocupacion_GrupoFamiliar', ocupacion.toJson());

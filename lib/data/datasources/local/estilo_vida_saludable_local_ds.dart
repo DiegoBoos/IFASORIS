@@ -1,22 +1,21 @@
 import 'package:ifasoris/core/error/failure.dart';
-import 'package:ifasoris/data/models/estilo_vida_saludable_model.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/estilo_vida_saludable_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
+import '../../models/estilo_vida_saludable.dart';
 
 abstract class EstiloVidaSaludableLocalDataSource {
   Future<int> saveEstiloVidaSaludable(
-      EstiloVidaSaludableEntity estiloVidaSaludable);
+      EstiloVidaSaludableModel estiloVidaSaludable);
 
-  Future<EstiloVidaSaludableEntity?> getEstiloVidaSaludable(int afiliadoId);
+  Future<EstiloVidaSaludableModel?> getEstiloVidaSaludable(int afiliadoId);
 }
 
 class EstiloVidaSaludableLocalDataSourceImpl
     implements EstiloVidaSaludableLocalDataSource {
   @override
   Future<int> saveEstiloVidaSaludable(
-      EstiloVidaSaludableEntity estiloVidaSaludable) async {
+      EstiloVidaSaludableModel estiloVidaSaludable) async {
     final db = await ConnectionSQLiteService.db;
 
     try {
@@ -33,7 +32,7 @@ class EstiloVidaSaludableLocalDataSourceImpl
   }
 
   @override
-  Future<EstiloVidaSaludableEntity?> getEstiloVidaSaludable(
+  Future<EstiloVidaSaludableModel?> getEstiloVidaSaludable(
       int afiliadoId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp4_EstilosVidaSaludable',

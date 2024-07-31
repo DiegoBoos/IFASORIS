@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/utils/input_decoration.dart';
 
-import '../../../data/models/enfermedad_tradicional_model.dart';
-import '../../../data/models/especialidad_med_tradicional_model.dart';
-import '../../../data/models/lugar_atencion_medico_model.dart';
-import '../../../data/models/planta_medicinal_model.dart';
-import '../../../domain/entities/atencion_salud_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../data/models/enfermedad_tradicional.dart';
+import '../../../data/models/especialidad_med_tradicional.dart';
+import '../../../data/models/lugar_atencion_medico.dart';
+import '../../../data/models/planta_medicinal.dart';
+import '../../../domain/entities/atencion_salud.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../../domain/usecases/enfermedad_acude/enfermedad_acude_exports.dart';
 import '../../../domain/usecases/enfermedad_tradicional/enfermedad_tradicional_exports.dart';
 import '../../../domain/usecases/lugar_planta_medicinal/lugar_planta_medicinal_exports.dart';
@@ -78,9 +79,9 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
         TextFormField(
           enabled: false,
           controller: _nombresApellidosCtrl,
-          decoration: const InputDecoration(
+          decoration: CustomInputDecoration.inputDecoration(
+            hintText: 'Nombres y Apellidos',
             labelText: 'Integrante Grupo Familiar',
-            border: OutlineInputBorder(),
           ),
         ),
         const Divider(),
@@ -102,7 +103,7 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                     .map(
                       (enfermedadAcude) => DropdownMenuItem<int>(
                         value: enfermedadAcude.enfermedadAcudeId,
-                        child: Text(enfermedadAcude.descripcion),
+                        child: Text(enfermedadAcude.descripcion ?? ''),
                       ),
                     )
                     .toList(),
@@ -148,8 +149,8 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                             .map(
                               (e) => e.opcionId == 3
                                   ? Container()
-                                  : RadioListTile(
-                                      title: Text(e.descripcion),
+                                  : RadioListTile<int?>(
+                                      title: Text(e.descripcion ?? ''),
                                       value: e.opcionId,
                                       groupValue:
                                           _recibioAtencionMedTradicionalId,
@@ -250,13 +251,14 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                                 context,
                                                 value,
                                                 especialidadMedTradicional
-                                                    .especialidadMedTradId,
+                                                    .especialidadMedTradId!,
                                                 atencionSaludBloc);
                                           }),
                                       Flexible(
                                         child: Text(
                                           especialidadMedTradicional
-                                              .descripcion,
+                                                  .descripcion ??
+                                              '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -329,12 +331,13 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                                 context,
                                                 value,
                                                 enfermedadTradicional
-                                                    .enfermedadTradicionalId,
+                                                    .enfermedadTradicionalId!,
                                                 atencionSaludBloc);
                                           }),
                                       Flexible(
                                         child: Text(
-                                          enfermedadTradicional.descripcion,
+                                          enfermedadTradicional.descripcion ??
+                                              '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -406,12 +409,12 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                                 context,
                                                 value,
                                                 lugarAtencionMedico
-                                                    .lugarAtencionMedicoId,
+                                                    .lugarAtencionMedicoId!,
                                                 atencionSaludBloc);
                                           }),
                                       Flexible(
                                         child: Text(
-                                          lugarAtencionMedico.descripcion,
+                                          lugarAtencionMedico.descripcion ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -457,7 +460,7 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                     .map(
                       (enfermedadTratamiento) => DropdownMenuItem<int>(
                         value: enfermedadTratamiento.enfermedadTratamientoId,
-                        child: Text(enfermedadTratamiento.descripcion),
+                        child: Text(enfermedadTratamiento.descripcion ?? ''),
                       ),
                     )
                     .toList(),
@@ -504,8 +507,8 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                             .map(
                               (e) => e.opcionId == 3
                                   ? Container()
-                                  : RadioListTile(
-                                      title: Text(e.descripcion),
+                                  : RadioListTile<int?>(
+                                      title: Text(e.descripcion ?? ''),
                                       value: e.opcionId,
                                       groupValue: _utilizaPlantasMedId,
                                       onChanged: (int? newValue) {
@@ -578,7 +581,8 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                             (lugarPlantaMedicinal) => DropdownMenuItem<int>(
                               value:
                                   lugarPlantaMedicinal.lugarPlantaMedicinalId,
-                              child: Text(lugarPlantaMedicinal.descripcion),
+                              child:
+                                  Text(lugarPlantaMedicinal.descripcion ?? ''),
                             ),
                           )
                           .toList(),
@@ -651,12 +655,12 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                                                 context,
                                                 value,
                                                 plantaMedicinal
-                                                    .plantaMedicinalId,
+                                                    .plantaMedicinalId!,
                                                 atencionSaludBloc);
                                           }),
                                       Flexible(
                                         child: Text(
-                                          plantaMedicinal.descripcion,
+                                          plantaMedicinal.descripcion ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),

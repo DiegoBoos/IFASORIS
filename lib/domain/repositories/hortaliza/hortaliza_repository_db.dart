@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/hortaliza_model.dart';
+import 'package:ifasoris/data/models/hortaliza.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/hortaliza_entity.dart';
+import '../../entities/hortaliza.dart';
 
 abstract class HortalizaRepositoryDB {
   Future<Either<Failure, int>> saveHortalizaRepositoryDB(

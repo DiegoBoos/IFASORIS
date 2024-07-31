@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/presencia_animal_vivienda_model.dart';
+import '../../models/presencia_animal_vivienda.dart';
 
 abstract class PresenciaAnimalViviendaRemoteDataSource {
   Future<List<PresenciaAnimalViviendaModel>> getPresenciaAnimalesVivienda(
@@ -24,7 +24,7 @@ class PresenciaAnimalViviendaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/presenciaanimalesviviendabyDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/presenciaanimalesviviendabyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -1,11 +1,10 @@
-import '../../../domain/entities/metodo_planificacion_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/metodo_planificacion_model.dart';
+import '../../models/metodo_planificacion.dart';
 
 abstract class MetodoPlanificacionLocalDataSource {
   Future<List<MetodoPlanificacionModel>> getMetodosPlanificacion();
   Future<int> saveMetodoPlanificacion(
-      MetodoPlanificacionEntity metodoPlanificacion);
+      MetodoPlanificacionModel metodoPlanificacion);
 }
 
 class MetodoPlanificacionLocalDataSourceImpl
@@ -22,7 +21,7 @@ class MetodoPlanificacionLocalDataSourceImpl
 
   @override
   Future<int> saveMetodoPlanificacion(
-      MetodoPlanificacionEntity metodoPlanificacion) async {
+      MetodoPlanificacionModel metodoPlanificacion) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('MetodosPlanificacion_CuidadoSaludCondRiesgo',

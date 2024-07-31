@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/medio_utiliza_ca/medio_utiliza_ca_db_usecase.dart';
 
-import '../../../domain/entities/medio_utiliza_ca_entity.dart';
+import '../../../domain/entities/medio_utiliza_ca.dart';
 
 part 'medio_utiliza_ca_state.dart';
 

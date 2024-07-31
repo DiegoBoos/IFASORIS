@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/grupo_familiar_entity.dart';
+import '../../entities/grupo_familiar.dart';
 import '../../repositories/grupo_familiar/grupo_familiar_repository_db.dart';
 
 class GrupoFamiliarUsecaseDB {

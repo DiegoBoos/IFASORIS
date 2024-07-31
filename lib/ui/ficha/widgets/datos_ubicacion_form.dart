@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../data/models/medio_comunicacion_model.dart';
-import '../../../domain/entities/dim_ubicacion_entity.dart';
+import '../../../data/models/medio_comunicacion.dart';
+import '../../../domain/entities/dim_ubicacion.dart';
 import '../../../domain/usecases/estado_via/estado_via_exports.dart';
 import '../../../domain/usecases/tipo_documento/tipo_documento_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
@@ -13,6 +13,7 @@ import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';
 import '../../cubits/medio_comunicacion/medio_comunicacion_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../cubits/resguardo/resguardo_cubit.dart';
+import '../../utils/input_decoration.dart';
 import '../../utils/validators/form_validators.dart';
 import '../helpers/medios_comunicacion_helper.dart';
 
@@ -101,9 +102,9 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         const SizedBox(height: 20),
         TextFormField(
           controller: _nombreRecibeVisitaCtrl,
-          decoration: const InputDecoration(
+          decoration: CustomInputDecoration.inputDecoration(
+            hintText: 'Ingrese el nombre de quien recibe la visita',
             labelText: 'Nombre de quien recibe la visita',
-            border: OutlineInputBorder(),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -127,13 +128,13 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     .map(
                       (tipoDocumento) => DropdownMenuItem<String>(
                         value: tipoDocumento.tipo,
-                        child: Text(tipoDocumento.descripcion),
+                        child: Text(tipoDocumento.descripcion ?? ''),
                       ),
                     )
                     .toList(),
-                decoration: const InputDecoration(
-                    labelText: 'Tipo documento de quien recibe la visita',
-                    border: OutlineInputBorder()),
+                decoration: CustomInputDecoration.inputDecoration(
+                    hintText: 'Seleccione el tipo de documento',
+                    labelText: 'Tipo documento de quien recibe la visita'),
                 onChanged: (String? newValue) {
                   setState(() {
                     _tipoDocumentoRecibeVisita = newValue;
@@ -155,9 +156,9 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         TextFormField(
           keyboardType: TextInputType.number,
           controller: _documentoRecibeVisitaCtrl,
-          decoration: const InputDecoration(
+          decoration: CustomInputDecoration.inputDecoration(
+            hintText: 'Ingrese el documento de quien recibe la visita',
             labelText: 'Documento de quien recibe la visita',
-            border: OutlineInputBorder(),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -173,9 +174,9 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         TextFormField(
           enabled: false,
           initialValue: formattedFechaDiligenciamiento,
-          decoration: const InputDecoration(
+          decoration: CustomInputDecoration.inputDecoration(
+            hintText: 'Ingrese la fecha de diligenciamiento',
             labelText: 'Fecha de Diligenciamiento',
-            border: OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 20),
@@ -185,8 +186,9 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               child: TextFormField(
                 enabled: false,
                 initialValue: _nomDptoAfiliado,
-                decoration: const InputDecoration(
-                    labelText: 'Departamento', border: OutlineInputBorder()),
+                decoration: CustomInputDecoration.inputDecoration(
+                    hintText: 'Ingrese el departamento',
+                    labelText: 'Departamento'),
               ),
             ),
             const SizedBox(width: 10),
@@ -194,8 +196,8 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               child: TextFormField(
                 enabled: false,
                 initialValue: _nomMpioAfiliado,
-                decoration: const InputDecoration(
-                    labelText: 'Municipio', border: OutlineInputBorder()),
+                decoration: CustomInputDecoration.inputDecoration(
+                    hintText: 'Ingrese el municipio', labelText: 'Municipio'),
               ),
             ),
           ],
@@ -204,29 +206,30 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
         TextFormField(
           enabled: false,
           initialValue: _direccion,
-          decoration: const InputDecoration(
-              labelText: 'Dirección', border: OutlineInputBorder()),
+          decoration: CustomInputDecoration.inputDecoration(
+              hintText: 'Ingrese la dirección', labelText: 'Dirección'),
         ),
         const SizedBox(height: 20),
         TextFormField(
           enabled: false,
           initialValue: _codZonaAfiliado,
-          decoration: const InputDecoration(
-              labelText: 'Zona', border: OutlineInputBorder()),
+          decoration: CustomInputDecoration.inputDecoration(
+              hintText: 'Ingrese la zona', labelText: 'Zona'),
         ),
         const SizedBox(height: 20),
         TextFormField(
           enabled: false,
           initialValue: _ipsPrimariaAfiliado,
-          decoration: const InputDecoration(
-              labelText: 'IPS Primaria', border: OutlineInputBorder()),
+          decoration: CustomInputDecoration.inputDecoration(
+              hintText: 'Ingrese la IPS Primaria', labelText: 'IPS Primaria'),
         ),
         const SizedBox(height: 20),
         TextFormField(
           enabled: false,
           initialValue: _documento,
-          decoration: const InputDecoration(
-              labelText: 'Numero de Documento', border: OutlineInputBorder()),
+          decoration: CustomInputDecoration.inputDecoration(
+              hintText: 'Ingrese el número de documento',
+              labelText: 'Numero de Documento'),
         ),
         const SizedBox(height: 20),
         Row(
@@ -235,16 +238,17 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                 child: TextFormField(
               enabled: false,
               controller: _telefonoFijoCtrl,
-              decoration: const InputDecoration(
-                  labelText: 'Teléfono fijo', border: OutlineInputBorder()),
+              decoration: CustomInputDecoration.inputDecoration(
+                  hintText: 'Ingrese el teléfono fijo',
+                  labelText: 'Teléfono fijo'),
             )),
             const SizedBox(width: 10),
             Expanded(
               child: TextFormField(
                 enabled: false,
                 controller: _telefonocel1Ctrl,
-                decoration: const InputDecoration(
-                    labelText: 'Celular 1', border: OutlineInputBorder()),
+                decoration: CustomInputDecoration.inputDecoration(
+                    hintText: 'Ingrese el celular 1', labelText: 'Celular 1'),
               ),
             ),
             const SizedBox(width: 10),
@@ -252,8 +256,8 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               child: TextFormField(
                 enabled: false,
                 controller: _telefonocel2Ctrl,
-                decoration: const InputDecoration(
-                    labelText: 'Celular 2', border: OutlineInputBorder()),
+                decoration: CustomInputDecoration.inputDecoration(
+                    hintText: 'Ingrese el celular 2', labelText: 'Celular 2'),
               ),
             ),
           ],
@@ -279,8 +283,8 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                             .map(
                               (e) => e.opcionId == 3
                                   ? Container()
-                                  : RadioListTile(
-                                      title: Text(e.descripcion),
+                                  : RadioListTile<int?>(
+                                      title: Text(e.descripcion ?? ''),
                                       value: e.opcionId,
                                       groupValue: _perteneceResguardo,
                                       onChanged: (int? newValue) {
@@ -333,12 +337,13 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                       .map(
                         (resguardo) => DropdownMenuItem<int>(
                           value: resguardo.resguardoId,
-                          child: Text(resguardo.nombreResguardo),
+                          child: Text(resguardo.nombreResguardo ?? ''),
                         ),
                       )
                       .toList(),
-                  decoration: const InputDecoration(
-                      labelText: 'Resguardo', border: OutlineInputBorder()),
+                  decoration: CustomInputDecoration.inputDecoration(
+                      hintText: 'Seleccione el resguardo',
+                      labelText: 'Resguardo'),
                   onChanged: (int? newValue) {
                     setState(() {
                       _resguardoId = newValue;
@@ -369,14 +374,15 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     .map(
                       (autoridadIndigena) => DropdownMenuItem<int>(
                         value: autoridadIndigena.autoridadIndigenaId,
-                        child: Text(autoridadIndigena.descripcion),
+                        child: Text(autoridadIndigena.descripcion ?? ''),
                       ),
                     )
                     .toList(),
-                decoration: const InputDecoration(
-                    labelText:
-                        'Nombre con el que se connoce a la autoridad indígena',
-                    border: OutlineInputBorder()),
+                decoration: CustomInputDecoration.inputDecoration(
+                  hintText: 'Seleccione la autoridad indígena',
+                  labelText:
+                      'Nombre con el que se connoce a la autoridad indígena',
+                ),
                 onChanged: (int? newValue) {
                   setState(() {
                     _autoridadIndigena = newValue;
@@ -406,12 +412,13 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                 items: viasAccesoLoaded
                     .map((viaAcceso) => DropdownMenuItem<int>(
                           value: viaAcceso.viaAccesoId,
-                          child: Text(viaAcceso.descripcion),
+                          child: Text(viaAcceso.descripcion ?? ''),
                         ))
                     .toList(),
-                decoration: const InputDecoration(
-                    labelText: 'Vías de acceso que utiliza',
-                    border: OutlineInputBorder()),
+                decoration: CustomInputDecoration.inputDecoration(
+                  hintText: 'Seleccione la vía de acceso',
+                  labelText: 'Vías de acceso que utiliza',
+                ),
                 onChanged: (int? newValue) {
                   setState(() {
                     _viaAcceso = newValue;
@@ -442,13 +449,14 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     .map(
                       (estadoVia) => DropdownMenuItem<int>(
                         value: estadoVia.estadoViaId,
-                        child: Text(estadoVia.descripcion),
+                        child: Text(estadoVia.descripcion ?? ''),
                       ),
                     )
                     .toList(),
-                decoration: const InputDecoration(
-                    labelText: 'Estado de las vías de acceso',
-                    border: OutlineInputBorder()),
+                decoration: CustomInputDecoration.inputDecoration(
+                  hintText: 'Seleccione el estado de las vías de acceso',
+                  labelText: 'Estado de las vías de acceso',
+                ),
                 onChanged: (int? newValue) {
                   setState(() {
                     _estadoVia = newValue;
@@ -480,7 +488,8 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
               int? ningunoId;
 
               for (var e in mediosComunicacionLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'N') {
                   ningunoId = e.medioComunicacionId;
                 }
@@ -518,13 +527,13 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                                         ningunoId,
                                         context,
                                         value,
-                                        medioComunicacion.medioComunicacionId,
+                                        medioComunicacion.medioComunicacionId!,
                                         dimUbicacionBloc);
                                   },
                                 ),
                                 Flexible(
                                   child: Text(
-                                    medioComunicacion.descripcion,
+                                    medioComunicacion.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),

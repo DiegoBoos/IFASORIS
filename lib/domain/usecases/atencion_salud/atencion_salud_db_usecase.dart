@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/atencion_salud_entity.dart';
+import '../../../data/models/atencion_salud.dart';
+import '../../entities/atencion_salud.dart';
 import '../../repositories/atencion_salud/atencion_salud_repository_db.dart';
 
 class AtencionSaludUsecaseDB {
@@ -10,7 +11,7 @@ class AtencionSaludUsecaseDB {
   AtencionSaludUsecaseDB(this.repositoryDB);
 
   Future<Either<Failure, int>> saveAtencionSaludUsecaseDB(
-      AtencionSaludEntity atencionSalud) {
+      AtencionSaludModel atencionSalud) {
     return repositoryDB.saveAtencionSaludRepositoryDB(atencionSalud);
   }
 

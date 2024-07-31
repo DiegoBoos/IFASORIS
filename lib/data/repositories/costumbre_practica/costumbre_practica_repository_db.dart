@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/costumbre_practica_entity.dart';
+import '../../../domain/entities/costumbre_practica.dart';
 import '../../../domain/repositories/costumbre_practica/costumbre_practica_repository_db.dart';
 import '../../datasources/local/costumbre_practica_local_ds.dart';
+import '../../models/costumbre_practica.dart';
 
 class CostumbrePracticaRepositoryDBImpl
     implements CostumbrePracticaRepositoryDB {
@@ -14,7 +14,7 @@ class CostumbrePracticaRepositoryDBImpl
       {required this.costumbrePracticaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<CostumbrePracticaEntity>>>
+  Future<Either<Failure, List<CostumbrePracticaModel>>>
       getCostumbresPracticanRepositoryDB() async {
     try {
       final result =
@@ -22,7 +22,7 @@ class CostumbrePracticaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +31,14 @@ class CostumbrePracticaRepositoryDBImpl
   Future<Either<Failure, int>> saveCostumbrePracticaRepositoryDB(
       CostumbrePracticaEntity costumbrePractica) async {
     try {
+      final costumbrePracticaModel =
+          CostumbrePracticaModel.fromEntity(costumbrePractica);
       final result = await costumbrePracticaLocalDataSource
-          .saveCostumbrePractica(costumbrePractica);
+          .saveCostumbrePractica(costumbrePracticaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

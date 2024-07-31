@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/regimen_entity.dart';
+import '../../../domain/entities/regimen.dart';
 import '../../../domain/usecases/regimen/regimen_db_usecase.dart';
 
 part 'regimen_state.dart';

@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/tiempo_tarda_med_tradicional_entity.dart';
+import '../../../domain/entities/tiempo_tarda_med_tradicional.dart';
 import '../../../domain/repositories/tiempo_tarda_med_tradicional/tiempo_tarda_med_tradicional_repository_db.dart';
 import '../../datasources/local/tiempo_tarda_med_tradicional_local_ds.dart';
+import '../../models/tiempo_tarda_med_tradicional.dart';
 
 class TiempoTardaMedTradicionalRepositoryDBImpl
     implements TiempoTardaMedTradicionalRepositoryDB {
@@ -15,7 +15,7 @@ class TiempoTardaMedTradicionalRepositoryDBImpl
       {required this.tiempoTardaMedTradicionalLocalDataSource});
 
   @override
-  Future<Either<Failure, List<TiempoTardaMedTradicionalEntity>>>
+  Future<Either<Failure, List<TiempoTardaMedTradicionalModel>>>
       getTiemposTardaMedTradicionalRepositoryDB() async {
     try {
       final result = await tiempoTardaMedTradicionalLocalDataSource
@@ -23,7 +23,7 @@ class TiempoTardaMedTradicionalRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -32,12 +32,14 @@ class TiempoTardaMedTradicionalRepositoryDBImpl
   Future<Either<Failure, int>> saveTiempoTardaMedTradicionalRepositoryDB(
       TiempoTardaMedTradicionalEntity tiempoTardaMedTradicional) async {
     try {
+      final tiempoTardaMedTradicionalModel =
+          TiempoTardaMedTradicionalModel.fromEntity(tiempoTardaMedTradicional);
       final result = await tiempoTardaMedTradicionalLocalDataSource
-          .saveTiempoTardaMedTradicional(tiempoTardaMedTradicional);
+          .saveTiempoTardaMedTradicional(tiempoTardaMedTradicionalModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

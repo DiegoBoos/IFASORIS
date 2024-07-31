@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../data/models/evento_costumbre_participa_model.dart';
-import '../../entities/evento_costumbre_participa_entity.dart';
+import '../../../data/models/evento_costumbre_participa.dart';
+import '../../entities/evento_costumbre_participa.dart';
 import '../../repositories/evento_costumbre_participa/evento_costumbre_participa_repository_db.dart';
 
 class EventoCostumbreParticipaUsecaseDB {

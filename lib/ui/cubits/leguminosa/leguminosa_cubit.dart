@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/leguminosa_model.dart';
+import 'package:ifasoris/data/models/leguminosa.dart';
 
-import '../../../domain/entities/leguminosa_entity.dart';
+import '../../../domain/entities/leguminosa.dart';
 import '../../../domain/usecases/leguminosa/leguminosa_db_usecase.dart';
 
 part 'leguminosa_state.dart';

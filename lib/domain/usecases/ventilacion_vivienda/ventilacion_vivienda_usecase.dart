@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/ventilacion_vivienda_entity.dart';
+import '../../entities/ventilacion_vivienda.dart';
 import '../../repositories/ventilacion_vivienda/ventilacion_vivienda_repository.dart';
 
 class VentilacionViviendaUsecase {

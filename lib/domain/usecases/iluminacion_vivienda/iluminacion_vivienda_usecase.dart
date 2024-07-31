@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/iluminacion_vivienda_entity.dart';
+import '../../entities/iluminacion_vivienda.dart';
 import '../../repositories/iluminacion_vivienda/iluminacion_vivienda_repository.dart';
 
 class IluminacionViviendaUsecase {

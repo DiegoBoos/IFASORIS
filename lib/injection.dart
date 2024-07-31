@@ -176,7 +176,7 @@ void init() {
   eventoCostumbreParticipaInit();
   costumbrePracticaInit();
   sancionJusticiaInit();
-  nroCuartoViviendaInit();
+  cuartoViviendaInit();
   // external
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => SharedPreferencesService());
@@ -371,8 +371,8 @@ void syncInit() {
       religionProfesaUsecaseDB: locator(),
       sancionJusticiaUsecase: locator(),
       sancionJusticiaUsecaseDB: locator(),
-      nroCuartoViviendaUsecase: locator(),
-      nroCuartoViviendaUsecaseDB: locator(),
+      cuartoViviendaUsecase: locator(),
+      cuartoViviendaUsecaseDB: locator(),
       fichaUsecase: locator(),
       fichaUsecaseDB: locator()));
 }
@@ -3358,40 +3358,40 @@ void sancionJusticiaInit() {
   );
 }
 
-void nroCuartoViviendaInit() {
+void cuartoViviendaInit() {
   // cubit
   locator.registerFactory(
-      () => NroCuartoViviendaCubit(nroCuartoViviendaUsecaseDB: locator()));
+      () => CuartoViviendaCubit(cuartoViviendaUsecaseDB: locator()));
 
   // remote usecase
-  locator.registerLazySingleton(() => NroCuartoViviendaUsecase(locator()));
+  locator.registerLazySingleton(() => CuartoViviendaUsecase(locator()));
 
   // local usecase
-  locator.registerLazySingleton(() => NroCuartoViviendaUsecaseDB(locator()));
+  locator.registerLazySingleton(() => CuartoViviendaUsecaseDB(locator()));
 
   // repository
-  locator.registerLazySingleton<NroCuartoViviendaRepository>(
-    () => NroCuartoViviendaRepositoryImpl(
-      nroCuartoViviendaRemoteDataSource: locator(),
+  locator.registerLazySingleton<CuartoViviendaRepository>(
+    () => CuartoViviendaRepositoryImpl(
+      cuartoViviendaRemoteDataSource: locator(),
     ),
   );
 
   // repository DB
-  locator.registerLazySingleton<NroCuartoViviendaRepositoryDB>(
-    () => NroCuartoViviendaRepositoryDBImpl(
-      nroCuartoViviendaLocalDataSource: locator(),
+  locator.registerLazySingleton<CuartoViviendaRepositoryDB>(
+    () => CuartoViviendaRepositoryDBImpl(
+      cuartoViviendaLocalDataSource: locator(),
     ),
   );
 
   // remote data source
-  locator.registerLazySingleton<NroCuartoViviendaRemoteDataSource>(
-    () => NroCuartoViviendaRemoteDataSourceImpl(
+  locator.registerLazySingleton<CuartoViviendaRemoteDataSource>(
+    () => CuartoViviendaRemoteDataSourceImpl(
       client: locator(),
     ),
   );
 
   // local data source
-  locator.registerLazySingleton<NroCuartoViviendaLocalDataSource>(
-    () => NroCuartoViviendaLocalDataSourceImpl(),
+  locator.registerLazySingleton<CuartoViviendaLocalDataSource>(
+    () => CuartoViviendaLocalDataSourceImpl(),
   );
 }

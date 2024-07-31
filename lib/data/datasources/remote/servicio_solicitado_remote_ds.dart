@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/servicio_solicitado_model.dart';
+import '../../models/servicio_solicitado.dart';
 
 abstract class ServicioSolicitadoRemoteDataSource {
   Future<List<ServicioSolicitadoModel>> getServiciosSolicitados();
@@ -21,7 +21,7 @@ class ServicioSolicitadoRemoteDataSourceImpl
   @override
   Future<List<ServicioSolicitadoModel>> getServiciosSolicitados() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/serviciossolicita');
+      final uri = Uri.parse('${Constants.apiPublica}/serviciossolicita');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

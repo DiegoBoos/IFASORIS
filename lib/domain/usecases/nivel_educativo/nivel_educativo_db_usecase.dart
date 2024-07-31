@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/nivel_educativo_entity.dart';
+import '../../entities/nivel_educativo.dart';
 import '../../repositories/nivel_educativo/nivel_educativo_repository_db.dart';
 
 class NivelEducativoUsecaseDB {

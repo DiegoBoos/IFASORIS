@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/etnia_entity.dart';
+import '../../../domain/entities/etnia.dart';
 import '../../../domain/usecases/etnia/etnia_db_usecase.dart';
 
 part 'etnia_state.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/atencion_salud_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/atencion_salud.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
 import '../../cubits/enfermedad_acude/enfermedad_acude_cubit.dart';
 import '../../cubits/enfermedad_tradicional/enfermedad_tradicional_cubit.dart';

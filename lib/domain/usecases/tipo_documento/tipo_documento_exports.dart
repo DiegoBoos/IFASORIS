@@ -2,7 +2,7 @@ export 'package:ifasoris/domain/usecases/tipo_documento/tipo_documento_usecase.d
 export 'package:ifasoris/domain/usecases/tipo_documento/tipo_documento_db_usecase.dart';
 export 'package:ifasoris/domain/repositories/tipo_documento/tipo_documento_repository.dart';
 export 'package:ifasoris/domain/repositories/tipo_documento/tipo_documento_repository_db.dart';
-export 'package:ifasoris/domain/entities/tipo_documento_entity.dart';
+export 'package:ifasoris/domain/entities/tipo_documento.dart';
 export 'package:ifasoris/ui/cubits/tipo_documento/tipo_documento_cubit.dart';
 export 'package:ifasoris/data/repositories/tipo_documento/tipo_documento_repository.dart';
 export 'package:ifasoris/data/repositories/tipo_documento/tipo_documento_repository_db.dart';

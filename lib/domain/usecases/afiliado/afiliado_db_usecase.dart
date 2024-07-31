@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/afiliado_entity.dart';
-import '../../entities/ficha_entity.dart';
+import '../../entities/afiliado.dart';
+import '../../entities/ficha.dart';
 import '../../repositories/afiliado/afiliado_repository_db.dart';
 
 class AfiliadoUsecaseDB {

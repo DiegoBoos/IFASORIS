@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/data/models/evento_costumbre_participa_model.dart';
+import 'package:ifasoris/data/models/evento_costumbre_participa.dart';
 
-import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
+import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas.dart';
 import '../../../domain/usecases/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_db_usecase.dart';
 import '../../../domain/usecases/evento_costumbre_participa/evento_costumbre_participa_db_usecase.dart';
 

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/entities/hortaliza_entity.dart';
-import 'package:ifasoris/domain/entities/tuberculo_platano_entity.dart';
+import 'package:ifasoris/domain/entities/hortaliza.dart';
+import 'package:ifasoris/domain/entities/tuberculo_platano.dart';
 
-import '../../../data/models/cereal_model.dart';
-import '../../../data/models/especie_animal_model.dart';
-import '../../../data/models/fruto_model.dart';
-import '../../../data/models/hortaliza_model.dart';
-import '../../../data/models/leguminosa_model.dart';
-import '../../../data/models/tuberculo_platano_model.dart';
-import '../../../data/models/verdura_model.dart';
-import '../../../domain/entities/cereal_entity.dart';
-import '../../../domain/entities/dim_ubicacion_entity.dart';
-import '../../../domain/entities/verdura_entity.dart';
+import '../../../data/models/cereal.dart';
+import '../../../data/models/especie_animal.dart';
+import '../../../data/models/fruto.dart';
+import '../../../data/models/hortaliza.dart';
+import '../../../data/models/leguminosa.dart';
+import '../../../data/models/tuberculo_platano.dart';
+import '../../../data/models/verdura.dart';
+import '../../../domain/entities/cereal.dart';
+import '../../../domain/entities/dim_ubicacion.dart';
+import '../../../domain/entities/verdura.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/especie_animal/especie_animal_cubit.dart';
@@ -130,8 +130,8 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                 .map(
                                   (e) => e.opcionId == 3
                                       ? Container()
-                                      : RadioListTile(
-                                          title: Text(e.descripcion),
+                                      : RadioListTile<int?>(
+                                          title: Text(e.descripcion ?? ''),
                                           value: e.opcionId,
                                           groupValue: _poseeChagra,
                                           onChanged: (int? newValue) {
@@ -208,7 +208,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
 
                     for (var e in tuberculosPlatanosLoaded) {
                       final optionType =
-                          FormValidators.optionType(e.descripcion);
+                          FormValidators.optionType(e.descripcion ?? '');
                       if (optionType == 'N') {
                         ningunoId = e.tuberculoPlatanoId;
                       } else if (optionType == 'O') {
@@ -273,7 +273,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                       ),
                                       Flexible(
                                         child: Text(
-                                          tuberculoPlatano.descripcion,
+                                          tuberculoPlatano.descripcion ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -350,7 +350,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
 
                     for (var e in leguminosasLoaded) {
                       final optionType =
-                          FormValidators.optionType(e.descripcion);
+                          FormValidators.optionType(e.descripcion ?? '');
                       if (optionType == 'N') {
                         ningunoId = e.leguminosaId;
                       }
@@ -386,13 +386,13 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                               ningunoId,
                                               context,
                                               value,
-                                              leguminosa.leguminosaId,
+                                              leguminosa.leguminosaId!,
                                               dimUbicacionBloc);
                                         },
                                       ),
                                       Flexible(
                                         child: Text(
-                                          leguminosa.descripcion,
+                                          leguminosa.descripcion ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -431,7 +431,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
 
                     for (var e in hortalizasLoaded) {
                       final optionType =
-                          FormValidators.optionType(e.descripcion);
+                          FormValidators.optionType(e.descripcion ?? '');
                       if (optionType == 'N') {
                         ningunoId = e.hortalizaId;
                       } else if (optionType == 'O') {
@@ -492,7 +492,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           }),
                                       Flexible(
                                         child: Text(
-                                          hortaliza.descripcion,
+                                          hortaliza.descripcion ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -565,7 +565,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
 
                     for (var e in verdurasLoaded) {
                       final optionType =
-                          FormValidators.optionType(e.descripcion);
+                          FormValidators.optionType(e.descripcion ?? '');
                       if (optionType == 'N') {
                         ningunoId = e.verduraId;
                       } else if (optionType == 'O') {
@@ -625,7 +625,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           }),
                                       Flexible(
                                         child: Text(
-                                          verdura.descripcion,
+                                          verdura.descripcion ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -697,7 +697,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
 
                     for (var e in frutosLoaded) {
                       final optionType =
-                          FormValidators.optionType(e.descripcion);
+                          FormValidators.optionType(e.descripcion ?? '');
                       if (optionType == 'N') {
                         ningunoId = e.frutoId;
                       }
@@ -732,12 +732,12 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                 ningunoId,
                                                 context,
                                                 value,
-                                                fruto.frutoId,
+                                                fruto.frutoId!,
                                                 dimUbicacionBloc);
                                           }),
                                       Flexible(
                                         child: Text(
-                                          fruto.descripcion,
+                                          fruto.descripcion ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -776,7 +776,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
 
                     for (var e in cerealesLoaded) {
                       final optionType =
-                          FormValidators.optionType(e.descripcion);
+                          FormValidators.optionType(e.descripcion ?? '');
                       if (optionType == 'N') {
                         ningunoId = e.cerealId;
                       } else if (optionType == 'O') {
@@ -840,7 +840,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           }),
                                       Flexible(
                                         child: Text(
-                                          cereal.descripcion,
+                                          cereal.descripcion ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -913,7 +913,8 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
               int? ningunoId;
 
               for (var e in especiesAnimalesLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'N') {
                   ningunoId = e.especieAnimalCriaId;
                 }
@@ -950,12 +951,12 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           ningunoId,
                                           context,
                                           value,
-                                          especieAnimal.especieAnimalCriaId,
+                                          especieAnimal.especieAnimalCriaId!,
                                           dimUbicacionBloc);
                                     }),
                                 Flexible(
                                   child: Text(
-                                    especieAnimal.descripcion,
+                                    especieAnimal.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -990,7 +991,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                     .map(
                       (tipoCalendario) => DropdownMenuItem<int>(
                         value: tipoCalendario.tipoCalendarioId,
-                        child: Text(tipoCalendario.descripcion),
+                        child: Text(tipoCalendario.descripcion ?? ''),
                       ),
                     )
                     .toList(),

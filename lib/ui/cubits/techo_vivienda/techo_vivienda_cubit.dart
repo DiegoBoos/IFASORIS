@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/techo_vivienda_model.dart';
+import 'package:ifasoris/data/models/techo_vivienda.dart';
 
-import '../../../domain/entities/techo_vivienda_entity.dart';
+import '../../../domain/entities/techo_vivienda.dart';
 import '../../../domain/usecases/techo_vivienda/techo_vivienda_db_usecase.dart';
 
 part 'techo_vivienda_state.dart';

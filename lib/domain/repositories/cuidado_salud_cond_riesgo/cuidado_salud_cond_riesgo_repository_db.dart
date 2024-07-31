@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/cuidado_salud_cond_riesgo_entity.dart';
+import '../../entities/cuidado_salud_cond_riesgo.dart';
 
 abstract class CuidadoSaludCondRiesgoRepositoryDB {
   Future<Either<Failure, int>> saveCuidadoSaludCondRiesgoRepositoryDB(

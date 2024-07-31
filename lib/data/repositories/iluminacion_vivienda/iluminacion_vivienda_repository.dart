@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/iluminacion_vivienda_entity.dart';
 import '../../../domain/repositories/iluminacion_vivienda/iluminacion_vivienda_repository.dart';
 import '../../datasources/remote/iluminacion_vivienda_remote_ds.dart';
+import '../../models/iluminacion_vivienda.dart';
 
 class IluminacionViviendaRepositoryImpl
     implements IluminacionViviendaRepository {
@@ -16,7 +15,7 @@ class IluminacionViviendaRepositoryImpl
       {required this.iluminacionViviendaRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<IluminacionViviendaEntity>>>
+  Future<Either<Failure, List<IluminacionViviendaModel>>>
       getIluminacionesViviendaRepository() async {
     try {
       final result =
@@ -25,8 +24,6 @@ class IluminacionViviendaRepositoryImpl
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

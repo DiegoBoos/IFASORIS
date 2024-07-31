@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/especialidad_med_tradicional_model.dart';
-import 'package:ifasoris/data/models/nombre_med_tradicional_model.dart';
+import 'package:ifasoris/data/models/especialidad_med_tradicional.dart';
+import 'package:ifasoris/data/models/nombre_med_tradicional.dart';
 
-import '../../../domain/entities/especialidad_med_tradicional_entity.dart';
+import '../../../domain/entities/especialidad_med_tradicional.dart';
 import '../../../domain/usecases/especialidad_med_tradicional/especialidad_med_tradicional_db_usecase.dart';
 
 part 'especialidad_med_tradicional_state.dart';

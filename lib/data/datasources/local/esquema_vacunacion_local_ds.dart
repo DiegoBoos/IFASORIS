@@ -1,10 +1,9 @@
-import '../../../domain/entities/esquema_vacunacion_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/esquema_vacunacion_model.dart';
+import '../../models/esquema_vacunacion.dart';
 
 abstract class EsquemaVacunacionLocalDataSource {
   Future<List<EsquemaVacunacionModel>> getEsquemasVacunacion();
-  Future<int> saveEsquemaVacunacion(EsquemaVacunacionEntity esquemaVacunacion);
+  Future<int> saveEsquemaVacunacion(EsquemaVacunacionModel esquemaVacunacion);
 }
 
 class EsquemaVacunacionLocalDataSourceImpl
@@ -21,7 +20,7 @@ class EsquemaVacunacionLocalDataSourceImpl
 
   @override
   Future<int> saveEsquemaVacunacion(
-      EsquemaVacunacionEntity esquemaVacunacion) async {
+      EsquemaVacunacionModel esquemaVacunacion) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('EsquemasVacunacion_CuidadoSaludCondRiesgo',

@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/cuarto_vivienda_entity.dart';
+import '../../entities/cuarto_vivienda.dart';
 import '../../repositories/cuarto_vivienda/cuarto_vivienda_repository.dart';
 
-class NroCuartoViviendaUsecase {
-  final NroCuartoViviendaRepository repository;
+class CuartoViviendaUsecase {
+  final CuartoViviendaRepository repository;
 
-  NroCuartoViviendaUsecase(this.repository);
+  CuartoViviendaUsecase(this.repository);
 
-  Future<Either<Failure, List<NroCuartoViviendaEntity>>>
-      getNroCuartosViviendaUsecase() {
-    return repository.getNroCuartosViviendaRepository();
+  Future<Either<Failure, List<CuartoViviendaEntity>>>
+      getCuartosViviendaUsecase() {
+    return repository.getCuartosViviendaRepository();
   }
 }

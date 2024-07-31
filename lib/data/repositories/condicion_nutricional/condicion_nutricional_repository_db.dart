@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/condicion_nutricional_entity.dart';
+import '../../../domain/entities/condicion_nutricional.dart';
 import '../../../domain/repositories/condicion_nutricional/condicion_nutricional_repository_db.dart';
 import '../../datasources/local/condicion_nutricional_local_ds.dart';
+import '../../models/condicion_nutricional.dart';
 
 class CondicionNutricionalRepositoryDBImpl
     implements CondicionNutricionalRepositoryDB {
@@ -14,7 +14,7 @@ class CondicionNutricionalRepositoryDBImpl
       {required this.condicionNutricionalLocalDataSource});
 
   @override
-  Future<Either<Failure, List<CondicionNutricionalEntity>>>
+  Future<Either<Failure, List<CondicionNutricionalModel>>>
       getCondicionesNutricionalesRepositoryDB() async {
     try {
       final result = await condicionNutricionalLocalDataSource
@@ -22,7 +22,7 @@ class CondicionNutricionalRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +31,14 @@ class CondicionNutricionalRepositoryDBImpl
   Future<Either<Failure, int>> saveCondicionNutricionalRepositoryDB(
       CondicionNutricionalEntity condicionNutricional) async {
     try {
+      final condicionNutricionalModel =
+          CondicionNutricionalModel.fromEntity(condicionNutricional);
       final result = await condicionNutricionalLocalDataSource
-          .saveCondicionNutricional(condicionNutricional);
+          .saveCondicionNutricional(condicionNutricionalModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

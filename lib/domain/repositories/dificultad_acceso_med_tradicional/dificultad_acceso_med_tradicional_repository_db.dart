@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../data/models/dificultad_acceso_med_tradicional_model.dart';
-import '../../entities/dificultad_acceso_med_tradicional_entity.dart';
+import '../../../data/models/dificultad_acceso_med_tradicional.dart';
+import '../../entities/dificultad_acceso_med_tradicional.dart';
 
 abstract class DificultadAccesoMedTradicionalRepositoryDB {
   Future<Either<Failure, int>> saveDificultadAccesoMedTradicionalRepositoryDB(

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/familia_entity.dart';
+import '../../entities/familia.dart';
 import '../../repositories/familia/familia_repository_db.dart';
 
 class FamiliaUsecaseDB {

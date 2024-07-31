@@ -1,19 +1,18 @@
 import 'package:ifasoris/core/error/failure.dart';
-import 'package:ifasoris/data/models/dim_vivienda_model.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/dim_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
+import '../../models/dim_vivienda.dart';
 
 abstract class DimViviendaLocalDataSource {
-  Future<int> saveDimVivienda(DimViviendaEntity dimVivienda);
+  Future<int> saveDimVivienda(DimViviendaModel dimVivienda);
 
-  Future<DimViviendaEntity?> getDimVivienda(int afiliadoId, int familiaId);
+  Future<DimViviendaModel?> getDimVivienda(int afiliadoId, int familiaId);
 }
 
 class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   @override
-  Future<int> saveDimVivienda(DimViviendaEntity dimVivienda) async {
+  Future<int> saveDimVivienda(DimViviendaModel dimVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     try {
@@ -29,7 +28,7 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   }
 
   @override
-  Future<DimViviendaEntity?> getDimVivienda(
+  Future<DimViviendaModel?> getDimVivienda(
       int afiliadoId, int familiaId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp2_DatosVivienda',

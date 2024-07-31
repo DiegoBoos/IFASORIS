@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/verdura_model.dart';
+import 'package:ifasoris/data/models/verdura.dart';
 
-import '../../../domain/entities/verdura_entity.dart';
+import '../../../domain/entities/verdura.dart';
 import '../../../domain/usecases/verdura/verdura_db_usecase.dart';
 
 part 'verdura_state.dart';

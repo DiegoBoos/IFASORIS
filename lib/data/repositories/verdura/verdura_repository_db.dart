@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/verdura_model.dart';
+import 'package:ifasoris/data/models/verdura.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/verdura_entity.dart';
+import '../../../domain/entities/verdura.dart';
 import '../../../domain/repositories/verdura/verdura_repository_db.dart';
 import '../../datasources/local/verdura_local_ds.dart';
 
@@ -13,13 +12,13 @@ class VerduraRepositoryDBImpl implements VerduraRepositoryDB {
   VerduraRepositoryDBImpl({required this.verduraLocalDataSource});
 
   @override
-  Future<Either<Failure, List<VerduraEntity>>> getVerdurasRepositoryDB() async {
+  Future<Either<Failure, List<VerduraModel>>> getVerdurasRepositoryDB() async {
     try {
       final result = await verduraLocalDataSource.getVerduras();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -28,11 +27,12 @@ class VerduraRepositoryDBImpl implements VerduraRepositoryDB {
   Future<Either<Failure, int>> saveVerduraRepositoryDB(
       VerduraEntity verdura) async {
     try {
-      final result = await verduraLocalDataSource.saveVerdura(verdura);
+      final verduraModel = VerduraModel.fromEntity(verdura);
+      final result = await verduraLocalDataSource.saveVerdura(verduraModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -46,7 +46,7 @@ class VerduraRepositoryDBImpl implements VerduraRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -60,7 +60,7 @@ class VerduraRepositoryDBImpl implements VerduraRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

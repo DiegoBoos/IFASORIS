@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/tipo_sanitario_vivienda_model.dart';
+import 'package:ifasoris/data/models/tipo_sanitario_vivienda.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/tipo_sanitario_vivienda_entity.dart';
+import '../../../domain/entities/tipo_sanitario_vivienda.dart';
 import '../../../domain/repositories/tipo_sanitario_vivienda/tipo_sanitario_vivienda_repository_db.dart';
 import '../../datasources/local/tipo_sanitario_vivienda_local_ds.dart';
 
@@ -16,7 +15,7 @@ class TipoSanitarioViviendaRepositoryDBImpl
       {required this.tipoSanitarioViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<TipoSanitarioViviendaEntity>>>
+  Future<Either<Failure, List<TipoSanitarioViviendaModel>>>
       getTiposSanitarioRepositoryDB() async {
     try {
       final result =
@@ -24,7 +23,7 @@ class TipoSanitarioViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -33,12 +32,14 @@ class TipoSanitarioViviendaRepositoryDBImpl
   Future<Either<Failure, int>> saveTipoSanitarioViviendaRepositoryDB(
       TipoSanitarioViviendaEntity tipoSanitarioVivienda) async {
     try {
+      final tipoSanitarioViviendaModel =
+          TipoSanitarioViviendaModel.fromEntity(tipoSanitarioVivienda);
       final result = await tipoSanitarioViviendaLocalDataSource
-          .saveTipoSanitarioVivienda(tipoSanitarioVivienda);
+          .saveTipoSanitarioVivienda(tipoSanitarioViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -52,7 +53,7 @@ class TipoSanitarioViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -66,7 +67,7 @@ class TipoSanitarioViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

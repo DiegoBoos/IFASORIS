@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/lugar_atencion_medico_model.dart';
+import '../../models/lugar_atencion_medico.dart';
 
 abstract class LugarAtencionMedicoRemoteDataSource {
   Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico();
@@ -21,8 +21,7 @@ class LugarAtencionMedicoRemoteDataSourceImpl
   @override
   Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico() async {
     try {
-      final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/lugaresatencionmedico');
+      final uri = Uri.parse('${Constants.apiPublica}/lugaresatencionmedico');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

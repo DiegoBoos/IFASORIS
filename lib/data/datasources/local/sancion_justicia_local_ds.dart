@@ -1,10 +1,9 @@
-import '../../../domain/entities/sancion_justicia_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/sancion_justicia_model.dart';
+import '../../models/sancion_justicia.dart';
 
 abstract class SancionJusticiaLocalDataSource {
   Future<List<SancionJusticiaModel>> getSancionesJusticia();
-  Future<int> saveSancionJusticia(SancionJusticiaEntity sancionJusticia);
+  Future<int> saveSancionJusticia(SancionJusticiaModel sancionJusticia);
 }
 
 class SancionJusticiaLocalDataSourceImpl
@@ -21,7 +20,7 @@ class SancionJusticiaLocalDataSourceImpl
   }
 
   @override
-  Future<int> saveSancionJusticia(SancionJusticiaEntity sancionJusticia) async {
+  Future<int> saveSancionJusticia(SancionJusticiaModel sancionJusticia) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

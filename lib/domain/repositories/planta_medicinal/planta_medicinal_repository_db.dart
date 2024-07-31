@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/planta_medicinal_model.dart';
+import 'package:ifasoris/data/models/planta_medicinal.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/planta_medicinal_entity.dart';
+import '../../entities/planta_medicinal.dart';
 
 abstract class PlantaMedicinalRepositoryDB {
   Future<Either<Failure, int>> savePlantaMedicinalRepositoryDB(

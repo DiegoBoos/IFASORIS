@@ -1,12 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/medio_comunicacion_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/medio_comunicacion_model.dart';
+import '../../models/medio_comunicacion.dart';
 
 abstract class MedioComunicacionLocalDataSource {
   Future<List<MedioComunicacionModel>> getMediosComunicacion();
-  Future<int> saveMedioComunicacion(MedioComunicacionEntity medioComunicacion);
+  Future<int> saveMedioComunicacion(MedioComunicacionModel medioComunicacion);
 
   Future<int> saveUbicacionMediosComunicacion(
       int ubicacionId, List<LstMediosComunica> lstMediosComunica);
@@ -29,7 +28,7 @@ class MedioComunicacionLocalDataSourceImpl
 
   @override
   Future<int> saveMedioComunicacion(
-      MedioComunicacionEntity medioComunicacion) async {
+      MedioComunicacionModel medioComunicacion) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =

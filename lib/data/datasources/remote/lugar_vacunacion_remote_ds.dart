@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/lugar_vacunacion_model.dart';
+import '../../models/lugar_vacunacion.dart';
 
 abstract class LugarVacunacionRemoteDataSource {
   Future<List<LugarVacunacionModel>> getLugaresVacunacion();
@@ -21,7 +21,7 @@ class LugarVacunacionRemoteDataSourceImpl
   @override
   Future<List<LugarVacunacionModel>> getLugaresVacunacion() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/lugarvacunacion');
+      final uri = Uri.parse('${Constants.apiPublica}/lugarvacunacion');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

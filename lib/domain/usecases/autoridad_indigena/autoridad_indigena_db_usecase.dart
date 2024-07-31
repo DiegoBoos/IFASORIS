@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/autoridad_indigena_entity.dart';
+import '../../entities/autoridad_indigena.dart';
 import '../../repositories/autoridad_indigena/autoridad_indigena_repository_db.dart';
 
 class AutoridadIndigenaUsecaseDB {

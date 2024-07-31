@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/medio_comunicacion_model.dart';
+import 'package:ifasoris/data/models/medio_comunicacion.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/medio_comunicacion_entity.dart';
+import '../../../domain/entities/medio_comunicacion.dart';
 import '../../../domain/repositories/medio_comunicacion/medio_comunicacion_repository_db.dart';
 import '../../datasources/local/medio_comunicacion_local_ds.dart';
 
@@ -15,7 +14,7 @@ class MedioComunicacionRepositoryDBImpl
       {required this.medioComunicacionLocalDataSource});
 
   @override
-  Future<Either<Failure, List<MedioComunicacionEntity>>>
+  Future<Either<Failure, List<MedioComunicacionModel>>>
       getMediosComunicacionRepositoryDB() async {
     try {
       final result =
@@ -23,7 +22,7 @@ class MedioComunicacionRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -32,12 +31,14 @@ class MedioComunicacionRepositoryDBImpl
   Future<Either<Failure, int>> saveMedioComunicacionRepositoryDB(
       MedioComunicacionEntity medioComunicacion) async {
     try {
+      final medioComunicacionModel =
+          MedioComunicacionModel.fromEntity(medioComunicacion);
       final result = await medioComunicacionLocalDataSource
-          .saveMedioComunicacion(medioComunicacion);
+          .saveMedioComunicacion(medioComunicacionModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -51,7 +52,7 @@ class MedioComunicacionRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -65,7 +66,7 @@ class MedioComunicacionRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

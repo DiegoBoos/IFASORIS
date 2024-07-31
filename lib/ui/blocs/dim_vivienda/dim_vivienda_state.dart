@@ -23,5 +23,5 @@ class DimViviendaSubmissionFailed extends DimViviendaState {
 }
 
 DimViviendaEntity initObject() {
-  return DimViviendaEntity(formStatus: const DimViviendaFormInitial());
+  return const DimViviendaEntity(formStatus: DimViviendaFormInitial());
 }

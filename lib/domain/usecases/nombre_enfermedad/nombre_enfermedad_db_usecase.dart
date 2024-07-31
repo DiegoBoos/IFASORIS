@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/nombre_enfermedad_model.dart';
+import 'package:ifasoris/data/models/nombre_enfermedad.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/nombre_enfermedad_entity.dart';
+import '../../entities/nombre_enfermedad.dart';
 import '../../repositories/nombre_enfermedad/nombre_enfermedad_repository_db.dart';
 
 class NombreEnfermedadUsecaseDB {

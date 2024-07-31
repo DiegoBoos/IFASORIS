@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/seguimiento_enfermedad_entity.dart';
+import '../../../domain/entities/seguimiento_enfermedad.dart';
 import '../../../domain/usecases/seguimiento_enfermedad/seguimiento_enfermedad_db_usecase.dart';
 
 part 'seguimiento_enfermedad_state.dart';

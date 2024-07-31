@@ -1,31 +1,29 @@
-import '../../../domain/entities/cuarto_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/cuarto_vivienda_model.dart';
+import '../../models/cuarto_vivienda.dart';
 
-abstract class NroCuartoViviendaLocalDataSource {
-  Future<List<NroCuartoViviendaModel>> getNroCuartosVivienda();
-  Future<int> saveNroCuartoVivienda(NroCuartoViviendaEntity nroCuartoVivienda);
+abstract class CuartoViviendaLocalDataSource {
+  Future<List<CuartoViviendaModel>> getCuartosVivienda();
+  Future<int> saveCuartoVivienda(CuartoViviendaModel cuartoVivienda);
 }
 
-class NroCuartoViviendaLocalDataSourceImpl
-    implements NroCuartoViviendaLocalDataSource {
+class CuartoViviendaLocalDataSourceImpl
+    implements CuartoViviendaLocalDataSource {
   @override
-  Future<List<NroCuartoViviendaModel>> getNroCuartosVivienda() async {
+  Future<List<CuartoViviendaModel>> getCuartosVivienda() async {
     final db = await ConnectionSQLiteService.db;
-    final res = await db.query('NroCuartosVivienda_DatosVivienda');
-    final result = List<NroCuartoViviendaModel>.from(
-        res.map((m) => NroCuartoViviendaModel.fromJson(m))).toList();
+    final res = await db.query('CuartosVivienda_DatosVivienda');
+    final result = List<CuartoViviendaModel>.from(
+        res.map((m) => CuartoViviendaModel.fromJson(m))).toList();
 
     return result;
   }
 
   @override
-  Future<int> saveNroCuartoVivienda(
-      NroCuartoViviendaEntity nroCuartoVivienda) async {
+  Future<int> saveCuartoVivienda(CuartoViviendaModel cuartoVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(
-        'NroCuartosVivienda_DatosVivienda', nroCuartoVivienda.toJson());
+        'CuartosVivienda_DatosVivienda', cuartoVivienda.toJson());
 
     return res;
   }

@@ -29,6 +29,6 @@ class DimensionSocioCulturalPueblosIndigenasSubmissionFailed
 }
 
 DimensionSocioCulturalPueblosIndigenasEntity initObject() {
-  return DimensionSocioCulturalPueblosIndigenasEntity(
-      formStatus: const DimensionSocioCulturalPueblosIndigenasFormInitial());
+  return const DimensionSocioCulturalPueblosIndigenasEntity(
+      formStatus: DimensionSocioCulturalPueblosIndigenasFormInitial());
 }

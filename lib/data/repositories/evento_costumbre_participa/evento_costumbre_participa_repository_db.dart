@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/evento_costumbre_participa_model.dart';
+import 'package:ifasoris/data/models/evento_costumbre_participa.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/evento_costumbre_participa_entity.dart';
+import '../../../domain/entities/evento_costumbre_participa.dart';
 import '../../../domain/repositories/evento_costumbre_participa/evento_costumbre_participa_repository_db.dart';
 import '../../datasources/local/evento_costumbre_participa_local_ds.dart';
 
@@ -16,7 +15,7 @@ class EventoCostumbreParticipaRepositoryDBImpl
       {required this.eventoCostumbreParticipaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<EventoCostumbreParticipaEntity>>>
+  Future<Either<Failure, List<EventoCostumbreParticipaModel>>>
       getEventosCostumbresParticipaRepositoryDB() async {
     try {
       final result = await eventoCostumbreParticipaLocalDataSource
@@ -24,7 +23,7 @@ class EventoCostumbreParticipaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -33,12 +32,14 @@ class EventoCostumbreParticipaRepositoryDBImpl
   Future<Either<Failure, int>> saveEventoCostumbreParticipaRepositoryDB(
       EventoCostumbreParticipaEntity eventoCostumbreParticipa) async {
     try {
+      final eventoCostumbreParticipaModel =
+          EventoCostumbreParticipaModel.fromEntity(eventoCostumbreParticipa);
       final result = await eventoCostumbreParticipaLocalDataSource
-          .saveEventoCostumbreParticipa(eventoCostumbreParticipa);
+          .saveEventoCostumbreParticipa(eventoCostumbreParticipaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -54,7 +55,7 @@ class EventoCostumbreParticipaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -71,7 +72,7 @@ class EventoCostumbreParticipaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

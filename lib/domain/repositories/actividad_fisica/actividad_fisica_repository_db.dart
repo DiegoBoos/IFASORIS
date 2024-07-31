@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/actividad_fisica_entity.dart';
+import '../../entities/actividad_fisica.dart';
 
 abstract class ActividadFisicaRepositoryDB {
   Future<Either<Failure, int>> saveActividadFisicaRepositoryDB(

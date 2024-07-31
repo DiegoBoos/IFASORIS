@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/medio_utiliza_ca_model.dart';
+import '../../models/medio_utiliza_ca.dart';
 
 abstract class MedioUtilizaCARemoteDataSource {
   Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA(int ideDpto);
@@ -22,7 +22,7 @@ class MedioUtilizaCARemoteDataSourceImpl
   Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA(int ideDpto) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/mediosutilizaCentroAtencionbyDpto?IdeDpto=$ideDpto');
+          '${Constants.apiPublica}/mediosutilizaCentroAtencionbyDpto?IdeDpto=$ideDpto');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

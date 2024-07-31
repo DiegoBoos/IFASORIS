@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/techo_vivienda_entity.dart';
+import '../../entities/techo_vivienda.dart';
 import '../../repositories/techo_vivienda/techo_vivienda_repository.dart';
 
 class TechoViviendaUsecase {

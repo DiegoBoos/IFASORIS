@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/lengua_maneja_model.dart';
+import '../../models/lengua_maneja.dart';
 
 abstract class LenguaManejaRemoteDataSource {
   Future<List<LenguaManejaModel>> getLenguasManeja();
@@ -20,7 +20,7 @@ class LenguaManejaRemoteDataSourceImpl implements LenguaManejaRemoteDataSource {
   @override
   Future<List<LenguaManejaModel>> getLenguasManeja() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/lenguamaneja');
+      final uri = Uri.parse('${Constants.apiPublica}/lenguamaneja');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

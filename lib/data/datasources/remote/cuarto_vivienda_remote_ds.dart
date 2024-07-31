@@ -3,25 +3,25 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/cuarto_vivienda_model.dart';
+import '../../models/cuarto_vivienda.dart';
 
-abstract class NroCuartoViviendaRemoteDataSource {
-  Future<List<NroCuartoViviendaModel>> getNroCuartosVivienda();
+abstract class CuartoViviendaRemoteDataSource {
+  Future<List<CuartoViviendaModel>> getCuartosVivienda();
 }
 
-class NroCuartoViviendaRemoteDataSourceImpl
-    implements NroCuartoViviendaRemoteDataSource {
+class CuartoViviendaRemoteDataSourceImpl
+    implements CuartoViviendaRemoteDataSource {
   final prefs = SharedPreferencesService();
   final http.Client client;
 
-  NroCuartoViviendaRemoteDataSourceImpl({required this.client});
+  CuartoViviendaRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<NroCuartoViviendaModel>> getNroCuartosVivienda() async {
+  Future<List<CuartoViviendaModel>> getCuartosVivienda() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/nrocuartosvivienda');
+      final uri = Uri.parse('${Constants.apiPublica}/cuartosvivienda');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ class NroCuartoViviendaRemoteDataSourceImpl
 
       final decodedResp = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
-        final result = nroCuartosViviendaFromJson(jsonEncode(decodedResp));
+        final result = cuartosViviendaFromJson(jsonEncode(decodedResp));
 
         return result;
       } else {

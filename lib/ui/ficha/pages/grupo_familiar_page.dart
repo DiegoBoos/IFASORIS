@@ -13,7 +13,7 @@ import '../../cubits/parentesco/parentesco_cubit.dart';
 import '../../cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
 import '../../cubits/regimen/regimen_cubit.dart';
 import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart';

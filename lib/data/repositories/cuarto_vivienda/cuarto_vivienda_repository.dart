@@ -1,31 +1,26 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/cuarto_vivienda_entity.dart';
+import 'package:ifasoris/domain/entities/cuarto_vivienda.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/repositories/cuarto_vivienda/cuarto_vivienda_repository.dart';
 import '../../datasources/remote/cuarto_vivienda_remote_ds.dart';
 
-class NroCuartoViviendaRepositoryImpl implements NroCuartoViviendaRepository {
-  final NroCuartoViviendaRemoteDataSource nroCuartoViviendaRemoteDataSource;
+class CuartoViviendaRepositoryImpl implements CuartoViviendaRepository {
+  final CuartoViviendaRemoteDataSource cuartoViviendaRemoteDataSource;
 
-  NroCuartoViviendaRepositoryImpl(
-      {required this.nroCuartoViviendaRemoteDataSource});
+  CuartoViviendaRepositoryImpl({required this.cuartoViviendaRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<NroCuartoViviendaEntity>>>
-      getNroCuartosViviendaRepository() async {
+  Future<Either<Failure, List<CuartoViviendaEntity>>>
+      getCuartosViviendaRepository() async {
     try {
-      final result =
-          await nroCuartoViviendaRemoteDataSource.getNroCuartosVivienda();
+      final result = await cuartoViviendaRemoteDataSource.getCuartosVivienda();
 
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

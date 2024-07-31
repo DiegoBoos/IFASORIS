@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 import '../../cubits/costumbre_practica/costumbre_practica_cubit.dart';
 import '../../cubits/evento_costumbre_participa/evento_costumbre_participa_cubit.dart';

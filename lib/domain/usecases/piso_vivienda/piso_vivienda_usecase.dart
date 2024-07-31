@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/piso_vivienda_entity.dart';
+import '../../entities/piso_vivienda.dart';
 import '../../repositories/piso_vivienda/piso_vivienda_repository.dart';
 
 class PisoViviendaUsecase {

@@ -1,12 +1,10 @@
 import 'package:sqflite/sqflite.dart';
-
-import '../../../domain/entities/leguminosa_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/leguminosa_model.dart';
+import '../../models/leguminosa.dart';
 
 abstract class LeguminosaLocalDataSource {
   Future<List<LeguminosaModel>> getLeguminosas();
-  Future<int> saveLeguminosa(LeguminosaEntity leguminosa);
+  Future<int> saveLeguminosa(LeguminosaModel leguminosa);
 
   Future<int> saveUbicacionLeguminosas(
       int ubicacionId, List<LstLeguminosa> lstLeguminosas);
@@ -27,7 +25,7 @@ class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
   }
 
   @override
-  Future<int> saveLeguminosa(LeguminosaEntity leguminosa) async {
+  Future<int> saveLeguminosa(LeguminosaModel leguminosa) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

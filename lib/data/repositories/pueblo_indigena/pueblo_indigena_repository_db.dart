@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/pueblo_indigena_entity.dart';
+import '../../../domain/entities/pueblo_indigena.dart';
 import '../../../domain/repositories/pueblo_indigena/pueblo_indigena_repository_db.dart';
 import '../../datasources/local/pueblo_indigena_local_ds.dart';
+import '../../models/pueblo_indigena.dart';
 
 class PuebloIndigenaRepositoryDBImpl implements PuebloIndigenaRepositoryDB {
   final PuebloIndigenaLocalDataSource puebloIndigenaLocalDataSource;
@@ -12,14 +12,14 @@ class PuebloIndigenaRepositoryDBImpl implements PuebloIndigenaRepositoryDB {
   PuebloIndigenaRepositoryDBImpl({required this.puebloIndigenaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<PuebloIndigenaEntity>>>
+  Future<Either<Failure, List<PuebloIndigenaModel>>>
       getPueblosIndigenasRepositoryDB() async {
     try {
       final result = await puebloIndigenaLocalDataSource.getPueblosIndigenas();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -28,12 +28,14 @@ class PuebloIndigenaRepositoryDBImpl implements PuebloIndigenaRepositoryDB {
   Future<Either<Failure, int>> savePuebloIndigenaRepositoryDB(
       PuebloIndigenaEntity puebloIndigena) async {
     try {
+      final puebloIndigenaModel =
+          PuebloIndigenaModel.fromEntity(puebloIndigena);
       final result = await puebloIndigenaLocalDataSource
-          .savePuebloIndigena(puebloIndigena);
+          .savePuebloIndigena(puebloIndigenaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

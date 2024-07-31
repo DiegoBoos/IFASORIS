@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/tipo_calendario_entity.dart';
+import '../../entities/tipo_calendario.dart';
 
 abstract class TipoCalendarioRepositoryDB {
   Future<Either<Failure, int>> saveTipoCalendarioRepositoryDB(

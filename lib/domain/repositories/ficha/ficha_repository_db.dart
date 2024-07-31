@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/estadistica_entity.dart';
-import '../../entities/ficha_entity.dart';
+import '../../entities/estadistica.dart';
+import '../../entities/ficha.dart';
 
 abstract class FichaRepositoryDB {
   Future<Either<Failure, FichaEntity>> createFichaRepositoryDB(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/lugar_atencion_medico_model.dart';
+import '../../../data/models/lugar_atencion_medico.dart';
 import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
 import '../../utils/custom_snack_bar.dart';
 

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/cigarrillo_dia_entity.dart';
+import '../../../domain/entities/cigarrillo_dia.dart';
 import '../../../domain/usecases/cigarrillo_dia/cigarrillo_dia_db_usecase.dart';
 
 part 'cigarrillo_dia_state.dart';

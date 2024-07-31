@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/dificultad_acceso_ca_model.dart';
-import '../../../data/models/medio_utiliza_ca_model.dart';
-import '../../../domain/entities/dim_ubicacion_entity.dart';
+import '../../../data/models/dificultad_acceso_ca.dart';
+import '../../../data/models/medio_utiliza_ca.dart';
+import '../../../domain/entities/dim_ubicacion.dart';
 import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_ca/dificultad_acceso_ca_exports.dart';
 import '../../../domain/usecases/medio_utiliza_ca/medio_utiliza_ca_exports.dart';
@@ -63,7 +63,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                     .map(
                       (tiempoTardaCA) => DropdownMenuItem<int>(
                         value: tiempoTardaCA.tiempoTardaId,
-                        child: Text(tiempoTardaCA.descripcion),
+                        child: Text(tiempoTardaCA.descripcion ?? ''),
                       ),
                     )
                     .toList(),
@@ -129,13 +129,13 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                                         formState,
                                         context,
                                         value,
-                                        medioUtilizaCA.medioUtilizaId,
+                                        medioUtilizaCA.medioUtilizaId!,
                                         dimUbicacionBloc);
                                   },
                                 ),
                                 Flexible(
                                   child: Text(
-                                    medioUtilizaCA.descripcion,
+                                    medioUtilizaCA.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -173,7 +173,8 @@ class AccesoCAFormState extends State<AccesoCAForm> {
               int? ningunoId;
 
               for (var e in dificultadesAccesoCALoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'N') {
                   ningunoId = e.dificultaAccesoId;
                 }
@@ -214,13 +215,13 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                                         ningunoId,
                                         context,
                                         value ?? false,
-                                        dificultadAccesoCA.dificultaAccesoId,
+                                        dificultadAccesoCA.dificultaAccesoId!,
                                         dimUbicacionBloc);
                                   },
                                 ),
                                 Flexible(
                                   child: Text(
-                                    dificultadAccesoCA.descripcion,
+                                    dificultadAccesoCA.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -256,7 +257,7 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                     .map(
                       (costoDesplazamiento) => DropdownMenuItem<int>(
                         value: costoDesplazamiento.costoDesplazamientoId,
-                        child: Text(costoDesplazamiento.descripcion),
+                        child: Text(costoDesplazamiento.descripcion ?? ''),
                       ),
                     )
                     .toList(),
@@ -300,8 +301,8 @@ class AccesoCAFormState extends State<AccesoCAForm> {
                             .map(
                               (e) => e.opcionId == 3
                                   ? Container()
-                                  : RadioListTile(
-                                      title: Text(e.descripcion),
+                                  : RadioListTile<int?>(
+                                      title: Text(e.descripcion ?? ''),
                                       value: e.opcionId,
                                       groupValue: _produccionMinera,
                                       onChanged: (int? newValue) {

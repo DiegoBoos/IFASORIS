@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:ifasoris/domain/usecases/ficha/ficha_exports.dart';
+
 import 'package:path/path.dart';
 
-import '../../../constants.dart';
+import '../../../core/constants.dart';
+import '../../../domain/entities/ficha.dart';
 import '../../utils/pdf_api.dart';
 
 class PDFViewerPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _PDFViewerPageState extends State<PDFViewerPage> {
 
     return FutureBuilder(
       future: PDFApi.loadNetwork(
-          '${Constants.syncUrl}/reports/ficha/${widget.ficha.numFicha}'),
+          '${Constants.syncPublica}/reports/ficha/${widget.ficha.numFicha}'),
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         if (snapshot.hasData) {
           final file = snapshot.data;

@@ -1,14 +1,13 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/dificultad_acceso_med_tradicional_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/dificultad_acceso_med_tradicional_model.dart';
+import '../../models/dificultad_acceso_med_tradicional.dart';
 
 abstract class DificultadAccesoMedTradicionalLocalDataSource {
   Future<List<DificultadAccesoMedTradicionalModel>>
       getDificultadesAccesoMedTradicional();
   Future<int> saveDificultadAccesoMedTradicional(
-      DificultadAccesoMedTradicionalEntity dificultadAccesoMedTradicional);
+      DificultadAccesoMedTradicionalModel dificultadAccesoMedTradicional);
 
   Future<int> saveUbicacionAccesoMedTradicional(
       int ubicacionId,
@@ -35,7 +34,7 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
 
   @override
   Future<int> saveDificultadAccesoMedTradicional(
-      DificultadAccesoMedTradicionalEntity
+      DificultadAccesoMedTradicionalModel
           dificultadAccesoMedTradicional) async {
     final db = await ConnectionSQLiteService.db;
 

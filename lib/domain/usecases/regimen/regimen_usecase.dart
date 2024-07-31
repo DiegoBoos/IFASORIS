@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/regimen_entity.dart';
+import '../../entities/regimen.dart';
 import '../../repositories/regimen/regimen_repository.dart';
 
 class RegimenUsecase {

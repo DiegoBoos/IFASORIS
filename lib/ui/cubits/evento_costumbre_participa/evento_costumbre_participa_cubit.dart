@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/models/evento_costumbre_participa_model.dart';
-import '../../../domain/entities/evento_costumbre_participa_entity.dart';
+import '../../../data/models/evento_costumbre_participa.dart';
+import '../../../domain/entities/evento_costumbre_participa.dart';
 import '../../../domain/usecases/evento_costumbre_participa/evento_costumbre_participa_db_usecase.dart';
 
 part 'evento_costumbre_participa_state.dart';

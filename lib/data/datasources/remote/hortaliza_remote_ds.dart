@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/hortaliza_model.dart';
+import '../../models/hortaliza.dart';
 
 abstract class HortalizaRemoteDataSource {
   Future<List<HortalizaModel>> getHortalizas(int dtoId);
@@ -20,8 +20,8 @@ class HortalizaRemoteDataSourceImpl implements HortalizaRemoteDataSource {
   @override
   Future<List<HortalizaModel>> getHortalizas(int dtoId) async {
     try {
-      final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/hortalizasbyDpto?IdeDpto=$dtoId');
+      final uri =
+          Uri.parse('${Constants.apiPublica}/hortalizasbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -94,7 +94,7 @@ class ConnectionSQLiteService {
       ref.execute(ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO);
       ref.execute(
           ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO_NOMBRES_ENFERMEDAD);
-      ref.execute(ConnectionSQL.CREATE_NRO_CUARTOS_VIVIENDA);
+      ref.execute(ConnectionSQL.CREATE__CUARTOS_VIVIENDA);
       ref.execute(
           ConnectionSQL.CREATE_CUIDADO_SALUD_COND_RIESGO_SERVICIOS_SOLICITADOS);
       ref.execute(ConnectionSQL.CREATE_DIM_SOCIO_CULTURAL_PUEBLOS_INDIGENAS);

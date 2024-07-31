@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/genero_entity.dart';
+import '../../../domain/entities/genero.dart';
 import '../../../domain/usecases/genero/genero_db_usecase.dart';
 
 part 'genero_state.dart';

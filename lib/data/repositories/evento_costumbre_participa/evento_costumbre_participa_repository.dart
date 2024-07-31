@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/evento_costumbre_participa_entity.dart';
 import '../../../domain/repositories/evento_costumbre_participa/evento_costumbre_participa_repository.dart';
 import '../../datasources/remote/evento_costumbre_participa_remote_ds.dart';
+import '../../models/evento_costumbre_participa.dart';
 
 class EventoCostumbreParticipaRepositoryImpl
     implements EventoCostumbreParticipaRepository {
@@ -17,7 +16,7 @@ class EventoCostumbreParticipaRepositoryImpl
       {required this.eventoCostumbreParticipaRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<EventoCostumbreParticipaEntity>>>
+  Future<Either<Failure, List<EventoCostumbreParticipaModel>>>
       getEventosCostumbresParticipaRepository(int dtoId) async {
     try {
       final result = await eventoCostumbreParticipaRemoteDataSource
@@ -26,8 +25,6 @@ class EventoCostumbreParticipaRepositoryImpl
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/especialidad_med_tradicional_model.dart';
+import '../../models/especialidad_med_tradicional.dart';
 
 abstract class EspecialidadMedTradicionalRemoteDataSource {
   Future<List<EspecialidadMedTradicionalModel>> getEspecialidadesMedTradicional(
@@ -24,7 +24,7 @@ class EspecialidadMedTradicionalRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/especialidadesmedtradicionalbyDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/especialidadesmedtradicionalbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/dificultad_acceso_med_tradicional_model.dart';
-import '../../../data/models/especialidad_med_tradicional_model.dart';
-import '../../../data/models/medio_utiliza_med_tradicional_model.dart';
-import '../../../data/models/nombre_med_tradicional_model.dart';
-import '../../../domain/entities/dim_ubicacion_entity.dart';
+import '../../../data/models/dificultad_acceso_med_tradicional.dart';
+import '../../../data/models/especialidad_med_tradicional.dart';
+import '../../../data/models/medio_utiliza_med_tradicional.dart';
+import '../../../data/models/nombre_med_tradicional.dart';
+import '../../../domain/entities/dim_ubicacion.dart';
 import '../../../domain/usecases/costo_desplazamiento/costo_desplazamiento_exports.dart';
 import '../../../domain/usecases/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_exports.dart';
 import '../../../domain/usecases/especialidad_med_tradicional/especialidad_med_tradicional_exports.dart';
@@ -14,6 +14,7 @@ import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
+import '../../utils/input_decoration.dart';
 import '../../utils/validators/form_validators.dart';
 import '../helpers/dificultades_acceso_med_trad_helper.dart';
 import '../helpers/medios_utiliza_med_trad_helper.dart';
@@ -86,8 +87,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _existeMedTradicionalComunidad,
                                     onChanged: (int? newValue) {
@@ -233,7 +234,9 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                     ),
                                     Flexible(
                                       child: Text(
-                                        especialidadMedTradicional.descripcion,
+                                        especialidadMedTradicional
+                                                .descripcion ??
+                                            '',
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -274,7 +277,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                           (tiempoTardaMedTradicional) => DropdownMenuItem<int>(
                             value:
                                 tiempoTardaMedTradicional.tiempoTardaMedTradId,
-                            child: Text(tiempoTardaMedTradicional.descripcion),
+                            child: Text(
+                                tiempoTardaMedTradicional.descripcion ?? ''),
                           ),
                         )
                         .toList(),
@@ -348,13 +352,13 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                             context,
                                             value,
                                             medioUtilizaMedTrad
-                                                .medioUtilizaMedTradId,
+                                                .medioUtilizaMedTradId!,
                                             dimUbicacionBloc);
                                       },
                                     ),
                                     Flexible(
                                       child: Text(
-                                        medioUtilizaMedTrad.descripcion,
+                                        medioUtilizaMedTrad.descripcion ?? '',
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -397,7 +401,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                   int? ningunoId;
 
                   for (var e in dificultadesAccesoMedTradicionalLoaded) {
-                    final optionType = FormValidators.optionType(e.descripcion);
+                    final optionType =
+                        FormValidators.optionType(e.descripcion ?? '');
                     if (optionType == 'N') {
                       ningunoId = e.dificultadAccesoMedTradId;
                     }
@@ -441,14 +446,15 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                                             context,
                                             value,
                                             dificultadAccesoMedTradicional
-                                                .dificultadAccesoMedTradId,
+                                                .dificultadAccesoMedTradId!,
                                             dimUbicacionBloc);
                                       },
                                     ),
                                     Flexible(
                                       child: Text(
                                         dificultadAccesoMedTradicional
-                                            .descripcion,
+                                                .descripcion ??
+                                            '',
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -487,7 +493,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                         .map(
                           (costoDesplazamiento) => DropdownMenuItem<int>(
                             value: costoDesplazamiento.costoDesplazamientoId,
-                            child: Text(costoDesplazamiento.descripcion),
+                            child: Text(costoDesplazamiento.descripcion ?? ''),
                           ),
                         )
                         .toList(),
@@ -524,7 +530,8 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
                       child: TextFormField(
                         initialValue:
                             _nombresMedTrad[index].nombreMedTradicional,
-                        decoration: InputDecoration(
+                        decoration: CustomInputDecoration.inputDecoration(
+                            hintText: 'Nombre del médico tradicional',
                             labelText:
                                 'Nombre del médico tradicional ${index + 1}'),
                         validator: (value) {

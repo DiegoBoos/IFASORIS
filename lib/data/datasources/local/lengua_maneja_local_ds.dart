@@ -1,10 +1,9 @@
-import '../../../domain/entities/lengua_maneja_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/lengua_maneja_model.dart';
+import '../../models/lengua_maneja.dart';
 
 abstract class LenguaManejaLocalDataSource {
   Future<List<LenguaManejaModel>> getLenguasManeja();
-  Future<int> saveLenguaManeja(LenguaManejaEntity lenguaManeja);
+  Future<int> saveLenguaManeja(LenguaManejaModel lenguaManeja);
 }
 
 class LenguaManejaLocalDataSourceImpl implements LenguaManejaLocalDataSource {
@@ -19,7 +18,7 @@ class LenguaManejaLocalDataSourceImpl implements LenguaManejaLocalDataSource {
   }
 
   @override
-  Future<int> saveLenguaManeja(LenguaManejaEntity lenguaManeja) async {
+  Future<int> saveLenguaManeja(LenguaManejaModel lenguaManeja) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =

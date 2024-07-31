@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/ventilacion_vivienda_entity.dart';
+import '../../../domain/entities/ventilacion_vivienda.dart';
 import '../../../domain/repositories/ventilacion_vivienda/ventilacion_vivienda_repository_db.dart';
 import '../../datasources/local/ventilacion_vivienda_local_ds.dart';
+import '../../models/ventilacion_vivienda.dart';
 
 class VentilacionViviendaRepositoryDBImpl
     implements VentilacionViviendaRepositoryDB {
@@ -14,7 +14,7 @@ class VentilacionViviendaRepositoryDBImpl
       {required this.ventilacionViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<VentilacionViviendaEntity>>>
+  Future<Either<Failure, List<VentilacionViviendaModel>>>
       getVentilacionesViviendaRepositoryDB() async {
     try {
       final result =
@@ -22,7 +22,7 @@ class VentilacionViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +31,14 @@ class VentilacionViviendaRepositoryDBImpl
   Future<Either<Failure, int>> saveVentilacionViviendaRepositoryDB(
       VentilacionViviendaEntity ventilacionVivienda) async {
     try {
+      final ventilacionViviendaModel =
+          VentilacionViviendaModel.fromEntity(ventilacionVivienda);
       final result = await ventilacionViviendaLocalDataSource
-          .saveVentilacionVivienda(ventilacionVivienda);
+          .saveVentilacionVivienda(ventilacionViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/enfermedad_tradicional_model.dart';
+import 'package:ifasoris/data/models/enfermedad_tradicional.dart';
 
-import '../../../domain/entities/enfermedad_tradicional_entity.dart';
+import '../../../domain/entities/enfermedad_tradicional.dart';
 import '../../../domain/usecases/enfermedad_tradicional/enfermedad_tradicional_db_usecase.dart';
 
 part 'enfermedad_tradicional_state.dart';

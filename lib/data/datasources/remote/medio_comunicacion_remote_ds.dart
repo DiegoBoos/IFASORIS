@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/medio_comunicacion_model.dart';
+import '../../models/medio_comunicacion.dart';
 
 abstract class MedioComunicacionRemoteDataSource {
   Future<List<MedioComunicacionModel>> getMediosComunicacion(int dtoId);
@@ -22,7 +22,7 @@ class MedioComunicacionRemoteDataSourceImpl
   Future<List<MedioComunicacionModel>> getMediosComunicacion(int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/medioscomunicacionByDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/medioscomunicacionByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

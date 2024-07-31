@@ -1,10 +1,9 @@
-import '../../../domain/entities/sync_log_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/sync_log_model.dart';
+import '../../models/sync_log.dart';
 
 abstract class SyncLogLocalDataSource {
   Future<List<SyncLogModel>> getSyncLogsDB();
-  Future<int> forceSyncDB(List<SyncLogEntity> syncLogsEntity);
+  Future<int> forceSyncDB(List<SyncLogModel> syncLogs);
 }
 
 class SyncLogLocalDataSourceImpl implements SyncLogLocalDataSource {
@@ -63,13 +62,13 @@ class SyncLogLocalDataSourceImpl implements SyncLogLocalDataSource {
   }
 
   @override
-  Future<int> forceSyncDB(List<SyncLogEntity> syncLogsEntity) async {
+  Future<int> forceSyncDB(List<SyncLogModel> syncLogs) async {
     final db = await ConnectionSQLiteService.db;
 
     var batch = db.batch();
 
-    for (var syncLog in syncLogsEntity) {
-      batch.update(syncLog.tabla, {'recordStatus': 'R'});
+    for (var syncLog in syncLogs) {
+      batch.update(syncLog.tabla!, {'recordStatus': 'R'});
     }
 
     final res = await batch.commit();

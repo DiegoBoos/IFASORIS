@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../../domain/repositories/grupo_familiar/grupo_familiar_repository_db.dart';
 import '../../datasources/local/grupo_familiar_local_ds.dart';
+import '../../models/grupo_familiar.dart';
 
 class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
   final GrupoFamiliarLocalDataSource grupoFamiliarLocalDataSource;
@@ -12,23 +12,25 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
   GrupoFamiliarRepositoryDBImpl({required this.grupoFamiliarLocalDataSource});
 
   @override
-  Future<Either<Failure, GrupoFamiliarEntity>>
+  Future<Either<Failure, GrupoFamiliarModel>>
       saveAfiliadoGrupoFamiliarRepositoryDB(
           GrupoFamiliarEntity afiliadoGrupoFamiliar) async {
     try {
+      final afiliadoGrupoFamiliarModel =
+          GrupoFamiliarModel.fromEntity(afiliadoGrupoFamiliar);
       final result = await grupoFamiliarLocalDataSource
-          .saveGrupoFamiliar(afiliadoGrupoFamiliar);
+          .saveGrupoFamiliar(afiliadoGrupoFamiliarModel);
 
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
 
   @override
-  Future<Either<Failure, List<GrupoFamiliarEntity>>>
+  Future<Either<Failure, List<GrupoFamiliarModel>>>
       getGrupoFamiliarRepositoryDB(int familiaId) async {
     try {
       final result =
@@ -37,7 +39,7 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -52,7 +54,7 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -67,7 +69,7 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -81,7 +83,7 @@ class GrupoFamiliarRepositoryDBImpl implements GrupoFamiliarRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

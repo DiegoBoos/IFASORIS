@@ -1,10 +1,9 @@
-import '../../../domain/entities/cigarrillo_dia_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/cigarrillo_dia_model.dart';
+import '../../models/cigarrillo_dia.dart';
 
 abstract class CigarrilloDiaLocalDataSource {
   Future<List<CigarrilloDiaModel>> getCigarrillosDia();
-  Future<int> saveCigarrilloDia(CigarrilloDiaEntity cigarrilloDia);
+  Future<int> saveCigarrilloDia(CigarrilloDiaModel cigarrilloDia);
 }
 
 class CigarrilloDiaLocalDataSourceImpl implements CigarrilloDiaLocalDataSource {
@@ -19,7 +18,7 @@ class CigarrilloDiaLocalDataSourceImpl implements CigarrilloDiaLocalDataSource {
   }
 
   @override
-  Future<int> saveCigarrilloDia(CigarrilloDiaEntity cigarrilloDia) async {
+  Future<int> saveCigarrilloDia(CigarrilloDiaModel cigarrilloDia) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

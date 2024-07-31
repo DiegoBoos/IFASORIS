@@ -1,10 +1,9 @@
-import '../../../domain/entities/estado_via_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/estado_via_model.dart';
+import '../../models/estado_via.dart';
 
 abstract class EstadoViaLocalDataSource {
   Future<List<EstadoViaModel>> getEstadosVias();
-  Future<int> saveEstadoVia(EstadoViaEntity estadoVia);
+  Future<int> saveEstadoVia(EstadoViaModel estadoVia);
 }
 
 class EstadoViaLocalDataSourceImpl implements EstadoViaLocalDataSource {
@@ -20,7 +19,7 @@ class EstadoViaLocalDataSourceImpl implements EstadoViaLocalDataSource {
   }
 
   @override
-  Future<int> saveEstadoVia(EstadoViaEntity estadoVia) async {
+  Future<int> saveEstadoVia(EstadoViaModel estadoVia) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('EstadoVias', estadoVia.toJson());

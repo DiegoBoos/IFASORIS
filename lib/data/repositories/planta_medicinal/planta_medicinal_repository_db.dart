@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/planta_medicinal_model.dart';
+import 'package:ifasoris/data/models/planta_medicinal.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/planta_medicinal_entity.dart';
+import '../../../domain/entities/planta_medicinal.dart';
 import '../../../domain/repositories/planta_medicinal/planta_medicinal_repository_db.dart';
 import '../../datasources/local/planta_medicinal_local_ds.dart';
 
@@ -14,7 +13,7 @@ class PlantaMedicinalRepositoryDBImpl implements PlantaMedicinalRepositoryDB {
       {required this.plantaMedicinalLocalDataSource});
 
   @override
-  Future<Either<Failure, List<PlantaMedicinalEntity>>>
+  Future<Either<Failure, List<PlantaMedicinalModel>>>
       getPlantasMedicinalesRepositoryDB() async {
     try {
       final result =
@@ -22,7 +21,7 @@ class PlantaMedicinalRepositoryDBImpl implements PlantaMedicinalRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -31,12 +30,14 @@ class PlantaMedicinalRepositoryDBImpl implements PlantaMedicinalRepositoryDB {
   Future<Either<Failure, int>> savePlantaMedicinalRepositoryDB(
       PlantaMedicinalEntity plantaMedicinal) async {
     try {
+      final plantaMedicinalModel =
+          PlantaMedicinalModel.fromEntity(plantaMedicinal);
       final result = await plantaMedicinalLocalDataSource
-          .savePlantaMedicinal(plantaMedicinal);
+          .savePlantaMedicinal(plantaMedicinalModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -51,7 +52,7 @@ class PlantaMedicinalRepositoryDBImpl implements PlantaMedicinalRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -66,7 +67,7 @@ class PlantaMedicinalRepositoryDBImpl implements PlantaMedicinalRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

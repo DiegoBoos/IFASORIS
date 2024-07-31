@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/especialidad_med_tradicional_model.dart';
-import 'package:ifasoris/data/models/nombre_med_tradicional_model.dart';
+import 'package:ifasoris/data/models/especialidad_med_tradicional.dart';
+import 'package:ifasoris/data/models/nombre_med_tradicional.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/especialidad_med_tradicional_entity.dart';
+import '../../entities/especialidad_med_tradicional.dart';
 import '../../repositories/especialidad_med_tradicional/especialidad_med_tradicional_repository_db.dart';
 
 class EspecialidadMedTradicionalUsecaseDB {

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/tipo_combustible_vivienda_model.dart';
+import 'package:ifasoris/data/models/tipo_combustible_vivienda.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/tipo_combustible_vivienda_entity.dart';
+import '../../entities/tipo_combustible_vivienda.dart';
 
 abstract class TipoCombustibleViviendaRepositoryDB {
   Future<Either<Failure, int>> saveTipoCombustibleViviendaRepositoryDB(

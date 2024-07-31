@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../cubits/curso_vida/curso_vida_cubit.dart';
@@ -229,7 +229,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (tipoDocumento) => DropdownMenuItem<int>(
                                   value: tipoDocumento.tipoDocumentoId,
-                                  child: Text(tipoDocumento.descripcion),
+                                  child: Text(tipoDocumento.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -298,9 +298,9 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                                     Column(
                                       children: generosLoaded
                                           .map(
-                                            (e) => RadioListTile<int>(
+                                            (e) => RadioListTile<int?>(
                                                 title: Text(
-                                                  e.descripcion,
+                                                  e.descripcion ?? '',
                                                 ),
                                                 value: e.generoId,
                                                 groupValue: _generoId,
@@ -365,7 +365,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (cursoVida) => DropdownMenuItem<int>(
                                   value: cursoVida.cursoVidaId,
-                                  child: Text(cursoVida.descripcion),
+                                  child: Text(cursoVida.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -402,7 +402,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (parentesco) => DropdownMenuItem<int>(
                                   value: parentesco.parentescoId,
-                                  child: Text(parentesco.descripcion),
+                                  child: Text(parentesco.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -444,7 +444,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (regimen) => DropdownMenuItem<int>(
                                   value: regimen.tipoRegimenId,
-                                  child: Text(regimen.descripcion),
+                                  child: Text(regimen.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -482,7 +482,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (nivelEducativo) => DropdownMenuItem<int>(
                                   value: nivelEducativo.nivelEducativoId,
-                                  child: Text(nivelEducativo.descripcion),
+                                  child: Text(nivelEducativo.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -523,7 +523,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
 
                         for (var e in ocupacionesLoaded) {
                           final optionType =
-                              FormValidators.optionType(e.descripcion);
+                              FormValidators.optionType(e.descripcion ?? '');
                           if (optionType == 'O') {
                             otroId = e.ocupacionId;
                           }
@@ -535,7 +535,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (ocupacion) => DropdownMenuItem<int>(
                                   value: ocupacion.ocupacionId,
-                                  child: Text(ocupacion.descripcion),
+                                  child: Text(ocupacion.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -612,7 +612,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (grupoRiesgo) => DropdownMenuItem<int>(
                                   value: grupoRiesgo.grupoRiesgoId,
-                                  child: Text(grupoRiesgo.descripcion),
+                                  child: Text(grupoRiesgo.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -656,7 +656,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                               .map(
                                 (etnia) => DropdownMenuItem<int>(
                                   value: etnia.etniaId,
-                                  child: Text(etnia.descripcion),
+                                  child: Text(etnia.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -718,7 +718,8 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                                     .map(
                                       (puebloIndigena) => DropdownMenuItem<int>(
                                         value: puebloIndigena.puebloIde,
-                                        child: Text(puebloIndigena.Descripcion),
+                                        child: Text(
+                                            puebloIndigena.descripcion ?? ''),
                                       ),
                                     )
                                     .toList(),
@@ -762,7 +763,8 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                                     .map(
                                       (lenguaManeja) => DropdownMenuItem<int>(
                                         value: lenguaManeja.lenguaManejaId,
-                                        child: Text(lenguaManeja.descripcion),
+                                        child: Text(
+                                            lenguaManeja.descripcion ?? ''),
                                       ),
                                     )
                                     .toList(),
@@ -821,7 +823,8 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                                               value:
                                                   lenguaMaterna.lenguaMaternaId,
                                               child: Text(
-                                                  lenguaMaterna.descripcion),
+                                                  lenguaMaterna.descripcion ??
+                                                      ''),
                                             ),
                                           )
                                           .toList(),

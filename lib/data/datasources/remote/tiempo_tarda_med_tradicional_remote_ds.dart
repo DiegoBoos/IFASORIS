@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/tiempo_tarda_med_tradicional_model.dart';
+import '../../models/tiempo_tarda_med_tradicional.dart';
 
 abstract class TiempoTardaMedTradicionalRemoteDataSource {
   Future<List<TiempoTardaMedTradicionalModel>> getTiemposTardaMedTradicional();
@@ -23,7 +23,7 @@ class TiempoTardaMedTradicionalRemoteDataSourceImpl
       getTiemposTardaMedTradicional() async {
     try {
       final uri =
-          Uri.parse('${Constants.ifasorisBaseUrl}/tiempotardamedtradicional');
+          Uri.parse('${Constants.apiPublica}/tiempotardamedtradicional');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

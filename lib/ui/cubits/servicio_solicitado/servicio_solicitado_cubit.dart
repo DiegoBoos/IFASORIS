@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/data/models/servicio_solicitado_model.dart';
+import 'package:ifasoris/data/models/servicio_solicitado.dart';
 
-import '../../../domain/entities/servicio_solicitado_entity.dart';
+import '../../../domain/entities/servicio_solicitado.dart';
 import '../../../domain/usecases/servicio_solicitado/servicio_solicitado_db_usecase.dart';
 
 part 'servicio_solicitado_state.dart';

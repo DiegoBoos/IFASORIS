@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/usuario_entity.dart';
+import '../../../domain/entities/usuario.dart';
 import '../../../domain/repositories/auth/auth_repository.dart';
 import '../../datasources/remote/auth_remote_ds.dart';
+import '../../models/usuario.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
@@ -14,16 +14,15 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.authRemoteDataSource});
 
   @override
-  Future<Either<Failure, UsuarioEntity>> logInRepository(
+  Future<Either<Failure, UsuarioModel>> logInRepository(
       UsuarioEntity usuario) async {
     try {
-      final result = await authRemoteDataSource.logIn(usuario);
+      final usuarioModel = UsuarioModel.fromEntity(usuario);
+      final result = await authRemoteDataSource.logIn(usuarioModel);
 
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }
@@ -39,8 +38,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

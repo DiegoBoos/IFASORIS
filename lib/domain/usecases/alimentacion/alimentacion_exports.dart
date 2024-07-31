@@ -2,7 +2,7 @@ export 'package:ifasoris/domain/usecases/alimentacion/alimentacion_usecase.dart'
 export 'package:ifasoris/domain/usecases/alimentacion/alimentacion_db_usecase.dart';
 export 'package:ifasoris/domain/repositories/alimentacion/alimentacion_repository.dart';
 export 'package:ifasoris/domain/repositories/alimentacion/alimentacion_repository_db.dart';
-export 'package:ifasoris/domain/entities/alimentacion_entity.dart';
+export 'package:ifasoris/domain/entities/alimentacion.dart';
 export 'package:ifasoris/ui/cubits/alimentacion/alimentacion_cubit.dart';
 export 'package:ifasoris/data/repositories/alimentacion/alimentacion_repository.dart';
 export 'package:ifasoris/data/repositories/alimentacion/alimentacion_repository_db.dart';

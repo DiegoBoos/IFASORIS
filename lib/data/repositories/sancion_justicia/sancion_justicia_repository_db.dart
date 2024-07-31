@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/sancion_justicia_entity.dart';
+import '../../../domain/entities/sancion_justicia.dart';
 import '../../../domain/repositories/sancion_justicia/sancion_justicia_repository_db.dart';
 import '../../datasources/local/sancion_justicia_local_ds.dart';
+import '../../models/sancion_justicia.dart';
 
 class SancionJusticiaRepositoryDBImpl implements SancionJusticiaRepositoryDB {
   final SancionJusticiaLocalDataSource sancionJusticiaLocalDataSource;
@@ -13,7 +13,7 @@ class SancionJusticiaRepositoryDBImpl implements SancionJusticiaRepositoryDB {
       {required this.sancionJusticiaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<SancionJusticiaEntity>>>
+  Future<Either<Failure, List<SancionJusticiaModel>>>
       getSancionesJusticiaRepositoryDB() async {
     try {
       final result =
@@ -21,7 +21,7 @@ class SancionJusticiaRepositoryDBImpl implements SancionJusticiaRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -30,12 +30,14 @@ class SancionJusticiaRepositoryDBImpl implements SancionJusticiaRepositoryDB {
   Future<Either<Failure, int>> saveSancionJusticiaRepositoryDB(
       SancionJusticiaEntity sancionJusticia) async {
     try {
+      final sancionJusticiaModel =
+          SancionJusticiaModel.fromEntity(sancionJusticia);
       final result = await sancionJusticiaLocalDataSource
-          .saveSancionJusticia(sancionJusticia);
+          .saveSancionJusticia(sancionJusticiaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

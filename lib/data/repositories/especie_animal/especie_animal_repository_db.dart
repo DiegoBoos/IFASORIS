@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/especie_animal_model.dart';
+import 'package:ifasoris/data/models/especie_animal.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/especie_animal_entity.dart';
+import '../../../domain/entities/especie_animal.dart';
 import '../../../domain/repositories/especie_animal/especie_animal_repository_db.dart';
 import '../../datasources/local/especie_animal_local_ds.dart';
 
@@ -13,14 +12,14 @@ class EspecieAnimalRepositoryDBImpl implements EspecieAnimalRepositoryDB {
   EspecieAnimalRepositoryDBImpl({required this.especieAnimalLocalDataSource});
 
   @override
-  Future<Either<Failure, List<EspecieAnimalEntity>>>
+  Future<Either<Failure, List<EspecieAnimalModel>>>
       getEspeciesAnimalesRepositoryDB() async {
     try {
       final result = await especieAnimalLocalDataSource.getEspeciesAnimales();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -29,12 +28,13 @@ class EspecieAnimalRepositoryDBImpl implements EspecieAnimalRepositoryDB {
   Future<Either<Failure, int>> saveEspecieAnimalRepositoryDB(
       EspecieAnimalEntity especieAnimal) async {
     try {
-      final result =
-          await especieAnimalLocalDataSource.saveEspecieAnimal(especieAnimal);
+      final especieAnimalModel = EspecieAnimalModel.fromEntity(especieAnimal);
+      final result = await especieAnimalLocalDataSource
+          .saveEspecieAnimal(especieAnimalModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -48,7 +48,7 @@ class EspecieAnimalRepositoryDBImpl implements EspecieAnimalRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -62,7 +62,7 @@ class EspecieAnimalRepositoryDBImpl implements EspecieAnimalRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

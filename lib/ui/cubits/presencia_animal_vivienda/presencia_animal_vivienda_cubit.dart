@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/presencia_animal_vivienda_model.dart';
+import 'package:ifasoris/data/models/presencia_animal_vivienda.dart';
 
-import '../../../domain/entities/presencia_animal_vivienda_entity.dart';
+import '../../../domain/entities/presencia_animal_vivienda.dart';
 import '../../../domain/usecases/presencia_animal_vivienda/presencia_animal_vivienda_db_usecase.dart';
 
 part 'presencia_animal_vivienda_state.dart';

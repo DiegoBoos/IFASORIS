@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/data/models/slider_model.dart';
+import 'package:ifasoris/data/models/slider.dart';
 
 part 'slider_state.dart';
 

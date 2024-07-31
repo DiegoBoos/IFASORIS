@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/lugar_atencion_medico_model.dart';
+import 'package:ifasoris/data/models/lugar_atencion_medico.dart';
 
-import '../../../domain/entities/lugar_atencion_medico_entity.dart';
+import '../../../domain/entities/lugar_atencion_medico.dart';
 import '../../../domain/usecases/lugar_atencion_medico/lugar_atencion_medico_db_usecase.dart';
 
 part 'lugar_atencion_medico_state.dart';

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/factor_riesgo_vivienda_model.dart';
-import '../../../data/models/piso_vivienda_model.dart';
-import '../../../data/models/presencia_animal_vivienda_model.dart';
-import '../../../data/models/servicio_publico_vivienda_model.dart';
-import '../../../data/models/techo_vivienda_model.dart';
-import '../../../data/models/tipo_combustible_vivienda_model.dart';
-import '../../../data/models/tipo_sanitario_vivienda_model.dart';
-import '../../../data/models/tratamiento_agua_vivienda_model.dart';
+import '../../../data/models/factor_riesgo_vivienda.dart';
+import '../../../data/models/piso_vivienda.dart';
+import '../../../data/models/presencia_animal_vivienda.dart';
+import '../../../data/models/servicio_publico_vivienda.dart';
+import '../../../data/models/techo_vivienda.dart';
+import '../../../data/models/tipo_combustible_vivienda.dart';
+import '../../../data/models/tipo_sanitario_vivienda.dart';
+import '../../../data/models/tratamiento_agua_vivienda.dart';
 import '../../../domain/usecases/dim_vivienda/dim_vivienda_exports.dart';
 import '../../../domain/usecases/factor_riesgo_vivienda/factor_riesgo_vivienda_exports.dart';
 import '../../../domain/usecases/presencia_animal_vivienda/presencia_animal_vivienda_exports.dart';
@@ -27,9 +27,9 @@ import '../../utils/custom_snack_bar.dart';
 import '../../utils/input_decoration.dart';
 import '../../utils/validators/form_validators.dart';
 import '../helpers/servicios_publicos_helper.dart';
-import 'package:ifasoris/domain/entities/piso_vivienda_entity.dart';
-import 'package:ifasoris/domain/entities/techo_vivienda_entity.dart';
-import 'package:ifasoris/domain/entities/tipo_combustible_vivienda_entity.dart';
+import 'package:ifasoris/domain/entities/piso_vivienda.dart';
+import 'package:ifasoris/domain/entities/techo_vivienda.dart';
+import 'package:ifasoris/domain/entities/tipo_combustible_vivienda.dart';
 
 class DatosViviendaForm extends StatefulWidget {
   const DatosViviendaForm({super.key, required this.dimVivienda});
@@ -44,7 +44,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   int? _tenenciaVivienda;
   int? _ventilacionViviendaId;
   int? _iluminacionViviendaId;
-  int? _nroCuartoViviendaId;
+  int? _cuartoViviendaId;
 
   bool _showOtroTechoVivienda = false;
   String? _otroTipoTecho;
@@ -70,7 +70,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
       _tenenciaVivienda = widget.dimVivienda.tenenciaViviendaId;
       _ventilacionViviendaId = widget.dimVivienda.ventilacionViviendaId;
       _iluminacionViviendaId = widget.dimVivienda.iluminacionViviendaId;
-      _nroCuartoViviendaId = widget.dimVivienda.nroCuartosViviendaId;
+      _cuartoViviendaId = widget.dimVivienda.cuartosViviendaId;
 
       if (widget.dimVivienda.lstTecho != null &&
           widget.dimVivienda.lstTecho!.isNotEmpty &&
@@ -171,7 +171,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     formstate.didChange(_tipoVivienda);
                                   },
                                 ),
-                                Text(tipoVivienda.descripcion),
+                                Text(tipoVivienda.descripcion ?? ''),
                                 if (index < tiposViviendaLoaded.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
                               ],
@@ -206,26 +206,26 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           textAlign: TextAlign.center,
         ),
         const Divider(),
-        BlocBuilder<NroCuartoViviendaCubit, NroCuartosViviendaState>(
+        BlocBuilder<CuartoViviendaCubit, CuartosViviendaState>(
           builder: (context, state) {
-            if (state is NroCuartosViviendaLoaded) {
-              final nroCuartosViviendaLoaded = state.nroCuartosViviendaLoaded!;
+            if (state is CuartosViviendaLoaded) {
+              final cuartosViviendaLoaded = state.cuartosViviendaLoaded!;
 
               return DropdownButtonFormField<int>(
-                value: _nroCuartoViviendaId,
-                items: nroCuartosViviendaLoaded
-                    .map((nroCuartoVivienda) => DropdownMenuItem<int>(
-                          value: nroCuartoVivienda.nroCuartoViviendaId,
-                          child: Text(nroCuartoVivienda.descripcion),
+                value: _cuartoViviendaId,
+                items: cuartosViviendaLoaded
+                    .map((cuartoVivienda) => DropdownMenuItem<int>(
+                          value: cuartoVivienda.cuartoViviendaId,
+                          child: Text(cuartoVivienda.descripcion ?? ''),
                         ))
                     .toList(),
                 decoration: const InputDecoration(
                     labelText: 'Cuarto vivienda', border: OutlineInputBorder()),
                 onChanged: (int? newValue) {
                   setState(() {
-                    _nroCuartoViviendaId = newValue;
+                    _cuartoViviendaId = newValue;
                   });
-                  dimViviendaBloc.add(NroCuartoViviendaChanged(newValue!));
+                  dimViviendaBloc.add(CuartoViviendaChanged(newValue!));
                 },
                 validator: (value) {
                   if (value == null) {
@@ -276,7 +276,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     formstate.didChange(_tenenciaVivienda);
                                   },
                                 ),
-                                Text(e.descripcion),
+                                Text(e.descripcion ?? ''),
                                 if (index < tenenciasViviendaLoaded.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
                               ],
@@ -318,7 +318,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               int? otroId;
 
               for (var e in pisosViviendaLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.pisoViviendaId;
                 }
@@ -376,7 +377,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    pisoVivienda.descripcion,
+                                    pisoVivienda.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -444,7 +445,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               int? otroId;
 
               for (var e in techosViviendaLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.techoViviendaId;
                 }
@@ -498,7 +500,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    techoVivienda.descripcion,
+                                    techoVivienda.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -596,7 +598,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     formstate.didChange(_ventilacionViviendaId);
                                   },
                                 ),
-                                Text(ventilacionVivienda.descripcion),
+                                Text(ventilacionVivienda.descripcion ?? ''),
                                 if (index <
                                     ventilacionesViviendaLoaded.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
@@ -668,7 +670,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             _iluminacionViviendaId!));
                                   },
                                 ),
-                                Text(iluminacionVivienda.descripcion),
+                                Text(iluminacionVivienda.descripcion ?? ''),
                                 if (index <
                                     iluminacionesViviendaLoaded.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
@@ -714,7 +716,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               int? ningunoId;
 
               for (var e in serviciosPublicosViviendaLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'N') {
                   ningunoId = e.servicioPublicoViviendaId;
                 }
@@ -753,13 +756,13 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                         context,
                                         value,
                                         servicioPublicoVivienda
-                                            .servicioPublicoViviendaId,
+                                            .servicioPublicoViviendaId!,
                                         dimViviendaBloc);
                                   },
                                 ),
                                 Flexible(
                                   child: Text(
-                                    servicioPublicoVivienda.descripcion,
+                                    servicioPublicoVivienda.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -800,7 +803,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               int? otroId;
 
               for (var e in tratamientosAguaViviendaLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.tratamientoAguaViviendaId;
                 }
@@ -857,7 +861,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    tratamientoAguaVivienda.descripcion,
+                                    tratamientoAguaVivienda.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -931,7 +935,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               int? noTieneId;
 
               for (var e in tiposSanitarioViviendaLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.tipoSanitarioViviendaId;
                 } else if (optionType == 'NT') {
@@ -994,7 +999,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    tipoSanitarioVivienda.descripcion,
+                                    tipoSanitarioVivienda.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -1069,7 +1074,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               int? otroId;
 
               for (var e in tiposCombustibleViviendaLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.tipoCombustibleViviendaId;
                 }
@@ -1126,7 +1132,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    tipoCombustibleVivienda.descripcion,
+                                    tipoCombustibleVivienda.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -1202,7 +1208,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               int? otroId;
 
               for (var e in factoresRiesgoViviendaLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.factorRiesgoViviendaId;
                 }
@@ -1260,7 +1267,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     }),
                                 Flexible(
                                   child: Text(
-                                    factorRiesgoVivienda.descripcion,
+                                    factorRiesgoVivienda.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -1334,7 +1341,8 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
               int? otroId;
 
               for (var e in presenciaAnimalesViviendaLoaded) {
-                final optionType = FormValidators.optionType(e.descripcion);
+                final optionType =
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.presenciaAnimalViviendaId;
                 }
@@ -1392,7 +1400,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     }),
                                 Flexible(
                                   child: Text(
-                                    presenciaAnimalVivienda.descripcion,
+                                    presenciaAnimalVivienda.descripcion ?? '',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),

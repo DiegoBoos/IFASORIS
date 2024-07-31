@@ -1,10 +1,9 @@
-import '../../../domain/entities/costumbre_practica_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/costumbre_practica_model.dart';
+import '../../models/costumbre_practica.dart';
 
 abstract class CostumbrePracticaLocalDataSource {
   Future<List<CostumbrePracticaModel>> getCostumbresPractica();
-  Future<int> saveCostumbrePractica(CostumbrePracticaEntity costumbrePractica);
+  Future<int> saveCostumbrePractica(CostumbrePracticaModel costumbrePractica);
 }
 
 class CostumbrePracticaLocalDataSourceImpl
@@ -22,7 +21,7 @@ class CostumbrePracticaLocalDataSourceImpl
 
   @override
   Future<int> saveCostumbrePractica(
-      CostumbrePracticaEntity costumbrePractica) async {
+      CostumbrePracticaModel costumbrePractica) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

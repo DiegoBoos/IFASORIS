@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/factor_riesgo_vivienda_model.dart';
+import '../../models/factor_riesgo_vivienda.dart';
 
 abstract class FactorRiesgoViviendaRemoteDataSource {
   Future<List<FactorRiesgoViviendaModel>> getFactoresRiesgoVivienda(int dtoId);
@@ -23,7 +23,7 @@ class FactorRiesgoViviendaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/factoresriesgoviviendabyDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/factoresriesgoviviendabyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

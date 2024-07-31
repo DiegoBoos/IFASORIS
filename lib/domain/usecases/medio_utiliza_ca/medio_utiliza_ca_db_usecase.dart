@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/medio_utiliza_ca_model.dart';
+import 'package:ifasoris/data/models/medio_utiliza_ca.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/medio_utiliza_ca_entity.dart';
+import '../../entities/medio_utiliza_ca.dart';
 import '../../repositories/medio_utiliza_ca/medio_utiliza_ca_repository_db.dart';
 
 class MedioUtilizaCAUsecaseDB {

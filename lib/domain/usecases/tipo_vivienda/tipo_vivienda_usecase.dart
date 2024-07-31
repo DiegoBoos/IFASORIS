@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/tipo_vivienda_entity.dart';
+import '../../entities/tipo_vivienda.dart';
 import '../../repositories/tipo_vivienda/tipo_vivienda_repository.dart';
 
 class TipoViviendaUsecase {

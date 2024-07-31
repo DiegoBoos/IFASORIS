@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/tipo_sanitario_vivienda_model.dart';
+import '../../models/tipo_sanitario_vivienda.dart';
 
 abstract class TipoSanitarioViviendaRemoteDataSource {
   Future<List<TipoSanitarioViviendaModel>> getTiposSanitarioVivienda(int dtoId);
@@ -23,7 +23,7 @@ class TipoSanitarioViviendaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/tiposanitarioviviendabyDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/tiposanitarioviviendabyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

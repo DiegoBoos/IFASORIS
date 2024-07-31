@@ -1,11 +1,10 @@
-import '../../../domain/entities/seguimiento_enfermedad_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/seguimiento_enfermedad_model.dart';
+import '../../models/seguimiento_enfermedad.dart';
 
 abstract class SeguimientoEnfermedadLocalDataSource {
   Future<List<SeguimientoEnfermedadModel>> getSeguimientoEnfermedades();
   Future<int> saveSeguimientoEnfermedad(
-      SeguimientoEnfermedadEntity seguimientoEnfermedad);
+      SeguimientoEnfermedadModel seguimientoEnfermedad);
 }
 
 class SeguimientoEnfermedadLocalDataSourceImpl
@@ -23,7 +22,7 @@ class SeguimientoEnfermedadLocalDataSourceImpl
 
   @override
   Future<int> saveSeguimientoEnfermedad(
-      SeguimientoEnfermedadEntity seguimientoEnfermedad) async {
+      SeguimientoEnfermedadModel seguimientoEnfermedad) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

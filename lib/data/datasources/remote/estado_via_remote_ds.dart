@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/estado_via_model.dart';
+import '../../models/estado_via.dart';
 
 abstract class EstadoViaRemoteDataSource {
   Future<List<EstadoViaModel>> getEstadoVias();
@@ -20,7 +20,7 @@ class EstadoViaRemoteDataSourceImpl implements EstadoViaRemoteDataSource {
   @override
   Future<List<EstadoViaModel>> getEstadoVias() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/estadovias');
+      final uri = Uri.parse('${Constants.apiPublica}/estadovias');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -1,19 +1,18 @@
 import 'package:ifasoris/core/error/failure.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/atencion_salud_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/atencion_salud_model.dart';
+import '../../models/atencion_salud.dart';
 
 abstract class AtencionSaludLocalDataSource {
-  Future<int> saveAtencionSalud(AtencionSaludEntity atencionSalud);
+  Future<int> saveAtencionSalud(AtencionSaludModel atencionSalud);
 
-  Future<AtencionSaludEntity?> getAtencionSalud(int afiliadoId);
+  Future<AtencionSaludModel?> getAtencionSalud(int afiliadoId);
 }
 
 class AtencionSaludLocalDataSourceImpl implements AtencionSaludLocalDataSource {
   @override
-  Future<int> saveAtencionSalud(AtencionSaludEntity atencionSalud) async {
+  Future<int> saveAtencionSalud(AtencionSaludModel atencionSalud) async {
     final db = await ConnectionSQLiteService.db;
 
     try {
@@ -29,7 +28,7 @@ class AtencionSaludLocalDataSourceImpl implements AtencionSaludLocalDataSource {
   }
 
   @override
-  Future<AtencionSaludEntity?> getAtencionSalud(int afiliadoId) async {
+  Future<AtencionSaludModel?> getAtencionSalud(int afiliadoId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp7_AtencionSalud',
         where: 'Afiliado_id = ?', whereArgs: [afiliadoId]);

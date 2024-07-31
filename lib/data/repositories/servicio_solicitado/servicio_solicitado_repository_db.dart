@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/servicio_solicitado_model.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/servicio_solicitado_entity.dart';
+import '../../../domain/entities/servicio_solicitado.dart';
 import '../../../domain/repositories/servicio_solicitado/servicio_solicitado_repository_db.dart';
 import '../../datasources/local/servicio_solicitado_local_ds.dart';
+import '../../models/servicio_solicitado.dart';
 
 class ServicioSolicitadoRepositoryDBImpl
     implements ServicioSolicitadoRepositoryDB {
@@ -15,7 +14,7 @@ class ServicioSolicitadoRepositoryDBImpl
       {required this.servicioSolicitadoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<ServicioSolicitadoEntity>>>
+  Future<Either<Failure, List<ServicioSolicitadoModel>>>
       getServiciosSolicitadosRepositoryDB() async {
     try {
       final result =
@@ -23,7 +22,7 @@ class ServicioSolicitadoRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -32,12 +31,14 @@ class ServicioSolicitadoRepositoryDBImpl
   Future<Either<Failure, int>> saveServicioSolicitadoRepositoryDB(
       ServicioSolicitadoEntity servicioSolicitado) async {
     try {
+      final servicioSolicitadoModel =
+          ServicioSolicitadoModel.fromEntity(servicioSolicitado);
       final result = await servicioSolicitadoLocalDataSource
-          .saveServicioSolicitado(servicioSolicitado);
+          .saveServicioSolicitado(servicioSolicitadoModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -52,7 +53,7 @@ class ServicioSolicitadoRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -68,7 +69,7 @@ class ServicioSolicitadoRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/iluminacion_vivienda_model.dart';
+import '../../models/iluminacion_vivienda.dart';
 
 abstract class IluminacionViviendaRemoteDataSource {
   Future<List<IluminacionViviendaModel>> getIluminacionesVivienda();
@@ -21,7 +21,7 @@ class IluminacionViviendaRemoteDataSourceImpl
   @override
   Future<List<IluminacionViviendaModel>> getIluminacionesVivienda() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/iluminacionvivienda');
+      final uri = Uri.parse('${Constants.apiPublica}/iluminacionvivienda');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

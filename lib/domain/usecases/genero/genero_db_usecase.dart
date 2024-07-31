@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/genero_entity.dart';
+import '../../entities/genero.dart';
 import '../../repositories/genero/genero_repository_db.dart';
 
 class GeneroUsecaseDB {

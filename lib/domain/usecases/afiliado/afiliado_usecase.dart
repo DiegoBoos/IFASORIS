@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../data/models/afiliado_response_model.dart';
+import '../../../data/models/afiliado.dart';
 import '../../repositories/afiliado/afiliado_repository.dart';
 
 class AfiliadoUsecase {

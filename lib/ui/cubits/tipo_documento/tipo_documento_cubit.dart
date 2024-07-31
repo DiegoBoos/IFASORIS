@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/tipo_documento_entity.dart';
+import '../../../domain/entities/tipo_documento.dart';
 import '../../../domain/usecases/tipo_documento/tipo_documento_db_usecase.dart';
 
 part 'tipo_documento_state.dart';

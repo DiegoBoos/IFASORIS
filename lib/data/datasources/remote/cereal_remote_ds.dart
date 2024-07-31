@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/cereal_model.dart';
+import '../../models/cereal.dart';
 
 abstract class CerealRemoteDataSource {
   Future<List<CerealModel>> getCereales(int dtoId);
@@ -20,8 +20,8 @@ class CerealRemoteDataSourceImpl implements CerealRemoteDataSource {
   @override
   Future<List<CerealModel>> getCereales(int dtoId) async {
     try {
-      final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/cerealesbyDpto?IdeDpto=$dtoId');
+      final uri =
+          Uri.parse('${Constants.apiPublica}/cerealesbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

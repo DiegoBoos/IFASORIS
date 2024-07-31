@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/opcion_si_no_entity.dart';
+import '../../entities/opcion_si_no.dart';
 
 abstract class OpcionSiNoRepositoryDB {
   Future<Either<Failure, int>> saveOpcionSiNoRepositoryDB(

@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/via_acceso_entity.dart';
+import '../../../domain/entities/via_acceso.dart';
 import '../../../domain/repositories/via_acceso/via_acceso_repository_db.dart';
 import '../../datasources/local/via_acceso_local_ds.dart';
+import '../../models/via_acceso.dart';
 
 class ViaAccesoRepositoryDBImpl implements ViaAccesoRepositoryDB {
   final ViaAccesoLocalDataSource viaAccesoLocalDataSource;
@@ -12,14 +12,14 @@ class ViaAccesoRepositoryDBImpl implements ViaAccesoRepositoryDB {
   ViaAccesoRepositoryDBImpl({required this.viaAccesoLocalDataSource});
 
   @override
-  Future<Either<Failure, List<ViaAccesoEntity>>>
+  Future<Either<Failure, List<ViaAccesoModel>>>
       getViasAccesoRepositoryDB() async {
     try {
       final result = await viaAccesoLocalDataSource.getViasAcceso();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -28,11 +28,13 @@ class ViaAccesoRepositoryDBImpl implements ViaAccesoRepositoryDB {
   Future<Either<Failure, int>> saveViaAccesoRepositoryDB(
       ViaAccesoEntity viaAcceso) async {
     try {
-      final result = await viaAccesoLocalDataSource.saveViaAcceso(viaAcceso);
+      final viaAccesoModel = ViaAccesoModel.fromEntity(viaAcceso);
+      final result =
+          await viaAccesoLocalDataSource.saveViaAcceso(viaAccesoModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

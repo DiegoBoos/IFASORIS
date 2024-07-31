@@ -10,7 +10,6 @@ class CustomInputDecoration {
     return InputDecoration(
         hintText: hintText,
         labelText: labelText,
-        labelStyle: const TextStyle(color: Colors.grey),
         border: const OutlineInputBorder(),
         prefixIcon:
             prefixIcon != null ? Icon(prefixIcon, color: Colors.grey) : null,

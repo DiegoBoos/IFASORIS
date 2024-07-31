@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/costumbre_practica_entity.dart';
+import '../../../domain/entities/costumbre_practica.dart';
 import '../../../domain/usecases/costumbre_practica/costumbre_practica_db_usecase.dart';
 
 part 'costumbre_practica_state.dart';

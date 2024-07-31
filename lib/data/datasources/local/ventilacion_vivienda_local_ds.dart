@@ -1,11 +1,10 @@
-import '../../../domain/entities/ventilacion_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/ventilacion_vivienda_model.dart';
+import '../../models/ventilacion_vivienda.dart';
 
 abstract class VentilacionViviendaLocalDataSource {
   Future<List<VentilacionViviendaModel>> getVentilacionesVivienda();
   Future<int> saveVentilacionVivienda(
-      VentilacionViviendaEntity ventilacionVivienda);
+      VentilacionViviendaModel ventilacionVivienda);
 }
 
 class VentilacionViviendaLocalDataSourceImpl
@@ -22,7 +21,7 @@ class VentilacionViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveVentilacionVivienda(
-      VentilacionViviendaEntity ventilacionVivienda) async {
+      VentilacionViviendaModel ventilacionVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

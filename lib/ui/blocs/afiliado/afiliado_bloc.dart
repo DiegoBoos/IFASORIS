@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/afiliado/afiliado_db_usecase.dart';
 
-import '../../../domain/entities/afiliado_entity.dart';
-import '../../../domain/entities/ficha_entity.dart';
+import '../../../domain/entities/afiliado.dart';
+import '../../../domain/entities/ficha.dart';
 
 part 'afiliado_event.dart';
 part 'afiliado_state.dart';

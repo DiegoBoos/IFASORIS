@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/tipo_combustible_vivienda_model.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/tipo_combustible_vivienda_entity.dart';
+import '../../../domain/entities/tipo_combustible_vivienda.dart';
 import '../../../domain/repositories/tipo_combustible_vivienda/tipo_combustible_vivienda_repository_db.dart';
 import '../../datasources/local/tipo_combustible_vivienda_local_ds.dart';
+import '../../models/tipo_combustible_vivienda.dart';
 
 class TipoCombustibleViviendaRepositoryDBImpl
     implements TipoCombustibleViviendaRepositoryDB {
@@ -16,7 +15,7 @@ class TipoCombustibleViviendaRepositoryDBImpl
       {required this.tipoCombustibleViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<TipoCombustibleViviendaEntity>>>
+  Future<Either<Failure, List<TipoCombustibleViviendaModel>>>
       getTiposCombustibleRepositoryDB() async {
     try {
       final result =
@@ -24,7 +23,7 @@ class TipoCombustibleViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -33,12 +32,14 @@ class TipoCombustibleViviendaRepositoryDBImpl
   Future<Either<Failure, int>> saveTipoCombustibleViviendaRepositoryDB(
       TipoCombustibleViviendaEntity tipoCombustibleVivienda) async {
     try {
+      final tipoCombustibleViviendaModel =
+          TipoCombustibleViviendaModel.fromEntity(tipoCombustibleVivienda);
       final result = await tipoCombustibleViviendaLocalDataSource
-          .saveTipoCombustibleVivienda(tipoCombustibleVivienda);
+          .saveTipoCombustibleVivienda(tipoCombustibleViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -52,7 +53,7 @@ class TipoCombustibleViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -66,7 +67,7 @@ class TipoCombustibleViviendaRepositoryDBImpl
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

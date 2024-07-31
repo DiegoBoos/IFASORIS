@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/sancion_justicia_model.dart';
+import '../../models/sancion_justicia.dart';
 
 abstract class SancionJusticiaRemoteDataSource {
   Future<List<SancionJusticiaModel>> getSancionesJusticia();
@@ -21,7 +21,7 @@ class SancionJusticiaRemoteDataSourceImpl
   @override
   Future<List<SancionJusticiaModel>> getSancionesJusticia() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/sancionesjusticia');
+      final uri = Uri.parse('${Constants.apiPublica}/sancionesjusticia');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

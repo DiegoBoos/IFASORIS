@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/genero_model.dart';
+import '../../models/genero.dart';
 
 abstract class GeneroRemoteDataSource {
   Future<List<GeneroModel>> getGeneros();
@@ -20,7 +20,7 @@ class GeneroRemoteDataSourceImpl implements GeneroRemoteDataSource {
   @override
   Future<List<GeneroModel>> getGeneros() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/genero');
+      final uri = Uri.parse('${Constants.apiPublica}/genero');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

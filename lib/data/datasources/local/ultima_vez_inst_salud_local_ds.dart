@@ -1,11 +1,10 @@
-import '../../../domain/entities/ultima_vez_inst_salud_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/ultima_vez_inst_salud_model.dart';
+import '../../models/ultima_vez_inst_salud.dart';
 
 abstract class UltimaVezInstSaludLocalDataSource {
   Future<List<UltimaVezInstSaludModel>> getUltimasVecesInstSalud();
   Future<int> saveUltimaVezInstSalud(
-      UltimaVezInstSaludEntity ultimaVezInstSalud);
+      UltimaVezInstSaludModel ultimaVezInstSalud);
 }
 
 class UltimaVezInstSaludLocalDataSourceImpl
@@ -22,7 +21,7 @@ class UltimaVezInstSaludLocalDataSourceImpl
 
   @override
   Future<int> saveUltimaVezInstSalud(
-      UltimaVezInstSaludEntity ultimaVezInstSalud) async {
+      UltimaVezInstSaludModel ultimaVezInstSalud) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('UltimaVezInstSalud_CuidadoSaludCondRiesgo',

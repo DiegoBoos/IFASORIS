@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/nombre_lengua_materna_model.dart';
+import '../../models/nombre_lengua_materna.dart';
 
 abstract class NombreLenguaMaternaRemoteDataSource {
   Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna(int dtoId);
@@ -23,7 +23,7 @@ class NombreLenguaMaternaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.ifasorisBaseUrl}/nombrelenguamaternaByDpto?IdeDpto=$dtoId');
+          '${Constants.apiPublica}/nombrelenguamaternaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

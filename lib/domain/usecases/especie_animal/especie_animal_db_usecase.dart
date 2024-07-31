@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/especie_animal_model.dart';
+import 'package:ifasoris/data/models/especie_animal.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/especie_animal_entity.dart';
+import '../../entities/especie_animal.dart';
 import '../../repositories/especie_animal/especie_animal_repository_db.dart';
 
 class EspecieAnimalUsecaseDB {

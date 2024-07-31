@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/nombre_enfermedad_model.dart';
-import '../../../domain/entities/nombre_enfermedad_entity.dart';
+import '../../../data/models/nombre_enfermedad.dart';
+import '../../../domain/entities/nombre_enfermedad.dart';
 import '../../../domain/usecases/nombre_enfermedad/nombre_enfermedad_db_usecase.dart';
 
 part 'nombre_enfermedad_state.dart';

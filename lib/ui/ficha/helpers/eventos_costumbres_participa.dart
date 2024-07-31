@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/evento_costumbre_participa_model.dart';
+import '../../../data/models/evento_costumbre_participa.dart';
 import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 
 void handleEventoCostumbreParticipaSelection(

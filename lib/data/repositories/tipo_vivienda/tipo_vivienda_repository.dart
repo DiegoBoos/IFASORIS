@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/tipo_vivienda_entity.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/repositories/tipo_vivienda/tipo_vivienda_repository.dart';
 import '../../datasources/remote/tipo_vivienda_remote_ds.dart';
+import '../../models/tipo_vivienda.dart';
 
 class TipoViviendaRepositoryImpl implements TipoViviendaRepository {
   final TipoViviendaRemoteDataSource tipoViviendaRemoteDataSource;
@@ -14,7 +13,7 @@ class TipoViviendaRepositoryImpl implements TipoViviendaRepository {
   TipoViviendaRepositoryImpl({required this.tipoViviendaRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<TipoViviendaEntity>>> getTiposViviendaRepository(
+  Future<Either<Failure, List<TipoViviendaModel>>> getTiposViviendaRepository(
       int dtoId) async {
     try {
       final result = await tipoViviendaRemoteDataSource.getTiposVivienda(dtoId);
@@ -22,8 +21,6 @@ class TipoViviendaRepositoryImpl implements TipoViviendaRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

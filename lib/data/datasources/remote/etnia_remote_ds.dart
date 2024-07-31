@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/etnia_model.dart';
+import '../../models/etnia.dart';
 
 abstract class EtniaRemoteDataSource {
   Future<List<EtniaModel>> getEtnias();
@@ -20,7 +20,7 @@ class EtniaRemoteDataSourceImpl implements EtniaRemoteDataSource {
   @override
   Future<List<EtniaModel>> getEtnias() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/etnias');
+      final uri = Uri.parse('${Constants.apiPublica}/etnias');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

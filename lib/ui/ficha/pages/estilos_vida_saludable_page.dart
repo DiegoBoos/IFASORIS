@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/estilo_vida_saludable_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../domain/entities/estilo_vida_saludable.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 import '../../cubits/actividad_fisica/actividad_fisica_cubit.dart';
 import '../../cubits/alimentacion/alimentacion_cubit.dart';

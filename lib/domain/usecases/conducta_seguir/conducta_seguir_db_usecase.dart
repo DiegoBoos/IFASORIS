@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/conducta_seguir_entity.dart';
+import '../../entities/conducta_seguir.dart';
 import '../../repositories/conducta_seguir/conducta_seguir_repository_db.dart';
 
 class ConductaSeguirUsecaseDB {

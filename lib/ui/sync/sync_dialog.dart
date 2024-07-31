@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/entities/afiliado_entity.dart';
+import '../../domain/entities/afiliado.dart';
 import '../blocs/afiliado/afiliado_bloc.dart';
 import '../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../blocs/auth/auth_bloc.dart';

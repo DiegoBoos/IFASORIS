@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/grupo_riesgo_entity.dart';
+import '../../entities/grupo_riesgo.dart';
 import '../../repositories/grupo_riesgo/grupo_riesgo_repository.dart';
 
 class GrupoRiesgoUsecase {

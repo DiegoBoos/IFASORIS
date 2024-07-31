@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/opcion_si_no_model.dart';
+import '../../models/opcion_si_no.dart';
 
 abstract class OpcionSiNoRemoteDataSource {
   Future<List<OpcionSiNoModel>> getOpcionesSiNo();
@@ -20,7 +20,7 @@ class OpcionSiNoRemoteDataSourceImpl implements OpcionSiNoRemoteDataSource {
   @override
   Future<List<OpcionSiNoModel>> getOpcionesSiNo() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/opcionesSi_No');
+      final uri = Uri.parse('${Constants.apiPublica}/opcionesSi_No');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

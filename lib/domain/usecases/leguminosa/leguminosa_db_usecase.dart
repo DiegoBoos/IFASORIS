@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/leguminosa_model.dart';
+import 'package:ifasoris/data/models/leguminosa.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/leguminosa_entity.dart';
+import '../../entities/leguminosa.dart';
 import '../../repositories/leguminosa/leguminosa_repository_db.dart';
 
 class LeguminosaUsecaseDB {

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/nombre_enfermedad_entity.dart';
+import '../../entities/nombre_enfermedad.dart';
 import '../../repositories/nombre_enfermedad/nombre_enfermedad_repository.dart';
 
 class NombreEnfermedadUsecase {

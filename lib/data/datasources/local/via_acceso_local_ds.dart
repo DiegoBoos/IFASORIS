@@ -1,10 +1,9 @@
-import '../../../domain/entities/via_acceso_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/via_acceso_model.dart';
+import '../../models/via_acceso.dart';
 
 abstract class ViaAccesoLocalDataSource {
   Future<List<ViaAccesoModel>> getViasAcceso();
-  Future<int> saveViaAcceso(ViaAccesoEntity viaAcceso);
+  Future<int> saveViaAcceso(ViaAccesoModel viaAcceso);
 }
 
 class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
@@ -20,7 +19,7 @@ class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   }
 
   @override
-  Future<int> saveViaAcceso(ViaAccesoEntity viaAcceso) async {
+  Future<int> saveViaAcceso(ViaAccesoModel viaAcceso) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('ViasAcceso', viaAcceso.toJson());

@@ -1,13 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/servicio_publico_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/servicio_publico_vivienda_model.dart';
+import '../../models/servicio_publico_vivienda.dart';
 
 abstract class ServicioPublicoViviendaLocalDataSource {
   Future<List<ServicioPublicoViviendaModel>> getServiciosPublicos();
   Future<int> saveServicioPublicoVivienda(
-      ServicioPublicoViviendaEntity servicioPublicoVivienda);
+      ServicioPublicoViviendaModel servicioPublicoVivienda);
 
   Future<int> saveServiciosPublicosVivienda(
       int datoViviendaId, List<LstServPublico> lstServPublico);
@@ -30,7 +29,7 @@ class ServicioPublicoViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveServicioPublicoVivienda(
-      ServicioPublicoViviendaEntity servicioPublicoVivienda) async {
+      ServicioPublicoViviendaModel servicioPublicoVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('ServiciosPublicosVivienda_DatosVivienda',

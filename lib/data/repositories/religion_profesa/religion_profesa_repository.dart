@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/religion_profesa_entity.dart';
 import '../../../domain/repositories/religion_profesa/religion_profesa_repository.dart';
 import '../../datasources/remote/religion_profesa_remote_ds.dart';
+import '../../models/religion_profesa.dart';
 
 class ReligionProfesaRepositoryImpl implements ReligionProfesaRepository {
   final ReligionProfesaRemoteDataSource religionProfesaRemoteDataSource;
@@ -15,7 +14,7 @@ class ReligionProfesaRepositoryImpl implements ReligionProfesaRepository {
       {required this.religionProfesaRemoteDataSource});
 
   @override
-  Future<Either<Failure, List<ReligionProfesaEntity>>>
+  Future<Either<Failure, List<ReligionProfesaModel>>>
       getReligionesProfesaRepository() async {
     try {
       final result =
@@ -24,8 +23,6 @@ class ReligionProfesaRepositoryImpl implements ReligionProfesaRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

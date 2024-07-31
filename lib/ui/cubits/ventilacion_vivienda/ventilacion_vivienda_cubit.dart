@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/ventilacion_vivienda_entity.dart';
+import '../../../domain/entities/ventilacion_vivienda.dart';
 import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_db_usecase.dart';
 
 part 'ventilacion_vivienda_state.dart';

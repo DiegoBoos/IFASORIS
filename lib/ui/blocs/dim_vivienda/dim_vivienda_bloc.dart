@@ -1,15 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/factor_riesgo_vivienda_model.dart';
-import '../../../data/models/piso_vivienda_model.dart';
-import '../../../data/models/presencia_animal_vivienda_model.dart';
-import '../../../data/models/servicio_publico_vivienda_model.dart';
-import '../../../data/models/techo_vivienda_model.dart';
-import '../../../data/models/tipo_combustible_vivienda_model.dart';
-import '../../../data/models/tipo_sanitario_vivienda_model.dart';
-import '../../../data/models/tratamiento_agua_vivienda_model.dart';
-import '../../../domain/entities/dim_vivienda_entity.dart';
+import '../../../data/models/factor_riesgo_vivienda.dart';
+import '../../../data/models/piso_vivienda.dart';
+import '../../../data/models/presencia_animal_vivienda.dart';
+import '../../../data/models/servicio_publico_vivienda.dart';
+import '../../../data/models/techo_vivienda.dart';
+import '../../../data/models/tipo_combustible_vivienda.dart';
+import '../../../data/models/tipo_sanitario_vivienda.dart';
+import '../../../data/models/tratamiento_agua_vivienda.dart';
+import '../../../domain/entities/dim_vivienda.dart';
 import '../../../domain/usecases/dim_vivienda/dim_vivienda_db_usecase.dart';
 import '../../../domain/usecases/factor_riesgo_vivienda/factor_riesgo_vivienda_db_usecase.dart';
 import '../../../domain/usecases/piso_vivienda/piso_vivienda_db_usecase.dart';
@@ -209,8 +209,8 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     on<IluminacionViviendaChanged>((event, emit) {
       emit(state.copyWith(iluminacionViviendaId: event.iluminacionViviendaId));
     });
-    on<NroCuartoViviendaChanged>((event, emit) {
-      emit(state.copyWith(nroCuartosViviendaId: event.nroCuartosViviendaId));
+    on<CuartoViviendaChanged>((event, emit) {
+      emit(state.copyWith(cuartosViviendaId: event.cuartosViviendaId));
     });
     on<ServiciosPublicosViviendaChanged>((event, emit) {
       emit(state.copyWith(lstServPublico: event.lstServPublico));

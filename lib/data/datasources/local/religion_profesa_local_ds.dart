@@ -1,10 +1,9 @@
-import '../../../domain/entities/religion_profesa_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/religion_profesa_model.dart';
+import '../../models/religion_profesa.dart';
 
 abstract class ReligionProfesaLocalDataSource {
   Future<List<ReligionProfesaModel>> getReligionesProfesa();
-  Future<int> saveReligionProfesa(ReligionProfesaEntity religionProfesa);
+  Future<int> saveReligionProfesa(ReligionProfesaModel religionProfesa);
 }
 
 class ReligionProfesaLocalDataSourceImpl
@@ -21,7 +20,7 @@ class ReligionProfesaLocalDataSourceImpl
   }
 
   @override
-  Future<int> saveReligionProfesa(ReligionProfesaEntity religionProfesa) async {
+  Future<int> saveReligionProfesa(ReligionProfesaModel religionProfesa) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

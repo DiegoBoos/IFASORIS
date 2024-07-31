@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/tipo_documento_model.dart';
+import '../../models/tipo_documento.dart';
 
 abstract class TipoDocumentoRemoteDataSource {
   Future<List<TipoDocumentoModel>> getTiposDocumento();
@@ -21,7 +21,7 @@ class TipoDocumentoRemoteDataSourceImpl
   @override
   Future<List<TipoDocumentoModel>> getTiposDocumento() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/tiposdocumento');
+      final uri = Uri.parse('${Constants.apiPublica}/tiposdocumento');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

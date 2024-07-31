@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/alimentacion_model.dart';
+import '../../models/alimentacion.dart';
 
 abstract class AlimentacionRemoteDataSource {
   Future<List<AlimentacionModel>> getAlimentaciones();
@@ -20,7 +20,7 @@ class AlimentacionRemoteDataSourceImpl implements AlimentacionRemoteDataSource {
   @override
   Future<List<AlimentacionModel>> getAlimentaciones() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/alimentacion');
+      final uri = Uri.parse('${Constants.apiPublica}/alimentacion');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

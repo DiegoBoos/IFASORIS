@@ -1,7 +1,7 @@
 export 'package:ifasoris/domain/usecases/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_db_usecase.dart';
 export 'package:ifasoris/domain/repositories/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_repository.dart';
 export 'package:ifasoris/domain/repositories/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_repository_db.dart';
-export 'package:ifasoris/domain/entities/dimension_sociocultural_pueblos_indigenas_entity.dart';
+export 'package:ifasoris/domain/entities/dimension_sociocultural_pueblos_indigenas.dart';
 export 'package:ifasoris/ui/blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_bloc.dart';
 export 'package:ifasoris/data/repositories/dimension_sociocultural_pueblos_indigenas/dimension_sociocultural_pueblos_indigenas_repository_db.dart';
 export 'package:ifasoris/data/datasources/local/dimension_sociocultural_pueblos_indigenas_local_ds.dart';

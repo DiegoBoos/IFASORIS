@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/dim_ubicacion_entity.dart';
+import '../../../domain/entities/dim_ubicacion.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/autoridad_indigena/autoridad_indigena_cubit.dart';

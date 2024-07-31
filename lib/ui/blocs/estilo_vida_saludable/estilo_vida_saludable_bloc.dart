@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/estilo_vida_saludable_entity.dart';
+import '../../../domain/entities/estilo_vida_saludable.dart';
 import '../../../domain/usecases/estilo_vida_saludable/estilo_vida_saludable_db_usecase.dart';
 
 part 'estilo_vida_saludable_event.dart';

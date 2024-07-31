@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/hortaliza_model.dart';
+import 'package:ifasoris/data/models/hortaliza.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/hortaliza_entity.dart';
+import '../../../domain/entities/hortaliza.dart';
 import '../../../domain/repositories/hortaliza/hortaliza_repository_db.dart';
 import '../../datasources/local/hortaliza_local_ds.dart';
 
@@ -13,14 +12,14 @@ class HortalizaRepositoryDBImpl implements HortalizaRepositoryDB {
   HortalizaRepositoryDBImpl({required this.hortalizaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<HortalizaEntity>>>
+  Future<Either<Failure, List<HortalizaModel>>>
       getHortalizasRepositoryDB() async {
     try {
       final result = await hortalizaLocalDataSource.getHortalizas();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -29,11 +28,13 @@ class HortalizaRepositoryDBImpl implements HortalizaRepositoryDB {
   Future<Either<Failure, int>> saveHortalizaRepositoryDB(
       HortalizaEntity hortaliza) async {
     try {
-      final result = await hortalizaLocalDataSource.saveHortaliza(hortaliza);
+      final hortalizaModel = HortalizaModel.fromEntity(hortaliza);
+      final result =
+          await hortalizaLocalDataSource.saveHortaliza(hortalizaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -47,7 +48,7 @@ class HortalizaRepositoryDBImpl implements HortalizaRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -61,7 +62,7 @@ class HortalizaRepositoryDBImpl implements HortalizaRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

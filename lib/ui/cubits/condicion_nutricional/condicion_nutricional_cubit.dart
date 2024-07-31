@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/condicion_nutricional_entity.dart';
+import '../../../domain/entities/condicion_nutricional.dart';
 import '../../../domain/usecases/condicion_nutricional/condicion_nutricional_db_usecase.dart';
 
 part 'condicion_nutricional_state.dart';

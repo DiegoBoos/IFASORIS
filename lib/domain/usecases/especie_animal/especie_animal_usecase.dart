@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/especie_animal_entity.dart';
+import '../../entities/especie_animal.dart';
 import '../../repositories/especie_animal/especie_animal_repository.dart';
 
 class EspecieAnimalUsecase {

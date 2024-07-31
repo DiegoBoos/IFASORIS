@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/data/models/hortaliza_model.dart';
+import 'package:ifasoris/data/models/hortaliza.dart';
 
-import '../../../domain/entities/hortaliza_entity.dart';
+import '../../../domain/entities/hortaliza.dart';
 import '../../../domain/usecases/hortaliza/hortaliza_db_usecase.dart';
 
 part 'hortaliza_state.dart';

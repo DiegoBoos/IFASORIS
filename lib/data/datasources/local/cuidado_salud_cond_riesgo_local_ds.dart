@@ -1,15 +1,14 @@
 import 'package:ifasoris/core/error/failure.dart';
-import 'package:ifasoris/data/models/cuidado_salud_cond_riesgo_model.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
+import '../../models/cuidado_salud_cond_riesgo.dart';
 
 abstract class CuidadoSaludCondRiesgoLocalDataSource {
   Future<int> saveCuidadoSaludCondRiesgo(
-      CuidadoSaludCondRiesgoEntity cuidadoSaludCondRiesgo);
+      CuidadoSaludCondRiesgoModel cuidadoSaludCondRiesgo);
 
-  Future<CuidadoSaludCondRiesgoEntity?> getCuidadoSaludCondRiesgo(
+  Future<CuidadoSaludCondRiesgoModel?> getCuidadoSaludCondRiesgo(
       int afiliadoId);
 }
 
@@ -17,7 +16,7 @@ class CuidadoSaludCondRiesgoLocalDataSourceImpl
     implements CuidadoSaludCondRiesgoLocalDataSource {
   @override
   Future<int> saveCuidadoSaludCondRiesgo(
-      CuidadoSaludCondRiesgoEntity cuidadoSaludCondRiesgo) async {
+      CuidadoSaludCondRiesgoModel cuidadoSaludCondRiesgo) async {
     final db = await ConnectionSQLiteService.db;
 
     try {
@@ -34,7 +33,7 @@ class CuidadoSaludCondRiesgoLocalDataSourceImpl
   }
 
   @override
-  Future<CuidadoSaludCondRiesgoEntity?> getCuidadoSaludCondRiesgo(
+  Future<CuidadoSaludCondRiesgoModel?> getCuidadoSaludCondRiesgo(
       int afiliadoId) async {
     final db = await ConnectionSQLiteService.db;
     final res = await db.query('Asp5_CuidadoSaludCondRiesgo',

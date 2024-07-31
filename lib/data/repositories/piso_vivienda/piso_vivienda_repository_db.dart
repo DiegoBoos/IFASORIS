@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/piso_vivienda_model.dart';
+import 'package:ifasoris/data/models/piso_vivienda.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
-import '../../../domain/entities/piso_vivienda_entity.dart';
+import '../../../domain/entities/piso_vivienda.dart';
 import '../../../domain/repositories/piso_vivienda/piso_vivienda_repository_db.dart';
 import '../../datasources/local/piso_vivienda_local_ds.dart';
 
@@ -13,14 +12,14 @@ class PisoViviendaRepositoryDBImpl implements PisoViviendaRepositoryDB {
   PisoViviendaRepositoryDBImpl({required this.pisoViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, List<PisoViviendaEntity>>>
+  Future<Either<Failure, List<PisoViviendaModel>>>
       getPisosViviendaRepositoryDB() async {
     try {
       final result = await pisoViviendaLocalDataSource.getPisosVivienda();
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -29,12 +28,13 @@ class PisoViviendaRepositoryDBImpl implements PisoViviendaRepositoryDB {
   Future<Either<Failure, int>> savePisoViviendaRepositoryDB(
       PisoViviendaEntity pisoVivienda) async {
     try {
+      final pisoViviendaModel = PisoViviendaModel.fromEntity(pisoVivienda);
       final result =
-          await pisoViviendaLocalDataSource.savePisoVivienda(pisoVivienda);
+          await pisoViviendaLocalDataSource.savePisoVivienda(pisoViviendaModel);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -48,7 +48,7 @@ class PisoViviendaRepositoryDBImpl implements PisoViviendaRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }
@@ -62,7 +62,7 @@ class PisoViviendaRepositoryDBImpl implements PisoViviendaRepositoryDB {
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
-    } on ServerException {
+    } on ServerFailure {
       return const Left(DatabaseFailure(['Excepción no controlada']));
     }
   }

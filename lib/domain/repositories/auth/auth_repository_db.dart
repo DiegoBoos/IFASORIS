@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/usuario_entity.dart';
+import '../../entities/usuario.dart';
 
 abstract class AuthRepositoryDB {
   Future<Either<Failure, UsuarioEntity?>> logInRepositoryDB(

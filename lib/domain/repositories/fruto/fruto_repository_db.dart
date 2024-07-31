@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/fruto_model.dart';
+import 'package:ifasoris/data/models/fruto.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/fruto_entity.dart';
+import '../../entities/fruto.dart';
 
 abstract class FrutoRepositoryDB {
   Future<Either<Failure, int>> saveFrutoRepositoryDB(FrutoEntity fruto);

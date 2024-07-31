@@ -1,10 +1,9 @@
-import '../../../domain/entities/regimen_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/regimen_model.dart';
+import '../../models/regimen.dart';
 
 abstract class RegimenLocalDataSource {
   Future<List<RegimenModel>> getRegimenes();
-  Future<int> saveRegimen(RegimenEntity regimen);
+  Future<int> saveRegimen(RegimenModel regimen);
 }
 
 class RegimenLocalDataSourceImpl implements RegimenLocalDataSource {
@@ -20,7 +19,7 @@ class RegimenLocalDataSourceImpl implements RegimenLocalDataSource {
   }
 
   @override
-  Future<int> saveRegimen(RegimenEntity regimen) async {
+  Future<int> saveRegimen(RegimenModel regimen) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('Regimenes_GrupoFamiliar', regimen.toJson());

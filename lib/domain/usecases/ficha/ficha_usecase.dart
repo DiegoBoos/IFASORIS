@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/ficha_entity.dart';
+import '../../entities/ficha.dart';
 import '../../repositories/ficha/ficha_repository.dart';
 
 class FichaUsecase {

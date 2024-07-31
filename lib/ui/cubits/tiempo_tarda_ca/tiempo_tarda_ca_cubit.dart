@@ -1,7 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/domain/entities/tiempo_tarda_ca_entity.dart';
 import 'package:ifasoris/domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_db_usecase.dart';
+
+import '../../../domain/entities/tiempo_tarda_ca.dart';
 
 part 'tiempo_tarda_ca_state.dart';
 

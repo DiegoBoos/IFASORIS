@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/verdura_model.dart';
+import 'package:ifasoris/data/models/verdura.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/verdura_entity.dart';
+import '../../entities/verdura.dart';
 import '../../repositories/verdura/verdura_repository_db.dart';
 
 class VerduraUsecaseDB {

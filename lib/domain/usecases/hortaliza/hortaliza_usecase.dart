@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/hortaliza_entity.dart';
+import '../../entities/hortaliza.dart';
 import '../../repositories/hortaliza/hortaliza_repository.dart';
 
 class HortalizaUsecase {

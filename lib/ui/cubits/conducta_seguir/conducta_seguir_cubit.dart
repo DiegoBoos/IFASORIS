@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/conducta_seguir_entity.dart';
+import '../../../domain/entities/conducta_seguir.dart';
 import '../../../domain/usecases/conducta_seguir/conducta_seguir_db_usecase.dart';
 
 part 'conducta_seguir_state.dart';

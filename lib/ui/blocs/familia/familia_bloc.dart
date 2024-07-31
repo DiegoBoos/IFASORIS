@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/domain/usecases/familia/familia_exports.dart';
 
-import '../../../domain/entities/familia_entity.dart';
+import '../../../domain/entities/familia.dart';
 
 part 'familia_event.dart';
 part 'familia_state.dart';

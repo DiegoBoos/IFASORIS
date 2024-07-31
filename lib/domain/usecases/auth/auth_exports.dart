@@ -2,7 +2,7 @@ export 'package:ifasoris/domain/usecases/auth/auth_usecase.dart';
 export 'package:ifasoris/domain/usecases/auth/auth_db_usecase.dart';
 export 'package:ifasoris/domain/repositories/auth/auth_repository.dart';
 export 'package:ifasoris/domain/repositories/auth/auth_repository_db.dart';
-export 'package:ifasoris/domain/entities/usuario_entity.dart';
+export 'package:ifasoris/domain/entities/usuario.dart';
 export 'package:ifasoris/ui/blocs/auth/auth_bloc.dart';
 export 'package:ifasoris/data/repositories/auth/auth_repository.dart';
 export 'package:ifasoris/data/repositories/auth/auth_repository_db.dart';

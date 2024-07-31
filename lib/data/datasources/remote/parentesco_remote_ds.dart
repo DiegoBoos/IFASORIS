@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../constants.dart';
+import '../../../core/constants.dart';
 import '../../../services/shared_preferences_service.dart';
-import '../../models/parentesco_model.dart';
+import '../../models/parentesco.dart';
 
 abstract class ParentescoRemoteDataSource {
   Future<List<ParentescoModel>> getParentescos();
@@ -20,7 +20,7 @@ class ParentescoRemoteDataSourceImpl implements ParentescoRemoteDataSource {
   @override
   Future<List<ParentescoModel>> getParentescos() async {
     try {
-      final uri = Uri.parse('${Constants.ifasorisBaseUrl}/parentesco');
+      final uri = Uri.parse('${Constants.apiPublica}/parentesco');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

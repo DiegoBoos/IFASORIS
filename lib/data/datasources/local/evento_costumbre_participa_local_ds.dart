@@ -1,13 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/evento_costumbre_participa_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/evento_costumbre_participa_model.dart';
+import '../../models/evento_costumbre_participa.dart';
 
 abstract class EventoCostumbreParticipaLocalDataSource {
   Future<List<EventoCostumbreParticipaModel>> getEventosCostumbresParticipa();
   Future<int> saveEventoCostumbreParticipa(
-      EventoCostumbreParticipaEntity eventoCostumbreParticipa);
+      EventoCostumbreParticipaModel eventoCostumbreParticipa);
 
   Future<List<LstEventoCostumbreParticipa>> getAsp6EventosCostumbresParticipa(
       int? dimensionSocioCulturalPueblosIndigenasId);
@@ -33,7 +32,7 @@ class EventoCostumbreParticipaLocalDataSourceImpl
 
   @override
   Future<int> saveEventoCostumbreParticipa(
-      EventoCostumbreParticipaEntity eventoCostumbreParticipa) async {
+      EventoCostumbreParticipaModel eventoCostumbreParticipa) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

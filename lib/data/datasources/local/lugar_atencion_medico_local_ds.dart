@@ -1,13 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entities/lugar_atencion_medico_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/lugar_atencion_medico_model.dart';
+import '../../models/lugar_atencion_medico.dart';
 
 abstract class LugarAtencionMedicoLocalDataSource {
   Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico();
   Future<int> saveLugarAtencionMedico(
-      LugarAtencionMedicoEntity lugarAtencionMedico);
+      LugarAtencionMedicoModel lugarAtencionMedico);
 
   Future<List<LstLugarAtencionMedico>> getLugaresAtencionMedicoAtencionSalud(
       int? atencionSaludId);
@@ -30,7 +29,7 @@ class LugarAtencionMedicoLocalDataSourceImpl
 
   @override
   Future<int> saveLugarAtencionMedico(
-      LugarAtencionMedicoEntity lugarAtencionMedico) async {
+      LugarAtencionMedicoModel lugarAtencionMedico) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

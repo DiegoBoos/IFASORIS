@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/ui/utils/input_decoration.dart';
 
-import '../../../data/models/nombre_enfermedad_model.dart';
-import '../../../data/models/servicio_solicitado_model.dart';
-import '../../../domain/entities/cuidado_salud_cond_riesgo_entity.dart';
-import '../../../domain/entities/grupo_familiar_entity.dart';
+import '../../../data/models/nombre_enfermedad.dart';
+import '../../../data/models/servicio_solicitado.dart';
+import '../../../domain/entities/cuidado_salud_cond_riesgo.dart';
+import '../../../domain/entities/grupo_familiar.dart';
 import '../../../domain/usecases/condicion_nutricional/condicion_nutricional_exports.dart';
 import '../../../domain/usecases/conducta_seguir/conducta_seguir_exports.dart';
 import '../../../domain/usecases/esquema_vacunacion/esquema_vacunacion_exports.dart';
@@ -117,9 +118,9 @@ class _CuidadoSaludCondRiesgoFormState
       TextFormField(
         enabled: false,
         controller: _nombresApellidosCtrl,
-        decoration: const InputDecoration(
+        decoration: CustomInputDecoration.inputDecoration(
+          hintText: 'Nombres y Apellidos',
           labelText: 'Integrante Grupo Familiar',
-          border: OutlineInputBorder(),
         ),
       ),
       const Divider(),
@@ -141,7 +142,7 @@ class _CuidadoSaludCondRiesgoFormState
                   .map(
                     (ultimaVezInstSalud) => DropdownMenuItem<int>(
                       value: ultimaVezInstSalud.ultimaVezInstSaludId,
-                      child: Text(ultimaVezInstSalud.descripcion),
+                      child: Text(ultimaVezInstSalud.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -212,12 +213,13 @@ class _CuidadoSaludCondRiesgoFormState
                                         formState,
                                         context,
                                         value,
-                                        servicioSolicitado.servicioSolicitadoId,
+                                        servicioSolicitado
+                                            .servicioSolicitadoId!,
                                         cuidadoSaludCondRiesgoBloc);
                                   }),
                               Flexible(
                                 child: Text(
-                                  servicioSolicitado.descripcion,
+                                  servicioSolicitado.descripcion ?? '',
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -261,8 +263,8 @@ class _CuidadoSaludCondRiesgoFormState
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _tieneEnfermedad,
                                     onChanged: (int? newValue) {
@@ -354,12 +356,12 @@ class _CuidadoSaludCondRiesgoFormState
                                               context,
                                               value,
                                               nombreEnfermedad
-                                                  .nombreEnfermedadId,
+                                                  .nombreEnfermedadId!,
                                               cuidadoSaludCondRiesgoBloc);
                                         }),
                                     Flexible(
                                       child: Text(
-                                        nombreEnfermedad.descripcion,
+                                        nombreEnfermedad.descripcion ?? '',
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -405,7 +407,8 @@ class _CuidadoSaludCondRiesgoFormState
                           (seguimientoEnfermedad) => DropdownMenuItem<int>(
                             value:
                                 seguimientoEnfermedad.seguimientoEnfermedadId,
-                            child: Text(seguimientoEnfermedad.descripcion),
+                            child:
+                                Text(seguimientoEnfermedad.descripcion ?? ''),
                           ),
                         )
                         .toList(),
@@ -452,7 +455,7 @@ class _CuidadoSaludCondRiesgoFormState
                   .map(
                     (condicionNutricional) => DropdownMenuItem<int>(
                       value: condicionNutricional.condicionNutricionalId,
-                      child: Text(condicionNutricional.descripcion),
+                      child: Text(condicionNutricional.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -499,8 +502,8 @@ class _CuidadoSaludCondRiesgoFormState
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _tosFlemaId,
                                     onChanged: (int? newValue) {
@@ -556,8 +559,8 @@ class _CuidadoSaludCondRiesgoFormState
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _manchasPielId,
                                     onChanged: (int? newValue) {
@@ -612,8 +615,8 @@ class _CuidadoSaludCondRiesgoFormState
                           .map(
                             (e) => e.opcionId == 3
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _carnetVacunacionId,
                                     onChanged: (int? newValue) {
@@ -680,8 +683,8 @@ class _CuidadoSaludCondRiesgoFormState
                         Column(
                             children: esquemasVacunacionLoaded
                                 .map(
-                                  (e) => RadioListTile(
-                                    title: Text(e.descripcion),
+                                  (e) => RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.esquemaVacunacionId,
                                     groupValue: _esquemaVacunacionId,
                                     onChanged: (int? newValue) {
@@ -734,8 +737,8 @@ class _CuidadoSaludCondRiesgoFormState
                         Column(
                             children: lugaresVacunacionLoaded
                                 .map(
-                                  (e) => RadioListTile(
-                                    title: Text(e.descripcion),
+                                  (e) => RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.lugarVacunacionId,
                                     groupValue: _lugarVacunacionId,
                                     onChanged: (int? newValue) {
@@ -794,8 +797,8 @@ class _CuidadoSaludCondRiesgoFormState
                             (e) => widget.currentAfiliado.edad! < 12 &&
                                     e.opcionId == 1
                                 ? Container()
-                                : RadioListTile(
-                                    title: Text(e.descripcion),
+                                : RadioListTile<int?>(
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _utilizaMetodoPlanificacionId,
                                     onChanged: (int? newValue) {
@@ -865,7 +868,7 @@ class _CuidadoSaludCondRiesgoFormState
                         .map(
                           (metodoPlanificacion) => DropdownMenuItem<int>(
                             value: metodoPlanificacion.metodoPlanificacionId,
-                            child: Text(metodoPlanificacion.descripcion),
+                            child: Text(metodoPlanificacion.descripcion ?? ''),
                           ),
                         )
                         .toList(),
@@ -912,7 +915,7 @@ class _CuidadoSaludCondRiesgoFormState
                   .map(
                     (conductaSeguir) => DropdownMenuItem<int>(
                       value: conductaSeguir.conductaSeguirId,
-                      child: Text(conductaSeguir.descripcion),
+                      child: Text(conductaSeguir.descripcion ?? ''),
                     ),
                   )
                   .toList(),

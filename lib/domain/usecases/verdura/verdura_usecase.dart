@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/verdura_entity.dart';
+import '../../entities/verdura.dart';
 import '../../repositories/verdura/verdura_repository.dart';
 
 class VerduraUsecase {

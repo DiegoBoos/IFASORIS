@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/domain/entities/ficha_entity.dart';
 
-import '../../../core/error/exception.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/repositories/ficha/ficha_repository.dart';
 import '../../datasources/remote/ficha_remote_ds.dart';
+import '../../models/ficha.dart';
 
 class FichaRepositoryImpl implements FichaRepository {
   final FichaRemoteDataSource fichaRemoteDataSource;
@@ -21,15 +20,13 @@ class FichaRepositoryImpl implements FichaRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }
   }
 
   @override
-  Future<Either<Failure, List<FichaEntity>>> getFichasRepository(
+  Future<Either<Failure, List<FichaModel>>> getFichasRepository(
       String userName) async {
     try {
       final result = await fichaRemoteDataSource.getFichas(userName);
@@ -37,8 +34,6 @@ class FichaRepositoryImpl implements FichaRepository {
       return Right(result);
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.properties));
-    } on ServerException {
-      return const Left(ServerFailure(['Excepción no controlada']));
     } on SocketException catch (e) {
       return Left(ConnectionFailure([e.message]));
     }

@@ -1,9 +1,8 @@
-import '../../../domain/entities/familia_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/familia_model.dart';
+import '../../models/familia.dart';
 
 abstract class FamiliaLocalDataSource {
-  Future<FamiliaEntity> createFamilia(FamiliaEntity familia);
+  Future<FamiliaModel> createFamilia(FamiliaModel familia);
   Future<List<FamiliaModel>> loadFamilias();
 
   Future<int> deleteAfiliadoFamilia(int fkAfiliadoId);
@@ -11,7 +10,7 @@ abstract class FamiliaLocalDataSource {
 
 class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   @override
-  Future<FamiliaEntity> createFamilia(FamiliaEntity familia) async {
+  Future<FamiliaModel> createFamilia(FamiliaModel familia) async {
     final db = await ConnectionSQLiteService.db;
 
     // final res = await db.insert('Familia', familia.toJson());
@@ -32,7 +31,7 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
       // Insertar la nueva familia en la tabla 'Familia'
       final res = await txn.insert('Familia', familia.toJson());
       // Actualizar el ID de familia
-      familia.familiaId = res;
+      familia.copyWith(familiaId: res);
 
       // Eliminar filas en la tabla 'Asp3_GrupoFamiliar'
       await txn.execute('DELETE FROM Asp3_GrupoFamiliar WHERE Afiliado_id = ?',

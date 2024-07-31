@@ -1,10 +1,9 @@
-import '../../../domain/entities/parentesco_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/parentesco_model.dart';
+import '../../models/parentesco.dart';
 
 abstract class ParentescoLocalDataSource {
   Future<List<ParentescoModel>> getParentescos();
-  Future<int> saveParentesco(ParentescoEntity parentesco);
+  Future<int> saveParentesco(ParentescoModel parentesco);
 }
 
 class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
@@ -20,7 +19,7 @@ class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
   }
 
   @override
-  Future<int> saveParentesco(ParentescoEntity parentesco) async {
+  Future<int> saveParentesco(ParentescoModel parentesco) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =

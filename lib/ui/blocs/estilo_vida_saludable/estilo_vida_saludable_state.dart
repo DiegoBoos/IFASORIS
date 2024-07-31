@@ -23,6 +23,6 @@ class EstiloVidaSaludableSubmissionFailed extends EstiloVidaSaludableState {
 }
 
 EstiloVidaSaludableEntity initObject() {
-  return EstiloVidaSaludableEntity(
-      formStatus: const EstiloVidaSaludableFormInitial());
+  return const EstiloVidaSaludableEntity(
+      formStatus: EstiloVidaSaludableFormInitial());
 }

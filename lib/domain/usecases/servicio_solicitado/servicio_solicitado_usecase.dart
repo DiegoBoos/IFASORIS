@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/servicio_solicitado_entity.dart';
+import '../../entities/servicio_solicitado.dart';
 import '../../repositories/servicio_solicitado/servicio_solicitado_repository.dart';
 
 class ServicioSolicitadoUsecase {

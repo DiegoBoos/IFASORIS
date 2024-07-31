@@ -1,11 +1,10 @@
-import '../../../domain/entities/iluminacion_vivienda_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/iluminacion_vivienda_model.dart';
+import '../../models/iluminacion_vivienda.dart';
 
 abstract class IluminacionViviendaLocalDataSource {
   Future<List<IluminacionViviendaModel>> getIluminacionesVivienda();
   Future<int> saveIluminacionVivienda(
-      IluminacionViviendaEntity iluminacionVivienda);
+      IluminacionViviendaModel iluminacionVivienda);
 }
 
 class IluminacionViviendaLocalDataSourceImpl
@@ -22,7 +21,7 @@ class IluminacionViviendaLocalDataSourceImpl
 
   @override
   Future<int> saveIluminacionVivienda(
-      IluminacionViviendaEntity iluminacionVivienda) async {
+      IluminacionViviendaModel iluminacionVivienda) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

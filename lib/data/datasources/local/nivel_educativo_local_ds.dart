@@ -1,10 +1,9 @@
-import '../../../domain/entities/nivel_educativo_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/nivel_educativo_model.dart';
+import '../../models/nivel_educativo.dart';
 
 abstract class NivelEducativoLocalDataSource {
   Future<List<NivelEducativoModel>> getNivelesEducativos();
-  Future<int> saveNivelEducativo(NivelEducativoEntity nivelEducativo);
+  Future<int> saveNivelEducativo(NivelEducativoModel nivelEducativo);
 }
 
 class NivelEducativoLocalDataSourceImpl
@@ -20,7 +19,7 @@ class NivelEducativoLocalDataSourceImpl
   }
 
   @override
-  Future<int> saveNivelEducativo(NivelEducativoEntity nivelEducativo) async {
+  Future<int> saveNivelEducativo(NivelEducativoModel nivelEducativo) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert(

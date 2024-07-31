@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/parentesco_entity.dart';
+import '../../entities/parentesco.dart';
 import '../../repositories/parentesco/parentesco_repository_db.dart';
 
 class ParentescoUsecaseDB {

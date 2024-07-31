@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/factor_riesgo_vivienda_model.dart';
+import 'package:ifasoris/data/models/factor_riesgo_vivienda.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/factor_riesgo_vivienda_entity.dart';
+import '../../entities/factor_riesgo_vivienda.dart';
 
 abstract class FactorRiesgoViviendaRepositoryDB {
   Future<Either<Failure, int>> saveFactorRiesgoViviendaRepositoryDB(

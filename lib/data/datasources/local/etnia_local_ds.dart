@@ -1,10 +1,9 @@
-import '../../../domain/entities/etnia_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/etnia_model.dart';
+import '../../models/etnia.dart';
 
 abstract class EtniaLocalDataSource {
   Future<List<EtniaModel>> getEtnias();
-  Future<int> saveEtnia(EtniaEntity etnia);
+  Future<int> saveEtnia(EtniaModel etnia);
 }
 
 class EtniaLocalDataSourceImpl implements EtniaLocalDataSource {
@@ -19,7 +18,7 @@ class EtniaLocalDataSourceImpl implements EtniaLocalDataSource {
   }
 
   @override
-  Future<int> saveEtnia(EtniaEntity etnia) async {
+  Future<int> saveEtnia(EtniaModel etnia) async {
     final db = await ConnectionSQLiteService.db;
 
     final res = await db.insert('Etnia_GrupoFamiliar', etnia.toJson());

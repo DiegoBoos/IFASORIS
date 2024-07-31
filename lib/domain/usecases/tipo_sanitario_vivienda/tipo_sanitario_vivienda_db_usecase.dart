@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:ifasoris/data/models/tipo_sanitario_vivienda_model.dart';
+import 'package:ifasoris/data/models/tipo_sanitario_vivienda.dart';
 
 import '../../../core/error/failure.dart';
-import '../../entities/tipo_sanitario_vivienda_entity.dart';
+import '../../entities/tipo_sanitario_vivienda.dart';
 import '../../repositories/tipo_sanitario_vivienda/tipo_sanitario_vivienda_repository_db.dart';
 
 class TipoSanitarioViviendaUsecaseDB {

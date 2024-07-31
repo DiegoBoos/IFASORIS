@@ -1,10 +1,9 @@
-import '../../../domain/entities/tiempo_tarda_ca_entity.dart';
 import '../../../services/connection_sqlite_service.dart';
-import '../../models/tiempo_tarda_ca_model.dart';
+import '../../models/tiempo_tarda_ca.dart';
 
 abstract class TiempoTardaCALocalDataSource {
   Future<List<TiempoTardaCAModel>> getTiemposTardaCA();
-  Future<int> saveTiempoTardaCA(TiempoTardaCAEntity tiempoTardaCA);
+  Future<int> saveTiempoTardaCA(TiempoTardaCAModel tiempoTardaCA);
 }
 
 class TiempoTardaCALocalDataSourceImpl implements TiempoTardaCALocalDataSource {
@@ -19,7 +18,7 @@ class TiempoTardaCALocalDataSourceImpl implements TiempoTardaCALocalDataSource {
   }
 
   @override
-  Future<int> saveTiempoTardaCA(TiempoTardaCAEntity tiempoTardaCA) async {
+  Future<int> saveTiempoTardaCA(TiempoTardaCAModel tiempoTardaCA) async {
     final db = await ConnectionSQLiteService.db;
 
     final res =
