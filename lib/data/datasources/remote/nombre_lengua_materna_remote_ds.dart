@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/nombre_lengua_materna.dart';
 
@@ -23,7 +23,7 @@ class NombreLenguaMaternaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.apiPublica}/nombrelenguamaternaByDpto?IdeDpto=$dtoId');
+          '${AppConfig.apiPublica}/nombrelenguamaternaByDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/hortaliza.dart';
 
 abstract class HortalizaLocalDataSource {
@@ -16,8 +15,7 @@ abstract class HortalizaLocalDataSource {
 class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
   @override
   Future<List<HortalizaModel>> getHortalizas() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Hortalizas_AspectosSocioEconomicos');
+    final res = await supabase.from(.select()'Hortalizas_AspectosSocioEconomicos');
     final result =
         List<HortalizaModel>.from(res.map((m) => HortalizaModel.fromJson(m)))
             .toList();
@@ -27,10 +25,9 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
 
   @override
   Future<int> saveHortaliza(HortalizaModel hortaliza) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'Hortalizas_AspectosSocioEconomicos', hortaliza.toJson());
+    final res = await supabase
+        .from(
+        .insert('Hortalizas_AspectosSocioEconomicos', hortaliza.toJson());
 
     return res;
   }
@@ -38,8 +35,6 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
   @override
   Future<int> saveUbicacionHortalizas(
       int ubicacionId, List<LstHortaliza> lstHortalizas) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionHortalizas',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -62,8 +57,7 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
 
   @override
   Future<List<LstHortaliza>> getUbicacionHortalizas(int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionHortalizas',
+    final res = await supabase.from(.select()'Asp1_UbicacionHortalizas',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
     final result =
         List<LstHortaliza>.from(res.map((m) => LstHortaliza.fromJson(m)))

@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/familia.dart';
 
 abstract class FamiliaLocalDataSource {
@@ -11,9 +11,7 @@ abstract class FamiliaLocalDataSource {
 class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   @override
   Future<FamiliaModel> createFamilia(FamiliaModel familia) async {
-    final db = await ConnectionSQLiteService.db;
-
-    // final res = await db.insert('Familia', familia.toJson());
+    // final res = await  supabase.from(.insert('Familia', familia.toJson());
 
     // // Esta instruccion acuaualiza los datos de familia para el caso cuando se crea una nueva ficha de un afiliado que pertenence a un grupo familiar
     // final sql = '''
@@ -58,8 +56,7 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
 
   @override
   Future<List<FamiliaModel>> loadFamilias() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Familia');
+    final res = await supabase.from('Familia').select();
     final result =
         List<FamiliaModel>.from(res.map((m) => FamiliaModel.fromJson(m)))
             .toList();
@@ -69,10 +66,10 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
 
   @override
   Future<int> deleteAfiliadoFamilia(int fkAfiliadoId) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.delete('Familia',
-        where: 'FK_Afiliado_id = ?', whereArgs: [fkAfiliadoId]);
+    final res = await supabase
+        .from('Familia')
+        .delete()
+        .eq('FK_Afiliado_id', fkAfiliadoId);
 
     return res;
   }

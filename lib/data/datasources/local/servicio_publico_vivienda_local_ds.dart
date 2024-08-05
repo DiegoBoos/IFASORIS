@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/servicio_publico_vivienda.dart';
 
 abstract class ServicioPublicoViviendaLocalDataSource {
@@ -19,8 +18,7 @@ class ServicioPublicoViviendaLocalDataSourceImpl
     implements ServicioPublicoViviendaLocalDataSource {
   @override
   Future<List<ServicioPublicoViviendaModel>> getServiciosPublicos() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('ServiciosPublicosVivienda_DatosVivienda');
+    final res = await supabase.from(.select()'ServiciosPublicosVivienda_DatosVivienda');
     final result = List<ServicioPublicoViviendaModel>.from(
         res.map((m) => ServicioPublicoViviendaModel.fromJson(m))).toList();
 
@@ -30,9 +28,8 @@ class ServicioPublicoViviendaLocalDataSourceImpl
   @override
   Future<int> saveServicioPublicoVivienda(
       ServicioPublicoViviendaModel servicioPublicoVivienda) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('ServiciosPublicosVivienda_DatosVivienda',
+    final res = await supabase.from(.insert(
+        'ServiciosPublicosVivienda_DatosVivienda',
         servicioPublicoVivienda.toJson());
 
     return res;
@@ -41,8 +38,6 @@ class ServicioPublicoViviendaLocalDataSourceImpl
   @override
   Future<int> saveServiciosPublicosVivienda(
       int datoViviendaId, List<LstServPublico> lstServPublico) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaServiciosPublicos',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
@@ -66,8 +61,7 @@ class ServicioPublicoViviendaLocalDataSourceImpl
   @override
   Future<List<LstServPublico>> getServiciosPublicosVivienda(
       int? datoViviendaId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp2_DatosViviendaServiciosPublicos',
+    final res = await supabase.from(.select()'Asp2_DatosViviendaServiciosPublicos',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
     final result =
         List<LstServPublico>.from(res.map((m) => LstServPublico.fromJson(m)))

@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/resguardo.dart';
 
 abstract class ResguardoLocalDataSource {
@@ -9,8 +8,7 @@ abstract class ResguardoLocalDataSource {
 class ResguardoLocalDataSourceImpl implements ResguardoLocalDataSource {
   @override
   Future<List<ResguardoModel>> getResguardos() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Resguardos');
+    final res = await supabase.from(.select()'Resguardos');
     final result =
         List<ResguardoModel>.from(res.map((m) => ResguardoModel.fromJson(m)))
             .toList();
@@ -20,9 +18,8 @@ class ResguardoLocalDataSourceImpl implements ResguardoLocalDataSource {
 
   @override
   Future<int> saveResguardo(ResguardoModel resguardo) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('Resguardos', resguardo.toJson());
+    final res =
+        await supabase.from(.insert('Resguardos', resguardo.toJson());
 
     return res;
   }

@@ -1,7 +1,6 @@
 import 'package:ifasoris/core/error/failure.dart';
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/atencion_salud.dart';
 
 abstract class AtencionSaludLocalDataSource {
@@ -13,14 +12,10 @@ abstract class AtencionSaludLocalDataSource {
 class AtencionSaludLocalDataSourceImpl implements AtencionSaludLocalDataSource {
   @override
   Future<int> saveAtencionSalud(AtencionSaludModel atencionSalud) async {
-    final db = await ConnectionSQLiteService.db;
-
     try {
-      final res = await db.insert(
-        'Asp7_AtencionSalud',
-        atencionSalud.toJson(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      final res = await supabase.from('Asp7_AtencionSalud').insert(
+            atencionSalud.toJson(),
+          );
       return res;
     } catch (e) {
       throw const DatabaseFailure(['Error al guardar atencion en salud']);
@@ -29,14 +24,14 @@ class AtencionSaludLocalDataSourceImpl implements AtencionSaludLocalDataSource {
 
   @override
   Future<AtencionSaludModel?> getAtencionSalud(int afiliadoId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp7_AtencionSalud',
-        where: 'Afiliado_id = ?', whereArgs: [afiliadoId]);
+    final res = await supabase
+        .from('Asp7_AtencionSalud')
+        .select()
+        .eq('Afiliado_id', afiliadoId);
 
     if (res.isEmpty) return null;
 
-    final resultMap = {for (var e in res[0].entries) e.key: e.value};
-    final result = AtencionSaludModel.fromJson(resultMap);
+    final result = AtencionSaludModel.fromJson(res);
     return result;
   }
 }

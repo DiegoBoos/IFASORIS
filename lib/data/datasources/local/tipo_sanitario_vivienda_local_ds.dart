@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/tipo_sanitario_vivienda.dart';
 
 abstract class TipoSanitarioViviendaLocalDataSource {
@@ -18,8 +17,7 @@ class TipoSanitarioViviendaLocalDataSourceImpl
     implements TipoSanitarioViviendaLocalDataSource {
   @override
   Future<List<TipoSanitarioViviendaModel>> getTiposSanitario() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('TiposSanitarioVivienda_DatosVivienda');
+    final res = await supabase.from(.select()'TiposSanitarioVivienda_DatosVivienda');
     final result = List<TipoSanitarioViviendaModel>.from(
         res.map((m) => TipoSanitarioViviendaModel.fromJson(m))).toList();
 
@@ -29,9 +27,7 @@ class TipoSanitarioViviendaLocalDataSourceImpl
   @override
   Future<int> saveTipoSanitarioVivienda(
       TipoSanitarioViviendaModel tipoSanitarioVivienda) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
+    final res = await supabase.from(.insert(
         'TiposSanitarioVivienda_DatosVivienda', tipoSanitarioVivienda.toJson());
 
     return res;
@@ -40,8 +36,6 @@ class TipoSanitarioViviendaLocalDataSourceImpl
   @override
   Future<int> saveTiposSanitarioVivienda(
       int datoViviendaId, List<LstTipoSanitario> lstTipoSanitario) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp2_DatosViviendaTiposSanitario',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
@@ -66,8 +60,7 @@ class TipoSanitarioViviendaLocalDataSourceImpl
   @override
   Future<List<LstTipoSanitario>> getTiposSanitarioVivienda(
       int? datoViviendaId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp2_DatosViviendaTiposSanitario',
+    final res = await supabase.from(.select()'Asp2_DatosViviendaTiposSanitario',
         where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
     final result = List<LstTipoSanitario>.from(
         res.map((m) => LstTipoSanitario.fromJson(m))).toList();

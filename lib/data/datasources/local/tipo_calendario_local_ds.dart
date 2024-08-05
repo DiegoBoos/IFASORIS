@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/tipo_calendario.dart';
 
 abstract class TipoCalendarioLocalDataSource {
@@ -10,8 +9,7 @@ class TipoCalendarioLocalDataSourceImpl
     implements TipoCalendarioLocalDataSource {
   @override
   Future<List<TipoCalendarioModel>> getTiposCalendario() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('TiposCalendarios_AspectosSocioEconomicos');
+    final res = await supabase.from(.select()'TiposCalendarios_AspectosSocioEconomicos');
     final result = List<TipoCalendarioModel>.from(
         res.map((m) => TipoCalendarioModel.fromJson(m))).toList();
 
@@ -20,9 +18,7 @@ class TipoCalendarioLocalDataSourceImpl
 
   @override
   Future<int> saveTipoCalendario(TipoCalendarioModel tipoCalendario) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
+    final res = await supabase.from(.insert(
         'TiposCalendarios_AspectosSocioEconomicos', tipoCalendario.toJson());
 
     return res;

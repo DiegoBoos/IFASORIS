@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/nombre_enfermedad.dart';
 
 abstract class NombreEnfermedadLocalDataSource {
@@ -18,8 +17,7 @@ class NombreEnfermedadLocalDataSourceImpl
     implements NombreEnfermedadLocalDataSource {
   @override
   Future<List<NombreEnfermedadModel>> getNombresEnfermedades() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('NombresEnfermedad_CuidadoSaludCondRiesgo');
+    final res = await supabase.from(.select()'NombresEnfermedad_CuidadoSaludCondRiesgo');
     final result = List<NombreEnfermedadModel>.from(
         res.map((m) => NombreEnfermedadModel.fromJson(m))).toList();
 
@@ -29,9 +27,7 @@ class NombreEnfermedadLocalDataSourceImpl
   @override
   Future<int> saveNombreEnfermedad(
       NombreEnfermedadModel nombreEnfermedad) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
+    final res = await supabase.from(.insert(
         'NombresEnfermedad_CuidadoSaludCondRiesgo', nombreEnfermedad.toJson());
 
     return res;
@@ -40,8 +36,7 @@ class NombreEnfermedadLocalDataSourceImpl
   @override
   Future<List<LstNombreEnfermedad>> getLstNombresEnfermedades(
       int? cuidadoSaludCondRiesgoId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp5_CuidadoSaludCondRiesgoNombresEnfermedad',
+    final res = await supabase.from(.select()'Asp5_CuidadoSaludCondRiesgoNombresEnfermedad',
         where: 'CuidadoSaludCondRiesgo_id = ?',
         whereArgs: [cuidadoSaludCondRiesgoId]);
     final result = List<LstNombreEnfermedad>.from(
@@ -53,8 +48,6 @@ class NombreEnfermedadLocalDataSourceImpl
   @override
   Future<int> saveNombresEnfermedades(int cuidadoSaludCondRiesgoId,
       List<LstNombreEnfermedad> lstNombresEnfermedades) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp5_CuidadoSaludCondRiesgoNombresEnfermedad',
         where: 'CuidadoSaludCondRiesgo_id = ?',

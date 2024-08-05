@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/servicio_solicitado.dart';
 
 abstract class ServicioSolicitadoLocalDataSource {
@@ -19,8 +18,7 @@ class ServicioSolicitadoLocalDataSourceImpl
     implements ServicioSolicitadoLocalDataSource {
   @override
   Future<List<ServicioSolicitadoModel>> getServiciosSolicitados() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('ServiciosSolicitados_CuidadoSaludCondRiesgo');
+    final res = await supabase.from(.select()'ServiciosSolicitados_CuidadoSaludCondRiesgo');
     final result = List<ServicioSolicitadoModel>.from(
         res.map((m) => ServicioSolicitadoModel.fromJson(m))).toList();
 
@@ -30,9 +28,8 @@ class ServicioSolicitadoLocalDataSourceImpl
   @override
   Future<int> saveServicioSolicitado(
       ServicioSolicitadoModel servicioSolicitado) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('ServiciosSolicitados_CuidadoSaludCondRiesgo',
+    final res = await supabase.from(.insert(
+        'ServiciosSolicitados_CuidadoSaludCondRiesgo',
         servicioSolicitado.toJson());
 
     return res;
@@ -41,8 +38,7 @@ class ServicioSolicitadoLocalDataSourceImpl
   @override
   Future<List<LstServicioSolicitado>> getLstServiciosSolicitados(
       int? cuidadoSaludCondRiesgoId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp5_CuidadoSaludCondRiesgoServiciosSolicita',
+    final res = await supabase.from(.select()'Asp5_CuidadoSaludCondRiesgoServiciosSolicita',
         where: 'CuidadoSaludCondRiesgo_id = ?',
         whereArgs: [cuidadoSaludCondRiesgoId]);
     final result = List<LstServicioSolicitado>.from(
@@ -54,8 +50,6 @@ class ServicioSolicitadoLocalDataSourceImpl
   @override
   Future<int> saveServiciosSolicitados(int cuidadoSaludCondRiesgoId,
       List<LstServicioSolicitado> lstServiciosSolicitados) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp5_CuidadoSaludCondRiesgoServiciosSolicita',
         where: 'CuidadoSaludCondRiesgo_id = ?',

@@ -1,6 +1,4 @@
-import 'package:sqflite/sqflite.dart';
-
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/dificultad_acceso_ca.dart';
 
 abstract class DificultadAccesoCALocalDataSource {
@@ -19,8 +17,8 @@ class DificultadAccesoCALocalDataSourceImpl
     implements DificultadAccesoCALocalDataSource {
   @override
   Future<List<DificultadAccesoCAModel>> getDificultadesAccesoCA() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('DificultadesAcceso_CentroAtencion');
+    final res =
+        await supabase.from('DificultadesAcceso_CentroAtencion').select();
     final result = List<DificultadAccesoCAModel>.from(
         res.map((m) => DificultadAccesoCAModel.fromJson(m))).toList();
 
@@ -30,10 +28,9 @@ class DificultadAccesoCALocalDataSourceImpl
   @override
   Future<int> saveDificultadAccesoCA(
       DificultadAccesoCAModel dificultadAccesoCA) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'DificultadesAcceso_CentroAtencion', dificultadAccesoCA.toJson());
+    final res = await supabase
+        .from('DificultadesAcceso_CentroAtencion')
+        .insert(dificultadAccesoCA.toJson());
 
     return res;
   }
@@ -41,8 +38,6 @@ class DificultadAccesoCALocalDataSourceImpl
   @override
   Future<int> saveUbicacionDificultadesAcceso(int ubicacionId,
       List<LstDificultadAccesoAtencion> lstDificultadAccesoAtencion) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionDificultadAcceso',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -66,9 +61,11 @@ class DificultadAccesoCALocalDataSourceImpl
   @override
   Future<List<LstDificultadAccesoAtencion>> getUbicacionDificultadesAcceso(
       int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionDificultadAcceso',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionDificultadAcceso')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
+
     final result = List<LstDificultadAccesoAtencion>.from(
         res.map((m) => LstDificultadAccesoAtencion.fromJson(m))).toList();
 

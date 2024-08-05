@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/curso_vida.dart';
 
 abstract class CursoVidaLocalDataSource {
@@ -9,8 +9,7 @@ abstract class CursoVidaLocalDataSource {
 class CursoVidaLocalDataSourceImpl implements CursoVidaLocalDataSource {
   @override
   Future<List<CursoVidaModel>> getCursosVida() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('CursoVida_GrupoFamiliar');
+    final res = await supabase.from('CursoVida_GrupoFamiliar').select();
     final result =
         List<CursoVidaModel>.from(res.map((m) => CursoVidaModel.fromJson(m)))
             .toList();
@@ -20,9 +19,9 @@ class CursoVidaLocalDataSourceImpl implements CursoVidaLocalDataSource {
 
   @override
   Future<int> saveCursoVida(CursoVidaModel cursoVida) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('CursoVida_GrupoFamiliar', cursoVida.toJson());
+    final res = await supabase
+        .from('CursoVida_GrupoFamiliar')
+        .insert(cursoVida.toJson());
 
     return res;
   }

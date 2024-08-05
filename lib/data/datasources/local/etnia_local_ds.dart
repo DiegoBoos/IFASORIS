@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/etnia.dart';
 
 abstract class EtniaLocalDataSource {
@@ -9,8 +9,7 @@ abstract class EtniaLocalDataSource {
 class EtniaLocalDataSourceImpl implements EtniaLocalDataSource {
   @override
   Future<List<EtniaModel>> getEtnias() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Etnia_GrupoFamiliar');
+    final res = await supabase.from('Etnia_GrupoFamiliar').select();
     final result =
         List<EtniaModel>.from(res.map((m) => EtniaModel.fromJson(m))).toList();
 
@@ -19,9 +18,8 @@ class EtniaLocalDataSourceImpl implements EtniaLocalDataSource {
 
   @override
   Future<int> saveEtnia(EtniaModel etnia) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('Etnia_GrupoFamiliar', etnia.toJson());
+    final res =
+        await supabase.from('Etnia_GrupoFamiliar').insert(etnia.toJson());
 
     return res;
   }

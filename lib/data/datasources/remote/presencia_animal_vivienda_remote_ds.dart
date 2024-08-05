@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/presencia_animal_vivienda.dart';
 
@@ -24,7 +24,7 @@ class PresenciaAnimalViviendaRemoteDataSourceImpl
       int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.apiPublica}/presenciaanimalesviviendabyDpto?IdeDpto=$dtoId');
+          '${AppConfig.apiPublica}/presenciaanimalesviviendabyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

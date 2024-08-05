@@ -1,5 +1,6 @@
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/grupo_familiar.dart';
 
 abstract class GrupoFamiliarLocalDataSource {
@@ -20,27 +21,24 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   Future<GrupoFamiliarModel> saveGrupoFamiliar(
       GrupoFamiliarModel afiliadoGrupoFamiliar) async {
     try {
-      final db = await ConnectionSQLiteService.db;
-
       if (afiliadoGrupoFamiliar.grupoFamiliarId == null) {
-        await db.insert(
-          'Asp3_GrupoFamiliar',
-          afiliadoGrupoFamiliar.toJson(),
-        );
+        await supabase.from('Asp3_GrupoFamiliar').insert(
+              afiliadoGrupoFamiliar.toJson(),
+            );
       } else {
-        await db.update(
-          'Asp3_GrupoFamiliar',
-          afiliadoGrupoFamiliar.toJson(),
-          where: 'Afiliado_id = ?',
-          whereArgs: [
-            afiliadoGrupoFamiliar.afiliadoId,
-          ],
-        );
+        await supabase
+            .from('Asp3_GrupoFamiliar')
+            .update(
+              afiliadoGrupoFamiliar.toJson(),
+            )
+            .eq('Afiliado_id', afiliadoGrupoFamiliar.afiliadoId);
       }
 
-      final consultarAfiliado =
-          await db.rawQuery('''SELECT Afiliado.nombre1, Afiliado.nombre2,
-              Afiliado.apellido1, Afiliado.apellido2, Asp3_GrupoFamiliar.* FROM Asp3_GrupoFamiliar
+      final consultarAfiliado = await supabase
+          .from('Asp3_GrupoFamiliar')
+          .select('Afiliado.nombre1, Afiliado.nombre2')
+          .rawQuery('''SELECT 
+              Afiliado.apellido1, Afiliado.apellido2, Asp3_GrupoFamiliar.* FROM 
               LEFT JOIN Afiliado ON Asp3_GrupoFamiliar.Afiliado_id = Afiliado.Afiliado_id
               WHERE Asp3_GrupoFamiliar.Afiliado_id = ${afiliadoGrupoFamiliar.afiliadoId}
               AND Asp3_GrupoFamiliar.Familia_id = ${afiliadoGrupoFamiliar.familiaId}''');
@@ -57,8 +55,10 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
 
   @override
   Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.rawQuery('''SELECT * FROM Asp3_GrupoFamiliar 
+    final res = await supabase
+        .from('Asp3_GrupoFamiliar')
+        .select()
+        .rawQuery('''SELECT * FROM  
            JOIN Afiliado ON Asp3_GrupoFamiliar.Afiliado_id = Afiliado.Afiliado_id
            WHERE Asp3_GrupoFamiliar.Familia_id = $familiaId''');
 
@@ -70,30 +70,28 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
 
   @override
   Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId, int familiaId) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final result = await db.delete('Asp3_GrupoFamiliar',
-        where: 'Afiliado_id = ? AND Familia_id = ?',
-        whereArgs: [afiliadoId, familiaId]);
+    final result = await supabase
+        .from('Asp3_GrupoFamiliar')
+        .delete()
+        .eq('Afiliado_id,Familia_id', [afiliadoId, familiaId]);
 
     return result;
   }
 
   @override
   Future<int> completeGrupoFamiliar(int afiliado) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.update('Asp3_GrupoFamiliar', {'isComplete': 1},
-        where: 'Afiliado_id = ?', whereArgs: [afiliado]);
+    final res = await supabase
+        .from('Asp3_GrupoFamiliar')
+        .update()
+        .eq('Afiliado_id', afiliado)
+        .eq('isComplete', 1);
 
     return res;
   }
 
   @override
   Future<bool> existeAfiliadoCabezaFamilia(int afiliadoId) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.rawQuery('''
+    final res = await supabase.from('Asp3_GrupoFamiliar').select().rawQuery('''
     SELECT EXISTS (
       SELECT 1 FROM Asp3_GrupoFamiliar 
       INNER JOIN Familia ON Asp3_GrupoFamiliar.Afiliado_id = Familia.FK_Afiliado_id

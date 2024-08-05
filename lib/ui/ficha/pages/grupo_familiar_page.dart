@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
 
 import '../../cubits/curso_vida/curso_vida_cubit.dart';
 import '../../cubits/etnia/etnia_cubit.dart';
@@ -232,8 +233,9 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
 
                           Navigator.of(context).pop();
 
-                          CustomSnackBar.showSnackBar(context,
-                              'Afiliado eliminado correctamente', Colors.green);
+                          context.showSnackBar(
+                              message: value.toString(),
+                              backgroundColor: Colors.green);
                         }
                       });
                     }

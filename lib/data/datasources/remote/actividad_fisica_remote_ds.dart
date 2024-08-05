@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/actividad_fisica.dart';
 
@@ -21,7 +21,7 @@ class ActividadFisicaRemoteDataSourceImpl
   @override
   Future<List<ActividadFisicaModel>> getActividadesFisicas() async {
     try {
-      final uri = Uri.parse('${Constants.apiPublica}/actividadesfisicas');
+      final uri = Uri.parse('${AppConfig.apiPublica}/actividadesfisicas');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

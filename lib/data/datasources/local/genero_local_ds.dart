@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/genero.dart';
 
 abstract class GeneroLocalDataSource {
@@ -9,8 +9,7 @@ abstract class GeneroLocalDataSource {
 class GeneroLocalDataSourceImpl implements GeneroLocalDataSource {
   @override
   Future<List<GeneroModel>> getGeneros() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Genero_GrupoFamiliar');
+    final res = await supabase.from('Genero_GrupoFamiliar').select();
     final result =
         List<GeneroModel>.from(res.map((m) => GeneroModel.fromJson(m)))
             .toList();
@@ -20,9 +19,8 @@ class GeneroLocalDataSourceImpl implements GeneroLocalDataSource {
 
   @override
   Future<int> saveGenero(GeneroModel genero) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('Genero_GrupoFamiliar', genero.toJson());
+    final res =
+        await supabase.from('Genero_GrupoFamiliar').insert(genero.toJson());
 
     return res;
   }

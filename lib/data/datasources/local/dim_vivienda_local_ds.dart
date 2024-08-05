@@ -1,7 +1,6 @@
 import 'package:ifasoris/core/error/failure.dart';
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/dim_vivienda.dart';
 
 abstract class DimViviendaLocalDataSource {
@@ -13,14 +12,10 @@ abstract class DimViviendaLocalDataSource {
 class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   @override
   Future<int> saveDimVivienda(DimViviendaModel dimVivienda) async {
-    final db = await ConnectionSQLiteService.db;
-
     try {
-      final res = await db.insert(
-        'Asp2_DatosVivienda',
-        dimVivienda.toJson(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      final res = await supabase.from('Asp2_DatosVivienda').insert(
+            dimVivienda.toJson(),
+          );
       return res;
     } catch (e) {
       throw const DatabaseFailure(['Error al guardar la vivienda']);
@@ -30,15 +25,14 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   @override
   Future<DimViviendaModel?> getDimVivienda(
       int afiliadoId, int familiaId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp2_DatosVivienda',
-        where: 'Afiliado_id = ? AND Familia_id = ?',
-        whereArgs: [afiliadoId, familiaId]);
+    final res = await supabase
+        .from('Asp2_DatosVivienda')
+        .select()
+        .eq('Afiliado_id,Familia_id', [afiliadoId, familiaId]);
 
     if (res.isEmpty) return null;
 
-    final resultMap = {for (var e in res[0].entries) e.key: e.value};
-    final result = DimViviendaModel.fromJson(resultMap);
+    final result = DimViviendaModel.fromJson(res);
     return result;
   }
 }

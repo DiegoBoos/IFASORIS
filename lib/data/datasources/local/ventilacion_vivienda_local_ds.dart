@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/ventilacion_vivienda.dart';
 
 abstract class VentilacionViviendaLocalDataSource {
@@ -11,8 +10,7 @@ class VentilacionViviendaLocalDataSourceImpl
     implements VentilacionViviendaLocalDataSource {
   @override
   Future<List<VentilacionViviendaModel>> getVentilacionesVivienda() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('VentilacionVivienda_DatosVivienda');
+    final res = await supabase.from(.select()'VentilacionVivienda_DatosVivienda');
     final result = List<VentilacionViviendaModel>.from(
         res.map((m) => VentilacionViviendaModel.fromJson(m))).toList();
 
@@ -22,9 +20,7 @@ class VentilacionViviendaLocalDataSourceImpl
   @override
   Future<int> saveVentilacionVivienda(
       VentilacionViviendaModel ventilacionVivienda) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
+    final res = await supabase.from(.insert(
         'VentilacionVivienda_DatosVivienda', ventilacionVivienda.toJson());
 
     return res;

@@ -53,41 +53,41 @@ class AccesoCAFormState extends State<AccesoCAForm> {
         const Divider(),
         const SizedBox(height: 20),
         BlocBuilder<TiempoTardaCACubit, TiemposTardaCAState>(
-          builder: (context, state) {
-            if (state is TiemposTardaCALoaded) {
-              final tiemposTardaCALoaded = state.tiemposTardaCALoaded!;
+            builder: (context, state) {
+          if (state is TiemposTardaCALoaded) {
+            final tiemposTardaCALoaded = state.tiemposTardaCALoaded!;
 
-              return DropdownButtonFormField<int>(
-                value: _tiempoTardaId,
-                items: tiemposTardaCALoaded
-                    .map(
-                      (tiempoTardaCA) => DropdownMenuItem<int>(
-                        value: tiempoTardaCA.tiempoTardaId,
-                        child: Text(tiempoTardaCA.descripcion ?? ''),
-                      ),
-                    )
-                    .toList(),
-                decoration: const InputDecoration(
-                    labelText:
-                        'Tiempo que tarda en llegar desde su casa al centro de atención en Salud',
-                    border: OutlineInputBorder()),
-                onChanged: (int? newValue) {
-                  setState(() {
-                    _tiempoTardaId = newValue;
-                  });
-                  dimUbicacionBloc.add(TiempoTardaChanged(newValue!));
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Campo Requerido';
-                  }
-                  return null;
-                },
-              );
-            }
+            return DropdownButtonFormField<int>(
+              value: _tiempoTardaId,
+              items: tiemposTardaCALoaded
+                  .map(
+                    (tiempoTardaCA) => DropdownMenuItem<int>(
+                      value: tiempoTardaCA.tiempoTardaId,
+                      child: Text(tiempoTardaCA.descripcion ?? ''),
+                    ),
+                  )
+                  .toList(),
+              decoration: const InputDecoration(
+                  labelText:
+                      'Tiempo que tarda en llegar desde su casa al centro de atención en Salud',
+                  border: OutlineInputBorder()),
+              onChanged: (int? newValue) {
+                setState(() {
+                  _tiempoTardaId = newValue;
+                });
+                dimUbicacionBloc.add(TiempoTardaChanged(newValue!));
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Campo Requerido';
+                }
+                return null;
+              },
+            );
+          } else {
             return Container();
-          },
-        ),
+          }
+        }),
         const Divider(),
         const Text(
           'Medios que utiliza para el desplazamiento al centro de atención',
@@ -254,12 +254,12 @@ class AccesoCAFormState extends State<AccesoCAForm> {
               return DropdownButtonFormField<int>(
                 value: _costoDesplazamientoId,
                 items: costosDesplazamientoLoaded
-                    .map(
-                      (costoDesplazamiento) => DropdownMenuItem<int>(
-                        value: costoDesplazamiento.costoDesplazamientoId,
-                        child: Text(costoDesplazamiento.descripcion ?? ''),
-                      ),
-                    )
+                    .map((costoDesplazamiento) => DropdownMenuItem<int>(
+                          value: costoDesplazamiento.costoDesplazamientoId,
+                          child: Text(
+                            costoDesplazamiento.descripcion ?? '',
+                          ),
+                        ))
                     .toList(),
                 decoration: const InputDecoration(
                     labelText: 'Costo desplazamiento',

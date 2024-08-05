@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/sync_log.dart';
 
 abstract class SyncLogLocalDataSource {
@@ -9,8 +8,6 @@ abstract class SyncLogLocalDataSource {
 class SyncLogLocalDataSourceImpl implements SyncLogLocalDataSource {
   @override
   Future<List<SyncLogModel>> getSyncLogsDB() async {
-    final db = await ConnectionSQLiteService.db;
-
     String sql = '''
       SELECT 'Aliado' as Tabla, Count(*) as CantidadRegistros from Aliado WHERE RecordStatus<>'R' group by Tabla having Count(*)>0
       UNION ALL
@@ -63,8 +60,6 @@ class SyncLogLocalDataSourceImpl implements SyncLogLocalDataSource {
 
   @override
   Future<int> forceSyncDB(List<SyncLogModel> syncLogs) async {
-    final db = await ConnectionSQLiteService.db;
-
     var batch = db.batch();
 
     for (var syncLog in syncLogs) {

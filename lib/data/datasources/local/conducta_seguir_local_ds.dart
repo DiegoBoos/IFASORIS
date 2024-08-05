@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/conducta_seguir.dart';
 
 abstract class ConductaSeguirLocalDataSource {
@@ -10,8 +10,8 @@ class ConductaSeguirLocalDataSourceImpl
     implements ConductaSeguirLocalDataSource {
   @override
   Future<List<ConductaSeguirModel>> getConductasSeguir() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('ConductasSeguir_CuidadoSaludCondRiesgo');
+    final res =
+        await supabase.from('ConductasSeguir_CuidadoSaludCondRiesgo').select();
     final result = List<ConductaSeguirModel>.from(
         res.map((m) => ConductaSeguirModel.fromJson(m))).toList();
 
@@ -20,10 +20,9 @@ class ConductaSeguirLocalDataSourceImpl
 
   @override
   Future<int> saveConductaSeguir(ConductaSeguirModel conductaSeguir) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'ConductasSeguir_CuidadoSaludCondRiesgo', conductaSeguir.toJson());
+    final res = await supabase
+        .from('ConductasSeguir_CuidadoSaludCondRiesgo')
+        .insert(conductaSeguir.toJson());
 
     return res;
   }

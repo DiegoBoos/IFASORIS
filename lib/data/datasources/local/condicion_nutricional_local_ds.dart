@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/condicion_nutricional.dart';
 
 abstract class CondicionNutricionalLocalDataSource {
@@ -11,9 +11,9 @@ class CondicionNutricionalLocalDataSourceImpl
     implements CondicionNutricionalLocalDataSource {
   @override
   Future<List<CondicionNutricionalModel>> getCondicionesNutricionales() async {
-    final db = await ConnectionSQLiteService.db;
-    final res =
-        await db.query('CondicionesNutricionales_CuidadoSaludCondRiesgo');
+    final res = await supabase
+        .from('CondicionesNutricionales_CuidadoSaludCondRiesgo')
+        .select();
     final result = List<CondicionNutricionalModel>.from(
         res.map((m) => CondicionNutricionalModel.fromJson(m))).toList();
 
@@ -23,11 +23,9 @@ class CondicionNutricionalLocalDataSourceImpl
   @override
   Future<int> saveCondicionNutricional(
       CondicionNutricionalModel condicionNutricional) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'CondicionesNutricionales_CuidadoSaludCondRiesgo',
-        condicionNutricional.toJson());
+    final res = await supabase
+        .from('CondicionesNutricionales_CuidadoSaludCondRiesgo')
+        .insert(condicionNutricional.toJson());
 
     return res;
   }

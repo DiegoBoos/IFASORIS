@@ -103,7 +103,7 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                     .map(
                       (enfermedadAcude) => DropdownMenuItem<int>(
                         value: enfermedadAcude.enfermedadAcudeId,
-                        child: Text(enfermedadAcude.descripcion ?? ''),
+                        child: Text(enfermedadAcude.descripcion ?? ,
                       ),
                     )
                     .toList(),
@@ -150,7 +150,7 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                               (e) => e.opcionId == 3
                                   ? Container()
                                   : RadioListTile<int?>(
-                                      title: Text(e.descripcion ?? ''),
+                                      title: Text(e.descripcion ?? ,
                                       value: e.opcionId,
                                       groupValue:
                                           _recibioAtencionMedTradicionalId,
@@ -460,7 +460,7 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                     .map(
                       (enfermedadTratamiento) => DropdownMenuItem<int>(
                         value: enfermedadTratamiento.enfermedadTratamientoId,
-                        child: Text(enfermedadTratamiento.descripcion ?? ''),
+                        child: Text(enfermedadTratamiento.descripcion ?? ,
                       ),
                     )
                     .toList(),
@@ -508,7 +508,7 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                               (e) => e.opcionId == 3
                                   ? Container()
                                   : RadioListTile<int?>(
-                                      title: Text(e.descripcion ?? ''),
+                                      title: Text(e.descripcion ?? ,
                                       value: e.opcionId,
                                       groupValue: _utilizaPlantasMedId,
                                       onChanged: (int? newValue) {
@@ -582,7 +582,7 @@ class _AtencionSaludFormState extends State<AtencionSaludForm> {
                               value:
                                   lugarPlantaMedicinal.lugarPlantaMedicinalId,
                               child:
-                                  Text(lugarPlantaMedicinal.descripcion ?? ''),
+                                  Text(lugarPlantaMedicinal.descripcion ?? ,
                             ),
                           )
                           .toList(),

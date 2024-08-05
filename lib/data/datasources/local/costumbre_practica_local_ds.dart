@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/costumbre_practica.dart';
 
 abstract class CostumbrePracticaLocalDataSource {
@@ -10,9 +10,9 @@ class CostumbrePracticaLocalDataSourceImpl
     implements CostumbrePracticaLocalDataSource {
   @override
   Future<List<CostumbrePracticaModel>> getCostumbresPractica() async {
-    final db = await ConnectionSQLiteService.db;
-    final res =
-        await db.query('CostumbresPractican_DimSocioCulturalPueblosIndigenas');
+    final res = await supabase
+        .from('CostumbresPractican_DimSocioCulturalPueblosIndigenas')
+        .select();
     final result = List<CostumbrePracticaModel>.from(
         res.map((m) => CostumbrePracticaModel.fromJson(m))).toList();
 
@@ -22,11 +22,9 @@ class CostumbrePracticaLocalDataSourceImpl
   @override
   Future<int> saveCostumbrePractica(
       CostumbrePracticaModel costumbrePractica) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'CostumbresPractican_DimSocioCulturalPueblosIndigenas',
-        costumbrePractica.toJson());
+    final res = await supabase
+        .from('CostumbresPractican_DimSocioCulturalPueblosIndigenas')
+        .insert(costumbrePractica.toJson());
 
     return res;
   }

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/hortaliza.dart';
 
@@ -21,7 +21,7 @@ class HortalizaRemoteDataSourceImpl implements HortalizaRemoteDataSource {
   Future<List<HortalizaModel>> getHortalizas(int dtoId) async {
     try {
       final uri =
-          Uri.parse('${Constants.apiPublica}/hortalizasbyDpto?IdeDpto=$dtoId');
+          Uri.parse('${AppConfig.apiPublica}/hortalizasbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

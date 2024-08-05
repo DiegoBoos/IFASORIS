@@ -1,6 +1,4 @@
-import 'package:sqflite/sqflite.dart';
-
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/especialidad_med_tradicional.dart';
 import '../../models/nombre_med_tradicional.dart';
 
@@ -33,8 +31,9 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   @override
   Future<List<EspecialidadMedTradicionalModel>>
       getEspecialidadesMedTradicional() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('EspecialidadesMedTrad_AccesoMedTradicional');
+    final res = await supabase
+        .from('EspecialidadesMedTrad_AccesoMedTradicional')
+        .select();
     final result = List<EspecialidadMedTradicionalModel>.from(
         res.map((m) => EspecialidadMedTradicionalModel.fromJson(m))).toList();
 
@@ -44,10 +43,9 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   @override
   Future<int> saveEspecialidadMedTradicional(
       EspecialidadMedTradicionalModel especialidadMedTradicional) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('EspecialidadesMedTrad_AccesoMedTradicional',
-        especialidadMedTradicional.toJson());
+    final res = await supabase
+        .from('EspecialidadesMedTrad_AccesoMedTradicional')
+        .insert(especialidadMedTradicional.toJson());
 
     return res;
   }
@@ -55,7 +53,6 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   @override
   Future<int> saveUbicacionEspecialidadMedTradicional(
       int ubicacionId, List<LstEspMedTradicional> lstEspMedTradicional) async {
-    final db = await ConnectionSQLiteService.db;
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionEspecialidadMedTradicional',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -80,8 +77,6 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   @override
   Future<int> saveUbicacionNombresMedTradicional(int ubicacionId,
       List<LstNombreMedTradicional> lstNombreMedTradicional) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionNombresMedTradicional',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -106,9 +101,10 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   @override
   Future<List<LstNombreMedTradicional>> getUbicacionNombresMedTradicional(
       int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionNombresMedTradicional',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionNombresMedTradicional')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final result = List<LstNombreMedTradicional>.from(
         res.map((m) => LstNombreMedTradicional.fromJson(m))).toList();
 
@@ -118,9 +114,10 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   @override
   Future<List<LstEspMedTradicional>> getUbicacionEspecialidadesMedTradicional(
       int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionEspecialidadMedTradicional',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionEspecialidadMedTradicional')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final result = List<LstEspMedTradicional>.from(
         res.map((m) => LstEspMedTradicional.fromJson(m))).toList();
 
@@ -130,9 +127,10 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   @override
   Future<List<LstEspMedTradicional>>
       getEspecialidadesMedTradicionalAtencionSalud(int? atencionSaludId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp7_EspecialidadesMedTradAtencionSalud',
-        where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);
+    final res = await supabase
+        .from('Asp7_EspecialidadesMedTradAtencionSalud')
+        .select()
+        .eq('AtencionSalud_id', atencionSaludId);
     final result = List<LstEspMedTradicional>.from(
         res.map((m) => LstEspMedTradicional.fromJson(m))).toList();
 
@@ -142,8 +140,6 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   @override
   Future<int> saveEspecialidadesMedTradicionalAtencionSalud(int atencionSaludId,
       List<LstEspMedTradicional> lstEspMedTradicional) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp7_EspecialidadesMedTradAtencionSalud',
         where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);

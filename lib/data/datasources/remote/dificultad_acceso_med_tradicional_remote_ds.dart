@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/dificultad_acceso_med_tradicional.dart';
 
@@ -24,7 +24,7 @@ class DificultadAccesoMedTradicionalRemoteDataSourceImpl
       getDificultadesAccesoMedTradicional(int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.apiPublica}/dificultadesaccesomedtradicionalbyDpto?IdeDpto=$dtoId');
+          '${AppConfig.apiPublica}/dificultadesaccesomedtradicionalbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

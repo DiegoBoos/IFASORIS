@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
 import 'package:ifasoris/ui/blocs/auth/auth_bloc.dart';
 
 import '../../utils/custom_snack_bar.dart';
@@ -77,13 +78,13 @@ class _CambioDispositivoPageState extends State<CambioDispositivoPage> {
                                     .cambioDispositivo(
                                         userName, datosEquipo.idEquipo!)
                                     .then((value) {
-                                  if (value != '') {
+                                  if (value !=  {
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
                                     authBloc.add(LogOut());
                                   } else {
-                                    CustomSnackBar.showSnackBar(context,
-                                        'Exepción no controlada', Colors.red);
+                                    context.showErrorSnackBar(
+                                        message: value.toString());
                                   }
                                 });
                               } else {

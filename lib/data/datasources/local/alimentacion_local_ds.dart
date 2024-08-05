@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/alimentacion.dart';
 
 abstract class AlimentacionLocalDataSource {
@@ -9,8 +9,7 @@ abstract class AlimentacionLocalDataSource {
 class AlimentacionLocalDataSourceImpl implements AlimentacionLocalDataSource {
   @override
   Future<List<AlimentacionModel>> getAlimentaciones() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Alimentacion_EstilosVidaSaludable');
+    final res = await supabase.from('Alimentacion_EstilosVidaSaludable');
     final result = List<AlimentacionModel>.from(
         res.map((m) => AlimentacionModel.fromJson(m))).toList();
 
@@ -19,10 +18,9 @@ class AlimentacionLocalDataSourceImpl implements AlimentacionLocalDataSource {
 
   @override
   Future<int> saveAlimentacion(AlimentacionModel alimentacion) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'Alimentacion_EstilosVidaSaludable', alimentacion.toJson());
+    final res = await supabase
+        .from('Alimentacion_EstilosVidaSaludable')
+        .insert(alimentacion.toJson());
 
     return res;
   }

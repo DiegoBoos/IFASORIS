@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/dificultad_acceso_ca.dart';
 
@@ -22,7 +22,7 @@ class DificultadAccesoCARemoteDataSourceImpl
   Future<List<DificultadAccesoCAModel>> getDificultadesAccesoCA() async {
     try {
       final uri =
-          Uri.parse('${Constants.apiPublica}/dificultadesaccesoCentroAtencion');
+          Uri.parse('${AppConfig.apiPublica}/dificultadesaccesoCentroAtencion');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

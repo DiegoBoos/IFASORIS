@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/parentesco.dart';
 
 abstract class ParentescoLocalDataSource {
@@ -9,8 +8,7 @@ abstract class ParentescoLocalDataSource {
 class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
   @override
   Future<List<ParentescoModel>> getParentescos() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Parentesco_GrupoFamiliar');
+    final res = await supabase.from(.select()'Parentesco_GrupoFamiliar');
     final result =
         List<ParentescoModel>.from(res.map((m) => ParentescoModel.fromJson(m)))
             .toList();
@@ -20,10 +18,9 @@ class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
 
   @override
   Future<int> saveParentesco(ParentescoModel parentesco) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res =
-        await db.insert('Parentesco_GrupoFamiliar', parentesco.toJson());
+    final res = await supabase
+        .from(
+        .insert('Parentesco_GrupoFamiliar', parentesco.toJson());
 
     return res;
   }

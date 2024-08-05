@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/religion_profesa.dart';
 
 abstract class ReligionProfesaLocalDataSource {
@@ -10,9 +9,8 @@ class ReligionProfesaLocalDataSourceImpl
     implements ReligionProfesaLocalDataSource {
   @override
   Future<List<ReligionProfesaModel>> getReligionesProfesa() async {
-    final db = await ConnectionSQLiteService.db;
     final res =
-        await db.query('ReligionesProfesa_DimSocioCulturalPueblosIndigenas');
+        await supabase.from(.select()'ReligionesProfesa_DimSocioCulturalPueblosIndigenas');
     final result = List<ReligionProfesaModel>.from(
         res.map((m) => ReligionProfesaModel.fromJson(m))).toList();
 
@@ -21,9 +19,7 @@ class ReligionProfesaLocalDataSourceImpl
 
   @override
   Future<int> saveReligionProfesa(ReligionProfesaModel religionProfesa) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
+    final res = await supabase.from(.insert(
         'ReligionesProfesa_DimSocioCulturalPueblosIndigenas',
         religionProfesa.toJson());
 

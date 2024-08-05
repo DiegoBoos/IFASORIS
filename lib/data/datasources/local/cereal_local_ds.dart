@@ -1,6 +1,4 @@
-import 'package:sqflite/sqflite.dart';
-
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/cereal.dart';
 
 abstract class CerealLocalDataSource {
@@ -14,8 +12,8 @@ abstract class CerealLocalDataSource {
 class CerealLocalDataSourceImpl implements CerealLocalDataSource {
   @override
   Future<List<CerealModel>> getCereales() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Cereales_AspectosSocioEconomicos');
+    final res =
+        await supabase.from('Cereales_AspectosSocioEconomicos').select();
     final result =
         List<CerealModel>.from(res.map((m) => CerealModel.fromJson(m)))
             .toList();
@@ -25,10 +23,9 @@ class CerealLocalDataSourceImpl implements CerealLocalDataSource {
 
   @override
   Future<int> saveCereal(CerealModel cereal) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res =
-        await db.insert('Cereales_AspectosSocioEconomicos', cereal.toJson());
+    final res = await supabase
+        .from('Cereales_AspectosSocioEconomicos')
+        .insert(cereal.toJson());
 
     return res;
   }
@@ -36,8 +33,6 @@ class CerealLocalDataSourceImpl implements CerealLocalDataSource {
   @override
   Future<int> saveUbicacionCereales(
       int ubicacionId, List<LstCereal> lstCereales) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionCereales',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -60,9 +55,10 @@ class CerealLocalDataSourceImpl implements CerealLocalDataSource {
 
   @override
   Future<List<LstCereal>> getUbicacionCereales(int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionCereales',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionCereales')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final result =
         List<LstCereal>.from(res.map((m) => LstCereal.fromJson(m))).toList();
 

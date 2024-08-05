@@ -3,16 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../blocs/auth/auth_bloc.dart';
 import '../../utils/network_icon.dart';
-import '../widgets/sign_in_form.dart';
+import '../widgets/register_form.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
+
+  static Route<void> route() {
+    return MaterialPageRoute(
+      builder: (context) => const RegisterPage(),
+    );
+  }
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
@@ -45,7 +51,7 @@ class _SignInPageState extends State<SignInPage> {
               ],
             ),
             const SizedBox(height: 30),
-            const SignInForm(),
+            const RegisterForm(),
           ],
         ),
       ),

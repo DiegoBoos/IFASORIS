@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/app_config.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'injection.dart' as di;
 import 'router.dart';
 import 'ui/blocs/afiliado/afiliado_bloc.dart';
@@ -97,6 +99,8 @@ final prefs = SharedPreferencesService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+      url: AppConfig.supabaseUrl, anonKey: AppConfig.supabaseAnonKey);
   di.init();
   await prefs.initPrefs();
   runApp(const MyApp());

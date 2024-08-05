@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifasoris/domain/entities/hortaliza.dart';
-import 'package:ifasoris/domain/entities/tuberculo_platano.dart';
 
 import '../../../data/models/cereal.dart';
 import '../../../data/models/especie_animal.dart';
@@ -12,6 +10,8 @@ import '../../../data/models/tuberculo_platano.dart';
 import '../../../data/models/verdura.dart';
 import '../../../domain/entities/cereal.dart';
 import '../../../domain/entities/dim_ubicacion.dart';
+import '../../../domain/entities/hortaliza.dart';
+import '../../../domain/entities/tuberculo_platano.dart';
 import '../../../domain/entities/verdura.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';

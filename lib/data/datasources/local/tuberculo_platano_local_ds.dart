@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/tuberculo_platano.dart';
 
 abstract class TuberculoPlatanoLocalDataSource {
@@ -17,8 +16,7 @@ class TuberculoPlatanoLocalDataSourceImpl
     implements TuberculoPlatanoLocalDataSource {
   @override
   Future<List<TuberculoPlatanoModel>> getTuberculosPlatanos() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('TuberculosPlatanos_AspectosSocioEconomicos');
+    final res = await supabase.from(.select()'TuberculosPlatanos_AspectosSocioEconomicos');
     final result = List<TuberculoPlatanoModel>.from(
         res.map((m) => TuberculoPlatanoModel.fromJson(m))).toList();
 
@@ -28,9 +26,8 @@ class TuberculoPlatanoLocalDataSourceImpl
   @override
   Future<int> saveTuberculoPlatano(
       TuberculoPlatanoModel tuberculoPlatano) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('TuberculosPlatanos_AspectosSocioEconomicos',
+    final res = await supabase.from(.insert(
+        'TuberculosPlatanos_AspectosSocioEconomicos',
         tuberculoPlatano.toJson());
 
     return res;
@@ -39,8 +36,6 @@ class TuberculoPlatanoLocalDataSourceImpl
   @override
   Future<int> saveUbicacionTuberculosPlatanos(
       int ubicacionId, List<LstTuberculo> lstTuberculos) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionTuberculosPlatanos',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -65,8 +60,7 @@ class TuberculoPlatanoLocalDataSourceImpl
   @override
   Future<List<LstTuberculo>> getUbicacionTuberculosPlatanos(
       int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionTuberculosPlatanos',
+    final res = await supabase.from(.select()'Asp1_UbicacionTuberculosPlatanos',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
     final result =
         List<LstTuberculo>.from(res.map((m) => LstTuberculo.fromJson(m)))

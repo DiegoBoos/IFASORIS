@@ -17,8 +17,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UsuarioModel>> logInRepository(
       UsuarioEntity usuario) async {
     try {
-      final usuarioModel = UsuarioModel.fromEntity(usuario);
-      final result = await authRemoteDataSource.logIn(usuarioModel);
+      final result = await authRemoteDataSource.logIn(usuario);
 
       return Right(result);
     } on ServerFailure catch (e) {

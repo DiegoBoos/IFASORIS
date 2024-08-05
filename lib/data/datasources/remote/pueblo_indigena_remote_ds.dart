@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/pueblo_indigena.dart';
 
@@ -22,7 +22,7 @@ class PuebloIndigenaRemoteDataSourceImpl
   Future<List<PuebloIndigenaModel>> getPueblosIndigenas(int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.apiPublica}/pueblosindigenasbyDpto?IdeDpto=$dtoId');
+          '${AppConfig.apiPublica}/pueblosindigenasbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/lugar_atencion_medico.dart';
 
 abstract class LugarAtencionMedicoLocalDataSource {
@@ -19,8 +18,7 @@ class LugarAtencionMedicoLocalDataSourceImpl
     implements LugarAtencionMedicoLocalDataSource {
   @override
   Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('LugaresAtencionMedico_AtencionSalud');
+    final res = await supabase.from(.select()'LugaresAtencionMedico_AtencionSalud');
     final result = List<LugarAtencionMedicoModel>.from(
         res.map((m) => LugarAtencionMedicoModel.fromJson(m))).toList();
 
@@ -30,9 +28,7 @@ class LugarAtencionMedicoLocalDataSourceImpl
   @override
   Future<int> saveLugarAtencionMedico(
       LugarAtencionMedicoModel lugarAtencionMedico) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
+    final res = await supabase.from(.insert(
         'LugaresAtencionMedico_AtencionSalud', lugarAtencionMedico.toJson());
 
     return res;
@@ -41,8 +37,7 @@ class LugarAtencionMedicoLocalDataSourceImpl
   @override
   Future<List<LstLugarAtencionMedico>> getLugaresAtencionMedicoAtencionSalud(
       int? atencionSaludId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp7_LugaresAtencionAtencionSalud',
+    final res = await supabase.from(.select()'Asp7_LugaresAtencionAtencionSalud',
         where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);
     final result = List<LstLugarAtencionMedico>.from(
         res.map((m) => LstLugarAtencionMedico.fromJson(m))).toList();
@@ -53,8 +48,6 @@ class LugarAtencionMedicoLocalDataSourceImpl
   @override
   Future<int> saveLugaresAtencionMedicoAtencionSalud(int atencionSaludId,
       List<LstLugarAtencionMedico> lstLugarAtencionMedico) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp7_LugaresAtencionAtencionSalud',
         where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);

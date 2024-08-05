@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -5,7 +7,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../core/app_config.dart';
 import '../../../core/constants.dart';
 import '../../../data/models/afiliado.dart';
 import '../../../data/models/alimentacion.dart';
@@ -84,7 +88,7 @@ import '../../../domain/usecases/ultima_vez_inst_salud/ultima_vez_inst_salud_exp
 import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
 import '../../../domain/usecases/verdura/verdura_exports.dart';
 import '../../../domain/usecases/via_acceso/via_acceso_exports.dart';
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../../services/shared_preferences_service.dart';
 
 part 'sync_event.dart';
@@ -542,7 +546,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           title: 'Descargando afiliados',
         )));
 
-        await truncateAfiliados(event);
+        await syncAfiliados(event);
       } else if (event.type == 'P') {
         await syncFicha(event);
       }
@@ -562,13 +566,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     on<SyncLog>((event, emit) => emit(IncompleteSync(event.syncLog)));
   }
 
-  Future<void> truncateAfiliados(SyncStarted event) async {
-    ConnectionSQLiteService.truncateTable('Afiliado').then((value) async {
-      successfulAfiliadoInserts = 0;
-      await syncAfiliados(event);
-    });
-  }
-
 // ************************** Ficha ****************************
   Future<void> syncFicha(
     SyncStarted event,
@@ -576,7 +573,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     final result = await fichaUsecase.createFichaUsecase();
     return result.fold((failure) => add(SyncError(failure.properties.first)),
         (data) async {
-      final uri = Uri.parse('${Constants.syncPublica}/ficha');
+      final uri = Uri.parse('${AppConfig.syncPublica}/ficha');
       final fichasSync = [];
 
       for (var i = 0; i < data.length; i++) {
@@ -588,8 +585,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
         // Escribe la cadena JSON en el archivo
         await file.writeAsString(jsonEncode(ficha));
-
-        print(file.path);
 
         final syncProgressModel = state.syncProgressModel.copyWith(
           title: 'Sincronizando Ficha',
@@ -613,7 +608,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           final fichaRemote = decodedResp['ficha'];
           // ficha.numFicha = fichaRemote['NumFicha'];
           fichasSync.add(ficha);
-          final db = await ConnectionSQLiteService.db;
 
           await db.update('Ficha', {'NumFicha': fichaRemote['numFicha']},
               where: 'Ficha_id = ?', whereArgs: [fichaIdLocal]);
@@ -646,7 +640,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     List<Map<String, dynamic>> combinedList = [];
 
     final requestUrl =
-        Uri.parse('${Constants.syncPublica}/afiliados/$mpioId/$limit');
+        Uri.parse('${AppConfig.syncPublica}/afiliados/$mpioId/$limit');
 
     try {
       final reqRes = await http.get(requestUrl);
@@ -658,7 +652,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
         for (var i = 0; i < loopValue; i++) {
           final afiliadosUrl = Uri.parse(
-              '${Constants.syncPublica}/afiliados/afiliadosbympio?limit=$limit&page=$i&mpioId=$mpioId');
+              '${AppConfig.syncPublica}/afiliados/afiliadosbympio?limit=$limit&page=$i&mpioId=$mpioId');
           final afiliadosRes = await http.get(afiliadosUrl);
           if (afiliadosRes.statusCode == 200) {
             final decodeReq = json.decode(afiliadosRes.body);
@@ -669,8 +663,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
           final syncProgressModel = state.syncProgressModel.copyWith(
             title: 'Sincronizando afiliados',
-            // counter: combinedList.length,
-            // total: totalRecords,
             counter: i,
             total: loopValue,
             percent: calculatePercent(i + 1, loopValue),
@@ -688,10 +680,14 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         };
 
         final result = AfiliadoResponseModel.fromJson(afiliadoResp);
-        saveAfiliados(event, result);
+
+        //TODO: Save to supabase
+        await supabase.from('afiliados').insert(result.resultado);
       } else {
         add(const SyncError('Excepción no controlada'));
       }
+    } on PostgrestException catch (error) {
+      add(SyncError(error.message));
     } on SocketException catch (e) {
       add(SyncError(e.toString()));
     }
@@ -699,8 +695,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   Future<void> saveAfiliados(
       SyncStarted event, AfiliadoResponseModel afiliadosRes) async {
-    final db = await ConnectionSQLiteService.db;
-
     try {
       await db.transaction((txn) async {
         final batch = txn.batch();
@@ -745,9 +739,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       //   )));
       //   await truncateDificultadesAccesoCA(event);
       // }
-    } catch (e) {
-      print('Error: $e');
-    }
+    } catch (e) {}
   }
 
   int calculatePercent(int counter, int total) {
@@ -821,7 +813,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
 // ************************** Dificultades acceso CA ****************************
-
 // ************************** Estado Vias ****************************
 
   Future<void> syncEstadoVias(SyncStarted event) async {

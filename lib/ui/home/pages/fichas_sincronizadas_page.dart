@@ -29,7 +29,7 @@ class _FichasSincronizadasPageState extends State<FichasSincronizadasPage> {
           builder: (context, state) {
             if (state is FichasLoaded) {
               final fichasSincronizadas = state.fichasLoaded
-                  ?.where((element) => element.numFicha != '')
+                  ?.where((element) => element.numFicha != 
                   .toList();
               if (fichasSincronizadas == null || fichasSincronizadas.isEmpty) {
                 return const Center(

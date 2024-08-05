@@ -6,19 +6,22 @@ import '../../domain/entities/equipo.dart';
 
 class DeviceInfo {
   static Future<Equipo?> infoDispositivo() async {
-    Equipo datosEquipo = const Equipo();
     try {
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       if (Platform.isAndroid) {
         AndroidDeviceInfo data = await deviceInfoPlugin.androidInfo;
-        datosEquipo.copyWith(idEquipo: data.id);
-        datosEquipo.copyWith(modeloEquipo: data.model);
+        return Equipo(
+          idEquipo: data.id,
+          modeloEquipo: data.model,
+        );
       } else if (Platform.isIOS) {
         IosDeviceInfo data = await deviceInfoPlugin.iosInfo;
-        datosEquipo.copyWith(idEquipo: data.identifierForVendor);
-        datosEquipo.copyWith(modeloEquipo: data.model);
+        return Equipo(
+          idEquipo: data.identifierForVendor,
+          modeloEquipo: data.model,
+        );
       }
-      return datosEquipo;
+      return null;
     } on PlatformException {
       return null;
     }

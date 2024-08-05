@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/metodo_planificacion.dart';
 
 abstract class MetodoPlanificacionLocalDataSource {
@@ -11,8 +10,7 @@ class MetodoPlanificacionLocalDataSourceImpl
     implements MetodoPlanificacionLocalDataSource {
   @override
   Future<List<MetodoPlanificacionModel>> getMetodosPlanificacion() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('MetodosPlanificacion_CuidadoSaludCondRiesgo');
+    final res = await supabase.from(.select()'MetodosPlanificacion_CuidadoSaludCondRiesgo');
     final result = List<MetodoPlanificacionModel>.from(
         res.map((m) => MetodoPlanificacionModel.fromJson(m))).toList();
 
@@ -22,9 +20,8 @@ class MetodoPlanificacionLocalDataSourceImpl
   @override
   Future<int> saveMetodoPlanificacion(
       MetodoPlanificacionModel metodoPlanificacion) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('MetodosPlanificacion_CuidadoSaludCondRiesgo',
+    final res = await supabase.from(.insert(
+        'MetodosPlanificacion_CuidadoSaludCondRiesgo',
         metodoPlanificacion.toJson());
 
     return res;

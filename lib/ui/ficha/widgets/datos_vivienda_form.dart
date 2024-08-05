@@ -171,7 +171,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     formstate.didChange(_tipoVivienda);
                                   },
                                 ),
-                                Text(tipoVivienda.descripcion ?? ''),
+                                Text(tipoVivienda.descripcion ?? ,
                                 if (index < tiposViviendaLoaded.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
                               ],
@@ -216,7 +216,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                 items: cuartosViviendaLoaded
                     .map((cuartoVivienda) => DropdownMenuItem<int>(
                           value: cuartoVivienda.cuartoViviendaId,
-                          child: Text(cuartoVivienda.descripcion ?? ''),
+                          child: Text(cuartoVivienda.descripcion ?? ,
                         ))
                     .toList(),
                 decoration: const InputDecoration(
@@ -276,7 +276,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     formstate.didChange(_tenenciaVivienda);
                                   },
                                 ),
-                                Text(e.descripcion ?? ''),
+                                Text(e.descripcion ?? ,
                                 if (index < tenenciasViviendaLoaded.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
                               ],
@@ -319,7 +319,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
               for (var e in pisosViviendaLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? '');
+                    FormValidators.optionType(e.descripcion ?? ;
                 if (optionType == 'O') {
                   otroId = e.pisoViviendaId;
                 }
@@ -446,7 +446,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
               for (var e in techosViviendaLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? '');
+                    FormValidators.optionType(e.descripcion ?? ;
                 if (optionType == 'O') {
                   otroId = e.techoViviendaId;
                 }
@@ -598,7 +598,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                     formstate.didChange(_ventilacionViviendaId);
                                   },
                                 ),
-                                Text(ventilacionVivienda.descripcion ?? ''),
+                                Text(ventilacionVivienda.descripcion ?? ,
                                 if (index <
                                     ventilacionesViviendaLoaded.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
@@ -670,7 +670,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             _iluminacionViviendaId!));
                                   },
                                 ),
-                                Text(iluminacionVivienda.descripcion ?? ''),
+                                Text(iluminacionVivienda.descripcion ?? ,
                                 if (index <
                                     iluminacionesViviendaLoaded.length - 1)
                                   const VerticalDivider(), // Adds a vertical separator between items
@@ -717,7 +717,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
               for (var e in serviciosPublicosViviendaLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? '');
+                    FormValidators.optionType(e.descripcion ?? ;
                 if (optionType == 'N') {
                   ningunoId = e.servicioPublicoViviendaId;
                 }
@@ -804,7 +804,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
               for (var e in tratamientosAguaViviendaLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? '');
+                    FormValidators.optionType(e.descripcion ?? ;
                 if (optionType == 'O') {
                   otroId = e.tratamientoAguaViviendaId;
                 }
@@ -936,7 +936,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
               for (var e in tiposSanitarioViviendaLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? '');
+                    FormValidators.optionType(e.descripcion ?? ;
                 if (optionType == 'O') {
                   otroId = e.tipoSanitarioViviendaId;
                 } else if (optionType == 'NT') {
@@ -1075,7 +1075,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
               for (var e in tiposCombustibleViviendaLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? '');
+                    FormValidators.optionType(e.descripcion ?? ;
                 if (optionType == 'O') {
                   otroId = e.tipoCombustibleViviendaId;
                 }
@@ -1209,7 +1209,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
               for (var e in factoresRiesgoViviendaLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? '');
+                    FormValidators.optionType(e.descripcion ?? ;
                 if (optionType == 'O') {
                   otroId = e.factorRiesgoViviendaId;
                 }
@@ -1342,7 +1342,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
 
               for (var e in presenciaAnimalesViviendaLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? '');
+                    FormValidators.optionType(e.descripcion ?? ;
                 if (optionType == 'O') {
                   otroId = e.presenciaAnimalViviendaId;
                 }

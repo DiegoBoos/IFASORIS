@@ -1,6 +1,4 @@
-import 'package:sqflite/sqflite.dart';
-
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/dificultad_acceso_med_tradicional.dart';
 
 abstract class DificultadAccesoMedTradicionalLocalDataSource {
@@ -23,8 +21,8 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
   @override
   Future<List<DificultadAccesoMedTradicionalModel>>
       getDificultadesAccesoMedTradicional() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('DificultadesAcceso_AccesoMedTradicional');
+    final res =
+        await supabase.from('DificultadesAcceso_AccesoMedTradicional').select();
     final result = List<DificultadAccesoMedTradicionalModel>.from(
             res.map((m) => DificultadAccesoMedTradicionalModel.fromJson(m)))
         .toList();
@@ -36,10 +34,9 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
   Future<int> saveDificultadAccesoMedTradicional(
       DificultadAccesoMedTradicionalModel
           dificultadAccesoMedTradicional) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('DificultadesAcceso_AccesoMedTradicional',
-        dificultadAccesoMedTradicional.toJson());
+    final res = await supabase
+        .from('DificultadesAcceso_AccesoMedTradicional')
+        .insert(dificultadAccesoMedTradicional.toJson());
 
     return res;
   }
@@ -49,8 +46,6 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
       int ubicacionId,
       List<LstDificultadAccesoMedTradicional>
           lstDificultadAccesoMedTradicional) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionAccesoMedTradicional',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -76,9 +71,11 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
   @override
   Future<List<LstDificultadAccesoMedTradicional>>
       getUbicacionDificultadesAccesoMedTradicional(int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionAccesoMedTradicional',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionAccesoMedTradicional')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
+
     final result = List<LstDificultadAccesoMedTradicional>.from(
         res.map((m) => LstDificultadAccesoMedTradicional.fromJson(m))).toList();
 

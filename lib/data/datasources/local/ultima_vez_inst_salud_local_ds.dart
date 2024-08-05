@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/ultima_vez_inst_salud.dart';
 
 abstract class UltimaVezInstSaludLocalDataSource {
@@ -11,8 +10,7 @@ class UltimaVezInstSaludLocalDataSourceImpl
     implements UltimaVezInstSaludLocalDataSource {
   @override
   Future<List<UltimaVezInstSaludModel>> getUltimasVecesInstSalud() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('UltimaVezInstSalud_CuidadoSaludCondRiesgo');
+    final res = await supabase.from(.select()'UltimaVezInstSalud_CuidadoSaludCondRiesgo');
     final result = List<UltimaVezInstSaludModel>.from(
         res.map((m) => UltimaVezInstSaludModel.fromJson(m))).toList();
 
@@ -22,9 +20,8 @@ class UltimaVezInstSaludLocalDataSourceImpl
   @override
   Future<int> saveUltimaVezInstSalud(
       UltimaVezInstSaludModel ultimaVezInstSalud) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('UltimaVezInstSalud_CuidadoSaludCondRiesgo',
+    final res = await supabase.from(.insert(
+        'UltimaVezInstSalud_CuidadoSaludCondRiesgo',
         ultimaVezInstSalud.toJson());
 
     return res;

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/tuberculo_platano.dart';
 
@@ -22,7 +22,7 @@ class TuberculoPlatanoRemoteDataSourceImpl
   Future<List<TuberculoPlatanoModel>> getTuberculosPlatanos(int dtoId) async {
     try {
       final uri = Uri.parse(
-          '${Constants.apiPublica}/tuberculosplatanosbyDpto?IdeDpto=$dtoId');
+          '${AppConfig.apiPublica}/tuberculosplatanosbyDpto?IdeDpto=$dtoId');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

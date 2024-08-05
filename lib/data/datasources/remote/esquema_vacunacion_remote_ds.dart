@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/esquema_vacunacion.dart';
 
@@ -21,7 +21,7 @@ class EsquemaVacunacionRemoteDataSourceImpl
   @override
   Future<List<EsquemaVacunacionModel>> getEsquemasVacunacion() async {
     try {
-      final uri = Uri.parse('${Constants.apiPublica}/esquemasvacunacion');
+      final uri = Uri.parse('${AppConfig.apiPublica}/esquemasvacunacion');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

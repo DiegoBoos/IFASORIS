@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/esquema_vacunacion.dart';
 
 abstract class EsquemaVacunacionLocalDataSource {
@@ -10,8 +10,9 @@ class EsquemaVacunacionLocalDataSourceImpl
     implements EsquemaVacunacionLocalDataSource {
   @override
   Future<List<EsquemaVacunacionModel>> getEsquemasVacunacion() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('EsquemasVacunacion_CuidadoSaludCondRiesgo');
+    final res = await supabase
+        .from('EsquemasVacunacion_CuidadoSaludCondRiesgo')
+        .select();
     final result = List<EsquemaVacunacionModel>.from(
         res.map((m) => EsquemaVacunacionModel.fromJson(m))).toList();
 
@@ -21,10 +22,9 @@ class EsquemaVacunacionLocalDataSourceImpl
   @override
   Future<int> saveEsquemaVacunacion(
       EsquemaVacunacionModel esquemaVacunacion) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('EsquemasVacunacion_CuidadoSaludCondRiesgo',
-        esquemaVacunacion.toJson());
+    final res = await supabase
+        .from('EsquemasVacunacion_CuidadoSaludCondRiesgo')
+        .insert(esquemaVacunacion.toJson());
 
     return res;
   }

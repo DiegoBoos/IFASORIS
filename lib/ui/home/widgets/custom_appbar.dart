@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
 
 import '../../../domain/usecases/auth/auth_exports.dart';
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
 import '../../sync/sync_dialog.dart';
 import '../../search/search_afiliados.dart';
 import '../../utils/custom_circular_progress.dart';
-import '../../utils/custom_snack_bar.dart';
 
 class CustomAppBar extends StatefulWidget {
   const CustomAppBar({super.key});
@@ -34,7 +34,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         BlocListener<AfiliadoBloc, AfiliadosState>(
           listener: (context, state) {
             if (state is AfiliadosError) {
-              CustomSnackBar.showSnackBar(context, state.message, Colors.red);
+              context.showErrorSnackBar(message: state.message);
             }
           },
         ),

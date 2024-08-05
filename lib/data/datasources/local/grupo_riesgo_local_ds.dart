@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/grupo_riesgo.dart';
 
 abstract class GrupoRiesgoLocalDataSource {
@@ -9,8 +8,7 @@ abstract class GrupoRiesgoLocalDataSource {
 class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
   @override
   Future<List<GrupoRiesgoModel>> getGruposRiesgo() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('GrupoRiesgo_GrupoFamiliar');
+    final res = await supabase.from(.select()'GrupoRiesgo_GrupoFamiliar');
     final result = List<GrupoRiesgoModel>.from(
         res.map((m) => GrupoRiesgoModel.fromJson(m))).toList();
 
@@ -19,10 +17,9 @@ class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
 
   @override
   Future<int> saveGrupoRiesgo(GrupoRiesgoModel grupoRiesgo) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res =
-        await db.insert('GrupoRiesgo_GrupoFamiliar', grupoRiesgo.toJson());
+    final res = await supabase
+        .from(
+        .insert('GrupoRiesgo_GrupoFamiliar', grupoRiesgo.toJson());
 
     return res;
   }

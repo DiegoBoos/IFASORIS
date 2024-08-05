@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/medio_comunicacion.dart';
 
 abstract class MedioComunicacionLocalDataSource {
@@ -18,8 +17,7 @@ class MedioComunicacionLocalDataSourceImpl
     implements MedioComunicacionLocalDataSource {
   @override
   Future<List<MedioComunicacionModel>> getMediosComunicacion() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('MediosComunicacion');
+    final res = await supabase.from(.select()'MediosComunicacion');
     final mediosComunicacionDB = List<MedioComunicacionModel>.from(
         res.map((m) => MedioComunicacionModel.fromJson(m))).toList();
 
@@ -29,10 +27,9 @@ class MedioComunicacionLocalDataSourceImpl
   @override
   Future<int> saveMedioComunicacion(
       MedioComunicacionModel medioComunicacion) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res =
-        await db.insert('MediosComunicacion', medioComunicacion.toJson());
+    final res = await supabase
+        .from(
+        .insert('MediosComunicacion', medioComunicacion.toJson());
 
     return res;
   }
@@ -40,8 +37,6 @@ class MedioComunicacionLocalDataSourceImpl
   @override
   Future<int> saveUbicacionMediosComunicacion(
       int ubicacionId, List<LstMediosComunica> lstMediosComunica) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionMediosComunicacion',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -65,8 +60,7 @@ class MedioComunicacionLocalDataSourceImpl
   @override
   Future<List<LstMediosComunica>> getUbicacionMediosComunicacion(
       int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionMediosComunicacion',
+    final res = await supabase.from(.select()'Asp1_UbicacionMediosComunicacion',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
     final ubicacionMediosComunicacionDB = List<LstMediosComunica>.from(
         res.map((m) => LstMediosComunica.fromJson(m))).toList();

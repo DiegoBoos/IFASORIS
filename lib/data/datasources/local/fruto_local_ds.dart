@@ -1,6 +1,4 @@
-import 'package:sqflite/sqflite.dart';
-
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/fruto.dart';
 
 abstract class FrutoLocalDataSource {
@@ -13,8 +11,7 @@ abstract class FrutoLocalDataSource {
 class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
   @override
   Future<List<FrutoModel>> getFrutos() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Frutos_AspectosSocioEconomicos');
+    final res = await supabase.from('Frutos_AspectosSocioEconomicos').select();
     final result =
         List<FrutoModel>.from(res.map((m) => FrutoModel.fromJson(m))).toList();
 
@@ -23,10 +20,9 @@ class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
 
   @override
   Future<int> saveFruto(FrutoModel fruto) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res =
-        await db.insert('Frutos_AspectosSocioEconomicos', fruto.toJson());
+    final res = await supabase
+        .from('Frutos_AspectosSocioEconomicos')
+        .insert(fruto.toJson());
 
     return res;
   }
@@ -34,8 +30,6 @@ class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
   @override
   Future<int> saveUbicacionFrutos(
       int ubicacionId, List<LstFruto> lstFrutos) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionFrutos',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -56,9 +50,10 @@ class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
 
   @override
   Future<List<LstFruto>> getUbicacionFrutos(int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionFrutos',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionFrutos')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final result =
         List<LstFruto>.from(res.map((m) => LstFruto.fromJson(m))).toList();
 

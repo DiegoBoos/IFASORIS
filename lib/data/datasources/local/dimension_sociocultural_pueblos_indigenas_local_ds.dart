@@ -1,7 +1,6 @@
 import 'package:ifasoris/core/error/failure.dart';
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/dimension_sociocultural_pueblos_indigenas.dart';
 
 abstract class DimensionSocioCulturalPueblosIndigenasLocalDataSource {
@@ -19,14 +18,11 @@ class DimensionSocioCulturalPueblosIndigenasLocalDataSourceImpl
   Future<int> saveDimensionSocioCulturalPueblosIndigenas(
       DimensionSocioCulturalPueblosIndigenasModel
           dimensionSocioCulturalPueblosIndigenas) async {
-    final db = await ConnectionSQLiteService.db;
-
     try {
-      final res = await db.insert(
-        'Asp6_DimSocioCulturalPueblosIndigenas',
-        dimensionSocioCulturalPueblosIndigenas.toJson(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      final res =
+          await supabase.from('Asp6_DimSocioCulturalPueblosIndigenas').insert(
+                dimensionSocioCulturalPueblosIndigenas.toJson(),
+              );
       return res;
     } catch (e) {
       throw const DatabaseFailure(
@@ -37,15 +33,14 @@ class DimensionSocioCulturalPueblosIndigenasLocalDataSourceImpl
   @override
   Future<DimensionSocioCulturalPueblosIndigenasModel?>
       getDimensionSocioCulturalPueblosIndigenas(int afiliadoId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp6_DimSocioCulturalPueblosIndigenas',
-        where: 'Afiliado_id = ?', whereArgs: [afiliadoId]);
+    final res = await supabase
+        .from('Asp6_DimSocioCulturalPueblosIndigenas')
+        .select()
+        .eq('Afiliado_id', afiliadoId);
 
     if (res.isEmpty) return null;
 
-    final resultMap = {for (var e in res[0].entries) e.key: e.value};
-    final result =
-        DimensionSocioCulturalPueblosIndigenasModel.fromJson(resultMap);
+    final result = DimensionSocioCulturalPueblosIndigenasModel.fromJson(res);
     return result;
   }
 }

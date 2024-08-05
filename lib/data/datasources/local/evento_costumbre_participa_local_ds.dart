@@ -1,6 +1,4 @@
-import 'package:sqflite/sqflite.dart';
-
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/evento_costumbre_participa.dart';
 
 abstract class EventoCostumbreParticipaLocalDataSource {
@@ -21,9 +19,9 @@ class EventoCostumbreParticipaLocalDataSourceImpl
   @override
   Future<List<EventoCostumbreParticipaModel>>
       getEventosCostumbresParticipa() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db
-        .query('EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas');
+    final res = await supabase
+        .from('EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
+        .select();
     final result = List<EventoCostumbreParticipaModel>.from(
         res.map((m) => EventoCostumbreParticipaModel.fromJson(m))).toList();
 
@@ -33,11 +31,9 @@ class EventoCostumbreParticipaLocalDataSourceImpl
   @override
   Future<int> saveEventoCostumbreParticipa(
       EventoCostumbreParticipaModel eventoCostumbreParticipa) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas',
-        eventoCostumbreParticipa.toJson());
+    final res = await supabase
+        .from('EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
+        .insert(eventoCostumbreParticipa.toJson());
 
     return res;
   }
@@ -46,8 +42,6 @@ class EventoCostumbreParticipaLocalDataSourceImpl
   Future<int> saveAsp6EventosCostumbresParticipa(
       int? dimensionSocioCulturalPueblosIndigenasId,
       List<LstEventoCostumbreParticipa> lstEventoCostumbreParticipa) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp6_DimSocioCulturalEventosCostumbresParticipo',
         where: 'DimSocioCulturalPueblosIndigenas_id = ?',
@@ -73,11 +67,12 @@ class EventoCostumbreParticipaLocalDataSourceImpl
   @override
   Future<List<LstEventoCostumbreParticipa>> getAsp6EventosCostumbresParticipa(
       int? dimensionSocioCulturalPueblosIndigenasId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query(
-        'Asp6_DimSocioCulturalEventosCostumbresParticipo',
-        where: 'DimSocioCulturalPueblosIndigenas_id = ?',
-        whereArgs: [dimensionSocioCulturalPueblosIndigenasId]);
+    final res = await supabase
+        .from('Asp6_DimSocioCulturalEventosCostumbresParticipo')
+        .select()
+        .eq('DimSocioCulturalPueblosIndigenas_id',
+            dimensionSocioCulturalPueblosIndigenasId);
+
     final result = List<LstEventoCostumbreParticipa>.from(
         res.map((m) => LstEventoCostumbreParticipa.fromJson(m))).toList();
 

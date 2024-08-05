@@ -17,6 +17,12 @@ import '../widgets/custom_appbar.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  static Route<void> route() {
+    return MaterialPageRoute(
+      builder: (context) => const HomePage(),
+    );
+  }
+
   @override
   State<HomePage> createState() => _HomePageState();
 }

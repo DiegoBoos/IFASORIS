@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/nivel_educativo.dart';
 
@@ -21,7 +21,7 @@ class NivelEducativoRemoteDataSourceImpl
   @override
   Future<List<NivelEducativoModel>> getNivelesEducativos() async {
     try {
-      final uri = Uri.parse('${Constants.apiPublica}/niveleducativo');
+      final uri = Uri.parse('${AppConfig.apiPublica}/niveleducativo');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',

@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/nombre_lengua_materna.dart';
 
 abstract class NombreLenguaMaternaLocalDataSource {
@@ -11,8 +10,7 @@ class NombreLenguaMaternaLocalDataSourceImpl
     implements NombreLenguaMaternaLocalDataSource {
   @override
   Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('NombreLenguaMaterna_GrupoFamiliar');
+    final res = await supabase.from(.select()'NombreLenguaMaterna_GrupoFamiliar');
     final result = List<NombreLenguaMaternaModel>.from(
         res.map((m) => NombreLenguaMaternaModel.fromJson(m))).toList();
 
@@ -22,9 +20,7 @@ class NombreLenguaMaternaLocalDataSourceImpl
   @override
   Future<int> saveNombreLenguaMaterna(
       NombreLenguaMaternaModel nombreLenguaMaterna) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
+    final res = await supabase.from(.insert(
         'NombreLenguaMaterna_GrupoFamiliar', nombreLenguaMaterna.toJson());
 
     return res;

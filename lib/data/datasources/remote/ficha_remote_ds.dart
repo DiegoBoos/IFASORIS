@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../core/error/failure.dart';
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../../services/shared_preferences_service.dart';
 import '../../models/ficha.dart';
 
@@ -23,7 +23,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
   Future<List<FichaModel>> getFichas(userName) async {
     try {
       final uri =
-          Uri.parse('${Constants.syncPublica}/ficha/by-username/$userName');
+          Uri.parse('${AppConfig.syncPublica}/ficha/by-username/$userName');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
@@ -47,8 +47,6 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
   @override
   Future<List<dynamic>> createFicha() async {
     try {
-      final db = await ConnectionSQLiteService.db;
-
       // Fichas
       final resFichas = await db.rawQuery('''
       	   SELECT
@@ -64,7 +62,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
       left join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
       WHERE (Asp3_GrupoFamiliar.isComplete=0 OR Asp3_GrupoFamiliar.isComplete IS NULL) AND NumFicha = '' AND Ficha_id_remote IS NULL
 	  )
-      ''');
+      ';
       // final resFichas = await db.rawQuery('''
       // SELECT
       // Ficha_id,
@@ -73,7 +71,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
       // UserName_Creacion as userNameCreacion,
       // UserName_Actualizacion as ultimaActualizacion
       // FROM Ficha WHERE NumFicha = ''
-      // ''');
+      // ';
 
       if (resFichas.isEmpty) {
         throw const ServerFailure(
@@ -99,7 +97,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           FK_Afiliado_id AS afiliadoId
           FROM Familia
           WHERE Ficha_id = $fichaId
-          ''');
+          ';
 
         if (resFamilia.isEmpty) {
           // throw const ServerFailure(
@@ -124,7 +122,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           CuartosVivienda_id AS CuartosViviendaId
           FROM Asp2_DatosVivienda
           WHERE Familia_id = $familiaId
-          ''');
+          ';
 
         if (resVivienda.isEmpty) {
           continue;
@@ -146,7 +144,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroTipoTecho AS otroTipoTecho
           FROM Asp2_DatosViviendaTechos
           WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+          ';
 
         var ltTechos = [];
         for (final techo in resTechos) {
@@ -163,7 +161,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           ServicioPublicoVivienda_id AS servicioPublicoViviendaId
           FROM Asp2_DatosViviendaServiciosPublicos
           WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+          ';
 
         var ltServiciosPublicos = [];
         for (final servicio in resServiciosPublicos) {
@@ -182,7 +180,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroTratamientoAgua AS otroTratamientoAgua
           FROM Asp2_DatosViviendaTratamientosAgua
           WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+          ';
 
         var ltTratamientosAgua = [];
         for (final servicio in resTratamientosAgua) {
@@ -201,7 +199,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroFactorRiesgo AS otroFactorRiesgo
           FROM Asp2_DatosViviendaFactoresRiesgo
           WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+          ';
 
         var ltFactoresRiesgo = [];
         for (final riesgo in resFactoresRiesgo) {
@@ -220,7 +218,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroTipoSanitario AS otroTipoSanitario
           FROM Asp2_DatosViviendaTiposSanitario
           WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+          ';
 
         var ltTiposSanitario = [];
         for (final sanitario in resTiposSanitario) {
@@ -239,7 +237,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroTipoCombustible AS otroTipoCombustible
           FROM Asp2_DatosViviendaTiposCombustible
           WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+          ';
 
         var ltTiposCombustible = [];
         for (final combustible in resTiposCombustible) {
@@ -258,7 +256,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroPresenciaAnimal AS otroPresenciaAnimal
           FROM Asp2_DatosViviendaPresenciaAnimales
           WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+          ';
 
         var ltPresenciaAnimales = [];
         for (final animal in resPresenciaAnimales) {
@@ -277,7 +275,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroTipoPiso AS otroTipoPiso
           FROM Asp2_DatosViviendaPisos AS TC
           WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+          ';
 
         var ltPisos = [];
         for (final piso in resPisos) {
@@ -339,7 +337,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             TipoCalendario_id AS tipoCalendarioId
             FROM Asp1_Ubicacion
             WHERE Familia_id = $familiaId
-            ''');
+            ';
 
         if (resUbicacion.isEmpty) {
           continue;
@@ -356,7 +354,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           DificultadAccesoMedTrad_id AS dificultadAccesoMedTradId
           FROM Asp1_UbicacionAccesoMedTradicional AS AMT
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltDificultadAccesoMedTradicional = [];
 
@@ -375,7 +373,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroCereal AS otroCereal
           FROM Asp1_UbicacionCereales
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltCereales = [];
         for (final acceso in resCereales) {
@@ -391,7 +389,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           DificultaAcceso_id AS dificultaAccesoId
           FROM Asp1_UbicacionDificultadAcceso
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltDificultadAcceso = [];
         for (final dificultad in resDificultadAcceso) {
@@ -407,7 +405,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           EspecialidadMedTrad_id AS especialidadMedTradId
           FROM Asp1_UbicacionEspecialidadMedTradicional
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltEspecialidadMedTradicional = [];
         for (final especialidad in resEspecialidadMedTradicional) {
@@ -423,7 +421,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           EspecieAnimalCria_id AS especieAnimalCriaId
           FROM Asp1_UbicacionEspecieAnimalesCria
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltEspecieAnimalesCria = [];
         for (final animales in resEspecieAnimalesCria) {
@@ -439,7 +437,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           Fruto_id AS frutoId
           FROM Asp1_UbicacionFrutos
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltFrutos = [];
         for (final fruto in resFrutos) {
@@ -454,7 +452,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroHortaliza AS otroHortaliza
           FROM Asp1_UbicacionHortalizas
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltHortalizas = [];
         for (final hortaliza in resHortalizas) {
@@ -470,7 +468,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           Leguminosa_id AS leguminosaId
           FROM Asp1_UbicacionLeguminosas
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltLeguminosas = [];
         for (final leguminosa in resLeguminosas) {
@@ -486,7 +484,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           MedioComunicacion_id AS medioComunicacionId
           FROM Asp1_UbicacionMediosComunicacion
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltMediosComunicacion = [];
         for (final medio in resMediosComunicacion) {
@@ -502,7 +500,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           MedioUtilizaMedTrad_id AS medioUtilizaMedTradId
           FROM Asp1_UbicacionMediosMedTradicional
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltMediosMedTradicional = [];
         for (final medio in resMediosMedTradicional) {
@@ -518,7 +516,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           NombreMedTradicional AS nombreMedTradicional
           FROM Asp1_UbicacionNombresMedTradicional
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltNombresMedTradicional = [];
         for (final nombre in resNombresMedTradicional) {
@@ -535,7 +533,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroTuberculoPlatano AS otroTuberculoPlatano
           FROM Asp1_UbicacionTuberculosPlatanos
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltTuberculosPlatanos = [];
         for (final tuberculo in resTuberculosPlatanos) {
@@ -552,7 +550,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           OtroVerdura AS otroVerdura
           FROM Asp1_UbicacionVerduras
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltVerduras = [];
         for (final verdura in resVerduras) {
@@ -568,7 +566,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           MedioUtiliza_id AS medioUtilizaId
           FROM Asp1_UbicacionMediosCentroAtencion
           WHERE Ubicacion_id = $ubicacionId
-          ''');
+          ';
 
         var ltMediosCentroAtencion = [];
         for (final medio in resMediosCentroAtencion) {
@@ -637,7 +635,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
 
           FROM Asp3_GrupoFamiliar
           WHERE Familia_id = $familiaId
-          ''');
+          ';
 
         if (resGrupoFamiliar.isEmpty) {
           continue;
@@ -668,7 +666,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           ConsumoSustanciasPsicoactivas AS consumoSustanciasPsicoactivas
           FROM Asp4_EstilosVidaSaludable
           WHERE Familia_id = $familiaId
-          ''');
+          ';
 
         if (resEstilosVidaSaludable.isEmpty) {
           continue;
@@ -729,7 +727,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
 
           FROM Asp5_CuidadoSaludCondRiesgo
           WHERE Familia_id = $familiaId
-          ''');
+          ';
 
         if (resCuidadoSaludCondRiesgo.isEmpty) {
           continue;
@@ -750,7 +748,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             ServicioSolicitado_id AS servicioSolicitadoId
             FROM Asp5_CuidadoSaludCondRiesgoServiciosSolicita
             WHERE CuidadoSaludCondRiesgo_id = $cuidadoSaludConRiesgoId
-            ''');
+            ';
 
           var ltServiciosSolicita = [];
           for (final servicio in resServiciosSolicita) {
@@ -767,7 +765,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             NombreEnfermedad_id AS nombreEnfermedadId
             FROM Asp5_CuidadoSaludCondRiesgoNombresEnfermedad
             WHERE CuidadoSaludCondRiesgo_id = $cuidadoSaludConRiesgoId
-            ''');
+            ';
 
           var ltNombresEnfermedad = [];
           for (final enfermedad in resNombresEnfermedad) {
@@ -818,7 +816,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           Cuales_SitiosSagrados AS cualesSitiosSagrados
           FROM Asp6_DimSocioCulturalPueblosIndigenas
           WHERE Familia_id = $familiaId
-          ''');
+          ';
 
         if (resSocioCulturalPueblosIndigenas.isEmpty) {
           continue;
@@ -840,7 +838,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             EventoCostumbreParticipo_id AS eventoCostumbreParticipoId
             FROM Asp6_DimSocioCulturalEventosCostumbresParticipo
             WHERE DimSocioCulturalPueblosIndigenas_id = $dimSocioCulturalPueblosIndigenasId
-            ''');
+            ';
 
           var ltEventosCostumbresParticipa = [];
           for (final servicio in resEventosCostumbresParticipa) {
@@ -879,7 +877,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
 
           FROM Asp7_AtencionSalud
           WHERE Familia_id = $familiaId
-          ''');
+          ';
 
         if (resAtencionSalud.isEmpty) {
           continue;
@@ -899,7 +897,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             EnfermedadTradicional_id AS enfermedadTradicionalId
             FROM Asp7_EnfermedadesTradicionales_AtencionSalud
             WHERE AtencionSalud_id = $atencionSaludId
-            ''');
+            ';
 
           var ltEnfermedadesTradicionales = [];
           for (final enfermedad in resEnfermedadesTradicionales) {
@@ -916,7 +914,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             EspecialidadMedTrad_id AS especialidadMedTradId
             FROM Asp7_EspecialidadesMedTradAtencionSalud
             WHERE AtencionSalud_id = $atencionSaludId
-            ''');
+            ';
 
           var ltEspecialidadesMedTradAtencionSalud = [];
           for (final especialidad in resEspecialidadesMedTradAtencionSalud) {
@@ -934,7 +932,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             LugarAtencionMedico_id AS lugarAtencionMedicoId
             FROM Asp7_LugaresAtencionAtencionSalud
             WHERE AtencionSalud_id = $atencionSaludId
-            ''');
+            ';
 
           var ltLugaresAtencionSalud = [];
           for (final lugar in resLugaresAtencionSalud) {
@@ -951,7 +949,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
             PlantaMedicinal_id AS plantaMedicinalId
             FROM Asp7_PlantasMedicinales_AtencionSalud
             WHERE AtencionSalud_id = $atencionSaludId
-            ''');
+            ';
 
           var ltPlantasMedicinales = [];
           for (final lugar in resPlantasMedicinales) {

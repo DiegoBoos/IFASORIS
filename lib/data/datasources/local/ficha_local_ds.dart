@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/estadistica.dart';
 import '../../models/familia.dart';
 import '../../models/ficha.dart';
@@ -16,9 +16,7 @@ abstract class FichaLocalDataSource {
 class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   @override
   Future<FichaModel> createFicha(FichaModel ficha) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('Ficha', ficha.toJsonLocal());
+    final res = await supabase.from('Ficha').insert(ficha.toJsonLocal());
 
     ficha.copyWith(fichaId: res);
 
@@ -27,7 +25,6 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
   @override
   Future<List<FichaModel>> loadFichas(int familiaId) async {
-    final db = await ConnectionSQLiteService.db;
     final res = await db.rawQuery('''
       SELECT Ficha.* FROM Familia 
       LEFT JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
@@ -41,7 +38,6 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
   @override
   Future<List<EstadisticaModel>> loadEstadisticas() async {
-    final db = await ConnectionSQLiteService.db;
     final resFichasReportadas = await db.rawQuery('''
       SELECT  'FichasReportadas' as Estadistica,  count(*) as Cantidad FROM Ficha
       WHERE NumFicha <> '' or Ficha_id_remote IS NOT NULL
@@ -79,18 +75,14 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
   @override
   Future<int> deleteFicha(int fichaId) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res =
-        await db.delete('Ficha', where: 'Ficha_id = ?', whereArgs: [fichaId]);
-
+    final res = await supabase.from('Ficha').delete().eq('Ficha_id', fichaId);
     return res;
   }
 
   @override
   Future<List<FichaModel>> loadFichasSincronizadas() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.rawQuery('''
+    final res =
+        await supabase.from('Ficha').select('Ficha.*, Familia.*').rawQuery('''
       SELECT Ficha.*, Familia.* FROM Ficha 
       INNER JOIN Familia ON (Familia.Ficha_id  =  Ficha.Ficha_id)
       WHERE NumFicha <> '' or Ficha_id_remote IS NOT NULL
@@ -108,8 +100,6 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
   @override
   Future<FichaModel> createFichaCompleta(FichaModel ficha) async {
-    final db = await ConnectionSQLiteService.db;
-
     // Ficha
     ficha.copyWith(fichaIdRemote: ficha.fichaId);
     ficha.copyWith(fichaId: null);

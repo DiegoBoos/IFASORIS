@@ -1,5 +1,5 @@
-import 'package:sqflite/sqflite.dart';
-import '../../../services/connection_sqlite_service.dart';
+
+
 import '../../models/leguminosa.dart';
 
 abstract class LeguminosaLocalDataSource {
@@ -15,8 +15,7 @@ abstract class LeguminosaLocalDataSource {
 class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
   @override
   Future<List<LeguminosaModel>> getLeguminosas() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Leguminosas_AspectosSocioEconomicos');
+    final res = await supabase.from(.select()'Leguminosas_AspectosSocioEconomicos');
     final result =
         List<LeguminosaModel>.from(res.map((m) => LeguminosaModel.fromJson(m)))
             .toList();
@@ -26,10 +25,9 @@ class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
 
   @override
   Future<int> saveLeguminosa(LeguminosaModel leguminosa) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'Leguminosas_AspectosSocioEconomicos', leguminosa.toJson());
+    final res = await supabase
+        .from(
+        .insert('Leguminosas_AspectosSocioEconomicos', leguminosa.toJson());
 
     return res;
   }
@@ -37,8 +35,6 @@ class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
   @override
   Future<int> saveUbicacionLeguminosas(
       int ubicacionId, List<LstLeguminosa> lstLeguminosas) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionLeguminosas',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
@@ -59,8 +55,7 @@ class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
 
   @override
   Future<List<LstLeguminosa>> getUbicacionLeguminosas(int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionLeguminosas',
+    final res = await supabase.from(.select()'Asp1_UbicacionLeguminosas',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
     final result =
         List<LstLeguminosa>.from(res.map((m) => LstLeguminosa.fromJson(m)))

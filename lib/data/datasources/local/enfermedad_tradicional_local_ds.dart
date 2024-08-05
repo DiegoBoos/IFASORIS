@@ -1,6 +1,4 @@
-import 'package:sqflite/sqflite.dart';
-
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/enfermedad_tradicional.dart';
 
 abstract class EnfermedadTradicionalLocalDataSource {
@@ -20,8 +18,8 @@ class EnfermedadTradicionalLocalDataSourceImpl
   @override
   Future<List<EnfermedadTradicionalModel>>
       getEnfermedadesTradicionales() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('EnfermedadesTradicionales_AtencionSalud');
+    final res =
+        await supabase.from('EnfermedadesTradicionales_AtencionSalud').select();
     final result = List<EnfermedadTradicionalModel>.from(
         res.map((m) => EnfermedadTradicionalModel.fromJson(m))).toList();
 
@@ -31,10 +29,9 @@ class EnfermedadTradicionalLocalDataSourceImpl
   @override
   Future<int> saveEnfermedadTradicional(
       EnfermedadTradicionalModel enfermedadTradicional) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('EnfermedadesTradicionales_AtencionSalud',
-        enfermedadTradicional.toJson());
+    final res = await supabase
+        .from('EnfermedadesTradicionales_AtencionSalud')
+        .insert(enfermedadTradicional.toJson());
 
     return res;
   }
@@ -42,9 +39,10 @@ class EnfermedadTradicionalLocalDataSourceImpl
   @override
   Future<List<LstEnfermedadTradicional>>
       getEnfermedadesTradicionalesAtencionSalud(int? atencionSaludId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp7_EnfermedadesTradicionales_AtencionSalud',
-        where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);
+    final res = await supabase
+        .from('Asp7_EnfermedadesTradicionales_AtencionSalud')
+        .select()
+        .eq('AtencionSalud_id', atencionSaludId);
     final result = List<LstEnfermedadTradicional>.from(
         res.map((m) => LstEnfermedadTradicional.fromJson(m))).toList();
 
@@ -54,8 +52,6 @@ class EnfermedadTradicionalLocalDataSourceImpl
   @override
   Future<int> saveEnfermedadesTradicionalesAtencionSalud(int atencionSaludId,
       List<LstEnfermedadTradicional> lstEnfermedadTradicional) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp7_EnfermedadesTradicionales_AtencionSalud',
         where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
 
 import '../../../domain/entities/usuario.dart';

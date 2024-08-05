@@ -10,6 +10,15 @@ class UsuarioModel extends UsuarioEntity {
     int? departamentoId,
   });
 
+  factory UsuarioModel.fromEntity(UsuarioEntity entity) => UsuarioModel(
+        id: entity.id,
+        userName: entity.userName,
+        password: entity.password,
+        deviceId: entity.deviceId,
+        municipioId: entity.municipioId,
+        departamentoId: entity.departamentoId,
+      );
+
   factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
         id: json["Id"],
         userName: json["UserName"],
@@ -18,17 +27,6 @@ class UsuarioModel extends UsuarioEntity {
         municipioId: json["Municipio_id"],
         departamentoId: json["Departamento_id"],
       );
-
-  static UsuarioModel fromEntity(UsuarioEntity entity) {
-    return UsuarioModel(
-      id: entity.id,
-      userName: entity.userName,
-      password: entity.password,
-      deviceId: entity.deviceId,
-      municipioId: entity.municipioId,
-      departamentoId: entity.departamentoId,
-    );
-  }
 
   Map<String, dynamic> toJson() => {
         "Id": id,

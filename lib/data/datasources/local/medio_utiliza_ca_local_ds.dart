@@ -1,6 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 
-import '../../../services/connection_sqlite_service.dart';
+
 import '../../models/medio_utiliza_ca.dart';
 
 abstract class MedioUtilizaCALocalDataSource {
@@ -16,8 +15,7 @@ class MedioUtilizaCALocalDataSourceImpl
     implements MedioUtilizaCALocalDataSource {
   @override
   Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('MediosUtiliza_CentroAtencion');
+    final res = await supabase.from(.select()'MediosUtiliza_CentroAtencion');
     final mediosUtilizaCADB = List<MedioUtilizaCAModel>.from(
         res.map((m) => MedioUtilizaCAModel.fromJson(m))).toList();
 
@@ -26,10 +24,9 @@ class MedioUtilizaCALocalDataSourceImpl
 
   @override
   Future<int> saveMedioUtilizaCA(MedioUtilizaCAModel medioUtilizaCA) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert(
-        'MediosUtiliza_CentroAtencion', medioUtilizaCA.toJson());
+    final res = await supabase
+        .from(
+        .insert('MediosUtiliza_CentroAtencion', medioUtilizaCA.toJson());
 
     return res;
   }
@@ -37,8 +34,7 @@ class MedioUtilizaCALocalDataSourceImpl
   @override
   Future<List<LstMediosUtilizaCA>> getUbicacionMediosUtilizaCA(
       int? ubicacionId) async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('Asp1_UbicacionMediosCentroAtencion',
+    final res = await supabase.from(.select()'Asp1_UbicacionMediosCentroAtencion',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
     final result = List<LstMediosUtilizaCA>.from(
         res.map((m) => LstMediosUtilizaCA.fromJson(m))).toList();
@@ -49,8 +45,6 @@ class MedioUtilizaCALocalDataSourceImpl
   @override
   Future<int> saveUbicacionMediosUtilizaCA(
       int ubicacionId, List<LstMediosUtilizaCA> lstMediosUtilizaCA) async {
-    final db = await ConnectionSQLiteService.db;
-
     Batch batch = db.batch();
     batch.delete('Asp1_UbicacionMediosCentroAtencion',
         where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);

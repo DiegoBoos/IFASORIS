@@ -1,4 +1,3 @@
-import '../../../services/connection_sqlite_service.dart';
 import '../../models/via_acceso.dart';
 
 abstract class ViaAccesoLocalDataSource {
@@ -9,8 +8,7 @@ abstract class ViaAccesoLocalDataSource {
 class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   @override
   Future<List<ViaAccesoModel>> getViasAcceso() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('ViasAcceso');
+    final res = await supabase.from(.select()'ViasAcceso');
     final result =
         List<ViaAccesoModel>.from(res.map((m) => ViaAccesoModel.fromJson(m)))
             .toList();
@@ -20,9 +18,8 @@ class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
 
   @override
   Future<int> saveViaAcceso(ViaAccesoModel viaAcceso) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('ViasAcceso', viaAcceso.toJson());
+    final res =
+        await supabase.from(.insert('ViasAcceso', viaAcceso.toJson());
 
     return res;
   }

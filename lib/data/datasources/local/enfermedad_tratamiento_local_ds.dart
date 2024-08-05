@@ -1,4 +1,4 @@
-import '../../../services/connection_sqlite_service.dart';
+import '../../../core/constants.dart';
 import '../../models/enfermedad_tratamiento.dart';
 
 abstract class EnfermedadTratamientoLocalDataSource {
@@ -11,8 +11,8 @@ class EnfermedadTratamientoLocalDataSourceImpl
     implements EnfermedadTratamientoLocalDataSource {
   @override
   Future<List<EnfermedadTratamientoModel>> getEnfermedadesTratamiento() async {
-    final db = await ConnectionSQLiteService.db;
-    final res = await db.query('EnfermedadesTratamientos_AtencionSalud');
+    final res =
+        await supabase.from('EnfermedadesTratamientos_AtencionSalud').select();
     final result = List<EnfermedadTratamientoModel>.from(
         res.map((m) => EnfermedadTratamientoModel.fromJson(m))).toList();
 
@@ -22,10 +22,9 @@ class EnfermedadTratamientoLocalDataSourceImpl
   @override
   Future<int> saveEnfermedadTratamiento(
       EnfermedadTratamientoModel enfermedadTratamiento) async {
-    final db = await ConnectionSQLiteService.db;
-
-    final res = await db.insert('EnfermedadesTratamientos_AtencionSalud',
-        enfermedadTratamiento.toJson());
+    final res = await supabase
+        .from('EnfermedadesTratamientos_AtencionSalud')
+        .insert(enfermedadTratamiento.toJson());
 
     return res;
   }

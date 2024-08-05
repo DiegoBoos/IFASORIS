@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/error/failure.dart';
-import '../../../core/constants.dart';
+import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
 import '../../models/tiempo_tarda_med_tradicional.dart';
 
@@ -23,7 +23,7 @@ class TiempoTardaMedTradicionalRemoteDataSourceImpl
       getTiemposTardaMedTradicional() async {
     try {
       final uri =
-          Uri.parse('${Constants.apiPublica}/tiempotardamedtradicional');
+          Uri.parse('${AppConfig.apiPublica}/tiempotardamedtradicional');
 
       final resp = await client.get(uri, headers: {
         'Content-Type': 'application/json',
