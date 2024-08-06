@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/tipo_vivienda.dart';
 
 abstract class TipoViviendaLocalDataSource {
@@ -8,7 +9,7 @@ abstract class TipoViviendaLocalDataSource {
 class TipoViviendaLocalDataSourceImpl implements TipoViviendaLocalDataSource {
   @override
   Future<List<TipoViviendaModel>> getTiposVivienda() async {
-    final res = await supabase.from(.select()'TiposVivienda_DatosVivienda');
+    final res = await supabase.from('TiposVivienda_DatosVivienda').select();
     final result = List<TipoViviendaModel>.from(
         res.map((m) => TipoViviendaModel.fromJson(m))).toList();
 
@@ -18,8 +19,8 @@ class TipoViviendaLocalDataSourceImpl implements TipoViviendaLocalDataSource {
   @override
   Future<int> saveTipoVivienda(TipoViviendaModel tipoVivienda) async {
     final res = await supabase
-        .from(
-        .insert('TiposVivienda_DatosVivienda', tipoVivienda.toJson());
+        .from('TiposVivienda_DatosVivienda')
+        .insert(tipoVivienda.toJson());
 
     return res;
   }

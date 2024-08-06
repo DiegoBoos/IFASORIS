@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/medio_utiliza_med_tradicional.dart';
 
 abstract class MedioUtilizaMedTradicionalLocalDataSource {
@@ -20,7 +19,8 @@ class MedioUtilizaMedTradicionalLocalDataSourceImpl
   @override
   Future<List<MedioUtilizaMedTradicionalModel>>
       getMediosUtilizaMedTradicional() async {
-    final res = await supabase.from(.select()'MediosUtiliza_AccesoMedTradicional');
+    final res =
+        await supabase.from('MediosUtiliza_AccesoMedTradicional').select();
     final result = List<MedioUtilizaMedTradicionalModel>.from(
         res.map((m) => MedioUtilizaMedTradicionalModel.fromJson(m))).toList();
 
@@ -30,9 +30,9 @@ class MedioUtilizaMedTradicionalLocalDataSourceImpl
   @override
   Future<int> saveMedioUtilizaMedTradicional(
       MedioUtilizaMedTradicionalModel medioUtilizaMedTradicional) async {
-    final res = await supabase.from(.insert(
-        'MediosUtiliza_AccesoMedTradicional',
-        medioUtilizaMedTradicional.toJson());
+    final res = await supabase
+        .from('MediosUtiliza_AccesoMedTradicional')
+        .insert(medioUtilizaMedTradicional.toJson());
 
     return res;
   }
@@ -63,8 +63,10 @@ class MedioUtilizaMedTradicionalLocalDataSourceImpl
   @override
   Future<List<LstMediosMedTradicional>> getUbicacionMediosUtilizaMedTradicional(
       int? ubicacionId) async {
-    final res = await supabase.from(.select()'Asp1_UbicacionMediosMedTradicional',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionMediosMedTradicional')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final result = List<LstMediosMedTradicional>.from(
         res.map((m) => LstMediosMedTradicional.fromJson(m))).toList();
 

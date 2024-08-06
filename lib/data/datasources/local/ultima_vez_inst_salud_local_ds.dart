@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/ultima_vez_inst_salud.dart';
 
 abstract class UltimaVezInstSaludLocalDataSource {
@@ -10,7 +11,9 @@ class UltimaVezInstSaludLocalDataSourceImpl
     implements UltimaVezInstSaludLocalDataSource {
   @override
   Future<List<UltimaVezInstSaludModel>> getUltimasVecesInstSalud() async {
-    final res = await supabase.from(.select()'UltimaVezInstSalud_CuidadoSaludCondRiesgo');
+    final res = await supabase
+        .from('UltimaVezInstSalud_CuidadoSaludCondRiesgo')
+        .select();
     final result = List<UltimaVezInstSaludModel>.from(
         res.map((m) => UltimaVezInstSaludModel.fromJson(m))).toList();
 
@@ -20,9 +23,9 @@ class UltimaVezInstSaludLocalDataSourceImpl
   @override
   Future<int> saveUltimaVezInstSalud(
       UltimaVezInstSaludModel ultimaVezInstSalud) async {
-    final res = await supabase.from(.insert(
-        'UltimaVezInstSalud_CuidadoSaludCondRiesgo',
-        ultimaVezInstSalud.toJson());
+    final res = await supabase
+        .from('UltimaVezInstSalud_CuidadoSaludCondRiesgo')
+        .insert(ultimaVezInstSalud.toJson());
 
     return res;
   }

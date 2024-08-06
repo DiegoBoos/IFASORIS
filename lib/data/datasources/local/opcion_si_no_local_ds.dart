@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/opcion_si_no.dart';
 
 abstract class OpcionSiNoLocalDataSource {
@@ -8,7 +9,7 @@ abstract class OpcionSiNoLocalDataSource {
 class OpcionSiNoLocalDataSourceImpl implements OpcionSiNoLocalDataSource {
   @override
   Future<List<OpcionSiNoModel>> getOpcionesSiNo() async {
-    final res = await supabase.from(.select()'OpcionesSi_No');
+    final res = await supabase.from('OpcionesSi_No').select();
     final result =
         List<OpcionSiNoModel>.from(res.map((m) => OpcionSiNoModel.fromJson(m)))
             .toList();
@@ -19,7 +20,7 @@ class OpcionSiNoLocalDataSourceImpl implements OpcionSiNoLocalDataSource {
   @override
   Future<int> saveOpcionSiNo(OpcionSiNoModel opcionSiNo) async {
     final res =
-        await supabase.from(.insert('OpcionesSi_No', opcionSiNo.toJson());
+        await supabase.from('OpcionesSi_No').insert(opcionSiNo.toJson());
 
     return res;
   }

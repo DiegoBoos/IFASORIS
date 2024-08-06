@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/medio_comunicacion.dart';
 
 abstract class MedioComunicacionLocalDataSource {
@@ -17,7 +16,7 @@ class MedioComunicacionLocalDataSourceImpl
     implements MedioComunicacionLocalDataSource {
   @override
   Future<List<MedioComunicacionModel>> getMediosComunicacion() async {
-    final res = await supabase.from(.select()'MediosComunicacion');
+    final res = await supabase.from('MediosComunicacion').select();
     final mediosComunicacionDB = List<MedioComunicacionModel>.from(
         res.map((m) => MedioComunicacionModel.fromJson(m))).toList();
 
@@ -28,8 +27,8 @@ class MedioComunicacionLocalDataSourceImpl
   Future<int> saveMedioComunicacion(
       MedioComunicacionModel medioComunicacion) async {
     final res = await supabase
-        .from(
-        .insert('MediosComunicacion', medioComunicacion.toJson());
+        .from('MediosComunicacion')
+        .insert(medioComunicacion.toJson());
 
     return res;
   }
@@ -60,8 +59,10 @@ class MedioComunicacionLocalDataSourceImpl
   @override
   Future<List<LstMediosComunica>> getUbicacionMediosComunicacion(
       int? ubicacionId) async {
-    final res = await supabase.from(.select()'Asp1_UbicacionMediosComunicacion',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionMediosComunicacion')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final ubicacionMediosComunicacionDB = List<LstMediosComunica>.from(
         res.map((m) => LstMediosComunica.fromJson(m))).toList();
 

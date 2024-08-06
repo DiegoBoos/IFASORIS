@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/grupo_riesgo.dart';
 
 abstract class GrupoRiesgoLocalDataSource {
@@ -8,7 +9,7 @@ abstract class GrupoRiesgoLocalDataSource {
 class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
   @override
   Future<List<GrupoRiesgoModel>> getGruposRiesgo() async {
-    final res = await supabase.from(.select()'GrupoRiesgo_GrupoFamiliar');
+    final res = await supabase.from('GrupoRiesgo_GrupoFamiliar').select();
     final result = List<GrupoRiesgoModel>.from(
         res.map((m) => GrupoRiesgoModel.fromJson(m))).toList();
 
@@ -18,8 +19,8 @@ class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
   @override
   Future<int> saveGrupoRiesgo(GrupoRiesgoModel grupoRiesgo) async {
     final res = await supabase
-        .from(
-        .insert('GrupoRiesgo_GrupoFamiliar', grupoRiesgo.toJson());
+        .from('GrupoRiesgo_GrupoFamiliar')
+        .insert(grupoRiesgo.toJson());
 
     return res;
   }

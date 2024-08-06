@@ -78,7 +78,7 @@ class _CambioDispositivoPageState extends State<CambioDispositivoPage> {
                                     .cambioDispositivo(
                                         userName, datosEquipo.idEquipo!)
                                     .then((value) {
-                                  if (value !=  {
+                                  if (value != '') {
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
                                     authBloc.add(LogOut());

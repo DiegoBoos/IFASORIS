@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/tipo_sanitario_vivienda.dart';
 
 abstract class TipoSanitarioViviendaLocalDataSource {
@@ -17,7 +16,8 @@ class TipoSanitarioViviendaLocalDataSourceImpl
     implements TipoSanitarioViviendaLocalDataSource {
   @override
   Future<List<TipoSanitarioViviendaModel>> getTiposSanitario() async {
-    final res = await supabase.from(.select()'TiposSanitarioVivienda_DatosVivienda');
+    final res =
+        await supabase.from('TiposSanitarioVivienda_DatosVivienda').select();
     final result = List<TipoSanitarioViviendaModel>.from(
         res.map((m) => TipoSanitarioViviendaModel.fromJson(m))).toList();
 
@@ -27,8 +27,9 @@ class TipoSanitarioViviendaLocalDataSourceImpl
   @override
   Future<int> saveTipoSanitarioVivienda(
       TipoSanitarioViviendaModel tipoSanitarioVivienda) async {
-    final res = await supabase.from(.insert(
-        'TiposSanitarioVivienda_DatosVivienda', tipoSanitarioVivienda.toJson());
+    final res = await supabase
+        .from('TiposSanitarioVivienda_DatosVivienda')
+        .insert(tipoSanitarioVivienda.toJson());
 
     return res;
   }
@@ -60,8 +61,10 @@ class TipoSanitarioViviendaLocalDataSourceImpl
   @override
   Future<List<LstTipoSanitario>> getTiposSanitarioVivienda(
       int? datoViviendaId) async {
-    final res = await supabase.from(.select()'Asp2_DatosViviendaTiposSanitario',
-        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
+    final res = await supabase
+        .from('Asp2_DatosViviendaTiposSanitario')
+        .select()
+        .eq('DatoVivienda_id', datoViviendaId);
     final result = List<LstTipoSanitario>.from(
         res.map((m) => LstTipoSanitario.fromJson(m))).toList();
 

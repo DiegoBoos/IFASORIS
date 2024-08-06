@@ -67,7 +67,6 @@ import 'domain/usecases/sancion_justicia/sancion_justicia_exports.dart';
 import 'domain/usecases/seguimiento_enfermedad/seguimiento_enfermedad_exports.dart';
 import 'domain/usecases/servicio_publico_vivienda/servicio_publico_vivienda_exports.dart';
 import 'domain/usecases/servicio_solicitado/servicio_solicitado_exports.dart';
-import 'domain/usecases/sync_log/sync_log_exports.dart';
 import 'domain/usecases/techo_vivienda/techo_vivienda_exports.dart';
 import 'domain/usecases/tenencia_vivienda/tenencia_vivienda_exports.dart';
 import 'domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
@@ -95,7 +94,6 @@ void init() {
   authInit();
   internetInit();
   syncInit();
-  syncLogInit();
   afiliadoInit();
   afiliadoPrefsInit();
   dimUbicacionInit();
@@ -230,7 +228,6 @@ void internetInit() {
 void syncInit() {
   // bloc
   locator.registerFactory(() => SyncBloc(
-      syncLogDB: locator(),
       afiliadoUsecase: locator(),
       afiliadoUsecaseDB: locator(),
       dificultadAccesoCAUsecase: locator(),
@@ -375,26 +372,6 @@ void syncInit() {
       cuartoViviendaUsecaseDB: locator(),
       fichaUsecase: locator(),
       fichaUsecaseDB: locator()));
-}
-
-void syncLogInit() {
-  // cubit
-  locator.registerFactory(() => SyncLogCubit(syncLogDB: locator()));
-
-  // local usecase
-  locator.registerLazySingleton(() => SyncLogUsecaseDB(locator()));
-
-  // repository DB
-  locator.registerLazySingleton<SyncLogRepositoryDB>(
-    () => SyncLogRepositoryDBImpl(
-      syncLogLocalDataSource: locator(),
-    ),
-  );
-
-  // local data source
-  locator.registerLazySingleton<SyncLogLocalDataSource>(
-    () => SyncLogLocalDataSourceImpl(),
-  );
 }
 
 void afiliadoInit() {

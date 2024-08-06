@@ -128,7 +128,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     .map(
                       (tipoDocumento) => DropdownMenuItem<String>(
                         value: tipoDocumento.tipo,
-                        child: Text(tipoDocumento.descripcion ?? ,
+                        child: Text(tipoDocumento.descripcion ?? ''),
                       ),
                     )
                     .toList(),
@@ -284,7 +284,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                               (e) => e.opcionId == 3
                                   ? Container()
                                   : RadioListTile<int?>(
-                                      title: Text(e.descripcion ?? ,
+                                      title: Text(e.descripcion ?? ''),
                                       value: e.opcionId,
                                       groupValue: _perteneceResguardo,
                                       onChanged: (int? newValue) {
@@ -337,7 +337,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                       .map(
                         (resguardo) => DropdownMenuItem<int>(
                           value: resguardo.resguardoId,
-                          child: Text(resguardo.nombreResguardo ?? ,
+                          child: Text(resguardo.nombreResguardo ?? ''),
                         ),
                       )
                       .toList(),
@@ -374,7 +374,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     .map(
                       (autoridadIndigena) => DropdownMenuItem<int>(
                         value: autoridadIndigena.autoridadIndigenaId,
-                        child: Text(autoridadIndigena.descripcion ?? ,
+                        child: Text(autoridadIndigena.descripcion ?? ''),
                       ),
                     )
                     .toList(),
@@ -412,7 +412,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                 items: viasAccesoLoaded
                     .map((viaAcceso) => DropdownMenuItem<int>(
                           value: viaAcceso.viaAccesoId,
-                          child: Text(viaAcceso.descripcion ?? ,
+                          child: Text(viaAcceso.descripcion ?? ''),
                         ))
                     .toList(),
                 decoration: CustomInputDecoration.inputDecoration(
@@ -449,7 +449,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
                     .map(
                       (estadoVia) => DropdownMenuItem<int>(
                         value: estadoVia.estadoViaId,
-                        child: Text(estadoVia.descripcion ?? ,
+                        child: Text(estadoVia.descripcion ?? ''),
                       ),
                     )
                     .toList(),
@@ -489,7 +489,7 @@ class DatosUbicacionFormState extends State<DatosUbicacionForm> {
 
               for (var e in mediosComunicacionLoaded) {
                 final optionType =
-                    FormValidators.optionType(e.descripcion ?? ;
+                    FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'N') {
                   ningunoId = e.medioComunicacionId;
                 }

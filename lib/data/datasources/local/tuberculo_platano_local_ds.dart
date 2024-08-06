@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/tuberculo_platano.dart';
 
 abstract class TuberculoPlatanoLocalDataSource {
@@ -16,7 +15,9 @@ class TuberculoPlatanoLocalDataSourceImpl
     implements TuberculoPlatanoLocalDataSource {
   @override
   Future<List<TuberculoPlatanoModel>> getTuberculosPlatanos() async {
-    final res = await supabase.from(.select()'TuberculosPlatanos_AspectosSocioEconomicos');
+    final res = await supabase
+        .from('TuberculosPlatanos_AspectosSocioEconomicos')
+        .select();
     final result = List<TuberculoPlatanoModel>.from(
         res.map((m) => TuberculoPlatanoModel.fromJson(m))).toList();
 
@@ -26,9 +27,9 @@ class TuberculoPlatanoLocalDataSourceImpl
   @override
   Future<int> saveTuberculoPlatano(
       TuberculoPlatanoModel tuberculoPlatano) async {
-    final res = await supabase.from(.insert(
-        'TuberculosPlatanos_AspectosSocioEconomicos',
-        tuberculoPlatano.toJson());
+    final res = await supabase
+        .from('TuberculosPlatanos_AspectosSocioEconomicos')
+        .insert(tuberculoPlatano.toJson());
 
     return res;
   }
@@ -60,8 +61,10 @@ class TuberculoPlatanoLocalDataSourceImpl
   @override
   Future<List<LstTuberculo>> getUbicacionTuberculosPlatanos(
       int? ubicacionId) async {
-    final res = await supabase.from(.select()'Asp1_UbicacionTuberculosPlatanos',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionTuberculosPlatanos')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final result =
         List<LstTuberculo>.from(res.map((m) => LstTuberculo.fromJson(m)))
             .toList();

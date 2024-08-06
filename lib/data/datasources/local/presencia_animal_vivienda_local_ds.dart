@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/presencia_animal_vivienda.dart';
 
 abstract class PresenciaAnimalViviendaLocalDataSource {
@@ -18,7 +17,8 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
     implements PresenciaAnimalViviendaLocalDataSource {
   @override
   Future<List<PresenciaAnimalViviendaModel>> getPresenciaAnimales() async {
-    final res = await supabase.from(.select()'PresenciaAnimalesVivienda_DatosVivienda');
+    final res =
+        await supabase.from('PresenciaAnimalesVivienda_DatosVivienda').select();
     final result = List<PresenciaAnimalViviendaModel>.from(
         res.map((m) => PresenciaAnimalViviendaModel.fromJson(m))).toList();
 
@@ -28,9 +28,9 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
   @override
   Future<int> savePresenciaAnimalVivienda(
       PresenciaAnimalViviendaModel presenciaAnimalVivienda) async {
-    final res = await supabase.from(.insert(
-        'PresenciaAnimalesVivienda_DatosVivienda',
-        presenciaAnimalVivienda.toJson());
+    final res = await supabase
+        .from('PresenciaAnimalesVivienda_DatosVivienda')
+        .insert(presenciaAnimalVivienda.toJson());
 
     return res;
   }
@@ -62,8 +62,10 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
   @override
   Future<List<LstPresenciaAnimal>> getPresenciasAnimalesVivienda(
       int? datoViviendaId) async {
-    final res = await supabase.from(.select()'Asp2_DatosViviendaPresenciaAnimales',
-        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
+    final res = await supabase
+        .from('Asp2_DatosViviendaPresenciaAnimales')
+        .select()
+        .eq('DatoVivienda_id', datoViviendaId);
     final result = List<LstPresenciaAnimal>.from(
         res.map((m) => LstPresenciaAnimal.fromJson(m))).toList();
 

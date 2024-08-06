@@ -1,5 +1,6 @@
 
 
+import '../../../core/constants.dart';
 import '../../models/piso_vivienda.dart';
 
 abstract class PisoViviendaLocalDataSource {
@@ -12,7 +13,7 @@ abstract class PisoViviendaLocalDataSource {
 class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
   @override
   Future<List<PisoViviendaModel>> getPisosVivienda() async {
-    final res = await supabase.from(.select()'PisosVivienda_DatosVivienda');
+    final res = await supabase.from('PisosVivienda_DatosVivienda').select();
     final result = List<PisoViviendaModel>.from(
         res.map((m) => PisoViviendaModel.fromJson(m))).toList();
 
@@ -30,8 +31,7 @@ class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
 
   @override
   Future<List<LstPiso>> getPisosViviendaVivienda(int? datoViviendaId) async {
-    final res = await supabase.from(.select()'Asp2_DatosViviendaPisos',
-        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
+    final res = await supabase.from('Asp2_DatosViviendaPisos').select().eq('DatoVivienda_id', datoViviendaId);
     final result =
         List<LstPiso>.from(res.map((m) => LstPiso.fromJson(m))).toList();
 

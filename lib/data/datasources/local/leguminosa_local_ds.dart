@@ -1,5 +1,6 @@
 
 
+import '../../../core/constants.dart';
 import '../../models/leguminosa.dart';
 
 abstract class LeguminosaLocalDataSource {
@@ -15,7 +16,7 @@ abstract class LeguminosaLocalDataSource {
 class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
   @override
   Future<List<LeguminosaModel>> getLeguminosas() async {
-    final res = await supabase.from(.select()'Leguminosas_AspectosSocioEconomicos');
+    final res = await supabase.from('Leguminosas_AspectosSocioEconomicos').select();
     final result =
         List<LeguminosaModel>.from(res.map((m) => LeguminosaModel.fromJson(m)))
             .toList();
@@ -55,8 +56,7 @@ class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
 
   @override
   Future<List<LstLeguminosa>> getUbicacionLeguminosas(int? ubicacionId) async {
-    final res = await supabase.from(.select()'Asp1_UbicacionLeguminosas',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase.from('Asp1_UbicacionLeguminosas').select().eq('Ubicacion_id', ubicacionId);
     final result =
         List<LstLeguminosa>.from(res.map((m) => LstLeguminosa.fromJson(m)))
             .toList();

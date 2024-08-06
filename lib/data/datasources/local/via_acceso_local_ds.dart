@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/via_acceso.dart';
 
 abstract class ViaAccesoLocalDataSource {
@@ -8,7 +9,7 @@ abstract class ViaAccesoLocalDataSource {
 class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   @override
   Future<List<ViaAccesoModel>> getViasAcceso() async {
-    final res = await supabase.from(.select()'ViasAcceso');
+    final res = await supabase.from('ViasAcceso').select();
     final result =
         List<ViaAccesoModel>.from(res.map((m) => ViaAccesoModel.fromJson(m)))
             .toList();
@@ -18,8 +19,7 @@ class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
 
   @override
   Future<int> saveViaAcceso(ViaAccesoModel viaAcceso) async {
-    final res =
-        await supabase.from(.insert('ViasAcceso', viaAcceso.toJson());
+    final res = await supabase.from('ViasAcceso').insert(viaAcceso.toJson());
 
     return res;
   }

@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/tipo_documento.dart';
 
 abstract class TipoDocumentoLocalDataSource {
@@ -8,7 +9,7 @@ abstract class TipoDocumentoLocalDataSource {
 class TipoDocumentoLocalDataSourceImpl implements TipoDocumentoLocalDataSource {
   @override
   Future<List<TipoDocumentoModel>> getTiposDocumento() async {
-    final res = await supabase.from(.select()'TiposDocumento_GrupoFamiliar');
+    final res = await supabase.from('TiposDocumento_GrupoFamiliar').select();
     final result = List<TipoDocumentoModel>.from(
         res.map((m) => TipoDocumentoModel.fromJson(m))).toList();
 
@@ -18,8 +19,8 @@ class TipoDocumentoLocalDataSourceImpl implements TipoDocumentoLocalDataSource {
   @override
   Future<int> saveTipoDocumento(TipoDocumentoModel tipoDocumento) async {
     final res = await supabase
-        .from(
-        .insert('TiposDocumento_GrupoFamiliar', tipoDocumento.toJson());
+        .from('TiposDocumento_GrupoFamiliar')
+        .insert(tipoDocumento.toJson());
 
     return res;
   }

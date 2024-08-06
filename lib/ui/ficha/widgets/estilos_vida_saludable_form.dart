@@ -93,7 +93,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                   .map(
                     (actividadFisica) => DropdownMenuItem<int>(
                       value: actividadFisica.actividadFisicaId,
-                      child: Text(actividadFisica.descripcion ?? ,
+                      child: Text(actividadFisica.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -136,7 +136,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                   .map(
                     (alimentacion) => DropdownMenuItem<int>(
                       value: alimentacion.alimentacionId,
-                      child: Text(alimentacion.descripcion ?? ,
+                      child: Text(alimentacion.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -183,7 +183,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                             (e) => e.opcionId == 3
                                 ? Container()
                                 : RadioListTile<int?>(
-                                    title: Text(e.descripcion ?? ,
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _consumoCigarrillo,
                                     onChanged: (int? newValue) {
@@ -248,7 +248,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                         .map(
                           (numeroCigarrilloDia) => DropdownMenuItem<int>(
                             value: numeroCigarrilloDia.numeroCigarrilloDiaId,
-                            child: Text(numeroCigarrilloDia.descripcion ?? ,
+                            child: Text(numeroCigarrilloDia.descripcion ?? ''),
                           ),
                         )
                         .toList(),
@@ -294,7 +294,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                   .map(
                     (consumoAlcohol) => DropdownMenuItem<int>(
                       value: consumoAlcohol.consumoAlcoholId,
-                      child: Text(consumoAlcohol.descripcion ?? ,
+                      child: Text(consumoAlcohol.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -341,7 +341,7 @@ class _EstilosVidaSaludableFormState extends State<EstilosVidaSaludableForm> {
                             (e) => e.opcionId == 3
                                 ? Container()
                                 : RadioListTile<int?>(
-                                    title: Text(e.descripcion ?? ,
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _consumoSustanciaId,
                                     onChanged: (int? newValue) {

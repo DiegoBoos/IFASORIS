@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/resguardo.dart';
 
 abstract class ResguardoLocalDataSource {
@@ -8,7 +9,7 @@ abstract class ResguardoLocalDataSource {
 class ResguardoLocalDataSourceImpl implements ResguardoLocalDataSource {
   @override
   Future<List<ResguardoModel>> getResguardos() async {
-    final res = await supabase.from(.select()'Resguardos');
+    final res = await supabase.from('Resguardos').select();
     final result =
         List<ResguardoModel>.from(res.map((m) => ResguardoModel.fromJson(m)))
             .toList();
@@ -18,8 +19,7 @@ class ResguardoLocalDataSourceImpl implements ResguardoLocalDataSource {
 
   @override
   Future<int> saveResguardo(ResguardoModel resguardo) async {
-    final res =
-        await supabase.from(.insert('Resguardos', resguardo.toJson());
+    final res = await supabase.from('Resguardos').insert(resguardo.toJson());
 
     return res;
   }

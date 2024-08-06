@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/iluminacion_vivienda.dart';
 
 abstract class IluminacionViviendaLocalDataSource {
@@ -10,7 +11,8 @@ class IluminacionViviendaLocalDataSourceImpl
     implements IluminacionViviendaLocalDataSource {
   @override
   Future<List<IluminacionViviendaModel>> getIluminacionesVivienda() async {
-    final res = await supabase.from(.select()'IluminacionVivienda_DatosVivienda');
+    final res =
+        await supabase.from('IluminacionVivienda_DatosVivienda').select();
     final result = List<IluminacionViviendaModel>.from(
         res.map((m) => IluminacionViviendaModel.fromJson(m))).toList();
 
@@ -20,8 +22,9 @@ class IluminacionViviendaLocalDataSourceImpl
   @override
   Future<int> saveIluminacionVivienda(
       IluminacionViviendaModel iluminacionVivienda) async {
-    final res = await supabase.from(.insert(
-        'IluminacionVivienda_DatosVivienda', iluminacionVivienda.toJson());
+    final res = await supabase
+        .from('IluminacionVivienda_DatosVivienda')
+        .insert(iluminacionVivienda.toJson());
 
     return res;
   }

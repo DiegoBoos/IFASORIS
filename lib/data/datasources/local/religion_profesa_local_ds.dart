@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/religion_profesa.dart';
 
 abstract class ReligionProfesaLocalDataSource {
@@ -9,8 +10,9 @@ class ReligionProfesaLocalDataSourceImpl
     implements ReligionProfesaLocalDataSource {
   @override
   Future<List<ReligionProfesaModel>> getReligionesProfesa() async {
-    final res =
-        await supabase.from(.select()'ReligionesProfesa_DimSocioCulturalPueblosIndigenas');
+    final res = await supabase
+        .from('ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
+        .select();
     final result = List<ReligionProfesaModel>.from(
         res.map((m) => ReligionProfesaModel.fromJson(m))).toList();
 
@@ -19,9 +21,9 @@ class ReligionProfesaLocalDataSourceImpl
 
   @override
   Future<int> saveReligionProfesa(ReligionProfesaModel religionProfesa) async {
-    final res = await supabase.from(.insert(
-        'ReligionesProfesa_DimSocioCulturalPueblosIndigenas',
-        religionProfesa.toJson());
+    final res = await supabase
+        .from('ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
+        .insert(religionProfesa.toJson());
 
     return res;
   }

@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/pueblo_indigena.dart';
 
 abstract class PuebloIndigenaLocalDataSource {
@@ -9,7 +10,7 @@ class PuebloIndigenaLocalDataSourceImpl
     implements PuebloIndigenaLocalDataSource {
   @override
   Future<List<PuebloIndigenaModel>> getPueblosIndigenas() async {
-    final res = await supabase.from(.select()'PueblosIndigenas_GrupoFamiliar');
+    final res = await supabase.from('PueblosIndigenas_GrupoFamiliar').select();
     final result = List<PuebloIndigenaModel>.from(
         res.map((m) => PuebloIndigenaModel.fromJson(m))).toList();
 
@@ -19,8 +20,8 @@ class PuebloIndigenaLocalDataSourceImpl
   @override
   Future<int> savePuebloIndigena(PuebloIndigenaModel puebloIndigena) async {
     final res = await supabase
-        .from(
-        .insert('PueblosIndigenas_GrupoFamiliar', puebloIndigena.toJson());
+        .from('PueblosIndigenas_GrupoFamiliar')
+        .insert(puebloIndigena.toJson());
 
     return res;
   }

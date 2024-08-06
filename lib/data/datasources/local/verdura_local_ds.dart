@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/verdura.dart';
 
 abstract class VerduraLocalDataSource {
@@ -15,7 +14,8 @@ abstract class VerduraLocalDataSource {
 class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
   @override
   Future<List<VerduraModel>> getVerduras() async {
-    final res = await supabase.from(.select()'Verduras_AspectosSocioEconomicos');
+    final res =
+        await supabase.from('Verduras_AspectosSocioEconomicos').select();
     final result =
         List<VerduraModel>.from(res.map((m) => VerduraModel.fromJson(m)))
             .toList();
@@ -26,8 +26,8 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
   @override
   Future<int> saveVerdura(VerduraModel verdura) async {
     final res = await supabase
-        .from(
-        .insert('Verduras_AspectosSocioEconomicos', verdura.toJson());
+        .from('Verduras_AspectosSocioEconomicos')
+        .insert(verdura.toJson());
 
     return res;
   }
@@ -57,8 +57,10 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
 
   @override
   Future<List<LstVerdura>> getUbicacionVerduras(int? ubicacionId) async {
-    final res = await supabase.from(.select()'Asp1_UbicacionVerduras',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionVerduras')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final result =
         List<LstVerdura>.from(res.map((m) => LstVerdura.fromJson(m))).toList();
 

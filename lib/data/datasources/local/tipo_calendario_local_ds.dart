@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/tipo_calendario.dart';
 
 abstract class TipoCalendarioLocalDataSource {
@@ -9,7 +10,9 @@ class TipoCalendarioLocalDataSourceImpl
     implements TipoCalendarioLocalDataSource {
   @override
   Future<List<TipoCalendarioModel>> getTiposCalendario() async {
-    final res = await supabase.from(.select()'TiposCalendarios_AspectosSocioEconomicos');
+    final res = await supabase
+        .from('TiposCalendarios_AspectosSocioEconomicos')
+        .select();
     final result = List<TipoCalendarioModel>.from(
         res.map((m) => TipoCalendarioModel.fromJson(m))).toList();
 
@@ -18,8 +21,9 @@ class TipoCalendarioLocalDataSourceImpl
 
   @override
   Future<int> saveTipoCalendario(TipoCalendarioModel tipoCalendario) async {
-    final res = await supabase.from(.insert(
-        'TiposCalendarios_AspectosSocioEconomicos', tipoCalendario.toJson());
+    final res = await supabase
+        .from('TiposCalendarios_AspectosSocioEconomicos')
+        .insert(tipoCalendario.toJson());
 
     return res;
   }

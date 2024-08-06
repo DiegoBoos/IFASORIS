@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/regimen.dart';
 
 abstract class RegimenLocalDataSource {
@@ -8,7 +9,7 @@ abstract class RegimenLocalDataSource {
 class RegimenLocalDataSourceImpl implements RegimenLocalDataSource {
   @override
   Future<List<RegimenModel>> getRegimenes() async {
-    final res = await supabase.from(.select()'Regimenes_GrupoFamiliar');
+    final res = await supabase.from('Regimenes_GrupoFamiliar').select();
     final result =
         List<RegimenModel>.from(res.map((m) => RegimenModel.fromJson(m)))
             .toList();
@@ -18,9 +19,8 @@ class RegimenLocalDataSourceImpl implements RegimenLocalDataSource {
 
   @override
   Future<int> saveRegimen(RegimenModel regimen) async {
-    final res = await supabase
-        .from(
-        .insert('Regimenes_GrupoFamiliar', regimen.toJson());
+    final res =
+        await supabase.from('Regimenes_GrupoFamiliar').insert(regimen.toJson());
 
     return res;
   }

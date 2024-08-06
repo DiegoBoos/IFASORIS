@@ -18,7 +18,7 @@ class AppDrawer extends StatelessWidget {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     final fichaBloc = BlocProvider.of<FichaBloc>(context);
     final usuario = authBloc.state.usuario ??
-        const UsuarioEntity(userName: '', deviceId: '', password: ;
+        const UsuarioEntity(userName: '', deviceId: '', password: '');
 
     return Drawer(
       elevation: 16.0,

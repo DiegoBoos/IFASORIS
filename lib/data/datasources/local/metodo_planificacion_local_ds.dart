@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/metodo_planificacion.dart';
 
 abstract class MetodoPlanificacionLocalDataSource {
@@ -10,7 +11,9 @@ class MetodoPlanificacionLocalDataSourceImpl
     implements MetodoPlanificacionLocalDataSource {
   @override
   Future<List<MetodoPlanificacionModel>> getMetodosPlanificacion() async {
-    final res = await supabase.from(.select()'MetodosPlanificacion_CuidadoSaludCondRiesgo');
+    final res = await supabase
+        .from('MetodosPlanificacion_CuidadoSaludCondRiesgo')
+        .select();
     final result = List<MetodoPlanificacionModel>.from(
         res.map((m) => MetodoPlanificacionModel.fromJson(m))).toList();
 
@@ -20,9 +23,9 @@ class MetodoPlanificacionLocalDataSourceImpl
   @override
   Future<int> saveMetodoPlanificacion(
       MetodoPlanificacionModel metodoPlanificacion) async {
-    final res = await supabase.from(.insert(
-        'MetodosPlanificacion_CuidadoSaludCondRiesgo',
-        metodoPlanificacion.toJson());
+    final res = await supabase
+        .from('MetodosPlanificacion_CuidadoSaludCondRiesgo')
+        .insert(metodoPlanificacion.toJson());
 
     return res;
   }

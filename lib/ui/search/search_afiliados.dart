@@ -154,7 +154,7 @@ class SearchAfiliados extends SearchDelegate {
                                 .then((ficha) {
                               if (ficha != null) {
                                 if (ficha.numFicha == null ||
-                                    ficha.numFicha ==  {
+                                    ficha.numFicha == '') {
                                   afiliado.copyWith(
                                       afiliadoId: ficha.familia!.fkAfiliadoId);
 

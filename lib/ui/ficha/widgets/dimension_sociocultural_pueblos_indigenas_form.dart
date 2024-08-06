@@ -112,7 +112,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                   .map(
                     (religionProfesa) => DropdownMenuItem<int>(
                       value: religionProfesa.religionProfesaId,
-                      child: Text(religionProfesa.descripcion ?? ,
+                      child: Text(religionProfesa.descripcion ?? ''),
                     ),
                   )
                   .toList(),
@@ -159,7 +159,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                             (e) => e.opcionId == 3
                                 ? Container()
                                 : RadioListTile<int?>(
-                                    title: Text(e.descripcion ?? ,
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _conoceUsosCostumbresId,
                                     onChanged: (int? newValue) {
@@ -170,7 +170,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                         dimensionSocioCulturalPueblosIndigenasBloc
                                             .add(
                                                 const CualesUsosCostumbresChanged(
-                                                    );
+                                                    ''));
                                         dimensionSocioCulturalPueblosIndigenasBloc
                                             .add(
                                                 const ParticipaCostumbresChanged(
@@ -268,7 +268,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                   (e) => e.opcionId == 3
                                       ? Container()
                                       : RadioListTile<int?>(
-                                          title: Text(e.descripcion ?? ,
+                                          title: Text(e.descripcion ?? ''),
                                           value: e.opcionId,
                                           groupValue: _participaCostumbresId,
                                           onChanged: (int? newValue) {
@@ -348,7 +348,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
 
                         for (var e in eventosCostumbresParticipaLoaded) {
                           final optionType =
-                              FormValidators.optionType(e.descripcion ?? ;
+                              FormValidators.optionType(e.descripcion ?? '');
                           if (optionType == 'N') {
                             ningunoId = e.eventoCostumbreParticipaId;
                           }
@@ -447,7 +447,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                 (costumbrePractica) => DropdownMenuItem<int>(
                                   value: costumbrePractica.costumbrePracticaId,
                                   child:
-                                      Text(costumbrePractica.descripcion ?? ,
+                                      Text(costumbrePractica.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -493,7 +493,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                 (sancionJusticia) => DropdownMenuItem<int>(
                                   value: sancionJusticia.sancionJusticiaId,
                                   child:
-                                      Text(sancionJusticia.descripcion ?? ,
+                                      Text(sancionJusticia.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -545,7 +545,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                             (e) => e.opcionId == 3
                                 ? Container()
                                 : RadioListTile<int?>(
-                                    title: Text(e.descripcion ?? ,
+                                    title: Text(e.descripcion ?? ''),
                                     value: e.opcionId,
                                     groupValue: _sitiosSagradosId,
                                     onChanged: (int? newValue) {
@@ -556,7 +556,7 @@ class _DimensionSocioCulturalPueblosIndigenasFormState
                                         dimensionSocioCulturalPueblosIndigenasBloc
                                             .add(
                                                 const CualesSitiosSagradosChanged(
-                                                    );
+                                                    ''));
                                       }
                                       setState(() {
                                         _sitiosSagradosId = newValue!;

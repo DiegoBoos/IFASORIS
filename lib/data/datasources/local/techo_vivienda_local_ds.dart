@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/techo_vivienda.dart';
 
 abstract class TechoViviendaLocalDataSource {
@@ -14,7 +13,7 @@ abstract class TechoViviendaLocalDataSource {
 class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
   @override
   Future<List<TechoViviendaModel>> getTechosVivienda() async {
-    final res = await supabase.from(.select()'TechosVivienda_DatosVivienda');
+    final res = await supabase.from('TechosVivienda_DatosVivienda').select();
     final result = List<TechoViviendaModel>.from(
         res.map((m) => TechoViviendaModel.fromJson(m))).toList();
 
@@ -24,8 +23,8 @@ class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
   @override
   Future<int> saveTechoVivienda(TechoViviendaModel techoVivienda) async {
     final res = await supabase
-        .from(
-        .insert('TechosVivienda_DatosVivienda', techoVivienda.toJson());
+        .from('TechosVivienda_DatosVivienda')
+        .insert(techoVivienda.toJson());
 
     return res;
   }
@@ -55,8 +54,10 @@ class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
 
   @override
   Future<List<LstTecho>> getTechosViviendaVivienda(int? datoViviendaId) async {
-    final res = await supabase.from(.select()'Asp2_DatosViviendaTechos',
-        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
+    final res = await supabase
+        .from('Asp2_DatosViviendaTechos')
+        .select()
+        .eq('DatoVivienda_id', datoViviendaId);
     final result =
         List<LstTecho>.from(res.map((m) => LstTecho.fromJson(m))).toList();
 

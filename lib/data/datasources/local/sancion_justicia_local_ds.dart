@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/sancion_justicia.dart';
 
 abstract class SancionJusticiaLocalDataSource {
@@ -9,8 +10,9 @@ class SancionJusticiaLocalDataSourceImpl
     implements SancionJusticiaLocalDataSource {
   @override
   Future<List<SancionJusticiaModel>> getSancionesJusticia() async {
-    final res =
-        await supabase.from(.select()'SancionesJusticia_DimSocioCulturalPueblosIndigenas');
+    final res = await supabase
+        .from('SancionesJusticia_DimSocioCulturalPueblosIndigenas')
+        .select();
     final result = List<SancionJusticiaModel>.from(
         res.map((m) => SancionJusticiaModel.fromJson(m))).toList();
 
@@ -19,9 +21,9 @@ class SancionJusticiaLocalDataSourceImpl
 
   @override
   Future<int> saveSancionJusticia(SancionJusticiaModel sancionJusticia) async {
-    final res = await supabase.from(.insert(
-        'SancionesJusticia_DimSocioCulturalPueblosIndigenas',
-        sancionJusticia.toJson());
+    final res = await supabase
+        .from('SancionesJusticia_DimSocioCulturalPueblosIndigenas')
+        .insert(sancionJusticia.toJson());
 
     return res;
   }

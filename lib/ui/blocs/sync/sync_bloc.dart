@@ -72,7 +72,6 @@ import '../../../domain/usecases/sancion_justicia/sancion_justicia_exports.dart'
 import '../../../domain/usecases/seguimiento_enfermedad/seguimiento_enfermedad_exports.dart';
 import '../../../domain/usecases/servicio_publico_vivienda/servicio_publico_vivienda_exports.dart';
 import '../../../domain/usecases/servicio_solicitado/servicio_solicitado_exports.dart';
-import '../../../domain/usecases/sync_log/sync_log_exports.dart';
 import '../../../domain/usecases/techo_vivienda/techo_vivienda_exports.dart';
 import '../../../domain/usecases/tenencia_vivienda/tenencia_vivienda_exports.dart';
 import '../../../domain/usecases/tiempo_tarda_ca/tiempo_tarda_ca_exports.dart';
@@ -242,7 +241,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   final FichaUsecase fichaUsecase;
   final FichaUsecaseDB fichaUsecaseDB;
-  final SyncLogUsecaseDB syncLogDB;
 
   final prefs = SharedPreferencesService();
 
@@ -537,7 +535,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     required this.cuartoViviendaUsecaseDB,
     required this.fichaUsecase,
     required this.fichaUsecaseDB,
-    required this.syncLogDB,
   }) : super(SyncInitial()) {
     on<InitSync>((event, emit) => emit(SyncInitial()));
     on<SyncStarted>((event, emit) async {
@@ -563,7 +560,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           : emit(SyncIncrementInProgress(event.syncProgress));
     });
     on<SyncError>((event, emit) => emit(SyncFailure(event.message)));
-    on<SyncLog>((event, emit) => emit(IncompleteSync(event.syncLog)));
   }
 
 // ************************** Ficha ****************************

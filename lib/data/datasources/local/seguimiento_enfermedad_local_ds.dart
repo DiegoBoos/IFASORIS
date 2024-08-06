@@ -1,3 +1,4 @@
+import '../../../core/constants.dart';
 import '../../models/seguimiento_enfermedad.dart';
 
 abstract class SeguimientoEnfermedadLocalDataSource {
@@ -10,8 +11,9 @@ class SeguimientoEnfermedadLocalDataSourceImpl
     implements SeguimientoEnfermedadLocalDataSource {
   @override
   Future<List<SeguimientoEnfermedadModel>> getSeguimientoEnfermedades() async {
-    final res =
-        await supabase.from(.select()'SeguimientoEnfermedades_CuidadoSaludCondRiesgo');
+    final res = await supabase
+        .from('SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
+        .select();
     final result = List<SeguimientoEnfermedadModel>.from(
         res.map((m) => SeguimientoEnfermedadModel.fromJson(m))).toList();
 
@@ -21,9 +23,9 @@ class SeguimientoEnfermedadLocalDataSourceImpl
   @override
   Future<int> saveSeguimientoEnfermedad(
       SeguimientoEnfermedadModel seguimientoEnfermedad) async {
-    final res = await supabase.from(.insert(
-        'SeguimientoEnfermedades_CuidadoSaludCondRiesgo',
-        seguimientoEnfermedad.toJson());
+    final res = await supabase
+        .from('SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
+        .insert(seguimientoEnfermedad.toJson());
 
     return res;
   }

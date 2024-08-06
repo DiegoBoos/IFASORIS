@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/hortaliza.dart';
 
 abstract class HortalizaLocalDataSource {
@@ -15,7 +14,8 @@ abstract class HortalizaLocalDataSource {
 class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
   @override
   Future<List<HortalizaModel>> getHortalizas() async {
-    final res = await supabase.from(.select()'Hortalizas_AspectosSocioEconomicos');
+    final res =
+        await supabase.from('Hortalizas_AspectosSocioEconomicos').select();
     final result =
         List<HortalizaModel>.from(res.map((m) => HortalizaModel.fromJson(m)))
             .toList();
@@ -26,8 +26,8 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
   @override
   Future<int> saveHortaliza(HortalizaModel hortaliza) async {
     final res = await supabase
-        .from(
-        .insert('Hortalizas_AspectosSocioEconomicos', hortaliza.toJson());
+        .from('Hortalizas_AspectosSocioEconomicos')
+        .insert(hortaliza.toJson());
 
     return res;
   }
@@ -57,8 +57,10 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
 
   @override
   Future<List<LstHortaliza>> getUbicacionHortalizas(int? ubicacionId) async {
-    final res = await supabase.from(.select()'Asp1_UbicacionHortalizas',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    final res = await supabase
+        .from('Asp1_UbicacionHortalizas')
+        .select()
+        .eq('Ubicacion_id', ubicacionId);
     final result =
         List<LstHortaliza>.from(res.map((m) => LstHortaliza.fromJson(m)))
             .toList();

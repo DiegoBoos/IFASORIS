@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/nombre_enfermedad.dart';
 
 abstract class NombreEnfermedadLocalDataSource {
@@ -17,7 +16,9 @@ class NombreEnfermedadLocalDataSourceImpl
     implements NombreEnfermedadLocalDataSource {
   @override
   Future<List<NombreEnfermedadModel>> getNombresEnfermedades() async {
-    final res = await supabase.from(.select()'NombresEnfermedad_CuidadoSaludCondRiesgo');
+    final res = await supabase
+        .from('NombresEnfermedad_CuidadoSaludCondRiesgo')
+        .select();
     final result = List<NombreEnfermedadModel>.from(
         res.map((m) => NombreEnfermedadModel.fromJson(m))).toList();
 
@@ -27,8 +28,9 @@ class NombreEnfermedadLocalDataSourceImpl
   @override
   Future<int> saveNombreEnfermedad(
       NombreEnfermedadModel nombreEnfermedad) async {
-    final res = await supabase.from(.insert(
-        'NombresEnfermedad_CuidadoSaludCondRiesgo', nombreEnfermedad.toJson());
+    final res = await supabase
+        .from('NombresEnfermedad_CuidadoSaludCondRiesgo')
+        .insert(nombreEnfermedad.toJson());
 
     return res;
   }
@@ -36,9 +38,11 @@ class NombreEnfermedadLocalDataSourceImpl
   @override
   Future<List<LstNombreEnfermedad>> getLstNombresEnfermedades(
       int? cuidadoSaludCondRiesgoId) async {
-    final res = await supabase.from(.select()'Asp5_CuidadoSaludCondRiesgoNombresEnfermedad',
-        where: 'CuidadoSaludCondRiesgo_id = ?',
-        whereArgs: [cuidadoSaludCondRiesgoId]);
+    final res = await supabase
+        .from('Asp5_CuidadoSaludCondRiesgoNombresEnfermedad')
+        .select()
+        .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludCondRiesgoId);
+
     final result = List<LstNombreEnfermedad>.from(
         res.map((m) => LstNombreEnfermedad.fromJson(m))).toList();
 

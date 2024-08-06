@@ -1,5 +1,6 @@
 import '../../../core/constants.dart';
 import '../../models/afiliado.dart';
+import '../../models/familia.dart';
 import '../../models/ficha.dart';
 
 abstract class AfiliadoLocalDataSource {
@@ -34,7 +35,7 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
       JOIN Asp3_GrupoFamiliar ON Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id
       JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
       WHERE Asp3_GrupoFamiliar.Afiliado_id  = $afiliadoId
-      ';
+      ''');
 
     if (res.isEmpty) return null;
 
@@ -57,7 +58,7 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
       JOIN Asp3_GrupoFamiliar ON Familia.Familia_id = Asp3_GrupoFamiliar.GrupoFamiliar_id
       JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
       WHERE Asp3_GrupoFamiliar.Afiliado_id  = $afiliadoId AND Ficha.NumFicha <> ''
-           ';
+           ''');
     if (res.isEmpty) return '';
 
     final numFicha = res[0].entries.first.value as String;

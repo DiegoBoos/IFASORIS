@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/tipo_combustible_vivienda.dart';
 
 abstract class TipoCombustibleViviendaLocalDataSource {
@@ -18,7 +17,8 @@ class TipoCombustibleViviendaLocalDataSourceImpl
     implements TipoCombustibleViviendaLocalDataSource {
   @override
   Future<List<TipoCombustibleViviendaModel>> getTiposCombustible() async {
-    final res = await supabase.from(.select()'TiposCombustibleVivienda_DatosVivienda');
+    final res =
+        await supabase.from('TiposCombustibleVivienda_DatosVivienda').select();
     final result = List<TipoCombustibleViviendaModel>.from(
         res.map((m) => TipoCombustibleViviendaModel.fromJson(m))).toList();
 
@@ -28,9 +28,9 @@ class TipoCombustibleViviendaLocalDataSourceImpl
   @override
   Future<int> saveTipoCombustibleVivienda(
       TipoCombustibleViviendaModel tipoCombustibleVivienda) async {
-    final res = await supabase.from(.insert(
-        'TiposCombustibleVivienda_DatosVivienda',
-        tipoCombustibleVivienda.toJson());
+    final res = await supabase
+        .from('TiposCombustibleVivienda_DatosVivienda')
+        .insert(tipoCombustibleVivienda.toJson());
 
     return res;
   }
@@ -62,8 +62,10 @@ class TipoCombustibleViviendaLocalDataSourceImpl
   @override
   Future<List<LstTipoCombustible>> getTiposCombustibleVivienda(
       int? datoViviendaId) async {
-    final res = await supabase.from(.select()'Asp2_DatosViviendaTiposCombustible',
-        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
+    final res = await supabase
+        .from('Asp2_DatosViviendaTiposCombustible')
+        .select()
+        .eq('DatoVivienda_id', datoViviendaId);
     final result = List<LstTipoCombustible>.from(
         res.map((m) => LstTipoCombustible.fromJson(m))).toList();
 

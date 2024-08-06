@@ -1,5 +1,4 @@
-
-
+import '../../../core/constants.dart';
 import '../../models/planta_medicinal.dart';
 
 abstract class PlantaMedicinalLocalDataSource {
@@ -16,7 +15,8 @@ class PlantaMedicinalLocalDataSourceImpl
     implements PlantaMedicinalLocalDataSource {
   @override
   Future<List<PlantaMedicinalModel>> getPlantasMedicinales() async {
-    final res = await supabase.from(.select()'PlantasMedicinales_AtencionSalud');
+    final res =
+        await supabase.from('PlantasMedicinales_AtencionSalud').select();
     final result = List<PlantaMedicinalModel>.from(
         res.map((m) => PlantaMedicinalModel.fromJson(m))).toList();
 
@@ -26,8 +26,8 @@ class PlantaMedicinalLocalDataSourceImpl
   @override
   Future<int> savePlantaMedicinal(PlantaMedicinalModel plantaMedicinal) async {
     final res = await supabase
-        .from(
-        .insert('PlantasMedicinales_AtencionSalud', plantaMedicinal.toJson());
+        .from('PlantasMedicinales_AtencionSalud')
+        .insert(plantaMedicinal.toJson());
 
     return res;
   }
@@ -35,8 +35,10 @@ class PlantaMedicinalLocalDataSourceImpl
   @override
   Future<List<LstPlantaMedicinal>> getPlantasMedicinalesAtencionSalud(
       int? atencionSaludId) async {
-    final res = await supabase.from(.select()'Asp7_PlantasMedicinales_AtencionSalud',
-        where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);
+    final res = await supabase
+        .from('Asp7_PlantasMedicinales_AtencionSalud')
+        .select()
+        .eq('AtencionSalud_id', atencionSaludId);
     final result = List<LstPlantaMedicinal>.from(
         res.map((m) => LstPlantaMedicinal.fromJson(m))).toList();
 
