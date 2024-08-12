@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/servicio_solicitado.dart';
 
 abstract class ServicioSolicitadoLocalDataSource {
@@ -17,60 +20,85 @@ class ServicioSolicitadoLocalDataSourceImpl
     implements ServicioSolicitadoLocalDataSource {
   @override
   Future<List<ServicioSolicitadoModel>> getServiciosSolicitados() async {
-    final res = await supabase
-        .from('ServiciosSolicitados_CuidadoSaludCondRiesgo')
-        .select();
-    final result = List<ServicioSolicitadoModel>.from(
-        res.map((m) => ServicioSolicitadoModel.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('ServiciosSolicitados_CuidadoSaludCondRiesgo')
+          .select();
+      final result = List<ServicioSolicitadoModel>.from(
+          res.map((m) => ServicioSolicitadoModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveServicioSolicitado(
       ServicioSolicitadoModel servicioSolicitado) async {
-    final res = await supabase
-        .from('ServiciosSolicitados_CuidadoSaludCondRiesgo')
-        .insert(servicioSolicitado.toJson());
+    try {
+      final res = await supabase
+          .from('ServiciosSolicitados_CuidadoSaludCondRiesgo')
+          .insert(servicioSolicitado.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<List<LstServicioSolicitado>> getLstServiciosSolicitados(
       int? cuidadoSaludCondRiesgoId) async {
-    final res = await supabase
-        .from('Asp5_CuidadoSaludCondRiesgoServiciosSolicita')
-        .select()
-        .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludCondRiesgoId);
-    final result = List<LstServicioSolicitado>.from(
-        res.map((m) => LstServicioSolicitado.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('Asp5_CuidadoSaludCondRiesgoServiciosSolicita')
+          .select()
+          .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludCondRiesgoId);
+      final result = List<LstServicioSolicitado>.from(
+          res.map((m) => LstServicioSolicitado.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveServiciosSolicitados(int cuidadoSaludCondRiesgoId,
       List<LstServicioSolicitado> lstServiciosSolicitados) async {
-    Batch batch = db.batch();
-    batch.delete('Asp5_CuidadoSaludCondRiesgoServiciosSolicita',
-        where: 'CuidadoSaludCondRiesgo_id = ?',
-        whereArgs: [cuidadoSaludCondRiesgoId]);
+    try {
+      // First, delete existing records for the given cuidadoSaludCondRiesgoId
+      await supabase
+          .from('Asp5_CuidadoSaludCondRiesgoServiciosSolicita')
+          .delete()
+          .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludCondRiesgoId);
 
-    final cuidadoSaludCondRiesgoServiciosSolicitados = lstServiciosSolicitados
-        .map((item) => CuidadoSaludCondRiesgoServiciosSolicitados(
-            servicioSolicitadoId: item.servicioSolicitadoId,
-            cuidadoSaludCondRiesgoId: cuidadoSaludCondRiesgoId))
-        .toList();
+      // Prepare the list of records to be inserted
+      final cuidadoSaludCondRiesgoServiciosSolicitados = lstServiciosSolicitados
+          .map((item) => {
+                'servicioSolicitadoId': item.servicioSolicitadoId,
+                'cuidadoSaludCondRiesgoId': cuidadoSaludCondRiesgoId,
+              })
+          .toList();
 
-    for (final cuidadoSaludCondRiesgoServicioSolicitado
-        in cuidadoSaludCondRiesgoServiciosSolicitados) {
-      batch.insert('Asp5_CuidadoSaludCondRiesgoServiciosSolicita',
-          cuidadoSaludCondRiesgoServicioSolicitado.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp5_CuidadoSaludCondRiesgoServiciosSolicita')
+          .insert(cuidadoSaludCondRiesgoServiciosSolicitados);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 }

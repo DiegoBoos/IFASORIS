@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/nivel_educativo.dart';
 
 abstract class NivelEducativoLocalDataSource {
@@ -10,19 +13,31 @@ class NivelEducativoLocalDataSourceImpl
     implements NivelEducativoLocalDataSource {
   @override
   Future<List<NivelEducativoModel>> getNivelesEducativos() async {
-    final res = await supabase.from('NivelEducativo_GrupoFamiliar').select();
-    final result = List<NivelEducativoModel>.from(
-        res.map((m) => NivelEducativoModel.fromJson(m))).toList();
+    try {
+      final res = await supabase.from('NivelEducativo_GrupoFamiliar').select();
+      final result = List<NivelEducativoModel>.from(
+          res.map((m) => NivelEducativoModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveNivelEducativo(NivelEducativoModel nivelEducativo) async {
-    final res = await supabase
-        .from('NivelEducativo_GrupoFamiliar')
-        .insert(nivelEducativo.toJson());
+    try {
+      final res = await supabase
+          .from('NivelEducativo_GrupoFamiliar')
+          .insert(nivelEducativo.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/hortaliza.dart';
 
 abstract class HortalizaLocalDataSource {
@@ -14,57 +17,85 @@ abstract class HortalizaLocalDataSource {
 class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
   @override
   Future<List<HortalizaModel>> getHortalizas() async {
-    final res =
-        await supabase.from('Hortalizas_AspectosSocioEconomicos').select();
-    final result =
-        List<HortalizaModel>.from(res.map((m) => HortalizaModel.fromJson(m)))
-            .toList();
+    try {
+      final res =
+          await supabase.from('Hortalizas_AspectosSocioEconomicos').select();
+      final result =
+          List<HortalizaModel>.from(res.map((m) => HortalizaModel.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveHortaliza(HortalizaModel hortaliza) async {
-    final res = await supabase
-        .from('Hortalizas_AspectosSocioEconomicos')
-        .insert(hortaliza.toJson());
+    try {
+      final res = await supabase
+          .from('Hortalizas_AspectosSocioEconomicos')
+          .insert(hortaliza.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveUbicacionHortalizas(
       int ubicacionId, List<LstHortaliza> lstHortalizas) async {
-    Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionHortalizas',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    try {
+      // First, delete existing records for the given ubicacionId
+      await supabase
+          .from('Asp1_UbicacionHortalizas')
+          .delete()
+          .eq('Ubicacion_id', ubicacionId);
 
-    final ubicacionHortalizas = lstHortalizas
-        .map((item) => UbicacionHortalizas(
-            hortalizaId: item.hortalizaId,
-            ubicacionId: ubicacionId,
-            otroHortaliza: item.otroHortaliza))
-        .toList();
+      // Prepare the list of records to be inserted
+      final ubicacionHortalizas = lstHortalizas
+          .map((item) => {
+                'hortalizaId': item.hortalizaId,
+                'ubicacionId': ubicacionId,
+                'otroHortaliza': item.otroHortaliza,
+              })
+          .toList();
 
-    for (final ubicacionHortaliza in ubicacionHortalizas) {
-      batch.insert('Asp1_UbicacionHortalizas', ubicacionHortaliza.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp1_UbicacionHortalizas')
+          .insert(ubicacionHortalizas);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 
   @override
   Future<List<LstHortaliza>> getUbicacionHortalizas(int? ubicacionId) async {
-    final res = await supabase
-        .from('Asp1_UbicacionHortalizas')
-        .select()
-        .eq('Ubicacion_id', ubicacionId);
-    final result =
-        List<LstHortaliza>.from(res.map((m) => LstHortaliza.fromJson(m)))
-            .toList();
+    try {
+      final res = await supabase
+          .from('Asp1_UbicacionHortalizas')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final result =
+          List<LstHortaliza>.from(res.map((m) => LstHortaliza.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

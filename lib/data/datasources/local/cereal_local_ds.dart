@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/cereal.dart';
 
 abstract class CerealLocalDataSource {
@@ -12,56 +15,84 @@ abstract class CerealLocalDataSource {
 class CerealLocalDataSourceImpl implements CerealLocalDataSource {
   @override
   Future<List<CerealModel>> getCereales() async {
-    final res =
-        await supabase.from('Cereales_AspectosSocioEconomicos').select();
-    final result =
-        List<CerealModel>.from(res.map((m) => CerealModel.fromJson(m)))
-            .toList();
+    try {
+      final res =
+          await supabase.from('Cereales_AspectosSocioEconomicos').select();
+      final result =
+          List<CerealModel>.from(res.map((m) => CerealModel.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveCereal(CerealModel cereal) async {
-    final res = await supabase
-        .from('Cereales_AspectosSocioEconomicos')
-        .insert(cereal.toJson());
+    try {
+      final res = await supabase
+          .from('Cereales_AspectosSocioEconomicos')
+          .insert(cereal.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveUbicacionCereales(
       int ubicacionId, List<LstCereal> lstCereales) async {
-    Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionCereales',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    try {
+      // First, delete existing records for the given ubicacionId
+      await supabase
+          .from('Asp1_UbicacionCereales')
+          .delete()
+          .eq('Ubicacion_id', ubicacionId);
 
-    final ubicacionCereales = lstCereales
-        .map((item) => UbicacionCereales(
-            cerealId: item.cerealId,
-            ubicacionId: ubicacionId,
-            otroCereal: item.otroCereal))
-        .toList();
+      // Prepare the list of records to be inserted
+      final ubicacionCereales = lstCereales
+          .map((item) => {
+                'cerealId': item.cerealId,
+                'ubicacionId': ubicacionId,
+                'otroCereal': item.otroCereal,
+              })
+          .toList();
 
-    for (final ubicacionCereal in ubicacionCereales) {
-      batch.insert('Asp1_UbicacionCereales', ubicacionCereal.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp1_UbicacionCereales')
+          .insert(ubicacionCereales);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 
   @override
   Future<List<LstCereal>> getUbicacionCereales(int? ubicacionId) async {
-    final res = await supabase
-        .from('Asp1_UbicacionCereales')
-        .select()
-        .eq('Ubicacion_id', ubicacionId);
-    final result =
-        List<LstCereal>.from(res.map((m) => LstCereal.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('Asp1_UbicacionCereales')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final result =
+          List<LstCereal>.from(res.map((m) => LstCereal.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

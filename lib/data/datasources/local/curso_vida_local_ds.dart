@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/curso_vida.dart';
 
 abstract class CursoVidaLocalDataSource {
@@ -9,20 +12,32 @@ abstract class CursoVidaLocalDataSource {
 class CursoVidaLocalDataSourceImpl implements CursoVidaLocalDataSource {
   @override
   Future<List<CursoVidaModel>> getCursosVida() async {
-    final res = await supabase.from('CursoVida_GrupoFamiliar').select();
-    final result =
-        List<CursoVidaModel>.from(res.map((m) => CursoVidaModel.fromJson(m)))
-            .toList();
+    try {
+      final res = await supabase.from('CursoVida_GrupoFamiliar').select();
+      final result =
+          List<CursoVidaModel>.from(res.map((m) => CursoVidaModel.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveCursoVida(CursoVidaModel cursoVida) async {
-    final res = await supabase
-        .from('CursoVida_GrupoFamiliar')
-        .insert(cursoVida.toJson());
+    try {
+      final res = await supabase
+          .from('CursoVida_GrupoFamiliar')
+          .insert(cursoVida.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

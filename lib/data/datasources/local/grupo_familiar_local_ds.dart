@@ -1,3 +1,5 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 
@@ -31,78 +33,97 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
             .update(
               afiliadoGrupoFamiliar.toJson(),
             )
-            .eq('Afiliado_id', afiliadoGrupoFamiliar.afiliadoId);
+            .eq('Afiliado_id', afiliadoGrupoFamiliar.afiliadoId)
+            .eq('Familia_id', afiliadoGrupoFamiliar.familiaId);
       }
 
       final consultarAfiliado = await supabase
           .from('Asp3_GrupoFamiliar')
-          .select('Afiliado.nombre1, Afiliado.nombre2')
-          .rawQuery('''SELECT 
-              Afiliado.apellido1, Afiliado.apellido2, Asp3_GrupoFamiliar.* FROM 
-              LEFT JOIN Afiliado ON Asp3_GrupoFamiliar.Afiliado_id = Afiliado.Afiliado_id
-              WHERE Asp3_GrupoFamiliar.Afiliado_id = ${afiliadoGrupoFamiliar.afiliadoId}
-              AND Asp3_GrupoFamiliar.Familia_id = ${afiliadoGrupoFamiliar.familiaId}''');
+          .select(
+              'Afiliado.nombre1, Afiliado.nombre2, Afiliado.apellido1, Afiliado.apellido2, Asp3_GrupoFamiliar.*')
+          .eq('Asp3_GrupoFamiliar.Afiliado_id',
+              afiliadoGrupoFamiliar.afiliadoId)
+          .eq('Asp3_GrupoFamiliar.Familia_id', afiliadoGrupoFamiliar.familiaId)
+          .maybeSingle(); // Use maybeSingle to return one result or null
 
-      if (consultarAfiliado.isNotEmpty) {
-        return GrupoFamiliarModel.fromJson(consultarAfiliado.first);
-      } else {
+      if (consultarAfiliado == null) {
         throw const DatabaseFailure(['Registro no encontrado']);
       }
-    } catch (e) {
-      throw const DatabaseFailure(['Error al guardar el grupo familiar']);
+
+      return GrupoFamiliarModel.fromJson(consultarAfiliado);
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
   }
 
   @override
   Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId) async {
-    final res = await supabase
-        .from('Asp3_GrupoFamiliar')
-        .select()
-        .rawQuery('''SELECT * FROM  
-           JOIN Afiliado ON Asp3_GrupoFamiliar.Afiliado_id = Afiliado.Afiliado_id
-           WHERE Asp3_GrupoFamiliar.Familia_id = $familiaId''');
+    try {
+      final res = await supabase
+          .from('Asp3_GrupoFamiliar')
+          .select('Afiliado.*, Asp3_GrupoFamiliar.*')
+          .eq('Familia_id', familiaId);
 
-    final result = List<GrupoFamiliarModel>.from(
-        res.map((m) => GrupoFamiliarModel.fromJson(m))).toList();
+      final result = res
+          .map<GrupoFamiliarModel>((m) => GrupoFamiliarModel.fromJson(m))
+          .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> deleteAfiliadoGrupoFamiliar(int afiliadoId, int familiaId) async {
-    final result = await supabase
-        .from('Asp3_GrupoFamiliar')
-        .delete()
-        .eq('Afiliado_id,Familia_id', [afiliadoId, familiaId]);
+    try {
+      final res = await supabase
+          .from('Asp3_GrupoFamiliar')
+          .delete()
+          .eq('Afiliado_id', afiliadoId)
+          .eq('Familia_id', familiaId);
 
-    return result;
+      return res.count ?? 0; // Supabase returns the number of affected rows
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
-  Future<int> completeGrupoFamiliar(int afiliado) async {
-    final res = await supabase
-        .from('Asp3_GrupoFamiliar')
-        .update()
-        .eq('Afiliado_id', afiliado)
-        .eq('isComplete', 1);
+  Future<int> completeGrupoFamiliar(int afiliadoId) async {
+    try {
+      final res = await supabase
+          .from('Asp3_GrupoFamiliar')
+          .update({'isComplete': 1}).eq('Afiliado_id', afiliadoId);
 
-    return res;
+      return res.count ?? 0; // Supabase returns the number of affected rows
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<bool> existeAfiliadoCabezaFamilia(int afiliadoId) async {
-    final res = await supabase.from('Asp3_GrupoFamiliar').select().rawQuery('''
-    SELECT EXISTS (
-      SELECT 1 FROM Asp3_GrupoFamiliar 
-      INNER JOIN Familia ON Asp3_GrupoFamiliar.Afiliado_id = Familia.FK_Afiliado_id
-      WHERE Asp3_GrupoFamiliar.Afiliado_id = ?
-    )
-  ''', [afiliadoId]);
+    try {
+      final res = await supabase
+          .from('Asp3_GrupoFamiliar')
+          .select(
+              'exists (select 1 from Asp3_GrupoFamiliar inner join Familia on Asp3_GrupoFamiliar.Afiliado_id = Familia.FK_Afiliado_id where Asp3_GrupoFamiliar.Afiliado_id = $afiliadoId)')
+          .single(); // Use single to get the result of the exists query
 
-    if (res.isEmpty) return false;
-
-    final result = res.first.values.first as int;
-
-    return result == 1;
+      return res['exists'] as bool;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

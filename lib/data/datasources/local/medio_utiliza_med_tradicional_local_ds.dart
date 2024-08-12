@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/medio_utiliza_med_tradicional.dart';
 
 abstract class MedioUtilizaMedTradicionalLocalDataSource {
@@ -19,57 +22,85 @@ class MedioUtilizaMedTradicionalLocalDataSourceImpl
   @override
   Future<List<MedioUtilizaMedTradicionalModel>>
       getMediosUtilizaMedTradicional() async {
-    final res =
-        await supabase.from('MediosUtiliza_AccesoMedTradicional').select();
-    final result = List<MedioUtilizaMedTradicionalModel>.from(
-        res.map((m) => MedioUtilizaMedTradicionalModel.fromJson(m))).toList();
+    try {
+      final res =
+          await supabase.from('MediosUtiliza_AccesoMedTradicional').select();
+      final result = List<MedioUtilizaMedTradicionalModel>.from(
+          res.map((m) => MedioUtilizaMedTradicionalModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveMedioUtilizaMedTradicional(
       MedioUtilizaMedTradicionalModel medioUtilizaMedTradicional) async {
-    final res = await supabase
-        .from('MediosUtiliza_AccesoMedTradicional')
-        .insert(medioUtilizaMedTradicional.toJson());
+    try {
+      final res = await supabase
+          .from('MediosUtiliza_AccesoMedTradicional')
+          .insert(medioUtilizaMedTradicional.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveUbicacionMediosMedTradicional(int ubicacionId,
       List<LstMediosMedTradicional> lstMediosMedTradicional) async {
-    Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionMediosMedTradicional',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    try {
+      // First, delete existing records for the given ubicacionId
+      await supabase
+          .from('Asp1_UbicacionMediosMedTradicional')
+          .delete()
+          .eq('Ubicacion_id', ubicacionId);
 
-    final ubicacionMediosMedTradicional = lstMediosMedTradicional
-        .map((item) => UbicacionMediosMedTradicional(
-            medioUtilizaMedTradicionalId: item.medioUtilizaMedTradId,
-            ubicacionId: ubicacionId))
-        .toList();
+      // Prepare the list of records to be inserted
+      final ubicacionMediosMedTradicional = lstMediosMedTradicional
+          .map((item) => {
+                'medioUtilizaMedTradicionalId': item.medioUtilizaMedTradId,
+                'ubicacionId': ubicacionId,
+              })
+          .toList();
 
-    for (final ubicacionMedioMedTradicional in ubicacionMediosMedTradicional) {
-      batch.insert('Asp1_UbicacionMediosMedTradicional',
-          ubicacionMedioMedTradicional.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp1_UbicacionMediosMedTradicional')
+          .insert(ubicacionMediosMedTradicional);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure(
+          ['Error saving medios med tradicional for ubicacion']);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 
   @override
   Future<List<LstMediosMedTradicional>> getUbicacionMediosUtilizaMedTradicional(
       int? ubicacionId) async {
-    final res = await supabase
-        .from('Asp1_UbicacionMediosMedTradicional')
-        .select()
-        .eq('Ubicacion_id', ubicacionId);
-    final result = List<LstMediosMedTradicional>.from(
-        res.map((m) => LstMediosMedTradicional.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('Asp1_UbicacionMediosMedTradicional')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final result = List<LstMediosMedTradicional>.from(
+          res.map((m) => LstMediosMedTradicional.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

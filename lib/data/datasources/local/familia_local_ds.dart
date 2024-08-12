@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/familia.dart';
 
 abstract class FamiliaLocalDataSource {
@@ -11,66 +14,86 @@ abstract class FamiliaLocalDataSource {
 class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   @override
   Future<FamiliaModel> createFamilia(FamiliaModel familia) async {
-    // final res = await  supabase.from(.insert('Familia', familia.toJson());
+    try {
+      // Insert the new family into the 'Familia' table
+      final res = await supabase
+          .from('Familia')
+          .insert(familia.toJson())
+          .select()
+          .single();
 
-    // // Esta instruccion acuaualiza los datos de familia para el caso cuando se crea una nueva ficha de un afiliado que pertenence a un grupo familiar
-    // final sql = '''
-    // DELETE FROM Asp3_GrupoFamiliar where Afiliado_id = $familia.fkAfiliadoId;
-    // UPDATE Asp4_EstilosVidaSaludable SET Familia_id = $familia.familiaId AND Afiliado_id = $familia.fkAfiliadoId;
-    // UPDATE Asp5_CuidadoSaludCondRiesgo SET Familia_id = $familia.familiaId AND Afiliado_id = $familia.fkAfiliadoId;
-    // UPDATE Asp6_DimSocioCulturalPueblosIndigenas SET Familia_id = $familia.familiaId AND Afiliado_id = $familia.fkAfiliadoId;
-    // UPDATE Asp7_AtencionSalud SET Familia_id = $familia.familiaId AND Afiliado_id = $familia.fkAfiliadoId;
-    // ''';
-    // await db.execute(sql);
+      if (res.data == null) {
+        throw const DatabaseFailure(['Failed to insert familia']);
+      }
 
-    // familia.familiaId = res;
-    // Iniciar una transacción
-    await db.transaction((txn) async {
-      // Insertar la nueva familia en la tabla 'Familia'
-      final res = await txn.insert('Familia', familia.toJson());
-      // Actualizar el ID de familia
-      familia.copyWith(familiaId: res);
+      // Update the familia model with the new ID
+      final insertedFamilia = FamiliaModel.fromJson(res.data);
+      final newFamilia = familia.copyWith(familiaId: insertedFamilia.familiaId);
 
-      // Eliminar filas en la tabla 'Asp3_GrupoFamiliar'
-      await txn.execute('DELETE FROM Asp3_GrupoFamiliar WHERE Afiliado_id = ?',
-          [familia.fkAfiliadoId]);
+      // Delete rows in the 'Asp3_GrupoFamiliar' table
+      await supabase
+          .from('Asp3_GrupoFamiliar')
+          .delete()
+          .eq('Afiliado_id', newFamilia.fkAfiliadoId);
 
-      // Actualizar otras tablas una por una
-      await txn.execute(
-          'UPDATE Asp4_EstilosVidaSaludable SET Familia_id = ? WHERE Afiliado_id = ?',
-          [familia.familiaId, familia.fkAfiliadoId]);
-      await txn.execute(
-          'UPDATE Asp5_CuidadoSaludCondRiesgo SET Familia_id = ? WHERE Afiliado_id = ?',
-          [familia.familiaId, familia.fkAfiliadoId]);
-      await txn.execute(
-          'UPDATE Asp6_DimSocioCulturalPueblosIndigenas SET Familia_id = ? WHERE Afiliado_id = ?',
-          [familia.familiaId, familia.fkAfiliadoId]);
-      await txn.execute(
-          'UPDATE Asp7_AtencionSalud SET Familia_id = ? WHERE Afiliado_id = ?',
-          [familia.familiaId, familia.fkAfiliadoId]);
+      // Update other related tables one by one
+      await supabase
+          .from('Asp4_EstilosVidaSaludable')
+          .update({'Familia_id': newFamilia.familiaId}).eq(
+              'Afiliado_id', newFamilia.fkAfiliadoId);
 
-      return familia;
-    });
-    return familia;
+      await supabase
+          .from('Asp5_CuidadoSaludCondRiesgo')
+          .update({'Familia_id': newFamilia.familiaId}).eq(
+              'Afiliado_id', newFamilia.fkAfiliadoId);
+
+      await supabase
+          .from('Asp6_DimSocioCulturalPueblosIndigenas')
+          .update({'Familia_id': newFamilia.familiaId}).eq(
+              'Afiliado_id', newFamilia.fkAfiliadoId);
+
+      await supabase
+          .from('Asp7_AtencionSalud')
+          .update({'Familia_id': newFamilia.familiaId}).eq(
+              'Afiliado_id', newFamilia.fkAfiliadoId);
+
+      return FamiliaModel.fromEntity(newFamilia);
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<List<FamiliaModel>> loadFamilias() async {
-    final res = await supabase.from('Familia').select();
-    final result =
-        List<FamiliaModel>.from(res.map((m) => FamiliaModel.fromJson(m)))
-            .toList();
+    try {
+      final res = await supabase.from('Familia').select();
+      final result =
+          List<FamiliaModel>.from(res.map((m) => FamiliaModel.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> deleteAfiliadoFamilia(int fkAfiliadoId) async {
-    final res = await supabase
-        .from('Familia')
-        .delete()
-        .eq('FK_Afiliado_id', fkAfiliadoId);
+    try {
+      final res = await supabase
+          .from('Familia')
+          .delete()
+          .eq('FK_Afiliado_id', fkAfiliadoId);
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/via_acceso.dart';
 
 abstract class ViaAccesoLocalDataSource {
@@ -9,18 +12,30 @@ abstract class ViaAccesoLocalDataSource {
 class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   @override
   Future<List<ViaAccesoModel>> getViasAcceso() async {
-    final res = await supabase.from('ViasAcceso').select();
-    final result =
-        List<ViaAccesoModel>.from(res.map((m) => ViaAccesoModel.fromJson(m)))
-            .toList();
+    try {
+      final res = await supabase.from('ViasAcceso').select();
+      final result =
+          List<ViaAccesoModel>.from(res.map((m) => ViaAccesoModel.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveViaAcceso(ViaAccesoModel viaAcceso) async {
-    final res = await supabase.from('ViasAcceso').insert(viaAcceso.toJson());
+    try {
+      final res = await supabase.from('ViasAcceso').insert(viaAcceso.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

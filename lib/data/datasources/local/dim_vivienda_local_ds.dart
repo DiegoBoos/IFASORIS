@@ -1,4 +1,5 @@
 import 'package:ifasoris/core/error/failure.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constants.dart';
 import '../../models/dim_vivienda.dart';
@@ -17,22 +18,30 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
             dimVivienda.toJson(),
           );
       return res;
-    } catch (e) {
-      throw const DatabaseFailure(['Error al guardar la vivienda']);
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
   }
 
   @override
   Future<DimViviendaModel?> getDimVivienda(
       int afiliadoId, int familiaId) async {
-    final res = await supabase
-        .from('Asp2_DatosVivienda')
-        .select()
-        .eq('Afiliado_id,Familia_id', [afiliadoId, familiaId]);
+    try {
+      final res = await supabase
+          .from('Asp2_DatosVivienda')
+          .select()
+          .eq('Afiliado_id,Familia_id', [afiliadoId, familiaId]);
 
-    if (res.isEmpty) return null;
+      if (res.isEmpty) return null;
 
-    final result = DimViviendaModel.fromJson(res);
-    return result;
+      final result = DimViviendaModel.fromJson(res);
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

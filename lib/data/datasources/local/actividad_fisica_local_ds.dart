@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/actividad_fisica.dart';
 
 abstract class ActividadFisicaLocalDataSource {
@@ -10,20 +13,33 @@ class ActividadFisicaLocalDataSourceImpl
     implements ActividadFisicaLocalDataSource {
   @override
   Future<List<ActividadFisicaModel>> getActividadesFisicas() async {
-    final res =
-        await supabase.from('ActividadesFisicas_EstilosVidaSaludable').select();
-    final result = List<ActividadFisicaModel>.from(
-        res.map((m) => ActividadFisicaModel.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('ActividadesFisicas_EstilosVidaSaludable')
+          .select();
+      final result = List<ActividadFisicaModel>.from(
+          res.map((m) => ActividadFisicaModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveActividadFisica(ActividadFisicaModel actividadFisica) async {
-    final res = await supabase
-        .from('ActividadesFisicas_EstilosVidaSaludable')
-        .insert(actividadFisica.toJson());
+    try {
+      final res = await supabase
+          .from('ActividadesFisicas_EstilosVidaSaludable')
+          .insert(actividadFisica.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

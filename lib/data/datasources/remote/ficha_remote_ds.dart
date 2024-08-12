@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../core/app_config.dart';
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 
 import '../../../services/shared_preferences_service.dart';
@@ -48,32 +49,36 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
   Future<List<dynamic>> createFicha() async {
     try {
       // Fichas
-      final resFichas = await db.rawQuery('''
-      	   SELECT
-      Ficha_id,
-      FechaCreacion as fechaCreacion,
-      NumFicha as numFicha,
-      UserName_Creacion as userNameCreacion,
-      UserName_Actualizacion as ultimaActualizacion
-      FROM Ficha 
-	  WHERE NumFicha = '' AND Ficha.Ficha_id Not In(
-	  SELECT FichasIncompletas.Ficha_id FROM Ficha as FichasIncompletas
-      inner join Familia ON (Familia.Ficha_id  =  FichasIncompletas.Ficha_id)
-      left join Asp3_GrupoFamiliar on (Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id)
-      WHERE (Asp3_GrupoFamiliar.isComplete=0 OR Asp3_GrupoFamiliar.isComplete IS NULL) AND NumFicha = '' AND Ficha_id_remote IS NULL
-	  )
-      ';
-      // final resFichas = await db.rawQuery(''');
-      // SELECT
-      // Ficha_id,
-      // FechaCreacion as fechaCreacion,
-      // NumFicha as numFicha,
-      // UserName_Creacion as userNameCreacion,
-      // UserName_Actualizacion as ultimaActualizacion
-      // FROM Ficha WHERE NumFicha = ''
-      // ';
+      // Fetch the IDs that should be excluded
+      final excludedFichas = await supabase
+          .from('Ficha')
+          .select('Ficha_id')
+          .eq('NumFicha', '')
+          .in_(
+              'Ficha.Ficha_id',
+              (await supabase
+                  .from('Familia')
+                  .select('Ficha_id, Asp3_GrupoFamiliar!inner(Familia_id)')
+                  .is_('Asp3_GrupoFamiliar.isComplete', null)
+                  .or('Asp3_GrupoFamiliar.isComplete.eq.false, Asp3_GrupoFamiliar.isComplete.is.null')
+                  .is_('Ficha_id_remote', null)));
 
-      if (resFichas.isEmpty) {
+      final fichaIdsToExclude =
+          excludedFichas.data.map((e) => e['Ficha_id']).toList();
+
+// Main query excluding the fetched IDs
+      final resFichas = await supabase
+          .from('Ficha')
+          .select(
+              'Ficha_id, FechaCreacion as fechaCreacion, NumFicha as numFicha, UserName_Creacion as userNameCreacion, UserName_Actualizacion as ultimaActualizacion')
+          .eq('NumFicha', '')
+          .not('Ficha_id', 'in', fichaIdsToExclude);
+
+// Process the result
+      final result =
+          resFichas.data.map((ficha) => FichaModel.fromJson(ficha)).toList();
+
+      if (result.isEmpty) {
         throw const ServerFailure(
             ['No existen nuevas fichas para sincronizar']);
       }
@@ -89,15 +94,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         // resultMapFicha['Ficha_id'] = 0;
 
         // Familia
-        final resFamilia = await db.rawQuery('''
-          SELECT
-          Familia_id AS Familia_id,
-          Ficha_id AS fichaId,
-          ApellidosFlia AS apellidosFlia,
-          FK_Afiliado_id AS afiliadoId
-          FROM Familia
-          WHERE Ficha_id = $fichaId
-          ''');
+        final resFamilia = await supabase
+            .from('Familia')
+            .select('Familia_id, Ficha_id, ApellidosFlia, FK_Afiliado_id')
+            .eq('Ficha_id', fichaId);
 
         if (resFamilia.isEmpty) {
           // throw const ServerFailure(
@@ -111,18 +111,12 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         final familiaId = resultMapFamilia['Familia_id'];
 
         // Vivienda
-        final resVivienda = await db.rawQuery('''
-          SELECT
-          DatoVivienda_id AS datoViviendaId,
-          Familia_id AS familiaId,
-          TipoVivienda_id AS tipoViviendaId,
-          TenenciaVivienda_id AS tenenciaViviendaId,
-          VentilacionVivienda_id AS ventilacionViviendaId,
-          IluminacionVivienda_id AS iluminacionViviendaId,
-          CuartosVivienda_id AS CuartosViviendaId
-          FROM Asp2_DatosVivienda
-          WHERE Familia_id = $familiaId
-          ''');
+        // Query to fetch Asp2_DatosVivienda records based on Familia_id
+        final resVivienda = await supabase
+            .from('Asp2_DatosVivienda')
+            .select(
+                'DatoVivienda_id, Familia_id, TipoVivienda_id, TenenciaVivienda_id, VentilacionVivienda_id, IluminacionVivienda_id, CuartosVivienda_id')
+            .eq('Familia_id', familiaId);
 
         if (resVivienda.isEmpty) {
           continue;
@@ -136,15 +130,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         final datoViviendaId = resultMapVivienda['datoViviendaId'];
 
         // Techos
-        final resTechos = await db.rawQuery('''
-          SELECT
-          -- ViviendaTecho_id AS viviendaTechoId,
-          DatoVivienda_id AS datoViviendaId,
-          TechoVivienda_id AS techoViviendaId,
-          OtroTipoTecho AS otroTipoTecho
-          FROM Asp2_DatosViviendaTechos
-          WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+        final resTechos = await supabase
+            .from('Asp2_DatosViviendaTechos')
+            .select('DatoVivienda_id, TechoVivienda_id, OtroTipoTecho')
+            .eq('DatoVivienda_id', datoViviendaId);
 
         var ltTechos = [];
         for (final techo in resTechos) {
@@ -153,15 +142,11 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // ServPublicos
-        final resServiciosPublicos = await db.rawQuery('''
-          SELECT
-          -- ViviendaServicioPublico_id AS viviendaServicioPublicoId,
-          ServicioPublicoVivienda_id AS servicioPublicoViviendaId,
-          DatoVivienda_id AS datoViviendaId,
-          ServicioPublicoVivienda_id AS servicioPublicoViviendaId
-          FROM Asp2_DatosViviendaServiciosPublicos
-          WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+        final resServiciosPublicos = await supabase
+            .from('Asp2_DatosViviendaServiciosPublicos')
+            .select(
+                'ServicioPublicoVivienda_id, DatoVivienda_id, ServicioPublicoVivienda_id')
+            .eq('DatoVivienda_id', datoViviendaId);
 
         var ltServiciosPublicos = [];
         for (final servicio in resServiciosPublicos) {
@@ -171,16 +156,11 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           ltServiciosPublicos.add(resultMapServiciosPublicos);
         }
 
-        // TratamientosAgua
-        final resTratamientosAgua = await db.rawQuery('''
-          SELECT
-          -- ViviendaTmtoAgua_id AS viviendaTmtoAguaId,
-          DatoVivienda_id AS datoViviendaId,
-          TratamientoAguaVivienda_id AS tratamientoAguaViviendaId,
-          OtroTratamientoAgua AS otroTratamientoAgua
-          FROM Asp2_DatosViviendaTratamientosAgua
-          WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+        final resTratamientosAgua = await supabase
+            .from('Asp2_DatosViviendaTratamientosAgua')
+            .select(
+                'DatoVivienda_id, TratamientoAguaVivienda_id, OtroTratamientoAgua')
+            .eq('DatoVivienda_id', datoViviendaId);
 
         var ltTratamientosAgua = [];
         for (final servicio in resTratamientosAgua) {
@@ -191,15 +171,11 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // FactoresRieso
-        final resFactoresRiesgo = await db.rawQuery('''
-          SELECT
-          -- ViviendaFactorRiesgo_id AS viviendaFactorRiesgoId,
-          DatoVivienda_id AS datoViviendaId,
-          FactorRiesgoVivienda_id AS factorRiesgoViviendaId,
-          OtroFactorRiesgo AS otroFactorRiesgo
-          FROM Asp2_DatosViviendaFactoresRiesgo
-          WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+        final resFactoresRiesgo = await supabase
+            .from('Asp2_DatosViviendaFactoresRiesgo')
+            .select(
+                'DatoVivienda_id, FactorRiesgoVivienda_id, OtroFactorRiesgo')
+            .eq('DatoVivienda_id', datoViviendaId);
 
         var ltFactoresRiesgo = [];
         for (final riesgo in resFactoresRiesgo) {
@@ -210,15 +186,11 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // TiposSanitario
-        final resTiposSanitario = await db.rawQuery('''
-          SELECT
-          -- ViviendaTipoSanitario_id AS viviendaTipoSanitarioId,
-          DatoVivienda_id AS datoViviendaId,
-          TipoSanitarioVivienda_id AS tipoSanitarioViviendaId,
-          OtroTipoSanitario AS otroTipoSanitario
-          FROM Asp2_DatosViviendaTiposSanitario
-          WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+        final resTiposSanitario = await supabase
+            .from('Asp2_DatosViviendaTiposSanitario')
+            .select(
+                'DatoVivienda_id, TipoSanitarioVivienda_id, OtroTipoSanitario')
+            .eq('DatoVivienda_id', datoViviendaId);
 
         var ltTiposSanitario = [];
         for (final sanitario in resTiposSanitario) {
@@ -229,15 +201,11 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // TiposCombustible
-        final resTiposCombustible = await db.rawQuery('''
-          SELECT
-          -- ViviendaTipoCombustible_id AS viviendaTipoCombustibleId,
-          DatoVivienda_id AS datoViviendaId,
-          TipoCombustibleVivienda_id AS tipoCombustibleViviendaId,
-          OtroTipoCombustible AS otroTipoCombustible
-          FROM Asp2_DatosViviendaTiposCombustible
-          WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+        final resTiposCombustible = await supabase
+            .from('Asp2_DatosViviendaTiposCombustible')
+            .select(
+                'DatoVivienda_id, TipoCombustibleVivienda_id, OtroTipoCombustible')
+            .eq('DatoVivienda_id', datoViviendaId);
 
         var ltTiposCombustible = [];
         for (final combustible in resTiposCombustible) {
@@ -248,15 +216,11 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // PresenciaAnimales
-        final resPresenciaAnimales = await db.rawQuery('''
-          SELECT
-          -- ViviendaPresenciaAnimal_id AS viviendaPresenciaAnimalId,
-          DatoVivienda_id AS datoViviendaId,
-          PresenciaAnimalVivienda_id AS presenciaAnimalViviendaId,
-          OtroPresenciaAnimal AS otroPresenciaAnimal
-          FROM Asp2_DatosViviendaPresenciaAnimales
-          WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+        final resPresenciaAnimales = await supabase
+            .from('Asp2_DatosViviendaPresenciaAnimales')
+            .select(
+                'DatoVivienda_id, PresenciaAnimalVivienda_id, OtroPresenciaAnimal')
+            .eq('DatoVivienda_id', datoViviendaId);
 
         var ltPresenciaAnimales = [];
         for (final animal in resPresenciaAnimales) {
@@ -267,15 +231,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // Pisos
-        final resPisos = await db.rawQuery('''
-          SELECT
-          -- ViviendaPisos_id AS viviendaPisosId,
-          DatoVivienda_id AS datoViviendaId,
-          PisoVivienda_id AS pisoViviendaId,
-          OtroTipoPiso AS otroTipoPiso
-          FROM Asp2_DatosViviendaPisos AS TC
-          WHERE DatoVivienda_id = $datoViviendaId
-          ''');
+        final resPisos = await supabase
+            .from('Asp2_DatosViviendaPisos')
+            .select('DatoVivienda_id, PisoVivienda_id, OtroTipoPiso')
+            .eq('DatoVivienda_id', datoViviendaId);
 
         var ltPisos = [];
         for (final piso in resPisos) {
@@ -297,47 +256,36 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
 
         // Ubicacion
 
-        final resUbicacion = await db.rawQuery('''
-            SELECT
-            Ubicacion_id AS ubicacionId,
-            Familia_id AS familiaId,
-            NombreRecibeVisita AS nombreRecibeVisita,
-            TipoDoc_RecibeVisita AS tipoDocRecibeVisita,
-            Documento_RecibeVisita AS documentoRecibeVisita,
-            PerteneceResguardo AS perteneceResguardo,
-            ViaAcceso_id AS viaAccesoId,
-
-            (CASE WHEN Resguardo_id == 0 THEN
-            null
-            ELSE
-              Resguardo_id
-            END) as resguardoId,
-
-            AutoridadIndigena_id AS autoridadIndigenaId,
-            EstadoVia_id AS estadoViaId,
-
-            (CASE WHEN TiempoTarda_id == 0 THEN
-            null
-            ELSE
-              TiempoTarda_id
-            END) as tiempoTardaId,
-
-            CostoDesplazamiento_id AS costoDesplazamientoId,
-            ExisteMedTradicionalComunidad AS existeMedTradicionalComunidad,
-
-            (CASE WHEN TiempoTardaMedTrad_id == 0 THEN
-            null
-            ELSE
-              TiempoTardaMedTrad_id
-            END) as tiempoTardaMedTradId,
-
-            CostoDesplazamiento_MedTradicional AS costoDesplazamientoMedTradicional,
-            PoseeChagra AS poseeChagra,
-            ProduccionMinera AS produccionMinera,
-            TipoCalendario_id AS tipoCalendarioId
-            FROM Asp1_Ubicacion
-            WHERE Familia_id = $familiaId
-            ''');
+        // Query to fetch Asp1_Ubicacion records based on Familia_id
+        final resUbicacion = await supabase.from('Asp1_Ubicacion').select('''
+      Ubicacion_id, 
+      Familia_id, 
+      NombreRecibeVisita, 
+      TipoDoc_RecibeVisita, 
+      Documento_RecibeVisita, 
+      PerteneceResguardo, 
+      ViaAcceso_id, 
+      CASE 
+        WHEN Resguardo_id = 0 THEN null 
+        ELSE Resguardo_id 
+      END as resguardoId, 
+      AutoridadIndigena_id, 
+      EstadoVia_id, 
+      CASE 
+        WHEN TiempoTarda_id = 0 THEN null 
+        ELSE TiempoTarda_id 
+      END as tiempoTardaId, 
+      CostoDesplazamiento_id, 
+      ExisteMedTradicionalComunidad, 
+      CASE 
+        WHEN TiempoTardaMedTrad_id = 0 THEN null 
+        ELSE TiempoTardaMedTrad_id 
+      END as tiempoTardaMedTradId, 
+      CostoDesplazamiento_MedTradicional, 
+      PoseeChagra, 
+      ProduccionMinera, 
+      TipoCalendario_id
+    ''').eq('Familia_id', familiaId);
 
         if (resUbicacion.isEmpty) {
           continue;
@@ -349,12 +297,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         final ubicacionId = resultMapUbicacion['ubicacionId'];
 
         // DificultadAccesoMedTradicional
-        final resDificultadAccesoMedTradicional = await db.rawQuery('''
-          SELECT
-          DificultadAccesoMedTrad_id AS dificultadAccesoMedTradId
-          FROM Asp1_UbicacionAccesoMedTradicional AS AMT
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resDificultadAccesoMedTradicional = await supabase
+            .from('Asp1_UbicacionAccesoMedTradicional')
+            .select('DificultadAccesoMedTrad_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltDificultadAccesoMedTradicional = [];
 
@@ -367,13 +313,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // Cereales
-        final resCereales = await db.rawQuery('''
-          SELECT
-          Cereal_id AS cerealId,
-          OtroCereal AS otroCereal
-          FROM Asp1_UbicacionCereales
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resCereales = await supabase
+            .from('Asp1_UbicacionCereales')
+            .select('Cereal_id, OtroCereal')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltCereales = [];
         for (final acceso in resCereales) {
@@ -384,12 +327,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // DificultadAcceso
-        final resDificultadAcceso = await db.rawQuery('''
-          SELECT
-          DificultaAcceso_id AS dificultaAccesoId
-          FROM Asp1_UbicacionDificultadAcceso
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resDificultadAcceso = await supabase
+            .from('Asp1_UbicacionDificultadAcceso')
+            .select('DificultaAcceso_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltDificultadAcceso = [];
         for (final dificultad in resDificultadAcceso) {
@@ -400,12 +341,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // EspecialidadMedTradicional
-        final resEspecialidadMedTradicional = await db.rawQuery('''
-          SELECT
-          EspecialidadMedTrad_id AS especialidadMedTradId
-          FROM Asp1_UbicacionEspecialidadMedTradicional
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resEspecialidadMedTradicional = await supabase
+            .from('Asp1_UbicacionEspecialidadMedTradicional')
+            .select('EspecialidadMedTrad_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltEspecialidadMedTradicional = [];
         for (final especialidad in resEspecialidadMedTradicional) {
@@ -416,12 +355,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // EspecieAnimalesCria
-        final resEspecieAnimalesCria = await db.rawQuery('''
-          SELECT
-          EspecieAnimalCria_id AS especieAnimalCriaId
-          FROM Asp1_UbicacionEspecieAnimalesCria
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resEspecieAnimalesCria = await supabase
+            .from('Asp1_UbicacionEspecieAnimalesCria')
+            .select('EspecieAnimalCria_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltEspecieAnimalesCria = [];
         for (final animales in resEspecieAnimalesCria) {
@@ -432,12 +369,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // Frutos
-        final resFrutos = await db.rawQuery('''
-          SELECT
-          Fruto_id AS frutoId
-          FROM Asp1_UbicacionFrutos
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resFrutos = await supabase
+            .from('Asp1_UbicacionFrutos')
+            .select('Fruto_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltFrutos = [];
         for (final fruto in resFrutos) {
@@ -446,13 +381,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // Hortalizas
-        final resHortalizas = await db.rawQuery('''
-          SELECT
-          Hortaliza_id AS hortalizaId,
-          OtroHortaliza AS otroHortaliza
-          FROM Asp1_UbicacionHortalizas
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resHortalizas = await supabase
+            .from('Asp1_UbicacionHortalizas')
+            .select('Hortaliza_id, OtroHortaliza')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltHortalizas = [];
         for (final hortaliza in resHortalizas) {
@@ -463,12 +395,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // Leguminosas
-        final resLeguminosas = await db.rawQuery('''
-          SELECT
-          Leguminosa_id AS leguminosaId
-          FROM Asp1_UbicacionLeguminosas
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resLeguminosas = await supabase
+            .from('Asp1_UbicacionLeguminosas')
+            .select('Leguminosa_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltLeguminosas = [];
         for (final leguminosa in resLeguminosas) {
@@ -479,12 +409,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // MediosComunicacion
-        final resMediosComunicacion = await db.rawQuery('''
-          SELECT
-          MedioComunicacion_id AS medioComunicacionId
-          FROM Asp1_UbicacionMediosComunicacion
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resMediosComunicacion = await supabase
+            .from('Asp1_UbicacionMediosComunicacion')
+            .select('MedioComunicacion_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltMediosComunicacion = [];
         for (final medio in resMediosComunicacion) {
@@ -495,12 +423,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // MediosMedTradicional
-        final resMediosMedTradicional = await db.rawQuery('''
-          SELECT
-          MedioUtilizaMedTrad_id AS medioUtilizaMedTradId
-          FROM Asp1_UbicacionMediosMedTradicional
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resMediosMedTradicional = await supabase
+            .from('Asp1_UbicacionMediosMedTradicional')
+            .select('MedioUtilizaMedTrad_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltMediosMedTradicional = [];
         for (final medio in resMediosMedTradicional) {
@@ -511,12 +437,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // NombresMedTradicional
-        final resNombresMedTradicional = await db.rawQuery('''
-          SELECT
-          NombreMedTradicional AS nombreMedTradicional
-          FROM Asp1_UbicacionNombresMedTradicional
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resNombresMedTradicional = await supabase
+            .from('Asp1_UbicacionNombresMedTradicional')
+            .select('NombreMedTradicional')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltNombresMedTradicional = [];
         for (final nombre in resNombresMedTradicional) {
@@ -527,13 +451,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // TuberculosPlatanos
-        final resTuberculosPlatanos = await db.rawQuery('''
-          SELECT
-          TuberculoPlatano_id AS tuberculoPlatanoId,
-          OtroTuberculoPlatano AS otroTuberculoPlatano
-          FROM Asp1_UbicacionTuberculosPlatanos
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resTuberculosPlatanos = await supabase
+            .from('Asp1_UbicacionTuberculosPlatanos')
+            .select('TuberculoPlatano_id, OtroTuberculoPlatano')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltTuberculosPlatanos = [];
         for (final tuberculo in resTuberculosPlatanos) {
@@ -544,13 +465,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // Verduras
-        final resVerduras = await db.rawQuery('''
-          SELECT
-          Verdura_id AS verduraId,
-          OtroVerdura AS otroVerdura
-          FROM Asp1_UbicacionVerduras
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resVerduras = await supabase
+            .from('Asp1_UbicacionVerduras')
+            .select('Verdura_id, OtroVerdura')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltVerduras = [];
         for (final verdura in resVerduras) {
@@ -561,12 +479,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // MediosCentroAtencion
-        final resMediosCentroAtencion = await db.rawQuery('''
-          SELECT
-          MedioUtiliza_id AS medioUtilizaId
-          FROM Asp1_UbicacionMediosCentroAtencion
-          WHERE Ubicacion_id = $ubicacionId
-          ''');
+        final resMediosCentroAtencion = await supabase
+            .from('Asp1_UbicacionMediosCentroAtencion')
+            .select('MedioUtiliza_id')
+            .eq('Ubicacion_id', ubicacionId);
 
         var ltMediosCentroAtencion = [];
         for (final medio in resMediosCentroAtencion) {
@@ -595,47 +511,38 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         };
 
         // GrupoFamiliar
-        final resGrupoFamiliar = await db.rawQuery('''
-          SELECT
-          Familia_id AS familiaId,
-          Afiliado_id AS afiliadoId,
-          TipoDocumento_id AS tipoDocumentoId,
-          Documento AS documento,
-          Genero_id AS generoId,
-          FechaNacimiento AS fechaNacimiento,
-          Edad AS edad,
-          TipoRegimen_id AS tipoRegimenId,
-          Parentesco_id AS parentescoId,
-          Etnia_id AS etniaId,
-          CursoVida_id AS cursoVidaId,
-          NivelEducativo_id AS nivelEducativoId,
-          Ocupacion_id AS ocupacionId,
-          OtroOcupacion AS otroOcupacion,
-          GrupoRiesgo_id AS grupoRiesgoId,
-          OrigenEtnico5602_id AS origenEtnico5602Id,
-
-
-          (CASE WHEN PuebloIndigena_id == 0 THEN 
-              null 
-          ELSE 
-            PuebloIndigena_id 
-          END) as puebloIndigenaId,
-
-          (CASE WHEN LenguaManeja_id == 0 THEN 
-              null 
-          ELSE 
-            LenguaManeja_id 
-          END) as lenguaManejaId,
-
-          (CASE WHEN LenguaMaterna_id == 0 THEN 
-          null 
-          ELSE 
-            LenguaMaterna_id 
-          END) as lenguaMaternaId
-
-          FROM Asp3_GrupoFamiliar
-          WHERE Familia_id = $familiaId
-          ''');
+        // Query to fetch Asp3_GrupoFamiliar records based on Familia_id
+        final resGrupoFamiliar =
+            await supabase.from('Asp3_GrupoFamiliar').select('''
+      Familia_id, 
+      Afiliado_id, 
+      TipoDocumento_id, 
+      Documento, 
+      Genero_id, 
+      FechaNacimiento, 
+      Edad, 
+      TipoRegimen_id, 
+      Parentesco_id, 
+      Etnia_id, 
+      CursoVida_id, 
+      NivelEducativo_id, 
+      Ocupacion_id, 
+      OtroOcupacion, 
+      GrupoRiesgo_id, 
+      OrigenEtnico5602_id, 
+      CASE 
+        WHEN PuebloIndigena_id = 0 THEN null 
+        ELSE PuebloIndigena_id 
+      END as puebloIndigenaId, 
+      CASE 
+        WHEN LenguaManeja_id = 0 THEN null 
+        ELSE LenguaManeja_id 
+      END as lenguaManejaId, 
+      CASE 
+        WHEN LenguaMaterna_id = 0 THEN null 
+        ELSE LenguaMaterna_id 
+      END as lenguaMaternaId
+    ''').eq('Familia_id', familiaId);
 
         if (resGrupoFamiliar.isEmpty) {
           continue;
@@ -650,23 +557,21 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // EstilosVidaSaludable
-        final resEstilosVidaSaludable = await db.rawQuery('''
-          SELECT
-          Afiliado_id AS afiliadoId,
-          Familia_id AS familiaId,
-          ActividadFisica_id AS actividadFisicaId,
-          Alimentacion_id AS alimentacionId,
-          ConsumoAlcohol_id AS consumoAlcoholId,
-          ConsumeCigarrillo AS consumeCigarrillo,
-          (CASE WHEN NumeroCigarrilloDia_id == 0 THEN
-          null
-          ELSE
-            NumeroCigarrilloDia_id
-          END) as numeroCigarrilloDiaId,
-          ConsumoSustanciasPsicoactivas AS consumoSustanciasPsicoactivas
-          FROM Asp4_EstilosVidaSaludable
-          WHERE Familia_id = $familiaId
-          ''');
+        // Query to fetch Asp4_EstilosVidaSaludable records based on Familia_id
+        final resEstilosVidaSaludable =
+            await supabase.from('Asp4_EstilosVidaSaludable').select('''
+      Afiliado_id, 
+      Familia_id, 
+      ActividadFisica_id, 
+      Alimentacion_id, 
+      ConsumoAlcohol_id, 
+      ConsumeCigarrillo, 
+      CASE 
+        WHEN NumeroCigarrilloDia_id = 0 THEN null 
+        ELSE NumeroCigarrilloDia_id 
+      END as numeroCigarrilloDiaId, 
+      ConsumoSustanciasPsicoactivas
+    ''').eq('Familia_id', familiaId);
 
         if (resEstilosVidaSaludable.isEmpty) {
           continue;
@@ -681,53 +586,39 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // CuidadoSaludCondRiesgo
-        final resCuidadoSaludCondRiesgo = await db.rawQuery('''
-          SELECT
-          CuidadoSaludCondRiesgo_id AS cuidadoSaludCondRiesgoId,
-          Afiliado_id AS afiliadoId,
-          Familia_id AS familiaId,
-          UltimaVezInstSalud_id AS ultimaVezInstSaludId,
-
-          (CASE WHEN SeguimientoEnfermedad_id == 0 THEN
-              null
-          ELSE
-            SeguimientoEnfermedad_id
-          END) as seguimientoEnfermedadId,
-
-          CondicionNutricional_id AS condicionNutricionalId,
-          TosFlema_id AS tosFlemaId,
-          ManchasPiel_id AS manchasPielId,
-          CarnetVacunacion_id AS carnetVacunacionId,
-
-          (CASE WHEN EsquemaVacunacion_id == 0 THEN
-              null
-          ELSE
-            EsquemaVacunacion_id
-          END) as esquemaVacunacionId,
-
-          (CASE WHEN LugarVacunacion_id == 0 THEN
-              null
-          ELSE
-            LugarVacunacion_id
-          END) as lugarVacunacionId,
-
-          UtilizaMetodoPlanificacion_id AS utilizaMetodoPlanificacionId,
-
-          (CASE WHEN MetodoPlanificacion_id == 0 THEN
-              null
-          ELSE
-            MetodoPlanificacion_id
-          END) as metodoPlanificacionId,
-
-          (CASE WHEN ConductaSeguir_id == 0 THEN
-              null
-          ELSE
-            ConductaSeguir_id
-          END) as conductaSeguirId
-
-          FROM Asp5_CuidadoSaludCondRiesgo
-          WHERE Familia_id = $familiaId
-          ''');
+        // Query to fetch Asp5_CuidadoSaludCondRiesgo records based on Familia_id
+        final resCuidadoSaludCondRiesgo =
+            await supabase.from('Asp5_CuidadoSaludCondRiesgo').select('''
+      CuidadoSaludCondRiesgo_id, 
+      Afiliado_id, 
+      Familia_id, 
+      UltimaVezInstSalud_id, 
+      CASE 
+        WHEN SeguimientoEnfermedad_id = 0 THEN null 
+        ELSE SeguimientoEnfermedad_id 
+      END as seguimientoEnfermedadId, 
+      CondicionNutricional_id, 
+      TosFlema_id, 
+      ManchasPiel_id, 
+      CarnetVacunacion_id, 
+      CASE 
+        WHEN EsquemaVacunacion_id = 0 THEN null 
+        ELSE EsquemaVacunacion_id 
+      END as esquemaVacunacionId, 
+      CASE 
+        WHEN LugarVacunacion_id = 0 THEN null 
+        ELSE LugarVacunacion_id 
+      END as lugarVacunacionId, 
+      UtilizaMetodoPlanificacion_id, 
+      CASE 
+        WHEN MetodoPlanificacion_id = 0 THEN null 
+        ELSE MetodoPlanificacion_id 
+      END as metodoPlanificacionId, 
+      CASE 
+        WHEN ConductaSeguir_id = 0 THEN null 
+        ELSE ConductaSeguir_id 
+      END as conductaSeguirId
+    ''').eq('Familia_id', familiaId);
 
         if (resCuidadoSaludCondRiesgo.isEmpty) {
           continue;
@@ -742,13 +633,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
               resultMapCuidadoSaludCondRiesgo['cuidadoSaludCondRiesgoId'];
 
           // ServiciosSolicita
-          final resServiciosSolicita = await db.rawQuery('''
-            SELECT
-            CuidadoSaludCondRiesgo_id AS cuidadoSaludCondRiesgoId,
-            ServicioSolicitado_id AS servicioSolicitadoId
-            FROM Asp5_CuidadoSaludCondRiesgoServiciosSolicita
-            WHERE CuidadoSaludCondRiesgo_id = $cuidadoSaludConRiesgoId
-            ''');
+          final resServiciosSolicita = await supabase
+              .from('Asp5_CuidadoSaludCondRiesgoServiciosSolicita')
+              .select('CuidadoSaludCondRiesgo_id, ServicioSolicitado_id')
+              .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludConRiesgoId);
 
           var ltServiciosSolicita = [];
           for (final servicio in resServiciosSolicita) {
@@ -759,13 +647,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           }
 
           // NombresEnfermedad
-          final resNombresEnfermedad = await db.rawQuery('''
-            SELECT
-            CuidadoSaludCondRiesgo_id AS cuidadoSaludCondRiesgoId,
-            NombreEnfermedad_id AS nombreEnfermedadId
-            FROM Asp5_CuidadoSaludCondRiesgoNombresEnfermedad
-            WHERE CuidadoSaludCondRiesgo_id = $cuidadoSaludConRiesgoId
-            ''');
+          final resNombresEnfermedad = await supabase
+              .from('Asp5_CuidadoSaludCondRiesgoNombresEnfermedad')
+              .select('CuidadoSaludCondRiesgo_id, NombreEnfermedad_id')
+              .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludConRiesgoId);
 
           var ltNombresEnfermedad = [];
           for (final enfermedad in resNombresEnfermedad) {
@@ -785,38 +670,31 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // SocioCulturalPueblosIndigenas
-        final resSocioCulturalPueblosIndigenas = await db.rawQuery('''
-          SELECT
-          DimSocioCulturalPueblosIndigenas_id AS dimSocioCulturalPueblosIndigenasId,
-          Familia_id AS familiaId,
-          Afiliado_id AS afiliadoId,
-          ReligionProfesa_id AS religionProfesaId,
-          ConoceUsosCostumbres_id AS conoceUsosCostumbresId,
-          Cuales_UsosCostumbres AS cualesUsosCostumbres,
-
-          (CASE WHEN ParticipaCostumbres_id == 0 THEN
-              null
-          ELSE
-            ParticipaCostumbres_id
-          END) as participaCostumbresId,
-
-          (CASE WHEN CostumbrePractica_id == 0 THEN
-              null
-          ELSE
-            CostumbrePractica_id
-          END) as costumbrePracticaId,
-
-          (CASE WHEN SancionJusticia_id == 0 THEN
-              null
-          ELSE
-            SancionJusticia_id
-          END) as sancionJusticiaId,
-
-          SitiosSagrados_id AS sitiosSagradosId,
-          Cuales_SitiosSagrados AS cualesSitiosSagrados
-          FROM Asp6_DimSocioCulturalPueblosIndigenas
-          WHERE Familia_id = $familiaId
-          ''');
+        // Query to fetch Asp6_DimSocioCulturalPueblosIndigenas records based on Familia_id
+        final resSocioCulturalPueblosIndigenas = await supabase
+            .from('Asp6_DimSocioCulturalPueblosIndigenas')
+            .select('''
+      DimSocioCulturalPueblosIndigenas_id, 
+      Familia_id, 
+      Afiliado_id, 
+      ReligionProfesa_id, 
+      ConoceUsosCostumbres_id, 
+      Cuales_UsosCostumbres, 
+      CASE 
+        WHEN ParticipaCostumbres_id = 0 THEN null 
+        ELSE ParticipaCostumbres_id 
+      END as participaCostumbresId, 
+      CASE 
+        WHEN CostumbrePractica_id = 0 THEN null 
+        ELSE CostumbrePractica_id 
+      END as costumbrePracticaId, 
+      CASE 
+        WHEN SancionJusticia_id = 0 THEN null 
+        ELSE SancionJusticia_id 
+      END as sancionJusticiaId, 
+      SitiosSagrados_id, 
+      Cuales_SitiosSagrados
+    ''').eq('Familia_id', familiaId);
 
         if (resSocioCulturalPueblosIndigenas.isEmpty) {
           continue;
@@ -832,13 +710,12 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
                   'dimSocioCulturalPueblosIndigenasId'];
 
           // EventosCostumbresParticipa
-          final resEventosCostumbresParticipa = await db.rawQuery('''
-            SELECT
-            DimSocioCulturalPueblosIndigenas_id AS dimSocioCulturalPueblosIndigenasId,
-            EventoCostumbreParticipo_id AS eventoCostumbreParticipoId
-            FROM Asp6_DimSocioCulturalEventosCostumbresParticipo
-            WHERE DimSocioCulturalPueblosIndigenas_id = $dimSocioCulturalPueblosIndigenasId
-            ''');
+          final resEventosCostumbresParticipa = await supabase
+              .from('Asp6_DimSocioCulturalEventosCostumbresParticipo')
+              .select(
+                  'DimSocioCulturalPueblosIndigenas_id, EventoCostumbreParticipo_id')
+              .eq('DimSocioCulturalPueblosIndigenas_id',
+                  dimSocioCulturalPueblosIndigenasId);
 
           var ltEventosCostumbresParticipa = [];
           for (final servicio in resEventosCostumbresParticipa) {
@@ -859,25 +736,21 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         }
 
         // AtencionSalud
-        final resAtencionSalud = await db.rawQuery('''
-          SELECT
-          AtencionSalud_id AS atencionSaludId,
-          Afiliado_id AS afiliadoId,
-          Familia_id AS familiaId,
-          EnfermedadAcude_id AS enfermedadAcudeId,
-          RecibioAtencionMedTradicional_id AS recibioAtencionMedTradicionalId,
-          EnfermedadTratamiento_id AS enfermedadTratamientoId,
-          UtilizaPlantasMed_id AS utilizaPlantasMedId,
-
-          (CASE WHEN LugarPlantaMedicinal_id == 0 THEN
-              null
-          ELSE
-            LugarPlantaMedicinal_id
-          END) as lugarPlantaMedicinalId
-
-          FROM Asp7_AtencionSalud
-          WHERE Familia_id = $familiaId
-          ''');
+        // Query to fetch Asp7_AtencionSalud records based on Familia_id
+        final resAtencionSalud =
+            await supabase.from('Asp7_AtencionSalud').select('''
+      AtencionSalud_id, 
+      Afiliado_id, 
+      Familia_id, 
+      EnfermedadAcude_id, 
+      RecibioAtencionMedTradicional_id, 
+      EnfermedadTratamiento_id, 
+      UtilizaPlantasMed_id, 
+      CASE 
+        WHEN LugarPlantaMedicinal_id = 0 THEN null 
+        ELSE LugarPlantaMedicinal_id 
+      END as lugarPlantaMedicinalId
+    ''').eq('Familia_id', familiaId);
 
         if (resAtencionSalud.isEmpty) {
           continue;
@@ -891,13 +764,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           final atencionSaludId = resultMapAtencionSalud['atencionSaludId'];
 
           // EnfermedadesTRadicionales
-          final resEnfermedadesTradicionales = await db.rawQuery('''
-            SELECT
-            AtencionSalud_id AS atencionSaludId,
-            EnfermedadTradicional_id AS enfermedadTradicionalId
-            FROM Asp7_EnfermedadesTradicionales_AtencionSalud
-            WHERE AtencionSalud_id = $atencionSaludId
-            ''');
+          final resEnfermedadesTradicionales = await supabase
+              .from('Asp7_EnfermedadesTradicionales_AtencionSalud')
+              .select('AtencionSalud_id, EnfermedadTradicional_id')
+              .eq('AtencionSalud_id', atencionSaludId);
 
           var ltEnfermedadesTradicionales = [];
           for (final enfermedad in resEnfermedadesTradicionales) {
@@ -908,13 +778,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           }
 
           // EnfermedadesTRadicionales
-          final resEspecialidadesMedTradAtencionSalud = await db.rawQuery('''
-            SELECT
-            AtencionSalud_id AS atencionSaludId,
-            EspecialidadMedTrad_id AS especialidadMedTradId
-            FROM Asp7_EspecialidadesMedTradAtencionSalud
-            WHERE AtencionSalud_id = $atencionSaludId
-            ''');
+          final resEspecialidadesMedTradAtencionSalud = await supabase
+              .from('Asp7_EspecialidadesMedTradAtencionSalud')
+              .select('AtencionSalud_id, EspecialidadMedTrad_id')
+              .eq('AtencionSalud_id', atencionSaludId);
 
           var ltEspecialidadesMedTradAtencionSalud = [];
           for (final especialidad in resEspecialidadesMedTradAtencionSalud) {
@@ -926,13 +793,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           }
 
           // Lugaresatencion
-          final resLugaresAtencionSalud = await db.rawQuery('''
-            SELECT
-            AtencionSalud_id AS atencionSaludId,
-            LugarAtencionMedico_id AS lugarAtencionMedicoId
-            FROM Asp7_LugaresAtencionAtencionSalud
-            WHERE AtencionSalud_id = $atencionSaludId
-            ''');
+          final resLugaresAtencionSalud = await supabase
+              .from('Asp7_LugaresAtencionAtencionSalud')
+              .select('AtencionSalud_id, LugarAtencionMedico_id')
+              .eq('AtencionSalud_id', atencionSaludId);
 
           var ltLugaresAtencionSalud = [];
           for (final lugar in resLugaresAtencionSalud) {
@@ -943,13 +807,10 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
           }
 
           // PlantasMedicinales
-          final resPlantasMedicinales = await db.rawQuery('''
-            SELECT
-            AtencionSalud_id AS atencionSaludId,
-            PlantaMedicinal_id AS plantaMedicinalId
-            FROM Asp7_PlantasMedicinales_AtencionSalud
-            WHERE AtencionSalud_id = $atencionSaludId
-            ''');
+          final resPlantasMedicinales = await supabase
+              .from('Asp7_PlantasMedicinales_AtencionSalud')
+              .select('AtencionSalud_id, PlantaMedicinal_id')
+              .eq('AtencionSalud_id', atencionSaludId);
 
           var ltPlantasMedicinales = [];
           for (final lugar in resPlantasMedicinales) {

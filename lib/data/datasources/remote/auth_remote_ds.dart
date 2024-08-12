@@ -39,7 +39,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (resp.statusCode == 200) {
         final decodedResp = jsonDecode(resp.body);
-        final token = decodedResp['Result']['Token'];
         final resultMap = decodedResp['Result']['Usuario'];
         resultMap['Password'] = usuario.password;
 

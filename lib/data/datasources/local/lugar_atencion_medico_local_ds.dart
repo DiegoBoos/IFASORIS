@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/lugar_atencion_medico.dart';
 
 abstract class LugarAtencionMedicoLocalDataSource {
@@ -17,58 +20,84 @@ class LugarAtencionMedicoLocalDataSourceImpl
     implements LugarAtencionMedicoLocalDataSource {
   @override
   Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico() async {
-    final res =
-        await supabase.from('LugaresAtencionMedico_AtencionSalud').select();
-    final result = List<LugarAtencionMedicoModel>.from(
-        res.map((m) => LugarAtencionMedicoModel.fromJson(m))).toList();
+    try {
+      final res =
+          await supabase.from('LugaresAtencionMedico_AtencionSalud').select();
+      final result = List<LugarAtencionMedicoModel>.from(
+          res.map((m) => LugarAtencionMedicoModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveLugarAtencionMedico(
       LugarAtencionMedicoModel lugarAtencionMedico) async {
-    final res = await supabase
-        .from('LugaresAtencionMedico_AtencionSalud')
-        .insert(lugarAtencionMedico.toJson());
+    try {
+      final res = await supabase
+          .from('LugaresAtencionMedico_AtencionSalud')
+          .insert(lugarAtencionMedico.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<List<LstLugarAtencionMedico>> getLugaresAtencionMedicoAtencionSalud(
       int? atencionSaludId) async {
-    final res = await supabase
-        .from('Asp7_LugaresAtencionAtencionSalud')
-        .select()
-        .eq('AtencionSalud_id', atencionSaludId);
-    final result = List<LstLugarAtencionMedico>.from(
-        res.map((m) => LstLugarAtencionMedico.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('Asp7_LugaresAtencionAtencionSalud')
+          .select()
+          .eq('AtencionSalud_id', atencionSaludId);
+      final result = List<LstLugarAtencionMedico>.from(
+          res.map((m) => LstLugarAtencionMedico.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveLugaresAtencionMedicoAtencionSalud(int atencionSaludId,
       List<LstLugarAtencionMedico> lstLugarAtencionMedico) async {
-    Batch batch = db.batch();
-    batch.delete('Asp7_LugaresAtencionAtencionSalud',
-        where: 'AtencionSalud_id = ?', whereArgs: [atencionSaludId]);
+    try {
+      // First, delete existing records for the given atencionSaludId
+      await supabase
+          .from('Asp7_LugaresAtencionAtencionSalud')
+          .delete()
+          .eq('AtencionSalud_id', atencionSaludId);
 
-    final lugaresAtencionMedicoAtencionSalud = lstLugarAtencionMedico
-        .map((item) => LugarAtencionMedicoAtencionSalud(
-            lugarAtencionMedicoId: item.lugarAtencionMedicoId,
-            atencionSaludId: atencionSaludId))
-        .toList();
+      // Prepare the list of records to be inserted
+      final lugaresAtencionMedicoAtencionSalud = lstLugarAtencionMedico
+          .map((item) => {
+                'lugarAtencionMedicoId': item.lugarAtencionMedicoId,
+                'atencionSaludId': atencionSaludId,
+              })
+          .toList();
 
-    for (final lugarAtencionMedicoAtencionSalud
-        in lugaresAtencionMedicoAtencionSalud) {
-      batch.insert('Asp7_LugaresAtencionAtencionSalud',
-          lugarAtencionMedicoAtencionSalud.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp7_LugaresAtencionAtencionSalud')
+          .insert(lugaresAtencionMedicoAtencionSalud);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 }

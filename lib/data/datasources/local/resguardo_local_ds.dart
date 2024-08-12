@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/resguardo.dart';
 
 abstract class ResguardoLocalDataSource {
@@ -9,18 +12,30 @@ abstract class ResguardoLocalDataSource {
 class ResguardoLocalDataSourceImpl implements ResguardoLocalDataSource {
   @override
   Future<List<ResguardoModel>> getResguardos() async {
-    final res = await supabase.from('Resguardos').select();
-    final result =
-        List<ResguardoModel>.from(res.map((m) => ResguardoModel.fromJson(m)))
-            .toList();
+    try {
+      final res = await supabase.from('Resguardos').select();
+      final result =
+          List<ResguardoModel>.from(res.map((m) => ResguardoModel.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveResguardo(ResguardoModel resguardo) async {
-    final res = await supabase.from('Resguardos').insert(resguardo.toJson());
+    try {
+      final res = await supabase.from('Resguardos').insert(resguardo.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

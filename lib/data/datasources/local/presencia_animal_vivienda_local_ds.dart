@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/presencia_animal_vivienda.dart';
 
 abstract class PresenciaAnimalViviendaLocalDataSource {
@@ -17,58 +20,86 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
     implements PresenciaAnimalViviendaLocalDataSource {
   @override
   Future<List<PresenciaAnimalViviendaModel>> getPresenciaAnimales() async {
-    final res =
-        await supabase.from('PresenciaAnimalesVivienda_DatosVivienda').select();
-    final result = List<PresenciaAnimalViviendaModel>.from(
-        res.map((m) => PresenciaAnimalViviendaModel.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('PresenciaAnimalesVivienda_DatosVivienda')
+          .select();
+      final result = List<PresenciaAnimalViviendaModel>.from(
+          res.map((m) => PresenciaAnimalViviendaModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> savePresenciaAnimalVivienda(
       PresenciaAnimalViviendaModel presenciaAnimalVivienda) async {
-    final res = await supabase
-        .from('PresenciaAnimalesVivienda_DatosVivienda')
-        .insert(presenciaAnimalVivienda.toJson());
+    try {
+      final res = await supabase
+          .from('PresenciaAnimalesVivienda_DatosVivienda')
+          .insert(presenciaAnimalVivienda.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> savePresenciaAnimalesVivienda(
       int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimal) async {
-    Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaPresenciaAnimales',
-        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
+    try {
+      // First, delete existing records for the given datoViviendaId
+      await supabase
+          .from('Asp2_DatosViviendaPresenciaAnimales')
+          .delete()
+          .eq('DatoVivienda_id', datoViviendaId);
 
-    final viviendaPresenciaAnimales = lstPresenciaAnimal
-        .map((item) => ViviendaPresenciaAnimales(
-            presenciaAnimalViviendaId: item.presenciaAnimalViviendaId,
-            datoViviendaId: datoViviendaId,
-            otroPresenciaAnimal: item.otroPresenciaAnimal))
-        .toList();
+      // Prepare the list of records to be inserted
+      final viviendaPresenciaAnimales = lstPresenciaAnimal
+          .map((item) => {
+                'presenciaAnimalViviendaId': item.presenciaAnimalViviendaId,
+                'datoViviendaId': datoViviendaId,
+                'otroPresenciaAnimal': item.otroPresenciaAnimal,
+              })
+          .toList();
 
-    for (final viviendaServicioPublico in viviendaPresenciaAnimales) {
-      batch.insert('Asp2_DatosViviendaPresenciaAnimales',
-          viviendaServicioPublico.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp2_DatosViviendaPresenciaAnimales')
+          .insert(viviendaPresenciaAnimales);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 
   @override
   Future<List<LstPresenciaAnimal>> getPresenciasAnimalesVivienda(
       int? datoViviendaId) async {
-    final res = await supabase
-        .from('Asp2_DatosViviendaPresenciaAnimales')
-        .select()
-        .eq('DatoVivienda_id', datoViviendaId);
-    final result = List<LstPresenciaAnimal>.from(
-        res.map((m) => LstPresenciaAnimal.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('Asp2_DatosViviendaPresenciaAnimales')
+          .select()
+          .eq('DatoVivienda_id', datoViviendaId);
+      final result = List<LstPresenciaAnimal>.from(
+          res.map((m) => LstPresenciaAnimal.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

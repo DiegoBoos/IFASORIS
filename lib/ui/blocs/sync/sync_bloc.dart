@@ -605,8 +605,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           // ficha.numFicha = fichaRemote['NumFicha'];
           fichasSync.add(ficha);
 
-          await db.update('Ficha', {'NumFicha': fichaRemote['numFicha']},
-              where: 'Ficha_id = ?', whereArgs: [fichaIdLocal]);
+          await supabase
+              .from('Ficha')
+              .update({'NumFicha': fichaRemote['numFicha']}).eq(
+                  'Ficha_id', fichaIdLocal);
 
           add(SyncIncrementChanged(state.syncProgressModel.copyWith(
             title: 'Se sincronizaron: ${fichasSync.length} fichas',
@@ -677,7 +679,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
         final result = AfiliadoResponseModel.fromJson(afiliadoResp);
 
-        //TODO: Save to supabase
         await supabase.from('afiliados').insert(result.resultado);
       } else {
         add(const SyncError('Excepción no controlada'));
@@ -692,49 +693,33 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   Future<void> saveAfiliados(
       SyncStarted event, AfiliadoResponseModel afiliadosRes) async {
     try {
-      await db.transaction((txn) async {
-        final batch = txn.batch();
-        for (int i = 0; i < afiliadosRes.resultado.length; i++) {
-          final afiliado = afiliadosRes.resultado[i];
-          batch.insert('Afiliado', afiliado.toJson());
-          successfulAfiliadoInserts += i;
+      for (int i = 0; i < afiliadosRes.resultado.length; i++) {
+        final afiliado = afiliadosRes.resultado[i];
 
-          // final syncProgressModel = state.syncProgressModel.copyWith(
-          //   title: 'Sincronizando afiliados',
-          //   counter: i,
-          //   total: afiliadosRes.totalRegistros,
-          //   // counter: successfulAfiliadoInserts,
-          //   // total: afiliadosRes.totalRegistros,
-          //   percent: calculatePercent(i, afiliadosRes.totalRegistros),
-          // );
+        // Insert each afiliado record
+        final response =
+            await supabase.from('Afiliado').insert(afiliado.toJson());
 
-          // add(SyncPercentageChanged(syncProgressModel));
+        if (response.error == null) {
+          successfulAfiliadoInserts += 1;
+        } else {
+          throw Exception(
+              'Failed to insert afiliado: ${response.error?.message}');
         }
 
-        await batch.commit();
-        // Termina de sincronizar
+        // Optionally, update sync progress here if needed
         final syncProgressModel = state.syncProgressModel.copyWith(
           title: 'Sincronizando afiliados',
-          // counter: combinedList.length,
-          // total: totalRecords,
-          counter: 1,
-          // total: 100,
-          percent: calculatePercent(100, 100),
+          counter: i + 1, // Increment counter for each successful insert
+          percent: calculatePercent(i + 1, afiliadosRes.resultado.length),
         );
 
         add(Downloading(syncProgressModel));
-      });
+      }
 
       add(Downloading(state.syncProgressModel.copyWith(
         title: 'Descargando accesorias',
       )));
-      await truncateDificultadesAccesoCA(event);
-      // if (successfulAfiliadoInserts >= afiliadosRes.totalRegistros) {
-      //   add(Downloading(state.syncProgressModel.copyWith(
-      //     title: 'Descargando accesorias',
-      //   )));
-      //   await truncateDificultadesAccesoCA(event);
-      // }
     } catch (e) {}
   }
 
@@ -747,13 +732,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 // ************************** Afiliados ****************************
 
 // ************************** Dificultades acceso CA ****************************
-
-  Future<void> truncateDificultadesAccesoCA(SyncStarted event) async {
-    await ConnectionSQLiteService.truncateTable(
-        'DificultadesAcceso_CentroAtencion');
-    dificultadesAccesoCATemp = [];
-    await syncDificultadesAccesoCA(event);
-  }
 
   Future<void> syncDificultadesAccesoCA(SyncStarted event) async {
     final result =
@@ -772,12 +750,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           dificultadesAccesoCATemp[countRecordsDificultadAccesoTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('EstadoVias').then((value) async {
-          estadoViasTemp = [];
-          await syncEstadoVias(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -791,10 +764,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsDificultadAccesoTemp++;
       if (countRecordsDificultadAccesoTemp >= dificultadesAccesoCATemp.length) {
-        ConnectionSQLiteService.truncateTable('EstadoVias').then((value) async {
-          estadoViasTemp = [];
-          await syncEstadoVias(event);
-        });
         return;
       }
 
@@ -827,13 +796,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           estadoViasTemp[countRecordsEstadoViasTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('MediosComunicacion')
-            .then((value) async {
-          mediosComunicacionTemp = [];
-          await syncMediosComunicacion(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -846,11 +809,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsEstadoViasTemp++;
       if (countRecordsEstadoViasTemp >= estadoViasTemp.length) {
-        ConnectionSQLiteService.truncateTable('MediosComunicacion')
-            .then((value) async {
-          mediosComunicacionTemp = [];
-          await syncMediosComunicacion(event);
-        });
         return;
       }
 
@@ -885,13 +843,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           mediosComunicacionTemp[countRecordsMediosComunicacionTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('MediosUtiliza_CentroAtencion')
-            .then((value) async {
-          mediosUtilizaCATemp = [];
-          await syncMediosUtilizaCA(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -905,11 +857,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsMediosComunicacionTemp++;
       if (countRecordsMediosComunicacionTemp >= mediosComunicacionTemp.length) {
-        ConnectionSQLiteService.truncateTable('MediosUtiliza_CentroAtencion')
-            .then((value) async {
-          mediosUtilizaCATemp = [];
-          await syncMediosUtilizaCA(event);
-        });
         return;
       }
 
@@ -944,13 +891,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           mediosUtilizaCATemp[countRecordsMediosUtilizaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('TiemposTarda_CentroAtencion')
-            .then((value) async {
-          tiemposTardaCATemp = [];
-          await syncTiemposTardaCA(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -964,11 +905,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsMediosUtilizaTemp++;
       if (countRecordsMediosUtilizaTemp >= mediosUtilizaCATemp.length) {
-        ConnectionSQLiteService.truncateTable('TiemposTarda_CentroAtencion')
-            .then((value) async {
-          tiemposTardaCATemp = [];
-          await syncTiemposTardaCA(event);
-        });
         return;
       }
 
@@ -1002,12 +938,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           tiemposTardaCATemp[countRecordsTiemposTardaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('ViasAcceso').then((value) async {
-          viasAccesoTemp = [];
-          await syncViasAcceso(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1021,10 +952,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsTiemposTardaTemp++;
       if (countRecordsTiemposTardaTemp >= tiemposTardaCATemp.length) {
-        ConnectionSQLiteService.truncateTable('ViasAcceso').then((value) async {
-          viasAccesoTemp = [];
-          await syncViasAcceso(event);
-        });
         return;
       }
 
@@ -1059,14 +986,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           viasAccesoTemp[countRecordsViasAccesoTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'AutoridadesIndigenas_DatosVivienda')
-            .then((value) async {
-          autoridadesIndigenasTemp = [];
-          await syncAutoridadesIndigenas(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1079,12 +999,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsViasAccesoTemp++;
       if (countRecordsViasAccesoTemp >= viasAccesoTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'AutoridadesIndigenas_DatosVivienda')
-            .then((value) async {
-          autoridadesIndigenasTemp = [];
-          await syncAutoridadesIndigenas(event);
-        });
         return;
       }
 
@@ -1119,14 +1033,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           autoridadesIndigenasTemp[countRecordsAutoridadesIndigenasTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'Cereales_AspectosSocioEconomicos')
-            .then((value) async {
-          cerealesTemp = [];
-          await syncCereales(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1141,12 +1048,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsAutoridadesIndigenasTemp++;
       if (countRecordsAutoridadesIndigenasTemp >=
           autoridadesIndigenasTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'Cereales_AspectosSocioEconomicos')
-            .then((value) async {
-          cerealesTemp = [];
-          await syncCereales(event);
-        });
         return;
       }
 
@@ -1181,14 +1082,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           cerealesTemp[countRecordsCerealesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'CostosDesplazamiento_CentroAtencion')
-            .then((value) async {
-          costosDesplazamientoTemp = [];
-          await syncCostosDesplazamiento(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1201,12 +1095,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsCerealesTemp++;
       if (countRecordsCerealesTemp >= cerealesTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'CostosDesplazamiento_CentroAtencion')
-            .then((value) async {
-          costosDesplazamientoTemp = [];
-          await syncCostosDesplazamiento(event);
-        });
         return;
       }
 
@@ -1240,14 +1128,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           costosDesplazamientoTemp[countRecordsCostosDesplazamientoTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'DificultadesAcceso_AccesoMedTradicional')
-            .then((value) async {
-          dificultadesAccesoMedTradicionalTemp = [];
-          await syncDificultadesAccesoMedTradicional(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1262,12 +1143,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsCostosDesplazamientoTemp++;
       if (countRecordsCostosDesplazamientoTemp >=
           costosDesplazamientoTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'DificultadesAcceso_AccesoMedTradicional')
-            .then((value) async {
-          dificultadesAccesoMedTradicionalTemp = [];
-          await syncDificultadesAccesoMedTradicional(event);
-        });
         return;
       }
 
@@ -1304,14 +1179,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           dificultadesAccesoMedTradicionalTemp[
               countRecordsDificultadesAccesoMedTradicionalTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'EspecialidadesMedTrad_AccesoMedTradicional')
-            .then((value) async {
-          especialidadesMedTradicionalTemp = [];
-          await syncEspecialidadesMedTradicional(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1327,12 +1195,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsDificultadesAccesoMedTradicionalTemp++;
       if (countRecordsDificultadesAccesoMedTradicionalTemp >=
           dificultadesAccesoMedTradicionalTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'EspecialidadesMedTrad_AccesoMedTradicional')
-            .then((value) async {
-          especialidadesMedTradicionalTemp = [];
-          await syncEspecialidadesMedTradicional(event);
-        });
         return;
       }
 
@@ -1369,13 +1231,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           especialidadesMedTradicionalTemp[
               countRecordsEspecialidadesMedTradicionalTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('EspecieAnimalesCria')
-            .then((value) async {
-          especiesAnimalesTemp = [];
-          await syncEspeciesAnimales(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1390,12 +1246,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsEspecialidadesMedTradicionalTemp++;
       if (countRecordsEspecialidadesMedTradicionalTemp >=
           especialidadesMedTradicionalTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'EspecieAnimalesCria_AspectosSocioEconomicos')
-            .then((value) async {
-          especiesAnimalesTemp = [];
-          await syncEspeciesAnimales(event);
-        });
         return;
       }
 
@@ -1430,13 +1280,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           especiesAnimalesTemp[countRecordsEspeciesAnimalesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('Frutos_AspectosSocioEconomicos')
-            .then((value) async {
-          frutosTemp = [];
-          await syncFrutos(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1450,11 +1294,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsEspeciesAnimalesTemp++;
       if (countRecordsEspeciesAnimalesTemp >= especiesAnimalesTemp.length) {
-        ConnectionSQLiteService.truncateTable('Frutos_AspectosSocioEconomicos')
-            .then((value) async {
-          frutosTemp = [];
-          await syncFrutos(event);
-        });
         return;
       }
 
@@ -1489,14 +1328,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           frutosTemp[countRecordsFrutosTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'Hortalizas_AspectosSocioEconomicos')
-            .then((value) async {
-          hortalizasTemp = [];
-          await syncHortalizas(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1509,12 +1341,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsFrutosTemp++;
       if (countRecordsFrutosTemp >= frutosTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'Hortalizas_AspectosSocioEconomicos')
-            .then((value) async {
-          hortalizasTemp = [];
-          await syncHortalizas(event);
-        });
         return;
       }
 
@@ -1548,14 +1374,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           hortalizasTemp[countRecordsHortalizasTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'Leguminosas_AspectosSocioEconomicos')
-            .then((value) async {
-          leguminosasTemp = [];
-          await syncLeguminosas(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1568,12 +1387,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsHortalizasTemp++;
       if (countRecordsHortalizasTemp >= hortalizasTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'Leguminosas_AspectosSocioEconomicos')
-            .then((value) async {
-          leguminosasTemp = [];
-          await syncLeguminosas(event);
-        });
         return;
       }
 
@@ -1608,14 +1421,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           leguminosasTemp[countRecordsLeguminosasTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'MediosUtiliza_AccesoMedTradicional')
-            .then((value) async {
-          mediosUtilizaMedTradicionalTemp = [];
-          await syncMediosUtilizaMedTradicional(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1629,12 +1435,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsLeguminosasTemp++;
       if (countRecordsLeguminosasTemp >= leguminosasTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'MediosUtiliza_AccesoMedTradicional')
-            .then((value) async {
-          mediosUtilizaMedTradicionalTemp = [];
-          await syncMediosUtilizaMedTradicional(event);
-        });
         return;
       }
 
@@ -1670,13 +1470,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           mediosUtilizaMedTradicionalTemp[
               countRecordsMediosUtilizaMedTradicionalTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('OpcionesSi_No')
-            .then((value) async {
-          opcionesSiNoTemp = [];
-          await syncOpcionesSiNo(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1691,11 +1485,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsMediosUtilizaMedTradicionalTemp++;
       if (countRecordsMediosUtilizaMedTradicionalTemp >=
           mediosUtilizaMedTradicionalTemp.length) {
-        ConnectionSQLiteService.truncateTable('OpcionesSi_No')
-            .then((value) async {
-          opcionesSiNoTemp = [];
-          await syncOpcionesSiNo(event);
-        });
         return;
       }
 
@@ -1730,12 +1519,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           opcionesSiNoTemp[countRecordsOpcionesSiNoTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
-          resguardosTemp = [];
-          await syncResguardos(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1749,10 +1533,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsOpcionesSiNoTemp++;
       if (countRecordsOpcionesSiNoTemp >= opcionesSiNoTemp.length) {
-        ConnectionSQLiteService.truncateTable('Resguardos').then((value) async {
-          resguardosTemp = [];
-          await syncResguardos(event);
-        });
         return;
       }
 
@@ -1787,14 +1567,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           resguardosTemp[countRecordsResguardosTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'TiemposTarda_AccesoMedTradicional')
-            .then((value) async {
-          tiemposTardaMedTradicionalTemp = [];
-          await syncTiemposTardaMedTradicional(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1807,12 +1580,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsResguardosTemp++;
       if (countRecordsResguardosTemp >= resguardosTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'TiemposTarda_AccesoMedTradicional')
-            .then((value) async {
-          tiemposTardaMedTradicionalTemp = [];
-          await syncTiemposTardaMedTradicional(event);
-        });
         return;
       }
 
@@ -1848,14 +1615,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           tiemposTardaMedTradicionalTemp[
               countRecordsTiemposTardaMedTradicionalTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'TuberculosPlatanos_AspectosSocioEconomicos')
-            .then((value) async {
-          tuberculosPlatanosTemp = [];
-          await syncTuberculosPlatanos(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1870,12 +1630,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsTiemposTardaMedTradicionalTemp++;
       if (countRecordsTiemposTardaMedTradicionalTemp >=
           tiemposTardaMedTradicionalTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'TuberculosPlatanos_AspectosSocioEconomicos')
-            .then((value) async {
-          tuberculosPlatanosTemp = [];
-          await syncTuberculosPlatanos(event);
-        });
         return;
       }
 
@@ -1911,14 +1665,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           tuberculosPlatanosTemp[countRecordsTuberculosPlatanosTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'Verduras_AspectosSocioEconomicos')
-            .then((value) async {
-          verdurasTemp = [];
-          await syncVerduras(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1932,12 +1679,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsTuberculosPlatanosTemp++;
       if (countRecordsTuberculosPlatanosTemp >= tuberculosPlatanosTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'Verduras_AspectosSocioEconomicos')
-            .then((value) async {
-          verdurasTemp = [];
-          await syncVerduras(event);
-        });
         return;
       }
 
@@ -1972,14 +1713,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           verdurasTemp[countRecordsVerdurasTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'FactoresRiesgoVivienda_DatosVivienda')
-            .then((value) async {
-          factoresRiesgoViviendaTemp = [];
-          await syncFactoresRiesgoVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -1992,12 +1726,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsVerdurasTemp++;
       if (countRecordsVerdurasTemp >= verdurasTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'FactoresRiesgoVivienda_DatosVivienda')
-            .then((value) async {
-          factoresRiesgoViviendaTemp = [];
-          await syncFactoresRiesgoVivienda(event);
-        });
         return;
       }
 
@@ -2031,14 +1759,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           factoresRiesgoViviendaTemp[countRecordsFactoresRiesgoViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'IluminacionVivienda_DatosVivienda')
-            .then((value) async {
-          iluminacionesViviendaTemp = [];
-          await syncIluminacionesVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2053,12 +1774,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsFactoresRiesgoViviendaTemp++;
       if (countRecordsFactoresRiesgoViviendaTemp >=
           factoresRiesgoViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'IluminacionVivienda_DatosVivienda')
-            .then((value) async {
-          iluminacionesViviendaTemp = [];
-          await syncIluminacionesVivienda(event);
-        });
         return;
       }
 
@@ -2093,13 +1808,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           iluminacionesViviendaTemp[countRecordsIluminacionesViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('PisosVivienda_DatosVivienda')
-            .then((value) async {
-          pisosViviendaTemp = [];
-          await syncPisosVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2114,11 +1823,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsIluminacionesViviendaTemp++;
       if (countRecordsIluminacionesViviendaTemp >=
           iluminacionesViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable('PisosVivienda_DatosVivienda')
-            .then((value) async {
-          pisosViviendaTemp = [];
-          await syncPisosVivienda(event);
-        });
         return;
       }
 
@@ -2153,14 +1857,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           pisosViviendaTemp[countRecordsPisosViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'PresenciaAnimalesVivienda_DatosVivienda')
-            .then((value) async {
-          presenciaAnimalesViviendaTemp = [];
-          await syncPresenciaAnimalesVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2174,12 +1871,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsPisosViviendaTemp++;
       if (countRecordsPisosViviendaTemp >= pisosViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'PresenciaAnimalesVivienda_DatosVivienda')
-            .then((value) async {
-          presenciaAnimalesViviendaTemp = [];
-          await syncPresenciaAnimalesVivienda(event);
-        });
         return;
       }
 
@@ -2215,14 +1906,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           presenciaAnimalesViviendaTemp[
               countRecordsPresenciaAnimalesViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'ServiciosPublicosVivienda_DatosVivienda')
-            .then((value) async {
-          serviciosPublicosViviendaTemp = [];
-          await syncServiciosPublicosVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2237,12 +1921,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsPresenciaAnimalesViviendaTemp++;
       if (countRecordsPresenciaAnimalesViviendaTemp >=
           presenciaAnimalesViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'ServiciosPublicosVivienda_DatosVivienda')
-            .then((value) async {
-          serviciosPublicosViviendaTemp = [];
-          await syncServiciosPublicosVivienda(event);
-        });
         return;
       }
 
@@ -2279,13 +1957,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           serviciosPublicosViviendaTemp[
               countRecordsServiciosPublicosViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('TechosVivienda_DatosVivienda')
-            .then((value) async {
-          techosViviendaTemp = [];
-          await syncTechosVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2300,11 +1972,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsServiciosPublicosViviendaTemp++;
       if (countRecordsServiciosPublicosViviendaTemp >=
           serviciosPublicosViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable('TechosVivienda_DatosVivienda')
-            .then((value) async {
-          techosViviendaTemp = [];
-          await syncTechosVivienda(event);
-        });
         return;
       }
 
@@ -2340,13 +2007,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           techosViviendaTemp[countRecordsTechosViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('TenenciasVivienda_DatosVivienda')
-            .then((value) async {
-          tenenciasViviendaTemp = [];
-          await syncTenenciasVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2360,11 +2021,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsTechosViviendaTemp++;
       if (countRecordsTechosViviendaTemp >= techosViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable('TenenciasVivienda_DatosVivienda')
-            .then((value) async {
-          tenenciasViviendaTemp = [];
-          await syncTenenciasVivienda(event);
-        });
         return;
       }
 
@@ -2399,14 +2055,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           tenenciasViviendaTemp[countRecordsTenenciasViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'TiposCombustibleVivienda_DatosVivienda')
-            .then((value) async {
-          tiposCombustibleViviendaTemp = [];
-          await syncTiposCombustibleVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2420,12 +2069,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsTenenciasViviendaTemp++;
       if (countRecordsTenenciasViviendaTemp >= tenenciasViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'TiposCombustibleVivienda_DatosVivienda')
-            .then((value) async {
-          tiposCombustibleViviendaTemp = [];
-          await syncTiposCombustibleVivienda(event);
-        });
         return;
       }
 
@@ -2461,14 +2104,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           tiposCombustibleViviendaTemp[
               countRecordsTiposCombustibleViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'TiposSanitarioVivienda_DatosVivienda')
-            .then((value) async {
-          tiposSanitarioViviendaTemp = [];
-          await syncTiposSanitarioVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2483,12 +2119,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsTiposCombustibleViviendaTemp++;
       if (countRecordsTiposCombustibleViviendaTemp >=
           tiposCombustibleViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'TiposSanitarioVivienda_DatosVivienda')
-            .then((value) async {
-          tiposSanitarioViviendaTemp = [];
-          await syncTiposSanitarioVivienda(event);
-        });
         return;
       }
 
@@ -2524,14 +2154,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           tiposSanitarioViviendaTemp[countRecordsTiposSanitarioViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'TratamientoAguaVivienda_DatosVivienda')
-            .then((value) async {
-          tratamientosAguaViviendaTemp = [];
-          await syncTratamientosAguaVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2546,12 +2169,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsTiposSanitarioViviendaTemp++;
       if (countRecordsTiposSanitarioViviendaTemp >=
           tiposSanitarioViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'TratamientoAguaVivienda_DatosVivienda')
-            .then((value) async {
-          tratamientosAguaViviendaTemp = [];
-          await syncTratamientosAguaVivienda(event);
-        });
         return;
       }
 
@@ -2587,14 +2204,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           tratamientosAguaViviendaTemp[
               countRecordsTratamientosAguaViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'VentilacionVivienda_DatosVivienda')
-            .then((value) async {
-          ventilacionesViviendaTemp = [];
-          await syncVentilacionesVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2609,12 +2219,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsTratamientosAguaViviendaTemp++;
       if (countRecordsTratamientosAguaViviendaTemp >=
           tratamientosAguaViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'VentilacionVivienda_DatosVivienda')
-            .then((value) async {
-          ventilacionesViviendaTemp = [];
-          await syncVentilacionesVivienda(event);
-        });
         return;
       }
 
@@ -2650,13 +2254,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           ventilacionesViviendaTemp[countRecordsVentilacionesViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('TiposVivienda_DatosVivienda')
-            .then((value) async {
-          tiposViviendaTemp = [];
-          await syncTiposVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2671,11 +2269,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsVentilacionesViviendaTemp++;
       if (countRecordsVentilacionesViviendaTemp >=
           ventilacionesViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable('TiposVivienda_DatosVivienda')
-            .then((value) async {
-          tiposViviendaTemp = [];
-          await syncTiposVivienda(event);
-        });
         return;
       }
 
@@ -2710,14 +2303,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           tiposViviendaTemp[countRecordsTiposViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'TiposCalendarios_AspectosSocioEconomicos')
-            .then((value) async {
-          tiposCalendarioTemp = [];
-          await syncTiposCalendario(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2731,12 +2317,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsTiposViviendaTemp++;
       if (countRecordsTiposViviendaTemp >= tiposViviendaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'TiposCalendarios_AspectosSocioEconomicos')
-            .then((value) async {
-          tiposCalendarioTemp = [];
-          await syncTiposCalendario(event);
-        });
         return;
       }
 
@@ -2770,13 +2350,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           tiposCalendarioTemp[countRecordsTiposCalendarioTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('CursosVida_GrupoFamiliar')
-            .then((value) async {
-          cursosVidaTemp = [];
-          await syncCursosVida(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2790,11 +2364,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsTiposCalendarioTemp++;
       if (countRecordsTiposCalendarioTemp >= tiposCalendarioTemp.length) {
-        ConnectionSQLiteService.truncateTable('CursoVida_GrupoFamiliar')
-            .then((value) async {
-          cursosVidaTemp = [];
-          await syncCursosVida(event);
-        });
         return;
       }
 
@@ -2828,13 +2397,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           cursosVidaTemp[countRecordsCursosVidaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('Etnia_GrupoFamiliar')
-            .then((value) async {
-          etniasTemp = [];
-          await syncEtnias(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2847,11 +2410,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsCursosVidaTemp++;
       if (countRecordsCursosVidaTemp >= cursosVidaTemp.length) {
-        ConnectionSQLiteService.truncateTable('Etnia_GrupoFamiliar')
-            .then((value) async {
-          etniasTemp = [];
-          await syncEtnias(event);
-        });
         return;
       }
 
@@ -2885,13 +2443,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           etniasTemp[countRecordsEtniasTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('Genero_GrupoFamiliar')
-            .then((value) async {
-          generosTemp = [];
-          await syncGeneros(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2904,11 +2456,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsEtniasTemp++;
       if (countRecordsEtniasTemp >= etniasTemp.length) {
-        ConnectionSQLiteService.truncateTable('Genero_GrupoFamiliar')
-            .then((value) async {
-          generosTemp = [];
-          await syncGeneros(event);
-        });
         return;
       }
 
@@ -2941,13 +2488,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           generosTemp[countRecordsGenerosTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('GrupoRiesgo_GrupoFamiliar')
-            .then((value) async {
-          gruposRiesgoTemp = [];
-          await syncGruposRiesgo(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -2960,11 +2501,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsGenerosTemp++;
       if (countRecordsGenerosTemp >= generosTemp.length) {
-        ConnectionSQLiteService.truncateTable('GrupoRiesgo_GrupoFamiliar')
-            .then((value) async {
-          gruposRiesgoTemp = [];
-          await syncGruposRiesgo(event);
-        });
         return;
       }
 
@@ -2997,13 +2533,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           gruposRiesgoTemp[countRecordsGruposRiesgoTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('LenguaManeja_GrupoFamiliar')
-            .then((value) async {
-          lenguasManejaTemp = [];
-          await syncLenguasManeja(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3017,11 +2547,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsGruposRiesgoTemp++;
       if (countRecordsGruposRiesgoTemp >= gruposRiesgoTemp.length) {
-        ConnectionSQLiteService.truncateTable('LenguaManeja_GrupoFamiliar')
-            .then((value) async {
-          lenguasManejaTemp = [];
-          await syncLenguasManeja(event);
-        });
         return;
       }
 
@@ -3055,13 +2580,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           lenguasManejaTemp[countRecordsLenguasManejaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('NivelEducativo_GrupoFamiliar')
-            .then((value) async {
-          nivelesEducativosTemp = [];
-          await syncNivelesEducativos(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3075,11 +2594,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsLenguasManejaTemp++;
       if (countRecordsLenguasManejaTemp >= lenguasManejaTemp.length) {
-        ConnectionSQLiteService.truncateTable('NivelEducativo_GrupoFamiliar')
-            .then((value) async {
-          nivelesEducativosTemp = [];
-          await syncNivelesEducativos(event);
-        });
         return;
       }
 
@@ -3113,14 +2627,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           nivelesEducativosTemp[countRecordsNivelesEducativosTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'NombreLenguaMaterna_GrupoFamiliar')
-            .then((value) async {
-          nombresLenguasMaternaTemp = [];
-          await syncNombresLenguasMaterna(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3134,12 +2641,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsNivelesEducativosTemp++;
       if (countRecordsNivelesEducativosTemp >= nivelesEducativosTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'NombreLenguaMaterna_GrupoFamiliar')
-            .then((value) async {
-          nombresLenguasMaternaTemp = [];
-          await syncNombresLenguasMaterna(event);
-        });
         return;
       }
 
@@ -3174,13 +2675,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           nombresLenguasMaternaTemp[countRecordsNombresLenguasMaternaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('Ocupacion_GrupoFamiliar')
-            .then((value) async {
-          ocupacionesTemp = [];
-          await syncOcupaciones(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3195,11 +2690,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsNombresLenguasMaternaTemp++;
       if (countRecordsNombresLenguasMaternaTemp >=
           nombresLenguasMaternaTemp.length) {
-        ConnectionSQLiteService.truncateTable('Ocupacion_GrupoFamiliar')
-            .then((value) async {
-          ocupacionesTemp = [];
-          await syncOcupaciones(event);
-        });
         return;
       }
 
@@ -3233,13 +2723,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           ocupacionesTemp[countRecordsOcupacionesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('Parentesco_GrupoFamiliar')
-            .then((value) async {
-          parentescosTemp = [];
-          await syncParentescos(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3253,11 +2737,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsOcupacionesTemp++;
 
       if (countRecordsOcupacionesTemp >= ocupacionesTemp.length) {
-        ConnectionSQLiteService.truncateTable('Parentesco_GrupoFamiliar')
-            .then((value) async {
-          parentescosTemp = [];
-          await syncParentescos(event);
-        });
         return;
       }
 
@@ -3291,13 +2770,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           parentescosTemp[countRecordsParentescosTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('PueblosIndigenas_GrupoFamiliar')
-            .then((value) async {
-          pueblosIndigenasTemp = [];
-          await syncPueblosIndigenas(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3311,11 +2784,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsParentescosTemp++;
       if (countRecordsParentescosTemp >= parentescosTemp.length) {
-        ConnectionSQLiteService.truncateTable('PueblosIndigenas_GrupoFamiliar')
-            .then((value) async {
-          pueblosIndigenasTemp = [];
-          await syncPueblosIndigenas(event);
-        });
         return;
       }
 
@@ -3350,13 +2818,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           pueblosIndigenasTemp[countRecordsPueblosIndigenasTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('Regimenes_GrupoFamiliar')
-            .then((value) async {
-          regimenesTemp = [];
-          await syncRegimenes(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3370,11 +2832,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsPueblosIndigenasTemp++;
       if (countRecordsPueblosIndigenasTemp >= pueblosIndigenasTemp.length) {
-        ConnectionSQLiteService.truncateTable('Regimenes_GrupoFamiliar')
-            .then((value) async {
-          regimenesTemp = [];
-          await syncRegimenes(event);
-        });
         return;
       }
 
@@ -3408,13 +2865,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           regimenesTemp[countRecordsRegimenesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('TiposDocumento_GrupoFamiliar')
-            .then((value) async {
-          tiposDocumentoTemp = [];
-          await syncTiposDocumento(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3427,11 +2878,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsRegimenesTemp++;
       if (countRecordsRegimenesTemp >= regimenesTemp.length) {
-        ConnectionSQLiteService.truncateTable('TiposDocumento_GrupoFamiliar')
-            .then((value) async {
-          tiposDocumentoTemp = [];
-          await syncTiposDocumento(event);
-        });
         return;
       }
 
@@ -3464,14 +2910,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           tiposDocumentoTemp[countRecordsTiposDocumentoTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'ActividadesFisicas_EstilosVidaSaludable')
-            .then((value) async {
-          actividadesFisicasTemp = [];
-          await syncActividadesFisicas(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3485,12 +2924,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsTiposDocumentoTemp++;
       if (countRecordsTiposDocumentoTemp >= tiposDocumentoTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'ActividadesFisicas_EstilosVidaSaludable')
-            .then((value) async {
-          actividadesFisicasTemp = [];
-          await syncActividadesFisicas(event);
-        });
         return;
       }
 
@@ -3524,14 +2957,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           actividadesFisicasTemp[countRecordsActividadesFisicasTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'Alimentacion_EstilosVidaSaludable')
-            .then((value) async {
-          alimentacionesTemp = [];
-          await syncAlimentaciones(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3545,12 +2971,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsActividadesFisicasTemp++;
       if (countRecordsActividadesFisicasTemp >= actividadesFisicasTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'Alimentacion_EstilosVidaSaludable')
-            .then((value) async {
-          alimentacionesTemp = [];
-          await syncAlimentaciones(event);
-        });
         return;
       }
 
@@ -3584,14 +3004,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           alimentacionesTemp[countRecordsAlimentacionesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'NumeroCigarrilosDia_EstilosVidaSaludable')
-            .then((value) async {
-          cigarrillosDiaTemp = [];
-          await syncCigarrillosDia(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3606,12 +3019,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsAlimentacionesTemp++;
       if (countRecordsAlimentacionesTemp >= alimentacionesTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'NumeroCigarrilosDia_EstilosVidaSaludable')
-            .then((value) async {
-          cigarrillosDiaTemp = [];
-          await syncCigarrillosDia(event);
-        });
         return;
       }
 
@@ -3645,14 +3052,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           cigarrillosDiaTemp[countRecordsCigarrillosDiaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'ConsumoAlcohol_EstilosVidaSaludable')
-            .then((value) async {
-          consumosAlcoholTemp = [];
-          await syncConsumosAlcohol(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3666,12 +3066,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsCigarrillosDiaTemp++;
       if (countRecordsCigarrillosDiaTemp >= cigarrillosDiaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'ConsumoAlcohol_EstilosVidaSaludable')
-            .then((value) async {
-          consumosAlcoholTemp = [];
-          await syncConsumosAlcohol(event);
-        });
         return;
       }
 
@@ -3705,14 +3099,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           consumosAlcoholTemp[countRecordsConsumosAlcoholTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'CondicionesNutricionales_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          condicionesNutricionalesTemp = [];
-          await syncCondicionesNutricionales(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3726,12 +3113,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsConsumosAlcoholTemp++;
       if (countRecordsConsumosAlcoholTemp >= consumosAlcoholTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'CondicionesNutricionales_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          condicionesNutricionalesTemp = [];
-          await syncCondicionesNutricionales(event);
-        });
         return;
       }
 
@@ -3767,14 +3148,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           condicionesNutricionalesTemp[
               countRecordsCondicionesNutricionalesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'ConductasSeguir_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          conductasSeguirTemp = [];
-          await syncConductasSeguir(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3789,12 +3163,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsCondicionesNutricionalesTemp++;
       if (countRecordsCondicionesNutricionalesTemp >=
           condicionesNutricionalesTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'ConductasSeguir_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          conductasSeguirTemp = [];
-          await syncConductasSeguir(event);
-        });
         return;
       }
 
@@ -3829,14 +3197,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           conductasSeguirTemp[countRecordsConductasSeguirTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'EsquemasVacunacion_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          esquemasVacunacionTemp = [];
-          await syncEsquemasVacunacion(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3850,12 +3211,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsConductasSeguirTemp++;
       if (countRecordsConductasSeguirTemp >= conductasSeguirTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'EsquemasVacunacion_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          esquemasVacunacionTemp = [];
-          await syncEsquemasVacunacion(event);
-        });
         return;
       }
 
@@ -3890,14 +3245,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           esquemasVacunacionTemp[countRecordsEsquemasVacunacionTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'LugaresVacunacion_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          lugaresVacunacionTemp = [];
-          await syncLugaresVacunacion(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3911,12 +3259,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsEsquemasVacunacionTemp++;
       if (countRecordsEsquemasVacunacionTemp >= esquemasVacunacionTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'LugaresVacunacion_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          lugaresVacunacionTemp = [];
-          await syncLugaresVacunacion(event);
-        });
         return;
       }
 
@@ -3950,14 +3292,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           lugaresVacunacionTemp[countRecordsLugaresVacunacionTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'MetodosPlanificacion_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          metodosPlanificacionTemp = [];
-          await syncMetodosPlanificacion(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -3971,12 +3306,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsLugaresVacunacionTemp++;
       if (countRecordsLugaresVacunacionTemp >= lugaresVacunacionTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'MetodosPlanificacion_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          metodosPlanificacionTemp = [];
-          await syncMetodosPlanificacion(event);
-        });
         return;
       }
 
@@ -4011,14 +3340,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           metodosPlanificacionTemp[countRecordsMetodosPlanificacionTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'NombresEnfermedad_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          nombresEnfermedadesTemp = [];
-          await syncNombresEnfermedades(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4033,12 +3355,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsMetodosPlanificacionTemp++;
       if (countRecordsMetodosPlanificacionTemp >=
           metodosPlanificacionTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'NombresEnfermedad_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          nombresEnfermedadesTemp = [];
-          await syncNombresEnfermedades(event);
-        });
         return;
       }
 
@@ -4073,14 +3389,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           nombresEnfermedadesTemp[countRecordsNombresEnfermedadesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          seguimientoEnfermedadesTemp = [];
-          await syncSeguimientoEnfermedades(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4095,12 +3404,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsNombresEnfermedadesTemp++;
       if (countRecordsNombresEnfermedadesTemp >=
           nombresEnfermedadesTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          seguimientoEnfermedadesTemp = [];
-          await syncSeguimientoEnfermedades(event);
-        });
         return;
       }
 
@@ -4135,14 +3438,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           seguimientoEnfermedadesTemp[countRecordsSeguimientoEnfermedadesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'ServiciosSolicitados_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          serviciosSolicitadosTemp = [];
-          await syncServiciosSolicitados(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4157,12 +3453,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsSeguimientoEnfermedadesTemp++;
       if (countRecordsSeguimientoEnfermedadesTemp >=
           seguimientoEnfermedadesTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'ServiciosSolicitados_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          serviciosSolicitadosTemp = [];
-          await syncServiciosSolicitados(event);
-        });
         return;
       }
 
@@ -4197,14 +3487,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           serviciosSolicitadosTemp[countRecordsServiciosSolicitadosTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'UltimaVezInstSalud_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          ultimasVecesInstSaludTemp = [];
-          await syncUltimasVecesInstSalud(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4219,12 +3502,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsServiciosSolicitadosTemp++;
       if (countRecordsServiciosSolicitadosTemp >=
           serviciosSolicitadosTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'UltimaVezInstSalud_CuidadoSaludCondRiesgo')
-            .then((value) async {
-          ultimasVecesInstSaludTemp = [];
-          await syncUltimasVecesInstSalud(event);
-        });
         return;
       }
 
@@ -4259,13 +3536,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           ultimasVecesInstSaludTemp[countRecordsUltimasVecesInstSaludTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('EnfermedadesAcude_AtencionSalud')
-            .then((value) async {
-          enfermedadesAcudeTemp = [];
-          await syncEnfermedadesAcude(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4280,11 +3551,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsUltimasVecesInstSaludTemp++;
       if (countRecordsUltimasVecesInstSaludTemp >=
           ultimasVecesInstSaludTemp.length) {
-        ConnectionSQLiteService.truncateTable('EnfermedadesAcude_AtencionSalud')
-            .then((value) async {
-          enfermedadesAcudeTemp = [];
-          await syncEnfermedadesAcude(event);
-        });
         return;
       }
 
@@ -4318,14 +3584,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           enfermedadesAcudeTemp[countRecordsEnfermedadesAcudeTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'EnfermedadesTratamientos_AtencionSalud')
-            .then((value) async {
-          enfermedadesTratamientoTemp = [];
-          await syncEnfermedadesTratamiento(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4339,12 +3598,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsEnfermedadesAcudeTemp++;
       if (countRecordsEnfermedadesAcudeTemp >= enfermedadesAcudeTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'EnfermedadesTratamientos_AtencionSalud')
-            .then((value) async {
-          enfermedadesTratamientoTemp = [];
-          await syncEnfermedadesTratamiento(event);
-        });
         return;
       }
 
@@ -4379,14 +3632,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           enfermedadesTratamientoTemp[countRecordsEnfermedadesTratamientoTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'EnfermedadesTradicionales_AtencionSalud')
-            .then((value) async {
-          enfermedadesTradicionalesTemp = [];
-          await syncEnfermedadesTradicionales(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4401,12 +3647,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsEnfermedadesTratamientoTemp++;
       if (countRecordsEnfermedadesTratamientoTemp >=
           enfermedadesTratamientoTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'EnfermedadesTradicionales_AtencionSalud')
-            .then((value) async {
-          enfermedadesTradicionalesTemp = [];
-          await syncEnfermedadesTradicionales(event);
-        });
         return;
       }
 
@@ -4442,14 +3682,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           enfermedadesTradicionalesTemp[
               countRecordsEnfermedadesTradicionalesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'LugaresAtencionMedico_AtencionSalud')
-            .then((value) async {
-          lugaresAtencionMedicoTemp = [];
-          await syncLugaresAtencionMedico(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4464,12 +3697,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsEnfermedadesTradicionalesTemp++;
       if (countRecordsEnfermedadesTradicionalesTemp >=
           enfermedadesTradicionalesTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'LugaresAtencionMedico_AtencionSalud')
-            .then((value) async {
-          lugaresAtencionMedicoTemp = [];
-          await syncLugaresAtencionMedico(event);
-        });
         return;
       }
 
@@ -4505,14 +3732,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           lugaresAtencionMedicoTemp[countRecordsLugaresAtencionMedicoTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'LugaresPlantasMedicinales_AtencionSalud')
-            .then((value) async {
-          lugaresPlantasMedicinalesTemp = [];
-          await syncLugaresPlantasMedicinales(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4527,12 +3747,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsLugaresAtencionMedicoTemp++;
       if (countRecordsLugaresAtencionMedicoTemp >=
           lugaresAtencionMedicoTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'LugaresPlantasMedicinales_AtencionSalud')
-            .then((value) async {
-          lugaresPlantasMedicinalesTemp = [];
-          await syncLugaresPlantasMedicinales(event);
-        });
         return;
       }
 
@@ -4568,14 +3782,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           lugaresPlantasMedicinalesTemp[
               countRecordsLugaresPlantasMedicinalesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'PlantasMedicinales_AtencionSalud')
-            .then((value) async {
-          plantasMedicinalesTemp = [];
-          await syncPlantasMedicinales(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4590,12 +3797,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsLugaresPlantasMedicinalesTemp++;
       if (countRecordsLugaresPlantasMedicinalesTemp >=
           lugaresPlantasMedicinalesTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'PlantasMedicinales_AtencionSalud')
-            .then((value) async {
-          plantasMedicinalesTemp = [];
-          await syncPlantasMedicinales(event);
-        });
         return;
       }
 
@@ -4631,14 +3832,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           plantasMedicinalesTemp[countRecordsPlantasMedicinalesTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
-            .then((value) async {
-          religionesProfesaTemp = [];
-          await syncReligionesProfesa(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4652,12 +3846,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsPlantasMedicinalesTemp++;
       if (countRecordsPlantasMedicinalesTemp >= plantasMedicinalesTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
-            .then((value) async {
-          religionesProfesaTemp = [];
-          await syncReligionesProfesa(event);
-        });
         return;
       }
 
@@ -4691,14 +3879,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           religionesProfesaTemp[countRecordsReligionesProfesaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
-            .then((value) async {
-          eventosCostumbresParticipaTemp = [];
-          await syncEventosCostumbresParticipa(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4712,12 +3893,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsReligionesProfesaTemp++;
       if (countRecordsReligionesProfesaTemp >= religionesProfesaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
-            .then((value) async {
-          eventosCostumbresParticipaTemp = [];
-          await syncEventosCostumbresParticipa(event);
-        });
         return;
       }
 
@@ -4753,14 +3928,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           eventosCostumbresParticipaTemp[
               countRecordsEventosCostumbresParticipaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'CostumbresPractican_DimSocioCulturalPueblosIndigenas')
-            .then((value) async {
-          costumbresPracticanTemp = [];
-          await syncCostumbresPractican(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4775,12 +3943,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsEventosCostumbresParticipaTemp++;
       if (countRecordsEventosCostumbresParticipaTemp >=
           eventosCostumbresParticipaTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'CostumbresPractican_DimSocioCulturalPueblosIndigenas')
-            .then((value) async {
-          costumbresPracticanTemp = [];
-          await syncCostumbresPractican(event);
-        });
         return;
       }
 
@@ -4816,14 +3978,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           costumbresPracticanTemp[countRecordsCostumbresPracticanTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable(
-                'SancionesJusticia_DimSocioCulturalPueblosIndigenas')
-            .then((value) async {
-          sancionesJusticiaTemp = [];
-          await syncSancionesJusticia(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4838,12 +3993,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       countRecordsCostumbresPracticanTemp++;
       if (countRecordsCostumbresPracticanTemp >=
           costumbresPracticanTemp.length) {
-        ConnectionSQLiteService.truncateTable(
-                'SancionesJusticia_DimSocioCulturalPueblosIndigenas')
-            .then((value) async {
-          sancionesJusticiaTemp = [];
-          await syncSancionesJusticia(event);
-        });
         return;
       }
 
@@ -4877,13 +4026,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           sancionesJusticiaTemp[countRecordsSancionesJusticiaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateTable('CuartosVivienda_DatosVivienda')
-            .then((value) async {
-          cuartosViviendaTemp = [];
-          await syncCuartosVivienda(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4897,11 +4040,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsSancionesJusticiaTemp++;
       if (countRecordsSancionesJusticiaTemp >= sancionesJusticiaTemp.length) {
-        ConnectionSQLiteService.truncateTable('CuartosVivienda_DatosVivienda')
-            .then((value) async {
-          cuartosViviendaTemp = [];
-          await syncCuartosVivienda(event);
-        });
         return;
       }
 
@@ -4935,12 +4073,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           event,
           cuartosViviendaTemp[countRecordsCuartosViviendaTemp],
         );
-      } else {
-        ConnectionSQLiteService.truncateFicha().then((value) async {
-          fichasTemp = [];
-          await syncFichas(event);
-        });
-      }
+      } else {}
     });
   }
 
@@ -4954,10 +4087,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         (data) async {
       countRecordsCuartosViviendaTemp++;
       if (countRecordsCuartosViviendaTemp >= cuartosViviendaTemp.length) {
-        ConnectionSQLiteService.truncateFicha().then((value) async {
-          fichasTemp = [];
-          await syncFichas(event);
-        });
         return;
       }
 

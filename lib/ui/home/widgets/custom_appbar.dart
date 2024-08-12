@@ -46,16 +46,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
         actions: [
           IconButton(
               onPressed: () async {
-                bool isEmpty =
-                    await ConnectionSQLiteService.isTableEmpty('Afiliado');
-                if (isEmpty) {
-                  afiliadoBloc
-                      .add(const ErrorMessage('No existen datos del afiliado'));
-                } else {
-                  showSearch(
-                      context: context,
-                      delegate: SearchAfiliados(afiliadoBloc: afiliadoBloc));
-                }
+                showSearch(
+                    context: context,
+                    delegate: SearchAfiliados(afiliadoBloc: afiliadoBloc));
               },
               icon: const Icon(Icons.search)),
         ],

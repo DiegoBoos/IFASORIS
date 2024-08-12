@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/seguimiento_enfermedad.dart';
 
 abstract class SeguimientoEnfermedadLocalDataSource {
@@ -11,22 +14,34 @@ class SeguimientoEnfermedadLocalDataSourceImpl
     implements SeguimientoEnfermedadLocalDataSource {
   @override
   Future<List<SeguimientoEnfermedadModel>> getSeguimientoEnfermedades() async {
-    final res = await supabase
-        .from('SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
-        .select();
-    final result = List<SeguimientoEnfermedadModel>.from(
-        res.map((m) => SeguimientoEnfermedadModel.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
+          .select();
+      final result = List<SeguimientoEnfermedadModel>.from(
+          res.map((m) => SeguimientoEnfermedadModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveSeguimientoEnfermedad(
       SeguimientoEnfermedadModel seguimientoEnfermedad) async {
-    final res = await supabase
-        .from('SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
-        .insert(seguimientoEnfermedad.toJson());
+    try {
+      final res = await supabase
+          .from('SeguimientoEnfermedades_CuidadoSaludCondRiesgo')
+          .insert(seguimientoEnfermedad.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

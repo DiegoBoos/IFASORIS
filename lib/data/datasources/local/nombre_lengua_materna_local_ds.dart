@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/nombre_lengua_materna.dart';
 
 abstract class NombreLenguaMaternaLocalDataSource {
@@ -11,21 +14,33 @@ class NombreLenguaMaternaLocalDataSourceImpl
     implements NombreLenguaMaternaLocalDataSource {
   @override
   Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna() async {
-    final res =
-        await supabase.from('NombreLenguaMaterna_GrupoFamiliar').select();
-    final result = List<NombreLenguaMaternaModel>.from(
-        res.map((m) => NombreLenguaMaternaModel.fromJson(m))).toList();
+    try {
+      final res =
+          await supabase.from('NombreLenguaMaterna_GrupoFamiliar').select();
+      final result = List<NombreLenguaMaternaModel>.from(
+          res.map((m) => NombreLenguaMaternaModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveNombreLenguaMaterna(
       NombreLenguaMaternaModel nombreLenguaMaterna) async {
-    final res = await supabase
-        .from('NombreLenguaMaterna_GrupoFamiliar')
-        .insert(nombreLenguaMaterna.toJson());
+    try {
+      final res = await supabase
+          .from('NombreLenguaMaterna_GrupoFamiliar')
+          .insert(nombreLenguaMaterna.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

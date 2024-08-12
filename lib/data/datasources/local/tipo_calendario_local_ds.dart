@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/tipo_calendario.dart';
 
 abstract class TipoCalendarioLocalDataSource {
@@ -10,21 +13,33 @@ class TipoCalendarioLocalDataSourceImpl
     implements TipoCalendarioLocalDataSource {
   @override
   Future<List<TipoCalendarioModel>> getTiposCalendario() async {
-    final res = await supabase
-        .from('TiposCalendarios_AspectosSocioEconomicos')
-        .select();
-    final result = List<TipoCalendarioModel>.from(
-        res.map((m) => TipoCalendarioModel.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('TiposCalendarios_AspectosSocioEconomicos')
+          .select();
+      final result = List<TipoCalendarioModel>.from(
+          res.map((m) => TipoCalendarioModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveTipoCalendario(TipoCalendarioModel tipoCalendario) async {
-    final res = await supabase
-        .from('TiposCalendarios_AspectosSocioEconomicos')
-        .insert(tipoCalendario.toJson());
+    try {
+      final res = await supabase
+          .from('TiposCalendarios_AspectosSocioEconomicos')
+          .insert(tipoCalendario.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

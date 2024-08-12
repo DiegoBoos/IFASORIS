@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/parentesco.dart';
 
 abstract class ParentescoLocalDataSource {
@@ -9,20 +12,31 @@ abstract class ParentescoLocalDataSource {
 class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
   @override
   Future<List<ParentescoModel>> getParentescos() async {
-    final res = await supabase.from('Parentesco_GrupoFamiliar').select();
-    final result =
-        List<ParentescoModel>.from(res.map((m) => ParentescoModel.fromJson(m)))
-            .toList();
+    try {
+      final res = await supabase.from('Parentesco_GrupoFamiliar').select();
+      final result = List<ParentescoModel>.from(
+          res.map((m) => ParentescoModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveParentesco(ParentescoModel parentesco) async {
-    final res = await supabase
-        .from('Parentesco_GrupoFamiliar')
-        .insert(parentesco.toJson());
+    try {
+      final res = await supabase
+          .from('Parentesco_GrupoFamiliar')
+          .insert(parentesco.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

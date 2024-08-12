@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/regimen.dart';
 
 abstract class RegimenLocalDataSource {
@@ -9,19 +12,32 @@ abstract class RegimenLocalDataSource {
 class RegimenLocalDataSourceImpl implements RegimenLocalDataSource {
   @override
   Future<List<RegimenModel>> getRegimenes() async {
-    final res = await supabase.from('Regimenes_GrupoFamiliar').select();
-    final result =
-        List<RegimenModel>.from(res.map((m) => RegimenModel.fromJson(m)))
-            .toList();
+    try {
+      final res = await supabase.from('Regimenes_GrupoFamiliar').select();
+      final result =
+          List<RegimenModel>.from(res.map((m) => RegimenModel.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveRegimen(RegimenModel regimen) async {
-    final res =
-        await supabase.from('Regimenes_GrupoFamiliar').insert(regimen.toJson());
+    try {
+      final res = await supabase
+          .from('Regimenes_GrupoFamiliar')
+          .insert(regimen.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

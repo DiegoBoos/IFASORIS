@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/evento_costumbre_participa.dart';
 
 abstract class EventoCostumbreParticipaLocalDataSource {
@@ -19,63 +22,90 @@ class EventoCostumbreParticipaLocalDataSourceImpl
   @override
   Future<List<EventoCostumbreParticipaModel>>
       getEventosCostumbresParticipa() async {
-    final res = await supabase
-        .from('EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
-        .select();
-    final result = List<EventoCostumbreParticipaModel>.from(
-        res.map((m) => EventoCostumbreParticipaModel.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
+          .select();
+      final result = List<EventoCostumbreParticipaModel>.from(
+          res.map((m) => EventoCostumbreParticipaModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveEventoCostumbreParticipa(
       EventoCostumbreParticipaModel eventoCostumbreParticipa) async {
-    final res = await supabase
-        .from('EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
-        .insert(eventoCostumbreParticipa.toJson());
+    try {
+      final res = await supabase
+          .from('EventosCostumbresParticipo_DimSocioCulturalPueblosIndigenas')
+          .insert(eventoCostumbreParticipa.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveAsp6EventosCostumbresParticipa(
       int? dimensionSocioCulturalPueblosIndigenasId,
       List<LstEventoCostumbreParticipa> lstEventoCostumbreParticipa) async {
-    Batch batch = db.batch();
-    batch.delete('Asp6_DimSocioCulturalEventosCostumbresParticipo',
-        where: 'DimSocioCulturalPueblosIndigenas_id = ?',
-        whereArgs: [dimensionSocioCulturalPueblosIndigenasId]);
+    try {
+      // First, delete existing records for the given dimensionSocioCulturalPueblosIndigenasId
+      await supabase
+          .from('Asp6_DimSocioCulturalEventosCostumbresParticipo')
+          .delete()
+          .eq('DimSocioCulturalPueblosIndigenas_id',
+              dimensionSocioCulturalPueblosIndigenasId);
 
-    final ubicacionEspeciesAnimalesCria = lstEventoCostumbreParticipa
-        .map((item) => Asp6EventoCostumbreParticipa(
-            eventoCostumbreParticipaId: item.eventoCostumbreParticipaId,
-            dimSocioCulturalPueblosIndigenasId:
-                dimensionSocioCulturalPueblosIndigenasId))
-        .toList();
+      // Prepare the list of records to be inserted
+      final eventosCostumbresParticipa = lstEventoCostumbreParticipa
+          .map((item) => {
+                'eventoCostumbreParticipaId': item.eventoCostumbreParticipaId,
+                'dimSocioCulturalPueblosIndigenasId':
+                    dimensionSocioCulturalPueblosIndigenasId,
+              })
+          .toList();
 
-    for (final ubicacionEspecieAnimalCria in ubicacionEspeciesAnimalesCria) {
-      batch.insert('Asp6_DimSocioCulturalEventosCostumbresParticipo',
-          ubicacionEspecieAnimalCria.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp6_DimSocioCulturalEventosCostumbresParticipo')
+          .insert(eventosCostumbresParticipa);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 
   @override
   Future<List<LstEventoCostumbreParticipa>> getAsp6EventosCostumbresParticipa(
       int? dimensionSocioCulturalPueblosIndigenasId) async {
-    final res = await supabase
-        .from('Asp6_DimSocioCulturalEventosCostumbresParticipo')
-        .select()
-        .eq('DimSocioCulturalPueblosIndigenas_id',
-            dimensionSocioCulturalPueblosIndigenasId);
+    try {
+      final res = await supabase
+          .from('Asp6_DimSocioCulturalEventosCostumbresParticipo')
+          .select()
+          .eq('DimSocioCulturalPueblosIndigenas_id',
+              dimensionSocioCulturalPueblosIndigenasId);
 
-    final result = List<LstEventoCostumbreParticipa>.from(
-        res.map((m) => LstEventoCostumbreParticipa.fromJson(m))).toList();
+      final result = List<LstEventoCostumbreParticipa>.from(
+          res.map((m) => LstEventoCostumbreParticipa.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

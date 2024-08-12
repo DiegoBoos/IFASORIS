@@ -1,13 +1,13 @@
-import 'package:ifasoris/core/error/failure.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/dimension_sociocultural_pueblos_indigenas.dart';
 
 abstract class DimensionSocioCulturalPueblosIndigenasLocalDataSource {
   Future<int> saveDimensionSocioCulturalPueblosIndigenas(
       DimensionSocioCulturalPueblosIndigenasModel
           dimensionSocioCulturalPueblosIndigenas);
-
   Future<DimensionSocioCulturalPueblosIndigenasModel?>
       getDimensionSocioCulturalPueblosIndigenas(int afiliadoId);
 }
@@ -24,23 +24,30 @@ class DimensionSocioCulturalPueblosIndigenasLocalDataSourceImpl
                 dimensionSocioCulturalPueblosIndigenas.toJson(),
               );
       return res;
-    } catch (e) {
-      throw const DatabaseFailure(
-          ['Error al guardar dim sociocultural pueblos indigenas']);
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
   }
 
   @override
   Future<DimensionSocioCulturalPueblosIndigenasModel?>
       getDimensionSocioCulturalPueblosIndigenas(int afiliadoId) async {
-    final res = await supabase
-        .from('Asp6_DimSocioCulturalPueblosIndigenas')
-        .select()
-        .eq('Afiliado_id', afiliadoId);
+    try {
+      final res = await supabase
+          .from('Asp6_DimSocioCulturalPueblosIndigenas')
+          .select()
+          .eq('Afiliado_id', afiliadoId);
 
-    if (res.isEmpty) return null;
+      if (res.isEmpty) return null;
 
-    final result = DimensionSocioCulturalPueblosIndigenasModel.fromJson(res);
-    return result;
+      final result = DimensionSocioCulturalPueblosIndigenasModel.fromJson(res);
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

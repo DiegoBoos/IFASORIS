@@ -1,6 +1,7 @@
-
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/leguminosa.dart';
 
 abstract class LeguminosaLocalDataSource {
@@ -16,51 +17,83 @@ abstract class LeguminosaLocalDataSource {
 class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
   @override
   Future<List<LeguminosaModel>> getLeguminosas() async {
-    final res = await supabase.from('Leguminosas_AspectosSocioEconomicos').select();
-    final result =
-        List<LeguminosaModel>.from(res.map((m) => LeguminosaModel.fromJson(m)))
-            .toList();
+    try {
+      final res =
+          await supabase.from('Leguminosas_AspectosSocioEconomicos').select();
+      final result = List<LeguminosaModel>.from(
+          res.map((m) => LeguminosaModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveLeguminosa(LeguminosaModel leguminosa) async {
-    final res = await supabase
-        .from(
-        .insert('Leguminosas_AspectosSocioEconomicos', leguminosa.toJson());
+    try {
+      final res = await supabase
+          .from('Leguminosas_AspectosSocioEconomicos')
+          .insert(leguminosa.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveUbicacionLeguminosas(
       int ubicacionId, List<LstLeguminosa> lstLeguminosas) async {
-    Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionLeguminosas',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    try {
+      // First, delete existing records for the given ubicacionId
+      await supabase
+          .from('Asp1_UbicacionLeguminosas')
+          .delete()
+          .eq('Ubicacion_id', ubicacionId);
 
-    final ubicacionLeguminosas = lstLeguminosas
-        .map((item) => UbicacionLeguminosas(
-            leguminosaId: item.leguminosaId, ubicacionId: ubicacionId))
-        .toList();
+      // Prepare the list of records to be inserted
+      final ubicacionLeguminosas = lstLeguminosas
+          .map((item) => {
+                'leguminosaId': item.leguminosaId,
+                'ubicacionId': ubicacionId,
+              })
+          .toList();
 
-    for (final ubicacionLeguminosa in ubicacionLeguminosas) {
-      batch.insert('Asp1_UbicacionLeguminosas', ubicacionLeguminosa.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp1_UbicacionLeguminosas')
+          .insert(ubicacionLeguminosas);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 
   @override
   Future<List<LstLeguminosa>> getUbicacionLeguminosas(int? ubicacionId) async {
-    final res = await supabase.from('Asp1_UbicacionLeguminosas').select().eq('Ubicacion_id', ubicacionId);
-    final result =
-        List<LstLeguminosa>.from(res.map((m) => LstLeguminosa.fromJson(m)))
-            .toList();
+    try {
+      final res = await supabase
+          .from('Asp1_UbicacionLeguminosas')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final result =
+          List<LstLeguminosa>.from(res.map((m) => LstLeguminosa.fromJson(m)))
+              .toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

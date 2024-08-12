@@ -1,4 +1,7 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/medio_utiliza_ca.dart';
 
 abstract class MedioUtilizaCALocalDataSource {
@@ -14,57 +17,83 @@ class MedioUtilizaCALocalDataSourceImpl
     implements MedioUtilizaCALocalDataSource {
   @override
   Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA() async {
-    final res = await supabase.from('MediosUtiliza_CentroAtencion').select();
-    final mediosUtilizaCADB = List<MedioUtilizaCAModel>.from(
-        res.map((m) => MedioUtilizaCAModel.fromJson(m))).toList();
+    try {
+      final res = await supabase.from('MediosUtiliza_CentroAtencion').select();
+      final mediosUtilizaCADB = List<MedioUtilizaCAModel>.from(
+          res.map((m) => MedioUtilizaCAModel.fromJson(m))).toList();
 
-    return mediosUtilizaCADB;
+      return mediosUtilizaCADB;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveMedioUtilizaCA(MedioUtilizaCAModel medioUtilizaCA) async {
-    final res = await supabase
-        .from('MediosUtiliza_CentroAtencion')
-        .insert(medioUtilizaCA.toJson());
+    try {
+      final res = await supabase
+          .from('MediosUtiliza_CentroAtencion')
+          .insert(medioUtilizaCA.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<List<LstMediosUtilizaCA>> getUbicacionMediosUtilizaCA(
       int? ubicacionId) async {
-    final res = await supabase
-        .from('Asp1_UbicacionMediosCentroAtencion')
-        .select()
-        .eq('Ubicacion_id', ubicacionId);
+    try {
+      final res = await supabase
+          .from('Asp1_UbicacionMediosCentroAtencion')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
 
-    final result = List<LstMediosUtilizaCA>.from(
-        res.map((m) => LstMediosUtilizaCA.fromJson(m))).toList();
+      final result = List<LstMediosUtilizaCA>.from(
+          res.map((m) => LstMediosUtilizaCA.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> saveUbicacionMediosUtilizaCA(
       int ubicacionId, List<LstMediosUtilizaCA> lstMediosUtilizaCA) async {
-    Batch batch = db.batch();
-    batch.delete('Asp1_UbicacionMediosCentroAtencion',
-        where: 'Ubicacion_id = ?', whereArgs: [ubicacionId]);
+    try {
+      // First, delete existing records for the given ubicacionId
+      await supabase
+          .from('Asp1_UbicacionMediosCentroAtencion')
+          .delete()
+          .eq('Ubicacion_id', ubicacionId);
 
-    final ubicacionMediosUtilizaCA = lstMediosUtilizaCA
-        .map((item) => UbicacionMediosUtilizaCA(
-              ubicacionId: ubicacionId,
-              medioUtilizaId: item.medioUtilizaId,
-            ))
-        .toList();
+      // Prepare the list of records to be inserted
+      final ubicacionMediosUtilizaCA = lstMediosUtilizaCA
+          .map((item) => {
+                'ubicacionId': ubicacionId,
+                'medioUtilizaId': item.medioUtilizaId,
+              })
+          .toList();
 
-    for (final ubicacionMedioUtilizaCA in ubicacionMediosUtilizaCA) {
-      batch.insert('Asp1_UbicacionMediosCentroAtencion',
-          ubicacionMedioUtilizaCA.toJson());
+      // Insert the new records
+      final res = await supabase
+          .from('Asp1_UbicacionMediosCentroAtencion')
+          .insert(ubicacionMediosUtilizaCA);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 }

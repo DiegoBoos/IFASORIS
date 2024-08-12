@@ -1,6 +1,7 @@
-import 'package:ifasoris/core/error/failure.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/cuidado_salud_cond_riesgo.dart';
 
 abstract class CuidadoSaludCondRiesgoLocalDataSource {
@@ -20,23 +21,30 @@ class CuidadoSaludCondRiesgoLocalDataSourceImpl
             cuidadoSaludCondRiesgo.toJson(),
           );
       return res;
-    } catch (e) {
-      throw const DatabaseFailure(
-          ['Error al guardar cuidado salud cond riesgo']);
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
   }
 
   @override
   Future<CuidadoSaludCondRiesgoModel?> getCuidadoSaludCondRiesgo(
       int afiliadoId) async {
-    final res = await supabase
-        .from('Asp5_CuidadoSaludCondRiesgo')
-        .select()
-        .eq('Afiliado_id', afiliadoId);
+    try {
+      final res = await supabase
+          .from('Asp5_CuidadoSaludCondRiesgo')
+          .select()
+          .eq('Afiliado_id', afiliadoId);
 
-    if (res.isEmpty) return null;
+      if (res.isEmpty) return null;
 
-    final result = CuidadoSaludCondRiesgoModel.fromJson(res);
-    return result;
+      final result = CuidadoSaludCondRiesgoModel.fromJson(res);
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 }

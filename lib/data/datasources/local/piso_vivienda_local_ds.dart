@@ -1,6 +1,7 @@
-
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/error/failure.dart';
 import '../../models/piso_vivienda.dart';
 
 abstract class PisoViviendaLocalDataSource {
@@ -13,51 +14,81 @@ abstract class PisoViviendaLocalDataSource {
 class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
   @override
   Future<List<PisoViviendaModel>> getPisosVivienda() async {
-    final res = await supabase.from('PisosVivienda_DatosVivienda').select();
-    final result = List<PisoViviendaModel>.from(
-        res.map((m) => PisoViviendaModel.fromJson(m))).toList();
+    try {
+      final res = await supabase.from('PisosVivienda_DatosVivienda').select();
+      final result = List<PisoViviendaModel>.from(
+          res.map((m) => PisoViviendaModel.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> savePisoVivienda(PisoViviendaModel pisoVivienda) async {
-    final res = await supabase
-        .from(
-        .insert('PisosVivienda_DatosVivienda', pisoVivienda.toJson());
+    try {
+      final res = await supabase
+          .from('PisosVivienda_DatosVivienda')
+          .insert(pisoVivienda.toJson());
 
-    return res;
+      return res;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<List<LstPiso>> getPisosViviendaVivienda(int? datoViviendaId) async {
-    final res = await supabase.from('Asp2_DatosViviendaPisos').select().eq('DatoVivienda_id', datoViviendaId);
-    final result =
-        List<LstPiso>.from(res.map((m) => LstPiso.fromJson(m))).toList();
+    try {
+      final res = await supabase
+          .from('Asp2_DatosViviendaPisos')
+          .select()
+          .eq('DatoVivienda_id', datoViviendaId);
+      final result =
+          List<LstPiso>.from(res.map((m) => LstPiso.fromJson(m))).toList();
 
-    return result;
+      return result;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
   }
 
   @override
   Future<int> savePisosVivienda(
       int datoViviendaId, List<LstPiso> lstPiso) async {
-    Batch batch = db.batch();
-    batch.delete('Asp2_DatosViviendaPisos',
-        where: 'DatoVivienda_id = ?', whereArgs: [datoViviendaId]);
+    try {
+      // First, delete existing records for the given datoViviendaId
+      await supabase
+          .from('Asp2_DatosViviendaPisos')
+          .delete()
+          .eq('DatoVivienda_id', datoViviendaId);
 
-    final viviendaPisos = lstPiso
-        .map((item) => ViviendaPisos(
-            pisoViviendaId: item.pisoViviendaId,
-            datoViviendaId: datoViviendaId,
-            otroTipoPiso: item.otroTipoPiso))
-        .toList();
+      // Prepare the list of records to be inserted
+      final viviendaPisos = lstPiso
+          .map((item) => {
+                'pisoViviendaId': item.pisoViviendaId,
+                'datoViviendaId': datoViviendaId,
+                'otroTipoPiso': item.otroTipoPiso,
+              })
+          .toList();
 
-    for (final viviendaPiso in viviendaPisos) {
-      batch.insert('Asp2_DatosViviendaPisos', viviendaPiso.toJson());
+      // Insert the new records
+      final res =
+          await supabase.from('Asp2_DatosViviendaPisos').insert(viviendaPisos);
+
+      // Return the number of rows inserted
+      return res.data != null ? res.data.length : 0;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
-
-    final res = await batch.commit();
-
-    return res.length;
   }
 }
