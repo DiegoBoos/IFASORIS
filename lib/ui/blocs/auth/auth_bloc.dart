@@ -21,57 +21,55 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }) : super(AuthInitial()) {
     on<LogIn>((event, emit) async {
       emit(AuthLoading());
-      await _logIn(event, emit);
+      final usuario = event.usuario;
+
+      final result = await auth.logInUsecase(usuario);
+      result.fold((failure) {
+        emit(AuthError(failure.properties.first));
+      }, (data) {
+        emit(AuthLoaded(data));
+      });
+    });
+
+    on<Register>((event, emit) async {
+      emit(AuthLoading());
+      final result = await auth.registerUsecase(event.usuario);
+      result.fold((failure) {
+        emit(AuthError(failure.properties.first));
+      }, (data) {
+        emit(AuthAPILoaded(data));
+      });
     });
 
     on<LogInDB>((event, emit) async {
       emit(AuthLoading());
-      await _logInDB(event, emit);
+      final token = prefs.token;
+      if (token.isNotEmpty) {
+        final usuario = event.usuario;
+
+        final result = await authDB.logInUsecaseDB(usuario);
+        result.fold((failure) {
+          emit(AuthError(failure.properties.first));
+        }, (data) {
+          if (data == null) {
+            emit(const AuthError('Usuario no autenticado'));
+          } else {
+            emit(AuthLoaded(data));
+          }
+        });
+      } else {
+        emit(const AuthError(
+            'No existen datos, inicie sesión con una conexión a internet'));
+      }
     });
 
     on<LogOut>((_, emit) async {
-      await _logOut(emit);
-    });
-  }
-
-  _logIn(event, emit) async {
-    final usuario = event.usuario;
-
-    final result = await auth.logInUsecase(usuario);
-    result.fold((failure) {
-      emit(AuthError(failure.properties.first));
-    }, (data) {
-      emit(AuthLoaded(data));
-    });
-  }
-
-  _logInDB(event, emit) async {
-    final token = prefs.token;
-    if (token.isNotEmpty) {
-      final usuario = event.usuario;
-
-      final result = await authDB.logInUsecaseDB(usuario);
+      final result = await authDB.logOutUsecaseDB();
       result.fold((failure) {
         emit(AuthError(failure.properties.first));
       }, (data) {
-        if (data == null) {
-          emit(const AuthError('Usuario no autenticado'));
-        } else {
-          emit(AuthLoaded(data));
-        }
+        emit(LoggedOut());
       });
-    } else {
-      emit(const AuthError(
-          'No existen datos, inicie sesión con una conexión a internet'));
-    }
-  }
-
-  _logOut(Emitter<AuthState> emit) async {
-    final result = await authDB.logOutUsecaseDB();
-    result.fold((failure) {
-      emit(AuthError(failure.properties.first));
-    }, (data) {
-      emit(AuthInitial());
     });
   }
 

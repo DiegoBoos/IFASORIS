@@ -28,6 +28,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Failure, Map<String, dynamic>>> registerRepository(
+      UsuarioEntity usuario) async {
+    try {
+      final result = await authRemoteDataSource.register(usuario);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on SocketException catch (e) {
+      return Left(ConnectionFailure([e.message]));
+    }
+  }
+
+  @override
   Future<Either<Failure, String>> cambioDispositivoRepositoryDB(
       String userName, String idEquipo) async {
     try {

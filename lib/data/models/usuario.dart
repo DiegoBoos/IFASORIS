@@ -3,15 +3,25 @@ import 'package:ifasoris/domain/entities/usuario.dart';
 class UsuarioModel extends UsuarioEntity {
   const UsuarioModel({
     String? id,
+    String? email,
     String? userName,
     String? password,
     String? deviceId,
     int? municipioId,
     int? departamentoId,
-  });
+  }) : super(
+          id: id,
+          email: email,
+          userName: userName,
+          password: password,
+          deviceId: deviceId,
+          municipioId: municipioId,
+          departamentoId: departamentoId,
+        );
 
   factory UsuarioModel.fromEntity(UsuarioEntity entity) => UsuarioModel(
         id: entity.id,
+        email: entity.email,
         userName: entity.userName,
         password: entity.password,
         deviceId: entity.deviceId,
@@ -21,8 +31,8 @@ class UsuarioModel extends UsuarioEntity {
 
   factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
         id: json["Id"],
+        email: json["Email"],
         userName: json["UserName"],
-        password: json["Password"],
         deviceId: json["Device_Id"],
         municipioId: json["Municipio_id"],
         departamentoId: json["Departamento_id"],
@@ -30,6 +40,7 @@ class UsuarioModel extends UsuarioEntity {
 
   Map<String, dynamic> toJson() => {
         "Id": id,
+        "Email": email,
         "UserName": userName,
         "Password": password,
         "Device_Id": deviceId,

@@ -6,7 +6,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants.dart';
 import '../../../domain/entities/usuario.dart';
 import '../../blocs/auth/auth_bloc.dart';
-import '../../cubits/internet/internet_cubit.dart';
 import '../../utils/device_info.dart';
 import '../../utils/input_decoration.dart';
 
@@ -18,57 +17,46 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  /* final userNameCtrl = TextEditingController(text: 'sirispruebas');
-  final passwordCtrl = TextEditingController(text: 'Siris*2024'); */
-  final emailCtrl = TextEditingController();
-  final usernameCtrl = TextEditingController();
-  final passwordCtrl = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final emailCtrl = TextEditingController(text: 'siris837000638@gmail.com');
+  final userNameCtrl = TextEditingController(text: 'sirispruebas');
+  final passwordCtrl = TextEditingController(text: 'Siris*2024');
+
   bool eyeToggle = true;
 
   @override
   void dispose() {
-    emailCtrl.dispose();
-    usernameCtrl.dispose();
+    userNameCtrl.dispose();
     passwordCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-
     final authBloc = BlocProvider.of<AuthBloc>(context, listen: true);
-    final internetCubit = BlocProvider.of<InternetCubit>(context);
 
     login() async {
       if (!formKey.currentState!.validate()) {
         return;
       }
 
-      final email = emailCtrl.text;
-      final username = usernameCtrl.text;
-      final password = passwordCtrl.text;
+      final email = emailCtrl.text.trim();
+      final username = userNameCtrl.text.trim();
+      final password = passwordCtrl.text.trim();
+
       try {
-        await supabase.auth.signInWithPassword(
-          email: email,
-          password: password,
-        );
+        final datosEquipo = await DeviceInfo.infoDispositivo();
 
-        await DeviceInfo.infoDispositivo().then((datosEquipo) {
-          if (datosEquipo != null && datosEquipo.idEquipo != null) {
-            final usuario = UsuarioEntity(
-              userName: username,
-              password: password,
-              deviceId: datosEquipo.idEquipo,
-            );
+        if (datosEquipo != null && datosEquipo.idEquipo != null) {
+          final usuario = UsuarioEntity(
+            email: email,
+            userName: username,
+            password: password,
+            deviceId: datosEquipo.idEquipo,
+          );
 
-            if (internetCubit.state is InternetConnected) {
-              authBloc.add(LogIn(usuario: usuario));
-            } else if (internetCubit.state is InternetDisconnected) {
-              authBloc.add(LogInDB(usuario: usuario));
-            }
-          }
-        });
+          authBloc.add(LogIn(usuario: usuario));
+        }
       } on AuthException catch (error) {
         context.showErrorSnackBar(message: error.message);
       } catch (error) {
@@ -98,7 +86,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
               const SizedBox(height: 30.0),
               TextFormField(
-                controller: usernameCtrl,
+                controller: userNameCtrl,
                 autocorrect: false,
                 decoration: CustomInputDecoration.inputDecoration(
                     hintText: 'Ingrese el nombre de usuario',

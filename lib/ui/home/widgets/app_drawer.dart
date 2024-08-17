@@ -131,13 +131,17 @@ class AppDrawer extends StatelessWidget {
               },
             ),
             const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Cerrar sesión'),
-              onTap: () {
-                Navigator.pop(context);
-                authBloc.add(LogOut());
+            BlocListener<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state is LoggedOut) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, 'login', (route) => false);
+                }
               },
+              child: ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Cerrar sesión'),
+                  onTap: () => authBloc.add(LogOut())),
             ),
           ],
         ),

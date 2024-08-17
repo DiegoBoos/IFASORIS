@@ -13,6 +13,12 @@ class LogIn extends AuthEvent {
   const LogIn({required this.usuario});
 }
 
+class Register extends AuthEvent {
+  final UsuarioEntity usuario;
+
+  const Register({required this.usuario});
+}
+
 class LogInDB extends AuthEvent {
   final UsuarioEntity usuario;
 

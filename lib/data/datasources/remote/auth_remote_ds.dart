@@ -3,14 +3,16 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:ifasoris/domain/usecases/auth/auth_exports.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
-
 import '../../../core/app_config.dart';
 import '../../models/usuario.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UsuarioModel> logIn(UsuarioEntity usuario);
+  Future<Map<String, dynamic>> register(UsuarioEntity usuario);
   Future<String> cambioDispositivo(String userName, String idEquipo);
 }
 
@@ -23,10 +25,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UsuarioModel> logIn(UsuarioEntity usuario) async {
     try {
+      await supabase.auth.signInWithPassword(
+        email: usuario.email,
+        password: usuario.password!,
+      );
+
       final formData = {
-        "UserName": usuario.userName,
-        "Password": usuario.password,
-        "Device_Id": usuario.deviceId
+        'UserName': usuario.userName,
+        'Password': usuario.password,
+        'Device_Id': usuario.deviceId,
       };
 
       final uri = Uri.parse('${AppConfig.apiPublica}/usuarios/login');
@@ -40,7 +47,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (resp.statusCode == 200) {
         final decodedResp = jsonDecode(resp.body);
         final resultMap = decodedResp['Result']['Usuario'];
-        resultMap['Password'] = usuario.password;
 
         final result = UsuarioModel.fromJson(resultMap);
         return result;
@@ -50,6 +56,30 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> register(UsuarioEntity usuario) async {
+    try {
+      final AuthResponse res = await supabase.auth.signUp(
+        email: usuario.email,
+        password: usuario.password!,
+        data: {
+          'UserName': usuario.userName,
+          'Device_Id': usuario.deviceId,
+        },
+      );
+
+      final Session? session = res.session;
+      final User? user = res.user;
+
+      return {
+        'session': session,
+        'user': user,
+      };
+    } catch (e) {
+      throw const ServerFailure([unexpectedErrorMessage]);
     }
   }
 

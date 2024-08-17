@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../core/error/failure.dart';
-
-import '../../../data/models/usuario.dart';
 import '../../entities/usuario.dart';
 import '../../repositories/auth/auth_repository_db.dart';
 
@@ -11,7 +9,8 @@ class AuthUsecaseDB {
 
   AuthUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, UsuarioEntity?>> logInUsecaseDB(UsuarioModel usuario) {
+  Future<Either<Failure, UsuarioEntity?>> logInUsecaseDB(
+      UsuarioEntity usuario) {
     return repositoryDB.logInRepositoryDB(usuario);
   }
 

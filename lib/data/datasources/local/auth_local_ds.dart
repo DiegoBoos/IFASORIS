@@ -38,16 +38,10 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       final prefs = SharedPreferencesService();
       final clearStorage = await prefs.clearStorage();
 
-      final res = await supabase
-          .from('usuario')
-          .delete()
-          .eq('your_condition_column', 'your_condition_value');
+      await supabase.auth.signOut();
+      if (clearStorage) return 1;
 
-      if (clearStorage && res.data != null) {
-        return 1; // or the appropriate success code
-      } else {
-        return 0;
-      }
+      return 0;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

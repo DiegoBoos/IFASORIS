@@ -17,4 +17,9 @@ class AuthUsecase {
       String userName, String idEquipo) {
     return repository.cambioDispositivoRepositoryDB(userName, idEquipo);
   }
+
+  Future<Either<Failure, Map<String, dynamic>>> registerUsecase(
+      UsuarioEntity usuario) {
+    return repository.registerRepository(usuario);
+  }
 }

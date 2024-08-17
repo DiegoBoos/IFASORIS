@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ifasoris/ui/home/pages/home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ifasoris/core/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../../core/constants.dart';
-import '../pages/login_page.dart';
+import '../../../domain/entities/usuario.dart';
+import '../../blocs/auth/auth_bloc.dart';
+import '../../utils/device_info.dart';
+import '../../utils/input_decoration.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -13,116 +16,136 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final bool _isLoading = false;
-
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _usernameController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final emailCtrl = TextEditingController(text: 'siris837000638@gmail.com');
+  final userNameCtrl = TextEditingController(text: 'sirispruebas');
+  final passwordCtrl = TextEditingController(text: 'Siris*2024');
 
   bool eyeToggle = true;
 
-  Future<void> _signUp() async {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    final email = _emailController.text;
-    final password = _passwordController.text;
-    final username = _usernameController.text;
-    try {
-      await supabase.auth.signUp(
-          email: email, password: password, data: {'username': username});
-      Navigator.of(context)
-          .pushAndRemoveUntil(HomePage.route(), (route) => false);
-    } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (error) {
-      context.showErrorSnackBar(message: unexpectedErrorMessage);
-    }
-  }
-
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _usernameController.dispose();
+    emailCtrl.dispose();
+    passwordCtrl.dispose();
+    userNameCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: formPadding,
-          children: [
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                label: Text('Email'),
+    final authBloc = BlocProvider.of<AuthBloc>(context, listen: true);
+
+    register() async {
+      if (!formKey.currentState!.validate()) {
+        return;
+      }
+
+      final email = emailCtrl.text.trim();
+      final username = userNameCtrl.text.trim();
+      final password = passwordCtrl.text.trim();
+
+      try {
+        final datosEquipo = await DeviceInfo.infoDispositivo();
+
+        if (datosEquipo != null && datosEquipo.idEquipo != null) {
+          final usuario = UsuarioEntity(
+            email: email,
+            userName: username,
+            password: password,
+            deviceId: datosEquipo.idEquipo,
+          );
+
+          authBloc.add(Register(usuario: usuario));
+        }
+      } on AuthException catch (error) {
+        context.showErrorSnackBar(message: error.message);
+      } catch (error) {
+        context.showErrorSnackBar(message: 'Excepción no controlada');
+      }
+    }
+
+    return Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: emailCtrl,
+                decoration: CustomInputDecoration.inputDecoration(
+                    hintText: 'Ingrese el email',
+                    labelText: 'Email',
+                    prefixIcon: Icons.email),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Requerido*';
+                  }
+
+                  return null;
+                },
               ),
-              validator: (val) {
-                if (val == null || val.isEmpty) {
-                  return 'Required';
-                }
-                return null;
-              },
-              keyboardType: TextInputType.emailAddress,
-            ),
-            formSpacer,
-            TextFormField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                label: Text('Password'),
+              const SizedBox(height: 30.0),
+              TextFormField(
+                controller: userNameCtrl,
+                autocorrect: false,
+                decoration: CustomInputDecoration.inputDecoration(
+                    hintText: 'Ingrese el nombre de usuario',
+                    labelText: 'Nombre de usuario',
+                    prefixIcon: Icons.person),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Requerido*';
+                  }
+                  return null;
+                },
               ),
-              validator: (val) {
-                if (val == null || val.isEmpty) {
-                  return 'Required';
-                }
-                if (val.length < 6) {
-                  return '6 characters minimum';
-                }
-                return null;
-              },
-            ),
-            formSpacer,
-            TextFormField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                label: Text('Username'),
+              const SizedBox(height: 30.0),
+              TextFormField(
+                controller: passwordCtrl,
+                autocorrect: false,
+                obscureText: eyeToggle,
+                decoration: CustomInputDecoration.inputDecoration(
+                  hintText: '******',
+                  labelText: 'Contraseña',
+                  prefixIcon: Icons.lock_outlined,
+                  suffixIcon: IconButton(
+                      onPressed: () => setState(() => eyeToggle = !eyeToggle),
+                      icon: eyeToggle
+                          ? const Icon(
+                              Icons.remove_red_eye,
+                            )
+                          : const FaIcon(
+                              FontAwesomeIcons.solidEyeSlash,
+                              size: 18,
+                            )),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Requerido*';
+                  }
+                  return null;
+                },
               ),
-              validator: (val) {
-                if (val == null || val.isEmpty) {
-                  return 'Required';
-                }
-                final isValid = RegExp(r'^[A-Za-z0-9_]{3,24}$').hasMatch(val);
-                if (!isValid) {
-                  return '3-24 long with alphanumeric or underscore';
-                }
-                return null;
-              },
-            ),
-            formSpacer,
-            ElevatedButton(
-              onPressed: _isLoading ? null : () => _signUp(),
-              child: const Text('Register'),
-            ),
-            formSpacer,
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).push(LoginPage.route());
-              },
-              child: const Text('I already have an account'),
-            )
-          ],
-        ),
-      ),
-    );
+              const SizedBox(height: 30.0),
+              MaterialButton(
+                  minWidth: double.infinity,
+                  disabledColor: Colors.grey,
+                  elevation: 0,
+                  color: Theme.of(context).colorScheme.primary,
+                  onPressed:
+                      authBloc.state is AuthLoading ? null : () => register(),
+                  child: authBloc.state is AuthLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(),
+                        )
+                      : const Text(
+                          'Registrarse',
+                          style: TextStyle(color: Colors.white),
+                        )),
+            ],
+          ),
+        ));
   }
 }

@@ -99,7 +99,9 @@ final prefs = SharedPreferencesService();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-      url: AppConfig.supabaseUrl, anonKey: AppConfig.supabaseAnonKey);
+    url: AppConfig.supabaseUrl,
+    anonKey: AppConfig.supabaseAnonKey,
+  );
   di.init();
   await prefs.initPrefs();
   runApp(const MyApp());

@@ -25,6 +25,17 @@ class AuthLoaded extends AuthState {
   List<Object?> get props => [usuarioAutenticado];
 }
 
+class AuthAPILoaded extends AuthState {
+  final Map<String, dynamic>? sessionDetails;
+
+  const AuthAPILoaded(this.sessionDetails);
+
+  @override
+  List<Object?> get props => [sessionDetails];
+}
+
+class LoggedOut extends AuthState {}
+
 class AuthError extends AuthState {
   final String message;
 

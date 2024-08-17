@@ -8,4 +8,7 @@ abstract class AuthRepository {
 
   Future<Either<Failure, String>> cambioDispositivoRepositoryDB(
       String userName, String idEquipo);
+
+  Future<Either<Failure, Map<String, dynamic>>> registerRepository(
+      UsuarioEntity usuario);
 }
