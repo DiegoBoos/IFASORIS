@@ -29,7 +29,7 @@ import 'ui/cubits/conducta_seguir/conducta_seguir_cubit.dart';
 import 'ui/cubits/consumo_alcohol/consumo_alcohol_cubit.dart';
 import 'ui/cubits/costo_desplazamiento/costo_desplazamiento_cubit.dart';
 import 'ui/cubits/costumbre_practica/costumbre_practica_cubit.dart';
-import 'ui/cubits/cuarto_vivienda/cuarto_vivienda_cubit.dart';
+import 'ui/cubits/nro_cuarto_vivienda/nro_cuarto_vivienda_cubit.dart';
 import 'ui/cubits/curso_vida/curso_vida_cubit.dart';
 import 'ui/cubits/dificultad_acceso_ca/dificultad_acceso_ca_cubit.dart';
 import 'ui/cubits/dificultad_acceso_med_tradicional/dificultad_acceso_med_tradicional_cubit.dart';
@@ -70,7 +70,7 @@ import 'ui/cubits/piso_vivienda/piso_vivienda_cubit.dart';
 import 'ui/cubits/planta_medicinal/planta_medicinal_cubit.dart';
 import 'ui/cubits/presencia_animal_vivienda/presencia_animal_vivienda_cubit.dart';
 import 'ui/cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
-import 'ui/cubits/regimen/regimen_cubit.dart';
+import 'ui/cubits/tipo_regimen/tipo_regimen_cubit.dart';
 import 'ui/cubits/religion_profesa/religion_profesa_cubit.dart';
 import 'ui/cubits/resguardo/resguardo_cubit.dart';
 import 'ui/cubits/sancion_justicia/sancion_justicia_cubit.dart';
@@ -299,7 +299,7 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<PuebloIndigenaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<RegimenCubit>(),
+            create: (_) => di.locator<TipoRegimenCubit>(),
           ),
           BlocProvider(
             create: (_) => di.locator<TipoDocumentoCubit>(),
@@ -374,7 +374,7 @@ class MyApp extends StatelessWidget {
             create: (_) => di.locator<SancionJusticiaCubit>(),
           ),
           BlocProvider(
-            create: (_) => di.locator<CuartoViviendaCubit>(),
+            create: (_) => di.locator<NroCuartoViviendaCubit>(),
           ),
         ],
         child: MaterialApp(

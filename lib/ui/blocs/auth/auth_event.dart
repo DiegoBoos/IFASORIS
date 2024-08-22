@@ -19,10 +19,4 @@ class Register extends AuthEvent {
   const Register({required this.usuario});
 }
 
-class LogInDB extends AuthEvent {
-  final UsuarioEntity usuario;
-
-  const LogInDB({required this.usuario});
-}
-
 class LogOut extends AuthEvent {}

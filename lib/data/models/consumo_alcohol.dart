@@ -10,7 +10,11 @@ class ConsumoAlcoholModel extends ConsumoAlcoholEntity {
   const ConsumoAlcoholModel({
     int? consumoAlcoholId,
     String? descripcion,
-  });
+  }) : super(
+          consumoAlcoholId: consumoAlcoholId,
+          descripcion: descripcion,
+        );
+
   static ConsumoAlcoholModel fromEntity(ConsumoAlcoholEntity entity) {
     return ConsumoAlcoholModel(
       consumoAlcoholId: entity.consumoAlcoholId,

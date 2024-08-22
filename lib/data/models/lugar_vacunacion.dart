@@ -10,7 +10,10 @@ class LugarVacunacionModel extends LugarVacunacionEntity {
   const LugarVacunacionModel({
     int? lugarVacunacionId,
     String? descripcion,
-  });
+  }) : super(
+          lugarVacunacionId: lugarVacunacionId,
+          descripcion: descripcion,
+        );
 
   static LugarVacunacionModel fromEntity(LugarVacunacionEntity entity) {
     return LugarVacunacionModel(

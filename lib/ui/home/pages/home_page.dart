@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../domain/entities/afiliado.dart';
+import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
+import '../../search/search_afiliados.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../../utils/eliminar_ficha.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/buttons.dart';
-import '../widgets/headers.dart';
-import '../widgets/custom_appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,8 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
     final dimViviendaBloc = BlocProvider.of<DimViviendaBloc>(context);
 
@@ -56,21 +53,56 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         child: Scaffold(
-            appBar: PreferredSize(
-                preferredSize: Size.fromHeight(size.height * 0.08),
-                child: const CustomAppBar()),
+            appBar: AppBar(
+              elevation: 0,
+              title: const Text(
+                'Ficha',
+              ),
+              centerTitle: true,
+            ),
             drawer: const AppDrawer(),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 30),
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(40),
+                            bottomRight: Radius.circular(40)),
+                        color: Theme.of(context).colorScheme.primary),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                        borderRadius:
+                            BorderRadius.circular(30), // Rounded corners
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          final afiliadoBloc =
+                              BlocProvider.of<AfiliadoBloc>(context);
+                          showSearch(
+                              context: context,
+                              delegate:
+                                  SearchAfiliados(afiliadoBloc: afiliadoBloc));
+                        },
+                        child: const TextField(
+                          enabled: false,
+                          decoration: InputDecoration(
+                            hintText: 'Buscar afiliado',
+                            hintStyle: TextStyle(color: Colors.white),
+                            border: InputBorder.none, // No underline
+                            prefixIcon: Icon(Icons.search, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    )),
                 BlocBuilder<AfiliadoPrefsBloc, AfiliadoPrefsState>(
                     builder: (context, state) {
                   if (state is AfiliadoLoaded) {
                     return Column(
                       children: [
-                        _Header(
-                          afiliado: state.afiliado,
-                        ),
                         FadeInLeft(
                             child: CustomButton(
                                 icon: FontAwesomeIcons.dochub,
@@ -113,7 +145,8 @@ class _HomePageState extends State<HomePage> {
                       ],
                     );
                   }
-                  return _EmptyHeader();
+
+                  return Container();
                 }),
                 Expanded(child: Container()),
                 Padding(
@@ -127,31 +160,5 @@ class _HomePageState extends State<HomePage> {
                 )
               ],
             )));
-  }
-}
-
-class _Header extends StatelessWidget {
-  final AfiliadoEntity? afiliado;
-
-  const _Header({this.afiliado});
-  @override
-  Widget build(BuildContext context) {
-    return IconHeader(
-        icon: FontAwesomeIcons.userCheck,
-        title:
-            '${afiliado?.nombre1} ${afiliado?.nombre2} ${afiliado?.apellido1} ${afiliado?.apellido2}',
-        subtitle: afiliado?.documento ?? '',
-        color1: Theme.of(context).colorScheme.primary,
-        color2: Colors.green);
-  }
-}
-
-class _EmptyHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return IconHeader(
-        icon: FontAwesomeIcons.userCheck,
-        color1: Theme.of(context).colorScheme.primary,
-        color2: Colors.green);
   }
 }

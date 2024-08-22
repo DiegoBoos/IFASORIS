@@ -10,7 +10,10 @@ class NombreLenguaMaternaModel extends NombreLenguaMaternaEntity {
   const NombreLenguaMaternaModel({
     int? lenguaMaternaId,
     String? descripcion,
-  });
+  }) : super(
+          lenguaMaternaId: lenguaMaternaId,
+          descripcion: descripcion,
+        );
 
   static NombreLenguaMaternaModel fromEntity(NombreLenguaMaternaEntity entity) {
     return NombreLenguaMaternaModel(

@@ -15,7 +15,7 @@ class ConsumoAlcoholLocalDataSourceImpl
   Future<List<ConsumoAlcoholModel>> getConsumosAlcohol() async {
     try {
       final res =
-          await supabase.from('ConsumoAlcohol_EstilosVidaSaludable').select();
+          await supabase.from('consumoalcohol_estilosvidasaludable').select();
       final result = List<ConsumoAlcoholModel>.from(
           res.map((m) => ConsumoAlcoholModel.fromJson(m))).toList();
 
@@ -30,11 +30,11 @@ class ConsumoAlcoholLocalDataSourceImpl
   @override
   Future<int> saveConsumoAlcohol(ConsumoAlcoholModel consumoAlcohol) async {
     try {
-      final res = await supabase
-          .from('ConsumoAlcohol_EstilosVidaSaludable')
-          .insert(consumoAlcohol.toJson());
+      await supabase
+          .from('consumoalcohol_estilosvidasaludable')
+          .upsert(consumoAlcohol.toJson());
 
-      return res;
+      return consumoAlcohol.consumoAlcoholId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

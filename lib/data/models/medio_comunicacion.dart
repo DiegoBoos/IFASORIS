@@ -10,12 +10,18 @@ class MedioComunicacionModel extends MedioComunicacionEntity {
   const MedioComunicacionModel({
     int? medioComunicacionId,
     String? descripcion,
-  });
+    int? departamentoId,
+  }) : super(
+          medioComunicacionId: medioComunicacionId,
+          descripcion: descripcion,
+          departamentoId: departamentoId,
+        );
 
   static MedioComunicacionModel fromEntity(MedioComunicacionEntity entity) {
     return MedioComunicacionModel(
       medioComunicacionId: entity.medioComunicacionId,
       descripcion: entity.descripcion,
+      departamentoId: entity.departamentoId,
     );
   }
 
@@ -23,11 +29,13 @@ class MedioComunicacionModel extends MedioComunicacionEntity {
       MedioComunicacionModel(
         medioComunicacionId: json["MedioComunicacion_id"],
         descripcion: json["Descripcion"],
+        departamentoId: json["Departamento_Ide"],
       );
 
   Map<String, dynamic> toJson() => {
         "MedioComunicacion_id": medioComunicacionId,
         "Descripcion": descripcion,
+        "Departamento_Ide": departamentoId
       };
 }
 

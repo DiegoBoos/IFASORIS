@@ -11,13 +11,19 @@ class EventoCostumbreParticipaModel extends EventoCostumbreParticipaEntity {
   const EventoCostumbreParticipaModel({
     int? eventoCostumbreParticipaId,
     String? descripcion,
-  });
+    int? departamentoId,
+  }) : super(
+          eventoCostumbreParticipaId: eventoCostumbreParticipaId,
+          descripcion: descripcion,
+          departamentoId: departamentoId,
+        );
 
   static EventoCostumbreParticipaModel fromEntity(
       EventoCostumbreParticipaEntity entity) {
     return EventoCostumbreParticipaModel(
       eventoCostumbreParticipaId: entity.eventoCostumbreParticipaId,
       descripcion: entity.descripcion,
+      departamentoId: entity.departamentoId,
     );
   }
 
@@ -25,11 +31,13 @@ class EventoCostumbreParticipaModel extends EventoCostumbreParticipaEntity {
       EventoCostumbreParticipaModel(
         eventoCostumbreParticipaId: json["EventoCostumbreParticipo_id"],
         descripcion: json["Descripcion"],
+        departamentoId: json["Departamento_Ide"],
       );
 
   Map<String, dynamic> toJson() => {
         "EventoCostumbreParticipo_id": eventoCostumbreParticipaId,
         "Descripcion": descripcion,
+        "Departamento_Ide": departamentoId
       };
 }
 

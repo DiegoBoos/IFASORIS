@@ -16,7 +16,7 @@ class CostoDesplazamientoLocalDataSourceImpl
   Future<List<CostoDesplazamientoModel>> getCostosDesplazamiento() async {
     try {
       final res =
-          await supabase.from('CostosDesplazamiento_CentroAtencion').select();
+          await supabase.from('costosdesplazamiento_centroatencion').select();
       final result = List<CostoDesplazamientoModel>.from(
           res.map((m) => CostoDesplazamientoModel.fromJson(m))).toList();
 
@@ -32,11 +32,11 @@ class CostoDesplazamientoLocalDataSourceImpl
   Future<int> saveCostoDesplazamiento(
       CostoDesplazamientoModel costoDesplazamiento) async {
     try {
-      final res = await supabase
-          .from('CostosDesplazamiento_CentroAtencion')
-          .insert(costoDesplazamiento.toJson());
+      await supabase
+          .from('costosdesplazamiento_centroatencion')
+          .upsert(costoDesplazamiento.toJson());
 
-      return res;
+      return costoDesplazamiento.costoDesplazamientoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

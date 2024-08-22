@@ -10,7 +10,11 @@ class CerealModel extends CerealEntity {
     int? cerealId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          cerealId: cerealId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static CerealModel fromEntity(CerealEntity entity) {
     return CerealModel(

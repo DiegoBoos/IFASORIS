@@ -13,7 +13,7 @@ class TipoDocumentoLocalDataSourceImpl implements TipoDocumentoLocalDataSource {
   @override
   Future<List<TipoDocumentoModel>> getTiposDocumento() async {
     try {
-      final res = await supabase.from('TiposDocumento_GrupoFamiliar').select();
+      final res = await supabase.from('tiposdocumento_grupofamiliar').select();
       final result = List<TipoDocumentoModel>.from(
           res.map((m) => TipoDocumentoModel.fromJson(m))).toList();
 
@@ -28,11 +28,11 @@ class TipoDocumentoLocalDataSourceImpl implements TipoDocumentoLocalDataSource {
   @override
   Future<int> saveTipoDocumento(TipoDocumentoModel tipoDocumento) async {
     try {
-      final res = await supabase
-          .from('TiposDocumento_GrupoFamiliar')
-          .insert(tipoDocumento.toJson());
+      await supabase
+          .from('tiposdocumento_grupofamiliar')
+          .upsert(tipoDocumento.toJson());
 
-      return res;
+      return tipoDocumento.tipoDocumentoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

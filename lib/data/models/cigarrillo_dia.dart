@@ -10,7 +10,10 @@ class CigarrilloDiaModel extends CigarrilloDiaEntity {
   const CigarrilloDiaModel({
     int? numeroCigarrilloDiaId,
     String? descripcion,
-  });
+  }) : super(
+          numeroCigarrilloDiaId: numeroCigarrilloDiaId,
+          descripcion: descripcion,
+        );
 
   static CigarrilloDiaModel fromEntity(CigarrilloDiaEntity entity) {
     return CigarrilloDiaModel(

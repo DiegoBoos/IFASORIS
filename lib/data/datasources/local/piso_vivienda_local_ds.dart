@@ -15,7 +15,7 @@ class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
   @override
   Future<List<PisoViviendaModel>> getPisosVivienda() async {
     try {
-      final res = await supabase.from('PisosVivienda_DatosVivienda').select();
+      final res = await supabase.from('pisosvivienda_datosvivienda').select();
       final result = List<PisoViviendaModel>.from(
           res.map((m) => PisoViviendaModel.fromJson(m))).toList();
 
@@ -30,11 +30,11 @@ class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
   @override
   Future<int> savePisoVivienda(PisoViviendaModel pisoVivienda) async {
     try {
-      final res = await supabase
-          .from('PisosVivienda_DatosVivienda')
-          .insert(pisoVivienda.toJson());
+      await supabase
+          .from('pisosvivienda_datosvivienda')
+          .upsert(pisoVivienda.toJson());
 
-      return res;
+      return pisoVivienda.pisoViviendaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -46,7 +46,7 @@ class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
   Future<List<LstPiso>> getPisosViviendaVivienda(int? datoViviendaId) async {
     try {
       final res = await supabase
-          .from('Asp2_DatosViviendaPisos')
+          .from('asp2_datosviviendapisos')
           .select()
           .eq('DatoVivienda_id', datoViviendaId);
       final result =
@@ -66,7 +66,7 @@ class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
     try {
       // First, delete existing records for the given datoViviendaId
       await supabase
-          .from('Asp2_DatosViviendaPisos')
+          .from('asp2_datosviviendapisos')
           .delete()
           .eq('DatoVivienda_id', datoViviendaId);
 
@@ -81,7 +81,7 @@ class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
 
       // Insert the new records
       final res =
-          await supabase.from('Asp2_DatosViviendaPisos').insert(viviendaPisos);
+          await supabase.from('asp2_datosviviendapisos').upsert(viviendaPisos);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;

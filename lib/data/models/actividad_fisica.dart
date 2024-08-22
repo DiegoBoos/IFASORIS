@@ -10,7 +10,10 @@ class ActividadFisicaModel extends ActividadFisicaEntity {
   const ActividadFisicaModel({
     int? actividadFisicaId,
     String? descripcion,
-  });
+  }) : super(
+          actividadFisicaId: actividadFisicaId,
+          descripcion: descripcion,
+        );
 
   static fromEntity(ActividadFisicaEntity actividadFisica) {
     return ActividadFisicaModel(

@@ -13,7 +13,11 @@ class EspecialidadMedTradicionalModel extends EspecialidadMedTradicionalEntity {
     int? especialidadMedTradId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          especialidadMedTradId: especialidadMedTradId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static EspecialidadMedTradicionalModel fromEntity(
       EspecialidadMedTradicionalEntity entity) {

@@ -8,28 +8,32 @@ List<EnfermedadTradicionalModel> enfermedadesTradicionalesFromJson(
         json.decode(str).map((x) => EnfermedadTradicionalModel.fromJson(x)));
 
 class EnfermedadTradicionalModel extends EnfermedadTradicionalEntity {
-  const EnfermedadTradicionalModel({
-    int? enfermedadTradicionalId,
-    String? descripcion,
-  });
+  const EnfermedadTradicionalModel(
+      {int? enfermedadTradicionalId, String? descripcion, int? departamentoId})
+      : super(
+            enfermedadTradicionalId: enfermedadTradicionalId,
+            descripcion: descripcion,
+            departamentoId: departamentoId);
 
   static EnfermedadTradicionalModel fromEntity(
       EnfermedadTradicionalEntity entity) {
     return EnfermedadTradicionalModel(
-      enfermedadTradicionalId: entity.enfermedadTradicionalId,
-      descripcion: entity.descripcion,
-    );
+        enfermedadTradicionalId: entity.enfermedadTradicionalId,
+        descripcion: entity.descripcion,
+        departamentoId: entity.departamentoId);
   }
 
   factory EnfermedadTradicionalModel.fromJson(Map<String, dynamic> json) =>
       EnfermedadTradicionalModel(
         enfermedadTradicionalId: json["EnfermedadTradicional_id"],
         descripcion: json["Descripcion"],
+        departamentoId: json["Departamento_Ide"],
       );
 
   Map<String, dynamic> toJson() => {
         "EnfermedadTradicional_id": enfermedadTradicionalId,
         "Descripcion": descripcion,
+        "Departamento_Ide": departamentoId
       };
 }
 

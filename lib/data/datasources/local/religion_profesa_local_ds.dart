@@ -15,7 +15,7 @@ class ReligionProfesaLocalDataSourceImpl
   Future<List<ReligionProfesaModel>> getReligionesProfesa() async {
     try {
       final res = await supabase
-          .from('ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
+          .from('religionesprofesa_dimsocioculturalpueblosindigenas')
           .select();
       final result = List<ReligionProfesaModel>.from(
           res.map((m) => ReligionProfesaModel.fromJson(m))).toList();
@@ -31,11 +31,11 @@ class ReligionProfesaLocalDataSourceImpl
   @override
   Future<int> saveReligionProfesa(ReligionProfesaModel religionProfesa) async {
     try {
-      final res = await supabase
-          .from('ReligionesProfesa_DimSocioCulturalPueblosIndigenas')
-          .insert(religionProfesa.toJson());
+      await supabase
+          .from('religionesprofesa_dimsocioculturalpueblosindigenas')
+          .upsert(religionProfesa.toJson());
 
-      return res;
+      return religionProfesa.religionProfesaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

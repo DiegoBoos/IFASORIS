@@ -12,7 +12,10 @@ class TiempoTardaMedTradicionalModel extends TiempoTardaMedTradicionalEntity {
   const TiempoTardaMedTradicionalModel({
     int? tiempoTardaMedTradId,
     String? descripcion,
-  });
+  }) : super(
+          tiempoTardaMedTradId: tiempoTardaMedTradId,
+          descripcion: descripcion,
+        );
 
   static TiempoTardaMedTradicionalModel fromEntity(
       TiempoTardaMedTradicionalEntity entity) {

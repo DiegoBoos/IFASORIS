@@ -18,9 +18,8 @@ class _CambioDispositivoPageState extends State<CambioDispositivoPage> {
 
   @override
   void initState() {
-    final authBloc = BlocProvider.of<AuthBloc>(context);
-    final usuario = authBloc.state.usuario;
-    _textController.text = usuario?.userName ?? '';
+    final userName = supabase.auth.currentUser?.userMetadata?['username'];
+    _textController.text = userName ?? '';
     super.initState();
   }
 

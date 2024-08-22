@@ -10,7 +10,10 @@ class LenguaManejaModel extends LenguaManejaEntity {
   const LenguaManejaModel({
     int? lenguaManejaId,
     String? descripcion,
-  });
+  }) : super(
+          lenguaManejaId: lenguaManejaId,
+          descripcion: descripcion,
+        );
 
   static LenguaManejaModel fromEntity(LenguaManejaEntity entity) {
     return LenguaManejaModel(

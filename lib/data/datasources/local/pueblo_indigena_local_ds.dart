@@ -15,7 +15,7 @@ class PuebloIndigenaLocalDataSourceImpl
   Future<List<PuebloIndigenaModel>> getPueblosIndigenas() async {
     try {
       final res =
-          await supabase.from('PueblosIndigenas_GrupoFamiliar').select();
+          await supabase.from('pueblosindigenas_grupofamiliar').select();
       final result = List<PuebloIndigenaModel>.from(
           res.map((m) => PuebloIndigenaModel.fromJson(m))).toList();
 
@@ -30,11 +30,11 @@ class PuebloIndigenaLocalDataSourceImpl
   @override
   Future<int> savePuebloIndigena(PuebloIndigenaModel puebloIndigena) async {
     try {
-      final res = await supabase
-          .from('PueblosIndigenas_GrupoFamiliar')
-          .insert(puebloIndigena.toJson());
+      await supabase
+          .from('pueblosindigenas_grupofamiliar')
+          .upsert(puebloIndigena.toJson());
 
-      return res;
+      return puebloIndigena.puebloIde!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

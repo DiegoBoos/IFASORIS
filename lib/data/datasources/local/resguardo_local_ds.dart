@@ -13,7 +13,7 @@ class ResguardoLocalDataSourceImpl implements ResguardoLocalDataSource {
   @override
   Future<List<ResguardoModel>> getResguardos() async {
     try {
-      final res = await supabase.from('Resguardos').select();
+      final res = await supabase.from('resguardos').select();
       final result =
           List<ResguardoModel>.from(res.map((m) => ResguardoModel.fromJson(m)))
               .toList();
@@ -29,9 +29,9 @@ class ResguardoLocalDataSourceImpl implements ResguardoLocalDataSource {
   @override
   Future<int> saveResguardo(ResguardoModel resguardo) async {
     try {
-      final res = await supabase.from('Resguardos').insert(resguardo.toJson());
+      await supabase.from('resguardos').upsert(resguardo.toJson());
 
-      return res;
+      return resguardo.resguardoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

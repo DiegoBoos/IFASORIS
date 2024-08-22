@@ -8,12 +8,10 @@ abstract class TipoCombustibleViviendaLocalDataSource {
   Future<List<TipoCombustibleViviendaModel>> getTiposCombustible();
   Future<int> saveTipoCombustibleVivienda(
       TipoCombustibleViviendaModel tipoCombustibleVivienda);
-
-  Future<int> saveTiposCombustibleVivienda(
-      int datoViviendaId, List<LstTipoCombustible> lstTipoCombustible);
-
   Future<List<LstTipoCombustible>> getTiposCombustibleVivienda(
       int? datoViviendaId);
+  Future<int> saveTiposCombustibleVivienda(
+      int datoViviendaId, List<LstTipoCombustible> lstTipoCombustible);
 }
 
 class TipoCombustibleViviendaLocalDataSourceImpl
@@ -22,7 +20,7 @@ class TipoCombustibleViviendaLocalDataSourceImpl
   Future<List<TipoCombustibleViviendaModel>> getTiposCombustible() async {
     try {
       final res = await supabase
-          .from('TiposCombustibleVivienda_DatosVivienda')
+          .from('tiposcombustiblevivienda_datosvivienda')
           .select();
       final result = List<TipoCombustibleViviendaModel>.from(
           res.map((m) => TipoCombustibleViviendaModel.fromJson(m))).toList();
@@ -39,11 +37,30 @@ class TipoCombustibleViviendaLocalDataSourceImpl
   Future<int> saveTipoCombustibleVivienda(
       TipoCombustibleViviendaModel tipoCombustibleVivienda) async {
     try {
-      final res = await supabase
-          .from('TiposCombustibleVivienda_DatosVivienda')
-          .insert(tipoCombustibleVivienda.toJson());
+      await supabase
+          .from('tiposcombustiblevivienda_datosvivienda')
+          .upsert(tipoCombustibleVivienda.toJson());
 
-      return res;
+      return tipoCombustibleVivienda.tipoCombustibleViviendaId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstTipoCombustible>> getTiposCombustibleVivienda(
+      int? datoViviendaId) async {
+    try {
+      final res = await supabase
+          .from('asp2_datosviviendatiposcombustible')
+          .select()
+          .eq('DatoVivienda_id', datoViviendaId);
+      final result = List<LstTipoCombustible>.from(
+          res.map((m) => LstTipoCombustible.fromJson(m))).toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -57,7 +74,7 @@ class TipoCombustibleViviendaLocalDataSourceImpl
     try {
       // First, delete existing records for the given datoViviendaId
       await supabase
-          .from('Asp2_DatosViviendaTiposCombustible')
+          .from('asp2_datosviviendatiposcombustible')
           .delete()
           .eq('DatoVivienda_id', datoViviendaId);
 
@@ -72,30 +89,11 @@ class TipoCombustibleViviendaLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp2_DatosViviendaTiposCombustible')
-          .insert(viviendaTiposCombustible);
+          .from('asp2_datosviviendatiposcombustible')
+          .upsert(viviendaTiposCombustible);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstTipoCombustible>> getTiposCombustibleVivienda(
-      int? datoViviendaId) async {
-    try {
-      final res = await supabase
-          .from('Asp2_DatosViviendaTiposCombustible')
-          .select()
-          .eq('DatoVivienda_id', datoViviendaId);
-      final result = List<LstTipoCombustible>.from(
-          res.map((m) => LstTipoCombustible.fromJson(m))).toList();
-
-      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

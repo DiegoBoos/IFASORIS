@@ -10,7 +10,10 @@ class OcupacionModel extends OcupacionEntity {
   const OcupacionModel({
     int? ocupacionId,
     String? descripcion,
-  });
+  }) : super(
+          ocupacionId: ocupacionId,
+          descripcion: descripcion,
+        );
 
   static OcupacionModel fromEntity(OcupacionEntity entity) {
     return OcupacionModel(

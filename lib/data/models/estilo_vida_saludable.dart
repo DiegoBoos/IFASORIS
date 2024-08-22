@@ -20,7 +20,17 @@ class EstiloVidaSaludableModel extends EstiloVidaSaludableEntity {
     int? consumeCigarrillo,
     int? numeroCigarrilloDiaId,
     int? consumoSustanciasPsicoactivas,
-  });
+  }) : super(
+          estilosVidaId: estilosVidaId,
+          afiliadoId: afiliadoId,
+          familiaId: familiaId,
+          actividadFisicaId: actividadFisicaId,
+          alimentacionId: alimentacionId,
+          consumoAlcoholId: consumoAlcoholId,
+          consumeCigarrillo: consumeCigarrillo,
+          numeroCigarrilloDiaId: numeroCigarrilloDiaId,
+          consumoSustanciasPsicoactivas: consumoSustanciasPsicoactivas,
+        );
 
   static EstiloVidaSaludableModel fromEntity(EstiloVidaSaludableEntity entity) {
     return EstiloVidaSaludableModel(

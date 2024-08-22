@@ -10,7 +10,11 @@ class VerduraModel extends VerduraEntity {
     int? verduraId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          verduraId: verduraId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static VerduraModel fromEntity(VerduraEntity entity) {
     return VerduraModel(

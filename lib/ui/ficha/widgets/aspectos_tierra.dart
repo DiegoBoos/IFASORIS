@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
 
 import '../../../data/models/cereal.dart';
 import '../../../data/models/especie_animal.dart';
@@ -13,7 +14,6 @@ import '../../../domain/entities/dim_ubicacion.dart';
 import '../../../domain/entities/hortaliza.dart';
 import '../../../domain/entities/tuberculo_platano.dart';
 import '../../../domain/entities/verdura.dart';
-import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/especie_animal/especie_animal_cubit.dart';
 import '../../cubits/fruto/fruto_cubit.dart';
@@ -88,10 +88,10 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
   @override
   Widget build(BuildContext context) {
     final dimUbicacionBloc = BlocProvider.of<DimUbicacionBloc>(context);
-    final authBloc = BlocProvider.of<AuthBloc>(context);
-    final usuario = authBloc.state.usuario;
+    final departamentoId =
+        supabase.auth.currentUser!.userMetadata!['Departamento_id'];
     String textAspectoSocioeconomico = '';
-    switch (usuario!.departamentoId) {
+    switch (departamentoId) {
       case 6:
         textAspectoSocioeconomico = 'Posee huerta o chagra';
         break;

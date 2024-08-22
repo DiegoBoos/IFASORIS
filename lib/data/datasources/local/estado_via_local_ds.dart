@@ -13,7 +13,7 @@ class EstadoViaLocalDataSourceImpl implements EstadoViaLocalDataSource {
   @override
   Future<List<EstadoViaModel>> getEstadosVias() async {
     try {
-      final res = await supabase.from('EstadoVias').select();
+      final res = await supabase.from('estadovias').select();
       final result =
           List<EstadoViaModel>.from(res.map((m) => EstadoViaModel.fromJson(m)))
               .toList();
@@ -29,8 +29,8 @@ class EstadoViaLocalDataSourceImpl implements EstadoViaLocalDataSource {
   @override
   Future<int> saveEstadoVia(EstadoViaModel estadoVia) async {
     try {
-      final res = await supabase.from('EstadoVias').insert(estadoVia.toJson());
-      return res;
+      await supabase.from('estadovias').upsert(estadoVia.toJson());
+      return estadoVia.estadoViaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

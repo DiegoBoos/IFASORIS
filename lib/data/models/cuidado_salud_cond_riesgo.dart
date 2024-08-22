@@ -31,7 +31,24 @@ class CuidadoSaludCondRiesgoModel extends CuidadoSaludCondRiesgoEntity {
     int? conductaSeguirId,
     List<LstServicioSolicitado>? lstServiciosSolicitados,
     List<LstNombreEnfermedad>? lstNombresEnfermedades,
-  });
+  }) : super(
+          cuidadoSaludCondRiesgoId: cuidadoSaludCondRiesgoId,
+          afiliadoId: afiliadoId,
+          familiaId: familiaId,
+          ultimaVezInstSaludId: ultimaVezInstSaludId,
+          seguimientoEnfermedadId: seguimientoEnfermedadId,
+          condicionNutricionalId: condicionNutricionalId,
+          tosFlemaId: tosFlemaId,
+          manchasPielId: manchasPielId,
+          carnetVacunacionId: carnetVacunacionId,
+          esquemaVacunacionId: esquemaVacunacionId,
+          lugarVacunacionId: lugarVacunacionId,
+          utilizaMetodoPlanificacionId: utilizaMetodoPlanificacionId,
+          metodoPlanificacionId: metodoPlanificacionId,
+          conductaSeguirId: conductaSeguirId,
+          lstServiciosSolicitados: lstServiciosSolicitados,
+          lstNombresEnfermedades: lstNombresEnfermedades,
+        );
 
   static CuidadoSaludCondRiesgoModel fromEntity(
       CuidadoSaludCondRiesgoEntity entity) {

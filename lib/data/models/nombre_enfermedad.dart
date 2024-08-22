@@ -7,15 +7,19 @@ List<NombreEnfermedadModel> nombresEnfermedadesFromJson(String str) =>
         json.decode(str).map((x) => NombreEnfermedadModel.fromJson(x)));
 
 class NombreEnfermedadModel extends NombreEnfermedadEntity {
-  const NombreEnfermedadModel({
-    int? nombreEnfermedadId,
-    String? descripcion,
-  });
+  const NombreEnfermedadModel(
+      {int? nombreEnfermedadId, String? descripcion, int? departamentoId})
+      : super(
+          nombreEnfermedadId: nombreEnfermedadId,
+          descripcion: descripcion,
+          departamentoId: departamentoId,
+        );
 
   static NombreEnfermedadModel fromEntity(NombreEnfermedadEntity entity) {
     return NombreEnfermedadModel(
       nombreEnfermedadId: entity.nombreEnfermedadId,
       descripcion: entity.descripcion,
+      departamentoId: entity.departamentoId,
     );
   }
 
@@ -23,11 +27,13 @@ class NombreEnfermedadModel extends NombreEnfermedadEntity {
       NombreEnfermedadModel(
         nombreEnfermedadId: json["NombreEnfermedad_id"],
         descripcion: json["Descripcion"],
+        departamentoId: json["Departamento_Ide"],
       );
 
   Map<String, dynamic> toJson() => {
         "NombreEnfermedad_id": nombreEnfermedadId,
         "Descripcion": descripcion,
+        "Departamento_Ide": departamentoId
       };
 }
 

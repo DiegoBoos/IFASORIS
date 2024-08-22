@@ -13,7 +13,7 @@ class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
   @override
   Future<List<GrupoRiesgoModel>> getGruposRiesgo() async {
     try {
-      final res = await supabase.from('GrupoRiesgo_GrupoFamiliar').select();
+      final res = await supabase.from('gruporiesgo_grupofamiliar').select();
       final result = List<GrupoRiesgoModel>.from(
           res.map((m) => GrupoRiesgoModel.fromJson(m))).toList();
 
@@ -28,11 +28,11 @@ class GrupoRiesgoLocalDataSourceImpl implements GrupoRiesgoLocalDataSource {
   @override
   Future<int> saveGrupoRiesgo(GrupoRiesgoModel grupoRiesgo) async {
     try {
-      final res = await supabase
-          .from('GrupoRiesgo_GrupoFamiliar')
-          .insert(grupoRiesgo.toJson());
+      await supabase
+          .from('gruporiesgo_grupofamiliar')
+          .upsert(grupoRiesgo.toJson());
 
-      return res;
+      return grupoRiesgo.grupoRiesgoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

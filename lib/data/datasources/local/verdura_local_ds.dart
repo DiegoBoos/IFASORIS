@@ -7,11 +7,9 @@ import '../../models/verdura.dart';
 abstract class VerduraLocalDataSource {
   Future<List<VerduraModel>> getVerduras();
   Future<int> saveVerdura(VerduraModel verdura);
-
+  Future<List<LstVerdura>> getUbicacionVerduras(int? ubicacionId);
   Future<int> saveUbicacionVerduras(
       int ubicacionId, List<LstVerdura> lstVerduras);
-
-  Future<List<LstVerdura>> getUbicacionVerduras(int? ubicacionId);
 }
 
 class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
@@ -19,7 +17,7 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
   Future<List<VerduraModel>> getVerduras() async {
     try {
       final res =
-          await supabase.from('Verduras_AspectosSocioEconomicos').select();
+          await supabase.from('verduras_aspectossocioeconomicos').select();
       final result =
           List<VerduraModel>.from(res.map((m) => VerduraModel.fromJson(m)))
               .toList();
@@ -35,11 +33,30 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
   @override
   Future<int> saveVerdura(VerduraModel verdura) async {
     try {
-      final res = await supabase
-          .from('Verduras_AspectosSocioEconomicos')
-          .insert(verdura.toJson());
+      await supabase
+          .from('verduras_aspectossocioeconomicos')
+          .upsert(verdura.toJson());
 
-      return res;
+      return verdura.verduraId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstVerdura>> getUbicacionVerduras(int? ubicacionId) async {
+    try {
+      final res = await supabase
+          .from('asp1_ubicacionverduras')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final result =
+          List<LstVerdura>.from(res.map((m) => LstVerdura.fromJson(m)))
+              .toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -53,7 +70,7 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionVerduras')
+          .from('asp1_ubicacionverduras')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -68,30 +85,11 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionVerduras')
-          .insert(ubicacionVerduras);
+          .from('asp1_ubicacionverduras')
+          .upsert(ubicacionVerduras);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstVerdura>> getUbicacionVerduras(int? ubicacionId) async {
-    try {
-      final res = await supabase
-          .from('Asp1_UbicacionVerduras')
-          .select()
-          .eq('Ubicacion_id', ubicacionId);
-      final result =
-          List<LstVerdura>.from(res.map((m) => LstVerdura.fromJson(m)))
-              .toList();
-
-      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

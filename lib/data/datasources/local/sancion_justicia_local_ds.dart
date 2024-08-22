@@ -15,7 +15,7 @@ class SancionJusticiaLocalDataSourceImpl
   Future<List<SancionJusticiaModel>> getSancionesJusticia() async {
     try {
       final res = await supabase
-          .from('SancionesJusticia_DimSocioCulturalPueblosIndigenas')
+          .from('sancionesjusticia_dimsocioculturalpueblosindigenas')
           .select();
       final result = List<SancionJusticiaModel>.from(
           res.map((m) => SancionJusticiaModel.fromJson(m))).toList();
@@ -31,11 +31,11 @@ class SancionJusticiaLocalDataSourceImpl
   @override
   Future<int> saveSancionJusticia(SancionJusticiaModel sancionJusticia) async {
     try {
-      final res = await supabase
-          .from('SancionesJusticia_DimSocioCulturalPueblosIndigenas')
-          .insert(sancionJusticia.toJson());
+      await supabase
+          .from('sancionesjusticia_dimsocioculturalpueblosindigenas')
+          .upsert(sancionJusticia.toJson());
 
-      return res;
+      return sancionJusticia.sancionJusticiaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

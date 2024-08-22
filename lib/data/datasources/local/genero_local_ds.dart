@@ -13,7 +13,7 @@ class GeneroLocalDataSourceImpl implements GeneroLocalDataSource {
   @override
   Future<List<GeneroModel>> getGeneros() async {
     try {
-      final res = await supabase.from('Genero_GrupoFamiliar').select();
+      final res = await supabase.from('genero_grupofamiliar').select();
       final result =
           List<GeneroModel>.from(res.map((m) => GeneroModel.fromJson(m)))
               .toList();
@@ -29,10 +29,9 @@ class GeneroLocalDataSourceImpl implements GeneroLocalDataSource {
   @override
   Future<int> saveGenero(GeneroModel genero) async {
     try {
-      final res =
-          await supabase.from('Genero_GrupoFamiliar').insert(genero.toJson());
+      await supabase.from('genero_grupofamiliar').upsert(genero.toJson());
 
-      return res;
+      return genero.generoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

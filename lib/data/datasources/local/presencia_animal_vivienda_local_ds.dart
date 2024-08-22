@@ -8,10 +8,8 @@ abstract class PresenciaAnimalViviendaLocalDataSource {
   Future<List<PresenciaAnimalViviendaModel>> getPresenciaAnimales();
   Future<int> savePresenciaAnimalVivienda(
       PresenciaAnimalViviendaModel presenciaAnimalVivienda);
-
   Future<List<LstPresenciaAnimal>> getPresenciasAnimalesVivienda(
       int? datoViviendaId);
-
   Future<int> savePresenciaAnimalesVivienda(
       int datoViviendaId, List<LstPresenciaAnimal> lstPresenciaAnimal);
 }
@@ -22,7 +20,7 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
   Future<List<PresenciaAnimalViviendaModel>> getPresenciaAnimales() async {
     try {
       final res = await supabase
-          .from('PresenciaAnimalesVivienda_DatosVivienda')
+          .from('presenciaanimalesvivienda_datosvivienda')
           .select();
       final result = List<PresenciaAnimalViviendaModel>.from(
           res.map((m) => PresenciaAnimalViviendaModel.fromJson(m))).toList();
@@ -39,11 +37,11 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
   Future<int> savePresenciaAnimalVivienda(
       PresenciaAnimalViviendaModel presenciaAnimalVivienda) async {
     try {
-      final res = await supabase
-          .from('PresenciaAnimalesVivienda_DatosVivienda')
-          .insert(presenciaAnimalVivienda.toJson());
+      await supabase
+          .from('presenciaanimalesvivienda_datosvivienda')
+          .upsert(presenciaAnimalVivienda.toJson());
 
-      return res;
+      return presenciaAnimalVivienda.presenciaAnimalViviendaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -57,7 +55,7 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
     try {
       // First, delete existing records for the given datoViviendaId
       await supabase
-          .from('Asp2_DatosViviendaPresenciaAnimales')
+          .from('asp2_datosviviendapresenciaanimales')
           .delete()
           .eq('DatoVivienda_id', datoViviendaId);
 
@@ -72,8 +70,8 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp2_DatosViviendaPresenciaAnimales')
-          .insert(viviendaPresenciaAnimales);
+          .from('asp2_datosviviendapresenciaanimales')
+          .upsert(viviendaPresenciaAnimales);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
@@ -89,7 +87,7 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
       int? datoViviendaId) async {
     try {
       final res = await supabase
-          .from('Asp2_DatosViviendaPresenciaAnimales')
+          .from('asp2_datosviviendapresenciaanimales')
           .select()
           .eq('DatoVivienda_id', datoViviendaId);
       final result = List<LstPresenciaAnimal>.from(

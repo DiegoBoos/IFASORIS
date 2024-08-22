@@ -15,7 +15,7 @@ class ActividadFisicaLocalDataSourceImpl
   Future<List<ActividadFisicaModel>> getActividadesFisicas() async {
     try {
       final res = await supabase
-          .from('ActividadesFisicas_EstilosVidaSaludable')
+          .from('actividadesfisicas_estilosvidasaludable')
           .select();
       final result = List<ActividadFisicaModel>.from(
           res.map((m) => ActividadFisicaModel.fromJson(m))).toList();
@@ -31,11 +31,11 @@ class ActividadFisicaLocalDataSourceImpl
   @override
   Future<int> saveActividadFisica(ActividadFisicaModel actividadFisica) async {
     try {
-      final res = await supabase
-          .from('ActividadesFisicas_EstilosVidaSaludable')
-          .insert(actividadFisica.toJson());
+      await supabase
+          .from('actividadesfisicas_estilosvidasaludable')
+          .upsert(actividadFisica.toJson());
 
-      return res;
+      return actividadFisica.actividadFisicaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

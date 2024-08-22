@@ -10,7 +10,11 @@ class GeneroModel extends GeneroEntity {
     int? generoId,
     String? tipo,
     String? descripcion,
-  });
+  }) : super(
+          generoId: generoId,
+          tipo: tipo,
+          descripcion: descripcion,
+        );
 
   static GeneroModel fromEntity(GeneroEntity entity) {
     return GeneroModel(

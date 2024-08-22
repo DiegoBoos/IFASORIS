@@ -54,10 +54,10 @@ class TenenciaViviendaChanged extends DimViviendaEvent {
   const TenenciaViviendaChanged(this.tenenciaViviendaId);
 }
 
-class CuartoViviendaChanged extends DimViviendaEvent {
-  final int cuartosViviendaId;
+class NroCuartoViviendaChanged extends DimViviendaEvent {
+  final int nroCuartosViviendaId;
 
-  const CuartoViviendaChanged(this.cuartosViviendaId);
+  const NroCuartoViviendaChanged(this.nroCuartosViviendaId);
 }
 
 class PisosViviendaChanged extends DimViviendaEvent {

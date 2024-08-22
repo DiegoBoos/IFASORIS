@@ -1,8 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:ifasoris/domain/usecases/afiliado/afiliado_exports.dart';
 
 import '../../../core/error/failure.dart';
-import '../../../domain/repositories/afiliado/afiliado_repository_db.dart';
-import '../../datasources/local/afiliado_local_ds.dart';
 import '../../models/afiliado.dart';
 import '../../models/ficha.dart';
 
@@ -16,6 +15,19 @@ class AfiliadoRepositoryDBImpl implements AfiliadoRepositoryDB {
       String query) async {
     try {
       final result = await afiliadoLocalDataSource.getAfiliados(query);
+      return Right(result);
+    } on DatabaseFailure catch (e) {
+      return Left(DatabaseFailure(e.properties));
+    } on ServerFailure {
+      return const Left(DatabaseFailure(['Excepción no controlada']));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> saveAfiliadoRepositoryDB(
+      AfiliadoEntity afiliado) async {
+    try {
+      final result = await afiliadoLocalDataSource.saveAfiliado(afiliado);
       return Right(result);
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));

@@ -13,7 +13,7 @@ class CursoVidaLocalDataSourceImpl implements CursoVidaLocalDataSource {
   @override
   Future<List<CursoVidaModel>> getCursosVida() async {
     try {
-      final res = await supabase.from('CursoVida_GrupoFamiliar').select();
+      final res = await supabase.from('cursovida_grupofamiliar').select();
       final result =
           List<CursoVidaModel>.from(res.map((m) => CursoVidaModel.fromJson(m)))
               .toList();
@@ -29,11 +29,9 @@ class CursoVidaLocalDataSourceImpl implements CursoVidaLocalDataSource {
   @override
   Future<int> saveCursoVida(CursoVidaModel cursoVida) async {
     try {
-      final res = await supabase
-          .from('CursoVida_GrupoFamiliar')
-          .insert(cursoVida.toJson());
+      await supabase.from('cursovida_grupofamiliar').upsert(cursoVida.toJson());
 
-      return res;
+      return cursoVida.cursoVidaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

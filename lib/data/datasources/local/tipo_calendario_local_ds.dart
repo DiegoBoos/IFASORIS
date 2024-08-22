@@ -15,7 +15,7 @@ class TipoCalendarioLocalDataSourceImpl
   Future<List<TipoCalendarioModel>> getTiposCalendario() async {
     try {
       final res = await supabase
-          .from('TiposCalendarios_AspectosSocioEconomicos')
+          .from('tiposcalendarios_aspectossocioeconomicos')
           .select();
       final result = List<TipoCalendarioModel>.from(
           res.map((m) => TipoCalendarioModel.fromJson(m))).toList();
@@ -31,11 +31,11 @@ class TipoCalendarioLocalDataSourceImpl
   @override
   Future<int> saveTipoCalendario(TipoCalendarioModel tipoCalendario) async {
     try {
-      final res = await supabase
-          .from('TiposCalendarios_AspectosSocioEconomicos')
-          .insert(tipoCalendario.toJson());
+      await supabase
+          .from('tiposcalendarios_aspectossocioeconomicos')
+          .upsert(tipoCalendario.toJson());
 
-      return res;
+      return tipoCalendario.tipoCalendarioId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

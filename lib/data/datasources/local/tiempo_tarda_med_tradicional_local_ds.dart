@@ -17,7 +17,7 @@ class TiempoTardaMedTradicionalLocalDataSourceImpl
       getTiemposTardaMedTradicional() async {
     try {
       final res =
-          await supabase.from('TiemposTarda_AccesoMedTradicional').select();
+          await supabase.from('tiempostarda_accesomedtradicional').select();
       final result = List<TiempoTardaMedTradicionalModel>.from(
           res.map((m) => TiempoTardaMedTradicionalModel.fromJson(m))).toList();
 
@@ -33,11 +33,11 @@ class TiempoTardaMedTradicionalLocalDataSourceImpl
   Future<int> saveTiempoTardaMedTradicional(
       TiempoTardaMedTradicionalModel tiempoTardaMedTradicional) async {
     try {
-      final res = await supabase
-          .from('TiemposTarda_AccesoMedTradicional')
-          .insert(tiempoTardaMedTradicional.toJson());
+      await supabase
+          .from('tiempostarda_accesomedtradicional')
+          .upsert(tiempoTardaMedTradicional.toJson());
 
-      return res;
+      return tiempoTardaMedTradicional.tiempoTardaMedTradId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

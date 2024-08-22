@@ -11,7 +11,11 @@ class TipoDocumentoModel extends TipoDocumentoEntity {
     int? tipoDocumentoId,
     String? tipo,
     String? descripcion,
-  });
+  }) : super(
+          tipoDocumentoId: tipoDocumentoId,
+          tipo: tipo,
+          descripcion: descripcion,
+        );
 
   static TipoDocumentoModel fromEntity(TipoDocumentoEntity entity) {
     return TipoDocumentoModel(

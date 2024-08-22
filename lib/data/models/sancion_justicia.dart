@@ -10,7 +10,10 @@ class SancionJusticiaModel extends SancionJusticiaEntity {
   const SancionJusticiaModel({
     int? sancionJusticiaId,
     String? descripcion,
-  });
+  }) : super(
+          sancionJusticiaId: sancionJusticiaId,
+          descripcion: descripcion,
+        );
 
   static SancionJusticiaModel fromEntity(SancionJusticiaEntity entity) {
     return SancionJusticiaModel(

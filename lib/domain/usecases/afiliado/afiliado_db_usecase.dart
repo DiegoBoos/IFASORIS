@@ -15,6 +15,10 @@ class AfiliadoUsecaseDB {
     return repositoryDB.getAfiliadosRepositoryDB(query);
   }
 
+  Future<Either<Failure, void>> saveAfiliadoUsecaseDB(AfiliadoEntity afiliado) {
+    return repositoryDB.saveAfiliadoRepositoryDB(afiliado);
+  }
+
   Future<Either<Failure, FichaEntity?>> afiliadoTieneFichaRepositoryDB(
       int afiliadoId) {
     return repositoryDB.afiliadoTieneFichaRepositoryDB(afiliadoId);

@@ -10,7 +10,10 @@ class GrupoRiesgoModel extends GrupoRiesgoEntity {
   const GrupoRiesgoModel({
     int? grupoRiesgoId,
     String? descripcion,
-  });
+  }) : super(
+          grupoRiesgoId: grupoRiesgoId,
+          descripcion: descripcion,
+        );
 
   static GrupoRiesgoModel fromEntity(GrupoRiesgoEntity entity) {
     return GrupoRiesgoModel(

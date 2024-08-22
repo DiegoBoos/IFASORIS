@@ -15,7 +15,7 @@ class AutoridadIndigenaLocalDataSourceImpl
   Future<List<AutoridadIndigenaModel>> getAutoridadesIndigenas() async {
     try {
       final res =
-          await supabase.from('AutoridadesIndigenas_DatosVivienda').select();
+          await supabase.from('autoridadesindigenas_datosvivienda').select();
       final result = List<AutoridadIndigenaModel>.from(
           res.map((m) => AutoridadIndigenaModel.fromJson(m))).toList();
 
@@ -31,11 +31,11 @@ class AutoridadIndigenaLocalDataSourceImpl
   Future<int> saveAutoridadIndigena(
       AutoridadIndigenaModel autoridadIndigena) async {
     try {
-      final res = await supabase
-          .from('AutoridadesIndigenas_DatosVivienda')
-          .insert(autoridadIndigena.toJson());
+      await supabase
+          .from('autoridadesindigenas_datosvivienda')
+          .upsert(autoridadIndigena.toJson());
 
-      return res;
+      return autoridadIndigena.autoridadIndigenaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

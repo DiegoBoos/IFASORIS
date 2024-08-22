@@ -9,7 +9,10 @@ class EtniaModel extends EtniaEntity {
   const EtniaModel({
     int? etniaId,
     String? descripcion,
-  });
+  }) : super(
+          etniaId: etniaId,
+          descripcion: descripcion,
+        );
 
   static EtniaModel fromEntity(EtniaEntity entity) {
     return EtniaModel(

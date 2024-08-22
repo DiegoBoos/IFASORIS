@@ -16,7 +16,7 @@ class NombreLenguaMaternaLocalDataSourceImpl
   Future<List<NombreLenguaMaternaModel>> getNombresLenguasMaterna() async {
     try {
       final res =
-          await supabase.from('NombreLenguaMaterna_GrupoFamiliar').select();
+          await supabase.from('nombrelenguamaterna_grupofamiliar').select();
       final result = List<NombreLenguaMaternaModel>.from(
           res.map((m) => NombreLenguaMaternaModel.fromJson(m))).toList();
 
@@ -32,11 +32,11 @@ class NombreLenguaMaternaLocalDataSourceImpl
   Future<int> saveNombreLenguaMaterna(
       NombreLenguaMaternaModel nombreLenguaMaterna) async {
     try {
-      final res = await supabase
-          .from('NombreLenguaMaterna_GrupoFamiliar')
-          .insert(nombreLenguaMaterna.toJson());
+      await supabase
+          .from('nombrelenguamaterna_grupofamiliar')
+          .upsert(nombreLenguaMaterna.toJson());
 
-      return res;
+      return nombreLenguaMaterna.lenguaMaternaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -11,7 +11,11 @@ class TipoSanitarioViviendaModel extends TipoSanitarioViviendaEntity {
     int? tipoSanitarioViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          tipoSanitarioViviendaId: tipoSanitarioViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static TipoSanitarioViviendaModel fromEntity(
       TipoSanitarioViviendaEntity entity) {

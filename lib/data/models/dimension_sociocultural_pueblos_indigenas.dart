@@ -30,7 +30,21 @@ class DimensionSocioCulturalPueblosIndigenasModel
     int? sitiosSagradosId,
     String? cualesSitiosSagrados,
     List<LstEventoCostumbreParticipa>? lstEventoCostumbreParticipa,
-  });
+  }) : super(
+          dimSocioCulturalPueblosIndigenasId:
+              dimSocioCulturalPueblosIndigenasId,
+          afiliadoId: afiliadoId,
+          familiaId: familiaId,
+          religionProfesaId: religionProfesaId,
+          conoceUsosCostumbresId: conoceUsosCostumbresId,
+          cualesUsosCostumbres: cualesUsosCostumbres,
+          participaCostumbresId: participaCostumbresId,
+          costumbrePracticaId: costumbrePracticaId,
+          sancionJusticiaId: sancionJusticiaId,
+          sitiosSagradosId: sitiosSagradosId,
+          cualesSitiosSagrados: cualesSitiosSagrados,
+          lstEventoCostumbreParticipa: lstEventoCostumbreParticipa,
+        );
 
   static DimensionSocioCulturalPueblosIndigenasModel fromEntity(
       DimensionSocioCulturalPueblosIndigenasEntity entity) {

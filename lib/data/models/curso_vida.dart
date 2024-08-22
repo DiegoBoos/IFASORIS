@@ -11,7 +11,11 @@ class CursoVidaModel extends CursoVidaEntity {
     int? cursoVidaId,
     String? descripcion,
     String? rango,
-  });
+  }) : super(
+          cursoVidaId: cursoVidaId,
+          descripcion: descripcion,
+          rango: rango,
+        );
 
   static CursoVidaModel fromEntity(CursoVidaEntity entity) {
     return CursoVidaModel(

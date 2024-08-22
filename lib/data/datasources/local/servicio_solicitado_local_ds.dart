@@ -8,10 +8,8 @@ abstract class ServicioSolicitadoLocalDataSource {
   Future<List<ServicioSolicitadoModel>> getServiciosSolicitados();
   Future<int> saveServicioSolicitado(
       ServicioSolicitadoModel servicioSolicitado);
-
   Future<List<LstServicioSolicitado>> getLstServiciosSolicitados(
       int? cuidadoSaludCondRiesgoId);
-
   Future<int> saveServiciosSolicitados(int cuidadoSaludCondRiesgoId,
       List<LstServicioSolicitado> lstServiciosSolicitados);
 }
@@ -22,7 +20,7 @@ class ServicioSolicitadoLocalDataSourceImpl
   Future<List<ServicioSolicitadoModel>> getServiciosSolicitados() async {
     try {
       final res = await supabase
-          .from('ServiciosSolicitados_CuidadoSaludCondRiesgo')
+          .from('serviciossolicitados_cuidadosaludcondriesgo')
           .select();
       final result = List<ServicioSolicitadoModel>.from(
           res.map((m) => ServicioSolicitadoModel.fromJson(m))).toList();
@@ -39,11 +37,11 @@ class ServicioSolicitadoLocalDataSourceImpl
   Future<int> saveServicioSolicitado(
       ServicioSolicitadoModel servicioSolicitado) async {
     try {
-      final res = await supabase
-          .from('ServiciosSolicitados_CuidadoSaludCondRiesgo')
-          .insert(servicioSolicitado.toJson());
+      await supabase
+          .from('serviciossolicitados_cuidadosaludcondriesgo')
+          .upsert(servicioSolicitado.toJson());
 
-      return res;
+      return servicioSolicitado.servicioSolicitadoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -56,7 +54,7 @@ class ServicioSolicitadoLocalDataSourceImpl
       int? cuidadoSaludCondRiesgoId) async {
     try {
       final res = await supabase
-          .from('Asp5_CuidadoSaludCondRiesgoServiciosSolicita')
+          .from('asp5_cuidadosaludcondriesgoserviciossolicita')
           .select()
           .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludCondRiesgoId);
       final result = List<LstServicioSolicitado>.from(
@@ -76,7 +74,7 @@ class ServicioSolicitadoLocalDataSourceImpl
     try {
       // First, delete existing records for the given cuidadoSaludCondRiesgoId
       await supabase
-          .from('Asp5_CuidadoSaludCondRiesgoServiciosSolicita')
+          .from('asp5_cuidadosaludcondriesgoserviciossolicita')
           .delete()
           .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludCondRiesgoId);
 
@@ -90,8 +88,8 @@ class ServicioSolicitadoLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp5_CuidadoSaludCondRiesgoServiciosSolicita')
-          .insert(cuidadoSaludCondRiesgoServiciosSolicitados);
+          .from('asp5_cuidadosaludcondriesgoserviciossolicita')
+          .upsert(cuidadoSaludCondRiesgoServiciosSolicitados);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;

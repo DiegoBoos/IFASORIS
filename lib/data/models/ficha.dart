@@ -17,7 +17,16 @@ class FichaModel extends FichaEntity {
     DateTime? ultimaActualizacion,
     int? fichaIdRemote,
     FamiliaModel? familia,
-  });
+  }) : super(
+          fichaId: fichaId,
+          fechaCreacion: fechaCreacion,
+          numFicha: numFicha,
+          userNameCreacion: userNameCreacion,
+          userNameActualizacion: userNameActualizacion,
+          ultimaActualizacion: ultimaActualizacion,
+          fichaIdRemote: fichaIdRemote,
+          familia: familia,
+        );
 
   static FichaModel fromEntity(FichaEntity entity) {
     return FichaModel(

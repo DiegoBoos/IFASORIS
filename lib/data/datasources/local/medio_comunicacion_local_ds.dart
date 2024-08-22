@@ -7,12 +7,10 @@ import '../../models/medio_comunicacion.dart';
 abstract class MedioComunicacionLocalDataSource {
   Future<List<MedioComunicacionModel>> getMediosComunicacion();
   Future<int> saveMedioComunicacion(MedioComunicacionModel medioComunicacion);
-
-  Future<int> saveUbicacionMediosComunicacion(
-      int ubicacionId, List<LstMediosComunica> lstMediosComunica);
-
   Future<List<LstMediosComunica>> getUbicacionMediosComunicacion(
       int? ubicacionId);
+  Future<int> saveUbicacionMediosComunicacion(
+      int ubicacionId, List<LstMediosComunica> lstMediosComunica);
 }
 
 class MedioComunicacionLocalDataSourceImpl
@@ -20,7 +18,7 @@ class MedioComunicacionLocalDataSourceImpl
   @override
   Future<List<MedioComunicacionModel>> getMediosComunicacion() async {
     try {
-      final res = await supabase.from('MediosComunicacion').select();
+      final res = await supabase.from('medioscomunicacion').select();
       final mediosComunicacionDB = List<MedioComunicacionModel>.from(
           res.map((m) => MedioComunicacionModel.fromJson(m))).toList();
 
@@ -36,11 +34,30 @@ class MedioComunicacionLocalDataSourceImpl
   Future<int> saveMedioComunicacion(
       MedioComunicacionModel medioComunicacion) async {
     try {
-      final res = await supabase
-          .from('MediosComunicacion')
-          .insert(medioComunicacion.toJson());
+      await supabase
+          .from('medioscomunicacion')
+          .upsert(medioComunicacion.toJson());
 
-      return res;
+      return medioComunicacion.medioComunicacionId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstMediosComunica>> getUbicacionMediosComunicacion(
+      int? ubicacionId) async {
+    try {
+      final res = await supabase
+          .from('asp1_ubicacionmedioscomunicacion')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final ubicacionMediosComunicacionDB = List<LstMediosComunica>.from(
+          res.map((m) => LstMediosComunica.fromJson(m))).toList();
+
+      return ubicacionMediosComunicacionDB;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -54,7 +71,7 @@ class MedioComunicacionLocalDataSourceImpl
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionMediosComunicacion')
+          .from('asp1_ubicacionmedioscomunicacion')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -68,30 +85,11 @@ class MedioComunicacionLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionMediosComunicacion')
-          .insert(ubicacionMediosComunicacion);
+          .from('asp1_ubicacionmedioscomunicacion')
+          .upsert(ubicacionMediosComunicacion);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstMediosComunica>> getUbicacionMediosComunicacion(
-      int? ubicacionId) async {
-    try {
-      final res = await supabase
-          .from('Asp1_UbicacionMediosComunicacion')
-          .select()
-          .eq('Ubicacion_id', ubicacionId);
-      final ubicacionMediosComunicacionDB = List<LstMediosComunica>.from(
-          res.map((m) => LstMediosComunica.fromJson(m))).toList();
-
-      return ubicacionMediosComunicacionDB;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -17,7 +17,7 @@ class EspecieAnimalLocalDataSourceImpl implements EspecieAnimalLocalDataSource {
   Future<List<EspecieAnimalModel>> getEspeciesAnimales() async {
     try {
       final res = await supabase
-          .from('EspecieAnimalesCria_AspectosSocioEconomicos')
+          .from('especieanimalescria_aspectossocioeconomicos')
           .select();
       final result = List<EspecieAnimalModel>.from(
           res.map((m) => EspecieAnimalModel.fromJson(m))).toList();
@@ -33,11 +33,11 @@ class EspecieAnimalLocalDataSourceImpl implements EspecieAnimalLocalDataSource {
   @override
   Future<int> saveEspecieAnimal(EspecieAnimalModel especieAnimal) async {
     try {
-      final res = await supabase
-          .from('EspecieAnimalesCria_AspectosSocioEconomicos')
-          .insert(especieAnimal.toJson());
+      await supabase
+          .from('especieanimalescria_aspectossocioeconomicos')
+          .upsert(especieAnimal.toJson());
 
-      return res;
+      return especieAnimal.especieAnimalCriaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -51,7 +51,7 @@ class EspecieAnimalLocalDataSourceImpl implements EspecieAnimalLocalDataSource {
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionEspecieAnimalesCria')
+          .from('asp1_ubicacionespecieanimalescria')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -65,8 +65,8 @@ class EspecieAnimalLocalDataSourceImpl implements EspecieAnimalLocalDataSource {
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionEspecieAnimalesCria')
-          .insert(ubicacionEspeciesAnimalesCria);
+          .from('asp1_ubicacionespecieanimalescria')
+          .upsert(ubicacionEspeciesAnimalesCria);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
@@ -81,7 +81,7 @@ class EspecieAnimalLocalDataSourceImpl implements EspecieAnimalLocalDataSource {
   Future<List<LstAnimalCria>> getAsp1EspeciesAnimales(int? ubicacionId) async {
     try {
       final res = await supabase
-          .from('Asp1_UbicacionEspecieAnimalesCria')
+          .from('asp1_ubicacionespecieanimalescria')
           .select()
           .eq('Ubicacion_id', ubicacionId);
       final result =

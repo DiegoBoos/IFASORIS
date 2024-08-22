@@ -12,7 +12,11 @@ class PresenciaAnimalViviendaModel extends PresenciaAnimalViviendaEntity {
     int? presenciaAnimalViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          presenciaAnimalViviendaId: presenciaAnimalViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static PresenciaAnimalViviendaModel fromEntity(
       PresenciaAnimalViviendaEntity entity) {

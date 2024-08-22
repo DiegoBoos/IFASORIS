@@ -9,7 +9,6 @@ abstract class PlantaMedicinalLocalDataSource {
   Future<int> savePlantaMedicinal(PlantaMedicinalModel plantaMedicinal);
   Future<List<LstPlantaMedicinal>> getPlantasMedicinalesAtencionSalud(
       int? atencionSaludId);
-
   Future<int> savePlantasMedicinalesAtencionSalud(
       int atencionSaludId, List<LstPlantaMedicinal> lstPlantaMedicinal);
 }
@@ -20,7 +19,7 @@ class PlantaMedicinalLocalDataSourceImpl
   Future<List<PlantaMedicinalModel>> getPlantasMedicinales() async {
     try {
       final res =
-          await supabase.from('PlantasMedicinales_AtencionSalud').select();
+          await supabase.from('plantasmedicinales_atencionsalud').select();
       final result = List<PlantaMedicinalModel>.from(
           res.map((m) => PlantaMedicinalModel.fromJson(m))).toList();
 
@@ -35,11 +34,11 @@ class PlantaMedicinalLocalDataSourceImpl
   @override
   Future<int> savePlantaMedicinal(PlantaMedicinalModel plantaMedicinal) async {
     try {
-      final res = await supabase
-          .from('PlantasMedicinales_AtencionSalud')
-          .insert(plantaMedicinal.toJson());
+      await supabase
+          .from('plantasmedicinales_atencionsalud')
+          .upsert(plantaMedicinal.toJson());
 
-      return res;
+      return plantaMedicinal.plantaMedicinalId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -52,7 +51,7 @@ class PlantaMedicinalLocalDataSourceImpl
       int? atencionSaludId) async {
     try {
       final res = await supabase
-          .from('Asp7_PlantasMedicinales_AtencionSalud')
+          .from('asp7_plantasmedicinales_atencionsalud')
           .select()
           .eq('AtencionSalud_id', atencionSaludId);
       final result = List<LstPlantaMedicinal>.from(
@@ -72,7 +71,7 @@ class PlantaMedicinalLocalDataSourceImpl
     try {
       // First, delete existing records for the given atencionSaludId
       await supabase
-          .from('Asp7_PlantasMedicinales_AtencionSalud')
+          .from('asp7_plantasmedicinales_atencionsalud')
           .delete()
           .eq('AtencionSalud_id', atencionSaludId);
 
@@ -86,8 +85,8 @@ class PlantaMedicinalLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp7_PlantasMedicinales_AtencionSalud')
-          .insert(plantasMedicinalesAtencionSalud);
+          .from('asp7_plantasmedicinales_atencionsalud')
+          .upsert(plantasMedicinalesAtencionSalud);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;

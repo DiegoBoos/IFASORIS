@@ -11,7 +11,11 @@ class EspecieAnimalModel extends EspecieAnimalEntity {
     int? especieAnimalCriaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          especieAnimalCriaId: especieAnimalCriaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static EspecieAnimalModel fromEntity(EspecieAnimalEntity entity) {
     return EspecieAnimalModel(

@@ -12,7 +12,11 @@ class ServicioPublicoViviendaModel extends ServicioPublicoViviendaEntity {
     int? servicioPublicoViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          servicioPublicoViviendaId: servicioPublicoViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static ServicioPublicoViviendaModel fromEntity(
       ServicioPublicoViviendaEntity entity) {

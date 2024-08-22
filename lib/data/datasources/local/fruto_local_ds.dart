@@ -16,7 +16,7 @@ class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
   Future<List<FrutoModel>> getFrutos() async {
     try {
       final res =
-          await supabase.from('Frutos_AspectosSocioEconomicos').select();
+          await supabase.from('frutos_aspectossocioeconomicos').select();
       final result =
           List<FrutoModel>.from(res.map((m) => FrutoModel.fromJson(m)))
               .toList();
@@ -32,11 +32,29 @@ class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
   @override
   Future<int> saveFruto(FrutoModel fruto) async {
     try {
-      final res = await supabase
-          .from('Frutos_AspectosSocioEconomicos')
-          .insert(fruto.toJson());
+      await supabase
+          .from('frutos_aspectossocioeconomicos')
+          .upsert(fruto.toJson());
 
-      return res;
+      return fruto.frutoId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstFruto>> getUbicacionFrutos(int? ubicacionId) async {
+    try {
+      final res = await supabase
+          .from('asp1_ubicacionfrutos')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final result =
+          List<LstFruto>.from(res.map((m) => LstFruto.fromJson(m))).toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -50,7 +68,7 @@ class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionFrutos')
+          .from('asp1_ubicacionfrutos')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -64,28 +82,10 @@ class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
 
       // Insert the new records
       final res =
-          await supabase.from('Asp1_UbicacionFrutos').insert(ubicacionFrutos);
+          await supabase.from('asp1_ubicacionfrutos').upsert(ubicacionFrutos);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstFruto>> getUbicacionFrutos(int? ubicacionId) async {
-    try {
-      final res = await supabase
-          .from('Asp1_UbicacionFrutos')
-          .select()
-          .eq('Ubicacion_id', ubicacionId);
-      final result =
-          List<LstFruto>.from(res.map((m) => LstFruto.fromJson(m))).toList();
-
-      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

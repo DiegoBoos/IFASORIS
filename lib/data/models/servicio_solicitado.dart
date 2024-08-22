@@ -10,7 +10,10 @@ class ServicioSolicitadoModel extends ServicioSolicitadoEntity {
   const ServicioSolicitadoModel({
     int? servicioSolicitadoId,
     String? descripcion,
-  });
+  }) : super(
+          servicioSolicitadoId: servicioSolicitadoId,
+          descripcion: descripcion,
+        );
 
   static ServicioSolicitadoModel fromEntity(ServicioSolicitadoEntity entity) {
     return ServicioSolicitadoModel(

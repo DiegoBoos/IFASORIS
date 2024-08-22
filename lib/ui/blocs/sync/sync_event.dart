@@ -10,10 +10,10 @@ abstract class SyncEvent extends Equatable {
 class InitSync extends SyncEvent {}
 
 class SyncStarted extends SyncEvent {
-  final UsuarioEntity usuario;
+  final User user;
   final String type;
 
-  const SyncStarted(this.usuario, this.type);
+  const SyncStarted(this.user, this.type);
 }
 
 class Downloading extends SyncEvent {

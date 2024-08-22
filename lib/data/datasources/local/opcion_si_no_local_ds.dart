@@ -13,7 +13,7 @@ class OpcionSiNoLocalDataSourceImpl implements OpcionSiNoLocalDataSource {
   @override
   Future<List<OpcionSiNoModel>> getOpcionesSiNo() async {
     try {
-      final res = await supabase.from('OpcionesSi_No').select();
+      final res = await supabase.from('opcionessi_no').select();
       final result = List<OpcionSiNoModel>.from(
           res.map((m) => OpcionSiNoModel.fromJson(m))).toList();
 
@@ -28,10 +28,9 @@ class OpcionSiNoLocalDataSourceImpl implements OpcionSiNoLocalDataSource {
   @override
   Future<int> saveOpcionSiNo(OpcionSiNoModel opcionSiNo) async {
     try {
-      final res =
-          await supabase.from('OpcionesSi_No').insert(opcionSiNo.toJson());
+      await supabase.from('opcionessi_no').upsert(opcionSiNo.toJson());
 
-      return res;
+      return opcionSiNo.opcionId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

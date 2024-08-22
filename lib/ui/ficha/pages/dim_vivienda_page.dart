@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/dim_vivienda.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
-import '../../cubits/cuarto_vivienda/cuarto_vivienda_cubit.dart';
+import '../../cubits/nro_cuarto_vivienda/nro_cuarto_vivienda_cubit.dart';
 import '../../cubits/factor_riesgo_vivienda/factor_riesgo_vivienda_cubit.dart';
 import '../../cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
 import '../../cubits/piso_vivienda/piso_vivienda_cubit.dart';
@@ -47,7 +47,7 @@ class _DimViviendaPageState extends State<DimViviendaPage> {
 
   getAccesoriasVivienda() {
     BlocProvider.of<TipoViviendaCubit>(context).getTiposViviendaDB();
-    BlocProvider.of<CuartoViviendaCubit>(context).getCuartosViviendaDB();
+    BlocProvider.of<NroCuartoViviendaCubit>(context).getNroCuartosViviendaDB();
     BlocProvider.of<TenenciaViviendaCubit>(context).getTenenciasViviendaDB();
     BlocProvider.of<PisoViviendaCubit>(context).getPisosViviendaDB();
     BlocProvider.of<TechoViviendaCubit>(context).getTechosViviendaDB();

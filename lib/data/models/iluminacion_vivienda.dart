@@ -10,7 +10,10 @@ class IluminacionViviendaModel extends IluminacionViviendaEntity {
   const IluminacionViviendaModel({
     int? iluminacionViviendaId,
     String? descripcion,
-  });
+  }) : super(
+          iluminacionViviendaId: iluminacionViviendaId,
+          descripcion: descripcion,
+        );
 
   static IluminacionViviendaModel fromEntity(IluminacionViviendaEntity entity) {
     return IluminacionViviendaModel(

@@ -11,7 +11,11 @@ class LeguminosaModel extends LeguminosaEntity {
     int? leguminosaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          leguminosaId: leguminosaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static LeguminosaModel fromEntity(LeguminosaEntity entity) {
     return LeguminosaModel(

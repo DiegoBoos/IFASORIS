@@ -15,7 +15,7 @@ class TenenciaViviendaLocalDataSourceImpl
   Future<List<TenenciaViviendaModel>> getTenenciasVivienda() async {
     try {
       final res =
-          await supabase.from('TenenciasVivienda_DatosVivienda').select();
+          await supabase.from('tenenciasvivienda_datosvivienda').select();
       final result = List<TenenciaViviendaModel>.from(
           res.map((m) => TenenciaViviendaModel.fromJson(m))).toList();
 
@@ -31,11 +31,11 @@ class TenenciaViviendaLocalDataSourceImpl
   Future<int> saveTenenciaVivienda(
       TenenciaViviendaModel tenenciaVivienda) async {
     try {
-      final res = await supabase
-          .from('TenenciasVivienda_DatosVivienda')
-          .insert(tenenciaVivienda.toJson());
+      await supabase
+          .from('tenenciasvivienda_datosvivienda')
+          .upsert(tenenciaVivienda.toJson());
 
-      return res;
+      return tenenciaVivienda.tenenciaViviendaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -11,7 +11,11 @@ class DificultadAccesoCAModel extends DificultadAccesoCAEntity {
     int? dificultaAccesoId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          dificultaAccesoId: dificultaAccesoId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static DificultadAccesoCAModel fromEntity(DificultadAccesoCAEntity entity) {
     return DificultadAccesoCAModel(

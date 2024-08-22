@@ -13,7 +13,7 @@ class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
   @override
   Future<List<ParentescoModel>> getParentescos() async {
     try {
-      final res = await supabase.from('Parentesco_GrupoFamiliar').select();
+      final res = await supabase.from('parentesco_grupofamiliar').select();
       final result = List<ParentescoModel>.from(
           res.map((m) => ParentescoModel.fromJson(m))).toList();
 
@@ -28,11 +28,11 @@ class ParentescoLocalDataSourceImpl implements ParentescoLocalDataSource {
   @override
   Future<int> saveParentesco(ParentescoModel parentesco) async {
     try {
-      final res = await supabase
-          .from('Parentesco_GrupoFamiliar')
-          .insert(parentesco.toJson());
+      await supabase
+          .from('parentesco_grupofamiliar')
+          .upsert(parentesco.toJson());
 
-      return res;
+      return parentesco.parentescoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

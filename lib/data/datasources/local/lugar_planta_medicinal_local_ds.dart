@@ -16,7 +16,7 @@ class LugarPlantaMedicinalLocalDataSourceImpl
   Future<List<LugarPlantaMedicinalModel>> getLugaresPlantasMedicinales() async {
     try {
       final res = await supabase
-          .from('LugaresPlantasMedicinales_AtencionSalud')
+          .from('lugaresplantasmedicinales_atencionsalud')
           .select();
       final result = List<LugarPlantaMedicinalModel>.from(
           res.map((m) => LugarPlantaMedicinalModel.fromJson(m))).toList();
@@ -33,11 +33,11 @@ class LugarPlantaMedicinalLocalDataSourceImpl
   Future<int> saveLugarPlantaMedicinal(
       LugarPlantaMedicinalModel lugarPlantaMedicinal) async {
     try {
-      final res = await supabase
-          .from('LugaresPlantasMedicinales_AtencionSalud')
-          .insert(lugarPlantaMedicinal.toJson());
+      await supabase
+          .from('lugaresplantasmedicinales_atencionsalud')
+          .upsert(lugarPlantaMedicinal.toJson());
 
-      return res;
+      return lugarPlantaMedicinal.lugarPlantaMedicinalId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

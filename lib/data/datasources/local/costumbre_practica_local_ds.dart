@@ -15,7 +15,7 @@ class CostumbrePracticaLocalDataSourceImpl
   Future<List<CostumbrePracticaModel>> getCostumbresPractica() async {
     try {
       final res = await supabase
-          .from('CostumbresPractican_DimSocioCulturalPueblosIndigenas')
+          .from('costumbrespractican_dimsocioculturalpueblosindigenas')
           .select();
       final result = List<CostumbrePracticaModel>.from(
           res.map((m) => CostumbrePracticaModel.fromJson(m))).toList();
@@ -32,11 +32,11 @@ class CostumbrePracticaLocalDataSourceImpl
   Future<int> saveCostumbrePractica(
       CostumbrePracticaModel costumbrePractica) async {
     try {
-      final res = await supabase
-          .from('CostumbresPractican_DimSocioCulturalPueblosIndigenas')
-          .insert(costumbrePractica.toJson());
+      await supabase
+          .from('costumbrespractican_dimsocioculturalpueblosindigenas')
+          .upsert(costumbrePractica.toJson());
 
-      return res;
+      return costumbrePractica.costumbrePracticaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

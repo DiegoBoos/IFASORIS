@@ -7,11 +7,9 @@ import '../../models/tuberculo_platano.dart';
 abstract class TuberculoPlatanoLocalDataSource {
   Future<List<TuberculoPlatanoModel>> getTuberculosPlatanos();
   Future<int> saveTuberculoPlatano(TuberculoPlatanoModel tuberculoPlatano);
-
+  Future<List<LstTuberculo>> getUbicacionTuberculosPlatanos(int? ubicacionId);
   Future<int> saveUbicacionTuberculosPlatanos(
       int ubicacionId, List<LstTuberculo> lstTuberculos);
-
-  Future<List<LstTuberculo>> getUbicacionTuberculosPlatanos(int? ubicacionId);
 }
 
 class TuberculoPlatanoLocalDataSourceImpl
@@ -20,7 +18,7 @@ class TuberculoPlatanoLocalDataSourceImpl
   Future<List<TuberculoPlatanoModel>> getTuberculosPlatanos() async {
     try {
       final res = await supabase
-          .from('TuberculosPlatanos_AspectosSocioEconomicos')
+          .from('tuberculosplatanos_aspectossocioeconomicos')
           .select();
       final result = List<TuberculoPlatanoModel>.from(
           res.map((m) => TuberculoPlatanoModel.fromJson(m))).toList();
@@ -37,11 +35,31 @@ class TuberculoPlatanoLocalDataSourceImpl
   Future<int> saveTuberculoPlatano(
       TuberculoPlatanoModel tuberculoPlatano) async {
     try {
-      final res = await supabase
-          .from('TuberculosPlatanos_AspectosSocioEconomicos')
-          .insert(tuberculoPlatano.toJson());
+      await supabase
+          .from('tuberculosplatanos_aspectossocioeconomicos')
+          .upsert(tuberculoPlatano.toJson());
 
-      return res;
+      return tuberculoPlatano.tuberculoPlatanoId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstTuberculo>> getUbicacionTuberculosPlatanos(
+      int? ubicacionId) async {
+    try {
+      final res = await supabase
+          .from('asp1_ubicaciontuberculosplatanos')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final result =
+          List<LstTuberculo>.from(res.map((m) => LstTuberculo.fromJson(m)))
+              .toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -55,7 +73,7 @@ class TuberculoPlatanoLocalDataSourceImpl
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionTuberculosPlatanos')
+          .from('asp1_ubicaciontuberculosplatanos')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -70,31 +88,11 @@ class TuberculoPlatanoLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionTuberculosPlatanos')
-          .insert(ubicacionTuberculosPlatanos);
+          .from('asp1_ubicaciontuberculosplatanos')
+          .upsert(ubicacionTuberculosPlatanos);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstTuberculo>> getUbicacionTuberculosPlatanos(
-      int? ubicacionId) async {
-    try {
-      final res = await supabase
-          .from('Asp1_UbicacionTuberculosPlatanos')
-          .select()
-          .eq('Ubicacion_id', ubicacionId);
-      final result =
-          List<LstTuberculo>.from(res.map((m) => LstTuberculo.fromJson(m)))
-              .toList();
-
-      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

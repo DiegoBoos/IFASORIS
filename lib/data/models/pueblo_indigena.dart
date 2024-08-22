@@ -13,7 +13,11 @@ class PuebloIndigenaModel extends PuebloIndigenaEntity {
     int? puebloIde,
     int? departamentoIde,
     String? descripcion,
-  });
+  }) : super(
+          puebloIde: puebloIde,
+          departamentoIde: departamentoIde,
+          descripcion: descripcion,
+        );
 
   static PuebloIndigenaModel fromEntity(PuebloIndigenaEntity entity) {
     return PuebloIndigenaModel(

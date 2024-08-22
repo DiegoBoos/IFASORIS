@@ -10,7 +10,11 @@ class FrutoModel extends FrutoEntity {
     int? frutoId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          frutoId: frutoId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static FrutoModel fromEntity(FrutoEntity entity) {
     return FrutoModel(

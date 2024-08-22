@@ -14,7 +14,7 @@ class NivelEducativoLocalDataSourceImpl
   @override
   Future<List<NivelEducativoModel>> getNivelesEducativos() async {
     try {
-      final res = await supabase.from('NivelEducativo_GrupoFamiliar').select();
+      final res = await supabase.from('niveleducativo_grupofamiliar').select();
       final result = List<NivelEducativoModel>.from(
           res.map((m) => NivelEducativoModel.fromJson(m))).toList();
 
@@ -29,11 +29,11 @@ class NivelEducativoLocalDataSourceImpl
   @override
   Future<int> saveNivelEducativo(NivelEducativoModel nivelEducativo) async {
     try {
-      final res = await supabase
-          .from('NivelEducativo_GrupoFamiliar')
-          .insert(nivelEducativo.toJson());
+      await supabase
+          .from('niveleducativo_grupofamiliar')
+          .upsert(nivelEducativo.toJson());
 
-      return res;
+      return nivelEducativo.nivelEducativoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

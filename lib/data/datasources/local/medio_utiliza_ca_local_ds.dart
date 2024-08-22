@@ -7,10 +7,10 @@ import '../../models/medio_utiliza_ca.dart';
 abstract class MedioUtilizaCALocalDataSource {
   Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA();
   Future<int> saveMedioUtilizaCA(MedioUtilizaCAModel medioUtilizaCA);
-  Future<int> saveUbicacionMediosUtilizaCA(
-      int ubicacionId, List<LstMediosUtilizaCA> lstMediosUtilizaCA);
   Future<List<LstMediosUtilizaCA>> getUbicacionMediosUtilizaCA(
       int? ubicacionId);
+  Future<int> saveUbicacionMediosUtilizaCA(
+      int ubicacionId, List<LstMediosUtilizaCA> lstMediosUtilizaCA);
 }
 
 class MedioUtilizaCALocalDataSourceImpl
@@ -18,7 +18,7 @@ class MedioUtilizaCALocalDataSourceImpl
   @override
   Future<List<MedioUtilizaCAModel>> getMediosUtilizaCA() async {
     try {
-      final res = await supabase.from('MediosUtiliza_CentroAtencion').select();
+      final res = await supabase.from('mediosutiliza_centroatencion').select();
       final mediosUtilizaCADB = List<MedioUtilizaCAModel>.from(
           res.map((m) => MedioUtilizaCAModel.fromJson(m))).toList();
 
@@ -33,11 +33,11 @@ class MedioUtilizaCALocalDataSourceImpl
   @override
   Future<int> saveMedioUtilizaCA(MedioUtilizaCAModel medioUtilizaCA) async {
     try {
-      final res = await supabase
-          .from('MediosUtiliza_CentroAtencion')
-          .insert(medioUtilizaCA.toJson());
+      await supabase
+          .from('mediosutiliza_centroatencion')
+          .upsert(medioUtilizaCA.toJson());
 
-      return res;
+      return medioUtilizaCA.medioUtilizaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -50,7 +50,7 @@ class MedioUtilizaCALocalDataSourceImpl
       int? ubicacionId) async {
     try {
       final res = await supabase
-          .from('Asp1_UbicacionMediosCentroAtencion')
+          .from('asp1_ubicacionmedioscentroatencion')
           .select()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -71,7 +71,7 @@ class MedioUtilizaCALocalDataSourceImpl
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionMediosCentroAtencion')
+          .from('asp1_ubicacionmedioscentroatencion')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -85,8 +85,8 @@ class MedioUtilizaCALocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionMediosCentroAtencion')
-          .insert(ubicacionMediosUtilizaCA);
+          .from('asp1_ubicacionmedioscentroatencion')
+          .upsert(ubicacionMediosUtilizaCA);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;

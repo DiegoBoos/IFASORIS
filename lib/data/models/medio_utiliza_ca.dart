@@ -11,7 +11,11 @@ class MedioUtilizaCAModel extends MedioUtilizaCAEntity {
     int? medioUtilizaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          medioUtilizaId: medioUtilizaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static MedioUtilizaCAModel fromEntity(MedioUtilizaCAEntity entity) {
     return MedioUtilizaCAModel(

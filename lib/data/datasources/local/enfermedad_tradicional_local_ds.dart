@@ -21,7 +21,7 @@ class EnfermedadTradicionalLocalDataSourceImpl
       getEnfermedadesTradicionales() async {
     try {
       final res = await supabase
-          .from('EnfermedadesTradicionales_AtencionSalud')
+          .from('enfermedadestradicionales_atencionsalud')
           .select();
       final result = List<EnfermedadTradicionalModel>.from(
           res.map((m) => EnfermedadTradicionalModel.fromJson(m))).toList();
@@ -38,11 +38,11 @@ class EnfermedadTradicionalLocalDataSourceImpl
   Future<int> saveEnfermedadTradicional(
       EnfermedadTradicionalModel enfermedadTradicional) async {
     try {
-      final res = await supabase
-          .from('EnfermedadesTradicionales_AtencionSalud')
-          .insert(enfermedadTradicional.toJson());
+      await supabase
+          .from('enfermedadestradicionales_atencionsalud')
+          .upsert(enfermedadTradicional.toJson());
 
-      return res;
+      return enfermedadTradicional.enfermedadTradicionalId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -55,7 +55,7 @@ class EnfermedadTradicionalLocalDataSourceImpl
       getEnfermedadesTradicionalesAtencionSalud(int? atencionSaludId) async {
     try {
       final res = await supabase
-          .from('Asp7_EnfermedadesTradicionales_AtencionSalud')
+          .from('asp7_enfermedadestradicionales_atencionsalud')
           .select()
           .eq('AtencionSalud_id', atencionSaludId);
       final result = List<LstEnfermedadTradicional>.from(
@@ -75,7 +75,7 @@ class EnfermedadTradicionalLocalDataSourceImpl
     try {
       // First, delete existing records for the given atencionSaludId
       await supabase
-          .from('Asp7_EnfermedadesTradicionales_AtencionSalud')
+          .from('asp7_enfermedadestradicionales_atencionsalud')
           .delete()
           .eq('AtencionSalud_id', atencionSaludId);
 
@@ -89,8 +89,8 @@ class EnfermedadTradicionalLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp7_EnfermedadesTradicionales_AtencionSalud')
-          .insert(enfermedadesTradicionalesAtencionSalud);
+          .from('asp7_enfermedadestradicionales_atencionsalud')
+          .upsert(enfermedadesTradicionalesAtencionSalud);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;

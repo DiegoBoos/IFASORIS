@@ -21,7 +21,7 @@ class DimViviendaModel extends DimViviendaEntity {
     int? tenenciaViviendaId,
     int? ventilacionViviendaId,
     int? iluminacionViviendaId,
-    int? cuartosViviendaId,
+    int? nroCuartosViviendaId,
     List<LstPiso>? lstPiso,
     List<LstTecho>? lstTecho,
     List<LstServPublico>? lstServPublico,
@@ -30,7 +30,23 @@ class DimViviendaModel extends DimViviendaEntity {
     List<LstTipoSanitario>? lstTipoSanitario,
     List<LstTipoCombustible>? lstTipoCombustible,
     List<LstPresenciaAnimal>? lstPresenciaAnimal,
-  });
+  }) : super(
+          datoViviendaId: datoViviendaId,
+          familiaId: familiaId,
+          tipoViviendaId: tipoViviendaId,
+          tenenciaViviendaId: tenenciaViviendaId,
+          ventilacionViviendaId: ventilacionViviendaId,
+          iluminacionViviendaId: iluminacionViviendaId,
+          nroCuartosViviendaId: nroCuartosViviendaId,
+          lstPiso: lstPiso,
+          lstTecho: lstTecho,
+          lstServPublico: lstServPublico,
+          lstTmtoAgua: lstTmtoAgua,
+          lstFactorRiesgo: lstFactorRiesgo,
+          lstTipoSanitario: lstTipoSanitario,
+          lstTipoCombustible: lstTipoCombustible,
+          lstPresenciaAnimal: lstPresenciaAnimal,
+        );
 
   static DimViviendaModel fromEntity(DimViviendaEntity entity) {
     return DimViviendaModel(
@@ -40,7 +56,7 @@ class DimViviendaModel extends DimViviendaEntity {
       tenenciaViviendaId: entity.tenenciaViviendaId,
       ventilacionViviendaId: entity.ventilacionViviendaId,
       iluminacionViviendaId: entity.iluminacionViviendaId,
-      cuartosViviendaId: entity.cuartosViviendaId,
+      nroCuartosViviendaId: entity.nroCuartosViviendaId,
       lstPiso: entity.lstPiso,
       lstTecho: entity.lstTecho,
       lstServPublico: entity.lstServPublico,
@@ -60,7 +76,7 @@ class DimViviendaModel extends DimViviendaEntity {
         tenenciaViviendaId: json["TenenciaVivienda_id"],
         ventilacionViviendaId: json["VentilacionVivienda_id"],
         iluminacionViviendaId: json["IluminacionVivienda_id"],
-        cuartosViviendaId: json["CuartosVivienda_id"],
+        nroCuartosViviendaId: json["NroCuartosVivienda_id"],
         lstPiso: json["LstPiso"] == null
             ? []
             : List<LstPiso>.from(
@@ -103,6 +119,6 @@ class DimViviendaModel extends DimViviendaEntity {
         "TenenciaVivienda_id": tenenciaViviendaId,
         "VentilacionVivienda_id": ventilacionViviendaId,
         "IluminacionVivienda_id": iluminacionViviendaId,
-        "NroCuartosVivienda_id": cuartosViviendaId,
+        "NroNroCuartosVivienda_id": nroCuartosViviendaId,
       };
 }

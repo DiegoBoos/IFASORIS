@@ -10,12 +10,18 @@ class PlantaMedicinalModel extends PlantaMedicinalEntity {
   const PlantaMedicinalModel({
     int? plantaMedicinalId,
     String? descripcion,
-  });
+    int? departamentoId,
+  }) : super(
+          plantaMedicinalId: plantaMedicinalId,
+          descripcion: descripcion,
+          departamentoId: departamentoId,
+        );
 
   static PlantaMedicinalModel fromEntity(PlantaMedicinalEntity entity) {
     return PlantaMedicinalModel(
       plantaMedicinalId: entity.plantaMedicinalId,
       descripcion: entity.descripcion,
+      departamentoId: entity.departamentoId,
     );
   }
 
@@ -23,11 +29,13 @@ class PlantaMedicinalModel extends PlantaMedicinalEntity {
       PlantaMedicinalModel(
         plantaMedicinalId: json["PlantaMedicinal_id"],
         descripcion: json["Descripcion"],
+        departamentoId: json["Departamento_Ide"],
       );
 
   Map<String, dynamic> toJson() => {
         "PlantaMedicinal_id": plantaMedicinalId,
         "Descripcion": descripcion,
+        "Departamento_Ide": departamentoId
       };
 }
 

@@ -10,7 +10,10 @@ class ConductaSeguirModel extends ConductaSeguirEntity {
   const ConductaSeguirModel({
     int? conductaSeguirId,
     String? descripcion,
-  });
+  }) : super(
+          conductaSeguirId: conductaSeguirId,
+          descripcion: descripcion,
+        );
 
   static ConductaSeguirModel fromEntity(ConductaSeguirEntity entity) {
     return ConductaSeguirModel(

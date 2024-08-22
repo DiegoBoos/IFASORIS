@@ -11,7 +11,11 @@ class PisoViviendaModel extends PisoViviendaEntity {
     int? pisoViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          pisoViviendaId: pisoViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static PisoViviendaModel fromEntity(PisoViviendaEntity entity) {
     return PisoViviendaModel(

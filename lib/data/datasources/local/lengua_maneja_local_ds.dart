@@ -13,7 +13,7 @@ class LenguaManejaLocalDataSourceImpl implements LenguaManejaLocalDataSource {
   @override
   Future<List<LenguaManejaModel>> getLenguasManeja() async {
     try {
-      final res = await supabase.from('LenguaManeja_GrupoFamiliar').select();
+      final res = await supabase.from('lenguamaneja_grupofamiliar').select();
       final result = List<LenguaManejaModel>.from(
           res.map((m) => LenguaManejaModel.fromJson(m))).toList();
 
@@ -28,11 +28,11 @@ class LenguaManejaLocalDataSourceImpl implements LenguaManejaLocalDataSource {
   @override
   Future<int> saveLenguaManeja(LenguaManejaModel lenguaManeja) async {
     try {
-      final res = await supabase
-          .from('LenguaManeja_GrupoFamiliar')
-          .insert(lenguaManeja.toJson());
+      await supabase
+          .from('lenguamaneja_grupofamiliar')
+          .upsert(lenguaManeja.toJson());
 
-      return res;
+      return lenguaManeja.lenguaManejaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

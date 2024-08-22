@@ -13,7 +13,7 @@ class TipoViviendaLocalDataSourceImpl implements TipoViviendaLocalDataSource {
   @override
   Future<List<TipoViviendaModel>> getTiposVivienda() async {
     try {
-      final res = await supabase.from('TiposVivienda_DatosVivienda').select();
+      final res = await supabase.from('tiposvivienda_datosvivienda').select();
       final result = List<TipoViviendaModel>.from(
           res.map((m) => TipoViviendaModel.fromJson(m))).toList();
 
@@ -28,11 +28,11 @@ class TipoViviendaLocalDataSourceImpl implements TipoViviendaLocalDataSource {
   @override
   Future<int> saveTipoVivienda(TipoViviendaModel tipoVivienda) async {
     try {
-      final res = await supabase
-          .from('TiposVivienda_DatosVivienda')
-          .insert(tipoVivienda.toJson());
+      await supabase
+          .from('tiposvivienda_datosvivienda')
+          .upsert(tipoVivienda.toJson());
 
-      return res;
+      return tipoVivienda.tipoViviendaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

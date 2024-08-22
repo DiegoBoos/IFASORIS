@@ -9,14 +9,12 @@ abstract class DificultadAccesoMedTradicionalLocalDataSource {
       getDificultadesAccesoMedTradicional();
   Future<int> saveDificultadAccesoMedTradicional(
       DificultadAccesoMedTradicionalModel dificultadAccesoMedTradicional);
-
+  Future<List<LstDificultadAccesoMedTradicional>>
+      getUbicacionDificultadesAccesoMedTradicional(int? ubicacionId);
   Future<int> saveUbicacionAccesoMedTradicional(
       int ubicacionId,
       List<LstDificultadAccesoMedTradicional>
           lstDificultadAccesoMedTradicional);
-
-  Future<List<LstDificultadAccesoMedTradicional>>
-      getUbicacionDificultadesAccesoMedTradicional(int? ubicacionId);
 }
 
 class DificultadAccesoMedTradicionalLocalDataSourceImpl
@@ -26,7 +24,7 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
       getDificultadesAccesoMedTradicional() async {
     try {
       final res = await supabase
-          .from('DificultadesAcceso_AccesoMedTradicional')
+          .from('dificultadesacceso_accesomedtradicional')
           .select();
       final result = List<DificultadAccesoMedTradicionalModel>.from(
               res.map((m) => DificultadAccesoMedTradicionalModel.fromJson(m)))
@@ -45,11 +43,32 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
       DificultadAccesoMedTradicionalModel
           dificultadAccesoMedTradicional) async {
     try {
-      final res = await supabase
-          .from('DificultadesAcceso_AccesoMedTradicional')
-          .insert(dificultadAccesoMedTradicional.toJson());
+      await supabase
+          .from('dificultadesacceso_accesomedtradicional')
+          .upsert(dificultadAccesoMedTradicional.toJson());
 
-      return res;
+      return dificultadAccesoMedTradicional.dificultadAccesoMedTradId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstDificultadAccesoMedTradicional>>
+      getUbicacionDificultadesAccesoMedTradicional(int? ubicacionId) async {
+    try {
+      final res = await supabase
+          .from('asp1_ubicacionaccesomedtradicional')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+
+      final result = List<LstDificultadAccesoMedTradicional>.from(
+              res.map((m) => LstDificultadAccesoMedTradicional.fromJson(m)))
+          .toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -65,7 +84,7 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionAccesoMedTradicional')
+          .from('asp1_ubicacionaccesomedtradicional')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -80,32 +99,11 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionAccesoMedTradicional')
-          .insert(ubicacionDificultadesAccesoMedTradicional);
+          .from('asp1_ubicacionaccesomedtradicional')
+          .upsert(ubicacionDificultadesAccesoMedTradicional);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstDificultadAccesoMedTradicional>>
-      getUbicacionDificultadesAccesoMedTradicional(int? ubicacionId) async {
-    try {
-      final res = await supabase
-          .from('Asp1_UbicacionAccesoMedTradicional')
-          .select()
-          .eq('Ubicacion_id', ubicacionId);
-
-      final result = List<LstDificultadAccesoMedTradicional>.from(
-              res.map((m) => LstDificultadAccesoMedTradicional.fromJson(m)))
-          .toList();
-
-      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

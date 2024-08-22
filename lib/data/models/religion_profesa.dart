@@ -10,7 +10,10 @@ class ReligionProfesaModel extends ReligionProfesaEntity {
   const ReligionProfesaModel({
     int? religionProfesaId,
     String? descripcion,
-  });
+  }) : super(
+          religionProfesaId: religionProfesaId,
+          descripcion: descripcion,
+        );
 
   static ReligionProfesaModel fromEntity(ReligionProfesaEntity entity) {
     return ReligionProfesaModel(

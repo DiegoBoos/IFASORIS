@@ -31,7 +31,7 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
       getEspecialidadesMedTradicional() async {
     try {
       final res = await supabase
-          .from('EspecialidadesMedTrad_AccesoMedTradicional')
+          .from('especialidadesmedtrad_accesomedtradicional')
           .select();
       final result = List<EspecialidadMedTradicionalModel>.from(
           res.map((m) => EspecialidadMedTradicionalModel.fromJson(m))).toList();
@@ -45,12 +45,28 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
   }
 
   @override
+  Future<int> saveEspecialidadMedTradicional(
+      EspecialidadMedTradicionalModel especialidadMedTradicional) async {
+    try {
+      await supabase
+          .from('especialidadesmedtrad_accesomedtradicional')
+          .upsert(especialidadMedTradicional.toJson());
+
+      return especialidadMedTradicional.especialidadMedTradId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
   Future<int> saveUbicacionEspecialidadMedTradicional(
       int ubicacionId, List<LstEspMedTradicional> lstEspMedTradicional) async {
     try {
       // Delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionEspecialidadMedTradicional')
+          .from('asp1_ubicacionespecialidadmedtradicional')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -64,8 +80,8 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionEspecialidadMedTradicional')
-          .insert(ubicacionEspecialidadesMedTradicional);
+          .from('asp1_ubicacionespecialidadmedtradicional')
+          .upsert(ubicacionEspecialidadesMedTradicional);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
@@ -82,7 +98,7 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
     try {
       // Delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionNombresMedTradicional')
+          .from('asp1_ubicacionnombresmedtradicional')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -96,8 +112,8 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionNombresMedTradicional')
-          .insert(ubicacionNombresMedTradicional);
+          .from('asp1_ubicacionnombresmedtradicional')
+          .upsert(ubicacionNombresMedTradicional);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
@@ -114,7 +130,7 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
     try {
       // Delete existing records for the given atencionSaludId
       await supabase
-          .from('Asp7_EspecialidadesMedTradAtencionSalud')
+          .from('asp7_especialidadesmedtradatencionsalud')
           .delete()
           .eq('AtencionSalud_id', atencionSaludId);
 
@@ -128,27 +144,11 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp7_EspecialidadesMedTradAtencionSalud')
-          .insert(nombresMedTradicionalAtencionSalud);
+          .from('asp7_especialidadesmedtradatencionsalud')
+          .upsert(nombresMedTradicionalAtencionSalud);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<int> saveEspecialidadMedTradicional(
-      EspecialidadMedTradicionalModel especialidadMedTradicional) async {
-    try {
-      final res = await supabase
-          .from('EspecialidadesMedTrad_AccesoMedTradicional')
-          .insert(especialidadMedTradicional.toJson());
-
-      return res;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -161,7 +161,7 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
       int? ubicacionId) async {
     try {
       final res = await supabase
-          .from('Asp1_UbicacionNombresMedTradicional')
+          .from('asp1_ubicacionnombresmedtradicional')
           .select()
           .eq('Ubicacion_id', ubicacionId);
       final result = List<LstNombreMedTradicional>.from(
@@ -180,7 +180,7 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
       int? ubicacionId) async {
     try {
       final res = await supabase
-          .from('Asp1_UbicacionEspecialidadMedTradicional')
+          .from('asp1_ubicacionespecialidadmedtradicional')
           .select()
           .eq('Ubicacion_id', ubicacionId);
       final result = List<LstEspMedTradicional>.from(
@@ -199,7 +199,7 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
       getEspecialidadesMedTradicionalAtencionSalud(int? atencionSaludId) async {
     try {
       final res = await supabase
-          .from('Asp7_EspecialidadesMedTradAtencionSalud')
+          .from('asp7_especialidadesmedtradatencionsalud')
           .select()
           .eq('AtencionSalud_id', atencionSaludId);
       final result = List<LstEspMedTradicional>.from(

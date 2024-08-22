@@ -20,9 +20,9 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthenticationState>(
         listener: (context, state) {
-          if (state is AuthAPILoaded) {
+          if (state is Registered) {
             Navigator.pushNamed(context, 'login');
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(

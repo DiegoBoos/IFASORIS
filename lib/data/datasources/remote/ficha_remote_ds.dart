@@ -115,7 +115,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
         final resVivienda = await supabase
             .from('Asp2_DatosVivienda')
             .select(
-                'DatoVivienda_id, Familia_id, TipoVivienda_id, TenenciaVivienda_id, VentilacionVivienda_id, IluminacionVivienda_id, CuartosVivienda_id')
+                'DatoVivienda_id, Familia_id, TipoVivienda_id, TenenciaVivienda_id, VentilacionVivienda_id, IluminacionVivienda_id, NroCuartosVivienda_id')
             .eq('Familia_id', familiaId);
 
         if (resVivienda.isEmpty) {

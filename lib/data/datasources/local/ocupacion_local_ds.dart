@@ -13,7 +13,7 @@ class OcupacionLocalDataSourceImpl implements OcupacionLocalDataSource {
   @override
   Future<List<OcupacionModel>> getOcupaciones() async {
     try {
-      final res = await supabase.from('Ocupacion_GrupoFamiliar').select();
+      final res = await supabase.from('ocupacion_grupofamiliar').select();
       final result =
           List<OcupacionModel>.from(res.map((m) => OcupacionModel.fromJson(m)))
               .toList();
@@ -29,11 +29,9 @@ class OcupacionLocalDataSourceImpl implements OcupacionLocalDataSource {
   @override
   Future<int> saveOcupacion(OcupacionModel ocupacion) async {
     try {
-      final res = await supabase
-          .from('Ocupacion_GrupoFamiliar')
-          .insert(ocupacion.toJson());
+      await supabase.from('ocupacion_grupofamiliar').upsert(ocupacion.toJson());
 
-      return res;
+      return ocupacion.ocupacionId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

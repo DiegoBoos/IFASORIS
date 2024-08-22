@@ -7,7 +7,6 @@ import '../../models/familia.dart';
 abstract class FamiliaLocalDataSource {
   Future<FamiliaModel> createFamilia(FamiliaModel familia);
   Future<List<FamiliaModel>> loadFamilias();
-
   Future<int> deleteAfiliadoFamilia(int fkAfiliadoId);
 }
 
@@ -17,8 +16,8 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
     try {
       // Insert the new family into the 'Familia' table
       final res = await supabase
-          .from('Familia')
-          .insert(familia.toJson())
+          .from('familia')
+          .upsert(familia.toJson())
           .select()
           .single();
 
@@ -30,30 +29,30 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
       final insertedFamilia = FamiliaModel.fromJson(res.data);
       final newFamilia = familia.copyWith(familiaId: insertedFamilia.familiaId);
 
-      // Delete rows in the 'Asp3_GrupoFamiliar' table
+      // Delete rows in the 'asp3_grupofamiliar' table
       await supabase
-          .from('Asp3_GrupoFamiliar')
+          .from('asp3_grupofamiliar')
           .delete()
           .eq('Afiliado_id', newFamilia.fkAfiliadoId);
 
       // Update other related tables one by one
       await supabase
-          .from('Asp4_EstilosVidaSaludable')
+          .from('asp4_estilosvidasaludable')
           .update({'Familia_id': newFamilia.familiaId}).eq(
               'Afiliado_id', newFamilia.fkAfiliadoId);
 
       await supabase
-          .from('Asp5_CuidadoSaludCondRiesgo')
+          .from('asp5_cuidadosaludcondriesgo')
           .update({'Familia_id': newFamilia.familiaId}).eq(
               'Afiliado_id', newFamilia.fkAfiliadoId);
 
       await supabase
-          .from('Asp6_DimSocioCulturalPueblosIndigenas')
+          .from('asp6_dimsocioculturalpueblosindigenas')
           .update({'Familia_id': newFamilia.familiaId}).eq(
               'Afiliado_id', newFamilia.fkAfiliadoId);
 
       await supabase
-          .from('Asp7_AtencionSalud')
+          .from('asp7_atencionsalud')
           .update({'Familia_id': newFamilia.familiaId}).eq(
               'Afiliado_id', newFamilia.fkAfiliadoId);
 
@@ -68,7 +67,7 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   @override
   Future<List<FamiliaModel>> loadFamilias() async {
     try {
-      final res = await supabase.from('Familia').select();
+      final res = await supabase.from('familia').select();
       final result =
           List<FamiliaModel>.from(res.map((m) => FamiliaModel.fromJson(m)))
               .toList();
@@ -85,7 +84,7 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   Future<int> deleteAfiliadoFamilia(int fkAfiliadoId) async {
     try {
       final res = await supabase
-          .from('Familia')
+          .from('familia')
           .delete()
           .eq('FK_Afiliado_id', fkAfiliadoId);
 

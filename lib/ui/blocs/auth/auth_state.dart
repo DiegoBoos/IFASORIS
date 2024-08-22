@@ -1,42 +1,42 @@
 part of 'auth_bloc.dart';
 
-abstract class AuthState extends Equatable {
-  final UsuarioEntity? usuario;
+abstract class AuthenticationState extends Equatable {
+  final User? loggedUser;
 
-  const AuthState({this.usuario});
+  const AuthenticationState({this.loggedUser});
 
   @override
-  List<Object?> get props => [usuario];
+  List<Object?> get props => [loggedUser];
 }
 
-class AuthInitial extends AuthState {}
+class AuthInitial extends AuthenticationState {}
 
-class AuthLoading extends AuthState {}
+class AuthLoading extends AuthenticationState {}
 
-class AuthLoaded extends AuthState {
-  final UsuarioEntity? usuarioAutenticado;
+class AuthLoaded extends AuthenticationState {
+  final User? currentUser;
 
-  const AuthLoaded(this.usuarioAutenticado)
+  const AuthLoaded(this.currentUser)
       : super(
-          usuario: usuarioAutenticado,
+          loggedUser: currentUser,
         );
 
   @override
-  List<Object?> get props => [usuarioAutenticado];
+  List<Object?> get props => [currentUser];
 }
 
-class AuthAPILoaded extends AuthState {
-  final Map<String, dynamic>? sessionDetails;
+class Registered extends AuthenticationState {
+  final User user;
 
-  const AuthAPILoaded(this.sessionDetails);
+  const Registered(this.user);
 
   @override
-  List<Object?> get props => [sessionDetails];
+  List<Object?> get props => [user];
 }
 
-class LoggedOut extends AuthState {}
+class LoggedOut extends AuthenticationState {}
 
-class AuthError extends AuthState {
+class AuthError extends AuthenticationState {
   final String message;
 
   const AuthError(this.message);

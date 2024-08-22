@@ -8,12 +8,10 @@ abstract class ServicioPublicoViviendaLocalDataSource {
   Future<List<ServicioPublicoViviendaModel>> getServiciosPublicos();
   Future<int> saveServicioPublicoVivienda(
       ServicioPublicoViviendaModel servicioPublicoVivienda);
-
-  Future<int> saveServiciosPublicosVivienda(
-      int datoViviendaId, List<LstServPublico> lstServPublico);
-
   Future<List<LstServPublico>> getServiciosPublicosVivienda(
       int? datoViviendaId);
+  Future<int> saveServiciosPublicosVivienda(
+      int datoViviendaId, List<LstServPublico> lstServPublico);
 }
 
 class ServicioPublicoViviendaLocalDataSourceImpl
@@ -22,7 +20,7 @@ class ServicioPublicoViviendaLocalDataSourceImpl
   Future<List<ServicioPublicoViviendaModel>> getServiciosPublicos() async {
     try {
       final res = await supabase
-          .from('ServiciosPublicosVivienda_DatosVivienda')
+          .from('serviciospublicosvivienda_datosvivienda')
           .select();
       final result = List<ServicioPublicoViviendaModel>.from(
           res.map((m) => ServicioPublicoViviendaModel.fromJson(m))).toList();
@@ -39,11 +37,31 @@ class ServicioPublicoViviendaLocalDataSourceImpl
   Future<int> saveServicioPublicoVivienda(
       ServicioPublicoViviendaModel servicioPublicoVivienda) async {
     try {
-      final res = await supabase
-          .from('ServiciosPublicosVivienda_DatosVivienda')
-          .insert(servicioPublicoVivienda.toJson());
+      await supabase
+          .from('serviciospublicosvivienda_datosvivienda')
+          .upsert(servicioPublicoVivienda.toJson());
 
-      return res;
+      return servicioPublicoVivienda.servicioPublicoViviendaId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstServPublico>> getServiciosPublicosVivienda(
+      int? datoViviendaId) async {
+    try {
+      final res = await supabase
+          .from('asp2_datosviviendaserviciospublicos')
+          .select()
+          .eq('DatoVivienda_id', datoViviendaId);
+      final result =
+          List<LstServPublico>.from(res.map((m) => LstServPublico.fromJson(m)))
+              .toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -57,7 +75,7 @@ class ServicioPublicoViviendaLocalDataSourceImpl
     try {
       // First, delete existing records for the given datoViviendaId
       await supabase
-          .from('Asp2_DatosViviendaServiciosPublicos')
+          .from('asp2_datosviviendaserviciospublicos')
           .delete()
           .eq('DatoVivienda_id', datoViviendaId);
 
@@ -71,31 +89,11 @@ class ServicioPublicoViviendaLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp2_DatosViviendaServiciosPublicos')
-          .insert(viviendaServiciosPublicos);
+          .from('asp2_datosviviendaserviciospublicos')
+          .upsert(viviendaServiciosPublicos);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstServPublico>> getServiciosPublicosVivienda(
-      int? datoViviendaId) async {
-    try {
-      final res = await supabase
-          .from('Asp2_DatosViviendaServiciosPublicos')
-          .select()
-          .eq('DatoVivienda_id', datoViviendaId);
-      final result =
-          List<LstServPublico>.from(res.map((m) => LstServPublico.fromJson(m)))
-              .toList();
-
-      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

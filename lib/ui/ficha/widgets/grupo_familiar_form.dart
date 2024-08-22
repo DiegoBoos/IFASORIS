@@ -15,7 +15,7 @@ import '../../cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
 import '../../cubits/ocupacion/ocupacion_cubit.dart';
 import '../../cubits/parentesco/parentesco_cubit.dart';
 import '../../cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
-import '../../cubits/regimen/regimen_cubit.dart';
+import '../../cubits/tipo_regimen/tipo_regimen_cubit.dart';
 import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 import '../../utils/custom_snack_bar.dart';
 import '../../utils/input_decoration.dart';
@@ -45,7 +45,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
   int? _cursoVidaId;
   int? _parentescoId;
   int? _tipoRegimenId;
-  String? _codRegimenAfiliado;
+  String? _codTipoRegimenAfiliado;
   int? _nivelEducativoId;
   int? _ocupacionId;
   String? _otroOcupacion;
@@ -98,13 +98,14 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
         calculateCursoVida(_edad!);
       }
 
-      _codRegimenAfiliado = widget.afiliadoGrupoFamiliar.codRegimenAfiliado;
-      if (_codRegimenAfiliado != null) {
-        if (_codRegimenAfiliado == "S") {
+      _codTipoRegimenAfiliado =
+          widget.afiliadoGrupoFamiliar.codTipoRegimenAfiliado;
+      if (_codTipoRegimenAfiliado != null) {
+        if (_codTipoRegimenAfiliado == "S") {
           _tipoRegimenId = 1;
-        } else if (_codRegimenAfiliado == "C") {
+        } else if (_codTipoRegimenAfiliado == "C") {
           _tipoRegimenId = 2;
-        } else if (_codRegimenAfiliado == "U") {
+        } else if (_codTipoRegimenAfiliado == "U") {
           _tipoRegimenId = 3;
         }
       } else {
@@ -433,18 +434,18 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                     textAlign: TextAlign.center,
                   ),
                   const Divider(),
-                  BlocBuilder<RegimenCubit, RegimenesState>(
+                  BlocBuilder<TipoRegimenCubit, TipoRegimenesState>(
                     builder: (context, state) {
-                      if (state is RegimenesLoaded) {
-                        final regimenesLoaded = state.regimenesLoaded!;
+                      if (state is TipoRegimenesLoaded) {
+                        final tiporegimenesLoaded = state.tiporegimenesLoaded!;
 
                         return DropdownButtonFormField<int>(
                           value: _tipoRegimenId,
-                          items: regimenesLoaded
+                          items: tiporegimenesLoaded
                               .map(
-                                (regimen) => DropdownMenuItem<int>(
-                                  value: regimen.tipoRegimenId,
-                                  child: Text(regimen.descripcion ?? ''),
+                                (tiporegimen) => DropdownMenuItem<int>(
+                                  value: tiporegimen.regimenId,
+                                  child: Text(tiporegimen.descripcion ?? ''),
                                 ),
                               )
                               .toList(),
@@ -884,8 +885,8 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                                 widget.afiliadoGrupoFamiliar.tipoDocAfiliado,
                             codGeneroAfiliado:
                                 widget.afiliadoGrupoFamiliar.codGeneroAfiliado,
-                            codRegimenAfiliado:
-                                widget.afiliadoGrupoFamiliar.codRegimenAfiliado,
+                            codTipoRegimenAfiliado: widget
+                                .afiliadoGrupoFamiliar.codTipoRegimenAfiliado,
                           );
 
                           grupoFamiliarBloc.add(

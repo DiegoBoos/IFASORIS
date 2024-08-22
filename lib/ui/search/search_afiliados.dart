@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
 
 import '../../domain/entities/afiliado.dart';
@@ -8,7 +9,6 @@ import '../../domain/entities/ficha.dart';
 import '../../domain/entities/grupo_familiar.dart';
 import '../blocs/afiliado/afiliado_bloc.dart';
 import '../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
-import '../blocs/auth/auth_bloc.dart';
 import '../cubits/familia/familia_cubit.dart';
 import '../cubits/ficha/ficha_cubit.dart';
 import '../ficha/widgets/grupo_familiar_form.dart';
@@ -53,156 +53,92 @@ class SearchAfiliados extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    final afiliadoBloc = BlocProvider.of<AfiliadoBloc>(context);
     if (query.isEmpty) {
       return Container();
     }
     if (isGrupoFamiliar) {
-      return BlocBuilder<AfiliadoBloc, AfiliadosState>(
-        builder: (context, state) {
-          if (state is AfiliadosLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is AfiliadosError) {
-            return Center(child: Text(state.message));
-          }
-          if (state is AfiliadosLoaded) {
-            if (state.afiliadosLoaded!.isEmpty) {
-              return const Center(child: Text('No hay resultados'));
-            } else {
-              return ListView(
-                  shrinkWrap: true,
-                  children: state.afiliadosLoaded!.map((afiliado) {
-                    return Column(
-                      children: [
-                        ListTile(
-                            title: Text('${afiliado.documento}'),
-                            subtitle: Text(
-                                '${afiliado.nombre1} ${afiliado.nombre2} ${afiliado.apellido1} ${afiliado.apellido2}'),
-                            onTap: () async {
-                              await afiliadoBloc
-                                  .afiliadoTieneFicha(afiliado.afiliadoId!)
-                                  .then((afiliadoFicha) async {
-                                if (afiliadoFicha != null) {
-                                  CustomSnackBar.showCustomDialog(
-                                      context,
-                                      "Error al agregar al grupo familiar",
-                                      "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
-                                      () => Navigator.pop(context),
-                                      false);
-                                } else {
-                                  final newGrupoFamiliar = GrupoFamiliarEntity(
-                                    afiliadoId: afiliado.afiliadoId,
-                                    documento: afiliado.documento,
-                                    edad: afiliado.edad,
-                                    fechaNacimiento: afiliado.fecnac,
-                                    nombre1: afiliado.nombre1,
-                                    nombre2: afiliado.nombre2,
-                                    apellido1: afiliado.apellido1,
-                                    apellido2: afiliado.apellido2,
-                                    tipoDocAfiliado: afiliado.tipoDocAfiliado,
-                                    codGeneroAfiliado:
-                                        afiliado.codGeneroAfiliado,
-                                    codRegimenAfiliado:
-                                        afiliado.codRegimenAfiliado,
-                                  );
+      return AfiliadosList(onTap: (AfiliadoEntity afiliado) async {
+        await afiliadoBloc
+            .afiliadoTieneFicha(afiliado.afiliadoId!)
+            .then((afiliadoFicha) async {
+          if (afiliadoFicha != null) {
+            CustomSnackBar.showCustomDialog(
+                context,
+                "Error al agregar al grupo familiar",
+                "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
+                () => Navigator.pop(context),
+                false);
+          } else {
+            final newGrupoFamiliar = GrupoFamiliarEntity(
+              afiliadoId: afiliado.afiliadoId,
+              documento: afiliado.documento,
+              edad: afiliado.edad,
+              fechaNacimiento: afiliado.fecnac,
+              nombre1: afiliado.nombre1,
+              nombre2: afiliado.nombre2,
+              apellido1: afiliado.apellido1,
+              apellido2: afiliado.apellido2,
+              tipoDocAfiliado: afiliado.tipoDocAfiliado,
+              codGeneroAfiliado: afiliado.codGeneroAfiliado,
+              codTipoRegimenAfiliado: afiliado.codTipoRegimenAfiliado,
+            );
 
-                                  Navigator.push<void>(
-                                      context,
-                                      MaterialPageRoute<void>(
-                                        builder: (BuildContext context) =>
-                                            GrupoFamiliarForm(
-                                                afiliadoGrupoFamiliar:
-                                                    newGrupoFamiliar),
-                                      ));
-                                }
-                              });
-                            }),
-                        const Divider()
-                      ],
-                    );
-                  }).toList());
-            }
+            Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => GrupoFamiliarForm(
+                      afiliadoGrupoFamiliar: newGrupoFamiliar),
+                ));
           }
-          return Container();
-        },
-      );
+        });
+      });
     } else {
-      return BlocBuilder<AfiliadoBloc, AfiliadosState>(
-        builder: (context, state) {
-          if (state is AfiliadosLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is AfiliadosError) {
-            return Center(child: Text(state.message));
-          }
-          if (state is AfiliadosLoaded) {
-            if (state.afiliadosLoaded!.isEmpty) {
-              return const Center(child: Text('No hay resultados'));
-            } else {
-              return ListView(
-                  children: state.afiliadosLoaded!.map((afiliado) {
-                return Column(
-                  children: [
-                    ListTile(
-                        title: Text('${afiliado.documento}'),
-                        subtitle: Text(
-                            '${afiliado.nombre1} ${afiliado.nombre2} ${afiliado.apellido1} ${afiliado.apellido2}'),
-                        onTap: () async {
-                          if (afiliado.edad! >= 14) {
-                            await afiliadoBloc
-                                .afiliadoTieneFicha(afiliado.afiliadoId!)
-                                .then((ficha) {
-                              if (ficha != null) {
-                                if (ficha.numFicha == null ||
-                                    ficha.numFicha == '') {
-                                  afiliado.copyWith(
-                                      afiliadoId: ficha.familia!.fkAfiliadoId);
+      return AfiliadosList(onTap: (AfiliadoEntity afiliado) async {
+        if (afiliado.edad! >= 14) {
+          await afiliadoBloc
+              .afiliadoTieneFicha(afiliado.afiliadoId!)
+              .then((ficha) {
+            if (ficha != null) {
+              if (ficha.numFicha == null || ficha.numFicha == '') {
+                afiliado.copyWith(afiliadoId: ficha.familia!.fkAfiliadoId);
 
-                                  cargarFicha(context, ficha, afiliado);
-                                } else {
-                                  CustomSnackBar.showCustomDialog(
-                                      context,
-                                      "Afiliado ya registrado",
-                                      "El afiliado se encuentra registrado en la ficha No. ${ficha.numFicha}",
-                                      () => Navigator.pop(context),
-                                      false);
-                                }
-                              } else {
-                                createFicha(context, afiliado);
-                              }
-                            });
-                          } else {
-                            CustomSnackBar.showCustomDialog(
-                                context,
-                                "Error al crear ficha",
-                                "Este afiliado es menor de 14 años",
-                                () => Navigator.pop(context),
-                                false);
-                          }
-                        }),
-                    const Divider()
-                  ],
-                );
-              }).toList());
+                cargarFicha(context, ficha, afiliado);
+              } else {
+                CustomSnackBar.showCustomDialog(
+                    context,
+                    "Afiliado ya registrado",
+                    "El afiliado se encuentra registrado en la ficha No. ${ficha.numFicha}",
+                    () => Navigator.pop(context),
+                    false);
+              }
+            } else {
+              createFicha(context, afiliado);
             }
-          }
-          return Container();
-        },
-      );
+          });
+        } else {
+          CustomSnackBar.showCustomDialog(
+              context,
+              "Error al crear ficha",
+              "Este afiliado es menor de 14 años",
+              () => Navigator.pop(context),
+              false);
+        }
+      });
     }
   }
 
   Future<void> createFicha(
       BuildContext context, AfiliadoEntity afiliado) async {
     final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
-    final authBloc = BlocProvider.of<AuthBloc>(context);
     final familiaCubit = BlocProvider.of<FamiliaCubit>(context);
     final fichaCubit = BlocProvider.of<FichaCubit>(context);
+    final user = supabase.auth.currentUser!;
 
     final newFicha = FichaEntity(
         fechaCreacion: DateTime.now(),
         numFicha: '',
-        userNameCreacion: authBloc.state.usuario!.userName,
+        userNameCreacion: user.userMetadata?['UserName'],
         ultimaActualizacion: DateTime.now());
 
     final respFicha = await fichaCubit.createFichaDB(newFicha);
@@ -246,5 +182,49 @@ class SearchAfiliados extends SearchDelegate {
   void showResults(BuildContext context) {
     afiliadoBloc.add(QueryChanged(query));
     super.showResults(context);
+  }
+}
+
+class AfiliadosList extends StatelessWidget {
+  const AfiliadosList({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
+
+  final Function(AfiliadoEntity afiliado) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AfiliadoBloc, AfiliadosState>(
+      builder: (context, state) {
+        if (state is AfiliadosLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is AfiliadosError) {
+          return Center(child: Text(state.message));
+        }
+        if (state is AfiliadosLoaded) {
+          if (state.afiliadosLoaded!.isEmpty) {
+            return const Center(child: Text('No hay resultados'));
+          } else {
+            return ListView(
+                shrinkWrap: true,
+                children: state.afiliadosLoaded!.map((afiliado) {
+                  return Column(
+                    children: [
+                      ListTile(
+                          title: Text(afiliado.documento ?? ''),
+                          subtitle: Text(
+                              '${afiliado.nombre1 ?? ''} ${afiliado.nombre2 ?? ''} ${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}'),
+                          onTap: () => onTap(afiliado)),
+                      const Divider()
+                    ],
+                  );
+                }).toList());
+          }
+        }
+        return Container();
+      },
+    );
   }
 }

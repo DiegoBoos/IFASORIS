@@ -11,7 +11,11 @@ class TechoViviendaModel extends TechoViviendaEntity {
     int? techoViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          techoViviendaId: techoViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static TechoViviendaModel fromEntity(TechoViviendaEntity entity) {
     return TechoViviendaModel(

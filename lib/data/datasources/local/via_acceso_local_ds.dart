@@ -13,7 +13,7 @@ class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   @override
   Future<List<ViaAccesoModel>> getViasAcceso() async {
     try {
-      final res = await supabase.from('ViasAcceso').select();
+      final res = await supabase.from('viasacceso').select();
       final result =
           List<ViaAccesoModel>.from(res.map((m) => ViaAccesoModel.fromJson(m)))
               .toList();
@@ -29,9 +29,9 @@ class ViaAccesoLocalDataSourceImpl implements ViaAccesoLocalDataSource {
   @override
   Future<int> saveViaAcceso(ViaAccesoModel viaAcceso) async {
     try {
-      final res = await supabase.from('ViasAcceso').insert(viaAcceso.toJson());
+      await supabase.from('viasacceso').upsert(viaAcceso.toJson());
 
-      return res;
+      return viaAcceso.viaAccesoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

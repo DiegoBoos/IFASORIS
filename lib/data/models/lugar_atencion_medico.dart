@@ -10,7 +10,10 @@ class LugarAtencionMedicoModel extends LugarAtencionMedicoEntity {
   const LugarAtencionMedicoModel({
     int? lugarAtencionMedicoId,
     String? descripcion,
-  });
+  }) : super(
+          lugarAtencionMedicoId: lugarAtencionMedicoId,
+          descripcion: descripcion,
+        );
 
   static LugarAtencionMedicoModel fromEntity(LugarAtencionMedicoEntity entity) {
     return LugarAtencionMedicoModel(

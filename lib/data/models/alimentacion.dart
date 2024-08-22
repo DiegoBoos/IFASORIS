@@ -10,7 +10,10 @@ class AlimentacionModel extends AlimentacionEntity {
   const AlimentacionModel({
     int? alimentacionId,
     String? descripcion,
-  });
+  }) : super(
+          alimentacionId: alimentacionId,
+          descripcion: descripcion,
+        );
 
   static fromEntity(AlimentacionEntity alimentacion) {
     return AlimentacionModel(

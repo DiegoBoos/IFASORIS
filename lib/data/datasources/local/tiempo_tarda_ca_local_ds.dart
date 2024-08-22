@@ -13,7 +13,7 @@ class TiempoTardaCALocalDataSourceImpl implements TiempoTardaCALocalDataSource {
   @override
   Future<List<TiempoTardaCAModel>> getTiemposTardaCA() async {
     try {
-      final res = await supabase.from('TiemposTarda_CentroAtencion').select();
+      final res = await supabase.from('tiempostarda_centroatencion').select();
       final result = List<TiempoTardaCAModel>.from(
           res.map((m) => TiempoTardaCAModel.fromJson(m))).toList();
 
@@ -28,11 +28,11 @@ class TiempoTardaCALocalDataSourceImpl implements TiempoTardaCALocalDataSource {
   @override
   Future<int> saveTiempoTardaCA(TiempoTardaCAModel tiempoTardaCA) async {
     try {
-      final res = await supabase
-          .from('TiemposTarda_CentroAtencion')
-          .insert(tiempoTardaCA.toJson());
+      await supabase
+          .from('tiempostarda_centroatencion')
+          .upsert(tiempoTardaCA.toJson());
 
-      return res;
+      return tiempoTardaCA.tiempoTardaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

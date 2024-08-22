@@ -10,7 +10,10 @@ class CostoDesplazamientoModel extends CostoDesplazamientoEntity {
   const CostoDesplazamientoModel({
     int? costoDesplazamientoId,
     String? descripcion,
-  });
+  }) : super(
+          costoDesplazamientoId: costoDesplazamientoId,
+          descripcion: descripcion,
+        );
 
   static CostoDesplazamientoModel fromEntity(CostoDesplazamientoEntity entity) {
     return CostoDesplazamientoModel(

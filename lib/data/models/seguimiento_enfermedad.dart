@@ -10,7 +10,10 @@ class SeguimientoEnfermedadModel extends SeguimientoEnfermedadEntity {
   const SeguimientoEnfermedadModel({
     int? seguimientoEnfermedadId,
     String? descripcion,
-  });
+  }) : super(
+          seguimientoEnfermedadId: seguimientoEnfermedadId,
+          descripcion: descripcion,
+        );
 
   static SeguimientoEnfermedadModel fromEntity(
       SeguimientoEnfermedadEntity entity) {

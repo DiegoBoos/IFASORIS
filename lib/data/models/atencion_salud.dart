@@ -27,7 +27,20 @@ class AtencionSaludModel extends AtencionSaludEntity {
       List<LstEnfermedadTradicional>? lstEnfermedadesTradicionales,
       List<LstEspMedTradicional>? lstEspecialidadesMedTradicional,
       List<LstLugarAtencionMedico>? lstLugaresAtencionMedico,
-      List<LstPlantaMedicinal>? lstPlantasMedicinales});
+      List<LstPlantaMedicinal>? lstPlantasMedicinales})
+      : super(
+            atencionSaludId: atencionSaludId,
+            afiliadoId: afiliadoId,
+            familiaId: familiaId,
+            enfermedadAcudeId: enfermedadAcudeId,
+            recibioAtencionMedTradicionalId: recibioAtencionMedTradicionalId,
+            enfermedadTratamientoId: enfermedadTratamientoId,
+            utilizaPlantasMedId: utilizaPlantasMedId,
+            lugarPlantaMedicinalId: lugarPlantaMedicinalId,
+            lstEnfermedadesTradicionales: lstEnfermedadesTradicionales,
+            lstEspecialidadesMedTradicional: lstEspecialidadesMedTradicional,
+            lstLugaresAtencionMedico: lstLugaresAtencionMedico,
+            lstPlantasMedicinales: lstPlantasMedicinales);
 
   static fromEntity(AtencionSaludEntity atencionSalud) {
     return AtencionSaludModel(

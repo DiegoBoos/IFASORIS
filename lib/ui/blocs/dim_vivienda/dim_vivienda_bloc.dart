@@ -209,8 +209,8 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
     on<IluminacionViviendaChanged>((event, emit) {
       emit(state.copyWith(iluminacionViviendaId: event.iluminacionViviendaId));
     });
-    on<CuartoViviendaChanged>((event, emit) {
-      emit(state.copyWith(cuartosViviendaId: event.cuartosViviendaId));
+    on<NroCuartoViviendaChanged>((event, emit) {
+      emit(state.copyWith(nroCuartosViviendaId: event.nroCuartosViviendaId));
     });
     on<ServiciosPublicosViviendaChanged>((event, emit) {
       emit(state.copyWith(lstServPublico: event.lstServPublico));

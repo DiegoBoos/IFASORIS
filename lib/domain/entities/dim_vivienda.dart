@@ -18,7 +18,7 @@ class DimViviendaEntity extends Equatable {
   final int? tenenciaViviendaId;
   final int? ventilacionViviendaId;
   final int? iluminacionViviendaId;
-  final int? cuartosViviendaId;
+  final int? nroCuartosViviendaId;
   final List<LstPiso>? lstPiso;
   final List<LstTecho>? lstTecho;
   final List<LstServPublico>? lstServPublico;
@@ -37,7 +37,7 @@ class DimViviendaEntity extends Equatable {
     this.tenenciaViviendaId,
     this.ventilacionViviendaId,
     this.iluminacionViviendaId,
-    this.cuartosViviendaId,
+    this.nroCuartosViviendaId,
     this.lstPiso,
     this.lstTecho,
     this.lstServPublico,
@@ -57,7 +57,7 @@ class DimViviendaEntity extends Equatable {
           int? tenenciaViviendaId,
           int? ventilacionViviendaId,
           int? iluminacionViviendaId,
-          int? cuartosViviendaId,
+          int? nroCuartosViviendaId,
           List<LstPiso>? lstPiso,
           List<LstTecho>? lstTecho,
           List<LstServPublico>? lstServPublico,
@@ -77,7 +77,7 @@ class DimViviendaEntity extends Equatable {
             ventilacionViviendaId ?? this.ventilacionViviendaId,
         iluminacionViviendaId:
             iluminacionViviendaId ?? this.iluminacionViviendaId,
-        cuartosViviendaId: cuartosViviendaId ?? this.cuartosViviendaId,
+        nroCuartosViviendaId: nroCuartosViviendaId ?? this.nroCuartosViviendaId,
         lstPiso: lstPiso ?? this.lstPiso,
         lstTecho: lstTecho ?? this.lstTecho,
         lstServPublico: lstServPublico ?? this.lstServPublico,
@@ -98,7 +98,7 @@ class DimViviendaEntity extends Equatable {
         tenenciaViviendaId,
         ventilacionViviendaId,
         iluminacionViviendaId,
-        cuartosViviendaId,
+        nroCuartosViviendaId,
         lstPiso,
         lstTecho,
         lstServPublico,

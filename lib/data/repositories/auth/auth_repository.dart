@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/usuario.dart';
 import '../../../domain/repositories/auth/auth_repository.dart';
 import '../../datasources/remote/auth_remote_ds.dart';
-import '../../models/usuario.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
@@ -14,8 +14,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.authRemoteDataSource});
 
   @override
-  Future<Either<Failure, UsuarioModel>> logInRepository(
-      UsuarioEntity usuario) async {
+  Future<Either<Failure, User>> logInRepository(UsuarioEntity usuario) async {
     try {
       final result = await authRemoteDataSource.logIn(usuario);
 
@@ -28,7 +27,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> registerRepository(
+  Future<Either<Failure, User>> registerRepository(
       UsuarioEntity usuario) async {
     try {
       final result = await authRemoteDataSource.register(usuario);

@@ -10,7 +10,10 @@ class ParentescoModel extends ParentescoEntity {
   const ParentescoModel({
     int? parentescoId,
     String? descripcion,
-  });
+  }) : super(
+          parentescoId: parentescoId,
+          descripcion: descripcion,
+        );
 
   static ParentescoModel fromEntity(ParentescoEntity entity) {
     return ParentescoModel(

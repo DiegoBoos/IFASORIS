@@ -1,18 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:ifasoris/domain/usecases/auth/auth_exports.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../core/app_config.dart';
+import '../../../domain/entities/usuario.dart';
 import '../../models/usuario.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<UsuarioModel> logIn(UsuarioEntity usuario);
-  Future<Map<String, dynamic>> register(UsuarioEntity usuario);
+  Future<User> logIn(UsuarioEntity usuario);
+  Future<User> register(UsuarioEntity usuario);
   Future<String> cambioDispositivo(String userName, String idEquipo);
 }
 
@@ -23,13 +22,79 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<UsuarioModel> logIn(UsuarioEntity usuario) async {
+  Future<User> logIn(UsuarioEntity usuario) async {
     try {
-      await supabase.auth.signInWithPassword(
+      final decodedResp = await loginResponse(usuario);
+
+      prefs.token = decodedResp['Result']['Token'];
+
+      final AuthResponse res = await supabase.auth.signInWithPassword(
         email: usuario.email,
         password: usuario.password!,
       );
 
+      return res.user!;
+    } on AuthException catch (e) {
+      throw ServerFailure([e.message]);
+    } catch (e) {
+      throw const ServerFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<User> register(UsuarioEntity usuario) async {
+    try {
+      final decodedResp = await loginResponse(usuario);
+      final usuarioModel =
+          UsuarioModel.fromJson(decodedResp['Result']['Usuario']);
+
+      final AuthResponse res = await supabase.auth.signUp(
+        email: usuario.email,
+        password: usuario.password!,
+        data: {
+          'UserName': usuarioModel.userName,
+          'Device_Id': usuarioModel.deviceId,
+          'Municipio_id': usuarioModel.municipioId,
+          'Departamento_id': usuarioModel.departamentoId,
+        },
+      );
+
+      return res.user!;
+    } on AuthException catch (e) {
+      throw ServerFailure([e.message]);
+    } catch (e) {
+      throw const ServerFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<String> cambioDispositivo(String userName, String idEquipo) async {
+    try {
+      final formData = {"UserName": userName, "Device_Id": idEquipo};
+
+      final uri = Uri.parse('${AppConfig.apiPublica}/users/cambiodispositivo');
+
+      final resp = await client.put(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${prefs.token}',
+          },
+          body: jsonEncode(formData));
+
+      final decodedResp = jsonDecode(resp.body);
+      if (decodedResp['StatusCode'] == 200) {
+        return decodedResp['ErrorMessages'][0];
+      } else {
+        throw const ServerFailure(['Excepción no controlada']);
+      }
+    } catch (e) {
+      throw const ServerFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  Future<Map<String, dynamic>> loginResponse(UsuarioEntity usuario) async {
+    try {
       final formData = {
         'UserName': usuario.userName,
         'Password': usuario.password,
@@ -46,67 +111,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (resp.statusCode == 200) {
         final decodedResp = jsonDecode(resp.body);
-        final resultMap = decodedResp['Result']['Usuario'];
-
-        final result = UsuarioModel.fromJson(resultMap);
-        return result;
+        return decodedResp;
       } else {
         final decodedErrorResp = jsonDecode(resp.body);
         throw ServerFailure(decodedErrorResp['ErrorMessages']);
       }
-    } on SocketException catch (e) {
-      throw SocketException(e.toString());
-    }
-  }
-
-  @override
-  Future<Map<String, dynamic>> register(UsuarioEntity usuario) async {
-    try {
-      final AuthResponse res = await supabase.auth.signUp(
-        email: usuario.email,
-        password: usuario.password!,
-        data: {
-          'UserName': usuario.userName,
-          'Device_Id': usuario.deviceId,
-        },
-      );
-
-      final Session? session = res.session;
-      final User? user = res.user;
-
-      return {
-        'session': session,
-        'user': user,
-      };
     } catch (e) {
       throw const ServerFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<String> cambioDispositivo(String userName, String idEquipo) async {
-    try {
-      final formData = {"UserName": userName, "Device_Id": idEquipo};
-
-      final uri =
-          Uri.parse('${AppConfig.apiPublica}/usuarios/cambiodispositivo');
-
-      final resp = await client.put(uri,
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ${prefs.token}',
-          },
-          body: jsonEncode(formData));
-
-      final decodedResp = jsonDecode(resp.body);
-      if (decodedResp['StatusCode'] == 200) {
-        return decodedResp['ErrorMessages'][0];
-      } else {
-        throw const ServerFailure(['Excepción no controlada']);
-      }
-    } on SocketException catch (e) {
-      throw SocketException(e.toString());
     }
   }
 }

@@ -16,7 +16,7 @@ class UltimaVezInstSaludLocalDataSourceImpl
   Future<List<UltimaVezInstSaludModel>> getUltimasVecesInstSalud() async {
     try {
       final res = await supabase
-          .from('UltimaVezInstSalud_CuidadoSaludCondRiesgo')
+          .from('ultimavezinstsalud_cuidadosaludcondriesgo')
           .select();
       final result = List<UltimaVezInstSaludModel>.from(
           res.map((m) => UltimaVezInstSaludModel.fromJson(m))).toList();
@@ -33,11 +33,11 @@ class UltimaVezInstSaludLocalDataSourceImpl
   Future<int> saveUltimaVezInstSalud(
       UltimaVezInstSaludModel ultimaVezInstSalud) async {
     try {
-      final res = await supabase
-          .from('UltimaVezInstSalud_CuidadoSaludCondRiesgo')
-          .insert(ultimaVezInstSalud.toJson());
+      await supabase
+          .from('ultimavezinstsalud_cuidadosaludcondriesgo')
+          .upsert(ultimaVezInstSalud.toJson());
 
-      return res;
+      return ultimaVezInstSalud.ultimaVezInstSaludId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

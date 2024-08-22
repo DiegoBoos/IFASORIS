@@ -4,7 +4,10 @@ class EstadisticaModel extends EstadisticaEntity {
   const EstadisticaModel({
     String? estadistica,
     int? cantidad,
-  });
+  }) : super(
+          estadistica: estadistica,
+          cantidad: cantidad,
+        );
 
   factory EstadisticaModel.fromJson(Map<String, dynamic> json) =>
       EstadisticaModel(

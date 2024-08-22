@@ -12,7 +12,7 @@ import '../../cubits/nombre_lengua_materna/nombre_lengua_materna_cubit.dart';
 import '../../cubits/ocupacion/ocupacion_cubit.dart';
 import '../../cubits/parentesco/parentesco_cubit.dart';
 import '../../cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
-import '../../cubits/regimen/regimen_cubit.dart';
+import '../../cubits/tipo_regimen/tipo_regimen_cubit.dart';
 import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
 import '../../../domain/entities/grupo_familiar.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
@@ -57,7 +57,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
     BlocProvider.of<GeneroCubit>(context).getGenerosDB();
     BlocProvider.of<CursoVidaCubit>(context).getCursosVidaDB();
     BlocProvider.of<ParentescoCubit>(context).getParentescosDB();
-    BlocProvider.of<RegimenCubit>(context).getRegimenesDB();
+    BlocProvider.of<TipoRegimenCubit>(context).getTipoRegimenesDB();
     BlocProvider.of<NivelEducativoCubit>(context).getNivelesEducativosDB();
     BlocProvider.of<OcupacionCubit>(context).getOcupacionesDB();
     BlocProvider.of<GrupoRiesgoCubit>(context).getGruposRiesgoDB();
@@ -105,7 +105,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                         apellido2: afiliado.apellido2,
                         tipoDocAfiliado: afiliado.tipoDocAfiliado,
                         codGeneroAfiliado: afiliado.codGeneroAfiliado,
-                        codRegimenAfiliado: afiliado.codRegimenAfiliado,
+                        codTipoRegimenAfiliado: afiliado.codTipoRegimenAfiliado,
                       ),
                     ),
                   ),

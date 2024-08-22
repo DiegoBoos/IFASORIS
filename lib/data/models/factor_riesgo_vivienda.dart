@@ -11,7 +11,11 @@ class FactorRiesgoViviendaModel extends FactorRiesgoViviendaEntity {
     int? factorRiesgoViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          factorRiesgoViviendaId: factorRiesgoViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static FactorRiesgoViviendaModel fromEntity(
       FactorRiesgoViviendaEntity entity) {

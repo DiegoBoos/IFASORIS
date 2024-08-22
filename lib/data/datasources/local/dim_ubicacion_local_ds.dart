@@ -5,8 +5,8 @@ import '../../../core/constants.dart';
 import '../../models/dim_ubicacion.dart';
 
 abstract class DimUbicacionLocalDataSource {
-  Future<int> saveDimUbicacion(DimUbicacionModel dimUbicacion);
   Future<DimUbicacionModel?> getDimUbicacion(int afiliadoId, int familiaId);
+  Future<int> saveDimUbicacion(DimUbicacionModel dimUbicacion);
 }
 
 class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
@@ -15,7 +15,7 @@ class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
       int afiliadoId, int familiaId) async {
     try {
       final res = await supabase
-          .from('Asp1_Ubicacion')
+          .from('asp1_ubicacion')
           .select()
           .eq('Afiliado_id', afiliadoId)
           .eq('Familia_id', familiaId);
@@ -35,10 +35,10 @@ class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
   @override
   Future<int> saveDimUbicacion(DimUbicacionModel dimUbicacion) async {
     try {
-      final res = await supabase.from('Asp1_Ubicacion').insert(
+      await supabase.from('asp1_ubicacion').upsert(
             dimUbicacion.toJson(),
           );
-      return res;
+      return dimUbicacion.ubicacionId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

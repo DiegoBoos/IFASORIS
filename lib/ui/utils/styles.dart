@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Styles {
-  static const Color lightGreen = Color(0XFF64DD17);
-  static const Color obscureGreen = Color(0xff008E69);
+  static const Color lightGreen = Color(0XFF11AF4E);
+  static const Color obscureGreen = Color(0XFF36BA67);
   static const titleStyle =
       TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
   static const subtitleStyle =

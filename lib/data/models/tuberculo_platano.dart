@@ -11,7 +11,11 @@ class TuberculoPlatanoModel extends TuberculoPlatanoEntity {
     int? tuberculoPlatanoId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          tuberculoPlatanoId: tuberculoPlatanoId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static TuberculoPlatanoModel fromEntity(TuberculoPlatanoEntity entity) {
     return TuberculoPlatanoModel(

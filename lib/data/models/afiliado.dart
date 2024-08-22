@@ -49,10 +49,40 @@ class AfiliadoModel extends AfiliadoEntity {
       String? codZonaAfiliado,
       String? codTipoPobAfiliado,
       String? ipsPrimariaAfiliado,
-      int? idePrestador,
+      String? idePrestador,
       int? edad,
-      String? codRegimenAfiliado,
-      int? familiaId});
+      String? codTipoRegimenAfiliado,
+      int? familiaId})
+      : super(
+            afiliadoId: afiliadoId,
+            tipoDocAfiliado: tipoDocAfiliado,
+            documento: documento,
+            afiliadoIdCabezaFamilia: afiliadoIdCabezaFamilia,
+            tipoDocCabezaFamilia: tipoDocCabezaFamilia,
+            documentocabeza: documentocabeza,
+            apellido1: apellido1,
+            apellido2: apellido2,
+            nombre1: nombre1,
+            nombre2: nombre2,
+            fecnac: fecnac,
+            codGeneroAfiliado: codGeneroAfiliado,
+            direccion: direccion,
+            telefonofijo: telefonofijo,
+            telefonocel1: telefonocel1,
+            telefonocel2: telefonocel2,
+            departamentoIde: departamentoIde,
+            codMpioAfiliado: codMpioAfiliado,
+            nomMpioAfiliado: nomMpioAfiliado,
+            codDptoAfiliado: codDptoAfiliado,
+            nomDptoAfiliado: nomDptoAfiliado,
+            fechafiliacion: fechafiliacion,
+            codZonaAfiliado: codZonaAfiliado,
+            codTipoPobAfiliado: codTipoPobAfiliado,
+            ipsPrimariaAfiliado: ipsPrimariaAfiliado,
+            idePrestador: idePrestador,
+            edad: edad,
+            codTipoRegimenAfiliado: codTipoRegimenAfiliado,
+            familiaId: familiaId);
 
   static AfiliadoModel fromEntity(AfiliadoEntity entity) {
     return AfiliadoModel(
@@ -83,7 +113,7 @@ class AfiliadoModel extends AfiliadoEntity {
       ipsPrimariaAfiliado: entity.ipsPrimariaAfiliado,
       idePrestador: entity.idePrestador,
       edad: entity.edad,
-      codRegimenAfiliado: entity.codRegimenAfiliado,
+      codTipoRegimenAfiliado: entity.codTipoRegimenAfiliado,
       familiaId: entity.familiaId,
     );
   }
@@ -118,7 +148,7 @@ class AfiliadoModel extends AfiliadoEntity {
         ipsPrimariaAfiliado: json["IPSPrimaria_Afiliado"],
         idePrestador: json["IDE_PRESTADOR"],
         edad: json["Edad"],
-        codRegimenAfiliado: json["CodRegimen_Afiliado"],
+        codTipoRegimenAfiliado: json["CodTipoRegimen_Afiliado"],
         familiaId: json["Familia_id"],
       );
 
@@ -152,7 +182,7 @@ class AfiliadoModel extends AfiliadoEntity {
         ipsPrimariaAfiliado: json["IPSPrimaria_Afiliado"],
         idePrestador: json["IDE_PRESTADOR"],
         edad: json["Edad"],
-        codRegimenAfiliado: json["CodRegimen_Afiliado"],
+        codTipoRegimenAfiliado: json["CodTipoRegimen_Afiliado"],
         familiaId: json["Familia_id"],
       );
 
@@ -184,7 +214,7 @@ class AfiliadoModel extends AfiliadoEntity {
         "IPSPrimaria_Afiliado": ipsPrimariaAfiliado,
         "IDE_PRESTADOR": idePrestador,
         "Edad": edad,
-        "CodRegimen_Afiliado": codRegimenAfiliado,
+        "CodTipoRegimen_Afiliado": codTipoRegimenAfiliado,
         "Familia_id": familiaId,
       };
 
@@ -216,7 +246,7 @@ class AfiliadoModel extends AfiliadoEntity {
         "IPSPrimaria_Afiliado": ipsPrimariaAfiliado,
         "IDE_PRESTADOR": idePrestador,
         "Edad": edad,
-        "CodRegimen_Afiliado": codRegimenAfiliado,
+        "CodTipoRegimen_Afiliado": codTipoRegimenAfiliado,
         "Familia_id": familiaId,
       };
 }

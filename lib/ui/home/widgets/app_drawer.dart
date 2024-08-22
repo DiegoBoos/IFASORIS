@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../domain/entities/usuario.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/ficha/ficha_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
-import '../../cubits/internet/internet_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
 import '../pages/graficas_page.dart';
-import 'custom_appbar.dart';
+import 'sync_status.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -17,8 +16,7 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     final fichaBloc = BlocProvider.of<FichaBloc>(context);
-    final usuario = authBloc.state.usuario ??
-        const UsuarioEntity(userName: '', deviceId: '', password: '');
+    final user = supabase.auth.currentUser!;
 
     return Drawer(
       elevation: 16.0,
@@ -44,7 +42,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  usuario.userName ?? '',
+                  user.userMetadata!['UserName'],
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24.0,
@@ -57,7 +55,7 @@ class AppDrawer extends StatelessWidget {
               title: const Text('Sincronización (Descarga)'),
               onTap: () {
                 Navigator.pop(context);
-                comenzarSincronizacion(context, usuario, 'A');
+                comenzarSincronizacion(context, user, 'A');
               },
             ),
             const Divider(),
@@ -66,7 +64,7 @@ class AppDrawer extends StatelessWidget {
               title: const Text('Sincronización (Subida)'),
               onTap: () {
                 Navigator.pop(context);
-                comenzarSincronizacion(context, usuario, 'P');
+                comenzarSincronizacion(context, user, 'P');
               },
             ),
             const Divider(),
@@ -131,7 +129,7 @@ class AppDrawer extends StatelessWidget {
               },
             ),
             const Divider(),
-            BlocListener<AuthBloc, AuthState>(
+            BlocListener<AuthBloc, AuthenticationState>(
               listener: (context, state) {
                 if (state is LoggedOut) {
                   Navigator.pushNamedAndRemoveUntil(
@@ -149,22 +147,13 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  void comenzarSincronizacion(
-      BuildContext context, UsuarioEntity usuario, String type) {
-    final internetCubit = BlocProvider.of<InternetCubit>(context);
+  void comenzarSincronizacion(BuildContext context, User user, String type) {
     final syncBloc = BlocProvider.of<SyncBloc>(context);
-    if (internetCubit.state is InternetConnected) {
-      syncBloc.add(InitSync());
-      showModalBottomSheet(
-          isDismissible: false,
-          enableDrag: false,
-          context: context,
-          builder: (_) => SyncStatus(usuario: usuario, type: type));
-    } else if (internetCubit.state is InternetDisconnected) {
-      CustomSnackBar.showSnackBar(
-          context,
-          'No es posible sincronizar, revise su conexión a internet',
-          Colors.red);
-    }
+    syncBloc.add(InitSync());
+    showModalBottomSheet(
+        isDismissible: false,
+        enableDrag: false,
+        context: context,
+        builder: (_) => SyncStatus(currentUser: user, type: type));
   }
 }

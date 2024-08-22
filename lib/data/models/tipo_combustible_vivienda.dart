@@ -12,7 +12,11 @@ class TipoCombustibleViviendaModel extends TipoCombustibleViviendaEntity {
     int? tipoCombustibleViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          tipoCombustibleViviendaId: tipoCombustibleViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static TipoCombustibleViviendaModel fromEntity(
       TipoCombustibleViviendaEntity entity) {

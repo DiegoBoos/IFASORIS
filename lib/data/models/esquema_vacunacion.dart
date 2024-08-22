@@ -10,7 +10,10 @@ class EsquemaVacunacionModel extends EsquemaVacunacionEntity {
   const EsquemaVacunacionModel({
     int? esquemaVacunacionId,
     String? descripcion,
-  });
+  }) : super(
+          esquemaVacunacionId: esquemaVacunacionId,
+          descripcion: descripcion,
+        );
 
   static EsquemaVacunacionModel fromEntity(EsquemaVacunacionEntity entity) {
     return EsquemaVacunacionModel(

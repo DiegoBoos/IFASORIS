@@ -10,7 +10,10 @@ class NivelEducativoModel extends NivelEducativoEntity {
   const NivelEducativoModel({
     int? nivelEducativoId,
     String? descripcion,
-  });
+  }) : super(
+          nivelEducativoId: nivelEducativoId,
+          descripcion: descripcion,
+        );
 
   static NivelEducativoModel fromEntity(NivelEducativoEntity entity) {
     return NivelEducativoModel(

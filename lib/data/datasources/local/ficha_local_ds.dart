@@ -19,7 +19,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   @override
   Future<FichaModel> createFicha(FichaModel ficha) async {
     try {
-      final res = await supabase.from('Ficha').insert(ficha.toJsonLocal());
+      final res = await supabase.from('ficha').upsert(ficha.toJsonLocal());
 
       ficha.copyWith(fichaId: res);
 
@@ -34,7 +34,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   @override
   Future<List<FichaModel>> loadFichas(int familiaId) async {
     try {
-      final res = await supabase.from('Familia').select('''
+      final res = await supabase.from('familia').select('''
           Ficha.*,
           Ficha(
            Ficha_id,
@@ -59,7 +59,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
       // Fichas Reportadas
       final resFichasReportadas = await supabase
-          .from('Ficha')
+          .from('ficha')
           .select('count(*) as Cantidad')
           .neq('NumFicha', '')
           .or('Ficha_id_remote.not.is.null');
@@ -70,7 +70,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
       // Fichas Registradas
       final resFichasRegistradas = await supabase
-          .from('Ficha')
+          .from('ficha')
           .select('count(*) as Cantidad')
           .eq('NumFicha', '')
           .is_('Ficha_id_remote', null);
@@ -84,12 +84,12 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
       // Fichas Registradas Incompletas (Simplified)
       final resFichasIncompletas = await supabase
-          .from('Ficha')
+          .from('ficha')
           .select(
-              'count(*) as Cantidad, Familia!inner(Ficha_id), Asp3_GrupoFamiliar!left(isComplete)')
+              'count(*) as Cantidad, Familia!inner(Ficha_id), asp3_grupofamiliar!left(isComplete)')
           .eq('NumFicha', '')
           .is_('Ficha_id_remote', null)
-          .is_('Asp3_GrupoFamiliar.isComplete', null);
+          .is_('asp3_grupofamiliar.isComplete', null);
 
       if (resFichasIncompletas.isNotEmpty) {
         results.add({
@@ -113,7 +113,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   @override
   Future<int> deleteFicha(int fichaId) async {
     try {
-      final res = await supabase.from('Ficha').delete().eq('Ficha_id', fichaId);
+      final res = await supabase.from('ficha').delete().eq('Ficha_id', fichaId);
       return res;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
@@ -126,7 +126,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   Future<List<FichaModel>> loadFichasSincronizadas() async {
     try {
       final res = await supabase
-          .from('Ficha')
+          .from('ficha')
           .select('Ficha.*, Familia.*, Familia!inner(Ficha_id)')
           .or('NumFicha.not.eq.("")')
           .or('Ficha_id_remote.not.is.null');
@@ -162,8 +162,8 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
 
       // Insert Ficha
       final fichaRes = await supabase
-          .from('Ficha')
-          .insert(ficha.toJsonLocal())
+          .from('ficha')
+          .upsert(ficha.toJsonLocal())
           .select()
           .single();
       final newFichaId = fichaRes.data['Ficha_id'];
@@ -173,8 +173,8 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
       final newFamilia = FamiliaModel.fromEntity(familia!);
 
       final familiaRes = await supabase
-          .from('Familia')
-          .insert(newFamilia.toJson())
+          .from('familia')
+          .upsert(newFamilia.toJson())
           .select()
           .single();
       final newFamiliaId = familiaRes.data['Familia_id'];
@@ -196,7 +196,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
             'apellido2': integrante.apellido2,
             'tipoDocAfiliado': integrante.tipoDocAfiliado,
             'codGeneroAfiliado': integrante.codGeneroAfiliado,
-            'codRegimenAfiliado': integrante.codRegimenAfiliado,
+            'codTipoRegimenAfiliado': integrante.codTipoRegimenAfiliado,
             'tipoRegimenId': integrante.tipoRegimenId,
             'parentescoId': integrante.parentescoId,
             'etniaId': integrante.etniaId,
@@ -212,7 +212,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
         }).toList();
 
         for (var e in grupoFamiliarData) {
-          await supabase.from('Asp3_GrupoFamiliar').insert(e);
+          await supabase.from('asp3_grupofamiliar').upsert(e);
         }
       }
 

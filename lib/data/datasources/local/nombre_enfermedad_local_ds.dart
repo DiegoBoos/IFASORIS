@@ -7,10 +7,8 @@ import '../../models/nombre_enfermedad.dart';
 abstract class NombreEnfermedadLocalDataSource {
   Future<List<NombreEnfermedadModel>> getNombresEnfermedades();
   Future<int> saveNombreEnfermedad(NombreEnfermedadModel nombreEnfermedad);
-
   Future<List<LstNombreEnfermedad>> getLstNombresEnfermedades(
       int? cuidadoSaludCondRiesgoId);
-
   Future<int> saveNombresEnfermedades(int cuidadoSaludCondRiesgoId,
       List<LstNombreEnfermedad> lstNombresEnfermedades);
 }
@@ -21,7 +19,7 @@ class NombreEnfermedadLocalDataSourceImpl
   Future<List<NombreEnfermedadModel>> getNombresEnfermedades() async {
     try {
       final res = await supabase
-          .from('NombresEnfermedad_CuidadoSaludCondRiesgo')
+          .from('nombresenfermedad_cuidadosaludcondriesgo')
           .select();
       final result = List<NombreEnfermedadModel>.from(
           res.map((m) => NombreEnfermedadModel.fromJson(m))).toList();
@@ -38,11 +36,11 @@ class NombreEnfermedadLocalDataSourceImpl
   Future<int> saveNombreEnfermedad(
       NombreEnfermedadModel nombreEnfermedad) async {
     try {
-      final res = await supabase
-          .from('NombresEnfermedad_CuidadoSaludCondRiesgo')
-          .insert(nombreEnfermedad.toJson());
+      await supabase
+          .from('nombresenfermedad_cuidadosaludcondriesgo')
+          .upsert(nombreEnfermedad.toJson());
 
-      return res;
+      return nombreEnfermedad.nombreEnfermedadId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -55,7 +53,7 @@ class NombreEnfermedadLocalDataSourceImpl
       int? cuidadoSaludCondRiesgoId) async {
     try {
       final res = await supabase
-          .from('Asp5_CuidadoSaludCondRiesgoNombresEnfermedad')
+          .from('asp5_cuidadosaludcondriesgonombresenfermedad')
           .select()
           .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludCondRiesgoId);
 
@@ -76,7 +74,7 @@ class NombreEnfermedadLocalDataSourceImpl
     try {
       // First, delete existing records for the given cuidadoSaludCondRiesgoId
       await supabase
-          .from('Asp5_CuidadoSaludCondRiesgoNombresEnfermedad')
+          .from('asp5_cuidadosaludcondriesgonombresenfermedad')
           .delete()
           .eq('CuidadoSaludCondRiesgo_id', cuidadoSaludCondRiesgoId);
 
@@ -90,8 +88,8 @@ class NombreEnfermedadLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp5_CuidadoSaludCondRiesgoNombresEnfermedad')
-          .insert(cuidadoSaludCondRiesgoNombresEnfermedades);
+          .from('asp5_cuidadosaludcondriesgonombresenfermedad')
+          .upsert(cuidadoSaludCondRiesgoNombresEnfermedades);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;

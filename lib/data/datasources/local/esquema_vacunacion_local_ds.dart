@@ -15,7 +15,7 @@ class EsquemaVacunacionLocalDataSourceImpl
   Future<List<EsquemaVacunacionModel>> getEsquemasVacunacion() async {
     try {
       final res = await supabase
-          .from('EsquemasVacunacion_CuidadoSaludCondRiesgo')
+          .from('esquemasvacunacion_cuidadosaludcondriesgo')
           .select();
       final result = List<EsquemaVacunacionModel>.from(
           res.map((m) => EsquemaVacunacionModel.fromJson(m))).toList();
@@ -32,11 +32,11 @@ class EsquemaVacunacionLocalDataSourceImpl
   Future<int> saveEsquemaVacunacion(
       EsquemaVacunacionModel esquemaVacunacion) async {
     try {
-      final res = await supabase
-          .from('EsquemasVacunacion_CuidadoSaludCondRiesgo')
-          .insert(esquemaVacunacion.toJson());
+      await supabase
+          .from('esquemasvacunacion_cuidadosaludcondriesgo')
+          .upsert(esquemaVacunacion.toJson());
 
-      return res;
+      return esquemaVacunacion.esquemaVacunacionId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -13,7 +13,11 @@ class MedioUtilizaMedTradicionalModel extends MedioUtilizaMedTradicionalEntity {
     int? medioUtilizaMedTradId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          medioUtilizaMedTradId: medioUtilizaMedTradId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static MedioUtilizaMedTradicionalModel fromEntity(
       MedioUtilizaMedTradicionalEntity entity) {

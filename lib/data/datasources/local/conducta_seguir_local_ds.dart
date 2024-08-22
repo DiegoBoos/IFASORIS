@@ -15,7 +15,7 @@ class ConductaSeguirLocalDataSourceImpl
   Future<List<ConductaSeguirModel>> getConductasSeguir() async {
     try {
       final res = await supabase
-          .from('ConductasSeguir_CuidadoSaludCondRiesgo')
+          .from('conductasseguir_cuidadosaludcondriesgo')
           .select();
       final result = List<ConductaSeguirModel>.from(
           res.map((m) => ConductaSeguirModel.fromJson(m))).toList();
@@ -31,11 +31,11 @@ class ConductaSeguirLocalDataSourceImpl
   @override
   Future<int> saveConductaSeguir(ConductaSeguirModel conductaSeguir) async {
     try {
-      final res = await supabase
-          .from('ConductasSeguir_CuidadoSaludCondRiesgo')
-          .insert(conductaSeguir.toJson());
+      await supabase
+          .from('conductasseguir_cuidadosaludcondriesgo')
+          .upsert(conductaSeguir.toJson());
 
-      return res;
+      return conductaSeguir.conductaSeguirId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

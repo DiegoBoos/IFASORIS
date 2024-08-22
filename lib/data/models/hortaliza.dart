@@ -11,7 +11,11 @@ class HortalizaModel extends HortalizaEntity {
     int? hortalizaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          hortalizaId: hortalizaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static HortalizaModel fromEntity(HortalizaEntity entity) {
     return HortalizaModel(

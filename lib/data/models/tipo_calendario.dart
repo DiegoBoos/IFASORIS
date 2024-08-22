@@ -10,7 +10,10 @@ class TipoCalendarioModel extends TipoCalendarioEntity {
   const TipoCalendarioModel({
     int? tipoCalendarioId,
     String? descripcion,
-  });
+  }) : super(
+          tipoCalendarioId: tipoCalendarioId,
+          descripcion: descripcion,
+        );
 
   static TipoCalendarioModel fromEntity(TipoCalendarioEntity entity) {
     return TipoCalendarioModel(

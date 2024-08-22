@@ -16,7 +16,7 @@ class VentilacionViviendaLocalDataSourceImpl
   Future<List<VentilacionViviendaModel>> getVentilacionesVivienda() async {
     try {
       final res =
-          await supabase.from('VentilacionVivienda_DatosVivienda').select();
+          await supabase.from('ventilacionvivienda_datosvivienda').select();
       final result = List<VentilacionViviendaModel>.from(
           res.map((m) => VentilacionViviendaModel.fromJson(m))).toList();
 
@@ -32,11 +32,11 @@ class VentilacionViviendaLocalDataSourceImpl
   Future<int> saveVentilacionVivienda(
       VentilacionViviendaModel ventilacionVivienda) async {
     try {
-      final res = await supabase
-          .from('VentilacionVivienda_DatosVivienda')
-          .insert(ventilacionVivienda.toJson());
+      await supabase
+          .from('ventilacionvivienda_datosvivienda')
+          .upsert(ventilacionVivienda.toJson());
 
-      return res;
+      return ventilacionVivienda.ventilacionViviendaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

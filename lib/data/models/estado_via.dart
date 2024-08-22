@@ -10,7 +10,10 @@ class EstadoViaModel extends EstadoViaEntity {
   const EstadoViaModel({
     int? estadoViaId,
     String? descripcion,
-  });
+  }) : super(
+          estadoViaId: estadoViaId,
+          descripcion: descripcion,
+        );
 
   static EstadoViaModel fromEntity(EstadoViaEntity entity) {
     return EstadoViaModel(

@@ -11,7 +11,11 @@ class TenenciaViviendaModel extends TenenciaViviendaEntity {
     int? tenenciaViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          tenenciaViviendaId: tenenciaViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static TenenciaViviendaModel fromEntity(TenenciaViviendaEntity entity) {
     return TenenciaViviendaModel(

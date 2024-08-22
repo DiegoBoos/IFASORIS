@@ -12,7 +12,12 @@ class ResguardoModel extends ResguardoEntity {
     String? nombreResguardo,
     String? codaneResguardo,
     int? departamentoIde,
-  });
+  }) : super(
+          resguardoId: resguardoId,
+          nombreResguardo: nombreResguardo,
+          codaneResguardo: codaneResguardo,
+          departamentoIde: departamentoIde,
+        );
 
   static ResguardoModel fromEntity(ResguardoEntity entity) {
     return ResguardoModel(

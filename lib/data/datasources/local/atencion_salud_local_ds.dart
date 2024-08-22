@@ -12,24 +12,10 @@ abstract class AtencionSaludLocalDataSource {
 
 class AtencionSaludLocalDataSourceImpl implements AtencionSaludLocalDataSource {
   @override
-  Future<int> saveAtencionSalud(AtencionSaludModel atencionSalud) async {
-    try {
-      final res = await supabase.from('Asp7_AtencionSalud').insert(
-            atencionSalud.toJson(),
-          );
-      return res;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure(['Error al guardar atencion en salud']);
-    }
-  }
-
-  @override
   Future<AtencionSaludModel?> getAtencionSalud(int afiliadoId) async {
     try {
       final res = await supabase
-          .from('Asp7_AtencionSalud')
+          .from('asp7_atencionsalud')
           .select()
           .eq('Afiliado_id', afiliadoId);
 
@@ -41,6 +27,20 @@ class AtencionSaludLocalDataSourceImpl implements AtencionSaludLocalDataSource {
       throw DatabaseFailure([error.message]);
     } catch (_) {
       throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<int> saveAtencionSalud(AtencionSaludModel atencionSalud) async {
+    try {
+      await supabase.from('asp7_atencionsalud').upsert(
+            atencionSalud.toJson(),
+          );
+      return atencionSalud.atencionSaludId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure(['Error al guardar atencion en salud']);
     }
   }
 }

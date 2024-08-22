@@ -14,7 +14,13 @@ class FamiliaModel extends FamiliaEntity {
     String? apellidosFlia,
     int? fkAfiliadoId,
     DimViviendaModel? vivienda,
-  });
+  }) : super(
+          familiaId: familiaId,
+          fichaId: fichaId,
+          apellidosFlia: apellidosFlia,
+          fkAfiliadoId: fkAfiliadoId,
+          vivienda: vivienda,
+        );
 
   static FamiliaModel fromEntity(FamiliaEntity entity) {
     return FamiliaModel(

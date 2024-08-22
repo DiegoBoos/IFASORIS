@@ -15,7 +15,7 @@ class LugarVacunacionLocalDataSourceImpl
   Future<List<LugarVacunacionModel>> getLugaresVacunacion() async {
     try {
       final res = await supabase
-          .from('LugaresVacunacion_CuidadoSaludCondRiesgo')
+          .from('lugaresvacunacion_cuidadosaludcondriesgo')
           .select();
       final result = List<LugarVacunacionModel>.from(
           res.map((m) => LugarVacunacionModel.fromJson(m))).toList();
@@ -31,11 +31,11 @@ class LugarVacunacionLocalDataSourceImpl
   @override
   Future<int> saveLugarVacunacion(LugarVacunacionModel lugarVacunacion) async {
     try {
-      final res = await supabase
-          .from('LugaresVacunacion_CuidadoSaludCondRiesgo')
-          .insert(lugarVacunacion.toJson());
+      await supabase
+          .from('lugaresvacunacion_cuidadosaludcondriesgo')
+          .upsert(lugarVacunacion.toJson());
 
-      return res;
+      return lugarVacunacion.lugarVacunacionId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthenticationState>(
         listener: (context, state) {
           if (state is AuthLoaded) {
             Navigator.pushNamed(context, 'home');

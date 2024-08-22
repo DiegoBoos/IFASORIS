@@ -8,10 +8,8 @@ abstract class LugarAtencionMedicoLocalDataSource {
   Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico();
   Future<int> saveLugarAtencionMedico(
       LugarAtencionMedicoModel lugarAtencionMedico);
-
   Future<List<LstLugarAtencionMedico>> getLugaresAtencionMedicoAtencionSalud(
       int? atencionSaludId);
-
   Future<int> saveLugaresAtencionMedicoAtencionSalud(
       int atencionSaludId, List<LstLugarAtencionMedico> lstLugarAtencionMedico);
 }
@@ -22,7 +20,7 @@ class LugarAtencionMedicoLocalDataSourceImpl
   Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico() async {
     try {
       final res =
-          await supabase.from('LugaresAtencionMedico_AtencionSalud').select();
+          await supabase.from('lugaresatencionmedico_atencionsalud').select();
       final result = List<LugarAtencionMedicoModel>.from(
           res.map((m) => LugarAtencionMedicoModel.fromJson(m))).toList();
 
@@ -38,11 +36,11 @@ class LugarAtencionMedicoLocalDataSourceImpl
   Future<int> saveLugarAtencionMedico(
       LugarAtencionMedicoModel lugarAtencionMedico) async {
     try {
-      final res = await supabase
-          .from('LugaresAtencionMedico_AtencionSalud')
-          .insert(lugarAtencionMedico.toJson());
+      await supabase
+          .from('lugaresatencionmedico_atencionsalud')
+          .upsert(lugarAtencionMedico.toJson());
 
-      return res;
+      return lugarAtencionMedico.lugarAtencionMedicoId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -55,7 +53,7 @@ class LugarAtencionMedicoLocalDataSourceImpl
       int? atencionSaludId) async {
     try {
       final res = await supabase
-          .from('Asp7_LugaresAtencionAtencionSalud')
+          .from('asp7_lugaresatencionatencionsalud')
           .select()
           .eq('AtencionSalud_id', atencionSaludId);
       final result = List<LstLugarAtencionMedico>.from(
@@ -75,7 +73,7 @@ class LugarAtencionMedicoLocalDataSourceImpl
     try {
       // First, delete existing records for the given atencionSaludId
       await supabase
-          .from('Asp7_LugaresAtencionAtencionSalud')
+          .from('asp7_lugaresatencionatencionsalud')
           .delete()
           .eq('AtencionSalud_id', atencionSaludId);
 
@@ -89,8 +87,8 @@ class LugarAtencionMedicoLocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp7_LugaresAtencionAtencionSalud')
-          .insert(lugaresAtencionMedicoAtencionSalud);
+          .from('asp7_lugaresatencionatencionsalud')
+          .upsert(lugaresAtencionMedicoAtencionSalud);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;

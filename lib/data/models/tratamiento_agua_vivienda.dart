@@ -12,7 +12,11 @@ class TratamientoAguaViviendaModel extends TratamientoAguaViviendaEntity {
     int? tratamientoAguaViviendaId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          tratamientoAguaViviendaId: tratamientoAguaViviendaId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static TratamientoAguaViviendaModel fromEntity(
       TratamientoAguaViviendaEntity entity) {

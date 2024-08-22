@@ -16,7 +16,7 @@ class CondicionNutricionalLocalDataSourceImpl
   Future<List<CondicionNutricionalModel>> getCondicionesNutricionales() async {
     try {
       final res = await supabase
-          .from('CondicionesNutricionales_CuidadoSaludCondRiesgo')
+          .from('condicionesnutricionales_cuidadosaludcondriesgo')
           .select();
       final result = List<CondicionNutricionalModel>.from(
           res.map((m) => CondicionNutricionalModel.fromJson(m))).toList();
@@ -34,11 +34,11 @@ class CondicionNutricionalLocalDataSourceImpl
   Future<int> saveCondicionNutricional(
       CondicionNutricionalModel condicionNutricional) async {
     try {
-      final res = await supabase
-          .from('CondicionesNutricionales_CuidadoSaludCondRiesgo')
-          .insert(condicionNutricional.toJson());
+      await supabase
+          .from('condicionesnutricionales_cuidadosaludcondriesgo')
+          .upsert(condicionNutricional.toJson());
 
-      return res;
+      return condicionNutricional.condicionNutricionalId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

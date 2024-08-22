@@ -18,7 +18,7 @@ import '../../../domain/usecases/tipo_sanitario_vivienda/tipo_sanitario_vivienda
 import '../../../domain/usecases/tipo_vivienda/tipo_vivienda_exports.dart';
 import '../../../domain/usecases/tratamiento_agua_vivienda/tratamiento_agua_vivienda_exports.dart';
 import '../../../domain/usecases/ventilacion_vivienda/ventilacion_vivienda_exports.dart';
-import '../../cubits/cuarto_vivienda/cuarto_vivienda_cubit.dart';
+import '../../cubits/nro_cuarto_vivienda/nro_cuarto_vivienda_cubit.dart';
 import '../../cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
 import '../../cubits/piso_vivienda/piso_vivienda_cubit.dart';
 import '../../cubits/techo_vivienda/techo_vivienda_cubit.dart';
@@ -44,7 +44,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   int? _tenenciaVivienda;
   int? _ventilacionViviendaId;
   int? _iluminacionViviendaId;
-  int? _cuartoViviendaId;
+  int? _nroCuartoViviendaId;
 
   bool _showOtroTechoVivienda = false;
   String? _otroTipoTecho;
@@ -70,7 +70,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
       _tenenciaVivienda = widget.dimVivienda.tenenciaViviendaId;
       _ventilacionViviendaId = widget.dimVivienda.ventilacionViviendaId;
       _iluminacionViviendaId = widget.dimVivienda.iluminacionViviendaId;
-      _cuartoViviendaId = widget.dimVivienda.cuartosViviendaId;
+      _nroCuartoViviendaId = widget.dimVivienda.nroCuartosViviendaId;
 
       if (widget.dimVivienda.lstTecho != null &&
           widget.dimVivienda.lstTecho!.isNotEmpty &&
@@ -206,26 +206,26 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
           textAlign: TextAlign.center,
         ),
         const Divider(),
-        BlocBuilder<CuartoViviendaCubit, CuartosViviendaState>(
+        BlocBuilder<NroCuartoViviendaCubit, NroCuartosViviendaState>(
           builder: (context, state) {
-            if (state is CuartosViviendaLoaded) {
-              final cuartosViviendaLoaded = state.cuartosViviendaLoaded!;
+            if (state is NroCuartosViviendaLoaded) {
+              final nroCuartosViviendaLoaded = state.nroCuartosViviendaLoaded!;
 
               return DropdownButtonFormField<int>(
-                value: _cuartoViviendaId,
-                items: cuartosViviendaLoaded
-                    .map((cuartoVivienda) => DropdownMenuItem<int>(
-                          value: cuartoVivienda.cuartoViviendaId,
-                          child: Text(cuartoVivienda.descripcion ?? ''),
+                value: _nroCuartoViviendaId,
+                items: nroCuartosViviendaLoaded
+                    .map((nroCuartoVivienda) => DropdownMenuItem<int>(
+                          value: nroCuartoVivienda.nroCuartoViviendaId,
+                          child: Text(nroCuartoVivienda.descripcion ?? ''),
                         ))
                     .toList(),
                 decoration: const InputDecoration(
                     labelText: 'Cuarto vivienda', border: OutlineInputBorder()),
                 onChanged: (int? newValue) {
                   setState(() {
-                    _cuartoViviendaId = newValue;
+                    _nroCuartoViviendaId = newValue;
                   });
-                  dimViviendaBloc.add(CuartoViviendaChanged(newValue!));
+                  dimViviendaBloc.add(NroCuartoViviendaChanged(newValue!));
                 },
                 validator: (value) {
                   if (value == null) {

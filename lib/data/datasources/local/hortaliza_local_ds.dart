@@ -7,11 +7,9 @@ import '../../models/hortaliza.dart';
 abstract class HortalizaLocalDataSource {
   Future<List<HortalizaModel>> getHortalizas();
   Future<int> saveHortaliza(HortalizaModel hortaliza);
-
+  Future<List<LstHortaliza>> getUbicacionHortalizas(int? ubicacionId);
   Future<int> saveUbicacionHortalizas(
       int ubicacionId, List<LstHortaliza> lstHortalizas);
-
-  Future<List<LstHortaliza>> getUbicacionHortalizas(int? ubicacionId);
 }
 
 class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
@@ -19,7 +17,7 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
   Future<List<HortalizaModel>> getHortalizas() async {
     try {
       final res =
-          await supabase.from('Hortalizas_AspectosSocioEconomicos').select();
+          await supabase.from('hortalizas_aspectossocioeconomicos').select();
       final result =
           List<HortalizaModel>.from(res.map((m) => HortalizaModel.fromJson(m)))
               .toList();
@@ -35,11 +33,30 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
   @override
   Future<int> saveHortaliza(HortalizaModel hortaliza) async {
     try {
-      final res = await supabase
-          .from('Hortalizas_AspectosSocioEconomicos')
-          .insert(hortaliza.toJson());
+      await supabase
+          .from('hortalizas_aspectossocioeconomicos')
+          .upsert(hortaliza.toJson());
 
-      return res;
+      return hortaliza.hortalizaId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstHortaliza>> getUbicacionHortalizas(int? ubicacionId) async {
+    try {
+      final res = await supabase
+          .from('asp1_ubicacionhortalizas')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+      final result =
+          List<LstHortaliza>.from(res.map((m) => LstHortaliza.fromJson(m)))
+              .toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -53,7 +70,7 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionHortalizas')
+          .from('asp1_ubicacionhortalizas')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -68,30 +85,11 @@ class HortalizaLocalDataSourceImpl implements HortalizaLocalDataSource {
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionHortalizas')
-          .insert(ubicacionHortalizas);
+          .from('asp1_ubicacionhortalizas')
+          .upsert(ubicacionHortalizas);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstHortaliza>> getUbicacionHortalizas(int? ubicacionId) async {
-    try {
-      final res = await supabase
-          .from('Asp1_UbicacionHortalizas')
-          .select()
-          .eq('Ubicacion_id', ubicacionId);
-      final result =
-          List<LstHortaliza>.from(res.map((m) => LstHortaliza.fromJson(m)))
-              .toList();
-
-      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

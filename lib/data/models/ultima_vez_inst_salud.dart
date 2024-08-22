@@ -10,7 +10,10 @@ class UltimaVezInstSaludModel extends UltimaVezInstSaludEntity {
   const UltimaVezInstSaludModel({
     int? ultimaVezInstSaludId,
     String? descripcion,
-  });
+  }) : super(
+          ultimaVezInstSaludId: ultimaVezInstSaludId,
+          descripcion: descripcion,
+        );
 
   static UltimaVezInstSaludModel fromEntity(UltimaVezInstSaludEntity entity) {
     return UltimaVezInstSaludModel(

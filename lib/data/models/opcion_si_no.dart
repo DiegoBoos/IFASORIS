@@ -10,7 +10,10 @@ class OpcionSiNoModel extends OpcionSiNoEntity {
   const OpcionSiNoModel({
     int? opcionId,
     String? descripcion,
-  });
+  }) : super(
+          opcionId: opcionId,
+          descripcion: descripcion,
+        );
 
   static OpcionSiNoModel fromEntity(OpcionSiNoEntity entity) {
     return OpcionSiNoModel(

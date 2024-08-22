@@ -10,7 +10,10 @@ class EnfermedadAcudeModel extends EnfermedadAcudeEntity {
   const EnfermedadAcudeModel({
     int? enfermedadAcudeId,
     String? descripcion,
-  });
+  }) : super(
+          enfermedadAcudeId: enfermedadAcudeId,
+          descripcion: descripcion,
+        );
 
   static EnfermedadAcudeModel fromEntity(EnfermedadAcudeEntity entity) {
     return EnfermedadAcudeModel(

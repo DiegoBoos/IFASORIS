@@ -10,7 +10,10 @@ class TiempoTardaCAModel extends TiempoTardaCAEntity {
   const TiempoTardaCAModel({
     int? tiempoTardaId,
     String? descripcion,
-  });
+  }) : super(
+          tiempoTardaId: tiempoTardaId,
+          descripcion: descripcion,
+        );
 
   static TiempoTardaCAModel fromEntity(TiempoTardaCAEntity entity) {
     return TiempoTardaCAModel(

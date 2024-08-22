@@ -10,7 +10,10 @@ class MetodoPlanificacionModel extends MetodoPlanificacionEntity {
   const MetodoPlanificacionModel({
     int? metodoPlanificacionId,
     String? descripcion,
-  });
+  }) : super(
+          metodoPlanificacionId: metodoPlanificacionId,
+          descripcion: descripcion,
+        );
 
   static MetodoPlanificacionModel fromEntity(MetodoPlanificacionEntity entity) {
     return MetodoPlanificacionModel(

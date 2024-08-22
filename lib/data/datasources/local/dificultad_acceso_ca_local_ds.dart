@@ -8,12 +8,12 @@ abstract class DificultadAccesoCALocalDataSource {
   Future<List<DificultadAccesoCAModel>> getDificultadesAccesoCA();
   Future<int> saveDificultadAccesoCA(
       DificultadAccesoCAModel dificultadAccesoCA);
-
+  Future<List<LstDificultadAccesoAtencion>> getUbicacionDificultadesAcceso(
+      int? ubicacionId);
   Future<int> saveUbicacionDificultadesAcceso(int ubicacionId,
       List<LstDificultadAccesoAtencion> lstDificultadAccesoAtencion);
 
-  Future<List<LstDificultadAccesoAtencion>> getUbicacionDificultadesAcceso(
-      int? ubicacionId);
+  Future<bool> emptyDificultadesAccesoCA(String id);
 }
 
 class DificultadAccesoCALocalDataSourceImpl
@@ -22,7 +22,7 @@ class DificultadAccesoCALocalDataSourceImpl
   Future<List<DificultadAccesoCAModel>> getDificultadesAccesoCA() async {
     try {
       final res =
-          await supabase.from('DificultadesAcceso_CentroAtencion').select();
+          await supabase.from('dificultadesacceso_centroatencion').select();
       final result = List<DificultadAccesoCAModel>.from(
           res.map((m) => DificultadAccesoCAModel.fromJson(m))).toList();
 
@@ -38,11 +38,31 @@ class DificultadAccesoCALocalDataSourceImpl
   Future<int> saveDificultadAccesoCA(
       DificultadAccesoCAModel dificultadAccesoCA) async {
     try {
-      final res = await supabase
-          .from('DificultadesAcceso_CentroAtencion')
-          .insert(dificultadAccesoCA.toJson());
+      await supabase
+          .from('dificultadesacceso_centroatencion')
+          .upsert(dificultadAccesoCA.toJson());
 
-      return res;
+      return dificultadAccesoCA.dificultaAccesoId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstDificultadAccesoAtencion>> getUbicacionDificultadesAcceso(
+      int? ubicacionId) async {
+    try {
+      final res = await supabase
+          .from('asp1_ubicaciondificultadacceso')
+          .select()
+          .eq('Ubicacion_id', ubicacionId);
+
+      final result = List<LstDificultadAccesoAtencion>.from(
+          res.map((m) => LstDificultadAccesoAtencion.fromJson(m))).toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -56,7 +76,7 @@ class DificultadAccesoCALocalDataSourceImpl
     try {
       // First, delete existing records for the given ubicacionId
       await supabase
-          .from('Asp1_UbicacionDificultadAcceso')
+          .from('asp1_ubicaciondificultadacceso')
           .delete()
           .eq('Ubicacion_id', ubicacionId);
 
@@ -70,8 +90,8 @@ class DificultadAccesoCALocalDataSourceImpl
 
       // Insert the new records
       final res = await supabase
-          .from('Asp1_UbicacionDificultadAcceso')
-          .insert(ubicacionDificultadesAcceso);
+          .from('asp1_ubicaciondificultadacceso')
+          .upsert(ubicacionDificultadesAcceso);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
@@ -83,18 +103,14 @@ class DificultadAccesoCALocalDataSourceImpl
   }
 
   @override
-  Future<List<LstDificultadAccesoAtencion>> getUbicacionDificultadesAcceso(
-      int? ubicacionId) async {
+  Future<bool> emptyDificultadesAccesoCA(String id) async {
     try {
-      final res = await supabase
-          .from('Asp1_UbicacionDificultadAcceso')
-          .select()
-          .eq('Ubicacion_id', ubicacionId);
+      await supabase
+          .from('dificultadesacceso_centroatencion')
+          .delete()
+          .eq('uid', supabase.auth.currentUser!.id);
 
-      final result = List<LstDificultadAccesoAtencion>.from(
-          res.map((m) => LstDificultadAccesoAtencion.fromJson(m))).toList();
-
-      return result;
+      return true;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

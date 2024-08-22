@@ -10,7 +10,10 @@ class CondicionNutricionalModel extends CondicionNutricionalEntity {
   const CondicionNutricionalModel({
     int? condicionNutricionalId,
     String? descripcion,
-  });
+  }) : super(
+          condicionNutricionalId: condicionNutricionalId,
+          descripcion: descripcion,
+        );
 
   static CondicionNutricionalModel fromEntity(
       CondicionNutricionalEntity entity) {

@@ -7,17 +7,15 @@ import '../../models/techo_vivienda.dart';
 abstract class TechoViviendaLocalDataSource {
   Future<List<TechoViviendaModel>> getTechosVivienda();
   Future<int> saveTechoVivienda(TechoViviendaModel techoVivienda);
-
-  Future<int> saveTechosVivienda(int datoViviendaId, List<LstTecho> lstTecho);
-
   Future<List<LstTecho>> getTechosViviendaVivienda(int? datoViviendaId);
+  Future<int> saveTechosVivienda(int datoViviendaId, List<LstTecho> lstTecho);
 }
 
 class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
   @override
   Future<List<TechoViviendaModel>> getTechosVivienda() async {
     try {
-      final res = await supabase.from('TechosVivienda_DatosVivienda').select();
+      final res = await supabase.from('techosvivienda_datosvivienda').select();
       final result = List<TechoViviendaModel>.from(
           res.map((m) => TechoViviendaModel.fromJson(m))).toList();
 
@@ -32,11 +30,29 @@ class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
   @override
   Future<int> saveTechoVivienda(TechoViviendaModel techoVivienda) async {
     try {
-      final res = await supabase
-          .from('TechosVivienda_DatosVivienda')
-          .insert(techoVivienda.toJson());
+      await supabase
+          .from('techosvivienda_datosvivienda')
+          .upsert(techoVivienda.toJson());
 
-      return res;
+      return techoVivienda.techoViviendaId!;
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<List<LstTecho>> getTechosViviendaVivienda(int? datoViviendaId) async {
+    try {
+      final res = await supabase
+          .from('asp2_datosviviendatechos')
+          .select()
+          .eq('DatoVivienda_id', datoViviendaId);
+      final result =
+          List<LstTecho>.from(res.map((m) => LstTecho.fromJson(m))).toList();
+
+      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -50,7 +66,7 @@ class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
     try {
       // First, delete existing records for the given datoViviendaId
       await supabase
-          .from('Asp2_DatosViviendaTechos')
+          .from('asp2_datosviviendatechos')
           .delete()
           .eq('DatoVivienda_id', datoViviendaId);
 
@@ -65,29 +81,11 @@ class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
 
       // Insert the new records
       final res = await supabase
-          .from('Asp2_DatosViviendaTechos')
-          .insert(viviendaTechos);
+          .from('asp2_datosviviendatechos')
+          .upsert(viviendaTechos);
 
       // Return the number of rows inserted
       return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<List<LstTecho>> getTechosViviendaVivienda(int? datoViviendaId) async {
-    try {
-      final res = await supabase
-          .from('Asp2_DatosViviendaTechos')
-          .select()
-          .eq('DatoVivienda_id', datoViviendaId);
-      final result =
-          List<LstTecho>.from(res.map((m) => LstTecho.fromJson(m))).toList();
-
-      return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

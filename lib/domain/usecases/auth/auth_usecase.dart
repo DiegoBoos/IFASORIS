@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/error/failure.dart';
 import '../../entities/usuario.dart';
@@ -9,17 +10,16 @@ class AuthUsecase {
 
   AuthUsecase(this.repository);
 
-  Future<Either<Failure, UsuarioEntity>> logInUsecase(UsuarioEntity usuario) {
+  Future<Either<Failure, User>> logInUsecase(UsuarioEntity usuario) {
     return repository.logInRepository(usuario);
+  }
+
+  Future<Either<Failure, User>> registerUsecase(UsuarioEntity usuario) {
+    return repository.registerRepository(usuario);
   }
 
   Future<Either<Failure, String>> cambioDispositivoUsecaseDB(
       String userName, String idEquipo) {
     return repository.cambioDispositivoRepositoryDB(userName, idEquipo);
-  }
-
-  Future<Either<Failure, Map<String, dynamic>>> registerUsecase(
-      UsuarioEntity usuario) {
-    return repository.registerRepository(usuario);
   }
 }

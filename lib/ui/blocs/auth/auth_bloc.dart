@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/services/shared_preferences_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../domain/entities/usuario.dart';
 import '../../../domain/usecases/auth/auth_db_usecase.dart';
@@ -9,7 +10,7 @@ import '../../../domain/usecases/auth/auth_usecase.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+class AuthBloc extends Bloc<AuthEvent, AuthenticationState> {
   final AuthUsecase auth;
   final AuthUsecaseDB authDB;
 
@@ -37,30 +38,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       result.fold((failure) {
         emit(AuthError(failure.properties.first));
       }, (data) {
-        emit(AuthAPILoaded(data));
+        emit(Registered(data));
       });
-    });
-
-    on<LogInDB>((event, emit) async {
-      emit(AuthLoading());
-      final token = prefs.token;
-      if (token.isNotEmpty) {
-        final usuario = event.usuario;
-
-        final result = await authDB.logInUsecaseDB(usuario);
-        result.fold((failure) {
-          emit(AuthError(failure.properties.first));
-        }, (data) {
-          if (data == null) {
-            emit(const AuthError('Usuario no autenticado'));
-          } else {
-            emit(AuthLoaded(data));
-          }
-        });
-      } else {
-        emit(const AuthError(
-            'No existen datos, inicie sesión con una conexión a internet'));
-      }
     });
 
     on<LogOut>((_, emit) async {

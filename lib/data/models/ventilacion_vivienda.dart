@@ -10,7 +10,10 @@ class VentilacionViviendaModel extends VentilacionViviendaEntity {
   const VentilacionViviendaModel({
     int? ventilacionViviendaId,
     String? descripcion,
-  });
+  }) : super(
+          ventilacionViviendaId: ventilacionViviendaId,
+          descripcion: descripcion,
+        );
 
   static VentilacionViviendaModel fromEntity(VentilacionViviendaEntity entity) {
     return VentilacionViviendaModel(

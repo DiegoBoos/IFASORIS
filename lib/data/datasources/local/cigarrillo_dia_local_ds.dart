@@ -14,7 +14,7 @@ class CigarrilloDiaLocalDataSourceImpl implements CigarrilloDiaLocalDataSource {
   Future<List<CigarrilloDiaModel>> getCigarrillosDia() async {
     try {
       final res = await supabase
-          .from('NumeroCigarrilosDia_EstilosVidaSaludable')
+          .from('numerocigarrilosdia_estilosvidasaludable')
           .select();
       final result = List<CigarrilloDiaModel>.from(
           res.map((m) => CigarrilloDiaModel.fromJson(m))).toList();
@@ -30,11 +30,11 @@ class CigarrilloDiaLocalDataSourceImpl implements CigarrilloDiaLocalDataSource {
   @override
   Future<int> saveCigarrilloDia(CigarrilloDiaModel cigarrilloDia) async {
     try {
-      final res = await supabase
-          .from('NumeroCigarrilosDia_EstilosVidaSaludable')
-          .insert(cigarrilloDia.toJson());
+      await supabase
+          .from('numerocigarrilosdia_estilosvidasaludable')
+          .upsert(cigarrilloDia.toJson());
 
-      return res;
+      return cigarrilloDia.numeroCigarrilloDiaId!;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

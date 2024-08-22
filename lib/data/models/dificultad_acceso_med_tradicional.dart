@@ -14,7 +14,11 @@ class DificultadAccesoMedTradicionalModel
     int? dificultadAccesoMedTradId,
     String? descripcion,
     int? departamentoIde,
-  });
+  }) : super(
+          dificultadAccesoMedTradId: dificultadAccesoMedTradId,
+          descripcion: descripcion,
+          departamentoIde: departamentoIde,
+        );
 
   static DificultadAccesoMedTradicionalModel fromEntity(
       DificultadAccesoMedTradicionalEntity entity) {
