@@ -48,5 +48,9 @@ class AfiliadoPrefsBloc extends Bloc<AfiliadoPrefsEvent, AfiliadoPrefsState> {
       sharedPreferencesService.delete('afiliado');
       emit(AfiliadoInitial());
     });
+
+    on<AfiliadoPrefsError>((event, emit) {
+      emit(AfiliadoError(event.message));
+    });
   }
 }

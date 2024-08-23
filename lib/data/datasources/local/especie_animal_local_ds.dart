@@ -58,18 +58,18 @@ class EspecieAnimalLocalDataSourceImpl implements EspecieAnimalLocalDataSource {
       // Prepare the list of records to be inserted
       final ubicacionEspeciesAnimalesCria = lstAnimalCria
           .map((item) => {
-                'especieAnimalCriaId': item.especieAnimalCriaId,
-                'ubicacionId': ubicacionId,
+                'EspecieAnimalCria_id': item.especieAnimalCriaId,
+                'Ubicacion_id': ubicacionId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicacionespecieanimalescria')
           .upsert(ubicacionEspeciesAnimalesCria);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionEspeciesAnimalesCria.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

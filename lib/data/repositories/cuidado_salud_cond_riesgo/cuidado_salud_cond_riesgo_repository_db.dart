@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/cuidado_salud_cond_riesgo.dart';
 import '../../../domain/repositories/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_repository_db.dart';
@@ -28,7 +29,7 @@ class CuidadoSaludCondRiesgoRepositoryDBImpl
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -43,7 +44,7 @@ class CuidadoSaludCondRiesgoRepositoryDBImpl
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

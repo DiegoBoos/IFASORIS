@@ -28,7 +28,7 @@ class FamiliaModel extends FamiliaEntity {
       fichaId: entity.fichaId,
       apellidosFlia: entity.apellidosFlia,
       fkAfiliadoId: entity.fkAfiliadoId,
-      vivienda: (entity.vivienda != null)
+      vivienda: entity.vivienda != null
           ? DimViviendaModel.fromEntity(entity.vivienda!)
           : null,
     );
@@ -39,13 +39,12 @@ class FamiliaModel extends FamiliaEntity {
         fichaId: json["Ficha_id"],
         apellidosFlia: json["ApellidosFlia"],
         fkAfiliadoId: json["FK_Afiliado_id"],
-        vivienda: (json["vivienda"] != null)
+        vivienda: json["vivienda"] != null
             ? DimViviendaModel.fromJson(json["vivienda"])
             : null,
       );
 
   Map<String, dynamic> toJson() => {
-        "Familia_id": familiaId,
         "Ficha_id": fichaId,
         "ApellidosFlia": apellidosFlia,
         "FK_Afiliado_id": fkAfiliadoId,

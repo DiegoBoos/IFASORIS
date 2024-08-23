@@ -73,19 +73,17 @@ class TechoViviendaLocalDataSourceImpl implements TechoViviendaLocalDataSource {
       // Prepare the list of records to be inserted
       final viviendaTechos = lstTecho
           .map((item) => {
-                'techoViviendaId': item.techoViviendaId,
-                'datoViviendaId': datoViviendaId,
-                'otroTipoTecho': item.otroTipoTecho,
+                'TechoVivienda_id': item.techoViviendaId,
+                'DatoVivienda_id': datoViviendaId,
+                'OtroTipoTecho': item.otroTipoTecho,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
-          .from('asp2_datosviviendatechos')
-          .upsert(viviendaTechos);
+      await supabase.from('asp2_datosviviendatechos').upsert(viviendaTechos);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return viviendaTechos.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -38,7 +38,7 @@ class FichaRemoteDataSourceImpl implements FichaRemoteDataSource {
 
         return result;
       } else {
-        throw const ServerFailure(['Excepción no controlada']);
+        throw const ServerFailure([unexpectedErrorMessage]);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

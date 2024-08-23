@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:ifasoris/data/models/presencia_animal_vivienda.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/presencia_animal_vivienda.dart';
 import '../../../domain/repositories/presencia_animal_vivienda/presencia_animal_vivienda_repository_db.dart';
@@ -24,7 +25,7 @@ class PresenciaAnimalViviendaRepositoryDBImpl
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -40,7 +41,7 @@ class PresenciaAnimalViviendaRepositoryDBImpl
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -54,7 +55,7 @@ class PresenciaAnimalViviendaRepositoryDBImpl
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -68,7 +69,7 @@ class PresenciaAnimalViviendaRepositoryDBImpl
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/nombre_lengua_materna.dart';
 import '../../../domain/repositories/nombre_lengua_materna/nombre_lengua_materna_repository_db.dart';
@@ -23,7 +24,7 @@ class NombreLenguaMaternaRepositoryDBImpl
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -39,7 +40,7 @@ class NombreLenguaMaternaRepositoryDBImpl
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

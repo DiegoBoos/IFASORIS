@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:ifasoris/data/models/piso_vivienda.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/piso_vivienda.dart';
 import '../../../domain/repositories/piso_vivienda/piso_vivienda_repository_db.dart';
@@ -20,7 +21,7 @@ class PisoViviendaRepositoryDBImpl implements PisoViviendaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -35,7 +36,7 @@ class PisoViviendaRepositoryDBImpl implements PisoViviendaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -49,7 +50,7 @@ class PisoViviendaRepositoryDBImpl implements PisoViviendaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -63,7 +64,7 @@ class PisoViviendaRepositoryDBImpl implements PisoViviendaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

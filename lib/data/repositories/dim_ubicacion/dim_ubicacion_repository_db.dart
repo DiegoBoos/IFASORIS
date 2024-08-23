@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/dim_ubicacion.dart';
 import '../../../domain/repositories/dim_ubicacion/dim_ubicacion_repository_db.dart';
@@ -23,7 +24,7 @@ class DimUbicacionRepositoryDBImpl implements DimUbicacionRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -38,7 +39,7 @@ class DimUbicacionRepositoryDBImpl implements DimUbicacionRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

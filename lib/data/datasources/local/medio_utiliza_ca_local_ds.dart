@@ -78,18 +78,18 @@ class MedioUtilizaCALocalDataSourceImpl
       // Prepare the list of records to be inserted
       final ubicacionMediosUtilizaCA = lstMediosUtilizaCA
           .map((item) => {
-                'ubicacionId': ubicacionId,
-                'medioUtilizaId': item.medioUtilizaId,
+                'Ubicacion_id': ubicacionId,
+                'MedioUtiliza_id': item.medioUtilizaId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicacionmedioscentroatencion')
           .upsert(ubicacionMediosUtilizaCA);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionMediosUtilizaCA.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

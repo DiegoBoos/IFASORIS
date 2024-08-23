@@ -60,7 +60,7 @@ class _LoginFormState extends State<LoginForm> {
       } on AuthException catch (error) {
         context.showErrorSnackBar(message: error.message);
       } catch (error) {
-        context.showErrorSnackBar(message: 'Excepción no controlada');
+        context.showErrorSnackBar(message: unexpectedErrorMessage);
       }
     }
 

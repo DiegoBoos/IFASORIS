@@ -75,17 +75,16 @@ class FrutoLocalDataSourceImpl implements FrutoLocalDataSource {
       // Prepare the list of records to be inserted
       final ubicacionFrutos = lstFrutos
           .map((item) => {
-                'frutoId': item.frutoId,
-                'ubicacionId': ubicacionId,
+                'Fruto_id': item.frutoId,
+                'Ubicacion_id': ubicacionId,
               })
           .toList();
 
       // Insert the new records
-      final res =
-          await supabase.from('asp1_ubicacionfrutos').upsert(ubicacionFrutos);
+      await supabase.from('asp1_ubicacionfrutos').upsert(ubicacionFrutos);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionFrutos.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

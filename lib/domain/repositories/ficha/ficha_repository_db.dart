@@ -19,4 +19,7 @@ abstract class FichaRepositoryDB {
 
   Future<Either<Failure, List<EstadisticaEntity>>>
       loadEstadisticasRepositoryDB();
+
+  Future<Either<Failure, void>> updateFichaRepositoryDB(
+      int fichaIdLocal, int numFicha);
 }

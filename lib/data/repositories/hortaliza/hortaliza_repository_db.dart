@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:ifasoris/data/models/hortaliza.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/hortaliza.dart';
 import '../../../domain/repositories/hortaliza/hortaliza_repository_db.dart';
@@ -20,7 +21,7 @@ class HortalizaRepositoryDBImpl implements HortalizaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -35,7 +36,7 @@ class HortalizaRepositoryDBImpl implements HortalizaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -49,7 +50,7 @@ class HortalizaRepositoryDBImpl implements HortalizaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -63,7 +64,7 @@ class HortalizaRepositoryDBImpl implements HortalizaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

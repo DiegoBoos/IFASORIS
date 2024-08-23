@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/curso_vida.dart';
 import '../../../domain/repositories/curso_vida/curso_vida_repository_db.dart';
@@ -20,7 +21,7 @@ class CursoVidaRepositoryDBImpl implements CursoVidaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -35,7 +36,7 @@ class CursoVidaRepositoryDBImpl implements CursoVidaRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

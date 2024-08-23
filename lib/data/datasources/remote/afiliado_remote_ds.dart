@@ -6,6 +6,7 @@ import 'package:ifasoris/services/shared_preferences_service.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../core/app_config.dart';
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../models/afiliado.dart';
 
@@ -48,7 +49,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
             //   afiliadosMap.addAll(afiliadosContent);
             // }
           } else {
-            throw const ServerFailure(['Excepción no controlada']);
+            throw const ServerFailure([unexpectedErrorMessage]);
           }
           // final base64Url = Uri.parse(
           //     '${AppConfig.syncPublica}/api/afiliados/afiliadosbydpto?limit=25000&page=$i&dptoId=$dtoId');
@@ -60,7 +61,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
           //     afiliadosMap.addAll(afiliadosContent);
           //   }
           // } else {
-          //   throw const ServerFailure(['Excepción no controlada']);
+          //   throw const ServerFailure([unexpectedErrorMessage]);
           // }
         }
         List<Map<String, dynamic>> combinedList =
@@ -74,7 +75,7 @@ class AfiliadoRemoteDataSourceImpl implements AfiliadoRemoteDataSource {
         final result = AfiliadoResponseModel.fromJson(afiliadoResp);
         return result;
       } else {
-        throw const ServerFailure(['Excepción no controlada']);
+        throw const ServerFailure([unexpectedErrorMessage]);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

@@ -13,17 +13,22 @@ abstract class FichaLocalDataSource {
   Future<List<EstadisticaModel>> loadEstadisticas();
   Future<int> deleteFicha(int fichaId);
   Future<List<FichaModel>> loadFichasSincronizadas();
+  Future<void> updateFicha(int fichaIdLocal, int numFicha);
 }
 
 class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   @override
   Future<FichaModel> createFicha(FichaModel ficha) async {
     try {
-      final res = await supabase.from('ficha').upsert(ficha.toJsonLocal());
+      await supabase.from('ficha').upsert(ficha.toJsonLocal());
+      final res = await supabase
+          .from('ficha')
+          .select('Ficha_id')
+          .eq('UserName_Creacion', ficha.userNameCreacion)
+          .single();
 
-      ficha.copyWith(fichaId: res);
-
-      return ficha;
+      final newFicha = ficha.copyWith(fichaId: res);
+      return newFicha;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -35,8 +40,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   Future<List<FichaModel>> loadFichas(int familiaId) async {
     try {
       final res = await supabase.from('familia').select('''
-          Ficha.*,
-          Ficha(
+          ficha(
            Ficha_id,
           )
           ''').eq('Familia_id', familiaId);
@@ -99,7 +103,6 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
       }
 
       // Additional queries like this need to be constructed similarly
-
       final result = results.map((m) => EstadisticaModel.fromJson(m)).toList();
 
       return result;
@@ -152,18 +155,19 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   Future<FichaModel> createFichaCompleta(FichaModel ficha) async {
     try {
       // Copy the ficha with a new fichaIdRemote and null fichaId
-      ficha = ficha.copyWith(fichaIdRemote: ficha.fichaId, fichaId: null);
+      final newFicha =
+          ficha.copyWith(fichaIdRemote: ficha.fichaId, fichaId: null);
 
       // Familia
-      var familia = ficha.familia?.copyWith(familiaId: null);
+      var familia = newFicha.familia?.copyWith(familiaId: null);
 
       // GrupoFamiliar
-      final grupoFamiliar = ficha.familia?.grupoFamiliar;
+      final grupoFamiliar = newFicha.familia?.grupoFamiliar;
 
       // Insert Ficha
       final fichaRes = await supabase
           .from('ficha')
-          .upsert(ficha.toJsonLocal())
+          .upsert(newFicha.toJsonLocal())
           .select()
           .single();
       final newFichaId = fichaRes.data['Ficha_id'];
@@ -216,11 +220,24 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
         }
       }
 
-      return ficha;
+      return newFicha;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
-      throw const DatabaseFailure(['Error creating complete ficha']);
+      throw const DatabaseFailure([unexpectedErrorMessage]);
+    }
+  }
+
+  @override
+  Future<void> updateFicha(int fichaIdLocal, int numFicha) async {
+    try {
+      await supabase
+          .from('Ficha')
+          .update({'NumFicha': numFicha}).eq('Ficha_id', fichaIdLocal);
+    } on PostgrestException catch (error) {
+      throw DatabaseFailure([error.message]);
+    } catch (_) {
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
   }
 }

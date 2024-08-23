@@ -80,18 +80,18 @@ class LugarAtencionMedicoLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final lugaresAtencionMedicoAtencionSalud = lstLugarAtencionMedico
           .map((item) => {
-                'lugarAtencionMedicoId': item.lugarAtencionMedicoId,
-                'atencionSaludId': atencionSaludId,
+                'LugarAtencionMedico_id': item.lugarAtencionMedicoId,
+                'AtencionSalud_id': atencionSaludId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp7_lugaresatencionatencionsalud')
           .upsert(lugaresAtencionMedicoAtencionSalud);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return lugaresAtencionMedicoAtencionSalud.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

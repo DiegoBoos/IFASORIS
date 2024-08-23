@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/core/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/ficha/ficha_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
@@ -32,22 +33,37 @@ class AppDrawer extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            SizedBox(
-              height: 150.0,
-              child: DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(20.0),
-                  ),
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(20.0),
                 ),
-                child: Text(
-                  user.userMetadata!['UserName'],
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24.0,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    user.userMetadata!['UserName'],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.0,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 20.0),
+                  BlocBuilder<AfiliadoPrefsBloc, AfiliadoPrefsState>(
+                    builder: (context, state) {
+                      if (state is AfiliadoLoaded) {
+                        return Text(
+                            'AFILIADO: ${state.afiliado?.nombre1 ?? ''} ${state.afiliado?.nombre2 ?? ''} ${state.afiliado?.apellido1 ?? ''} ${state.afiliado?.apellido2 ?? ''}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                            ));
+                      }
+                      return Container();
+                    },
+                  ),
+                ],
               ),
             ),
             ListTile(

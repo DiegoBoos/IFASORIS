@@ -94,11 +94,11 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   @override
   Future<int> completeGrupoFamiliar(int afiliadoId) async {
     try {
-      final res = await supabase
+      await supabase
           .from('asp3_grupofamiliar')
           .update({'isComplete': 1}).eq('Afiliado_id', afiliadoId);
 
-      return res.count ?? 0; // Supabase returns the number of affected rows
+      return 1;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -112,7 +112,8 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
       final res = await supabase
           .from('asp3_grupofamiliar')
           .select(
-              'exists (select 1 from asp3_grupofamiliar inner join Familia on asp3_grupofamiliar.Afiliado_id = Familia.FK_Afiliado_id where asp3_grupofamiliar.Afiliado_id = $afiliadoId)')
+              'exists (select 1 from asp3_grupofamiliar Familia!inner(FK_Afiliado_id)')
+          .eq('asp3_grupofamiliar.Afiliado_id', afiliadoId)
           .single(); // Use single to get the result of the exists query
 
       return res['exists'] as bool;

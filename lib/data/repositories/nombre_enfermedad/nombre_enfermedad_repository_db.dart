@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:ifasoris/data/models/nombre_enfermedad.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/nombre_enfermedad.dart';
 import '../../../domain/repositories/nombre_enfermedad/nombre_enfermedad_repository_db.dart';
@@ -22,7 +23,7 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -38,7 +39,7 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -53,7 +54,7 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -69,7 +70,7 @@ class NombreEnfermedadRepositoryDBImpl implements NombreEnfermedadRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

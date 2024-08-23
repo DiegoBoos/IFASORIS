@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants.dart';
 import '../../../domain/entities/grupo_familiar.dart';
 import '../../../domain/usecases/grupo_familiar/grupo_familiar_db_usecase.dart';
 
@@ -19,7 +20,7 @@ class AfiliadosGrupoFamiliarBloc
           .existeAfiliadoCabezaFamiliaUsecaseDB(event.familiaId);
       result.fold((failure) {
         emit(const AfiliadosGrupoFamiliarError(
-          'Excepción no controlada',
+          unexpectedErrorMessage,
         ));
       }, (data) => emit(AfiliadoCabezaFamiliaLoaded(data)));
     });
@@ -35,7 +36,7 @@ class AfiliadosGrupoFamiliarBloc
           .getGrupoFamiliarUsecaseDB(event.familiaId);
       result.fold((failure) {
         emit(const AfiliadosGrupoFamiliarError(
-          'Excepción no controlada',
+          unexpectedErrorMessage,
         ));
       }, (data) {
         emit(AfiliadosGrupoFamiliarLoaded(afiliadosGrupoFamiliarLoaded: data));

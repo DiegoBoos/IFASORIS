@@ -82,23 +82,23 @@ class MedioUtilizaMedTradicionalLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final ubicacionMediosMedTradicional = lstMediosMedTradicional
           .map((item) => {
-                'medioUtilizaMedTradicionalId': item.medioUtilizaMedTradId,
-                'ubicacionId': ubicacionId,
+                'MedioUtilizaMedTrad_id': item.medioUtilizaMedTradId,
+                'Ubicacion_id': ubicacionId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicacionmediosmedtradicional')
           .upsert(ubicacionMediosMedTradicional);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionMediosMedTradicional.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
       throw const DatabaseFailure(
-          ['Error saving medios med tradicional for ubicacion']);
+          [unexpectedErrorMessage]); // This is the only difference
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
@@ -13,6 +14,13 @@ import '../../utils/eliminar_ficha.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/buttons.dart';
 
+class _PieData {
+  _PieData(this.xData, this.yData, [this.text = '']);
+  final String xData;
+  final num yData;
+  final String text;
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -21,6 +29,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final PageController pageViewCtrl = PageController();
+
+  List<_PieData> syncedPendingCounts = [
+    _PieData('Sincronizadas: 2', 2, 'Sincronizadas'),
+    _PieData('Diligenciadas: 1', 1.toDouble(), 'Diligenciadas'),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -61,8 +76,7 @@ class _HomePageState extends State<HomePage> {
               centerTitle: true,
             ),
             drawer: const AppDrawer(),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            body: ListView(
               children: [
                 Container(
                     padding: const EdgeInsets.symmetric(
@@ -103,60 +117,177 @@ class _HomePageState extends State<HomePage> {
                   if (state is AfiliadoLoaded) {
                     return Column(
                       children: [
-                        FadeInLeft(
-                            child: CustomButton(
-                                icon: FontAwesomeIcons.dochub,
-                                texto: 'Diligenciar ficha',
-                                color1: Theme.of(context).colorScheme.primary,
-                                color2: Theme.of(context).colorScheme.secondary,
-                                onPress: () {
-                                  Navigator.pushNamed(context, 'ficha');
-                                })),
-                        FadeInRight(
-                            child: CustomButton(
-                                icon: FontAwesomeIcons.trash,
-                                texto: 'Eliminar ficha',
-                                color1: Colors.red,
-                                color2: Theme.of(context).colorScheme.error,
-                                onPress: () async {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text('Eliminar ficha'),
-                                          content: const Text(
-                                              '¿Está seguro de eliminar la ficha?'),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                                child: const Text('Cancelar')),
-                                            TextButton(
-                                                onPressed: () async {
-                                                  Navigator.pop(context);
-                                                  await eliminarFicha(context,
-                                                      state.afiliadoLoaded!);
-                                                },
-                                                child: const Text('Aceptar'))
-                                          ],
-                                        );
-                                      });
-                                })),
+                        Row(
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                pageViewCtrl.animateToPage(0,
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeIn);
+                              },
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                'Consulta',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                pageViewCtrl.animateToPage(1,
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeIn);
+                              },
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                'Sincronizadas',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                pageViewCtrl.animateToPage(2,
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeIn);
+                              },
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                'Pendientes',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 300,
+                          child: PageView(
+                            controller: pageViewCtrl,
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              Column(
+                                children: [
+                                  FadeInLeft(
+                                      child: CustomButton(
+                                          icon: FontAwesomeIcons.dochub,
+                                          texto: 'Diligenciar ficha',
+                                          color1: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          color2: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          onPress: () {
+                                            Navigator.pushNamed(
+                                                context, 'ficha');
+                                          })),
+                                  FadeInRight(
+                                      child: CustomButton(
+                                          icon: FontAwesomeIcons.trash,
+                                          texto: 'Eliminar ficha',
+                                          color1: Colors.red,
+                                          color2: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          onPress: () async {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                        'Eliminar ficha'),
+                                                    content: const Text(
+                                                        '¿Está seguro de eliminar la ficha?'),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: const Text(
+                                                              'Cancelar')),
+                                                      TextButton(
+                                                          onPressed: () async {
+                                                            Navigator.pop(
+                                                                context);
+                                                            await eliminarFicha(
+                                                                context,
+                                                                state
+                                                                    .afiliadoLoaded!);
+                                                          },
+                                                          child: const Text(
+                                                              'Aceptar'))
+                                                    ],
+                                                  );
+                                                });
+                                          })),
+                                ],
+                              ),
+                              const Text('Sincronizadas'),
+                              const Text('Pendientes'),
+                            ],
+                          ),
+                        )
                       ],
                     );
                   }
-
                   return Container();
                 }),
-                Expanded(child: Container()),
+                SfCircularChart(
+                  title: ChartTitle(
+                      text: 'Fichas Diligenciadas vs Sincronizadas',
+                      alignment: ChartAlignment.near,
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                      )),
+                  legend: Legend(isVisible: true),
+                  series: <PieSeries<_PieData, String>>[
+                    PieSeries<_PieData, String>(
+                        explode: true,
+                        explodeIndex: 0,
+                        dataSource: syncedPendingCounts,
+                        xValueMapper: (_PieData data, _) => data.xData,
+                        yValueMapper: (_PieData data, _) => data.yData,
+                        dataLabelMapper: (_PieData data, _) => data.text,
+                        dataLabelSettings: const DataLabelSettings(
+                            isVisible: true,
+                            textStyle: TextStyle(color: Colors.white))),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: Column(
-                    children: const [
-                      Text('IFASORIS'),
-                      Text('MALLAMAS EPS INDIGENA')
-                    ],
-                  ),
+                  child: Column(children: const [
+                    Text(
+                      'IFASORIS',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Text(
+                      'MALLAMAS EPS INDIGENA',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Text(
+                      'Última actualización: 23/08/2024',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ]),
                 )
               ],
             )));

@@ -77,19 +77,17 @@ class VerduraLocalDataSourceImpl implements VerduraLocalDataSource {
       // Prepare the list of records to be inserted
       final ubicacionVerduras = lstVerduras
           .map((item) => {
-                'verduraId': item.verduraId,
-                'ubicacionId': ubicacionId,
-                'otroVerdura': item.otroVerdura,
+                'Verdura_id': item.verduraId,
+                'Ubicacion_id': ubicacionId,
+                'OtroVerdura': item.otroVerdura,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
-          .from('asp1_ubicacionverduras')
-          .upsert(ubicacionVerduras);
+      await supabase.from('asp1_ubicacionverduras').upsert(ubicacionVerduras);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionVerduras.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

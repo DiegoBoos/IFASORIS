@@ -76,19 +76,17 @@ class CerealLocalDataSourceImpl implements CerealLocalDataSource {
       // Prepare the list of records to be inserted
       final ubicacionCereales = lstCereales
           .map((item) => {
-                'cerealId': item.cerealId,
-                'ubicacionId': ubicacionId,
-                'otroCereal': item.otroCereal,
+                'Cereal_id': item.cerealId,
+                'Ubicacion_id': ubicacionId,
+                'OtroCereal': item.otroCereal,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
-          .from('asp1_ubicacioncereales')
-          .upsert(ubicacionCereales);
+      await supabase.from('asp1_ubicacioncereales').upsert(ubicacionCereales);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionCereales.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

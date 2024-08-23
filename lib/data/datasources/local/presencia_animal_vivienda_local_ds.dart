@@ -62,19 +62,19 @@ class PresenciaAnimalViviendaLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final viviendaPresenciaAnimales = lstPresenciaAnimal
           .map((item) => {
-                'presenciaAnimalViviendaId': item.presenciaAnimalViviendaId,
-                'datoViviendaId': datoViviendaId,
-                'otroPresenciaAnimal': item.otroPresenciaAnimal,
+                'PresenciaAnimalVivienda_id': item.presenciaAnimalViviendaId,
+                'DatoVivienda_id': datoViviendaId,
+                'OtroPresenciaAnimal': item.otroPresenciaAnimal,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp2_datosviviendapresenciaanimales')
           .upsert(viviendaPresenciaAnimales);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return viviendaPresenciaAnimales.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

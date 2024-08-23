@@ -81,19 +81,19 @@ class TipoCombustibleViviendaLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final viviendaTiposCombustible = lstTipoCombustible
           .map((item) => {
-                'tipoCombustibleViviendaId': item.tipoCombustibleViviendaId,
-                'datoViviendaId': datoViviendaId,
-                'otroTipoCombustible': item.otroTipoCombustible,
+                'TipoCombustibleVivienda_id': item.tipoCombustibleViviendaId,
+                'DatoVivienda_id': datoViviendaId,
+                'OtroTipoCombustible': item.otroTipoCombustible,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp2_datosviviendatiposcombustible')
           .upsert(viviendaTiposCombustible);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return viviendaTiposCombustible.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -76,18 +76,18 @@ class LeguminosaLocalDataSourceImpl implements LeguminosaLocalDataSource {
       // Prepare the list of records to be inserted
       final ubicacionLeguminosas = lstLeguminosas
           .map((item) => {
-                'leguminosaId': item.leguminosaId,
-                'ubicacionId': ubicacionId,
+                'Leguminosa_id': item.leguminosaId,
+                'Ubicacion_id': ubicacionId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicacionleguminosas')
           .upsert(ubicacionLeguminosas);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionLeguminosas.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -67,25 +67,35 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
   @override
   Future<FichaModel?> afiliadoTieneFicha(int afiliadoId) async {
     try {
-      final res = await supabase.from('familia').select('''
-        Ficha.*, Familia.*
-        FROM Familia
-        JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
-        WHERE Familia.FK_Afiliado_id = $afiliadoId
+      // Fetch the first query
+      final ficha = await supabase.from('familia').select('''
+      ficha()
+  ''').eq('FK_Afiliado_id', afiliadoId);
 
-        UNION ALL
+// Fetch the second query
+      final asp3GrupoFamiliar = await supabase.from('familia').select('''
+    asp3_grupofamiliar()
+  ''').eq('asp3_grupofamiliar.Afiliado_id', afiliadoId);
 
-        SELECT Ficha.*, Familia.*
-        FROM Familia
-        JOIN Asp3_GrupoFamiliar ON Familia.Familia_id = Asp3_GrupoFamiliar.Familia_id
-        JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
-        WHERE Asp3_GrupoFamiliar.Afiliado_id = $afiliadoId
-      ''');
+// Combine the results
+      List<dynamic> combinedResults = [];
 
-      if (res.data != null) return null;
-      final familia = FamiliaModel.fromJson(res);
-      res['familia'] = familia.toJson();
-      final result = FichaModel.fromJson(res);
+// Add results from the first query
+      if (ficha is List) {
+        combinedResults.addAll(ficha);
+      }
+
+// Add results from the second query
+      if (asp3GrupoFamiliar is List) {
+        combinedResults.addAll(asp3GrupoFamiliar);
+      }
+
+// Now combinedResults contains the union of both queries
+
+      if (combinedResults.isEmpty) return null;
+      final familia = FamiliaModel.fromJson(combinedResults[0]);
+      combinedResults[0]['familia'] = familia.toJson();
+      final result = FichaModel.fromJson(combinedResults[0]);
 
       return result;
     } on PostgrestException catch (error) {
@@ -98,20 +108,39 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
   @override
   Future<String> afiliadoTieneFichaReportada(int afiliadoId) async {
     try {
-      final res = await supabase.from('familia').select('''
-    SELECT Ficha.NumFicha FROM Familia 
-    JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
-    WHERE Familia.FK_Afiliado_id = $afiliadoId AND Ficha.NumFicha <> ''
-    UNION ALL
-    SELECT Ficha.NumFicha FROM Familia 
-    JOIN Asp3_GrupoFamiliar ON Familia.Familia_id = Asp3_GrupoFamiliar.GrupoFamiliar_id
-    JOIN Ficha ON Ficha.Ficha_id = Familia.Ficha_id
-    WHERE Asp3_GrupoFamiliar.Afiliado_id  = $afiliadoId AND Ficha.NumFicha <> ''
-  ''');
+      // Fetch the first query
+      final ficha = await supabase.from('familia').select('''
+      ficha(NumFicha)
+  ''').eq('FK_Afiliado_id', afiliadoId).eq('ficha.NumFicha', '<>');
 
-      if (res.isEmpty) return '';
+// Fetch the second query
+      final asp3GrupoFamiliar = await supabase
+          .from('familia')
+          .select('''
+    ficha(NumFicha),
+    asp3_grupofamiliar()
+  ''')
+          .eq('asp3_grupofamiliar.Afiliado_id', afiliadoId)
+          .eq('ficha.NumFicha', '<>');
 
-      final numFicha = res[0].entries.first.value as String;
+      // Combine the results
+      List<dynamic> combinedResults = [];
+
+// Add results from the first query
+      if (ficha is List) {
+        combinedResults.addAll(ficha);
+      }
+
+// Add results from the second query
+      if (asp3GrupoFamiliar is List) {
+        combinedResults.addAll(asp3GrupoFamiliar);
+      }
+
+// Now combinedResults contains the union of both queries
+
+      if (combinedResults.isEmpty) return '';
+
+      final numFicha = combinedResults[0].entries.first.value as String;
       return numFicha;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);

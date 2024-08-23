@@ -14,7 +14,7 @@ class FichaCubit extends Cubit<FichaState> {
 
   Future<FichaEntity?> createFichaDB(FichaEntity ficha) async {
     final result = await fichaUsecaseDB.createFichaUsecaseDB(ficha);
-    return result.fold((failure) => null, (data) => ficha);
+    return result.fold((failure) => null, (data) => data);
   }
 
   Future<int> deleteFicha(int fichaId) async {

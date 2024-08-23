@@ -12,8 +12,6 @@ abstract class DificultadAccesoCALocalDataSource {
       int? ubicacionId);
   Future<int> saveUbicacionDificultadesAcceso(int ubicacionId,
       List<LstDificultadAccesoAtencion> lstDificultadAccesoAtencion);
-
-  Future<bool> emptyDificultadesAccesoCA(String id);
 }
 
 class DificultadAccesoCALocalDataSourceImpl
@@ -83,34 +81,18 @@ class DificultadAccesoCALocalDataSourceImpl
       // Prepare the list of records to be inserted
       final ubicacionDificultadesAcceso = lstDificultadAccesoAtencion
           .map((item) => {
-                'dificultadAccesoId': item.dificultaAccesoId,
-                'ubicacionId': ubicacionId,
+                'DificultaAcceso_id': item.dificultaAccesoId,
+                'Ubicacion_id': ubicacionId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicaciondificultadacceso')
           .upsert(ubicacionDificultadesAcceso);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
-    } on PostgrestException catch (error) {
-      throw DatabaseFailure([error.message]);
-    } catch (_) {
-      throw const DatabaseFailure([unexpectedErrorMessage]);
-    }
-  }
-
-  @override
-  Future<bool> emptyDificultadesAccesoCA(String id) async {
-    try {
-      await supabase
-          .from('dificultadesacceso_centroatencion')
-          .delete()
-          .eq('uid', supabase.auth.currentUser!.id);
-
-      return true;
+      return ubicacionDificultadesAcceso.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

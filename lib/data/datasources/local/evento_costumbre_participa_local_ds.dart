@@ -87,19 +87,19 @@ class EventoCostumbreParticipaLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final eventosCostumbresParticipa = lstEventoCostumbreParticipa
           .map((item) => {
-                'eventoCostumbreParticipaId': item.eventoCostumbreParticipaId,
-                'dimSocioCulturalPueblosIndigenasId':
+                'EventoCostumbreParticipo_id': item.eventoCostumbreParticipaId,
+                'DimSocioCulturalPueblosIndigenas_id':
                     dimensionSocioCulturalPueblosIndigenasId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp6_dimsocioculturaleventoscostumbresparticipo')
           .upsert(eventosCostumbresParticipa);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return eventosCostumbresParticipa.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

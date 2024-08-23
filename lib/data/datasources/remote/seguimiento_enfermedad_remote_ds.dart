@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../core/app_config.dart';
 import '../../../services/shared_preferences_service.dart';
@@ -34,7 +35,7 @@ class SeguimientoEnfermedadRemoteDataSourceImpl
         final result = seguimientoEnfermedadesFromJson(jsonEncode(decodedResp));
         return result;
       } else {
-        throw const ServerFailure(['Excepción no controlada']);
+        throw const ServerFailure([unexpectedErrorMessage]);
       }
     } on SocketException catch (e) {
       throw SocketException(e.toString());

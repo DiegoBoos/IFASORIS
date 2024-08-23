@@ -465,13 +465,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         final Map<String, dynamic> decodedResp = jsonDecode(resp.body);
         if (resp.statusCode == 200 || resp.statusCode == 201) {
           final fichaRemote = decodedResp['ficha'];
-          // ficha.numFicha = fichaRemote['NumFicha'];
           fichasSync.add(ficha);
 
-          await supabase
-              .from('Ficha')
-              .update({'NumFicha': fichaRemote['numFicha']}).eq(
-                  'Ficha_id', fichaIdLocal);
+          await fichaUsecaseDB.updateFichaUsecaseDB(
+              fichaIdLocal, fichaRemote['numFicha']);
 
           add(SyncIncrementChanged(state.syncProgressModel.copyWith(
             title: 'Se sincronizaron: ${fichasSync.length} fichas',
@@ -510,7 +507,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
           final decodeReq = json.decode(afiliadosResp.body);
           afiliadosMap.addAll(decodeReq);
         } else {
-          add(const SyncError('Excepción no controlada'));
+          add(const SyncError(unexpectedErrorMessage));
         }
 
         final syncProgressModel = state.syncProgressModel.copyWith(
@@ -533,7 +530,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
       await saveAfiliados(event, AfiliadoResponseModel.fromJson(afiliadoResp));
     } else {
-      add(const SyncError('Excepción no controlada'));
+      add(const SyncError(unexpectedErrorMessage));
     }
   }
 

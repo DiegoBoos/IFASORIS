@@ -92,18 +92,19 @@ class DificultadAccesoMedTradicionalLocalDataSourceImpl
       final ubicacionDificultadesAccesoMedTradicional =
           lstDificultadAccesoMedTradicional
               .map((item) => {
-                    'dificultadAccesoMedTradId': item.dificultadAccesoMedTradId,
-                    'ubicacionId': ubicacionId,
+                    'DificultadAccesoMedTrad_id':
+                        item.dificultadAccesoMedTradId,
+                    'Ubicacion_id': ubicacionId,
                   })
               .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicacionaccesomedtradicional')
           .upsert(ubicacionDificultadesAccesoMedTradicional);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionDificultadesAccesoMedTradicional.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../domain/entities/enfermedad_acude.dart';
 import '../../../domain/repositories/enfermedad_acude/enfermedad_acude_repository_db.dart';
@@ -22,7 +23,7 @@ class EnfermedadAcudeRepositoryDBImpl implements EnfermedadAcudeRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 
@@ -38,7 +39,7 @@ class EnfermedadAcudeRepositoryDBImpl implements EnfermedadAcudeRepositoryDB {
     } on DatabaseFailure catch (e) {
       return Left(DatabaseFailure(e.properties));
     } on ServerFailure {
-      return const Left(DatabaseFailure(['Excepción no controlada']));
+      return const Left(DatabaseFailure([unexpectedErrorMessage]));
     }
   }
 }

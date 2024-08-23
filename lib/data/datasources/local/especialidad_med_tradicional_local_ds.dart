@@ -73,18 +73,18 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final ubicacionEspecialidadesMedTradicional = lstEspMedTradicional
           .map((item) => {
-                'especialidadMedTradicionalId': item.especialidadMedTradId,
-                'ubicacionId': ubicacionId,
+                'EspecialidadMedTrad_id': item.especialidadMedTradId,
+                'Ubicacion_id': ubicacionId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicacionespecialidadmedtradicional')
           .upsert(ubicacionEspecialidadesMedTradicional);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionEspecialidadesMedTradicional.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
@@ -105,8 +105,8 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final ubicacionNombresMedTradicional = lstNombreMedTradicional
           .map((item) => {
-                'nombreMedTradicional': item.nombreMedTradicional,
-                'ubicacionId': ubicacionId,
+                'NombreMedTradicional': item.nombreMedTradicional,
+                'Ubicacion_id': ubicacionId,
               })
           .toList();
 
@@ -137,18 +137,18 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final nombresMedTradicionalAtencionSalud = lstEspMedTradicional
           .map((item) => {
-                'especialidadMedTradId': item.especialidadMedTradId,
-                'atencionSaludId': atencionSaludId,
+                'EspecialidadMedTrad_id': item.especialidadMedTradId,
+                'AtencionSalud_id': atencionSaludId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp7_especialidadesmedtradatencionsalud')
           .upsert(nombresMedTradicionalAtencionSalud);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return nombresMedTradicionalAtencionSalud.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

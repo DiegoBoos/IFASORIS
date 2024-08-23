@@ -73,18 +73,17 @@ class PisoViviendaLocalDataSourceImpl implements PisoViviendaLocalDataSource {
       // Prepare the list of records to be inserted
       final viviendaPisos = lstPiso
           .map((item) => {
-                'pisoViviendaId': item.pisoViviendaId,
-                'datoViviendaId': datoViviendaId,
-                'otroTipoPiso': item.otroTipoPiso,
+                'PisoVivienda_id': item.pisoViviendaId,
+                'DatoVivienda_id': datoViviendaId,
+                'OtroTipoPiso': item.otroTipoPiso,
               })
           .toList();
 
       // Insert the new records
-      final res =
-          await supabase.from('asp2_datosviviendapisos').upsert(viviendaPisos);
+      await supabase.from('asp2_datosviviendapisos').upsert(viviendaPisos);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return viviendaPisos.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

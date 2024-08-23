@@ -35,4 +35,9 @@ class FichaUsecaseDB {
   Future<Either<Failure, List<EstadisticaEntity>>> loadEstadisticasUsecaseDB() {
     return repositoryDB.loadEstadisticasRepositoryDB();
   }
+
+  Future<Either<Failure, void>> updateFichaUsecaseDB(
+      int fichaIdLocal, int numFicha) {
+    return repositoryDB.updateFichaRepositoryDB(fichaIdLocal, numFicha);
+  }
 }

@@ -86,7 +86,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (decodedResp['StatusCode'] == 200) {
         return decodedResp['ErrorMessages'][0];
       } else {
-        throw const ServerFailure(['Excepción no controlada']);
+        throw const ServerFailure([unexpectedErrorMessage]);
       }
     } catch (e) {
       throw const ServerFailure([unexpectedErrorMessage]);

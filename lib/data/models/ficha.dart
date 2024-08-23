@@ -45,7 +45,9 @@ class FichaModel extends FichaEntity {
 
   factory FichaModel.fromJson(Map<String, dynamic> json) => FichaModel(
         fichaId: json["Ficha_id"],
-        fechaCreacion: DateTime.parse(json["FechaCreacion"]),
+        fechaCreacion: json["FechaCreacion"] != null
+            ? DateTime.parse(json["FechaCreacion"])
+            : null,
         numFicha: json["NumFicha"],
         userNameCreacion: json["UserName_Creacion"],
         userNameActualizacion: json["UserName_Actualizacion"],
@@ -103,7 +105,6 @@ class FichaModel extends FichaEntity {
       };
 
   Map<String, dynamic> toJsonLocal() => {
-        "Ficha_id": fichaId,
         "FechaCreacion": fechaCreacion?.toIso8601String(),
         "NumFicha": numFicha,
         "UserName_Creacion": userNameCreacion,

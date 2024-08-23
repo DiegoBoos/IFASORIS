@@ -95,25 +95,28 @@ class SearchAfiliados extends SearchDelegate {
       });
     } else {
       return AfiliadosList(onTap: (AfiliadoEntity afiliado) async {
+        final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
+
         if (afiliado.edad! >= 14) {
           await afiliadoBloc
               .afiliadoTieneFicha(afiliado.afiliadoId!)
               .then((ficha) {
-            if (ficha != null) {
-              if (ficha.numFicha == null || ficha.numFicha == '') {
-                afiliado.copyWith(afiliadoId: ficha.familia!.fkAfiliadoId);
-
-                cargarFicha(context, ficha, afiliado);
-              } else {
-                CustomSnackBar.showCustomDialog(
-                    context,
-                    "Afiliado ya registrado",
-                    "El afiliado se encuentra registrado en la ficha No. ${ficha.numFicha}",
-                    () => Navigator.pop(context),
-                    false);
-              }
-            } else {
+            if (ficha == null) {
               createFicha(context, afiliado);
+            } else if (ficha.numFicha == null || ficha.numFicha == '') {
+              final newAfiliado = afiliado.copyWith(
+                  afiliadoId: ficha.familia!.fkAfiliadoId,
+                  familiaId: ficha.familia!.familiaId);
+
+              afiliadoPrefsBloc.add(SaveAfiliado(newAfiliado));
+              close(context, null);
+            } else {
+              CustomSnackBar.showCustomDialog(
+                  context,
+                  "Afiliado ya registrado",
+                  "El afiliado se encuentra registrado en la ficha No. ${ficha.numFicha}",
+                  () => Navigator.pop(context),
+                  false);
             }
           });
         } else {
@@ -143,34 +146,24 @@ class SearchAfiliados extends SearchDelegate {
 
     final respFicha = await fichaCubit.createFichaDB(newFicha);
 
-    if (respFicha != null) {
-      final newFamilia = FamiliaEntity(
-          fichaId: respFicha.fichaId!,
-          apellidosFlia: '${afiliado.apellido1}  ${afiliado.apellido2}',
-          fkAfiliadoId: afiliado.afiliadoId!);
+    if (respFicha == null) return;
 
-      await familiaCubit.createFamiliaDB(newFamilia).then((value) {
-        if (value != null) {
-          afiliadoPrefsBloc
-              .add(SaveAfiliado(afiliado.copyWith(familiaId: value.familiaId)));
+    final newFamilia = FamiliaEntity(
+        fichaId: respFicha.fichaId!,
+        apellidosFlia:
+            '${afiliado.apellido1 ?? ''} ${afiliado.apellido2 ?? ''}',
+        fkAfiliadoId: afiliado.afiliadoId!);
 
-          close(context, null);
-        } else {
-          afiliadoPrefsBloc
-              .add(const AfiliadoPrefsError("Error al crear ficha"));
-          close(context, null);
-        }
-      });
-    }
-  }
-
-  Future<void> cargarFicha(
-      BuildContext context, FichaEntity ficha, AfiliadoEntity afiliado) async {
-    final afiliadoPrefsBloc = BlocProvider.of<AfiliadoPrefsBloc>(context);
-
-    afiliadoPrefsBloc.add(
-        SaveAfiliado(afiliado.copyWith(familiaId: ficha.familia!.familiaId)));
-    close(context, null);
+    await familiaCubit.createFamiliaDB(newFamilia).then((value) {
+      if (value != null) {
+        final newAfiliado = afiliado.copyWith(familiaId: value.familiaId);
+        afiliadoPrefsBloc.add(SaveAfiliado(newAfiliado));
+        close(context, null);
+      } else {
+        afiliadoPrefsBloc.add(const AfiliadoPrefsError("Error al crear ficha"));
+        close(context, null);
+      }
+    });
   }
 
   @override

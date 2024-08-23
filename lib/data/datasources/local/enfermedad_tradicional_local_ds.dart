@@ -82,18 +82,18 @@ class EnfermedadTradicionalLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final enfermedadesTradicionalesAtencionSalud = lstEnfermedadTradicional
           .map((item) => {
-                'enfermedadTradicionalId': item.enfermedadTradicionalId,
-                'atencionSaludId': atencionSaludId,
+                'EnfermedadTradicional_id': item.enfermedadTradicionalId,
+                'AtencionSalud_id': atencionSaludId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp7_enfermedadestradicionales_atencionsalud')
           .upsert(enfermedadesTradicionalesAtencionSalud);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return enfermedadesTradicionalesAtencionSalud.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

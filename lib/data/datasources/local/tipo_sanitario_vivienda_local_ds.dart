@@ -79,19 +79,19 @@ class TipoSanitarioViviendaLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final viviendaTiposSanitario = lstTipoSanitario
           .map((item) => {
-                'tipoSanitarioViviendaId': item.tipoSanitarioViviendaId,
-                'datoViviendaId': datoViviendaId,
-                'otroTipoSanitario': item.otroTipoSanitario,
+                'TipoSanitarioVivienda_id': item.tipoSanitarioViviendaId,
+                'DatoVivienda_id': datoViviendaId,
+                'OtroTipoSanitario': item.otroTipoSanitario,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp2_datosviviendatipossanitario')
           .upsert(viviendaTiposSanitario);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return viviendaTiposSanitario.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

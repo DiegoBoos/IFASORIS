@@ -80,19 +80,19 @@ class TratamientoAguaViviendaLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final viviendaTratamientosAgua = lstTmtoAgua
           .map((item) => {
-                'tratamientoAguaViviendaId': item.tratamientoAguaViviendaId,
-                'datoViviendaId': datoViviendaId,
-                'otroTratamientoAgua': item.otroTratamientoAgua,
+                'TratamientoAguaVivienda_id': item.tratamientoAguaViviendaId,
+                'DatoVivienda_id': datoViviendaId,
+                'OtroTratamientoAgua': item.otroTratamientoAgua,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp2_datosviviendatratamientosagua')
           .upsert(viviendaTratamientosAgua);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return viviendaTratamientosAgua.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

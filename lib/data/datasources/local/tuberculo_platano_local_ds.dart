@@ -80,19 +80,19 @@ class TuberculoPlatanoLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final ubicacionTuberculosPlatanos = lstTuberculos
           .map((item) => {
-                'tuberculoPlatanoId': item.tuberculoPlatanoId,
-                'ubicacionId': ubicacionId,
-                'otroTuberculoPlatano': item.otroTuberculoPlatano,
+                'TuberculoPlatano_id': item.tuberculoPlatanoId,
+                'Ubicacion_id': ubicacionId,
+                'OtroTuberculoPlatano': item.otroTuberculoPlatano,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicaciontuberculosplatanos')
           .upsert(ubicacionTuberculosPlatanos);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionTuberculosPlatanos.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

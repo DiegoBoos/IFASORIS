@@ -60,7 +60,7 @@ class _RegisterFormState extends State<RegisterForm> {
       } on AuthException catch (error) {
         context.showErrorSnackBar(message: error.message);
       } catch (error) {
-        context.showErrorSnackBar(message: 'Excepción no controlada');
+        context.showErrorSnackBar(message: unexpectedErrorMessage);
       }
     }
 

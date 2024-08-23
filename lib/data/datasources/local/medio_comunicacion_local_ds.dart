@@ -78,18 +78,18 @@ class MedioComunicacionLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final ubicacionMediosComunicacion = lstMediosComunica
           .map((item) => {
-                'medioComunicacionId': item.medioComunicacionId,
-                'ubicacionId': ubicacionId,
+                'MedioComunicacion_id': item.medioComunicacionId,
+                'Ubicacion_id': ubicacionId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicacionmedioscomunicacion')
           .upsert(ubicacionMediosComunicacion);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return ubicacionMediosComunicacion.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

@@ -82,18 +82,18 @@ class ServicioPublicoViviendaLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final viviendaServiciosPublicos = lstServPublico
           .map((item) => {
-                'servicioPublicoViviendaId': item.servicioPublicoViviendaId,
-                'datoViviendaId': datoViviendaId,
+                'ServicioPublicoVivienda_id': item.servicioPublicoViviendaId,
+                'DatoVivienda_id': datoViviendaId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp2_datosviviendaserviciospublicos')
           .upsert(viviendaServiciosPublicos);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return viviendaServiciosPublicos.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

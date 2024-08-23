@@ -81,22 +81,22 @@ class NombreEnfermedadLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final cuidadoSaludCondRiesgoNombresEnfermedades = lstNombresEnfermedades
           .map((item) => {
-                'nombreEnfermedadId': item.nombreEnfermedadId,
-                'cuidadoSaludCondRiesgoId': cuidadoSaludCondRiesgoId,
+                'NombreEnfermedad_id': item.nombreEnfermedadId,
+                'CuidadoSaludCondRiesgo_id': cuidadoSaludCondRiesgoId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp5_cuidadosaludcondriesgonombresenfermedad')
           .upsert(cuidadoSaludCondRiesgoNombresEnfermedades);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return cuidadoSaludCondRiesgoNombresEnfermedades.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
-      throw const DatabaseFailure(['Error saving nombres enfermedades']);
+      throw const DatabaseFailure([unexpectedErrorMessage]);
     }
   }
 }

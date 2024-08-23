@@ -78,18 +78,18 @@ class PlantaMedicinalLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final plantasMedicinalesAtencionSalud = lstPlantaMedicinal
           .map((item) => {
-                'plantaMedicinalId': item.plantaMedicinalId,
-                'atencionSaludId': atencionSaludId,
+                'PlantaMedicinal_id': item.plantaMedicinalId,
+                'AtencionSalud_id': atencionSaludId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp7_plantasmedicinales_atencionsalud')
           .upsert(plantasMedicinalesAtencionSalud);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return plantasMedicinalesAtencionSalud.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

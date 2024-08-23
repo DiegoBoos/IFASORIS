@@ -81,18 +81,18 @@ class ServicioSolicitadoLocalDataSourceImpl
       // Prepare the list of records to be inserted
       final cuidadoSaludCondRiesgoServiciosSolicitados = lstServiciosSolicitados
           .map((item) => {
-                'servicioSolicitadoId': item.servicioSolicitadoId,
-                'cuidadoSaludCondRiesgoId': cuidadoSaludCondRiesgoId,
+                'ServicioSolicitado_id': item.servicioSolicitadoId,
+                'CuidadoSaludCondRiesgo_id': cuidadoSaludCondRiesgoId,
               })
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp5_cuidadosaludcondriesgoserviciossolicita')
           .upsert(cuidadoSaludCondRiesgoServiciosSolicitados);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return cuidadoSaludCondRiesgoServiciosSolicitados.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {
