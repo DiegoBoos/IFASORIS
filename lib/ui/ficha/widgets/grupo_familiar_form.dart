@@ -17,7 +17,7 @@ import '../../cubits/parentesco/parentesco_cubit.dart';
 import '../../cubits/pueblo_indigena/pueblo_indigena_cubit.dart';
 import '../../cubits/tipo_regimen/tipo_regimen_cubit.dart';
 import '../../cubits/tipo_documento/tipo_documento_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 import '../../utils/input_decoration.dart';
 import '../../utils/validators/form_validators.dart';
 
@@ -200,7 +200,11 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
               title: const Text('Ficha'),
               leading: IconButton(
                   icon: const Icon(Icons.close),
-                  onPressed: () => CustomSnackBar.exitDialog(context)),
+                  onPressed: () => CustomAlerts.showCustomDialog(
+                          context, 'Salir', '¿Desea salir de la ficha?', () {
+                        Navigator.popUntil(
+                            context, ModalRoute.withName('home'));
+                      })),
             ),
             body: Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/models/medio_utiliza_ca.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 
 void handleMedioUtilizaSelection(
     FormFieldState<List<LstMediosUtilizaCA>> formState,
@@ -36,7 +36,7 @@ void _handleRegularSelection(
 }
 
 void _showMaxSelectionError(BuildContext context) {
-  CustomSnackBar.showCustomDialog(context, 'Error', 'Máximo tres opciones',
+  CustomAlerts.showCustomDialog(context, 'Error', 'Máximo tres opciones',
       () => Navigator.pop(context), false);
 }
 

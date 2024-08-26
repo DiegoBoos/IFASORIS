@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/entities/afiliado.dart';
-import '../blocs/afiliado/afiliado_bloc.dart';
-import '../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
-import '../cubits/familia/familia_cubit.dart';
-import '../cubits/ficha/ficha_cubit.dart';
+import '../../../domain/entities/afiliado.dart';
+import '../../blocs/afiliado/afiliado_bloc.dart';
+import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
+import '../../cubits/familia/familia_cubit.dart';
+import '../../cubits/ficha/ficha_cubit.dart';
 
 Future<void> eliminarFicha(
     BuildContext context, AfiliadoEntity afiliado) async {

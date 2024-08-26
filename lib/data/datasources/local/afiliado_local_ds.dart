@@ -1,10 +1,10 @@
 import 'package:ifasoris/core/error/failure.dart';
+import 'package:ifasoris/data/models/familia.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/constants.dart';
 import '../../../domain/entities/afiliado.dart';
 import '../../models/afiliado.dart';
-import '../../models/familia.dart';
 import '../../models/ficha.dart';
 
 abstract class AfiliadoLocalDataSource {
@@ -67,37 +67,20 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
   @override
   Future<FichaModel?> afiliadoTieneFicha(int afiliadoId) async {
     try {
-      // Fetch the first query
-      final ficha = await supabase.from('familia').select('''
-      ficha()
-  ''').eq('FK_Afiliado_id', afiliadoId);
+      final familia = await Supabase.instance.client
+          .from('familia')
+          .select('*, ficha(*)')
+          .eq('FK_Afiliado_id', afiliadoId);
 
-// Fetch the second query
-      final asp3GrupoFamiliar = await supabase.from('familia').select('''
-    asp3_grupofamiliar()
-  ''').eq('asp3_grupofamiliar.Afiliado_id', afiliadoId);
+      if (familia.isEmpty) return null;
 
-// Combine the results
-      List<dynamic> combinedResults = [];
+      final familiaModel = FamiliaModel.fromJson(familia);
+      final Map<String, dynamic> ficha = {
+        ...familia['ficha'],
+        'familia': familiaModel.toJson(),
+      };
 
-// Add results from the first query
-      if (ficha is List) {
-        combinedResults.addAll(ficha);
-      }
-
-// Add results from the second query
-      if (asp3GrupoFamiliar is List) {
-        combinedResults.addAll(asp3GrupoFamiliar);
-      }
-
-// Now combinedResults contains the union of both queries
-
-      if (combinedResults.isEmpty) return null;
-      final familia = FamiliaModel.fromJson(combinedResults[0]);
-      combinedResults[0]['familia'] = familia.toJson();
-      final result = FichaModel.fromJson(combinedResults[0]);
-
-      return result;
+      return FichaModel.fromJson(ficha);
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

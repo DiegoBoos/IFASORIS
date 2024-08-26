@@ -24,7 +24,7 @@ import '../../cubits/tipo_calendario/tipo_calendario_cubit.dart';
 import '../../cubits/tuberculo_platano/tuberculo_platano_cubit.dart';
 import '../../cubits/verdura/verdura_cubit.dart';
 import '../../cubits/cereal/cereal_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 import '../../utils/input_decoration.dart';
 import '../../utils/validators/form_validators.dart';
 import '../helpers/especies_animales_cria_helper.dart';
@@ -254,7 +254,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                   tuberculoPlatano
                                                           .tuberculoPlatanoId !=
                                                       otroId)
-                                              ? CustomSnackBar.showCustomDialog(
+                                              ? CustomAlerts.showCustomDialog(
                                                   context,
                                                   'Error',
                                                   'Máximo cuatro opciones',
@@ -472,14 +472,13 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                         ningunoId &&
                                                     hortaliza.hortalizaId !=
                                                         otroId)
-                                                ? CustomSnackBar
-                                                    .showCustomDialog(
-                                                        context,
-                                                        'Error',
-                                                        'Máximo cinco opciones',
-                                                        () => Navigator.pop(
-                                                            context),
-                                                        false)
+                                                ? CustomAlerts.showCustomDialog(
+                                                    context,
+                                                    'Error',
+                                                    'Máximo cinco opciones',
+                                                    () =>
+                                                        Navigator.pop(context),
+                                                    false)
                                                 : setState(() {
                                                     _updateHortaliza(
                                                         formState,
@@ -605,14 +604,13 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                     verdura.verduraId !=
                                                         ningunoId &&
                                                     verdura.verduraId != otroId)
-                                                ? CustomSnackBar
-                                                    .showCustomDialog(
-                                                        context,
-                                                        'Error',
-                                                        'Máximo tres opciones',
-                                                        () => Navigator.pop(
-                                                            context),
-                                                        false)
+                                                ? CustomAlerts.showCustomDialog(
+                                                    context,
+                                                    'Error',
+                                                    'Máximo tres opciones',
+                                                    () =>
+                                                        Navigator.pop(context),
+                                                    false)
                                                 : setState(() {
                                                     _updateVerdura(
                                                         formState,
@@ -819,14 +817,13 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                     cereal.cerealId !=
                                                         ningunoId &&
                                                     cereal.cerealId != otroId)
-                                                ? CustomSnackBar
-                                                    .showCustomDialog(
-                                                        context,
-                                                        'Error',
-                                                        'Máximo tres opciones',
-                                                        () => Navigator.pop(
-                                                            context),
-                                                        false)
+                                                ? CustomAlerts.showCustomDialog(
+                                                    context,
+                                                    'Error',
+                                                    'Máximo tres opciones',
+                                                    () =>
+                                                        Navigator.pop(context),
+                                                    false)
                                                 : setState(() {
                                                     _updateCereales(
                                                         cereal,

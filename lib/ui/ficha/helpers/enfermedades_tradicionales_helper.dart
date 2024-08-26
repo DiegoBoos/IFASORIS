@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/models/enfermedad_tradicional.dart';
 import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 
 void handleEnfermedadTradicionalSelection(
     FormFieldState<List<LstEnfermedadTradicional>> formState,
@@ -37,7 +37,7 @@ void _handleRegularSelection(
 }
 
 void _showMaxSelectionError(BuildContext context) {
-  CustomSnackBar.showCustomDialog(context, 'Error', 'Máximo cinco opciones',
+  CustomAlerts.showCustomDialog(context, 'Error', 'Máximo cinco opciones',
       () => Navigator.pop(context), false);
 }
 

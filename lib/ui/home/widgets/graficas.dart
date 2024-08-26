@@ -1,23 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class GraficasPage extends StatelessWidget {
-  const GraficasPage({
-    required this.countCompletas,
-    required this.countInCompletas,
-    required this.countSincronizadas,
-    required this.countPendientes,
-    required this.countAfiliadosRegistrados,
-    required this.countAfiliadosReportados,
-    super.key,
-  });
+import '../../../data/models/estadistica.dart';
+import '../../blocs/ficha/ficha_bloc.dart';
 
-  final int countCompletas;
-  final int countInCompletas;
-  final int countSincronizadas;
-  final int countPendientes;
-  final int countAfiliadosRegistrados;
-  final int countAfiliadosReportados;
+class Graficas extends StatefulWidget {
+  const Graficas({super.key});
+
+  @override
+  State<Graficas> createState() => _GraficasState();
+}
+
+class _GraficasState extends State<Graficas> {
+  int countCompletas = 0;
+  int countInCompletas = 0;
+  int countSincronizadas = 0;
+  int countPendientes = 0;
+  int countAfiliadosRegistrados = 0;
+  int countAfiliadosReportados = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    loadEstadisticas();
+  }
+
+  void loadEstadisticas() async {
+    final fichaBloc = BlocProvider.of<FichaBloc>(context);
+    final estadisticas = await fichaBloc.loadEstadisticas();
+
+    countCompletas = estadisticas
+        .firstWhere((i) => i.estadistica == 'FichasRegistradasCompletas',
+            orElse: () => const EstadisticaModel(cantidad: 0))
+        .cantidad!;
+    countInCompletas = estadisticas
+        .firstWhere((i) => i.estadistica == 'FichasRegistradasIncompletas',
+            orElse: () => const EstadisticaModel(cantidad: 0))
+        .cantidad!;
+    countPendientes = estadisticas
+        .firstWhere((i) => i.estadistica == 'FichasReportadas',
+            orElse: () => const EstadisticaModel(cantidad: 0))
+        .cantidad!;
+    countSincronizadas = estadisticas
+        .firstWhere((i) => i.estadistica == 'FichasRegistradas',
+            orElse: () => const EstadisticaModel(cantidad: 0))
+        .cantidad!;
+    countAfiliadosRegistrados = estadisticas
+        .firstWhere((i) => i.estadistica == 'AfiliadosReportados',
+            orElse: () => const EstadisticaModel(cantidad: 0))
+        .cantidad!;
+    countAfiliadosReportados = estadisticas
+        .firstWhere((i) => i.estadistica == 'AfiliadosRegistrados',
+            orElse: () => const EstadisticaModel(cantidad: 0))
+        .cantidad!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +68,6 @@ class GraficasPage extends StatelessWidget {
     return Column(
       children: [
         SfCircularChart(
-          title: ChartTitle(text: 'Fichas Diligenciadas vs Sincronizadas'),
           legend: Legend(isVisible: true),
           series: <PieSeries<_PieData, String>>[
             PieSeries<_PieData, String>(

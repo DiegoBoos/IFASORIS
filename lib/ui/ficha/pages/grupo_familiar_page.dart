@@ -24,7 +24,8 @@ import '../../blocs/dimension_sociocultural_pueblos_indigenas/dimension_sociocul
 import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart';
 import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../search/search_afiliados.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
+import '../../utils/custom_svg.dart';
 import '../widgets/grupo_familiar_form.dart';
 import 'componentes_afiliado_page.dart';
 
@@ -134,8 +135,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                 atencionSaludBloc.add(AtencionSaludInit());
               } else {
                 if (formStatus is GrupoFamiliarSubmissionFailed) {
-                  CustomSnackBar.showSnackBar(
-                      context, formStatus.message, Colors.red);
+                  context.showErrorSnackBar(message: formStatus.message);
                 }
               }
             },
@@ -175,7 +175,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                   },
                 );
               }
-              return const Center(child: Text('No hay afiliados'));
+              return const Center(child: CustomSvg(title: 'No hay afiliados'));
             }),
           ],
         ));
@@ -199,53 +199,29 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
       direction: DismissDirection.endToStart,
       key: Key(afiliadoGrupoFamiliar.afiliadoId.toString()),
       confirmDismiss: (DismissDirection direction) {
-        return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text("Advertencia"),
-              content: Text(
-                  "¿Está seguro que desea eliminar el afiliado $nombreCompleto?"),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancelar"),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    if (afiliadoGrupoFamiliar.afiliadoId ==
-                        afiliado.afiliadoId) {
-                      Navigator.of(context).pop();
-                      CustomSnackBar.showSnackBar(
-                          context,
-                          'No se puede eliminar el afiliado cabeza de familia',
-                          Colors.red);
-                    } else {
-                      await grupoFamiliarBloc
-                          .deleteAfiliadoGrupoFamiliar(
-                              afiliadoGrupoFamiliar.afiliadoId!,
-                              afiliadoGrupoFamiliar.familiaId!)
-                          .then((value) {
-                        if (value != 0) {
-                          setState(() {
-                            afiliadosGrupoFamiliar.removeAt(index);
-                          });
+        return CustomAlerts.showCustomDialog(context, 'Advertencia',
+            '¿Está seguro que desea eliminar el afiliado $nombreCompleto?',
+            () async {
+          if (afiliadoGrupoFamiliar.afiliadoId == afiliado.afiliadoId) {
+            Navigator.of(context).pop();
+            context.showErrorSnackBar(
+                message: 'No se puede eliminar el afiliado cabeza de familia');
+          } else {
+            await grupoFamiliarBloc
+                .deleteAfiliadoGrupoFamiliar(afiliadoGrupoFamiliar.afiliadoId!,
+                    afiliadoGrupoFamiliar.familiaId!)
+                .then((value) {
+              if (value != 0) {
+                setState(() {
+                  afiliadosGrupoFamiliar.removeAt(index);
+                });
 
-                          Navigator.of(context).pop();
-
-                          context.showSnackBar(
-                              message: value.toString(),
-                              backgroundColor: Colors.green);
-                        }
-                      });
-                    }
-                  },
-                  child: const Text("Eliminar"),
-                ),
-              ],
-            );
-          },
-        );
+                context.showSnackBar(
+                    message: value.toString(), backgroundColor: Colors.green);
+              }
+            });
+          }
+        });
       },
       background: Container(
         color: Colors.red, // Background color when swiping

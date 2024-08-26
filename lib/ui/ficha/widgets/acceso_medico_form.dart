@@ -13,7 +13,7 @@ import '../../../domain/usecases/tiempo_tarda_med_tradicional/tiempo_tarda_med_t
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../cubits/medio_utiliza_med_tradicional/medio_utiliza_med_tradicional_cubit.dart';
 import '../../cubits/opcion_si_no/opcion_si_no_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 import '../../utils/input_decoration.dart';
 import '../../utils/validators/form_validators.dart';
 import '../helpers/dificultades_acceso_med_trad_helper.dart';
@@ -569,7 +569,7 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
         _nombresMedTrad.add(LstNombreMedTradicional(nombreMedTradicional: ''));
       });
     } else {
-      CustomSnackBar.showCustomDialog(
+      CustomAlerts.showCustomDialog(
           context,
           'Límite excedido',
           'No puede agregar más de 5 campos.',

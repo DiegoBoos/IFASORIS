@@ -6,7 +6,7 @@ import '../../../domain/entities/afiliado.dart';
 import '../../blocs/afiliado/afiliado_bloc.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
-import '../../utils/eliminar_ficha.dart';
+import '../helpers/eliminar_ficha.dart';
 
 class SyncDialog extends StatefulWidget {
   const SyncDialog({super.key, required this.type});
@@ -135,7 +135,7 @@ class _SyncDialogState extends State<SyncDialog> {
         .afiliadoTieneFicha(afiliado.afiliadoId!)
         .then((afiliadoFicha) async {
       if (afiliadoFicha != null) {
-        eliminarFicha(context, afiliado);
+        await eliminarFicha(context, afiliado);
       }
     });
   }

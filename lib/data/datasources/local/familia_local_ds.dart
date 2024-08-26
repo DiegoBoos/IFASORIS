@@ -14,19 +14,14 @@ class FamiliaLocalDataSourceImpl implements FamiliaLocalDataSource {
   @override
   Future<FamiliaModel> createFamilia(FamiliaModel familia) async {
     try {
-      // Insert the new family into the 'Familia' table
-      await supabase.from('familia').upsert(familia.toJson());
-
-      // Get the new family ID
       final res = await supabase
           .from('familia')
+          .upsert(familia.toJsonSupabase())
           .select()
-          .eq('FK_Afiliado_id', familia.fkAfiliadoId)
           .single();
 
       // Update the familia model with the new ID
-      final insertedFamilia = FamiliaModel.fromJson(res);
-      final newFamilia = familia.copyWith(familiaId: insertedFamilia.familiaId);
+      final newFamilia = FamiliaModel.fromJson(res);
 
       // Delete rows in the 'asp3_grupofamiliar' table
       await supabase

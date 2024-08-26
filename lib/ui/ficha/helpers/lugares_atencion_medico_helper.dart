@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/models/lugar_atencion_medico.dart';
 import '../../blocs/atencion_salud/atencion_salud_bloc.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 
 void handleLugarAtencionMedicoSelection(
     FormFieldState<List<LstLugarAtencionMedico>> formState,
@@ -36,7 +36,7 @@ void _handleRegularSelection(
 }
 
 void _showMaxSelectionError(BuildContext context) {
-  CustomSnackBar.showCustomDialog(context, 'Error', 'Máximo tres opciones',
+  CustomAlerts.showCustomDialog(context, 'Error', 'Máximo tres opciones',
       () => Navigator.pop(context), false);
 }
 

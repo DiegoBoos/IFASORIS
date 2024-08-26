@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/models/dificultad_acceso_med_tradicional.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 
 void handleDificultadAccesoMedTradSelection(
     FormFieldState<List<LstDificultadAccesoMedTradicional>> formState,
@@ -59,7 +59,7 @@ void _handleRegularSelection(
 }
 
 void _showMaxSelectionError(BuildContext context) {
-  CustomSnackBar.showCustomDialog(context, 'Error', 'Máximo tres opciones',
+  CustomAlerts.showCustomDialog(context, 'Error', 'Máximo tres opciones',
       () => Navigator.pop(context), false);
 }
 

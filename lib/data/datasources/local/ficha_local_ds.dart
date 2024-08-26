@@ -20,14 +20,12 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
   @override
   Future<FichaModel> createFicha(FichaModel ficha) async {
     try {
-      await supabase.from('ficha').upsert(ficha.toJsonLocal());
       final res = await supabase
           .from('ficha')
-          .select('Ficha_id')
-          .eq('UserName_Creacion', ficha.userNameCreacion)
+          .upsert(ficha.toJsonLocal())
+          .select()
           .single();
-
-      final newFicha = ficha.copyWith(fichaId: res);
+      final newFicha = FichaModel.fromJson(res);
       return newFicha;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
@@ -61,48 +59,43 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
     try {
       final List<Map<String, dynamic>> results = [];
 
-      // Fichas Reportadas
       final resFichasReportadas = await supabase
           .from('ficha')
-          .select('count(*) as Cantidad')
+          .select('*', const FetchOptions(count: CountOption.exact))
           .neq('NumFicha', '')
           .or('Ficha_id_remote.not.is.null');
+
       results.add({
         'Estadistica': 'FichasReportadas',
-        'Cantidad': resFichasReportadas.data[0]['Cantidad']
+        'Cantidad': resFichasReportadas.count
       });
 
-      // Fichas Registradas
       final resFichasRegistradas = await supabase
           .from('ficha')
-          .select('count(*) as Cantidad')
+          .select('*', const FetchOptions(count: CountOption.exact))
           .eq('NumFicha', '')
           .is_('Ficha_id_remote', null);
 
-      if (resFichasRegistradas.isNotEmpty) {
-        results.add({
-          'Estadistica': 'FichasRegistradas',
-          'Cantidad': resFichasRegistradas[0]['Cantidad']
-        });
-      }
+      results.add({
+        'Estadistica': 'FichasRegistradas',
+        'Cantidad': resFichasRegistradas.count
+      });
 
-      // Fichas Registradas Incompletas (Simplified)
       final resFichasIncompletas = await supabase
           .from('ficha')
           .select(
-              'count(*) as Cantidad, Familia!inner(Ficha_id), asp3_grupofamiliar!left(isComplete)')
+              '*, familia(Ficha_id)',
+              /* asp3_grupofamiliar(Familia_id) */
+              const FetchOptions(count: CountOption.exact))
           .eq('NumFicha', '')
-          .is_('Ficha_id_remote', null)
-          .is_('asp3_grupofamiliar.isComplete', null);
+          .is_('Ficha_id_remote', null);
+      /* .is_('asp3_grupofamiliar.isComplete', null); */
 
-      if (resFichasIncompletas.isNotEmpty) {
-        results.add({
-          'Estadistica': 'FichasRegistradasIncompletas',
-          'Cantidad': resFichasIncompletas[0]['Cantidad']
-        });
-      }
+      results.add({
+        'Estadistica': 'FichasRegistradasIncompletas',
+        'Cantidad': resFichasIncompletas.count
+      });
 
-      // Additional queries like this need to be constructed similarly
       final result = results.map((m) => EstadisticaModel.fromJson(m)).toList();
 
       return result;
@@ -130,11 +123,11 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
     try {
       final res = await supabase
           .from('ficha')
-          .select('Ficha.*, Familia.*, Familia!inner(Ficha_id)')
-          .or('NumFicha.not.eq.("")')
-          .or('Ficha_id_remote.not.is.null');
+          .select('*, familia(Ficha_id)')
+          .neq('NumFicha', '')
+          .neq('Ficha_id_remote', 0);
 
-      final result = res.data.map<FichaModel>((ficha) {
+      final result = res.map<FichaModel>((ficha) {
         final familia = FamiliaModel.fromJson(ficha['Familia']);
         Map<String, dynamic> fichaConFamilia = {
           ...ficha,

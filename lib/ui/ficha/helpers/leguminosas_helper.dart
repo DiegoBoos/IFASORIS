@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/models/leguminosa.dart';
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 
 void handleLeguminosaSelection(
     FormFieldState<List<LstLeguminosa>> formState,
@@ -57,7 +57,7 @@ void _handleRegularSelection(
 }
 
 void _showMaxSelectionError(BuildContext context) {
-  CustomSnackBar.showCustomDialog(context, 'Error', 'Máximo cinco opciones',
+  CustomAlerts.showCustomDialog(context, 'Error', 'Máximo cinco opciones',
       () => Navigator.pop(context), false);
 }
 

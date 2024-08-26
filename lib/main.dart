@@ -92,7 +92,7 @@ import 'ui/cubits/ultima_vez_inst_salud/ultima_vez_inst_salud_cubit.dart';
 import 'ui/cubits/ventilacion_vivienda/ventilacion_vivienda_cubit.dart';
 import 'ui/cubits/verdura/verdura_cubit.dart';
 import 'ui/cubits/via_acceso/via_acceso_cubit.dart';
-import 'ui/utils/styles.dart';
+import 'theme/styles.dart';
 
 final prefs = SharedPreferencesService();
 

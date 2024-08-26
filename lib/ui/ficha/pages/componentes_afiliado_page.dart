@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
 
 import '../../../domain/entities/atencion_salud.dart';
 import '../../../domain/entities/cuidado_salud_cond_riesgo.dart';
@@ -7,7 +8,7 @@ import '../../../domain/entities/dimension_sociocultural_pueblos_indigenas.dart'
 import '../../../domain/entities/estilo_vida_saludable.dart';
 import '../../../domain/entities/grupo_familiar.dart';
 import '../../cubits/slider/slider_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 import '../widgets/slide_show.dart';
 import '../../blocs/grupo_familiar/grupo_familiar_bloc.dart';
 import '../../blocs/estilo_vida_saludable/estilo_vida_saludable_bloc.dart'
@@ -78,8 +79,7 @@ class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
 
                       if (formStatus
                           is evs.EstiloVidaSaludableSubmissionFailed) {
-                        CustomSnackBar.showSnackBar(
-                            context, formStatus.message, Colors.red);
+                        context.showErrorSnackBar(message: formStatus.message);
                       }
                     },
                   ),
@@ -99,8 +99,7 @@ class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
 
                       if (formStatus
                           is cscr.CuidadoSaludCondRiesgoSubmissionFailed) {
-                        CustomSnackBar.showSnackBar(
-                            context, formStatus.message, Colors.red);
+                        context.showErrorSnackBar(message: formStatus.message);
                       }
                     },
                   ),
@@ -120,8 +119,7 @@ class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
 
                       if (formStatus is dspi
                           .DimensionSocioCulturalPueblosIndigenasSubmissionFailed) {
-                        CustomSnackBar.showSnackBar(
-                            context, formStatus.message, Colors.red);
+                        context.showErrorSnackBar(message: formStatus.message);
                       }
                     },
                   ),
@@ -129,16 +127,23 @@ class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
                     listener: (context, state) {
                       final formStatus = state.formStatus;
                       if (formStatus is ats.AtencionSaludSubmissionSuccess) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return buildCompleted();
-                            });
+                        CustomAlerts.showCustomDialog(
+                            context, 'Ficha guardada', 'Registro completado.',
+                            () async {
+                          final grupoFamiliarBloc =
+                              BlocProvider.of<GrupoFamiliarBloc>(context);
+
+                          await grupoFamiliarBloc
+                              .completeGrupoFamiliar(
+                                  widget.afiliado.afiliadoId!)
+                              .then((value) {
+                            Navigator.pushReplacementNamed(context, 'home');
+                          });
+                        });
                       }
 
                       if (formStatus is ats.AtencionSaludSubmissionFailed) {
-                        CustomSnackBar.showSnackBar(
-                            context, formStatus.message, Colors.red);
+                        context.showErrorSnackBar(message: formStatus.message);
                       }
                     },
                   ),
@@ -281,27 +286,5 @@ class _ComponentesAfiliadoState extends State<ComponentesAfiliado> {
       atencionSaludBloc.add(ats.FamiliaChanged(widget.afiliado.familiaId!));
       atencionSaludBloc.add(ats.AtencionSaludSubmitted());
     }
-  }
-
-  Widget buildCompleted() {
-    return AlertDialog(
-      title: const Text('Ficha guardada'),
-      content: const Text('Registro completado.'),
-      actions: [
-        TextButton(
-          onPressed: () async {
-            final grupoFamiliarBloc =
-                BlocProvider.of<GrupoFamiliarBloc>(context);
-
-            await grupoFamiliarBloc
-                .completeGrupoFamiliar(widget.afiliado.afiliadoId!)
-                .then((value) {
-              Navigator.pushReplacementNamed(context, 'home');
-            });
-          },
-          child: const Text('Aceptar'),
-        ),
-      ],
-    );
   }
 }

@@ -13,7 +13,7 @@ class FamiliaCubit extends Cubit<FamiliaState> {
 
   Future<FamiliaEntity?> createFamiliaDB(FamiliaEntity familia) async {
     final result = await familiaUsecaseDB.createFamiliaUsecaseDB(familia);
-    return result.fold((failure) => null, (data) => familia);
+    return result.fold((failure) => null, (data) => data);
   }
 
   Future<int> deleteAfiliadoFamilia(int fkAfiliadoId) async {

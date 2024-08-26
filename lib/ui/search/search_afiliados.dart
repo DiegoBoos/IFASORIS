@@ -12,7 +12,8 @@ import '../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../cubits/familia/familia_cubit.dart';
 import '../cubits/ficha/ficha_cubit.dart';
 import '../ficha/widgets/grupo_familiar_form.dart';
-import '../utils/custom_snack_bar.dart';
+import '../utils/custom_alerts.dart';
+import '../utils/custom_svg.dart';
 
 class SearchAfiliados extends SearchDelegate {
   final AfiliadoBloc afiliadoBloc;
@@ -63,7 +64,7 @@ class SearchAfiliados extends SearchDelegate {
             .afiliadoTieneFicha(afiliado.afiliadoId!)
             .then((afiliadoFicha) async {
           if (afiliadoFicha != null) {
-            CustomSnackBar.showCustomDialog(
+            CustomAlerts.showCustomDialog(
                 context,
                 "Error al agregar al grupo familiar",
                 "Esta persona ya se encuentra dentro de la ficha de un núcleo familiar",
@@ -111,7 +112,7 @@ class SearchAfiliados extends SearchDelegate {
               afiliadoPrefsBloc.add(SaveAfiliado(newAfiliado));
               close(context, null);
             } else {
-              CustomSnackBar.showCustomDialog(
+              CustomAlerts.showCustomDialog(
                   context,
                   "Afiliado ya registrado",
                   "El afiliado se encuentra registrado en la ficha No. ${ficha.numFicha}",
@@ -120,7 +121,7 @@ class SearchAfiliados extends SearchDelegate {
             }
           });
         } else {
-          CustomSnackBar.showCustomDialog(
+          CustomAlerts.showCustomDialog(
               context,
               "Error al crear ficha",
               "Este afiliado es menor de 14 años",
@@ -198,7 +199,7 @@ class AfiliadosList extends StatelessWidget {
         }
         if (state is AfiliadosLoaded) {
           if (state.afiliadosLoaded!.isEmpty) {
-            return const Center(child: Text('No hay resultados'));
+            return const Center(child: CustomSvg(title: 'No hay resultados'));
           } else {
             return ListView(
                 shrinkWrap: true,

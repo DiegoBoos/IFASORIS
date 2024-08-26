@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
-import 'package:ifasoris/domain/entities/atencion_salud.dart';
-import 'package:ifasoris/domain/entities/cuidado_salud_cond_riesgo.dart';
-import 'package:ifasoris/domain/entities/dim_ubicacion.dart';
-import 'package:ifasoris/domain/entities/dim_vivienda.dart';
-import 'package:ifasoris/domain/entities/dimension_sociocultural_pueblos_indigenas.dart';
-import 'package:ifasoris/domain/entities/estilo_vida_saludable.dart';
-import 'package:ifasoris/domain/entities/grupo_familiar.dart';
+
+import 'atencion_salud.dart';
+import 'cuidado_salud_cond_riesgo.dart';
+import 'dim_ubicacion.dart';
+import 'dim_vivienda.dart';
+import 'dimension_sociocultural_pueblos_indigenas.dart';
+import 'estilo_vida_saludable.dart';
+import 'grupo_familiar.dart';
 
 class FamiliaEntity extends Equatable {
   final int? familiaId;

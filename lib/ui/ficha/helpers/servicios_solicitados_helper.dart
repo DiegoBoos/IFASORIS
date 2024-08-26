@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/servicio_solicitado.dart';
 import '../../blocs/cuidado_salud_cond_riesgo/cuidado_salud_cond_riesgo_bloc.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 
 void handleServicioSolicitadoSelection(
     FormFieldState<List<LstServicioSolicitado>> formState,
@@ -35,7 +35,7 @@ void _handleRegularSelection(
 }
 
 void _showMaxSelectionError(BuildContext context) {
-  CustomSnackBar.showCustomDialog(context, 'Error', 'Máximo tres opciones',
+  CustomAlerts.showCustomDialog(context, 'Error', 'Máximo tres opciones',
       () => Navigator.pop(context), false);
 }
 

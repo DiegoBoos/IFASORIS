@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ifasoris/core/constants.dart';
+import 'package:ifasoris/ui/utils/custom_alerts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
 import '../../blocs/auth/auth_bloc.dart';
-import '../../blocs/ficha/ficha_bloc.dart';
 import '../../blocs/sync/sync_bloc.dart';
-import '../pages/graficas_page.dart';
+import '../../utils/device_info.dart';
 import 'sync_status.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -16,7 +16,6 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-    final fichaBloc = BlocProvider.of<FichaBloc>(context);
     final user = supabase.auth.currentUser!;
 
     return Drawer(
@@ -70,7 +69,6 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.cloud_download),
               title: const Text('Sincronización (Descarga)'),
               onTap: () {
-                Navigator.pop(context);
                 comenzarSincronizacion(context, user, 'A');
               },
             ),
@@ -79,52 +77,7 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.cloud_upload),
               title: const Text('Sincronización (Subida)'),
               onTap: () {
-                Navigator.pop(context);
                 comenzarSincronizacion(context, user, 'P');
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.pie_chart),
-              title: const Text('Estadísticas'),
-              onTap: () async {
-                await fichaBloc.loadEstadisticas().then((estadisticas) {
-                  final registradas = estadisticas
-                      .where((i) => i.estadistica == 'FichasRegistradas')
-                      .first;
-                  final reportadas = estadisticas
-                      .where((i) => i.estadistica == 'FichasReportadas')
-                      .first;
-                  final incompletas = estadisticas
-                      .where((i) =>
-                          i.estadistica == 'FichasRegistradasIncompletas')
-                      .first;
-                  final completas = estadisticas
-                      .where(
-                          (i) => i.estadistica == 'FichasRegistradasCompletas')
-                      .first;
-                  final afiliadosReportados = estadisticas
-                      .where((i) => i.estadistica == 'AfiliadosReportados')
-                      .first;
-                  final afiliadosRegistrados = estadisticas
-                      .where((i) => i.estadistica == 'AfiliadosRegistrados')
-                      .first;
-
-                  Navigator.push<void>(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => GraficasPage(
-                        countCompletas: completas.cantidad!,
-                        countInCompletas: incompletas.cantidad!,
-                        countSincronizadas: reportadas.cantidad!,
-                        countPendientes: registradas.cantidad!,
-                        countAfiliadosRegistrados:
-                            afiliadosRegistrados.cantidad!,
-                        countAfiliadosReportados: afiliadosReportados.cantidad!,
-                      ),
-                    ),
-                  );
-                });
               },
             ),
             const Divider(),
@@ -132,7 +85,6 @@ class AppDrawer extends StatelessWidget {
                 leading: const Icon(Icons.document_scanner),
                 title: const Text('Consultar fichas sincronizadas'),
                 onTap: () {
-                  Navigator.pop(context);
                   Navigator.pushNamed(context, 'fichas-sincronizadas');
                 }),
             const Divider(),
@@ -140,8 +92,30 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.phonelink_setup_outlined),
               title: const Text('Cambio de dispositivo'),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, 'cambio-dispositivo');
+                final userName = user.userMetadata!['UserName'];
+                CustomAlerts.showCustomDialog(context, 'Cambio de dispositivo',
+                    'Se eliminará el dispositivo actual para el usuario $userName, deberá iniciar sesión con su nuevo dispositivo la próxima vez.',
+                    () async {
+                  final authBloc = BlocProvider.of<AuthBloc>(context);
+
+                  await DeviceInfo.infoDispositivo().then((datosEquipo) async {
+                    if (datosEquipo != null && datosEquipo.idEquipo != null) {
+                      await authBloc
+                          .cambioDispositivo(userName, datosEquipo.idEquipo!)
+                          .then((value) {
+                        if (value != '') {
+                          authBloc.add(LogOut());
+                        } else {
+                          context.showErrorSnackBar(message: value.toString());
+                        }
+                      });
+                    } else {
+                      context.showErrorSnackBar(
+                        message: 'No se pudo obtener el id del dispositivo',
+                      );
+                    }
+                  });
+                });
               },
             ),
             const Divider(),

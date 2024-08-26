@@ -23,7 +23,7 @@ import '../../cubits/iluminacion_vivienda/iluminacion_vivienda_cubit.dart';
 import '../../cubits/piso_vivienda/piso_vivienda_cubit.dart';
 import '../../cubits/techo_vivienda/techo_vivienda_cubit.dart';
 import '../../cubits/tipo_combustible_vivienda/tipo_combustible_vivienda_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 import '../../utils/input_decoration.dart';
 import '../../utils/validators/form_validators.dart';
 import '../helpers/servicios_publicos_helper.dart';
@@ -358,7 +358,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value!.length >= 3 &&
                                             pisoVivienda.pisoViviendaId !=
                                                 otroId)
-                                        ? CustomSnackBar.showCustomDialog(
+                                        ? CustomAlerts.showCustomDialog(
                                             context,
                                             'Error',
                                             'Máximo tres opciones',
@@ -482,7 +482,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value!.length >= 3 &&
                                             techoVivienda.techoViviendaId !=
                                                 otroId)
-                                        ? CustomSnackBar.showCustomDialog(
+                                        ? CustomAlerts.showCustomDialog(
                                             context,
                                             'Error',
                                             'Máximo tres opciones',
@@ -843,7 +843,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             tratamientoAguaVivienda
                                                     .tratamientoAguaViviendaId !=
                                                 otroId)
-                                        ? CustomSnackBar.showCustomDialog(
+                                        ? CustomAlerts.showCustomDialog(
                                             context,
                                             'Error',
                                             'Máximo tres opciones',
@@ -980,7 +980,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             tipoSanitarioVivienda
                                                     .tipoSanitarioViviendaId !=
                                                 otroId)
-                                        ? CustomSnackBar.showCustomDialog(
+                                        ? CustomAlerts.showCustomDialog(
                                             context,
                                             'Error',
                                             'Máximo dos opciones',
@@ -1114,7 +1114,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             tipoCombustibleVivienda
                                                     .tipoCombustibleViviendaId !=
                                                 otroId)
-                                        ? CustomSnackBar.showCustomDialog(
+                                        ? CustomAlerts.showCustomDialog(
                                             context,
                                             'Error',
                                             'Máximo tres opciones',
@@ -1248,7 +1248,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               factorRiesgoVivienda
                                                       .factorRiesgoViviendaId !=
                                                   otroId)
-                                          ? CustomSnackBar.showCustomDialog(
+                                          ? CustomAlerts.showCustomDialog(
                                               context,
                                               'Error',
                                               'Máximo tres opciones',
@@ -1381,7 +1381,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               presenciaAnimalVivienda
                                                       .presenciaAnimalViviendaId !=
                                                   otroId)
-                                          ? CustomSnackBar.showCustomDialog(
+                                          ? CustomAlerts.showCustomDialog(
                                               context,
                                               'Error',
                                               'Máximo tres opciones',

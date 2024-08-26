@@ -149,7 +149,6 @@ class AfiliadoModel extends AfiliadoEntity {
         idePrestador: json["IDE_PRESTADOR"],
         edad: json["Edad"],
         codTipoRegimenAfiliado: json["CodTipoRegimen_Afiliado"],
-        familiaId: json["Familia_id"],
       );
 
   factory AfiliadoModel.fromDB(Map<String, dynamic> json) => AfiliadoModel(
@@ -215,7 +214,6 @@ class AfiliadoModel extends AfiliadoEntity {
         "IDE_PRESTADOR": idePrestador,
         "Edad": edad,
         "CodTipoRegimen_Afiliado": codTipoRegimenAfiliado,
-        "Familia_id": familiaId,
       };
 
   Map<String, dynamic> toJsonForSharedPreferences() => {

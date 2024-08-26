@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifasoris/core/constants.dart';
 import '../../../domain/entities/dim_ubicacion.dart';
 import '../../../domain/entities/dim_vivienda.dart';
 import '../../blocs/afiliado_prefs/afiliado_prefs_bloc.dart';
@@ -7,7 +8,7 @@ import '../../blocs/afiliados_grupo_familiar/afiliados_grupo_familiar_bloc.dart'
 import '../../blocs/dim_ubicacion/dim_ubicacion_bloc.dart';
 import '../../blocs/dim_vivienda/dim_vivienda_bloc.dart';
 import '../../cubits/slider/slider_cubit.dart';
-import '../../utils/custom_snack_bar.dart';
+import '../../utils/custom_alerts.dart';
 import '../widgets/slide_show.dart';
 import 'dim_ubicacion_page.dart';
 import 'dim_vivienda_page.dart';
@@ -71,7 +72,10 @@ class _FichaPageState extends State<FichaPage> {
             title: const Text('Ficha'),
             leading: IconButton(
                 icon: const Icon(Icons.close),
-                onPressed: () => CustomSnackBar.exitDialog(context)),
+                onPressed: () => CustomAlerts.showCustomDialog(
+                        context, 'Salir', '¿Desea salir de la ficha?', () {
+                      Navigator.popUntil(context, ModalRoute.withName('home'));
+                    })),
           ),
           body: BlocProvider(
             create: (context) => SliderCubit(),
@@ -95,8 +99,8 @@ class _FichaPageState extends State<FichaPage> {
                           sliderCubit.updateCurrentPage(currentPage + 1);
                         }
                         if (formStatus is DimUbicacionSubmissionFailed) {
-                          CustomSnackBar.showSnackBar(
-                              context, formStatus.message, Colors.red);
+                          context.showErrorSnackBar(
+                              message: formStatus.message);
                           Navigator.popUntil(
                               context, ModalRoute.withName('home'));
                         }
@@ -115,8 +119,8 @@ class _FichaPageState extends State<FichaPage> {
                           sliderCubit.updateCurrentPage(currentPage + 1);
                         }
                         if (formStatus is DimViviendaSubmissionFailed) {
-                          CustomSnackBar.showSnackBar(
-                              context, formStatus.message, Colors.red);
+                          context.showErrorSnackBar(
+                              message: formStatus.message);
                         }
                       },
                     ),
