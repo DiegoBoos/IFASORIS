@@ -74,7 +74,7 @@ class _FichaPageState extends State<FichaPage> {
                 icon: const Icon(Icons.close),
                 onPressed: () => CustomAlerts.showCustomDialog(
                         context, 'Salir', '¿Desea salir de la ficha?', () {
-                      Navigator.popUntil(context, ModalRoute.withName('home'));
+                      Navigator.pushReplacementNamed(context, 'home');
                     })),
           ),
           body: BlocProvider(
@@ -101,8 +101,7 @@ class _FichaPageState extends State<FichaPage> {
                         if (formStatus is DimUbicacionSubmissionFailed) {
                           context.showErrorSnackBar(
                               message: formStatus.message);
-                          Navigator.popUntil(
-                              context, ModalRoute.withName('home'));
+                          Navigator.pushReplacementNamed(context, 'home');
                         }
                       },
                     ),

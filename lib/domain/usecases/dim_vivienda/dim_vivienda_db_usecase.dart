@@ -9,7 +9,7 @@ class DimViviendaUsecaseDB {
 
   DimViviendaUsecaseDB(this.repositoryDB);
 
-  Future<Either<Failure, int>> saveDimViviendaUsecaseDB(
+  Future<Either<Failure, DimViviendaEntity>> saveDimViviendaUsecaseDB(
       DimViviendaEntity dimVivienda) {
     return repositoryDB.saveDimViviendaRepositoryDB(dimVivienda);
   }

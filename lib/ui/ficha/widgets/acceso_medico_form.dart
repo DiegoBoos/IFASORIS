@@ -524,33 +524,37 @@ class AccesoMedicoFormState extends State<AccesoMedicoForm> {
               shrinkWrap: true,
               itemCount: _nombresMedTrad.length,
               itemBuilder: (context, index) {
-                return Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        initialValue:
-                            _nombresMedTrad[index].nombreMedTradicional,
-                        decoration: CustomInputDecoration.inputDecoration(
-                            hintText: 'Nombre del médico tradicional',
-                            labelText:
-                                'Nombre del médico tradicional ${index + 1}'),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Campo requerido';
-                          }
-                          return null;
-                        },
-                        onChanged: (String? value) {
-                          _nombresMedTrad[index].nombreMedTradicional = value!;
-                          dimUbicacionBloc.add(
-                              NombresMedTradicionalChanged(_nombresMedTrad));
-                        },
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          initialValue:
+                              _nombresMedTrad[index].nombreMedTradicional,
+                          decoration: CustomInputDecoration.inputDecoration(
+                              hintText: 'Nombre del médico tradicional',
+                              labelText:
+                                  'Nombre del médico tradicional ${index + 1}'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Campo requerido';
+                            }
+                            return null;
+                          },
+                          onChanged: (String? value) {
+                            _nombresMedTrad[index].nombreMedTradicional =
+                                value!;
+                            dimUbicacionBloc.add(
+                                NombresMedTradicionalChanged(_nombresMedTrad));
+                          },
+                        ),
                       ),
-                    ),
-                    IconButton(
-                        icon: const Icon(Icons.remove),
-                        onPressed: () => _removeFormField(index)),
-                  ],
+                      IconButton(
+                          icon: const Icon(Icons.remove),
+                          onPressed: () => _removeFormField(index)),
+                    ],
+                  ),
                 );
               },
             ),

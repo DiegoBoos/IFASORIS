@@ -216,7 +216,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
       );
 
   Map<String, dynamic> toJson() => {
-        "Ubicacion_id": ubicacionId,
+        //"Ubicacion_id": ubicacionId,
         "Afiliado_id": afiliadoId,
         "Familia_id": familiaId,
         "NombreRecibeVisita": nombreRecibeVisita,

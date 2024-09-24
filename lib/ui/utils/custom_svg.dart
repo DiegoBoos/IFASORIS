@@ -10,6 +10,7 @@ class CustomSvg extends StatelessWidget {
     return Column(
       children: [
         Text(title),
+        const SizedBox(height: 20),
         SvgPicture.asset(
           'assets/svg/undraw_no_data_re_kwbl.svg',
           width: 200,

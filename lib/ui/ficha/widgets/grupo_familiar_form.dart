@@ -202,8 +202,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                   icon: const Icon(Icons.close),
                   onPressed: () => CustomAlerts.showCustomDialog(
                           context, 'Salir', '¿Desea salir de la ficha?', () {
-                        Navigator.popUntil(
-                            context, ModalRoute.withName('home'));
+                        Navigator.pushReplacementNamed(context, 'home');
                       })),
             ),
             body: Form(

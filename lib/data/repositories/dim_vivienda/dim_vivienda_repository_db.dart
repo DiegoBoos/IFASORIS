@@ -13,7 +13,7 @@ class DimViviendaRepositoryDBImpl implements DimViviendaRepositoryDB {
   DimViviendaRepositoryDBImpl({required this.dimViviendaLocalDataSource});
 
   @override
-  Future<Either<Failure, int>> saveDimViviendaRepositoryDB(
+  Future<Either<Failure, DimViviendaModel>> saveDimViviendaRepositoryDB(
       DimViviendaEntity dimVivienda) async {
     try {
       final dimViviendaModel = DimViviendaModel.fromEntity(dimVivienda);

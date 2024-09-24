@@ -191,8 +191,10 @@ class _HomePageState extends State<HomePage> {
                               const SingleChildScrollView(
                                 child: Graficas(),
                               ),
-                              const SingleChildScrollView(
-                                  child: FichasSincronizadas()),
+                              const Center(
+                                child: SingleChildScrollView(
+                                    child: FichasSincronizadas()),
+                              ),
                             ],
                           ),
                         ),

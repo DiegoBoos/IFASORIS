@@ -48,7 +48,7 @@ class CustomSnackBar {
             TextButton(
               child: const Text('Aceptar'),
               onPressed: () {
-                Navigator.popUntil(context, ModalRoute.withName('home'));
+                Navigator.pushReplacementNamed(context, 'home');
               },
             ),
           ],

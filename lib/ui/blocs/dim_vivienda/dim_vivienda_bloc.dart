@@ -49,24 +49,14 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
       emit(initObject());
     });
 
-    on<DimViviendaSubmitted>((event, emit) async {
-      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
-      final result = await dimViviendaUsecaseDB.saveDimViviendaUsecaseDB(state);
-      result.fold((failure) {
-        emit(state.copyWith(
-            formStatus: DimViviendaSubmissionFailed(failure.properties.first)));
-      }, (data) async => await saveFactoresRiesgoVivienda(data));
-    });
-
     on<GetDimVivienda>((event, emit) async {
       emit(state.copyWith(formStatus: DimViviendaFormLoading()));
       final result = await dimViviendaUsecaseDB.getDimViviendaUsecaseDB(
           event.afiliadoId, event.familiaId);
-      result.fold(
-          (failure) => emit(state.copyWith(
-              formStatus:
-                  DimViviendaSubmissionFailed(failure.properties.first))),
-          (data) {
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus: DimViviendaSubmissionFailed(failure.properties.first)));
+      }, (data) {
         if (data != null) {
           emit(data);
           add(GetTechosVivienda(data.datoViviendaId));
@@ -180,11 +170,28 @@ class DimViviendaBloc extends Bloc<DimViviendaEvent, DimViviendaEntity> {
       });
     });
 
+    on<DimViviendaSubmitted>((event, emit) async {
+      emit(state.copyWith(formStatus: DimViviendaFormLoading()));
+      final result = await dimViviendaUsecaseDB.saveDimViviendaUsecaseDB(state);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus: DimViviendaSubmissionFailed(failure.properties.first)));
+      }, (data) async {
+        await saveFactoresRiesgoVivienda(data.datoViviendaId!);
+      });
+    });
+
     on<DimViviendaFormSubmissionSuccess>((event, emit) {
       emit(state.copyWith(
           datoViviendaId: event.datoViviendaId,
           formStatus: DimViviendaSubmissionSuccess()));
     });
+
+    on<DimViviendaFormSubmissionFailed>((event, emit) {
+      emit(state.copyWith(
+          formStatus: DimViviendaSubmissionFailed(event.message)));
+    });
+
     on<DimViviendaAfiliadoChanged>((event, emit) {
       emit(state.copyWith(afiliadoId: event.afiliadoId));
     });

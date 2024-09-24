@@ -82,13 +82,6 @@ class AppDrawer extends StatelessWidget {
             ),
             const Divider(),
             ListTile(
-                leading: const Icon(Icons.document_scanner),
-                title: const Text('Consultar fichas sincronizadas'),
-                onTap: () {
-                  Navigator.pushNamed(context, 'fichas-sincronizadas');
-                }),
-            const Divider(),
-            ListTile(
               leading: const Icon(Icons.phonelink_setup_outlined),
               title: const Text('Cambio de dispositivo'),
               onTap: () {

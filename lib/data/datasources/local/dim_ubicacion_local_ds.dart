@@ -6,7 +6,7 @@ import '../../models/dim_ubicacion.dart';
 
 abstract class DimUbicacionLocalDataSource {
   Future<DimUbicacionModel?> getDimUbicacion(int afiliadoId, int familiaId);
-  Future<int> saveDimUbicacion(DimUbicacionModel dimUbicacion);
+  Future<DimUbicacionModel> saveDimUbicacion(DimUbicacionModel dimUbicacion);
 }
 
 class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
@@ -20,7 +20,7 @@ class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
           .eq('Afiliado_id', afiliadoId)
           .eq('Familia_id', familiaId);
 
-      if (res.data == null || res.data.isEmpty) return null;
+      if (res == null || res.isEmpty) return null;
 
       // Assuming you expect only one result, take the first entry
       final result = DimUbicacionModel.fromJson(res.data[0]);
@@ -33,12 +33,19 @@ class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
   }
 
   @override
-  Future<int> saveDimUbicacion(DimUbicacionModel dimUbicacion) async {
+  Future<DimUbicacionModel> saveDimUbicacion(
+      DimUbicacionModel dimUbicacion) async {
     try {
-      await supabase.from('asp1_ubicacion').upsert(
+      final resp = await supabase
+          .from('asp1_ubicacion')
+          .upsert(
             dimUbicacion.toJson(),
-          );
-      return dimUbicacion.ubicacionId!;
+          )
+          .select()
+          .single();
+
+      final ubicacion = DimUbicacionModel.fromJson(resp);
+      return ubicacion;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

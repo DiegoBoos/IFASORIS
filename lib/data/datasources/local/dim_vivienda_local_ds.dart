@@ -6,7 +6,7 @@ import '../../models/dim_vivienda.dart';
 
 abstract class DimViviendaLocalDataSource {
   Future<DimViviendaModel?> getDimVivienda(int afiliadoId, int familiaId);
-  Future<int> saveDimVivienda(DimViviendaModel dimVivienda);
+  Future<DimViviendaModel> saveDimVivienda(DimViviendaModel dimVivienda);
 }
 
 class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
@@ -31,12 +31,18 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   }
 
   @override
-  Future<int> saveDimVivienda(DimViviendaModel dimVivienda) async {
+  Future<DimViviendaModel> saveDimVivienda(DimViviendaModel dimVivienda) async {
     try {
-      await supabase.from('asp2_datosvivienda').upsert(
+      final resp = await supabase
+          .from('asp2_datosvivienda')
+          .upsert(
             dimVivienda.toJson(),
-          );
-      return dimVivienda.datoViviendaId!;
+          )
+          .select()
+          .single();
+
+      final vivienda = DimViviendaModel.fromJson(resp);
+      return vivienda;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

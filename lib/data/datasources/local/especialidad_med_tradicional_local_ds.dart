@@ -50,7 +50,9 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
     try {
       await supabase
           .from('especialidadesmedtrad_accesomedtradicional')
-          .upsert(especialidadMedTradicional.toJson());
+          .upsert(especialidadMedTradicional.toJson())
+          .select()
+          .single();
 
       return especialidadMedTradicional.especialidadMedTradId!;
     } on PostgrestException catch (error) {
@@ -111,12 +113,12 @@ class EspecialidadMedTradicionalLocalDataSourceImpl
           .toList();
 
       // Insert the new records
-      final res = await supabase
+      await supabase
           .from('asp1_ubicacionnombresmedtradicional')
           .upsert(ubicacionNombresMedTradicional);
 
       // Return the number of rows inserted
-      return res.data != null ? res.data.length : 0;
+      return lstNombreMedTradicional.length;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
     } catch (_) {

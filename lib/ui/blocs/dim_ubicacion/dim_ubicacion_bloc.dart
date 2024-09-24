@@ -70,17 +70,6 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
       emit(initObject());
     });
 
-    on<DimUbicacionSubmitted>((event, emit) async {
-      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
-      final result =
-          await dimUbicacionUsecaseDB.saveDimUbicacionUsecaseDB(state);
-      result.fold((failure) {
-        emit(state.copyWith(
-            formStatus:
-                DimUbicacionSubmissionFailed(failure.properties.first)));
-      }, (data) async => await saveUbicacionAccesoMedTradicional(data));
-    });
-
     on<GetDimUbicacion>((event, emit) async {
       emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
       final result = await dimUbicacionUsecaseDB.getDimUbicacionUsecaseDB(
@@ -296,11 +285,29 @@ class DimUbicacionBloc extends Bloc<DimUbicacionEvent, DimUbicacionEntity> {
       });
     });
 
+    on<DimUbicacionSubmitted>((event, emit) async {
+      emit(state.copyWith(formStatus: DimUbicacionFormLoading()));
+      final result =
+          await dimUbicacionUsecaseDB.saveDimUbicacionUsecaseDB(state);
+      result.fold((failure) {
+        emit(state.copyWith(
+            formStatus:
+                DimUbicacionSubmissionFailed(failure.properties.first)));
+      }, (data) async {
+        await saveUbicacionAccesoMedTradicional(data.ubicacionId!);
+      });
+    });
+
     on<DimUbicacionFormSubmissionSuccess>((event, emit) {
       emit(state.copyWith(
         ubicacionId: event.ubicacionId,
         formStatus: DimUbicacionSubmissionSuccess(),
       ));
+    });
+
+    on<DimUbicacionFormSubmissionFailed>((event, emit) {
+      emit(state.copyWith(
+          formStatus: DimUbicacionSubmissionFailed(event.message)));
     });
 
     on<DimUbicacionAfiliadoChanged>((event, emit) {
