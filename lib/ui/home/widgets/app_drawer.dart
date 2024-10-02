@@ -66,22 +66,6 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.cloud_download),
-              title: const Text('Sincronización (Descarga)'),
-              onTap: () {
-                comenzarSincronizacion(context, user, 'A');
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.cloud_upload),
-              title: const Text('Sincronización (Subida)'),
-              onTap: () {
-                comenzarSincronizacion(context, user, 'P');
-              },
-            ),
-            const Divider(),
-            ListTile(
               leading: const Icon(Icons.phonelink_setup_outlined),
               title: const Text('Cambio de dispositivo'),
               onTap: () {

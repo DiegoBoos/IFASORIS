@@ -18,10 +18,20 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   @override
   Future<List<GrupoFamiliarModel>> getGrupoFamiliar(int familiaId) async {
     try {
-      final res = await supabase
-          .from('asp3_grupofamiliar')
-          .select('Afiliado.*, asp3_grupofamiliar.*')
-          .eq('Familia_id', familiaId);
+      final res = await supabase.from('asp3_grupofamiliar').select(''' 
+            Afiliado:Afiliado_id ( 
+             Afiliado_id,
+             documento,
+             Edad,
+             fecnac,
+             nombre1,
+             nombre2,
+             apellido1,
+             apellido2,
+             TipoDoc_Afiliado,
+             CodGenero_Afiliado,
+             CodRegimen_Afiliado)
+            ''').eq('Familia_id', familiaId);
 
       final result = res
           .map<GrupoFamiliarModel>((m) => GrupoFamiliarModel.fromJson(m))
@@ -39,19 +49,20 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
   Future<GrupoFamiliarModel> saveGrupoFamiliar(
       GrupoFamiliarModel afiliadoGrupoFamiliar) async {
     try {
+      Map<String, dynamic> grupoFamiliarJson;
+
       if (afiliadoGrupoFamiliar.grupoFamiliarId == null) {
-        await supabase.from('asp3_grupofamiliar').upsert(
-              afiliadoGrupoFamiliar.toJson(),
-            );
+        grupoFamiliarJson = afiliadoGrupoFamiliar.toJson();
+        grupoFamiliarJson.remove('GrupoFamiliar_id');
       } else {
-        await supabase
-            .from('asp3_grupofamiliar')
-            .update(
-              afiliadoGrupoFamiliar.toJson(),
-            )
-            .eq('Afiliado_id', afiliadoGrupoFamiliar.afiliadoId)
-            .eq('Familia_id', afiliadoGrupoFamiliar.familiaId);
+        grupoFamiliarJson = afiliadoGrupoFamiliar.toJson();
       }
+
+      await supabase
+          .from('asp3_grupofamiliar')
+          .upsert(grupoFamiliarJson)
+          .eq('Afiliado_id', afiliadoGrupoFamiliar.afiliadoId)
+          .eq('Familia_id', afiliadoGrupoFamiliar.familiaId);
 
       final consultarAfiliado = await supabase
           .from('asp3_grupofamiliar')
@@ -114,7 +125,7 @@ class GrupoFamiliarLocalDataSourceImpl implements GrupoFamiliarLocalDataSource {
           .select(
               'exists (select 1 from asp3_grupofamiliar Familia!inner(FK_Afiliado_id)')
           .eq('asp3_grupofamiliar.Afiliado_id', afiliadoId)
-          .single(); // Use single to get the result of the exists query
+          .single();
 
       return res['exists'] as bool;
     } on PostgrestException catch (error) {

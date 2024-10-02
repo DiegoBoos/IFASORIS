@@ -19,14 +19,13 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final formKey = GlobalKey<FormState>();
   final emailCtrl = TextEditingController(text: 'siris837000638@gmail.com');
-  final userNameCtrl = TextEditingController(text: 'sirispruebas');
   final passwordCtrl = TextEditingController(text: 'Siris*2024');
 
   bool eyeToggle = true;
 
   @override
   void dispose() {
-    userNameCtrl.dispose();
+    emailCtrl.dispose();
     passwordCtrl.dispose();
     super.dispose();
   }
@@ -41,7 +40,6 @@ class _LoginFormState extends State<LoginForm> {
       }
 
       final email = emailCtrl.text.trim();
-      final username = userNameCtrl.text.trim();
       final password = passwordCtrl.text.trim();
 
       try {
@@ -50,7 +48,6 @@ class _LoginFormState extends State<LoginForm> {
         if (datosEquipo != null && datosEquipo.idEquipo != null) {
           final usuario = UsuarioEntity(
             email: email,
-            userName: username,
             password: password,
             deviceId: datosEquipo.idEquipo,
           );
@@ -81,21 +78,6 @@ class _LoginFormState extends State<LoginForm> {
                     return 'Requerido*';
                   }
 
-                  return null;
-                },
-              ),
-              const SizedBox(height: 30.0),
-              TextFormField(
-                controller: userNameCtrl,
-                autocorrect: false,
-                decoration: CustomInputDecoration.inputDecoration(
-                    hintText: 'Ingrese el nombre de usuario',
-                    labelText: 'Nombre de usuario',
-                    prefixIcon: Icons.person),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Requerido*';
-                  }
                   return null;
                 },
               ),

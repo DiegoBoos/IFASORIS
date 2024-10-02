@@ -22,6 +22,7 @@ DimUbicacionModel dimUbicacionFromJson(String str) =>
 class DimUbicacionModel extends DimUbicacionEntity {
   const DimUbicacionModel({
     int? ubicacionId,
+    int? afiliadoId,
     int? familiaId,
     String? nombreRecibeVisita,
     String? tipoDocRecibeVisita,
@@ -56,6 +57,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
     List<LstVerdura>? lstVerduras,
   }) : super(
           ubicacionId: ubicacionId,
+          afiliadoId: afiliadoId,
           familiaId: familiaId,
           nombreRecibeVisita: nombreRecibeVisita,
           tipoDocRecibeVisita: tipoDocRecibeVisita,
@@ -93,6 +95,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
   static DimUbicacionModel fromEntity(DimUbicacionEntity entity) {
     return DimUbicacionModel(
       ubicacionId: entity.ubicacionId,
+      afiliadoId: entity.afiliadoId,
       familiaId: entity.familiaId,
       nombreRecibeVisita: entity.nombreRecibeVisita,
       tipoDocRecibeVisita: entity.tipoDocRecibeVisita,
@@ -133,6 +136,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
   factory DimUbicacionModel.fromJson(Map<String, dynamic> json) =>
       DimUbicacionModel(
         ubicacionId: json["Ubicacion_id"],
+        afiliadoId: json["Afiliado_id"],
         familiaId: json["Familia_id"],
         nombreRecibeVisita: json["NombreRecibeVisita"],
         tipoDocRecibeVisita: json["TipoDoc_RecibeVisita"],
@@ -216,7 +220,7 @@ class DimUbicacionModel extends DimUbicacionEntity {
       );
 
   Map<String, dynamic> toJson() => {
-        //"Ubicacion_id": ubicacionId,
+        "Ubicacion_id": ubicacionId,
         "Afiliado_id": afiliadoId,
         "Familia_id": familiaId,
         "NombreRecibeVisita": nombreRecibeVisita,

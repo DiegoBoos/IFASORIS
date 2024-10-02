@@ -45,7 +45,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
   int? _cursoVidaId;
   int? _parentescoId;
   int? _tipoRegimenId;
-  String? _codTipoRegimenAfiliado;
+  String? _codRegimenAfiliado;
   int? _nivelEducativoId;
   int? _ocupacionId;
   String? _otroOcupacion;
@@ -85,7 +85,7 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
 
       _documento = widget.afiliadoGrupoFamiliar.documento;
       _nombresApellidos =
-          '${widget.afiliadoGrupoFamiliar.nombre1} ${widget.afiliadoGrupoFamiliar.nombre2} ${widget.afiliadoGrupoFamiliar.apellido1} ${widget.afiliadoGrupoFamiliar.apellido2}';
+          '${widget.afiliadoGrupoFamiliar.nombre1 ?? ''} ${widget.afiliadoGrupoFamiliar.nombre2 ?? ''} ${widget.afiliadoGrupoFamiliar.apellido1 ?? ''} ${widget.afiliadoGrupoFamiliar.apellido2 ?? ''}';
       _fechaNacimiento = widget.afiliadoGrupoFamiliar.fechaNacimiento;
 
       if (_fechaNacimiento != null) {
@@ -98,14 +98,13 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
         calculateCursoVida(_edad!);
       }
 
-      _codTipoRegimenAfiliado =
-          widget.afiliadoGrupoFamiliar.codTipoRegimenAfiliado;
-      if (_codTipoRegimenAfiliado != null) {
-        if (_codTipoRegimenAfiliado == "S") {
+      _codRegimenAfiliado = widget.afiliadoGrupoFamiliar.codRegimenAfiliado;
+      if (_codRegimenAfiliado != null) {
+        if (_codRegimenAfiliado == "S") {
           _tipoRegimenId = 1;
-        } else if (_codTipoRegimenAfiliado == "C") {
+        } else if (_codRegimenAfiliado == "C") {
           _tipoRegimenId = 2;
-        } else if (_codTipoRegimenAfiliado == "U") {
+        } else if (_codRegimenAfiliado == "U") {
           _tipoRegimenId = 3;
         }
       } else {
@@ -674,12 +673,12 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                                 _lenguaMaternaId = null;
                               });
 
-                              grupoFamiliarBloc
+                              /*  grupoFamiliarBloc
                                   .add(const PuebloIndigenaChanged(0));
                               grupoFamiliarBloc
                                   .add(const LenguaManejaChanged(0));
                               grupoFamiliarBloc
-                                  .add(const LenguaMaternaChanged(0));
+                                  .add(const LenguaMaternaChanged(0)); */
                             }
 
                             setState(() {
@@ -888,8 +887,8 @@ class _GrupoFamiliarFormState extends State<GrupoFamiliarForm> {
                                 widget.afiliadoGrupoFamiliar.tipoDocAfiliado,
                             codGeneroAfiliado:
                                 widget.afiliadoGrupoFamiliar.codGeneroAfiliado,
-                            codTipoRegimenAfiliado: widget
-                                .afiliadoGrupoFamiliar.codTipoRegimenAfiliado,
+                            codRegimenAfiliado:
+                                widget.afiliadoGrupoFamiliar.codRegimenAfiliado,
                           );
 
                           grupoFamiliarBloc.add(

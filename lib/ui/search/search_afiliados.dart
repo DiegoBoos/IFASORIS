@@ -82,7 +82,7 @@ class SearchAfiliados extends SearchDelegate {
               apellido2: afiliado.apellido2,
               tipoDocAfiliado: afiliado.tipoDocAfiliado,
               codGeneroAfiliado: afiliado.codGeneroAfiliado,
-              codTipoRegimenAfiliado: afiliado.codTipoRegimenAfiliado,
+              codRegimenAfiliado: afiliado.codRegimenAfiliado,
             );
 
             Navigator.push<void>(

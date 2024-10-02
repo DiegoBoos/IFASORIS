@@ -16,6 +16,7 @@ DimViviendaModel dimViviendaFromJson(String str) =>
 class DimViviendaModel extends DimViviendaEntity {
   const DimViviendaModel({
     int? datoViviendaId,
+    int? afiliadoId,
     int? familiaId,
     int? tipoViviendaId,
     int? tenenciaViviendaId,
@@ -32,6 +33,7 @@ class DimViviendaModel extends DimViviendaEntity {
     List<LstPresenciaAnimal>? lstPresenciaAnimal,
   }) : super(
           datoViviendaId: datoViviendaId,
+          afiliadoId: afiliadoId,
           familiaId: familiaId,
           tipoViviendaId: tipoViviendaId,
           tenenciaViviendaId: tenenciaViviendaId,
@@ -51,6 +53,7 @@ class DimViviendaModel extends DimViviendaEntity {
   static DimViviendaModel fromEntity(DimViviendaEntity entity) {
     return DimViviendaModel(
       datoViviendaId: entity.datoViviendaId,
+      afiliadoId: entity.afiliadoId,
       familiaId: entity.familiaId,
       tipoViviendaId: entity.tipoViviendaId,
       tenenciaViviendaId: entity.tenenciaViviendaId,
@@ -72,6 +75,7 @@ class DimViviendaModel extends DimViviendaEntity {
       DimViviendaModel(
         datoViviendaId: json["DatoVivienda_id"],
         familiaId: json["Familia_id"],
+        afiliadoId: json["Afiliado_id"],
         tipoViviendaId: json["TipoVivienda_id"],
         tenenciaViviendaId: json["TenenciaVivienda_id"],
         ventilacionViviendaId: json["VentilacionVivienda_id"],
@@ -119,6 +123,6 @@ class DimViviendaModel extends DimViviendaEntity {
         "TenenciaVivienda_id": tenenciaViviendaId,
         "VentilacionVivienda_id": ventilacionViviendaId,
         "IluminacionVivienda_id": iluminacionViviendaId,
-        "NroNroCuartosVivienda_id": nroCuartosViviendaId,
+        "NroCuartosVivienda_id": nroCuartosViviendaId,
       };
 }

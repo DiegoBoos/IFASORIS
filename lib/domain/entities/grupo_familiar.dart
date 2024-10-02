@@ -17,7 +17,7 @@ class GrupoFamiliarEntity extends Equatable {
   final String? apellido2;
   final String? tipoDocAfiliado;
   final String? codGeneroAfiliado;
-  final String? codTipoRegimenAfiliado;
+  final String? codRegimenAfiliado;
   final int? tipoRegimenId;
   final int? parentescoId;
   final int? etniaId;
@@ -48,7 +48,7 @@ class GrupoFamiliarEntity extends Equatable {
       this.apellido2,
       this.tipoDocAfiliado,
       this.codGeneroAfiliado,
-      this.codTipoRegimenAfiliado,
+      this.codRegimenAfiliado,
       this.tipoRegimenId,
       this.parentescoId,
       this.etniaId,
@@ -79,7 +79,7 @@ class GrupoFamiliarEntity extends Equatable {
     String? apellido2,
     String? tipoDocAfiliado,
     String? codGeneroAfiliado,
-    String? codTipoRegimenAfiliado,
+    String? codRegimenAfiliado,
     int? tipoRegimenId,
     int? parentescoId,
     int? etniaId,
@@ -110,8 +110,7 @@ class GrupoFamiliarEntity extends Equatable {
         apellido2: apellido2 ?? this.apellido2,
         tipoDocAfiliado: tipoDocAfiliado ?? this.tipoDocAfiliado,
         codGeneroAfiliado: codGeneroAfiliado ?? this.codGeneroAfiliado,
-        codTipoRegimenAfiliado:
-            codTipoRegimenAfiliado ?? this.codTipoRegimenAfiliado,
+        codRegimenAfiliado: codRegimenAfiliado ?? this.codRegimenAfiliado,
         tipoRegimenId: tipoRegimenId ?? this.tipoRegimenId,
         parentescoId: parentescoId ?? this.parentescoId,
         etniaId: etniaId ?? this.etniaId,
@@ -144,7 +143,7 @@ class GrupoFamiliarEntity extends Equatable {
         apellido2,
         tipoDocAfiliado,
         codGeneroAfiliado,
-        codTipoRegimenAfiliado,
+        codRegimenAfiliado,
         tipoRegimenId,
         parentescoId,
         etniaId,

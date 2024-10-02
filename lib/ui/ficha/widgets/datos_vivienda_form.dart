@@ -801,12 +801,15 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                   state.tratamientosAguaViviendaLoaded!;
 
               int? otroId;
+              int? sinTratamientoId;
 
               for (var e in tratamientosAguaViviendaLoaded) {
                 final optionType =
                     FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.tratamientoAguaViviendaId;
+                } else if (optionType == 'ST') {
+                  sinTratamientoId = e.tratamientoAguaViviendaId;
                 }
               }
 
@@ -842,7 +845,10 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                             formState.value!.length >= 3 &&
                                             tratamientoAguaVivienda
                                                     .tratamientoAguaViviendaId !=
-                                                otroId)
+                                                otroId &&
+                                            tratamientoAguaVivienda
+                                                    .tratamientoAguaViviendaId !=
+                                                sinTratamientoId)
                                         ? CustomAlerts.showCustomDialog(
                                             context,
                                             'Error',
@@ -854,6 +860,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                 formState,
                                                 tratamientoAguaVivienda,
                                                 otroId,
+                                                sinTratamientoId,
                                                 value,
                                                 dimViviendaBloc);
                                           });
@@ -1206,12 +1213,15 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                   state.factoresRiesgoViviendaLoaded!;
 
               int? otroId;
+              int? ningunoId;
 
               for (var e in factoresRiesgoViviendaLoaded) {
                 final optionType =
                     FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.factorRiesgoViviendaId;
+                } else if (optionType == 'N') {
+                  ningunoId = e.factorRiesgoViviendaId;
                 }
               }
 
@@ -1247,7 +1257,10 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               formState.value!.length >= 3 &&
                                               factorRiesgoVivienda
                                                       .factorRiesgoViviendaId !=
-                                                  otroId)
+                                                  otroId &&
+                                              factorRiesgoVivienda
+                                                      .factorRiesgoViviendaId !=
+                                                  ningunoId)
                                           ? CustomAlerts.showCustomDialog(
                                               context,
                                               'Error',
@@ -1260,6 +1273,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                     formState,
                                                     factorRiesgoVivienda,
                                                     otroId,
+                                                    ningunoId,
                                                     value,
                                                     dimViviendaBloc);
                                               },
@@ -1339,12 +1353,15 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                   state.presenciaAnimalesViviendaLoaded!;
 
               int? otroId;
+              int? ningunoId;
 
               for (var e in presenciaAnimalesViviendaLoaded) {
                 final optionType =
                     FormValidators.optionType(e.descripcion ?? '');
                 if (optionType == 'O') {
                   otroId = e.presenciaAnimalViviendaId;
+                } else if (optionType == 'N') {
+                  ningunoId = e.presenciaAnimalViviendaId;
                 }
               }
 
@@ -1380,7 +1397,10 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                               formState.value!.length >= 3 &&
                                               presenciaAnimalVivienda
                                                       .presenciaAnimalViviendaId !=
-                                                  otroId)
+                                                  otroId &&
+                                              presenciaAnimalVivienda
+                                                      .presenciaAnimalViviendaId !=
+                                                  ningunoId)
                                           ? CustomAlerts.showCustomDialog(
                                               context,
                                               'Error',
@@ -1393,6 +1413,7 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
                                                     formState,
                                                     presenciaAnimalVivienda,
                                                     otroId,
+                                                    ningunoId,
                                                     value,
                                                     dimViviendaBloc);
                                               },
@@ -1467,19 +1488,28 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   void _updatePresenciaAnimal(
       FormFieldState<List<LstPresenciaAnimal>> formState,
       PresenciaAnimalViviendaEntity presenciaAnimalVivienda,
+      int? otroId,
       int? ningunoId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstPresenciaAnimal>.from(formState.value ?? []);
-    if (presenciaAnimalVivienda.presenciaAnimalViviendaId == ningunoId) {
+    if (presenciaAnimalVivienda.presenciaAnimalViviendaId == otroId) {
       selectedItems.clear();
       selectedItems.add(LstPresenciaAnimal(
           presenciaAnimalViviendaId:
               presenciaAnimalVivienda.presenciaAnimalViviendaId));
       _showOtroPresenciaAnimal = true;
+    } else if (presenciaAnimalVivienda.presenciaAnimalViviendaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstPresenciaAnimal(
+          presenciaAnimalViviendaId:
+              presenciaAnimalVivienda.presenciaAnimalViviendaId));
+      _showOtroPresenciaAnimal = false;
+      _otroPresenciaAnimal = null;
     } else if (value == true) {
-      selectedItems
-          .removeWhere((e) => e.presenciaAnimalViviendaId == ningunoId);
+      selectedItems.removeWhere((e) =>
+          (e.presenciaAnimalViviendaId == ningunoId ||
+              e.presenciaAnimalViviendaId == otroId));
       selectedItems.add(LstPresenciaAnimal(
           presenciaAnimalViviendaId:
               presenciaAnimalVivienda.presenciaAnimalViviendaId));
@@ -1502,18 +1532,25 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   void _updateFactorRiesgo(
       FormFieldState<List<LstFactorRiesgo>> formState,
       FactorRiesgoViviendaEntity factorRiesgoVivienda,
+      int? otroId,
       int? ningunoId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstFactorRiesgo>.from(formState.value ?? []);
-    if (factorRiesgoVivienda.factorRiesgoViviendaId == ningunoId) {
+    if (factorRiesgoVivienda.factorRiesgoViviendaId == otroId) {
       selectedItems.clear();
       selectedItems.add(LstFactorRiesgo(
           factorRiesgoViviendaId: factorRiesgoVivienda.factorRiesgoViviendaId));
-
       _showOtroFactorRiesgo = true;
+    } else if (factorRiesgoVivienda.factorRiesgoViviendaId == ningunoId) {
+      selectedItems.clear();
+      selectedItems.add(LstFactorRiesgo(
+          factorRiesgoViviendaId: factorRiesgoVivienda.factorRiesgoViviendaId));
+      _showOtroFactorRiesgo = false;
+      _otroFactorRiesgo = null;
     } else if (value == true) {
-      selectedItems.removeWhere((e) => e.factorRiesgoViviendaId == ningunoId);
+      selectedItems.removeWhere((e) => (e.factorRiesgoViviendaId == otroId ||
+          e.factorRiesgoViviendaId == ningunoId));
       selectedItems.add(LstFactorRiesgo(
           factorRiesgoViviendaId: factorRiesgoVivienda.factorRiesgoViviendaId));
       _showOtroFactorRiesgo = false;
@@ -1618,19 +1655,28 @@ class _DatosViviendaFormState extends State<DatosViviendaForm> {
   void _updateTmtoAgua(
       FormFieldState<List<LstTmtoAgua>> formState,
       TratamientoAguaViviendaEntity tratamientoAguaVivienda,
-      int? ningunoId,
+      int? otroId,
+      int? sinTratamientoId,
       bool value,
       DimViviendaBloc dimViviendaBloc) {
     var selectedItems = List<LstTmtoAgua>.from(formState.value ?? []);
-    if (tratamientoAguaVivienda.tratamientoAguaViviendaId == ningunoId) {
+    if (tratamientoAguaVivienda.tratamientoAguaViviendaId == otroId) {
       selectedItems.clear();
       selectedItems.add(LstTmtoAgua(
           tratamientoAguaViviendaId:
               tratamientoAguaVivienda.tratamientoAguaViviendaId));
       _showOtroTratamientoAgua = true;
+    } else if (tratamientoAguaVivienda.tratamientoAguaViviendaId ==
+        sinTratamientoId) {
+      selectedItems.clear();
+      selectedItems.add(LstTmtoAgua(
+          tratamientoAguaViviendaId:
+              tratamientoAguaVivienda.tratamientoAguaViviendaId));
+      _showOtroTratamientoAgua = false;
+      _otroTratamientoAgua = null;
     } else if (value == true) {
-      selectedItems
-          .removeWhere((e) => e.tratamientoAguaViviendaId == ningunoId);
+      selectedItems.removeWhere((e) => (e.tratamientoAguaViviendaId == otroId ||
+          e.tratamientoAguaViviendaId == sinTratamientoId));
       selectedItems.add(LstTmtoAgua(
           tratamientoAguaViviendaId:
               tratamientoAguaVivienda.tratamientoAguaViviendaId));

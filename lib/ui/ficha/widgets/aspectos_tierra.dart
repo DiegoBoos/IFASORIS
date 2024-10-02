@@ -599,7 +599,7 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                           onChanged: (bool? value) {
                                             (value! &&
                                                     formState.value != null &&
-                                                    formState.value!.length >=
+                                                    formState.value!.length >
                                                         3 &&
                                                     verdura.verduraId !=
                                                         ningunoId &&
@@ -607,10 +607,9 @@ class AspectosTierraFormState extends State<AspectosTierraForm> {
                                                 ? CustomAlerts.showCustomDialog(
                                                     context,
                                                     'Error',
-                                                    'Máximo tres opciones',
-                                                    () =>
-                                                        Navigator.pop(context),
-                                                    false)
+                                                    'Máximo tres opciones', () {
+                                                    Navigator.pop(context);
+                                                  }, false)
                                                 : setState(() {
                                                     _updateVerdura(
                                                         formState,

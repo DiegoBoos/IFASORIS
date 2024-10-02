@@ -70,9 +70,10 @@ class AfiliadoLocalDataSourceImpl implements AfiliadoLocalDataSource {
       final familia = await Supabase.instance.client
           .from('familia')
           .select('*, ficha(*)')
-          .eq('FK_Afiliado_id', afiliadoId);
+          .eq('FK_Afiliado_id', afiliadoId)
+          .single();
 
-      if (familia.isEmpty) return null;
+      if (familia == null) return null;
 
       final familiaModel = FamiliaModel.fromJson(familia);
       final Map<String, dynamic> ficha = {

@@ -36,6 +36,8 @@ abstract class FormValidators {
       return 'O';
     } else if (descripcion == 'no tiene') {
       return 'NT';
+    } else if (descripcion == 'sin tratamiento') {
+      return 'ST';
     }
     return null;
   }

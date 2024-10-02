@@ -17,11 +17,12 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
       final res = await supabase
           .from('asp2_datosvivienda')
           .select()
-          .eq('Afiliado_id,Familia_id', [afiliadoId, familiaId]);
+          .eq('Afiliado_id', afiliadoId)
+          .eq('Familia_id', familiaId);
 
       if (res.isEmpty) return null;
 
-      final result = DimViviendaModel.fromJson(res);
+      final result = DimViviendaModel.fromJson(res[0]);
       return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
@@ -33,11 +34,18 @@ class DimViviendaLocalDataSourceImpl implements DimViviendaLocalDataSource {
   @override
   Future<DimViviendaModel> saveDimVivienda(DimViviendaModel dimVivienda) async {
     try {
+      Map<String, dynamic> dimViviendaJson;
+
+      if (dimVivienda.datoViviendaId == null) {
+        dimViviendaJson = dimVivienda.toJson();
+        dimViviendaJson.remove('DatoVivienda_id');
+      } else {
+        dimViviendaJson = dimVivienda.toJson();
+      }
+
       final resp = await supabase
           .from('asp2_datosvivienda')
-          .upsert(
-            dimVivienda.toJson(),
-          )
+          .upsert(dimViviendaJson)
           .select()
           .single();
 

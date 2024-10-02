@@ -51,7 +51,7 @@ class AfiliadoModel extends AfiliadoEntity {
       String? ipsPrimariaAfiliado,
       String? idePrestador,
       int? edad,
-      String? codTipoRegimenAfiliado,
+      String? codRegimenAfiliado,
       int? familiaId})
       : super(
             afiliadoId: afiliadoId,
@@ -81,7 +81,7 @@ class AfiliadoModel extends AfiliadoEntity {
             ipsPrimariaAfiliado: ipsPrimariaAfiliado,
             idePrestador: idePrestador,
             edad: edad,
-            codTipoRegimenAfiliado: codTipoRegimenAfiliado,
+            codRegimenAfiliado: codRegimenAfiliado,
             familiaId: familiaId);
 
   static AfiliadoModel fromEntity(AfiliadoEntity entity) {
@@ -113,7 +113,7 @@ class AfiliadoModel extends AfiliadoEntity {
       ipsPrimariaAfiliado: entity.ipsPrimariaAfiliado,
       idePrestador: entity.idePrestador,
       edad: entity.edad,
-      codTipoRegimenAfiliado: entity.codTipoRegimenAfiliado,
+      codRegimenAfiliado: entity.codRegimenAfiliado,
       familiaId: entity.familiaId,
     );
   }
@@ -148,7 +148,7 @@ class AfiliadoModel extends AfiliadoEntity {
         ipsPrimariaAfiliado: json["IPSPrimaria_Afiliado"],
         idePrestador: json["IDE_PRESTADOR"],
         edad: json["Edad"],
-        codTipoRegimenAfiliado: json["CodTipoRegimen_Afiliado"],
+        codRegimenAfiliado: json["CodRegimen_Afiliado"],
       );
 
   factory AfiliadoModel.fromDB(Map<String, dynamic> json) => AfiliadoModel(
@@ -181,7 +181,7 @@ class AfiliadoModel extends AfiliadoEntity {
         ipsPrimariaAfiliado: json["IPSPrimaria_Afiliado"],
         idePrestador: json["IDE_PRESTADOR"],
         edad: json["Edad"],
-        codTipoRegimenAfiliado: json["CodTipoRegimen_Afiliado"],
+        codRegimenAfiliado: json["CodRegimen_Afiliado"],
         familiaId: json["Familia_id"],
       );
 
@@ -213,7 +213,7 @@ class AfiliadoModel extends AfiliadoEntity {
         "IPSPrimaria_Afiliado": ipsPrimariaAfiliado,
         "IDE_PRESTADOR": idePrestador,
         "Edad": edad,
-        "CodTipoRegimen_Afiliado": codTipoRegimenAfiliado,
+        "CodRegimen_Afiliado": codRegimenAfiliado,
       };
 
   Map<String, dynamic> toJsonForSharedPreferences() => {
@@ -244,7 +244,7 @@ class AfiliadoModel extends AfiliadoEntity {
         "IPSPrimaria_Afiliado": ipsPrimariaAfiliado,
         "IDE_PRESTADOR": idePrestador,
         "Edad": edad,
-        "CodTipoRegimen_Afiliado": codTipoRegimenAfiliado,
+        "CodRegimen_Afiliado": codRegimenAfiliado,
         "Familia_id": familiaId,
       };
 }

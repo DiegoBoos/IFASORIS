@@ -88,6 +88,9 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
         listeners: [
           BlocListener<AfiliadosGrupoFamiliarBloc, AfiliadosGrupoFamiliarState>(
             listener: (context, state) {
+              if (state is AfiliadosGrupoFamiliarError) {
+                context.showErrorSnackBar(message: state.message);
+              }
               // Si no hay afiliados en el grupo familiar, se redirige al formulario
               if (state is AfiliadosGrupoFamiliarLoaded &&
                   state.afiliadosGrupoFamiliarLoaded.isEmpty) {
@@ -106,7 +109,7 @@ class _GrupoFamiliarState extends State<GrupoFamiliarPage> {
                         apellido2: afiliado.apellido2,
                         tipoDocAfiliado: afiliado.tipoDocAfiliado,
                         codGeneroAfiliado: afiliado.codGeneroAfiliado,
-                        codTipoRegimenAfiliado: afiliado.codTipoRegimenAfiliado,
+                        codRegimenAfiliado: afiliado.codRegimenAfiliado,
                       ),
                     ),
                   ),

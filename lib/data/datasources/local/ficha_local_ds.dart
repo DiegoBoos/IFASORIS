@@ -193,7 +193,7 @@ class FichaLocalDataSourceImpl implements FichaLocalDataSource {
             'apellido2': integrante.apellido2,
             'tipoDocAfiliado': integrante.tipoDocAfiliado,
             'codGeneroAfiliado': integrante.codGeneroAfiliado,
-            'codTipoRegimenAfiliado': integrante.codTipoRegimenAfiliado,
+            'codRegimenAfiliado': integrante.codRegimenAfiliado,
             'tipoRegimenId': integrante.tipoRegimenId,
             'parentescoId': integrante.parentescoId,
             'etniaId': integrante.etniaId,

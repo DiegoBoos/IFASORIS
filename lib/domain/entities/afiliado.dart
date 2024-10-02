@@ -28,7 +28,7 @@ class AfiliadoEntity extends Equatable {
   final String? ipsPrimariaAfiliado;
   final String? idePrestador;
   final int? edad;
-  final String? codTipoRegimenAfiliado;
+  final String? codRegimenAfiliado;
   final int? familiaId;
 
   const AfiliadoEntity({
@@ -59,7 +59,7 @@ class AfiliadoEntity extends Equatable {
     this.ipsPrimariaAfiliado,
     this.idePrestador,
     this.edad,
-    this.codTipoRegimenAfiliado,
+    this.codRegimenAfiliado,
     this.familiaId,
   });
 
@@ -91,7 +91,7 @@ class AfiliadoEntity extends Equatable {
     String? ipsPrimariaAfiliado,
     String? idePrestador,
     int? edad,
-    String? codTipoRegimenAfiliado,
+    String? codRegimenAfiliado,
     int? familiaId,
   }) =>
       AfiliadoEntity(
@@ -123,8 +123,7 @@ class AfiliadoEntity extends Equatable {
         ipsPrimariaAfiliado: ipsPrimariaAfiliado ?? this.ipsPrimariaAfiliado,
         idePrestador: idePrestador ?? this.idePrestador,
         edad: edad ?? this.edad,
-        codTipoRegimenAfiliado:
-            codTipoRegimenAfiliado ?? this.codTipoRegimenAfiliado,
+        codRegimenAfiliado: codRegimenAfiliado ?? this.codRegimenAfiliado,
         familiaId: familiaId ?? this.familiaId,
       );
 
@@ -157,7 +156,7 @@ class AfiliadoEntity extends Equatable {
         ipsPrimariaAfiliado,
         idePrestador,
         edad,
-        codTipoRegimenAfiliado,
+        codRegimenAfiliado,
         familiaId,
       ];
 }

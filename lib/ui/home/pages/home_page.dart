@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
         ),
         drawer: const AppDrawer(),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Header(),
             BlocBuilder<AfiliadoPrefsBloc, AfiliadoPrefsState>(

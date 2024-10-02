@@ -28,13 +28,13 @@ class TipoRegimenModel extends TipoRegimenEntity {
   factory TipoRegimenModel.fromJson(Map<String, dynamic> json) =>
       TipoRegimenModel(
         regimenId: json["Regimen_id"],
-        codigo: json["Tipo"],
         descripcion: json["Descripcion"],
+        codigo: json["Codigo"],
       );
 
   Map<String, dynamic> toJson() => {
         "Regimen_id": regimenId,
-        "Codigo": codigo,
         "Descripcion": descripcion,
+        "Codigo": codigo,
       };
 }

@@ -127,6 +127,36 @@ class _RegisterFormState extends State<RegisterForm> {
                 },
               ),
               const SizedBox(height: 30.0),
+              TextFormField(
+                autocorrect: false,
+                obscureText: eyeToggle,
+                decoration: CustomInputDecoration.inputDecoration(
+                  hintText: '******',
+                  labelText: 'Confirmar Contraseña',
+                  prefixIcon: Icons.lock_outlined,
+                  suffixIcon: IconButton(
+                      onPressed: () => setState(() => eyeToggle = !eyeToggle),
+                      icon: eyeToggle
+                          ? const Icon(
+                              Icons.remove_red_eye,
+                            )
+                          : const FaIcon(
+                              FontAwesomeIcons.solidEyeSlash,
+                              size: 18,
+                            )),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Requerido*';
+                  }
+
+                  if (value != passwordCtrl.text) {
+                    return 'Las contraseñas no coinciden';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 30.0),
               MaterialButton(
                   minWidth: double.infinity,
                   disabledColor: Colors.grey,

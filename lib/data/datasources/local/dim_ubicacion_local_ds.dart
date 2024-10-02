@@ -20,10 +20,9 @@ class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
           .eq('Afiliado_id', afiliadoId)
           .eq('Familia_id', familiaId);
 
-      if (res == null || res.isEmpty) return null;
+      if (res.isEmpty) return null;
 
-      // Assuming you expect only one result, take the first entry
-      final result = DimUbicacionModel.fromJson(res.data[0]);
+      final result = DimUbicacionModel.fromJson(res[0]);
       return result;
     } on PostgrestException catch (error) {
       throw DatabaseFailure([error.message]);
@@ -36,10 +35,19 @@ class DimUbicacionLocalDataSourceImpl implements DimUbicacionLocalDataSource {
   Future<DimUbicacionModel> saveDimUbicacion(
       DimUbicacionModel dimUbicacion) async {
     try {
+      Map<String, dynamic> dimUbicacionJson;
+
+      if (dimUbicacion.ubicacionId == null) {
+        dimUbicacionJson = dimUbicacion.toJson();
+        dimUbicacionJson.remove('Ubicacion_id');
+      } else {
+        dimUbicacionJson = dimUbicacion.toJson();
+      }
+
       final resp = await supabase
           .from('asp1_ubicacion')
           .upsert(
-            dimUbicacion.toJson(),
+            dimUbicacionJson,
           )
           .select()
           .single();
