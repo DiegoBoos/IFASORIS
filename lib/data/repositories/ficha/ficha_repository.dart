@@ -1,0 +1,41 @@
+import 'dart:io';
+
+import 'package:dartz/dartz.dart';
+
+import '../../../core/error/failure.dart';
+import '../../../domain/repositories/ficha/ficha_repository.dart';
+import '../../datasources/remote/ficha_remote_ds.dart';
+import '../../models/ficha.dart';
+
+class FichaRepositoryImpl implements FichaRepository {
+  final FichaRemoteDataSource fichaRemoteDataSource;
+
+  FichaRepositoryImpl({required this.fichaRemoteDataSource});
+
+  @override
+  Future<Either<Failure, List<dynamic>>> createFichaRepository() async {
+    try {
+      final result = await fichaRemoteDataSource.createFicha();
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on SocketException catch (e) {
+      return Left(ConnectionFailure([e.message]));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<FichaModel>>> getFichasRepository(
+      String userName) async {
+    try {
+      final result = await fichaRemoteDataSource.getFichas(userName);
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.properties));
+    } on SocketException catch (e) {
+      return Left(ConnectionFailure([e.message]));
+    }
+  }
+}

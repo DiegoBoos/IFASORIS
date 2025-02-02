@@ -1,0 +1,43 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
+import '../../../core/error/failure.dart';
+import '../../../core/constants.dart';
+import '../../../services/shared_preferences_service.dart';
+import '../../models/lugar_atencion_medico.dart';
+
+abstract class LugarAtencionMedicoRemoteDataSource {
+  Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico();
+}
+
+class LugarAtencionMedicoRemoteDataSourceImpl
+    implements LugarAtencionMedicoRemoteDataSource {
+  final prefs = SharedPreferencesService();
+  final http.Client client;
+
+  LugarAtencionMedicoRemoteDataSourceImpl({required this.client});
+
+  @override
+  Future<List<LugarAtencionMedicoModel>> getLugaresAtencionMedico() async {
+    try {
+      final uri = Uri.parse('${Constants.apiPublica}/lugaresatencionmedico');
+
+      final resp = await client.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${prefs.token}',
+      });
+
+      final decodedResp = jsonDecode(resp.body);
+      if (resp.statusCode == 200) {
+        final result = lugaresAtencionMedicoFromJson(jsonEncode(decodedResp));
+        return result;
+      } else {
+        throw const ServerFailure(['Excepción no controlada']);
+      }
+    } on SocketException catch (e) {
+      throw SocketException(e.toString());
+    }
+  }
+}

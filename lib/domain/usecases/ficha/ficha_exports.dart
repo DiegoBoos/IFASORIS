@@ -1,0 +1,11 @@
+export 'package:ifasoris/domain/usecases/ficha/ficha_usecase.dart';
+export 'package:ifasoris/domain/usecases/ficha/ficha_db_usecase.dart';
+export 'package:ifasoris/domain/repositories/ficha/ficha_repository.dart';
+export 'package:ifasoris/domain/repositories/ficha/ficha_repository_db.dart';
+export 'package:ifasoris/domain/entities/ficha.dart';
+export 'package:ifasoris/ui/blocs/ficha/ficha_bloc.dart';
+export 'package:ifasoris/ui/cubits/ficha/ficha_cubit.dart';
+export 'package:ifasoris/data/repositories/ficha/ficha_repository.dart';
+export 'package:ifasoris/data/repositories/ficha/ficha_repository_db.dart';
+export 'package:ifasoris/data/datasources/remote/ficha_remote_ds.dart';
+export 'package:ifasoris/data/datasources/local/ficha_local_ds.dart';
