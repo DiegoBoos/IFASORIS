@@ -1,10 +1,8 @@
 Ifasoris - Mobile Application
 
-📌 Overview
-
 Ifasoris is a mobile application designed to facilitate the collection and synchronization of health and demographic data. The app is intended for use in fieldwork, allowing authorized personnel to register and manage information about affiliated users while working offline and syncing data when an internet connection is available.
 
-🚀 Features
+Features
 
 Secure Login – User authentication with assigned roles.
 
@@ -34,17 +32,17 @@ Statistics
 
 <img width="230" alt="image" src="https://github.com/user-attachments/assets/c4c16b37-6513-4ff6-8dd2-76ae92c81041" />
 
-📖 User Guide
+User Guide
 
 The Ifasoris application is exclusively managed by Mallamas EPS-I, a health entity promoter. Due to its licensing restrictions, the user manual is only available to registered affiliates and authorized personnel.
 
-🛠 Tech Stack
+Tech Stack
 
 Frontend: Flutter
 
 Database: SQLite
 
-📩 Contact & Support
+Contact & Support
 
 For inquiries or support, please contact Mallamas EPS-I through official channels.
 
